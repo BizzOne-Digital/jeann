@@ -1,0 +1,1 @@
+export default function VerifyEmailPage() { return <><h1 className="display text-3xl text-[var(--navy)]">Verify your email</h1><p className="mt-3 text-[var(--stone)]">We sent a verification link to your work email. Open it to continue your registration.</p></>; }

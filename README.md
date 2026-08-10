@@ -1,36 +1,150 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Finekarts Incorporated Platform
 
-## Getting Started
+Production-oriented corporate website and modular commodity-trading management platform for **Finekarts Incorporated** — global agricultural commodity trading.
 
-First, run the development server:
+Public site generates qualified buyer/supplier leads and RFQs. Pricing is negotiated (no public fixed prices, no retail checkout). The secure platform manages organizations, transactions, documents, messages, approvals, and audit history.
+
+## Architecture
+
+| Area | Routes | Audience |
+|------|--------|----------|
+| Marketing | `/`, `/about`, `/products`, `/trade`, `/booking`, `/insights`, `/contact` + support pages | Public |
+| Auth | `/login`, `/register/buyer`, `/invite/[token]`, verify routes | Buyers / invitees |
+| Buyer portal | `/portal/buyer/*` | Buyer organizations |
+| Supplier portal | `/portal/supplier/*` | Invite-only suppliers |
+| Banking | `/portal/banking/*` | Scoped banking advisors |
+| Workspace | `/workspace/*` | Employees / managers |
+| Admin / CMS | `/admin/*` | Platform administration |
+
+Domain logic lives under `src/lib/*` (auth, authorization, storage, AI, finance, workflows, tracking). UI stays in `src/components/*` and `src/app/*`. Mongoose models are in `src/models/*`.
+
+## Prerequisites
+
+- Node.js 20+
+- MongoDB 7+ (required for full persistence, seed, and portal data)
+- npm 10+
+
+Without MongoDB, the public catalog and forms still run using the in-code seed catalog and `.data/` lead store.
+
+## Setup
 
 ```bash
+cp .env.example .env.local
+# edit secrets and MONGODB_URI
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Seed
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run seed
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Creates CMS content, packaging, workflows, draft buyer terms, example HST tax config (editable, not legal advice), integration placeholders, and optionally the initial admin when `INITIAL_ADMIN_*` is set.
 
-## Learn More
+### Create administrator
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# ensure INITIAL_ADMIN_EMAIL / INITIAL_ADMIN_PASSWORD / INITIAL_ADMIN_NAME in .env.local
+npm run create-admin
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Command | Purpose |
+|---------|---------|
+| `npm run dev` | Local development |
+| `npm run build` | Production build |
+| `npm run start` | Start production server |
+| `npm run lint` | ESLint |
+| `npm run typecheck` | TypeScript `--noEmit` |
+| `npm test` | Vitest unit tests |
+| `npm run seed` | Idempotent Mongo seed |
+| `npm run create-admin` | Secure first admin |
 
-## Deploy on Vercel
+## Demo logins (after `npm run seed`)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | value of `INITIAL_ADMIN_EMAIL` | value of `INITIAL_ADMIN_PASSWORD` |
+| Demo buyer | `buyer@demo.finekarts.com` | `DemoBuyer123!` |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Buyer registration (`/register/buyer`) creates a Mongo user + buyer org when `MONGODB_URI` is set. Public RFQs/contact/booking/trade offers dual-write to Mongo and `.data/leads.json`. Use the same email as the buyer account on RFQs so requests appear under `/portal/buyer/requests`.
+
+## Brand assets
+
+Client letterhead logo is in `public/brand/finekarts-logo.png`. See `public/brand/BRAND_ASSETS.md`.
+
+## Environment
+
+See `.env.example` for:
+
+- MongoDB, `APP_URL`, session secrets
+- Initial admin values
+- Email / SMS OTP providers
+- Private object storage
+- Malware scan adapter
+- Gemini (server-side only)
+- CRM, newsletter, shipment tracking
+- Feature flags
+
+Missing integrations must show **unconfigured** states — never fake success.
+
+## Gemini / AI assistant
+
+- Controlled by `GEMINI_ENABLED` + `GEMINI_API_KEY` and admin kill switch
+- Server-side only; public assistant falls back to deterministic approved-content answers
+- Never binding quotes, legal opinions, or private portal data
+
+## Organization isolation
+
+- Every query/file access enforces membership and permissions server-side
+- Buyers see only their organization
+- Suppliers see only assigned supplier-side transactions
+- Banking advisors see only explicitly shared packages
+- Browser-supplied organization IDs are never trusted alone
+
+## Roles (summary)
+
+CEO/Super Admin, General Manager, Trade Manager, Employee/Operations, Finance, Compliance/Reviewer, Buyer Org Admin/Member, Supplier Org Admin/Member, Banking Advisor, Read-only Auditor — with granular permissions in `src/lib/authorization/permissions.ts`.
+
+## Storage
+
+Private documents use the storage provider abstraction (`local` writes under `.data/private`, outside the public web root). Signed/short-lived access after authorization. Public marketing images may use `next/image` optimization; private trade docs must not.
+
+## Deployment notes
+
+- Set strong `SESSION_SECRET` / `AUTH_SECRET` (32+ chars)
+- Configure MongoDB, object storage, email domain, and HTTPS
+- Run seed once per environment
+- Configure background jobs/webhooks for email, malware scan, CRM sync, and shipment providers when available
+- Back up MongoDB and private object storage; define retention/legal hold with counsel
+
+## Production-readiness checklist
+
+- [ ] Legal review of all terms, privacy, buyer/supplier terms, AI disclosures
+- [ ] Banking/trade counsel review of LC/SCO/ICPO/PSA templates
+- [ ] Accounting review of tax configuration (HST example is not authoritative)
+- [ ] Privacy review (PIPEDA/GDPR applicability, retention, DPIA as needed)
+- [ ] Security review (MFA for staff, malware scanning, CSP, dependency audit)
+- [ ] Replace temporary brand mark with final logo
+- [ ] Confirm ownership/licensing of product imagery
+- [ ] Provider credentials tested in staging
+- [ ] Cross-tenant isolation tests passing in CI
+
+## Known limitations
+
+- A web app cannot guarantee prevention of screenshots or all copying of documents
+- AI drafts are never final legal/bank-approved documents
+- Tax and finance figures are estimates until accountant-approved rules/providers exist
+- Shipment tracking does not fabricate live vessel positions when no provider is configured
+- Formal PCI/SOC2/ISO/sanctions/AML claims are **not** made by this software alone
+
+## Demo flow (non-sensitive)
+
+1. Browse `/products` and open Canola oil
+2. Submit RFQ on `/trade` (terms acceptance required)
+3. Register buyer at `/register/buyer`
+4. Sign in and explore `/portal/buyer` (CIS, transactions stepper)
+5. Staff explore `/workspace` and `/admin` after admin seed
