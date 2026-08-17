@@ -546,9 +546,9 @@ export function ProcessTimeline() {
 
 export function ShippingTerms() {
   return (
-    <section className="bg-white">
+    <section className="relative bg-white overflow-hidden">
       <div className="grid lg:grid-cols-2">
-        <div className="bg-[#0b1f33] px-6 py-14 text-white sm:px-10 lg:px-16 lg:py-20">
+        <div className="relative bg-[#0b1f33] px-6 py-14 text-white sm:px-10 lg:px-16 lg:py-20 z-10">
           <Reveal>
             <h2 className="text-3xl font-semibold sm:text-4xl">
               Shipping Terms Built Around Your Trade
@@ -595,8 +595,8 @@ export function ShippingTerms() {
 
 export function PackagingSection() {
   return (
-    <section className="bg-[#f4f6f8] py-16 lg:py-24">
-      <div className="container-page">
+    <section className="relative bg-[#f4f6f8] py-16 lg:py-24 overflow-hidden">
+      <div className="container-page relative z-10">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <Reveal>
             <h2 className="text-3xl font-semibold text-[#0b1f33] sm:text-4xl">
@@ -706,52 +706,57 @@ export function InsightsAndNotes({
   ];
 
   return (
-    <section className="bg-[#f3f1ec] py-16 lg:py-24">
-      <div className="container-page">
-        <div className="grid gap-10 lg:grid-cols-[1fr_auto] lg:gap-12 xl:gap-16">
-          <div className="min-w-0">
-            <div className="flex flex-wrap items-end justify-between gap-3">
-              <h2 className="text-3xl font-semibold text-[#001a3d]">Market Insights</h2>
+    <section className="relative w-full overflow-hidden bg-[#f3f1ec] py-16 lg:py-24">
+      <div className="container-page relative z-10 w-full">
+        <div className="grid w-full gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:gap-16">
+          {/* Insights Cards Column */}
+          <div className="w-full">
+            <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+              <h2 className="text-3xl font-semibold text-[#001a3d] lg:text-4xl">
+                Market Insights
+              </h2>
               <Link
                 href="/insights"
-                className="text-sm font-medium text-[#c88e4a] transition hover:text-[#b57d3c]"
+                className="text-sm font-medium text-[#c88e4a] transition-colors hover:text-[#b57d3c]"
               >
                 View All Insights →
               </Link>
             </div>
 
-            <div className="mt-8 grid gap-6 sm:grid-cols-3 sm:gap-5">
+            <div className="grid w-full gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
               {posts.slice(0, 3).map((post, i) => (
                 <Reveal key={post.slug} delay={i * 0.06}>
-                  <Link href={`/insights/${post.slug}`} className="group block">
-                    <div className="relative aspect-[16/11] overflow-hidden rounded-sm bg-[#e4e0d8]">
-                      <Image
-                        src={cardImages[i] ?? cardImages[0]}
-                        alt=""
-                        fill
-                        className="object-cover transition duration-500 group-hover:scale-[1.03]"
-                        sizes="(max-width: 768px) 100vw, 260px"
-                      />
-                    </div>
-                    <div className="bg-transparent pt-4">
-                      <h3 className="text-base font-semibold leading-snug text-[#001a3d] group-hover:text-[#c88e4a]">
-                        {post.title}
-                      </h3>
-                      <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-[#666666]">
-                        {post.excerpt}
-                      </p>
-                      <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-[#c88e4a]">
-                        Read More <span aria-hidden>→</span>
-                      </span>
-                    </div>
-                  </Link>
+                  <article className="group w-full">
+                    <Link href={`/insights/${post.slug}`} className="block w-full">
+                      <div className="relative aspect-[16/11] w-full overflow-hidden rounded-lg bg-[#e4e0d8]">
+                        <Image
+                          src={cardImages[i] ?? cardImages[0]}
+                          alt={`Illustration for ${post.title}`}
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 300px"
+                        />
+                      </div>
+                      <div className="w-full pt-4">
+                        <h3 className="text-base font-semibold leading-snug text-[#001a3d] transition-colors group-hover:text-[#c88e4a]">
+                          {post.title}
+                        </h3>
+                        <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-[#666666]">
+                          {post.excerpt}
+                        </p>
+                        <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-[#c88e4a]">
+                          Read More <span aria-hidden="true">→</span>
+                        </span>
+                      </div>
+                    </Link>
+                  </article>
                 </Reveal>
               ))}
             </div>
           </div>
 
           <Reveal delay={0.1}>
-            <aside className="flex h-full max-w-sm flex-col justify-center border-[#d5d0c8] lg:border-l lg:pl-10 xl:pl-12">
+            <aside className="flex w-full flex-col justify-center rounded-lg bg-white/50 p-8 lg:p-10">
               <p className="text-xs font-semibold tracking-[0.2em] text-[#c88e4a] uppercase">
                 Client Perspective
               </p>
