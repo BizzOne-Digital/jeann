@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/motion/Reveal";
+import { buyerQuoteHref } from "@/lib/marketing/cta-links";
 import { PageHero } from "@/components/marketing/PageHero";
 
 function GoldButton({
@@ -32,7 +33,7 @@ export function AboutHero({ positioning }: { positioning: string }) {
       description={positioning}
       imageAlt="Agricultural commodities and global logistics"
       imageClassName="object-cover object-[72%_center] sm:object-[78%_center]"
-      primaryCta={{ href: "/trade#purchase-request", label: "Request a Quote →" }}
+      primaryCta={{ href: buyerQuoteHref(), label: "Request a Quote →" }}
       secondaryCta={{ href: "/contact", label: "Contact the desk" }}
     />
   );
@@ -264,7 +265,7 @@ export function AboutGlobal({ home3 = "/images/home-3.png" }: { home3?: string }
             </p>
           </Reveal>
           <Reveal delay={0.14}>
-            <GoldButton href="/trade" className="mt-10">
+            <GoldButton href="/resources" className="mt-10">
               How We Trade <span aria-hidden>→</span>
             </GoldButton>
           </Reveal>
@@ -309,7 +310,7 @@ export function AboutCta({
         </Reveal>
         <Reveal delay={0.14}>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <GoldButton href="/trade#purchase-request">
+            <GoldButton href={buyerQuoteHref()}>
               Request a Quote <span aria-hidden>→</span>
             </GoldButton>
             <Link

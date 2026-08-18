@@ -49,9 +49,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         reply:
-          "I couldn't reach the AI service just now. You can still browse products or submit a purchase request at /trade, or email Info@finekarts.com.",
+          "I couldn't reach the AI service just now. You can still browse products or sign in to submit a purchase request at /portal/buyer/new-request, or email Info@finekarts.com.",
         answer:
-          "I couldn't reach the AI service just now. You can still browse products or submit a purchase request at /trade, or email Info@finekarts.com.",
+          "I couldn't reach the AI service just now. You can still browse products or sign in to submit a purchase request at /portal/buyer/new-request, or email Info@finekarts.com.",
         provider: "error-fallback",
         disclaimer:
           "General trade information only — not a binding quote, contract, legal opinion, or bank instruction.",

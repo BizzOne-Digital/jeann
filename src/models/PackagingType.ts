@@ -9,6 +9,7 @@ export interface IPackagingType {
   name: string;
   mode: PackagingMode;
   description?: string;
+  advantages?: string[];
   displayOrder: number;
   status: PackagingTypeStatus;
   deletedAt?: Date;
@@ -26,6 +27,7 @@ const packagingTypeSchema = new Schema<IPackagingType>(
       required: true,
     },
     description: { type: String },
+    advantages: [{ type: String }],
     displayOrder: { type: Number, default: 0 },
     status: {
       type: String,

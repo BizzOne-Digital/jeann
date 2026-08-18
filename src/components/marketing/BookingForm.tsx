@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils/cn";
+import type { BuyerFormDefaults } from "@/lib/auth/buyer-profile";
 import { bookingSchema, type BookingInput } from "@/lib/validation/forms";
 
 const TIMEZONES = [
@@ -20,7 +21,13 @@ const TIMEZONES = [
   "Asia/Kolkata",
 ];
 
-export function BookingForm({ className }: { className?: string }) {
+export function BookingForm({
+  className,
+  prefill,
+}: {
+  className?: string;
+  prefill?: BuyerFormDefaults;
+}) {
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [reference, setReference] = useState<string>();
 
@@ -31,7 +38,14 @@ export function BookingForm({ className }: { className?: string }) {
     reset,
   } = useForm<BookingInput>({
     resolver: zodResolver(bookingSchema),
-    defaultValues: { timezone: "America/Toronto", consent: undefined },
+    defaultValues: {
+      name: prefill?.contactName ?? "",
+      organization: prefill?.companyName ?? "",
+      email: prefill?.email ?? "",
+      phone: prefill?.phone ?? "",
+      timezone: "America/Toronto",
+      consent: undefined,
+    },
   });
 
   async function onSubmit(data: BookingInput) {
@@ -40,6 +54,7 @@ export function BookingForm({ className }: { className?: string }) {
       const res = await fetch("/api/leads/booking", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
         body: JSON.stringify(data),
       });
       const json = (await res.json()) as { ok?: boolean; id?: string };

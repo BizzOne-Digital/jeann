@@ -2,52 +2,104 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils/cn";
 import { purchaseRequestSchema, type PurchaseRequestInput } from "@/lib/validation/forms";
+import type { PackagingItem } from "@/lib/content/packaging-catalog";
+
+import type { BuyerFormDefaults } from "@/lib/auth/buyer-profile";
 
 type Props = {
   defaultProduct?: { slug?: string; name?: string };
+  packagingOptions: PackagingItem[];
+  prefill?: BuyerFormDefaults;
   className?: string;
 };
 
-export function PurchaseRequestForm({ defaultProduct, className }: Props) {
+export function PurchaseRequestForm({ defaultProduct, packagingOptions, prefill, className }: Props) {
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [reference, setReference] = useState<string>();
 
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isSubmitting },
     reset,
   } = useForm<PurchaseRequestInput>({
     resolver: zodResolver(purchaseRequestSchema),
     defaultValues: {
+      companyName: prefill?.companyName ?? "",
+      contactName: prefill?.contactName ?? "",
+      email: prefill?.email ?? "",
+      phone: prefill?.phone ?? "",
       productSlug: defaultProduct?.slug,
-      productName: defaultProduct?.name ?? "",
+      lineItems: [
+        {
+          productName: defaultProduct?.name ?? "",
+          quantity: "",
+          unit: "MT",
+          packaging: "",
+        },
+      ],
       incoterm: "FOB",
       acceptTerms: undefined,
     },
   });
 
+  const { fields, append, remove } = useFieldArray({ control, name: "lineItems" });
+
   async function onSubmit(data: PurchaseRequestInput) {
     setStatus("idle");
+    const payload = {
+      ...data,
+      productName: data.lineItems.map((l) => l.productName).join("; "),
+      quantity: data.lineItems.map((l) => l.quantity).join("; "),
+      unit: data.lineItems.map((l) => l.unit).join("; "),
+      packaging: data.lineItems.map((l) => `${l.productName}: ${l.packaging}`).join("\n"),
+      specification: [
+        data.specification,
+        "Line items:",
+        ...data.lineItems.map(
+          (l, i) =>
+            `${i + 1}. ${l.productName} — ${l.quantity} ${l.unit} — Packaging: ${l.packaging}`,
+        ),
+      ]
+        .filter(Boolean)
+        .join("\n"),
+    };
     try {
       const res = await fetch("/api/leads/purchase-request", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        credentials: "same-origin",
+        body: JSON.stringify(payload),
       });
       const json = (await res.json()) as { ok?: boolean; id?: string; error?: string };
+      if (res.status === 401 || res.status === 403) {
+        setStatus("error");
+        return;
+      }
       if (!res.ok || !json.ok) {
         setStatus("error");
         return;
       }
       setReference(json.id);
       setStatus("success");
-      reset({ incoterm: "FOB", productName: defaultProduct?.name ?? "", productSlug: defaultProduct?.slug });
+      reset({
+        incoterm: "FOB",
+        lineItems: [
+          {
+            productName: defaultProduct?.name ?? "",
+            quantity: "",
+            unit: "MT",
+            packaging: "",
+          },
+        ],
+        productSlug: defaultProduct?.slug,
+      });
     } catch {
       setStatus("error");
     }
@@ -88,25 +140,74 @@ export function PurchaseRequestForm({ defaultProduct, className }: Props) {
       </div>
 
       <input type="hidden" {...register("productSlug")} />
-      <Field label="Product" error={errors.productName?.message}>
-        <input className="field" {...register("productName")} />
-      </Field>
+
+      <div className="space-y-4">
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-sm font-semibold text-[var(--navy)]">Products & packaging</p>
+          <button
+            type="button"
+            className="text-sm font-semibold text-[var(--ocean)] underline"
+            onClick={() =>
+              append({ productName: "", quantity: "", unit: "MT", packaging: "" })
+            }
+          >
+            + Add line
+          </button>
+        </div>
+        {errors.lineItems?.message ? (
+          <p className="text-sm text-red-700">{errors.lineItems.message}</p>
+        ) : null}
+        {fields.map((field, index) => (
+          <div
+            key={field.id}
+            className="rounded-md border border-[var(--line)] bg-[var(--cream)]/50 p-4"
+          >
+            <div className="mb-3 flex items-center justify-between">
+              <span className="text-xs font-semibold uppercase tracking-wide text-[var(--stone)]">
+                Line {index + 1}
+              </span>
+              {fields.length > 1 ? (
+                <button
+                  type="button"
+                  className="text-xs text-red-700 underline"
+                  onClick={() => remove(index)}
+                >
+                  Remove
+                </button>
+              ) : null}
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field
+                label="Product"
+                error={errors.lineItems?.[index]?.productName?.message}
+              >
+                <input className="field" {...register(`lineItems.${index}.productName`)} />
+              </Field>
+              <Field label="Packaging" error={errors.lineItems?.[index]?.packaging?.message}>
+                <select className="field" {...register(`lineItems.${index}.packaging`)} defaultValue="">
+                  <option value="">Select packaging</option>
+                  {packagingOptions.map((p) => (
+                    <option key={p.slug} value={p.name}>
+                      {p.name}
+                    </option>
+                  ))}
+                  <option value="Other / to discuss">Other / to discuss</option>
+                </select>
+              </Field>
+              <Field label="Quantity" error={errors.lineItems?.[index]?.quantity?.message}>
+                <input className="field" {...register(`lineItems.${index}.quantity`)} />
+              </Field>
+              <Field label="Unit" error={errors.lineItems?.[index]?.unit?.message}>
+                <input className="field" placeholder="MT, bags…" {...register(`lineItems.${index}.unit`)} />
+              </Field>
+            </div>
+          </div>
+        ))}
+      </div>
 
       <Field label="Specification notes" error={errors.specification?.message}>
         <textarea className="field min-h-24" {...register("specification")} />
       </Field>
-
-      <div className="grid gap-5 sm:grid-cols-3">
-        <Field label="Quantity" error={errors.quantity?.message}>
-          <input className="field" {...register("quantity")} />
-        </Field>
-        <Field label="Unit" error={errors.unit?.message}>
-          <input className="field" placeholder="MT, containers…" {...register("unit")} />
-        </Field>
-        <Field label="Frequency" error={errors.frequency?.message}>
-          <input className="field" placeholder="One-off, monthly…" {...register("frequency")} />
-        </Field>
-      </div>
 
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Destination country" error={errors.destinationCountry?.message}>
@@ -125,14 +226,14 @@ export function PurchaseRequestForm({ defaultProduct, className }: Props) {
             <option value="Other / to discuss">Other / to discuss</option>
           </select>
         </Field>
-        <Field label="Packaging preference" error={errors.packaging?.message}>
-          <input className="field" {...register("packaging")} />
+        <Field label="Frequency" error={errors.frequency?.message}>
+          <input className="field" placeholder="One-off, monthly…" {...register("frequency")} />
         </Field>
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Inspection preference" error={errors.inspection?.message}>
-          <input className="field" {...register("inspection")} />
+          <input className="field" placeholder="e.g. SGS at load port" {...register("inspection")} />
         </Field>
         <Field label="Timeline" error={errors.timeline?.message}>
           <input className="field" {...register("timeline")} />
@@ -165,7 +266,9 @@ export function PurchaseRequestForm({ defaultProduct, className }: Props) {
       {errors.acceptTerms ? <p className="text-sm text-red-700">{errors.acceptTerms.message}</p> : null}
 
       {status === "error" ? (
-        <p className="text-sm text-red-700">Something went wrong. Please try again or email Info@finekarts.com.</p>
+        <p className="text-sm text-red-700">
+          Something went wrong. Please sign in again or email Info@finekarts.com.
+        </p>
       ) : null}
 
       <Button type="submit" disabled={isSubmitting}>

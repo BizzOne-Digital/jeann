@@ -7,6 +7,7 @@ const NAV: Array<{ label: string; href: string }> = [
   { label: "Dashboard", href: "/admin" },
   { label: "Website Pages", href: "/admin/pages" },
   { label: "Products", href: "/admin/products" },
+  { label: "Packaging", href: "/admin/packaging" },
   { label: "Purchase Requests", href: "/admin/purchase-requests" },
   { label: "Trade Offers", href: "/admin/trade-offers" },
   { label: "Transactions", href: "/admin/transactions" },

@@ -82,6 +82,8 @@ body {
   background-attachment: scroll;
   color: var(--foreground);
   font-family: var(--font-sans), "Segoe UI", sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.6;
   min-height: 100%;
   width: 100%;
   max-width: 100%;
@@ -268,7 +270,7 @@ a {
 .label {
   display: block;
   margin-bottom: 0.4rem;
-  font-size: 0.82rem;
+  font-size: 0.875rem;
   font-weight: 600;
   color: var(--stone);
   letter-spacing: 0.04em;

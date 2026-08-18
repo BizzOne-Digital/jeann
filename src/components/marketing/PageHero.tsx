@@ -19,6 +19,8 @@ type Props = {
   secondaryCta?: PageHeroCta;
   /** full = about-style viewport hero; standard = compact band for inner pages */
   size?: "full" | "standard";
+  /** dark = navy overlay (default); light = cream/paper band for readability */
+  tone?: "dark" | "light";
   imageSrc?: string;
   imageAlt?: string;
   imageClassName?: string;
@@ -32,6 +34,7 @@ export function PageHero({
   primaryCta,
   secondaryCta,
   size = "standard",
+  tone = "dark",
   imageSrc = "/images/hero-commodities.png",
   imageAlt = "",
   imageClassName = "object-cover object-center",
@@ -39,13 +42,15 @@ export function PageHero({
 }: Props) {
   const reduce = useReducedMotion();
   const full = size === "full";
+  const light = tone === "light";
 
   return (
     <section
-      className={`relative w-full max-w-full overflow-hidden bg-[#071525] text-white ${
-        full ? "min-h-[100svh]" : ""
-      }`}
+      className={`relative w-full max-w-full overflow-hidden ${
+        light ? "bg-[var(--cream)] text-[var(--ink)]" : "bg-[#071525] text-white"
+      } ${full ? "min-h-[100svh]" : ""}`}
     >
+      {!light ? (
       <div className="absolute inset-0">
         <Image
           src={imageSrc}
@@ -80,18 +85,32 @@ export function PageHero({
           </>
         )}
       </div>
+      ) : (
+        <div
+          className="absolute inset-0 opacity-40"
+          aria-hidden
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(58,107,140,0.12) 0%, rgba(247,244,239,1) 45%, rgba(255,255,255,1) 100%)",
+          }}
+        />
+      )}
 
       <div
         className={`container-page relative ${
           full
             ? "flex min-h-[100svh] flex-col justify-center pb-24 pt-28 lg:pb-28 lg:pt-32"
-            : "py-16 sm:py-20 lg:py-24"
+            : light
+              ? "py-14 sm:py-16 lg:py-20"
+              : "py-16 sm:py-20 lg:py-24"
         }`}
       >
         <div className={`min-w-0 ${full ? "max-w-xl lg:max-w-2xl" : "max-w-2xl"}`}>
           <Reveal>
             <p
-              className={`display tracking-tight break-words text-white ${
+              className={`display tracking-tight break-words ${
+                light ? "text-[var(--ocean)]" : "text-white"
+              } ${
                 full
                   ? "text-2xl sm:text-4xl lg:text-[2.75rem]"
                   : "text-xl sm:text-3xl"
@@ -103,9 +122,11 @@ export function PageHero({
 
           <motion.h1
             className={`mt-4 break-words font-semibold leading-tight tracking-tight ${
+              light ? "text-[var(--navy)]" : ""
+            } ${
               full
                 ? "text-[1.75rem] sm:text-4xl lg:text-[2.85rem]"
-                : "text-[1.65rem] sm:text-4xl lg:text-[2.75rem]"
+                : "text-[1.75rem] sm:text-4xl lg:text-[2.75rem]"
             }`}
             initial={reduce ? false : { opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -116,8 +137,8 @@ export function PageHero({
 
           <Reveal delay={0.12}>
             <p
-              className={`mt-4 max-w-xl leading-relaxed text-white/70 ${
-                full ? "text-base sm:text-lg" : "text-base"
+              className={`mt-4 max-w-xl leading-relaxed ${
+                light ? "text-base text-[var(--stone)] sm:text-lg" : "text-white/70 text-base sm:text-lg"
               }`}
             >
               {description}
@@ -130,7 +151,7 @@ export function PageHero({
                 {primaryCta ? (
                   <Link
                     href={primaryCta.href}
-                    className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-md bg-[#d4a84b] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#c4983f] sm:w-auto"
+                    className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-md bg-[#d4a84b] px-6 py-3.5 text-base font-semibold text-white transition hover:bg-[#c4983f] sm:w-auto"
                   >
                     {primaryCta.label}
                   </Link>
@@ -138,7 +159,11 @@ export function PageHero({
                 {secondaryCta ? (
                   <Link
                     href={secondaryCta.href}
-                    className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-md border border-white/70 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10 sm:w-auto"
+                    className={`focus-ring inline-flex w-full items-center justify-center gap-2 rounded-md border px-6 py-3.5 text-base font-semibold transition sm:w-auto ${
+                      light
+                        ? "border-[var(--navy)]/25 text-[var(--navy)] hover:bg-[var(--navy)]/5"
+                        : "border-white/70 text-white hover:bg-white/10"
+                    }`}
                   >
                     {secondaryCta.label}
                   </Link>

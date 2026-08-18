@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Reveal } from "@/components/motion/Reveal";
 import { PageHero } from "@/components/marketing/PageHero";
 import { PurchaseRequestForm } from "@/components/marketing/PurchaseRequestForm";
+import { getPackagingSync } from "@/lib/content/packaging-catalog";
 import { TradeOfferForm } from "@/components/marketing/TradeOfferForm";
 
 const TERMS = [
@@ -322,7 +323,7 @@ export function TradePurchaseRequest({
         </div>
         <Reveal delay={0.08} y={20}>
           <div className="border border-[#e4e0d8] bg-[#f3f1ec]/60 p-6 sm:p-8">
-            <PurchaseRequestForm defaultProduct={defaultProduct} />
+            <PurchaseRequestForm defaultProduct={defaultProduct} packagingOptions={getPackagingSync()} />
           </div>
         </Reveal>
       </div>

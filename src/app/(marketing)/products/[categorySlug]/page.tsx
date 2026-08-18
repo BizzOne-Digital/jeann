@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { PageHero } from "@/components/marketing/PageHero";
 import { Reveal } from "@/components/motion/Reveal";
 import { getCategories, getCategory } from "@/lib/content/catalog";
+import { buyerQuoteHref } from "@/lib/marketing/cta-links";
 import { getCategoryCover } from "@/lib/content/product-images";
 
 type Props = { params: Promise<{ categorySlug: string }> };
@@ -37,7 +38,7 @@ export default async function CategoryPage({ params }: Props) {
         description={category.summary}
         imageSrc={cover.image}
         imageAlt={cover.alt}
-        primaryCta={{ href: "/trade#purchase-request", label: "Request a Quote →" }}
+        primaryCta={{ href: buyerQuoteHref(), label: "Request a Quote →" }}
         secondaryCta={{ href: "/products", label: "All categories" }}
       />
 

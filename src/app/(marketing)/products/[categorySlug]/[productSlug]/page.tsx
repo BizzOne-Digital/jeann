@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { PageHero } from "@/components/marketing/PageHero";
 import { Reveal } from "@/components/motion/Reveal";
 import { getCategories, getProduct } from "@/lib/content/catalog";
+import { buyerQuoteHref } from "@/lib/marketing/cta-links";
 import { getCategoryCover } from "@/lib/content/product-images";
 
 type Props = { params: Promise<{ categorySlug: string; productSlug: string }> };
@@ -33,7 +34,7 @@ export default async function ProductPage({ params }: Props) {
   const { category, product } = result;
   const cover = getCategoryCover(category.slug);
   const related = category.products.filter((p) => p.slug !== product.slug).slice(0, 3);
-  const quoteHref = `/trade?product=${encodeURIComponent(product.slug)}#purchase-request`;
+  const quoteHref = buyerQuoteHref(product.slug);
   const heroImage = product.image || cover.image;
 
   return (

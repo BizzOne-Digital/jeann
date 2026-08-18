@@ -9,7 +9,7 @@ import { getSite } from "@/lib/content/catalog";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Reach the Finekarts trade desk, supplier relations, or general enquiries.",
+  description: "Reach the Finekarts trade desk. Buyer messages and consultations are submitted through the buyer portal after sign-in.",
 };
 
 export default function ContactPage() {

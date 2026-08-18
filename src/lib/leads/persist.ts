@@ -73,7 +73,7 @@ export async function persistLeadToMongo(
         termsVersion: 1,
         termsAcceptedAt: new Date(),
         ipHash,
-        source: "public-form",
+        source: "buyer-portal",
       });
       await models.Lead.create({
         source: "purchase-request",

@@ -4,15 +4,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/motion/Reveal";
 import { PageHero } from "@/components/marketing/PageHero";
-import { ContactForm } from "@/components/marketing/ContactForm";
+import { BuyerPortalGate } from "@/components/marketing/BuyerPortalGate";
 
 export function ContactHero() {
   return (
     <PageHero
+      tone="light"
       title="Speak with our team"
-      description="Reach the Finekarts trade desk, supplier relations, or general enquiries. Response times vary by department and enquiry complexity."
-      primaryCta={{ href: "#contact-form", label: "Send a message →" }}
-      secondaryCta={{ href: "/booking", label: "Book a consultation" }}
+      description="Reach the Finekarts trade desk for qualified buyer enquiries. Signed-in buyers can send messages, book consultations, and submit purchase requests from the buyer portal."
+      primaryCta={{ href: "/login", label: "Buyer sign in →" }}
+      secondaryCta={{ href: "/register/buyer", label: "Register" }}
     />
   );
 }
@@ -28,22 +29,22 @@ export function ContactChannels({
 }) {
   const channels = [
     {
-      title: "Trade desk",
-      text: "RFQs, specifications, Incoterms, and logistics discussions for qualified buyers.",
-      href: "/trade#purchase-request",
-      linkLabel: "Submit a purchase request",
-    },
-    {
-      title: "Supplier relations",
-      text: "Programme introductions and trade offers. Portal access remains invitation-only after verification.",
-      href: "/trade#trade-offer",
-      linkLabel: "Submit a trade offer",
+      title: "Purchase requests",
+      text: "RFQs, specifications, Incoterms, and logistics discussions for signed-in buyers.",
+      href: "/login",
+      linkLabel: "Sign in to submit",
     },
     {
       title: "Consultations",
-      text: "Request a conversation window. Preferred times are not confirmed until staff responds.",
-      href: "/booking",
-      linkLabel: "Book a consultation",
+      text: "Request a trade desk conversation. Preferred times are confirmed by staff only.",
+      href: "/login",
+      linkLabel: "Book via buyer portal",
+    },
+    {
+      title: "General enquiries",
+      text: "Company information, compliance, and careers — email or use the form after sign-in.",
+      href: "#contact-form",
+      linkLabel: "Contact form",
     },
   ];
 
@@ -188,15 +189,10 @@ export function ContactFormSection({
         </div>
 
         <Reveal delay={0.08} y={20}>
-          <div className="border border-[#e4e0d8] bg-white p-6 sm:p-8">
-            <h3 className="text-lg font-semibold text-[#001a3d]">Enquiry form</h3>
-            <p className="mt-2 text-sm text-[#666666]">
-              Fields marked by validation are required. We route messages by department.
-            </p>
-            <div className="mt-6">
-              <ContactForm />
-            </div>
-          </div>
+          <BuyerPortalGate
+            title="Message the trade desk"
+            description="Contact and consultation forms are available after buyer sign-in. Register or sign in to send a message from your portal."
+          />
         </Reveal>
       </div>
     </section>
@@ -230,10 +226,10 @@ export function ContactCta() {
         <Reveal delay={0.14}>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link
-              href="/trade#purchase-request"
-              className="focus-ring inline-flex items-center justify-center gap-2 rounded-md bg-[#d4a84b] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#c4983f]"
+              href="/login"
+              className="focus-ring inline-flex items-center justify-center gap-2 rounded-md bg-[#d4a84b] px-6 py-3.5 text-base font-semibold text-white transition hover:bg-[#c4983f]"
             >
-              Request a Quote <span aria-hidden>→</span>
+              Buyer sign in <span aria-hidden>→</span>
             </Link>
             <Link
               href="/products"

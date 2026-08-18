@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { PageHero } from "@/components/marketing/PageHero";
 import { InsightRelated, InsightsCta } from "@/components/marketing/InsightSections";
 import { getInsightCover } from "@/lib/content/insight-images";
+import { buyerQuoteHref } from "@/lib/marketing/cta-links";
 import { getInsight, SEED_INSIGHTS } from "@/lib/content/catalog";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -46,7 +47,7 @@ export default async function InsightArticlePage({ params }: Props) {
         description={post.excerpt}
         imageSrc={cover}
         imageAlt=""
-        primaryCta={{ href: "/trade#purchase-request", label: "Request a Quote →" }}
+        primaryCta={{ href: buyerQuoteHref(), label: "Request a Quote →" }}
         secondaryCta={{ href: "/insights", label: "All insights" }}
       />
 
@@ -83,7 +84,7 @@ export default async function InsightArticlePage({ params }: Props) {
 
             <div className="mt-12 flex flex-wrap gap-3 border-t border-[#d5d0c8] pt-10">
               <Link
-                href="/trade#purchase-request"
+                href={buyerQuoteHref()}
                 className="focus-ring inline-flex items-center gap-2 rounded-md bg-[#d4a84b] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#c4983f]"
               >
                 Request a Quote <span aria-hidden>→</span>
@@ -115,8 +116,8 @@ export default async function InsightArticlePage({ params }: Props) {
                 </p>
                 <ul className="mt-4 space-y-3 text-sm text-[#555555]">
                   <li>
-                    <Link href="/trade" className="transition hover:text-[#c88e4a]">
-                      How we trade
+                    <Link href="/resources" className="transition hover:text-[#c88e4a]">
+                      Trade resources
                     </Link>
                   </li>
                   <li>
@@ -125,7 +126,7 @@ export default async function InsightArticlePage({ params }: Props) {
                     </Link>
                   </li>
                   <li>
-                    <Link href="/shipping-documents" className="transition hover:text-[#c88e4a]">
+                    <Link href="/resources" className="transition hover:text-[#c88e4a]">
                       Shipping documents
                     </Link>
                   </li>

@@ -1,15 +1,23 @@
 import { z } from "zod";
 
+export const purchaseRequestLineSchema = z.object({
+  productName: z.string().min(2).max(200),
+  quantity: z.string().min(1).max(80),
+  unit: z.string().min(1).max(40),
+  packaging: z.string().min(1).max(200),
+});
+
 export const purchaseRequestSchema = z.object({
   companyName: z.string().min(2).max(200),
   contactName: z.string().min(2).max(120),
   email: z.email(),
   phone: z.string().min(7).max(40),
   productSlug: z.string().optional(),
-  productName: z.string().min(2).max(200),
-  specification: z.string().max(2000).optional(),
-  quantity: z.string().min(1).max(80),
-  unit: z.string().min(1).max(40),
+  productName: z.string().min(2).max(200).optional(),
+  lineItems: z.array(purchaseRequestLineSchema).min(1).max(20),
+  specification: z.string().max(10000).optional(),
+  quantity: z.string().max(80).optional(),
+  unit: z.string().max(40).optional(),
   frequency: z.string().max(120).optional(),
   destinationCountry: z.string().min(2).max(120),
   destinationPort: z.string().max(120).optional(),
@@ -20,6 +28,11 @@ export const purchaseRequestSchema = z.object({
   paymentPreference: z.string().max(200).optional(),
   notes: z.string().max(4000).optional(),
   acceptTerms: z.literal(true, { error: "You must accept the submission terms." }),
+}).superRefine((data, ctx) => {
+  const first = data.lineItems[0];
+  if (!first?.productName) {
+    ctx.addIssue({ code: "custom", message: "At least one product line is required.", path: ["lineItems"] });
+  }
 });
 
 export const tradeOfferSchema = z.object({
@@ -41,7 +54,7 @@ export const contactSchema = z.object({
   name: z.string().min(2).max(120),
   email: z.email(),
   phone: z.string().max(40).optional(),
-  department: z.enum(["Trade desk", "Supplier relations", "General", "Careers", "Compliance"]),
+  department: z.enum(["Trade desk", "General", "Careers", "Compliance"]),
   message: z.string().min(10).max(4000),
   consent: z.literal(true, { error: "Consent is required." }),
   website: z.string().max(0).optional(),

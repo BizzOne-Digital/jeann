@@ -143,7 +143,7 @@ export function HomeHero() {
   ];
 
   return (
-    <section className="relative min-h-[100svh] w-full max-w-full overflow-hidden bg-[#071525] text-white">
+    <section className="relative min-h-[100svh] w-full max-w-full overflow-hidden bg-[var(--cream)] text-[var(--navy)]">
       <div className="absolute inset-0">
         <Image
           src="/images/hero-commodities.png"
@@ -151,28 +151,28 @@ export function HomeHero() {
           fill
           priority
           sizes="100vw"
-          className="object-cover object-[72%_center] sm:object-[78%_center]"
+          className="object-cover object-[72%_center] opacity-90 sm:object-[78%_center]"
         />
         <div
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(90deg, rgba(4,14,28,0.97) 0%, rgba(4,14,28,0.92) 24%, rgba(4,14,28,0.58) 48%, rgba(4,14,28,0.22) 70%, rgba(4,14,28,0.12) 100%)",
+              "linear-gradient(90deg, rgba(255,252,247,0.96) 0%, rgba(255,252,247,0.88) 28%, rgba(255,252,247,0.55) 52%, rgba(255,252,247,0.25) 72%, rgba(255,252,247,0.08) 100%)",
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#071525]/70 via-transparent to-[#071525]/25" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--cream)]/80 via-transparent to-white/20" />
       </div>
 
       <div className="container-page relative flex min-h-[100svh] flex-col justify-center pb-28 pt-28 lg:pb-32 lg:pt-32">
         <div className="min-w-0 max-w-xl lg:max-w-2xl">
           <Reveal>
-            <p className="text-[0.65rem] font-semibold tracking-[0.18em] text-[#d4a84b] uppercase sm:text-xs sm:tracking-[0.26em]">
+            <p className="text-[0.65rem] font-semibold tracking-[0.18em] text-[var(--gold)] uppercase sm:text-xs sm:tracking-[0.26em]">
               Global sourcing • Bulk commodities • Worldwide delivery
             </p>
           </Reveal>
 
           <motion.h1
-            className="mt-5 break-words text-[2rem] font-bold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-[3.6rem]"
+            className="mt-5 break-words text-[2rem] font-bold leading-[1.08] tracking-tight text-[var(--navy)] sm:text-5xl lg:text-[3.6rem]"
             initial={reduce ? false : { opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
@@ -181,7 +181,7 @@ export function HomeHero() {
           </motion.h1>
 
           <Reveal delay={0.1}>
-            <p className="mt-6 max-w-lg text-base leading-relaxed text-white/80 sm:text-lg">
+            <p className="mt-6 max-w-lg text-base leading-relaxed text-[var(--stone)] sm:text-lg">
               We source and supply high-quality agricultural commodities to qualified buyers across
               global markets.
             </p>
@@ -190,14 +190,14 @@ export function HomeHero() {
           <Reveal delay={0.16}>
             <div className="mt-9 flex w-full max-w-full flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Link
-                href="/trade#purchase-request"
-                className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-sm bg-[#d4a84b] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#c4983f] sm:w-auto"
+                href="/login"
+                className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-sm bg-[#d4a84b] px-6 py-3.5 text-base font-semibold text-white transition hover:bg-[#c4983f] sm:w-auto"
               >
-                Post a Purchase Request <span aria-hidden>→</span>
+                Buyer portal <span aria-hidden>→</span>
               </Link>
               <Link
                 href="/products"
-                className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-sm border border-white/75 bg-transparent px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10 sm:w-auto"
+                className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-sm border border-[var(--navy)]/25 bg-white/80 px-6 py-3.5 text-sm font-semibold text-[var(--navy)] transition hover:bg-white sm:w-auto"
               >
                 Explore Products
               </Link>
@@ -205,14 +205,14 @@ export function HomeHero() {
           </Reveal>
 
           <Reveal delay={0.22}>
-            <ul className="mt-10 flex flex-col gap-3 text-[0.88rem] text-[#d4a84b] sm:mt-12 sm:flex-row sm:flex-wrap sm:items-center sm:gap-y-4 sm:text-[0.92rem]">
+            <ul className="mt-10 flex flex-col gap-3 text-[0.88rem] text-[var(--navy)] sm:mt-12 sm:flex-row sm:flex-wrap sm:items-center sm:gap-y-4 sm:text-[0.92rem]">
               {trust.map((item, i) => (
                 <li key={item.label} className="flex items-center">
                   {i > 0 ? (
-                    <span className="mx-5 hidden h-5 w-px bg-white/35 sm:block" aria-hidden />
+                    <span className="mx-5 hidden h-5 w-px bg-[var(--line-strong)] sm:block" aria-hidden />
                   ) : null}
                   <span className="flex items-center gap-2.5">
-                    <span className="shrink-0 text-[#d4a84b]">{item.icon}</span>
+                    <span className="shrink-0 text-[var(--gold)]">{item.icon}</span>
                     <span className="font-medium tracking-wide">{item.label}</span>
                   </span>
                 </li>
@@ -277,7 +277,7 @@ export function ConnectionSection({
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mt-5 text-base leading-relaxed text-[#555555]">
-              Finekarts Incorporated connects trusted suppliers with qualified buyers worldwide. We
+              Finekarts Incorporated connects qualified buyers with established origin programmes worldwide. We
               specialize in the sourcing, quality coordination, and logistics of bulk agricultural
               commodities with integrity and professionalism.
             </p>
@@ -460,7 +460,7 @@ export function SourcedResponsibly({ home3 = "/images/home-3.png" }: { home3?: s
           </Reveal>
           <Reveal delay={0.08}>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-[#555555]">
-              Our global network of suppliers and logistics partners enables us to deliver quality
+              Our global network of logistics partners enables us to deliver quality
               commodities reliably and responsibly.
             </p>
           </Reveal>
@@ -481,10 +481,10 @@ export function SourcedResponsibly({ home3 = "/images/home-3.png" }: { home3?: s
 
           <Reveal delay={0.28}>
             <Link
-              href="/trade"
-              className="focus-ring mt-10 inline-flex items-center gap-2 rounded-md bg-[#d4a84b] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#c4983f]"
+              href="/resources"
+              className="focus-ring mt-10 inline-flex items-center gap-2 rounded-md bg-[#d4a84b] px-6 py-3.5 text-base font-semibold text-white transition hover:bg-[#c4983f]"
             >
-              How We Trade <span aria-hidden>→</span>
+              Resources & documents <span aria-hidden>→</span>
             </Link>
           </Reveal>
         </div>
@@ -503,7 +503,7 @@ export function ProcessTimeline() {
     {
       n: "02",
       title: "Review & Quote",
-      text: "Trade desk reviews fit against supplier programmes and workable logistics structures.",
+      text: "Trade desk reviews fit against origin programmes and workable logistics structures.",
     },
     {
       n: "03",
@@ -574,7 +574,7 @@ export function ShippingTerms() {
             ))}
           </div>
           <Reveal delay={0.16}>
-            <GoldButton href="/trade" className="mt-8">
+            <GoldButton href="/shipping" className="mt-8">
               Choose Your Shipment →
             </GoldButton>
           </Reveal>
@@ -611,7 +611,7 @@ export function PackagingSection() {
         </div>
         <p className="mt-3 max-w-2xl text-sm text-stone">
           Not every package type is available for every product. Compatibility depends on product,
-          supplier, route, and agreement.
+          corridor, and contract terms.
         </p>
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           {PACKAGING.map((item, i) => (
@@ -665,10 +665,10 @@ export function ReadyCtaBanner() {
           <Reveal delay={0.14}>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
-                href="/trade#purchase-request"
+                href="/login"
                 className="focus-ring inline-flex items-center gap-2 rounded-md bg-[#d4a84b] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#c4983f]"
               >
-                Post a Purchase Request <span aria-hidden>→</span>
+                Buyer portal sign in <span aria-hidden>→</span>
               </Link>
               <button
                 type="button"

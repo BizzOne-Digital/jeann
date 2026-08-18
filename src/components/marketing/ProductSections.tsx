@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 import { Reveal } from "@/components/motion/Reveal";
 import { PageHero } from "@/components/marketing/PageHero";
 import { searchProducts, type SeedCategory } from "@/lib/content/catalog";
+import { buyerQuoteHref } from "@/lib/marketing/cta-links";
 import { getCategoryCover } from "@/lib/content/product-images";
 
 export function ProductsHero() {
@@ -13,7 +14,7 @@ export function ProductsHero() {
     <PageHero
       title="Commodities we trade"
       description="Browse edible oils, sugar, rice & grains, beans & pulses, and related programmes. Specifications are confirmed with the trade desk — not fixed public prices."
-      primaryCta={{ href: "/trade#purchase-request", label: "Request a Quote →" }}
+      primaryCta={{ href: buyerQuoteHref(), label: "Request a Quote →" }}
       secondaryCta={{ href: "#catalog", label: "Browse catalog" }}
     />
   );
@@ -205,7 +206,7 @@ export function ProductsCta() {
         <Reveal delay={0.14}>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link
-              href="/trade#purchase-request"
+              href={buyerQuoteHref()}
               className="focus-ring inline-flex items-center justify-center gap-2 rounded-md bg-[#d4a84b] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#c4983f]"
             >
               Request a Quote <span aria-hidden>→</span>

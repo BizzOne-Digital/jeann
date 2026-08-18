@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Reveal } from "@/components/motion/Reveal";
 import { PageHero } from "@/components/marketing/PageHero";
+import { buyerQuoteHref } from "@/lib/marketing/cta-links";
 import { getInsightCover } from "@/lib/content/insight-images";
 
 export type InsightCard = {
@@ -33,7 +34,7 @@ export function InsightsHero() {
       title="Market insights"
       description="Plain-language explainers on Incoterms, RFQs, packaging, and shipping documents for qualified counterparties. Educational only — not legal advice."
       primaryCta={{ href: "#insights-list", label: "Browse articles →" }}
-      secondaryCta={{ href: "/trade", label: "How we trade" }}
+      secondaryCta={{ href: "/resources", label: "Trade resources" }}
     />
   );
 }
@@ -223,7 +224,7 @@ export function InsightsCta() {
         <Reveal delay={0.14}>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link
-              href="/trade#purchase-request"
+              href={buyerQuoteHref()}
               className="focus-ring inline-flex items-center justify-center gap-2 rounded-md bg-[#d4a84b] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#c4983f]"
             >
               Request a Quote <span aria-hidden>→</span>

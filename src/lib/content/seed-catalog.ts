@@ -281,54 +281,99 @@ export const SEED_PACKAGING = [
     name: "FIBCs / jumbo bags",
     mode: "dry" as const,
     description: "Flexible intermediate bulk containers for many dry commodities. Compatibility depends on product and route.",
+    advantages: [
+      "Efficient handling of dry bulk in 500–2000 kg units",
+      "Suitable for rice, pulses, grains, and similar products where agreed",
+      "Stackable on pallets for container or warehouse storage",
+    ],
   },
   {
     slug: "container-liners",
     name: "Container liners",
     mode: "dry" as const,
     description: "Liners for dry bulk in standard containers where suitable.",
+    advantages: [
+      "Converts a standard container into a bulk dry compartment",
+      "Reduces contamination from previous cargoes when properly installed",
+      "Useful for granular products on containerised routes",
+    ],
   },
   {
     slug: "multi-wall-sacks",
     name: "Multi-wall sacks",
     mode: "dry" as const,
     description: "Bagged packaging common for rice, pulses, sugar, and similar goods.",
+    advantages: [
+      "Familiar unit for retail and industrial redistribution",
+      "Easier partial discharge and inventory control",
+      "Often preferred for sugar and specialty rice grades",
+    ],
   },
   {
     slug: "flexitanks",
     name: "Flexitanks",
     mode: "liquid" as const,
     description: "Non-hazardous liquid bulk in containers, subject to product suitability.",
+    advantages: [
+      "Cost-effective liquid bulk in 20ft containers",
+      "Suitable for edible oils and similar non-hazardous liquids",
+      "Single-use bladder reduces cross-contamination risk when properly fitted",
+    ],
   },
   {
     slug: "ibc-totes",
     name: "IBC totes",
     mode: "liquid" as const,
     description: "Intermediate bulk containers for liquid products where agreed.",
+    advantages: [
+      "Reusable or single-trip options depending on programme",
+      "Convenient for smaller liquid lots and multi-drop delivery",
+      "Standard footprint for warehouse and truck handling",
+    ],
   },
   {
     slug: "drums-barrels",
     name: "Drums / barrels",
     mode: "liquid" as const,
     description: "Drum programmes for smaller liquid lots or specific handling needs.",
+    advantages: [
+      "Suitable for sample programmes and smaller industrial buyers",
+      "Well understood for customs and warehouse handling",
+      "Multiple steel or HDPE options per product requirements",
+    ],
   },
   {
     slug: "iso-tank-containers",
     name: "ISO tank containers",
     mode: "liquid" as const,
     description: "Tank containers for suitable liquid commodities and routes.",
+    advantages: [
+      "Dedicated tank for food-grade or chemical-grade liquids",
+      "Efficient intermodal rail/truck/ship transfer",
+      "Temperature-controlled options where route permits",
+    ],
   },
   {
     slug: "dry-bulk-vessel",
     name: "Dry-bulk vessel holds",
     mode: "unpackaged" as const,
     description: "Unpackaged dry bulk where vessel programmes apply. Not available for every product.",
+    advantages: [
+      "Lowest unit cost for very large dry bulk volumes",
+      "Suited to grains, oilseeds, and similar unpackaged programmes",
+      "Requires hold cleanliness and draft survey discipline",
+    ],
   },
   {
     slug: "product-chemical-tankers",
     name: "Product / chemical tankers",
     mode: "unpackaged" as const,
     description: "Tanker programmes where product chemistry and route permit. Subject to agreement.",
+    advantages: [
+      "Dedicated parcel or full-ship liquid bulk",
+      "Pipeline loading/discharge at suitable terminals",
+      "Essential for large edible oil and oleochemical volumes",
+    ],
   },
 ];
 
@@ -341,5 +386,5 @@ export const SITE = {
   addressLine1: "4275 Village Center Court",
   addressLine2: "Mississauga, Ontario L4Z 1V3, Canada",
   positioning:
-    "An extension of manufacturers and suppliers — sourcing quality agricultural commodities globally and delivering to qualified buyers worldwide.",
+    "Sourcing quality agricultural commodities globally and delivering to qualified buyers worldwide through structured trade programmes.",
 };

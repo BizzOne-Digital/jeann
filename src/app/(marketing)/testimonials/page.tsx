@@ -15,7 +15,7 @@ export default function TestimonialsPage() {
         title="What counterparties say"
         description="We publish testimonials only after CMS approval. There are no fabricated quotes on this site."
         primaryCta={{ href: "/contact", label: "Start a conversation →" }}
-        secondaryCta={{ href: "/trade", label: "How we trade" }}
+        secondaryCta={{ href: "/resources", label: "Trade resources" }}
       />
 
       <section className="bg-[#f3f1ec] py-16 lg:py-24">

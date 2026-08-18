@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { FaqAccordion } from "@/components/marketing/FaqAccordion";
 import { PageHero } from "@/components/marketing/PageHero";
+import { buyerQuoteHref } from "@/lib/marketing/cta-links";
 import { SEED_FAQS } from "@/lib/content/catalog";
 
 export const metadata: Metadata = {
   title: "FAQ",
-  description: "Frequently asked questions about Finekarts RFQs, Incoterms, pricing, and supplier access.",
+  description: "Frequently asked questions about Finekarts RFQs, Incoterms, pricing, and buyer access.",
 };
 
 export default function FaqPage() {
@@ -15,7 +16,7 @@ export default function FaqPage() {
       <PageHero
         title="Common questions"
         description="Straight answers about how we trade. For deal-specific advice, contact the trade desk."
-        primaryCta={{ href: "/trade#purchase-request", label: "Request a Quote →" }}
+        primaryCta={{ href: buyerQuoteHref(), label: "Request a Quote →" }}
         secondaryCta={{ href: "/contact", label: "Contact us" }}
       />
 
@@ -24,7 +25,7 @@ export default function FaqPage() {
           <FaqAccordion items={SEED_FAQS} />
           <div className="mt-12 flex flex-wrap gap-3">
             <Link
-              href="/trade#purchase-request"
+              href={buyerQuoteHref()}
               className="focus-ring inline-flex items-center gap-2 rounded-md bg-[#d4a84b] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#c4983f]"
             >
               Request a Quote <span aria-hidden>→</span>

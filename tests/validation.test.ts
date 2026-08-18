@@ -9,9 +9,14 @@ describe("lead validation", () => {
       contactName: "Alex Buyer",
       email: "alex@example.com",
       phone: "4165550100",
-      productName: "Canola oil",
-      quantity: "1000",
-      unit: "MT",
+      lineItems: [
+        {
+          productName: "Canola oil",
+          quantity: "1000",
+          unit: "MT",
+          packaging: "Flexitank",
+        },
+      ],
       destinationCountry: "Canada",
       incoterm: "CIF",
       acceptTerms: false,

@@ -5,9 +5,16 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { cn } from "@/lib/utils/cn";
+import type { BuyerFormDefaults } from "@/lib/auth/buyer-profile";
 import { contactSchema, type ContactInput } from "@/lib/validation/forms";
 
-export function ContactForm({ className }: { className?: string }) {
+export function ContactForm({
+  className,
+  prefill,
+}: {
+  className?: string;
+  prefill?: Pick<BuyerFormDefaults, "contactName" | "email" | "phone">;
+}) {
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
 
   const {
@@ -17,7 +24,13 @@ export function ContactForm({ className }: { className?: string }) {
     reset,
   } = useForm<ContactInput>({
     resolver: zodResolver(contactSchema),
-    defaultValues: { consent: undefined, website: "" },
+    defaultValues: {
+      name: prefill?.contactName ?? "",
+      email: prefill?.email ?? "",
+      phone: prefill?.phone ?? "",
+      consent: undefined,
+      website: "",
+    },
   });
 
   async function onSubmit(data: ContactInput) {
@@ -26,6 +39,7 @@ export function ContactForm({ className }: { className?: string }) {
       const res = await fetch("/api/leads/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
         body: JSON.stringify(data),
       });
       const json = (await res.json()) as { ok?: boolean };
@@ -77,7 +91,6 @@ export function ContactForm({ className }: { className?: string }) {
         <Field label="Department" error={errors.department?.message}>
           <select className="field" {...register("department")}>
             <option value="Trade desk">Trade desk</option>
-            <option value="Supplier relations">Supplier relations</option>
             <option value="General">General</option>
             <option value="Careers">Careers</option>
             <option value="Compliance">Compliance</option>

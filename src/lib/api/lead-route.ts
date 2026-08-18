@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import type { z } from "zod";
+import { requireBuyerApiSession } from "@/lib/auth/require-buyer-api";
 import { saveLead, type LeadKind } from "@/lib/leads/store";
 import { persistLeadToMongo } from "@/lib/leads/persist";
 
@@ -10,9 +11,19 @@ function clientIp(request: NextRequest) {
   );
 }
 
-export function leadRoute(kind: LeadKind, schema: z.ZodType) {
+type LeadRouteOptions = {
+  /** Buyer must be signed in (portal forms). */
+  requireBuyer?: boolean;
+};
+
+export function leadRoute(kind: LeadKind, schema: z.ZodType, options: LeadRouteOptions = {}) {
   return async function POST(request: NextRequest) {
     try {
+      if (options.requireBuyer) {
+        const auth = await requireBuyerApiSession();
+        if ("error" in auth && auth.error) return auth.error;
+      }
+
       const parsed = schema.safeParse(await request.json());
       if (!parsed.success) {
         return NextResponse.json(

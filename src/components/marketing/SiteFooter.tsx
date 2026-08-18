@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getSite } from "@/lib/content/catalog";
-import { NewsletterForm } from "@/components/marketing/NewsletterForm";
 
 const LINKS = [
   {
@@ -24,12 +23,12 @@ const LINKS = [
     ],
   },
   {
-    title: "Trade",
+    title: "Resources",
     items: [
-      { href: "/trade", label: "How we trade" },
+      { href: "/resources", label: "Documents & terminology" },
       { href: "/packaging", label: "Packaging" },
-      { href: "/shipping-documents", label: "Shipping documents" },
-      { href: "/booking", label: "Book a consultation" },
+      { href: "/shipping", label: "Shipping" },
+      { href: "/inspections", label: "Inspections" },
       { href: "/insights", label: "Insights" },
     ],
   },
@@ -67,8 +66,8 @@ export function SiteFooter() {
                 </p>
               </div>
             </div>
-            <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/65">
-              Global agricultural commodity trading for qualified buyers and suppliers.
+            <p className="mt-5 max-w-xs text-base leading-relaxed text-white/65">
+              Global agricultural commodity trading for qualified international buyers.
             </p>
             <div className="mt-5 space-y-1 text-sm text-white/75">
               <p>
@@ -110,12 +109,19 @@ export function SiteFooter() {
 
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#e89a2d]">
-              Support & Insights
+              Buyer portal
             </p>
             <p className="mt-3 text-sm text-white/65">
-              Optional updates on process notes and published resources. Consent required.
+              RFQs, consultations, and trade desk messages are submitted after buyer sign-in.
             </p>
-            <NewsletterForm />
+            <div className="mt-4 flex flex-wrap gap-2">
+              <Link href="/login" className="rounded-md bg-[#e89a2d] px-4 py-2.5 text-sm font-semibold text-[#071525] transition hover:bg-[#f0a93c]">
+                Sign in
+              </Link>
+              <Link href="/register/buyer" className="rounded-md border border-white/25 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10">
+                Register
+              </Link>
+            </div>
           </div>
         </div>
 

@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     template: "%s | Finekarts Incorporated",
   },
   description:
-    "Finekarts Incorporated sources and supplies bulk agricultural commodities for qualified international buyers and suppliers. Request a quote — no public fixed pricing.",
+    "Finekarts Incorporated sources and supplies bulk agricultural commodities for qualified international buyers. Sign in to submit RFQs — no public fixed pricing.",
   icons: {
     icon: [{ url: "/favicon.png", type: "image/png" }, { url: "/favicon.svg" }],
   },

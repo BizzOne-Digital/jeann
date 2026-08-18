@@ -42,14 +42,14 @@ export default async function RequestsPage() {
       description="Requests submitted to Finekarts and their qualification status."
     >
       <div className="mb-4">
-        <Link className="btn btn-primary" href="/trade">
+        <Link className="btn btn-primary" href="/portal/buyer/new-request">
           Submit new request
         </Link>
       </div>
       {rows.length === 0 ? (
         <EmptyState
           title="No purchase requests yet"
-          detail="Submit an RFQ from the Trade page using the same email as this account so it links to your organization."
+          detail="Submit a purchase request from this portal using the same email as your account so it links to your organization."
         />
       ) : (
         <div className="table-scroll rounded-lg border border-[var(--line)] bg-white">

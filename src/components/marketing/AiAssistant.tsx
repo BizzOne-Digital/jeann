@@ -4,6 +4,7 @@ import { FormEvent, useMemo, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { getCategories, SEED_FAQS } from "@/lib/content/catalog";
+import { buyerQuoteHref } from "@/lib/marketing/cta-links";
 
 type Msg = { role: "user" | "assistant"; text: string };
 
@@ -15,7 +16,7 @@ function answerFor(input: string): string {
     return "Finekarts does not publish fixed prices. Submit a purchase request with quantity, specs, destination, and preferred Incoterm (FOB/CIF) so the trade desk can review. This is general information — not a binding quote.";
   }
   if (/(fob|cif|incoterm)/.test(q)) {
-    return "FOB and CIF are commonly discussed. FOB typically focuses on delivery on board at origin; CIF typically bundles freight and minimum insurance to a destination port. Final allocations follow the signed contract. See /trade for more.";
+    return "FOB and CIF are commonly discussed. FOB typically focuses on delivery on board at origin; CIF typically bundles freight and minimum insurance to a destination port. Final allocations follow the signed contract. See /resources and /shipping for more.";
   }
   if (/(packag|flexitank|fibc|drum|tank)/.test(q)) {
     return "Packaging depends on product, supplier, route, and agreement. Dry bulk may use FIBCs, liners, or sacks; liquids may use flexitanks, IBCs, drums, or ISO tanks. Not every option applies to every product — see /packaging.";
@@ -24,10 +25,10 @@ function answerFor(input: string): string {
     return "Suppliers cannot self-register publicly. Finekarts sends single-use invitation links after review. Contact the trade desk to start a supplier conversation.";
   }
   if (/(book|consultation|meeting|call)/.test(q)) {
-    return "You can request a consultation at /booking. Requests are stored for review and are not confirmed appointments until staff (or a configured calendar provider) confirms.";
+    return "You can request a consultation from the buyer portal after sign-in at /portal/buyer/booking. Requests are stored for review and are not confirmed appointments until staff confirms.";
   }
   if (/(rfq|purchase request|buy)/.test(q)) {
-    return "Use Post a Purchase Request on /trade. Include company details, product, quantity, destination, Incoterm preference, and packaging/inspection notes. Submission does not guarantee acceptance or supply.";
+    return "Sign in and submit a purchase request from the buyer portal. Include company details, product lines, quantities, destination, Incoterm preference, and packaging/inspection notes. Submission does not guarantee acceptance or supply.";
   }
 
   const productHit = categories
@@ -35,7 +36,7 @@ function answerFor(input: string): string {
     .find((p) => q.includes(p.name.toLowerCase()) || q.includes(p.slug.replace(/-/g, " ")));
 
   if (productHit) {
-    return `${productHit.name} is listed under ${productHit.category}. ${productHit.overview} Status: ${productHit.status.replaceAll("_", " ")}. Request a quote from /products/${productHit.categorySlug}/${productHit.slug}. General information only — not a binding offer.`;
+    return `${productHit.name} is listed under ${productHit.category}. ${productHit.overview} Status: ${productHit.status.replaceAll("_", " ")}. Request a quote from /products/${productHit.categorySlug}/${productHit.slug} (buyer sign-in required). General information only — not a binding offer.`;
   }
 
   const faq = SEED_FAQS.find(
@@ -153,7 +154,7 @@ export function AiAssistant() {
                 </div>
                 <p className="text-xs text-stone">
                   Prefer a person?{" "}
-                  <Link href="/trade#purchase-request" className="font-semibold text-navy underline">
+                  <Link href={buyerQuoteHref()} className="font-semibold text-navy underline">
                     Submit an RFQ
                   </Link>{" "}
                   or{" "}

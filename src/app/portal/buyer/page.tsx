@@ -43,21 +43,26 @@ export default async function BuyerDashboard() {
       </div>
       <div className="mt-6">
         {requests === 0 ? (
-          <EmptyState
-            title="Your trade desk is ready"
-            detail="Submit a purchase request to begin qualification. Live records appear here after you send an RFQ."
-          />
+          <div className="space-y-4">
+            <EmptyState
+              title="Your trade desk is ready"
+              detail="Submit a purchase request to begin qualification."
+            />
+            <Link href="/portal/buyer/new-request" className="btn btn-primary">
+              Submit your first request
+            </Link>
+          </div>
         ) : (
           <div className="rounded-lg border border-[var(--line)] bg-white p-5">
             <p className="text-sm text-[var(--stone)]">
               You have {requests} purchase request{requests === 1 ? "" : "s"}. Review status on the
-              requests page or submit another RFQ from Trade.
+              requests page or submit another RFQ.
             </p>
             <div className="mt-4 flex flex-wrap gap-3">
-              <Link className="btn btn-primary" href="/portal/buyer/requests">
+              <Link href="/portal/buyer/requests" className="btn btn-outline">
                 View requests
               </Link>
-              <Link className="btn btn-outline" href="/trade">
+              <Link href="/portal/buyer/new-request" className="btn btn-primary">
                 New purchase request
               </Link>
             </div>
