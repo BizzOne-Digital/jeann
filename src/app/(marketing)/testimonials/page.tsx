@@ -1,40 +1,46 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHero } from "@/components/marketing/PageHero";
+import { TestimonialsGrid } from "@/components/marketing/TestimonialSections";
+import { getPublishedTestimonials } from "@/lib/content/testimonials-catalog";
+import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
 
 export const metadata: Metadata = {
   title: "Testimonials",
   description:
-    "Client testimonials appear on Finekarts only when explicitly approved through the CMS.",
+    "Client testimonials from verified counterparties working with Finekarts on global commodity trade.",
 };
 
-export default function TestimonialsPage() {
+export default async function TestimonialsPage() {
+  const [testimonials, cms] = await Promise.all([
+    getPublishedTestimonials(),
+    getPublishedPage("testimonials"),
+  ]);
+  const hero = getSectionFields(cms, "hero");
+
   return (
     <>
       <PageHero
-        title="What counterparties say"
-        description="We publish testimonials only after CMS approval. There are no fabricated quotes on this site."
+        title={hero.title || "What counterparties say"}
+        description={
+          hero.description ||
+          "Verified buyers and trade partners share their experience working with Finekarts."
+        }
         primaryCta={{ href: "/contact", label: "Start a conversation →" }}
         secondaryCta={{ href: "/resources", label: "Trade resources" }}
       />
 
       <section className="bg-[#f3f1ec] py-16 lg:py-24">
         <div className="container-page">
-          <div className="border border-[#d5d0c8] bg-white px-6 py-14 text-center sm:px-10">
-            <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">
-              No approved testimonials published
-            </h2>
-            <p className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-[#666666]">
-              When verified counterparties provide approved statements, they will appear here with
-              attribution controlled by admin — not marketing filler.
+          <TestimonialsGrid testimonials={testimonials} />
+          {testimonials.length > 0 ? (
+            <p className="mt-10 text-center text-sm text-[#666666]">
+              Interested in working with Finekarts?{" "}
+              <Link href="/contact" className="font-semibold text-[#c88e4a] underline">
+                Contact the trade desk
+              </Link>
             </p>
-            <Link
-              href="/contact"
-              className="focus-ring mt-8 inline-flex items-center gap-2 rounded-md bg-[#d4a84b] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#c4983f]"
-            >
-              Start a conversation <span aria-hidden>→</span>
-            </Link>
-          </div>
+          ) : null}
         </div>
       </section>
     </>

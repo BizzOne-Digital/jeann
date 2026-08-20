@@ -2,8 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { FeaturedTestimonialAside } from "@/components/marketing/TestimonialSections";
 import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { cmsField } from "@/lib/content/cms-field";
 import { Reveal } from "@/components/motion/Reveal";
 import { HomeCtaChat } from "@/components/marketing/HomeCtaChat";
 import type { SeedCategory } from "@/lib/content/catalog";
@@ -88,7 +90,7 @@ function GoldButton({
   );
 }
 
-export function HomeHero() {
+export function HomeHero({ cms }: { cms?: Record<string, string> }) {
   const reduce = useReducedMotion();
 
   const trust = [
@@ -168,7 +170,11 @@ export function HomeHero() {
         <div className="min-w-0 max-w-xl lg:max-w-2xl">
           <Reveal>
             <p className="text-[0.65rem] font-semibold tracking-[0.18em] text-[#d4a84b] uppercase sm:text-xs sm:tracking-[0.26em]">
-              Global sourcing • Bulk commodities • Worldwide delivery
+              {cmsField(
+                cms,
+                "eyebrow",
+                "Global sourcing • Bulk commodities • Worldwide delivery",
+              )}
             </p>
           </Reveal>
 
@@ -178,29 +184,32 @@ export function HomeHero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
           >
-            Global Agricultural Commodity Trading
+            {cmsField(cms, "title", "Global Agricultural Commodity Trading")}
           </motion.h1>
 
           <Reveal delay={0.1}>
             <p className="mt-6 max-w-lg text-base leading-relaxed text-white/80 sm:text-lg">
-              We source and supply high-quality agricultural commodities to qualified buyers across
-              global markets.
+              {cmsField(
+                cms,
+                "description",
+                "We source and supply high-quality agricultural commodities to qualified buyers across global markets.",
+              )}
             </p>
           </Reveal>
 
           <Reveal delay={0.16}>
             <div className="mt-9 flex w-full max-w-full flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Link
-                href="/login"
+                href={cmsField(cms, "primaryCtaHref", "/login")}
                 className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-sm bg-[#d4a84b] px-6 py-3.5 text-base font-semibold text-white transition hover:bg-[#c4983f] sm:w-auto"
               >
-                Buyer portal <span aria-hidden>→</span>
+                {cmsField(cms, "primaryCtaLabel", "Buyer portal")} <span aria-hidden>→</span>
               </Link>
               <Link
-                href="/products"
+                href={cmsField(cms, "secondaryCtaHref", "/products")}
                 className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-sm border border-white/75 bg-transparent px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10 sm:w-auto"
               >
-                Explore Products
+                {cmsField(cms, "secondaryCtaLabel", "Explore Products")}
               </Link>
             </div>
           </Reveal>
@@ -697,8 +706,14 @@ export function ReadyCtaBanner() {
 
 export function InsightsAndNotes({
   posts,
+  featuredTestimonial,
 }: {
   posts: Array<{ slug: string; title: string; excerpt: string; category: string }>;
+  featuredTestimonial?: {
+    quote: string;
+    attribution: string;
+    company: string;
+  } | null;
 }) {
   const cardImages = [
     "/images/products/rapeseed-oil-reference.png",
@@ -757,29 +772,18 @@ export function InsightsAndNotes({
           </div>
 
           <Reveal delay={0.1}>
-            <aside className="flex w-full flex-col justify-center rounded-lg bg-white/50 p-8 lg:p-10">
-              <p className="text-xs font-semibold tracking-[0.2em] text-[#c88e4a] uppercase">
-                Client Perspective
-              </p>
-              <p
-                className="mt-4 font-serif text-5xl leading-none text-[#001a3d]"
-                aria-hidden
-              >
-                “
-              </p>
-              <blockquote className="mt-2 text-base leading-relaxed text-[#555555]">
-                Finekarts has been a reliable partner in our global sourcing journey. Their
-                transparency, quality focus, and logistics expertise give us confidence in every
-                shipment.
-              </blockquote>
-              <div className="mt-6 h-px w-16 bg-[#c88e4a]" />
-              <p className="mt-5 text-sm font-semibold text-[#001a3d]">Procurement Manager</p>
-              <p className="text-sm text-[#001a3d]/80">Global Food Importer</p>
-              <p className="mt-4 text-[11px] leading-snug text-[#8a8580]">
-                Illustrative anonymous perspective for layout — published testimonials require CMS
-                approval.
-              </p>
-            </aside>
+            <FeaturedTestimonialAside
+              testimonial={
+                featuredTestimonial
+                  ? {
+                      id: "featured",
+                      quote: featuredTestimonial.quote,
+                      attribution: featuredTestimonial.attribution,
+                      company: featuredTestimonial.company,
+                    }
+                  : null
+              }
+            />
           </Reveal>
         </div>
       </div>

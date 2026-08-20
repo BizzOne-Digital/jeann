@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/motion/Reveal";
 import { buyerQuoteHref } from "@/lib/marketing/cta-links";
+import { cmsField } from "@/lib/content/cms-field";
 import { PageHero } from "@/components/marketing/PageHero";
 
 function GoldButton({
@@ -25,16 +26,28 @@ function GoldButton({
   );
 }
 
-export function AboutHero({ positioning }: { positioning: string }) {
+export function AboutHero({
+  positioning,
+  cms,
+}: {
+  positioning: string;
+  cms?: Record<string, string>;
+}) {
   return (
     <PageHero
       size="full"
-      title="Your connection to global commodity markets"
-      description={positioning}
+      title={cmsField(cms, "title", "Your connection to global commodity markets")}
+      description={cmsField(cms, "description", positioning)}
       imageAlt="Agricultural commodities and global logistics"
       imageClassName="object-cover object-[72%_center] sm:object-[78%_center]"
-      primaryCta={{ href: buyerQuoteHref(), label: "Request a Quote →" }}
-      secondaryCta={{ href: "/contact", label: "Contact the desk" }}
+      primaryCta={{
+        href: cmsField(cms, "primaryCtaHref", buyerQuoteHref()),
+        label: cmsField(cms, "primaryCtaLabel", "Request a Quote →"),
+      }}
+      secondaryCta={{
+        href: cmsField(cms, "secondaryCtaHref", "/contact"),
+        label: cmsField(cms, "secondaryCtaLabel", "Contact the desk"),
+      }}
     />
   );
 }
@@ -42,9 +55,11 @@ export function AboutHero({ positioning }: { positioning: string }) {
 export function AboutWhoWeAre({
   home1 = "/images/home-1.png",
   home2 = "/images/home-2.png",
+  cms,
 }: {
   home1?: string;
   home2?: string;
+  cms?: Record<string, string>;
 }) {
   return (
     <section className="bg-[#f3f1ec] py-16 lg:py-24">
@@ -52,26 +67,30 @@ export function AboutWhoWeAre({
         <div className="max-w-xl">
           <Reveal>
             <p className="text-xs font-semibold tracking-[0.22em] text-[#c88e4a] uppercase">
-              Who We Are
+              {cmsField(cms, "eyebrow", "Who We Are")}
             </p>
           </Reveal>
           <Reveal delay={0.06}>
             <h2 className="mt-3 text-3xl font-semibold leading-tight text-[#001a3d] sm:text-4xl lg:text-[2.65rem]">
-              An extension of manufacturers and suppliers
+              {cmsField(cms, "title", "An extension of manufacturers and suppliers")}
             </h2>
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mt-5 text-base leading-relaxed text-[#555555]">
-              Finekarts Incorporated connects trusted suppliers with qualified buyers worldwide. We
-              specialize in the sourcing, quality coordination, and logistics of bulk agricultural
-              commodities with integrity and professionalism.
+              {cmsField(
+                cms,
+                "body",
+                "Finekarts Incorporated connects trusted suppliers with qualified buyers worldwide. We specialize in the sourcing, quality coordination, and logistics of bulk agricultural commodities with integrity and professionalism.",
+              )}
             </p>
           </Reveal>
           <Reveal delay={0.14}>
             <p className="mt-4 text-base leading-relaxed text-[#555555]">
-              From origin to destination, our team ensures reliable execution, transparent
-              communication, and consistent value at every step — without inventing volumes,
-              certifications, or guarantees.
+              {cmsField(
+                cms,
+                "body2",
+                "From origin to destination, our team ensures reliable execution, transparent communication, and consistent value at every step — without inventing volumes, certifications, or guarantees.",
+              )}
             </p>
           </Reveal>
           <Reveal delay={0.18}>
@@ -113,7 +132,7 @@ export function AboutWhoWeAre({
   );
 }
 
-export function AboutCapabilities() {
+export function AboutCapabilities({ cms }: { cms?: Record<string, string> }) {
   const capabilities = [
     "Specification alignment for edible oils, sugar, rice & grains, beans & pulses, and related programmes",
     "Third-party inspection coordination when agreed — agency and scope are transaction-specific",
@@ -127,20 +146,21 @@ export function AboutCapabilities() {
         <div>
           <Reveal>
             <p className="text-xs font-semibold tracking-[0.22em] text-[#c88e4a] uppercase">
-              What we coordinate
+              {cmsField(cms, "eyebrow", "What we coordinate")}
             </p>
           </Reveal>
           <Reveal delay={0.06}>
             <h2 className="mt-3 text-3xl font-semibold leading-tight text-[#001a3d] sm:text-4xl">
-              Global programmes, qualified channels
+              {cmsField(cms, "title", "Global programmes, qualified channels")}
             </h2>
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mt-5 text-base leading-relaxed text-[#555555]">
-              We source bulk agricultural commodities for industrial buyers, refiners, and
-              distributors. Origins, grades, and sustainability claims are stated only when
-              verified. Packaging and logistics modes — container, flexitank, ISO tank, or vessel —
-              apply only where product and corridor allow.
+              {cmsField(
+                cms,
+                "body",
+                "We source bulk agricultural commodities for industrial buyers, refiners, and distributors. Origins, grades, and sustainability claims are stated only when verified. Packaging and logistics modes — container, flexitank, ISO tank, or vessel — apply only where product and corridor allow.",
+              )}
             </p>
           </Reveal>
           <Reveal delay={0.14}>
@@ -170,7 +190,7 @@ export function AboutCapabilities() {
   );
 }
 
-export function AboutProcess() {
+export function AboutProcess({ cms }: { cms?: Record<string, string> }) {
   const steps = [
     {
       n: "01",
@@ -199,18 +219,21 @@ export function AboutProcess() {
       <div className="container-page">
         <Reveal>
           <p className="text-center text-xs font-semibold tracking-[0.22em] text-[#d4a84b] uppercase">
-            How we work
+            {cmsField(cms, "eyebrow", "How we work")}
           </p>
         </Reveal>
         <Reveal delay={0.06}>
           <h2 className="mx-auto mt-3 max-w-2xl text-center text-3xl font-semibold sm:text-4xl">
-            A clear path from request to delivery
+            {cmsField(cms, "title", "A clear path from request to delivery")}
           </h2>
         </Reveal>
         <Reveal delay={0.1}>
           <p className="mx-auto mt-4 max-w-xl text-center text-sm leading-relaxed text-white/65">
-            Our role is to align specifications, inspection, logistics, and documentation — not to
-            guarantee outcomes.
+            {cmsField(
+              cms,
+              "body",
+              "Our role is to align specifications, inspection, logistics, and documentation — not to guarantee outcomes.",
+            )}
           </p>
         </Reveal>
 
@@ -233,7 +256,13 @@ export function AboutProcess() {
   );
 }
 
-export function AboutGlobal({ home3 = "/images/home-3.png" }: { home3?: string }) {
+export function AboutGlobal({
+  home3 = "/images/home-3.png",
+  cms,
+}: {
+  home3?: string;
+  cms?: Record<string, string>;
+}) {
   return (
     <section className="bg-[#f3f1ec] py-16 lg:py-24">
       <div className="container-page grid items-center gap-12 lg:grid-cols-[0.95fr_1.15fr] lg:gap-16">
@@ -251,17 +280,17 @@ export function AboutGlobal({ home3 = "/images/home-3.png" }: { home3?: string }
 
         <div>
           <Reveal>
-            <h2 className="text-3xl font-semibold leading-tight text-[#001a3d] sm:text-4xl">
-              Sourced responsibly.
-              <br />
-              Delivered globally.
+            <h2 className="whitespace-pre-line text-3xl font-semibold leading-tight text-[#001a3d] sm:text-4xl">
+              {cmsField(cms, "title", "Sourced responsibly.\nDelivered globally.")}
             </h2>
           </Reveal>
           <Reveal delay={0.08}>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-[#555555]">
-              Our network of suppliers and logistics partners helps us deliver quality commodities
-              reliably — with transparent communication and documentation discipline at every
-              corridor.
+              {cmsField(
+                cms,
+                "body",
+                "Our network of suppliers and logistics partners helps us deliver quality commodities reliably — with transparent communication and documentation discipline at every corridor.",
+              )}
             </p>
           </Reveal>
           <Reveal delay={0.14}>
@@ -279,10 +308,12 @@ export function AboutCta({
   email,
   phone,
   phoneDisplay,
+  cms,
 }: {
   email: string;
   phone: string;
   phoneDisplay: string;
+  cms?: Record<string, string>;
 }) {
   return (
     <section className="relative overflow-hidden py-16 text-white lg:py-20">
@@ -299,19 +330,22 @@ export function AboutCta({
       <div className="container-page relative text-center">
         <Reveal>
           <h2 className="mx-auto max-w-2xl text-3xl font-semibold leading-tight sm:text-4xl">
-            Ready to discuss an enquiry?
+            {cmsField(cms, "title", "Ready to discuss an enquiry?")}
           </h2>
         </Reveal>
         <Reveal delay={0.08}>
           <p className="mx-auto mt-4 max-w-lg text-base leading-relaxed text-white/70">
-            Share specifications and destination details. Submission does not guarantee acceptance
-            or pricing.
+            {cmsField(
+              cms,
+              "body",
+              "Share specifications and destination details. Submission does not guarantee acceptance or pricing.",
+            )}
           </p>
         </Reveal>
         <Reveal delay={0.14}>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <GoldButton href={buyerQuoteHref()}>
-              Request a Quote <span aria-hidden>→</span>
+            <GoldButton href={cmsField(cms, "primaryCtaHref", buyerQuoteHref())}>
+              {cmsField(cms, "primaryCtaLabel", "Request a Quote")} <span aria-hidden>→</span>
             </GoldButton>
             <Link
               href="/booking"

@@ -3,14 +3,16 @@ import Link from "next/link";
 import { FaqAccordion } from "@/components/marketing/FaqAccordion";
 import { PageHero } from "@/components/marketing/PageHero";
 import { buyerQuoteHref } from "@/lib/marketing/cta-links";
-import { SEED_FAQS } from "@/lib/content/catalog";
+import { getPublishedFaqs } from "@/lib/content/faqs-catalog";
 
 export const metadata: Metadata = {
   title: "FAQ",
   description: "Frequently asked questions about Finekarts RFQs, Incoterms, pricing, and buyer access.",
 };
 
-export default function FaqPage() {
+export default async function FaqPage() {
+  const faqs = await getPublishedFaqs();
+
   return (
     <>
       <PageHero
@@ -22,7 +24,7 @@ export default function FaqPage() {
 
       <section className="bg-[#f3f1ec] py-16 lg:py-24">
         <div className="container-narrow">
-          <FaqAccordion items={SEED_FAQS} />
+          <FaqAccordion items={faqs} />
           <div className="mt-12 flex flex-wrap gap-3">
             <Link
               href={buyerQuoteHref()}

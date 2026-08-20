@@ -20,15 +20,7 @@ const NAV = [
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const reduce = useReducedMotion();
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -42,10 +34,8 @@ export function SiteHeader() {
   return (
     <>
       <header
-        className={cn(
-          "fixed inset-x-0 top-0 z-[70] w-full max-w-full overflow-x-clip border-b border-white/10 bg-[#071525] text-white transition-shadow duration-300",
-          scrolled ? "shadow-[0_8px_32px_rgba(0,0,0,0.45)]" : "shadow-[0_4px_20px_rgba(0,0,0,0.25)]",
-        )}
+        className="fixed inset-x-0 top-0 z-[70] w-full max-w-full overflow-x-clip border-b border-white/10 bg-[#071525] text-white shadow-[0_8px_32px_rgba(0,0,0,0.45)]"
+        style={{ backgroundColor: "#071525" }}
       >
         <div className="container-page flex h-[4.75rem] min-w-0 items-center justify-between gap-3">
           <Link href="/" className="focus-ring flex min-w-0 items-center gap-2.5 rounded-sm sm:gap-3">

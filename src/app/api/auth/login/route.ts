@@ -1,9 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createSession } from "@/lib/auth/session";
 import { findDevUserByEmail } from "@/lib/auth/dev-store";
+import {
+  getSessionConfigError,
+  isSessionConfigError,
+} from "@/lib/auth/session-config";
 import { verifyPassword } from "@/lib/auth/password";
 import { loginSchema } from "@/lib/validation/auth";
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
+
+export const runtime = "nodejs";
 
 function portalRedirectForRoles(roles: string[]): string | null {
   if (roles.some((r) => r === "ceo_super_admin" || r === "general_manager")) {
@@ -72,7 +78,20 @@ export async function POST(request: NextRequest) {
           );
         }
 
-        await createSession({ userId: user._id, userAgent: ua, ip });
+        const sessionIssue = getSessionConfigError();
+        if (sessionIssue) {
+          return NextResponse.json({ error: sessionIssue }, { status: 503 });
+        }
+
+        try {
+          await createSession({ userId: user._id, userAgent: ua, ip });
+        } catch (sessionError) {
+          console.error("[login] session", sessionError);
+          if (isSessionConfigError(sessionError)) {
+            return NextResponse.json({ error: sessionIssue ?? "Unable to sign in." }, { status: 503 });
+          }
+          throw sessionError;
+        }
         return NextResponse.json({ ok: true, redirectTo });
       }
 

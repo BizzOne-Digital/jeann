@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { PageHero } from "@/components/marketing/PageHero";
+import { CmsPageHero } from "@/components/marketing/CmsPageHero";
 import { PartnerProfileCard } from "@/components/marketing/PartnerSections";
 import { Reveal } from "@/components/motion/Reveal";
+import { cmsField } from "@/lib/content/cms-field";
+import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
 import { getPartners, PARTNERS_PAGE_INTRO } from "@/lib/content/partners-catalog";
 
 export const metadata: Metadata = {
@@ -11,31 +13,36 @@ export const metadata: Metadata = {
     "Independent inspection, certification, and verification partners supporting transparent international commodity trade.",
 };
 
-export default function PartnersPage() {
+export default async function PartnersPage() {
   const partners = getPartners();
+  const cms = await getPublishedPage("partners");
+  const intro = getSectionFields(cms, "intro");
 
   return (
     <>
-      <PageHero
-        tone="light"
-        title={PARTNERS_PAGE_INTRO.title}
-        description={PARTNERS_PAGE_INTRO.lead}
-        primaryCta={{ href: "#partners-list", label: "Browse partners →" }}
-        secondaryCta={{ href: "/inspections", label: "Inspection overview" }}
+      <CmsPageHero
+        pageSlug="partners"
+        tone="dark"
+        defaults={{
+          title: PARTNERS_PAGE_INTRO.title,
+          description: PARTNERS_PAGE_INTRO.lead,
+          primaryCta: { href: "#partners-list", label: "Browse partners →" },
+          secondaryCta: { href: "/inspections", label: "Inspection overview" },
+        }}
       />
 
       <section className="bg-white py-16 lg:py-20">
         <div className="container-page">
           <Reveal>
             <p className="max-w-3xl text-base leading-relaxed text-[var(--stone)]">
-              {PARTNERS_PAGE_INTRO.note}
+              {cmsField(intro, "note", PARTNERS_PAGE_INTRO.note)}
             </p>
             <p className="mt-4 max-w-3xl text-base leading-relaxed text-[var(--stone)]">
-              Each profile below uses the <strong className="font-semibold text-[var(--navy)]">partner name</strong>, a
-              short <strong className="font-semibold text-[var(--navy)]">intro</strong>, a{" "}
-              <strong className="font-semibold text-[var(--navy)]">photo</strong>, and descriptive{" "}
-              <strong className="font-semibold text-[var(--navy)]">text content</strong> — no logos required.
-              Send updated copy and images to your administrator when ready.
+              {cmsField(
+                intro,
+                "body",
+                "Each profile below uses the partner name, a short intro, a photo, and descriptive text content. Send updated copy and images to your administrator when ready.",
+              )}
             </p>
           </Reveal>
 

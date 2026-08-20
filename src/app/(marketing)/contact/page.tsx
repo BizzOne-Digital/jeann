@@ -6,18 +6,20 @@ import {
   ContactCta,
 } from "@/components/marketing/ContactSections";
 import { getSite } from "@/lib/content/catalog";
+import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
 
 export const metadata: Metadata = {
   title: "Contact",
   description: "Reach the Finekarts trade desk. Buyer messages and consultations are submitted through the buyer portal after sign-in.",
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
   const site = getSite();
+  const cms = await getPublishedPage("contact");
 
   return (
     <>
-      <ContactHero />
+      <ContactHero cms={getSectionFields(cms, "hero")} />
       <ContactChannels
         email={site.email}
         phone={site.phone}

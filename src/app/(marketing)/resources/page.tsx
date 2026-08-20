@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { PageHero } from "@/components/marketing/PageHero";
+import { CmsPageHero } from "@/components/marketing/CmsPageHero";
 import { Reveal } from "@/components/motion/Reveal";
+import { cmsField } from "@/lib/content/cms-field";
+import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
 
 export const metadata: Metadata = {
   title: "Resources",
@@ -61,24 +63,33 @@ const DOCUMENT_GROUPS = [
   },
 ];
 
-export default function ResourcesPage() {
+export default async function ResourcesPage() {
+  const cms = await getPublishedPage("resources");
+  const intro = getSectionFields(cms, "intro");
+
   return (
     <>
-      <PageHero
-        tone="light"
-        title="Resources"
-        description="Educational reference for trade documents, terminology, and process notes. Purchase requests and consultations are submitted through the buyer portal after sign-in."
-        primaryCta={{ href: "/login", label: "Buyer portal sign-in →" }}
-        secondaryCta={{ href: "/register/buyer", label: "Register as buyer" }}
+      <CmsPageHero
+        pageSlug="resources"
+        tone="dark"
+        defaults={{
+          title: "Resources",
+          description:
+            "Educational reference for trade documents, terminology, and process notes. Purchase requests and consultations are submitted through the buyer portal after sign-in.",
+          primaryCta: { href: "/login", label: "Buyer portal sign-in →" },
+          secondaryCta: { href: "/register/buyer", label: "Register as buyer" },
+        }}
       />
 
       <section className="bg-white py-16 lg:py-20">
         <div className="container-page">
           <Reveal>
             <p className="max-w-3xl text-base leading-relaxed text-[var(--stone)]">
-              Document sets vary by product, corridor, bank, and contract. Lists below are starting
-              points for discussion — not guarantees that every document will be issued or accepted
-              without amendment. See also{" "}
+              {cmsField(
+                intro,
+                "body",
+                "Document sets vary by product, corridor, bank, and contract. Lists below are starting points for discussion — not guarantees that every document will be issued or accepted without amendment.",
+              )} See also{" "}
               <Link href="/shipping" className="font-semibold text-[var(--navy)] underline">
                 Shipping
               </Link>

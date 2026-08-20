@@ -14,6 +14,8 @@ import {
 import { BUYER_WORKFLOW_STEPS, SUPPLIER_WORKFLOW_STEPS } from "@/lib/workflows/transitions";
 import { hashPassword } from "@/lib/auth/password";
 import { getEnv } from "@/lib/config/env";
+import { SEED_TESTIMONIALS } from "@/lib/content/testimonials-seed";
+import { SEED_TEAM } from "@/lib/content/team-seed";
 
 async function main() {
   if (!isMongoConfigured()) {
@@ -31,6 +33,8 @@ async function main() {
     PackagingType,
     Faq,
     BlogPost,
+    Testimonial,
+    TeamMember,
     WorkflowTemplate,
     TermsDocument,
     TaxConfiguration,
@@ -128,6 +132,35 @@ async function main() {
     await Faq.findOneAndUpdate(
       { question: faq.question },
       { ...faq, category: "General", displayOrder: i, status: "published" },
+      { upsert: true },
+    );
+  }
+
+  for (const testimonial of SEED_TESTIMONIALS) {
+    await Testimonial.findOneAndUpdate(
+      { quote: testimonial.quote },
+      {
+        quote: testimonial.quote,
+        attribution: testimonial.attribution,
+        company: testimonial.company,
+        status: testimonial.status,
+        isPlaceholder: false,
+      },
+      { upsert: true },
+    );
+  }
+
+  for (const member of SEED_TEAM) {
+    await TeamMember.findOneAndUpdate(
+      { name: member.name, roleTitle: member.roleTitle },
+      {
+        name: member.name,
+        roleTitle: member.roleTitle,
+        bio: member.bio,
+        photo: member.photo,
+        displayOrder: member.displayOrder,
+        status: member.status,
+      },
       { upsert: true },
     );
   }
@@ -396,6 +429,11 @@ async function main() {
   );
 
   console.log(`Demo buyer ensured: ${demoEmail} / ${demoPassword}`);
+
+  const { seedPagesFromRegistry } = await import("@/lib/content/page-content");
+  const pagesSeeded = await seedPagesFromRegistry();
+  console.log(`Website pages seeded: ${pagesSeeded} new page(s).`);
+
   console.log("Seed completed successfully.");
   process.exit(0);
 }

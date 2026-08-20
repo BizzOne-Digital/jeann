@@ -3,17 +3,28 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/motion/Reveal";
+import { cmsField } from "@/lib/content/cms-field";
 import { PageHero } from "@/components/marketing/PageHero";
 import { BuyerPortalGate } from "@/components/marketing/BuyerPortalGate";
 
-export function ContactHero() {
+export function ContactHero({ cms }: { cms?: Record<string, string> }) {
   return (
     <PageHero
-      tone="light"
-      title="Speak with our team"
-      description="Reach the Finekarts trade desk for qualified buyer enquiries. Signed-in buyers can send messages, book consultations, and submit purchase requests from the buyer portal."
-      primaryCta={{ href: "/login", label: "Buyer sign in →" }}
-      secondaryCta={{ href: "/register/buyer", label: "Register" }}
+      tone="dark"
+      title={cmsField(cms, "title", "Speak with our team")}
+      description={cmsField(
+        cms,
+        "description",
+        "Reach the Finekarts trade desk for qualified buyer enquiries. Signed-in buyers can send messages, book consultations, and submit purchase requests from the buyer portal.",
+      )}
+      primaryCta={{
+        href: cmsField(cms, "primaryCtaHref", "/login"),
+        label: cmsField(cms, "primaryCtaLabel", "Buyer sign in →"),
+      }}
+      secondaryCta={{
+        href: cmsField(cms, "secondaryCtaHref", "/register/buyer"),
+        label: cmsField(cms, "secondaryCtaLabel", "Register"),
+      }}
     />
   );
 }
@@ -174,18 +185,6 @@ export function ContactFormSection({
               </dd>
             </div>
           </dl>
-
-          <Reveal delay={0.16}>
-            <div className="relative mt-10 hidden aspect-[5/4] overflow-hidden bg-white lg:block">
-              <Image
-                src="/images/home-3.png"
-                alt="Global Finekarts sourcing and logistics network"
-                fill
-                className="object-contain object-center p-4"
-                sizes="420px"
-              />
-            </div>
-          </Reveal>
         </div>
 
         <Reveal delay={0.08} y={20}>
