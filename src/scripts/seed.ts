@@ -248,14 +248,20 @@ async function main() {
   if (env.INITIAL_ADMIN_EMAIL && env.INITIAL_ADMIN_PASSWORD) {
     const email = env.INITIAL_ADMIN_EMAIL.toLowerCase();
     let user = await User.findOne({ email });
+    const passwordHash = await hashPassword(env.INITIAL_ADMIN_PASSWORD);
     if (!user) {
       user = await User.create({
         email,
-        passwordHash: await hashPassword(env.INITIAL_ADMIN_PASSWORD),
+        passwordHash,
         name: env.INITIAL_ADMIN_NAME || "Platform Administrator",
         emailVerifiedAt: new Date(),
         status: "active",
       });
+    } else {
+      await User.updateOne(
+        { _id: user._id },
+        { $set: { passwordHash, status: "active", deletedAt: null } },
+      );
     }
 
     let org = await Organization.findOne({ type: "internal", legalName: SITE.name });
@@ -289,15 +295,21 @@ async function main() {
   const demoEmail = "buyer@demo.finekarts.com";
   const demoPassword = "DemoBuyer123!";
   let demoUser = await User.findOne({ email: demoEmail });
+  const demoHash = await hashPassword(demoPassword);
   if (!demoUser) {
     demoUser = await User.create({
       email: demoEmail,
-      passwordHash: await hashPassword(demoPassword),
+      passwordHash: demoHash,
       name: "Demo Buyer",
       phone: "+1-416-555-0100",
       emailVerifiedAt: new Date(),
       status: "active",
     });
+  } else {
+    await User.updateOne(
+      { _id: demoUser._id },
+      { $set: { passwordHash: demoHash, status: "active", deletedAt: null } },
+    );
   }
   let buyerOrg = await Organization.findOne({
     type: "buyer",

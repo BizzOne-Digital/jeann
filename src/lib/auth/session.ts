@@ -86,7 +86,9 @@ export async function createSession(
         ? options.userId
         : new Types.ObjectId(String(options.userId));
     uid = userId.toString();
-    await tryConnectMongo();
+    if (!(await tryConnectMongo())) {
+      throw new Error("Database unavailable");
+    }
     const doc = await Session.create({
       userId,
       tokenHash,
@@ -159,26 +161,30 @@ export async function destroySession(sessionId?: string): Promise<void> {
   const jar = await cookies();
   const cookie = jar.get(SESSION_COOKIE_NAME)?.value;
 
-  if (sessionId && isMongoConfigured()) {
-    await tryConnectMongo();
-    await Session.updateOne(
-      { _id: sessionId, revokedAt: null },
-      { $set: { revokedAt: new Date() } },
-    );
-  } else if (cookie && isMongoConfigured()) {
-    const payload = await verifySessionToken(cookie);
-    if (payload) {
-      await tryConnectMongo();
-      await Session.updateOne(
-        { _id: payload.sid, revokedAt: null },
-        { $set: { revokedAt: new Date() } },
-      );
+  try {
+    if (sessionId && isMongoConfigured()) {
+      if (await tryConnectMongo()) {
+        await Session.updateOne(
+          { _id: sessionId, revokedAt: null },
+          { $set: { revokedAt: new Date() } },
+        );
+      }
+    } else if (cookie && isMongoConfigured()) {
+      const payload = await verifySessionToken(cookie);
+      if (payload && (await tryConnectMongo())) {
+        await Session.updateOne(
+          { _id: payload.sid, revokedAt: null },
+          { $set: { revokedAt: new Date() } },
+        );
+      }
+    } else if (sessionId) {
+      await revokeDevSession(sessionId);
+    } else if (cookie && !isMongoConfigured()) {
+      const payload = await verifySessionToken(cookie);
+      if (payload) await revokeDevSession(payload.sid);
     }
-  } else if (sessionId) {
-    await revokeDevSession(sessionId);
-  } else if (cookie && !isMongoConfigured()) {
-    const payload = await verifySessionToken(cookie);
-    if (payload) await revokeDevSession(payload.sid);
+  } catch (error) {
+    console.error("[destroySession]", error);
   }
 
   jar.delete(SESSION_COOKIE_NAME);
@@ -196,12 +202,12 @@ export async function rotateSession(options: {
   const rawToken = randomToken(32);
   const tokenHash = sha256(rawToken);
   const expiresAt = new Date(Date.now() + SESSION_TTL_MS);
-  const userId = new Types.ObjectId(current.userId);
 
   let sessionId: string;
 
   if (isMongoConfigured()) {
-    await tryConnectMongo();
+    const userId = new Types.ObjectId(current.userId);
+    if (!(await tryConnectMongo())) return null;
     const doc = await Session.create({
       userId,
       tokenHash,
@@ -212,7 +218,8 @@ export async function rotateSession(options: {
     });
     sessionId = doc._id.toString();
   } else {
-    sessionId = randomToken(16);
+    const session = await createDevSession(current.userId, tokenHash, expiresAt);
+    sessionId = session.id;
   }
 
   const jwt = await signSessionToken(

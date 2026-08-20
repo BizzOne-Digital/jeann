@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createSession } from "@/lib/auth/session";
 import { createDevBuyer, findDevOrganization, findDevUserByEmail } from "@/lib/auth/dev-store";
 import { hashPassword } from "@/lib/auth/password";
-import { registerBuyerSchema } from "@/lib/validation/forms";
+import { registerBuyerSchema } from "@/lib/validation/auth";
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
 import { normalizeCompanyName } from "@/lib/db/ids";
 
@@ -31,9 +32,17 @@ export async function POST(request: NextRequest) {
     const input = parsed.data;
     const email = input.email.toLowerCase();
     const passwordHash = await hashPassword(input.password);
+    const ua = request.headers.get("user-agent") ?? undefined;
+    const ip = request.headers.get("x-forwarded-for")?.split(",")[0];
 
     if (isMongoConfigured()) {
-      await tryConnectMongo();
+      if (!(await tryConnectMongo())) {
+        return NextResponse.json(
+          { error: "Service temporarily unavailable. Please try again shortly." },
+          { status: 503 },
+        );
+      }
+
       const { User, Organization, OrganizationMembership } = await import("@/models");
       const normalized = normalizeCompanyName(input.legalName) || "buyer";
       const [emailMatch, companyMatch] = await Promise.all([
@@ -44,7 +53,6 @@ export async function POST(request: NextRequest) {
           deletedAt: null,
         }).lean(),
       ]);
-      // Do not disclose whether an entity is already registered.
       if (emailMatch || companyMatch) {
         return NextResponse.json(
           { ok: true, status: "review", message: "Registration received for review." },
@@ -79,7 +87,17 @@ export async function POST(request: NextRequest) {
         status: "active",
       });
 
-      return NextResponse.json({ ok: true, status: "pending-verification" }, { status: 201 });
+      await createSession({ userId: user._id, userAgent: ua, ip });
+
+      return NextResponse.json(
+        {
+          ok: true,
+          status: "active",
+          redirectTo: "/portal/buyer",
+          message: "Account created. Redirecting…",
+        },
+        { status: 201 },
+      );
     }
 
     const [emailMatch, companyMatch] = await Promise.all([
@@ -92,14 +110,25 @@ export async function POST(request: NextRequest) {
         { status: 202 },
       );
     }
-    await createDevBuyer({
+
+    const user = await createDevBuyer({
       organizationName: input.legalName,
       name: input.contactName,
       email,
       phone: input.phone,
       passwordHash,
     });
-    return NextResponse.json({ ok: true, status: "pending-verification" }, { status: 201 });
+    await createSession({ userId: user.id, userAgent: ua, ip });
+
+    return NextResponse.json(
+      {
+        ok: true,
+        status: "active",
+        redirectTo: "/portal/buyer",
+        message: "Account created. Redirecting…",
+      },
+      { status: 201 },
+    );
   } catch (error) {
     console.error("[register/buyer]", error);
     return NextResponse.json({ error: "Unable to receive registration." }, { status: 400 });

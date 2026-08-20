@@ -143,7 +143,7 @@ export function HomeHero() {
   ];
 
   return (
-    <section className="relative min-h-[100svh] w-full max-w-full overflow-hidden bg-[var(--cream)] text-[var(--navy)]">
+    <section className="relative min-h-[100svh] w-full max-w-full overflow-hidden bg-[#071525] text-white">
       <div className="absolute inset-0">
         <Image
           src="/images/hero-commodities.png"
@@ -151,28 +151,29 @@ export function HomeHero() {
           fill
           priority
           sizes="100vw"
-          className="object-cover object-[72%_center] opacity-90 sm:object-[78%_center]"
+          className="object-cover object-[72%_center] sm:object-[78%_center]"
         />
         <div
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(90deg, rgba(255,252,247,0.96) 0%, rgba(255,252,247,0.88) 28%, rgba(255,252,247,0.55) 52%, rgba(255,252,247,0.25) 72%, rgba(255,252,247,0.08) 100%)",
+              "linear-gradient(90deg, rgba(4,14,28,0.92) 0%, rgba(4,14,28,0.86) 24%, rgba(4,14,28,0.52) 48%, rgba(4,14,28,0.26) 70%, rgba(4,14,28,0.14) 100%)",
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[var(--cream)]/80 via-transparent to-white/20" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#071525]/65 via-transparent to-[#071525]/20" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0a2844]/40 via-transparent to-[#d4a84b]/10" />
       </div>
 
       <div className="container-page relative flex min-h-[100svh] flex-col justify-center pb-28 pt-28 lg:pb-32 lg:pt-32">
         <div className="min-w-0 max-w-xl lg:max-w-2xl">
           <Reveal>
-            <p className="text-[0.65rem] font-semibold tracking-[0.18em] text-[var(--gold)] uppercase sm:text-xs sm:tracking-[0.26em]">
+            <p className="text-[0.65rem] font-semibold tracking-[0.18em] text-[#d4a84b] uppercase sm:text-xs sm:tracking-[0.26em]">
               Global sourcing • Bulk commodities • Worldwide delivery
             </p>
           </Reveal>
 
           <motion.h1
-            className="mt-5 break-words text-[2rem] font-bold leading-[1.08] tracking-tight text-[var(--navy)] sm:text-5xl lg:text-[3.6rem]"
+            className="mt-5 break-words text-[2rem] font-bold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-[3.6rem]"
             initial={reduce ? false : { opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
@@ -181,7 +182,7 @@ export function HomeHero() {
           </motion.h1>
 
           <Reveal delay={0.1}>
-            <p className="mt-6 max-w-lg text-base leading-relaxed text-[var(--stone)] sm:text-lg">
+            <p className="mt-6 max-w-lg text-base leading-relaxed text-white/80 sm:text-lg">
               We source and supply high-quality agricultural commodities to qualified buyers across
               global markets.
             </p>
@@ -197,7 +198,7 @@ export function HomeHero() {
               </Link>
               <Link
                 href="/products"
-                className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-sm border border-[var(--navy)]/25 bg-white/80 px-6 py-3.5 text-sm font-semibold text-[var(--navy)] transition hover:bg-white sm:w-auto"
+                className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-sm border border-white/75 bg-transparent px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10 sm:w-auto"
               >
                 Explore Products
               </Link>
@@ -205,14 +206,14 @@ export function HomeHero() {
           </Reveal>
 
           <Reveal delay={0.22}>
-            <ul className="mt-10 flex flex-col gap-3 text-[0.88rem] text-[var(--navy)] sm:mt-12 sm:flex-row sm:flex-wrap sm:items-center sm:gap-y-4 sm:text-[0.92rem]">
+            <ul className="mt-10 flex flex-col gap-3 text-[0.88rem] text-[#d4a84b] sm:mt-12 sm:flex-row sm:flex-wrap sm:items-center sm:gap-y-4 sm:text-[0.92rem]">
               {trust.map((item, i) => (
                 <li key={item.label} className="flex items-center">
                   {i > 0 ? (
-                    <span className="mx-5 hidden h-5 w-px bg-[var(--line-strong)] sm:block" aria-hidden />
+                    <span className="mx-5 hidden h-5 w-px bg-white/35 sm:block" aria-hidden />
                   ) : null}
                   <span className="flex items-center gap-2.5">
-                    <span className="shrink-0 text-[var(--gold)]">{item.icon}</span>
+                    <span className="shrink-0 text-[#d4a84b]">{item.icon}</span>
                     <span className="font-medium tracking-wide">{item.label}</span>
                   </span>
                 </li>

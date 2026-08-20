@@ -17,7 +17,7 @@ async function requireAdmin() {
   const session = await getSession();
   if (!session) return null;
   if (!isMongoConfigured()) return null;
-  await tryConnectMongo();
+  if (!(await tryConnectMongo())) return null;
   const { OrganizationMembership } = await import("@/models");
   const membership = await OrganizationMembership.findOne({
     userId: session.userId,
@@ -28,47 +28,82 @@ async function requireAdmin() {
   return membership ? session : null;
 }
 
+function serviceUnavailable() {
+  return NextResponse.json({ error: "Service temporarily unavailable." }, { status: 503 });
+}
+
 export async function GET() {
-  if (!(await requireAdmin())) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  try {
+    if (!(await requireAdmin())) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+    if (!(await tryConnectMongo())) return serviceUnavailable();
+    const { PackagingType } = await import("@/models");
+    const items = await PackagingType.find({ deletedAt: null }).sort({ displayOrder: 1 }).lean();
+    return NextResponse.json({ items });
+  } catch (error) {
+    console.error("[admin/packaging GET]", error);
+    return serviceUnavailable();
   }
-  await tryConnectMongo();
-  const { PackagingType } = await import("@/models");
-  const items = await PackagingType.find({ deletedAt: null }).sort({ displayOrder: 1 }).lean();
-  return NextResponse.json({ items });
 }
 
 export async function POST(request: NextRequest) {
-  if (!(await requireAdmin())) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  try {
+    if (!(await requireAdmin())) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
+    }
+
+    const parsed = packagingSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Invalid input", issues: parsed.error.flatten() },
+        { status: 422 },
+      );
+    }
+    if (!(await tryConnectMongo())) return serviceUnavailable();
+
+    const { PackagingType } = await import("@/models");
+    const input = parsed.data;
+    const doc = await PackagingType.findOneAndUpdate(
+      { slug: input.slug },
+      {
+        ...input,
+        slug: input.slug.toLowerCase(),
+        deletedAt: null,
+      },
+      { upsert: true, new: true },
+    );
+    return NextResponse.json({ ok: true, item: doc });
+  } catch (error) {
+    console.error("[admin/packaging POST]", error);
+    return serviceUnavailable();
   }
-  const parsed = packagingSchema.safeParse(await request.json());
-  if (!parsed.success) {
-    return NextResponse.json({ error: "Invalid input", issues: parsed.error.flatten() }, { status: 422 });
-  }
-  await tryConnectMongo();
-  const { PackagingType } = await import("@/models");
-  const input = parsed.data;
-  const doc = await PackagingType.findOneAndUpdate(
-    { slug: input.slug },
-    {
-      ...input,
-      slug: input.slug.toLowerCase(),
-      deletedAt: null,
-    },
-    { upsert: true, new: true },
-  );
-  return NextResponse.json({ ok: true, item: doc });
 }
 
 export async function DELETE(request: NextRequest) {
-  if (!(await requireAdmin())) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  try {
+    if (!(await requireAdmin())) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+    const slug = new URL(request.url).searchParams.get("slug");
+    if (!slug) return NextResponse.json({ error: "slug required" }, { status: 400 });
+    if (!(await tryConnectMongo())) return serviceUnavailable();
+
+    const { PackagingType } = await import("@/models");
+    await PackagingType.updateOne(
+      { slug },
+      { $set: { status: "inactive", deletedAt: new Date() } },
+    );
+    return NextResponse.json({ ok: true });
+  } catch (error) {
+    console.error("[admin/packaging DELETE]", error);
+    return serviceUnavailable();
   }
-  const slug = new URL(request.url).searchParams.get("slug");
-  if (!slug) return NextResponse.json({ error: "slug required" }, { status: 400 });
-  await tryConnectMongo();
-  const { PackagingType } = await import("@/models");
-  await PackagingType.updateOne({ slug }, { $set: { status: "inactive", deletedAt: new Date() } });
-  return NextResponse.json({ ok: true });
 }

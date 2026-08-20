@@ -5,8 +5,6 @@ import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
 export async function getBuyerOrganizationId(
   session: ActiveSession,
 ): Promise<Types.ObjectId | null> {
-  const devOrg = (session.user as unknown as { organizationId?: string }).organizationId;
-  if (devOrg && !Types.ObjectId.isValid(devOrg)) return null;
   if (!isMongoConfigured()) return null;
   await tryConnectMongo();
   const { OrganizationMembership } = await import("@/models");

@@ -2,8 +2,31 @@ import { NextRequest, NextResponse } from "next/server";
 import { createSession } from "@/lib/auth/session";
 import { findDevUserByEmail } from "@/lib/auth/dev-store";
 import { verifyPassword } from "@/lib/auth/password";
-import { loginSchema } from "@/lib/validation/forms";
+import { loginSchema } from "@/lib/validation/auth";
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
+
+function portalRedirectForRoles(roles: string[]): string | null {
+  if (roles.some((r) => r === "ceo_super_admin" || r === "general_manager")) {
+    return "/admin";
+  }
+  if (
+    roles.some((r) =>
+      ["trade_manager", "employee_operations", "finance", "compliance_reviewer"].includes(r),
+    )
+  ) {
+    return "/workspace";
+  }
+  if (roles.some((r) => r.startsWith("supplier_"))) {
+    return "/portal/supplier";
+  }
+  if (roles.includes("banking_advisor")) {
+    return "/portal/banking";
+  }
+  if (roles.some((r) => r === "buyer_org_admin" || r === "buyer_member")) {
+    return "/portal/buyer";
+  }
+  return null;
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,7 +41,13 @@ export async function POST(request: NextRequest) {
     const ip = request.headers.get("x-forwarded-for")?.split(",")[0];
 
     if (isMongoConfigured()) {
-      await tryConnectMongo();
+      if (!(await tryConnectMongo())) {
+        return NextResponse.json(
+          { error: "Service temporarily unavailable. Please try again shortly." },
+          { status: 503 },
+        );
+      }
+
       const { User, OrganizationMembership } = await import("@/models");
       const user = await User.findOne({ email, deletedAt: null }).select("+passwordHash");
       if (user?.passwordHash && (await verifyPassword(password, user.passwordHash))) {
@@ -28,38 +57,25 @@ export async function POST(request: NextRequest) {
             { status: 403 },
           );
         }
-        await createSession({ userId: user._id, userAgent: ua, ip });
+
         const membership = await OrganizationMembership.findOne({
           userId: user._id,
           status: "active",
           deletedAt: null,
         }).lean();
         const roles = membership?.roles ?? [];
-        let redirectTo = "/portal/buyer";
-        if (roles.some((r: string) => r === "ceo_super_admin" || r === "general_manager")) {
-          redirectTo = "/admin";
-        } else if (
-          roles.some((r: string) =>
-            [
-              "trade_manager",
-              "employee_operations",
-              "finance",
-              "compliance_reviewer",
-            ].includes(r),
-          )
-        ) {
-          redirectTo = "/workspace";
-        } else if (roles.some((r: string) => r.startsWith("supplier_"))) {
-          redirectTo = "/portal/supplier";
-        } else if (roles.includes("banking_advisor")) {
-          redirectTo = "/portal/banking";
+        const redirectTo = portalRedirectForRoles(roles);
+        if (!redirectTo) {
+          return NextResponse.json(
+            { error: "Your account has no portal access yet. Please contact support." },
+            { status: 403 },
+          );
         }
+
+        await createSession({ userId: user._id, userAgent: ua, ip });
         return NextResponse.json({ ok: true, redirectTo });
       }
-    }
 
-    // File-backed auth only when Mongo is not configured (ObjectId sessions require Mongo users).
-    if (isMongoConfigured()) {
       return NextResponse.json({ error: "Invalid email or password." }, { status: 401 });
     }
 

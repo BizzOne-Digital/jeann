@@ -1,5 +1,7 @@
 import { getCategories, SEED_INSIGHTS } from "@/lib/content/catalog";
+import { getPartners } from "@/lib/content/partners-catalog";
 import { getHomeSectionImages } from "@/lib/content/home-images";
+import { PartnersHomeTeaser } from "@/components/marketing/PartnerSections";
 import {
   HomeHero,
   ConnectionSection,
@@ -25,6 +27,7 @@ export default function HomePage() {
       <SourcedResponsibly home3={home3} />
       <ProcessTimeline />
       <ShippingTerms />
+      <PartnersHomeTeaser partners={getPartners()} />
       <PackagingSection />
       <ReadyCtaBanner />
       <InsightsAndNotes posts={posts} />

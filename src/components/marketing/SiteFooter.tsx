@@ -28,6 +28,7 @@ const LINKS = [
       { href: "/resources", label: "Documents & terminology" },
       { href: "/packaging", label: "Packaging" },
       { href: "/shipping", label: "Shipping" },
+      { href: "/partners", label: "Verification partners" },
       { href: "/inspections", label: "Inspections" },
       { href: "/insights", label: "Insights" },
     ],

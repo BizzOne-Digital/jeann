@@ -17,14 +17,20 @@ async function main() {
   const { User, Organization, OrganizationMembership } = await import("@/models");
   const email = env.INITIAL_ADMIN_EMAIL.toLowerCase();
   let user = await User.findOne({ email });
+  const passwordHash = await hashPassword(env.INITIAL_ADMIN_PASSWORD);
   if (!user) {
     user = await User.create({
       email,
-      passwordHash: await hashPassword(env.INITIAL_ADMIN_PASSWORD),
+      passwordHash,
       name: env.INITIAL_ADMIN_NAME || "Platform Administrator",
       emailVerifiedAt: new Date(),
       status: "active",
     });
+  } else {
+    await User.updateOne(
+      { _id: user._id },
+      { $set: { passwordHash, status: "active", deletedAt: null } },
+    );
   }
 
   let org = await Organization.findOne({ type: "internal" });

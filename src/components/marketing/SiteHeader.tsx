@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils/cn";
-import { isHeroMarketingPage } from "@/lib/marketing/hero-pages";
 
 const NAV = [
   { href: "/", label: "Home" },
@@ -17,15 +16,15 @@ const NAV = [
   { href: "/contact", label: "Contact" },
 ];
 
+/** Fixed navy bar on every page — avoids white-on-cream / invisible nav on light heroes. */
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const reduce = useReducedMotion();
-  const isHeroPage = isHeroMarketingPage(pathname);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 16);
+    const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -39,171 +38,164 @@ export function SiteHeader() {
   }, [open]);
 
   const closeMenu = () => setOpen(false);
-  const isHome = pathname === "/";
-  const lightHeader = isHome && !scrolled && !open;
-  const solid = scrolled || !isHeroPage || open;
-
-  const headerBg = lightHeader
-    ? "bg-white/90 shadow-[0_4px_24px_rgba(19,41,61,0.08)] backdrop-blur-md"
-    : solid
-      ? "bg-[#071525]/95 shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-md"
-      : "bg-transparent";
-
-  const brandTitleClass = lightHeader ? "text-[var(--navy)]" : "text-white";
-  const brandSubClass = lightHeader ? "text-[var(--stone)]" : "text-white/55";
-  const navClass = (active: boolean) =>
-    lightHeader
-      ? active
-        ? "text-[var(--navy)]"
-        : "text-[var(--stone)] hover:text-[var(--navy)]"
-      : active
-        ? "text-white"
-        : "text-[#d8e0ea] hover:text-white";
-  const portalBtnClass = lightHeader
-    ? "border-[var(--navy)] text-[var(--navy)] hover:bg-[var(--navy)] hover:text-white"
-    : "border-[#d4a84b] text-white hover:bg-[#d4a84b] hover:text-[#071525]";
-  const menuBtnClass = lightHeader
-    ? "border-[var(--line-strong)] text-[var(--navy)]"
-    : "border-white/25 text-white";
 
   return (
-    <header
-      className={cn(
-        "fixed inset-x-0 top-0 z-50 w-full max-w-full overflow-x-clip transition-[background-color,box-shadow,backdrop-filter] duration-300",
-        headerBg,
-      )}
-    >
-      <div className="container-page flex h-[4.75rem] min-w-0 items-center justify-between gap-3">
-        <Link href="/" className="focus-ring flex min-w-0 items-center gap-2.5 rounded-sm sm:gap-3">
-          <span className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full bg-white sm:h-11 sm:w-11">
-            <Image
-              src="/brand/finekarts-logo.png"
-              alt="Finekarts"
-              width={44}
-              height={44}
-              priority
-              className="h-full w-full object-cover"
-            />
-          </span>
-          <span className="min-w-0 leading-tight">
-            <span className={cn("block truncate text-[0.85rem] font-bold tracking-[0.16em] uppercase sm:text-[0.95rem] sm:tracking-[0.2em]", brandTitleClass)}>
-              Finekarts
+    <>
+      <header
+        className={cn(
+          "fixed inset-x-0 top-0 z-[70] w-full max-w-full overflow-x-clip border-b border-white/10 bg-[#071525] text-white transition-shadow duration-300",
+          scrolled ? "shadow-[0_8px_32px_rgba(0,0,0,0.45)]" : "shadow-[0_4px_20px_rgba(0,0,0,0.25)]",
+        )}
+      >
+        <div className="container-page flex h-[4.75rem] min-w-0 items-center justify-between gap-3">
+          <Link href="/" className="focus-ring flex min-w-0 items-center gap-2.5 rounded-sm sm:gap-3">
+            <span className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full bg-white sm:h-11 sm:w-11">
+              <Image
+                src="/brand/finekarts-logo.png"
+                alt="Finekarts"
+                width={44}
+                height={44}
+                priority
+                className="h-full w-full object-cover"
+              />
             </span>
-            <span
-              className={cn(
-                "block truncate text-[0.55rem] font-medium uppercase tracking-[0.24em] sm:text-[0.6rem] sm:tracking-[0.32em]",
-                brandSubClass,
-              )}
-            >
-              Incorporated
+            <span className="min-w-0 leading-tight">
+              <span className="block truncate text-[0.85rem] font-bold tracking-[0.16em] text-white uppercase sm:text-[0.95rem] sm:tracking-[0.2em]">
+                Finekarts
+              </span>
+              <span className="block truncate text-[0.55rem] font-medium uppercase tracking-[0.24em] text-[#d4a84b]/90 sm:text-[0.6rem] sm:tracking-[0.32em]">
+                Incorporated
+              </span>
             </span>
-          </span>
-        </Link>
-
-        <nav className="hidden items-center gap-0.5 xl:flex" aria-label="Primary">
-          {NAV.map((item) => {
-            const active =
-              item.href === "/"
-                ? pathname === "/"
-                : pathname === item.href || pathname.startsWith(`${item.href}/`);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "focus-ring relative px-3.5 py-2 text-[0.95rem] font-medium tracking-wide transition-colors",
-                  navClass(active),
-                )}
-              >
-                {item.label}
-                {active ? (
-                  <span className="absolute inset-x-3.5 -bottom-0.5 h-[2px] bg-[#d4a84b]" />
-                ) : null}
-              </Link>
-            );
-          })}
-        </nav>
-
-        <div className="hidden items-center xl:flex">
-          <Link
-            href="/login"
-            className={cn(
-              "focus-ring inline-flex items-center gap-2 rounded-sm border px-5 py-2.5 text-sm font-semibold transition",
-              portalBtnClass,
-            )}
-          >
-            Buyer Portal
-            <span aria-hidden>→</span>
           </Link>
-        </div>
 
-        <button
-          type="button"
-          className={cn(
-            "focus-ring relative z-[60] flex h-11 w-11 items-center justify-center rounded-full border xl:hidden",
-            menuBtnClass,
-          )}
-          aria-expanded={open}
-          aria-controls="mobile-nav"
-          onClick={() => setOpen((v) => !v)}
-        >
-          <span className="sr-only">Menu</span>
-          <span className="flex w-5 flex-col gap-1.5">
-            <span className={cn("h-0.5 transition", lightHeader ? "bg-[var(--navy)]" : "bg-white", open && "translate-y-2 rotate-45")} />
-            <span className={cn("h-0.5 transition", lightHeader ? "bg-[var(--navy)]" : "bg-white", open && "opacity-0")} />
-            <span className={cn("h-0.5 transition", lightHeader ? "bg-[var(--navy)]" : "bg-white", open && "-translate-y-2 -rotate-45")} />
-          </span>
-        </button>
-      </div>
+          <nav className="hidden items-center gap-0.5 xl:flex" aria-label="Primary">
+            {NAV.map((item) => {
+              const active =
+                item.href === "/"
+                  ? pathname === "/"
+                  : pathname === item.href || pathname.startsWith(`${item.href}/`);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    "focus-ring relative px-3.5 py-2 text-[0.95rem] font-medium tracking-wide transition-colors",
+                    active ? "text-[#d4a84b]" : "text-[#e8eef2] hover:text-white",
+                  )}
+                >
+                  {item.label}
+                  {active ? (
+                    <span className="absolute inset-x-3.5 -bottom-0.5 h-[2px] bg-[#d4a84b]" />
+                  ) : null}
+                </Link>
+              );
+            })}
+          </nav>
+
+          <div className="hidden items-center xl:flex">
+            <Link
+              href="/login"
+              className="focus-ring inline-flex items-center gap-2 rounded-sm border border-[#d4a84b] bg-[#d4a84b]/10 px-5 py-2.5 text-sm font-semibold text-[#f5e6c8] transition hover:bg-[#d4a84b] hover:text-[#071525]"
+            >
+              Buyer Portal
+              <span aria-hidden>→</span>
+            </Link>
+          </div>
+
+          <button
+            type="button"
+            className="focus-ring flex h-11 w-11 items-center justify-center rounded-md border border-[#d4a84b]/50 bg-[#0a2844] text-[#d4a84b] xl:hidden"
+            aria-expanded={open}
+            aria-controls="mobile-nav"
+            onClick={() => setOpen((v) => !v)}
+          >
+            <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
+            <span className="flex w-5 flex-col gap-1.5">
+              <span className={cn("h-0.5 bg-[#d4a84b] transition", open && "translate-y-2 rotate-45")} />
+              <span className={cn("h-0.5 bg-[#d4a84b] transition", open && "opacity-0")} />
+              <span className={cn("h-0.5 bg-[#d4a84b] transition", open && "-translate-y-2 -rotate-45")} />
+            </span>
+          </button>
+        </div>
+      </header>
 
       <AnimatePresence>
         {open ? (
           <motion.div
             id="mobile-nav"
-            className="fixed inset-0 z-50 bg-[#071525] text-white xl:hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Site menu"
+            className="fixed inset-0 z-[80] xl:hidden"
             initial={reduce ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <div className="container-page flex h-full flex-col pt-24">
-              <nav className="flex flex-col gap-1" aria-label="Mobile primary">
-                {NAV.map((item, i) => (
-                  <motion.div
-                    key={item.href}
-                    initial={reduce ? false : { opacity: 0, x: -16 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.05 * i }}
-                  >
+            <button
+              type="button"
+              className="absolute inset-0 bg-[#04101f]/90 backdrop-blur-sm"
+              aria-label="Close menu"
+              onClick={closeMenu}
+            />
+            <motion.div
+              className="absolute inset-y-0 right-0 flex w-[min(100%,22rem)] flex-col bg-[#071525] shadow-[-12px_0_40px_rgba(0,0,0,0.5)]"
+              initial={reduce ? false : { x: "100%" }}
+              animate={{ x: 0 }}
+              exit={reduce ? undefined : { x: "100%" }}
+              transition={{ type: "tween", duration: 0.25 }}
+            >
+              <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+                <p className="text-sm font-semibold tracking-wide text-[#d4a84b]">Menu</p>
+                <button
+                  type="button"
+                  className="rounded-md border border-white/20 px-3 py-1.5 text-sm text-white"
+                  onClick={closeMenu}
+                >
+                  Close
+                </button>
+              </div>
+              <nav className="flex-1 overflow-y-auto px-5 py-4" aria-label="Mobile primary">
+                {NAV.map((item) => {
+                  const active =
+                    item.href === "/"
+                      ? pathname === "/"
+                      : pathname === item.href || pathname.startsWith(`${item.href}/`);
+                  return (
                     <Link
+                      key={item.href}
                       href={item.href}
                       onClick={closeMenu}
-                      className="block border-b border-white/10 py-4 text-3xl font-semibold tracking-tight"
+                      className={cn(
+                        "block border-b border-white/10 py-4 text-lg font-semibold",
+                        active ? "text-[#d4a84b]" : "text-white",
+                      )}
                     >
                       {item.label}
                     </Link>
-                  </motion.div>
-                ))}
+                  );
+                })}
               </nav>
-              <div className="mt-8 flex flex-col gap-3 pb-10">
+              <div className="space-y-3 border-t border-white/10 p-5">
                 <Link
                   href="/login"
                   onClick={closeMenu}
-                  className="inline-flex items-center justify-center gap-2 rounded-sm border border-[#d4a84b] px-5 py-3 font-semibold text-white"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-sm border border-[#d4a84b] bg-[#d4a84b]/15 px-5 py-3 font-semibold text-[#f5e6c8]"
                 >
                   Buyer Portal →
                 </Link>
                 <Link
                   href="/register/buyer"
                   onClick={closeMenu}
-                  className="inline-flex items-center justify-center rounded-sm bg-[#d4a84b] px-5 py-3 font-semibold text-white"
+                  className="inline-flex w-full items-center justify-center rounded-sm bg-[#d4a84b] px-5 py-3 font-semibold text-[#071525]"
                 >
                   Register as buyer
                 </Link>
               </div>
-            </div>
+            </motion.div>
           </motion.div>
         ) : null}
       </AnimatePresence>
-    </header>
+    </>
   );
 }

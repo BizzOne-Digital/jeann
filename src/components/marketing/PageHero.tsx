@@ -101,8 +101,8 @@ export function PageHero({
           full
             ? "flex min-h-[100svh] flex-col justify-center pb-24 pt-28 lg:pb-28 lg:pt-32"
             : light
-              ? "py-14 sm:py-16 lg:py-20"
-              : "py-16 sm:py-20 lg:py-24"
+              ? "pt-24 pb-12 sm:pt-28 sm:pb-14 lg:pt-32 lg:pb-16"
+              : "pt-24 pb-14 sm:pt-28 sm:pb-16 lg:pt-32 lg:pb-20"
         }`}
       >
         <div className={`min-w-0 ${full ? "max-w-xl lg:max-w-2xl" : "max-w-2xl"}`}>
