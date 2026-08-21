@@ -10,6 +10,7 @@ const envSchema = z.object({
   INITIAL_ADMIN_EMAIL: z.string().email().optional(),
   INITIAL_ADMIN_PASSWORD: z.string().min(12).optional(),
   INITIAL_ADMIN_NAME: z.string().optional(),
+  ADMIN_NOTIFY_EMAIL: z.string().email().optional(),
   EMAIL_PROVIDER: z.enum(["none", "console", "resend", "smtp"]).default("console"),
   EMAIL_FROM: z.string().optional(),
   EMAIL_API_KEY: z.string().optional(),

@@ -6,6 +6,7 @@ type ApiBody = {
   error?: string;
   message?: string;
   redirectTo?: string;
+  status?: string;
   issues?: {
     fieldErrors?: Record<string, string[] | undefined>;
   };
@@ -136,6 +137,15 @@ export function BuyerRegistrationForm() {
         acceptBuyerTerms: true,
         acceptPrivacy: true,
       });
+
+      if (result.ok && result.body.status === "pending") {
+        setIsError(false);
+        setMessage(
+          result.body.message ||
+            "Registration received. We will email you when your account is approved.",
+        );
+        return;
+      }
 
       if (result.body.redirectTo) {
         window.location.assign(result.body.redirectTo);

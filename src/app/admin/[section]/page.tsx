@@ -18,10 +18,6 @@ const SECTIONS: Record<string, { title: string; description: string }> = {
     title: "Transactions",
     description: "Operate buyer and supplier transaction workflows, steps, and assignments.",
   },
-  buyers: {
-    title: "Buyer Organizations",
-    description: "Verify buyer companies, memberships, CIS profiles, and duplicate-review flags.",
-  },
   suppliers: {
     title: "Supplier Organizations",
     description: "Manage invite-only supplier onboarding, verification, and assigned transactions.",
@@ -33,10 +29,6 @@ const SECTIONS: Record<string, { title: string; description: string }> = {
   "validation-rules": {
     title: "Validation Rules",
     description: "Deterministic document filter rules with versioning and activation approval.",
-  },
-  approvals: {
-    title: "Approvals",
-    description: "Queues for trade-manager and compliance approvals with immutable audit events.",
   },
   bookings: {
     title: "Bookings",

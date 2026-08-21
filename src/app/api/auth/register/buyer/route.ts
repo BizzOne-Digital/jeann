@@ -10,6 +10,10 @@ import { hashPassword } from "@/lib/auth/password";
 import { registerBuyerSchema } from "@/lib/validation/auth";
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
 import { normalizeCompanyName } from "@/lib/db/ids";
+import {
+  notifyAdminNewBuyerRegistration,
+  notifyBuyerRegistrationReceived,
+} from "@/lib/email/buyer-notifications";
 
 export const runtime = "nodejs";
 
@@ -117,41 +121,40 @@ export async function POST(request: NextRequest) {
         status: "active",
       });
 
-      const sessionIssue = getSessionConfigError();
-      if (sessionIssue) {
-        return NextResponse.json(
-          {
-            ok: true,
-            status: "active",
-            redirectTo: "/login",
-            message:
-              "Account created. Please sign in with your email and password. (Admin: set SESSION_SECRET on the server.)",
-          },
-          { status: 201 },
-        );
-      }
+      const { Approval } = await import("@/models");
+      await Approval.create({
+        targetType: "buyer_organization",
+        targetId: org._id,
+        decision: "pending",
+        actorUserId: user._id,
+      });
 
       try {
-        await createSession({ userId: user._id, userAgent: ua, ip });
-      } catch (sessionError) {
-        console.error("[register/buyer] session", sessionError);
-        return NextResponse.json(
-          {
-            ok: true,
-            status: "active",
-            redirectTo: "/login",
-            message: "Account created. Please sign in with your email and password.",
-          },
-          { status: 201 },
-        );
+        await Promise.all([
+          notifyBuyerRegistrationReceived({
+            contactEmail: email,
+            contactName: input.contactName,
+            organizationName: input.legalName,
+          }),
+          notifyAdminNewBuyerRegistration({
+            organizationName: input.legalName,
+            contactName: input.contactName,
+            contactEmail: email,
+            country: countryCode(input.country),
+            organizationId: String(org._id),
+          }),
+        ]);
+      } catch (emailError) {
+        console.error("[register/buyer] email", emailError);
       }
 
       return NextResponse.json(
         {
           ok: true,
-          status: "active",
-          redirectTo: "/portal/buyer",
-          message: "Account created. Redirecting…",
+          status: "pending",
+          redirectTo: "/login",
+          message:
+            "Registration received. We will email you when your buyer portal access is approved.",
         },
         { status: 201 },
       );

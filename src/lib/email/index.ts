@@ -1,5 +1,6 @@
 import { getEnv } from "@/lib/config/env";
 import { ConsoleEmailProvider } from "@/lib/email/console";
+import { ResendEmailProvider } from "@/lib/email/resend";
 import type { EmailProvider, SendEmailInput, SendEmailResult } from "@/lib/email/types";
 
 let cached: EmailProvider | null = null;
@@ -13,9 +14,11 @@ export function getEmailProvider(): EmailProvider {
       cached = new ConsoleEmailProvider();
       return cached;
     case "resend":
+      cached = new ResendEmailProvider();
+      return cached;
     case "smtp":
       throw new Error(
-        `${env.EMAIL_PROVIDER} email provider is not implemented yet. Use EMAIL_PROVIDER=console for development.`,
+        `${env.EMAIL_PROVIDER} email provider is not implemented yet. Use EMAIL_PROVIDER=resend or console.`,
       );
     default:
       cached = new ConsoleEmailProvider();
