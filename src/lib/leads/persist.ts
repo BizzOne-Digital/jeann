@@ -55,6 +55,8 @@ export async function persistLeadToMongo(
         contactPhone: String(data.phone ?? ""),
         contactCompany: String(data.companyName ?? ""),
         productName: String(data.productName ?? ""),
+        productSlug: data.productSlug ? String(data.productSlug) : undefined,
+        productGrade: data.productGrade ? String(data.productGrade) : undefined,
         quantity: String(data.quantity ?? ""),
         unit: String(data.unit ?? ""),
         frequency: data.frequency ? String(data.frequency) : undefined,
@@ -67,6 +69,15 @@ export async function persistLeadToMongo(
         paymentPreference: data.paymentPreference
           ? String(data.paymentPreference)
           : undefined,
+        paymentTermId: data.paymentTermId ? String(data.paymentTermId) : undefined,
+        iccCode: data.iccCode ? String(data.iccCode) : undefined,
+        pricePerMt: typeof data.pricePerMt === "number" ? data.pricePerMt : undefined,
+        monthlyDeliveryTotal:
+          typeof data.monthlyDeliveryTotal === "number" ? data.monthlyDeliveryTotal : undefined,
+        deliveryCount:
+          typeof data.deliveryCount === "number" ? data.deliveryCount : undefined,
+        contractYears: typeof data.contractYears === "number" ? data.contractYears : undefined,
+        contractTotal: typeof data.contractTotal === "number" ? data.contractTotal : undefined,
         notes: [data.specification, data.notes].filter(Boolean).map(String).join("\n\n") || undefined,
         attachments: [],
         status: "submitted",

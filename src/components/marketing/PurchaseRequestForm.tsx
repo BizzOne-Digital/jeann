@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,6 +21,18 @@ type Props = {
 export function PurchaseRequestForm({ defaultProduct, packagingOptions, prefill, className }: Props) {
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [reference, setReference] = useState<string>();
+  const [paymentOptions, setPaymentOptions] = useState<Array<{ id: string; structure: string }>>(
+    [],
+  );
+
+  useEffect(() => {
+    fetch("/api/payment-terms")
+      .then((res) => res.json())
+      .then((data: { terms?: Array<{ id: string; structure: string }> }) => {
+        setPaymentOptions(data.terms ?? []);
+      })
+      .catch(() => setPaymentOptions([]));
+  }, []);
 
   const {
     register,
@@ -241,7 +253,15 @@ export function PurchaseRequestForm({ defaultProduct, packagingOptions, prefill,
       </div>
 
       <Field label="Payment preference" error={errors.paymentPreference?.message}>
-        <input className="field" placeholder="e.g. Irrevocable LC at sight" {...register("paymentPreference")} />
+        <select className="field" {...register("paymentPreference")}>
+          <option value="">Select payment structure (optional)</option>
+          {paymentOptions.map((option) => (
+            <option key={option.id} value={option.structure}>
+              {option.structure}
+            </option>
+          ))}
+          <option value="Other / to discuss">Other / to discuss</option>
+        </select>
       </Field>
 
       <Field label="Additional notes" error={errors.notes?.message}>

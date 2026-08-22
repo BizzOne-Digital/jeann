@@ -13,6 +13,10 @@ export default async function RequestsPage() {
     status: string;
     quantity?: string;
     unit?: string;
+    contractTotal?: number;
+    deliveryCount?: number;
+    paymentPreference?: string;
+    iccCode?: string;
     createdAt?: Date;
   }> = [];
 
@@ -31,6 +35,10 @@ export default async function RequestsPage() {
         status: d.status,
         quantity: d.quantity,
         unit: d.unit,
+        contractTotal: d.contractTotal,
+        deliveryCount: d.deliveryCount,
+        paymentPreference: d.paymentPreference,
+        iccCode: d.iccCode,
         createdAt: d.createdAt,
       }));
     }
@@ -58,7 +66,9 @@ export default async function RequestsPage() {
               <tr>
                 <th className="px-4 py-3 font-semibold">Reference</th>
                 <th className="px-4 py-3 font-semibold">Product</th>
-                <th className="px-4 py-3 font-semibold">Quantity</th>
+                <th className="px-4 py-3 font-semibold">Volume</th>
+                <th className="px-4 py-3 font-semibold">Contract</th>
+                <th className="px-4 py-3 font-semibold">Payment</th>
                 <th className="px-4 py-3 font-semibold">Status</th>
                 <th className="px-4 py-3 font-semibold">Submitted</th>
               </tr>
@@ -70,6 +80,16 @@ export default async function RequestsPage() {
                   <td className="px-4 py-3">{row.productName}</td>
                   <td className="px-4 py-3">
                     {[row.quantity, row.unit].filter(Boolean).join(" ") || "—"}
+                  </td>
+                  <td className="px-4 py-3">
+                    {row.contractTotal
+                      ? `USD ${row.contractTotal.toLocaleString()} (${row.deliveryCount ?? "—"} deliveries)`
+                      : "—"}
+                  </td>
+                  <td className="px-4 py-3">
+                    {row.paymentPreference
+                      ? `${row.paymentPreference}${row.iccCode ? ` (${row.iccCode})` : ""}`
+                      : "—"}
                   </td>
                   <td className="px-4 py-3 capitalize">{row.status.replaceAll("_", " ")}</td>
                   <td className="px-4 py-3 text-[var(--stone)]">

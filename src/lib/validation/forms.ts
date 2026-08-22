@@ -1,5 +1,59 @@
 import { z } from "zod";
 
+const positiveAmount = z
+  .union([z.string(), z.number()])
+  .transform((value) => Number(value))
+  .refine((value) => Number.isFinite(value) && value > 0, "Enter a valid amount.");
+
+export const edibleOilOrderSchema = z.object({
+  companyName: z.string().min(2).max(200),
+  contactName: z.string().min(2).max(120),
+  email: z.email(),
+  phone: z.string().min(7).max(40),
+  productSlug: z.string().min(2).max(80),
+  productGrade: z.enum(["Refined", "Crude", "Extra"]),
+  quantityMt: positiveAmount,
+  destinationCountry: z.string().min(2).max(120),
+  destinationPort: z.string().min(2).max(120),
+  incoterm: z.enum(["FOB", "CIF", "CFR", "FCA", "Other / to discuss"]),
+  pricePerMt: positiveAmount,
+  monthlyDeliveryTotal: positiveAmount,
+  contractYears: z.union([z.literal(1), z.literal(2)]),
+  deliveryCount: z.union([z.literal(12), z.literal(24)]),
+  contractTotal: positiveAmount,
+  paymentTermId: z.string().min(2).max(80),
+  iccCode: z.string().min(2).max(120),
+  packaging: z.string().max(200).optional(),
+  inspection: z.string().max(200).optional(),
+  notes: z.string().max(4000).optional(),
+  acceptTerms: z.literal(true, { error: "You must accept the submission terms." }),
+}).superRefine((data, ctx) => {
+  const expectedDeliveries = data.contractYears === 2 ? 24 : 12;
+  if (data.deliveryCount !== expectedDeliveries) {
+    ctx.addIssue({
+      code: "custom",
+      message: "Delivery count must match contract duration.",
+      path: ["deliveryCount"],
+    });
+  }
+  const expectedMonthly = Number((data.quantityMt * data.pricePerMt).toFixed(2));
+  if (Math.abs(data.monthlyDeliveryTotal - expectedMonthly) > 0.01) {
+    ctx.addIssue({
+      code: "custom",
+      message: "Monthly total should equal quantity × price per MT.",
+      path: ["monthlyDeliveryTotal"],
+    });
+  }
+  const expectedContract = Number((data.monthlyDeliveryTotal * data.deliveryCount).toFixed(2));
+  if (Math.abs(data.contractTotal - expectedContract) > 0.01) {
+    ctx.addIssue({
+      code: "custom",
+      message: "Contract total should equal monthly total × deliveries.",
+      path: ["contractTotal"],
+    });
+  }
+});
+
 export const purchaseRequestLineSchema = z.object({
   productName: z.string().min(2).max(200),
   quantity: z.string().min(1).max(80),
@@ -98,6 +152,7 @@ export const loginSchema = z.object({
   password: z.string().min(1),
 });
 
+export type EdibleOilOrderInput = z.infer<typeof edibleOilOrderSchema>;
 export type PurchaseRequestInput = z.infer<typeof purchaseRequestSchema>;
 export type TradeOfferInput = z.infer<typeof tradeOfferSchema>;
 export type ContactInput = z.infer<typeof contactSchema>;

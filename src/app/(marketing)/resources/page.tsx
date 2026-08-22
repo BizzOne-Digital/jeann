@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CmsPageHero } from "@/components/marketing/CmsPageHero";
+import { PaymentTermsTable } from "@/components/marketing/PaymentTermsTable";
 import { Reveal } from "@/components/motion/Reveal";
 import { cmsField } from "@/lib/content/cms-field";
 import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
@@ -8,7 +9,7 @@ import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
 export const metadata: Metadata = {
   title: "Resources",
   description:
-    "Trade documents, terminology, and educational resources for qualified buyers. RFQs and forms are available in the buyer portal after sign-in.",
+    "Trade documents, banking clauses, payment structures, and educational resources for qualified buyers. RFQs are submitted through the buyer portal after sign-in.",
 };
 
 const DOWNLOADS = [
@@ -80,6 +81,8 @@ export default async function ResourcesPage() {
           secondaryCta: { href: "/register/buyer", label: "Register as buyer" },
         }}
       />
+
+      <PaymentTermsTable />
 
       <section className="bg-white py-16 lg:py-20">
         <div className="container-page">

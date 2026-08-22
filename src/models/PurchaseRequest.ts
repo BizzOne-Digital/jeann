@@ -27,6 +27,15 @@ export interface IPurchaseRequest {
   inspection?: string;
   timeline?: string;
   paymentPreference?: string;
+  paymentTermId?: string;
+  iccCode?: string;
+  productSlug?: string;
+  productGrade?: string;
+  pricePerMt?: number;
+  monthlyDeliveryTotal?: number;
+  deliveryCount?: number;
+  contractYears?: number;
+  contractTotal?: number;
   notes?: string;
   attachments: AttachmentFields[];
   status: PurchaseRequestStatus;
@@ -58,6 +67,15 @@ const purchaseRequestSchema = new Schema<IPurchaseRequest>(
     inspection: { type: String },
     timeline: { type: String },
     paymentPreference: { type: String },
+    paymentTermId: { type: String },
+    iccCode: { type: String },
+    productSlug: { type: String },
+    productGrade: { type: String },
+    pricePerMt: { type: Number },
+    monthlyDeliveryTotal: { type: Number },
+    deliveryCount: { type: Number },
+    contractYears: { type: Number },
+    contractTotal: { type: Number },
     notes: { type: String },
     attachments: [attachmentSchema],
     status: {

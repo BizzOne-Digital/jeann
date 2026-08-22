@@ -17,6 +17,11 @@ export interface SiteAddress {
   country: string;
 }
 
+export interface PaymentTermsConfigFields {
+  enabledIds: string[];
+  preferredId?: string | null;
+}
+
 export interface ISiteSettings {
   key: string;
   companyName: string;
@@ -29,6 +34,7 @@ export interface ISiteSettings {
   featureFlags: Record<string, boolean>;
   aiAssistantEnabled: boolean;
   locales: string[];
+  paymentTermsConfig?: PaymentTermsConfigFields;
 }
 
 export type SiteSettingsLean = LeanDoc<ISiteSettings>;
@@ -66,6 +72,10 @@ const siteSettingsSchema = new Schema<ISiteSettings>(
     featureFlags: { type: Schema.Types.Mixed, default: () => ({}) },
     aiAssistantEnabled: { type: Boolean, default: false },
     locales: [{ type: String, default: ["en"] }],
+    paymentTermsConfig: {
+      enabledIds: [{ type: String }],
+      preferredId: { type: String },
+    },
   },
   { timestamps: true },
 );

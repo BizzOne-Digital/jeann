@@ -48,14 +48,19 @@ export async function loadAdminSectionData(section: string): Promise<AdminSectio
           .lean();
         return table(
           `${total} total`,
-          ["Reference", "Company", "Product", "Qty", "Status", "Submitted"],
+          ["Reference", "Company", "Product", "Contract", "Payment", "Status", "Submitted"],
           docs.map((doc) => ({
             key: doc.reference,
             cells: [
               doc.reference,
               doc.contactCompany || doc.contactEmail || "—",
               doc.productName,
-              [doc.quantity, doc.unit].filter(Boolean).join(" ") || "—",
+              doc.contractTotal
+                ? `USD ${doc.contractTotal.toLocaleString()} (${doc.deliveryCount ?? "—"} deliveries)`
+                : [doc.quantity, doc.unit].filter(Boolean).join(" ") || "—",
+              doc.paymentPreference
+                ? `${doc.paymentPreference}${doc.iccCode ? ` (${doc.iccCode})` : ""}`
+                : "—",
               doc.status,
               dateCell(doc.createdAt),
             ],

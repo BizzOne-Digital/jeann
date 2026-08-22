@@ -73,7 +73,7 @@ export const SEED_FAQS = [
   {
     question: "What payment terms are sometimes discussed?",
     answer:
-      "Irrevocable Letter of Credit and Irrevocable LC at sight are commonly discussed for suitable transactions, sometimes with SBLC support for larger structures. All instruments remain subject to contract, bank approval, compliance, and agreed wording.",
+      "For large commodity SPAs, parties often discuss an irrevocable documentary LC at sight (UCP 600), with SBLC backup for long-term contracts (ISP98), and alternatives such as bank guarantees (URDG 758), D/P or D/A collection (URC 522), or T/T per the commercial schedule. For 12-month programmes, Irrevocable LC at Sight + SBLC is commonly positioned as the preferred structure. See the banking clause and comparison table on Resources — all instruments remain subject to contract, bank approval, compliance, and agreed wording.",
   },
 ];
 
