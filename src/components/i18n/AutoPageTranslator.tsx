@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { SOURCE_LOCALE } from "@/lib/i18n/locales";
+import { setTranslating } from "@/lib/i18n/translation-runtime";
 import { useTranslation } from "@/components/i18n/TranslationProvider";
 
 const SKIP_TAGS = new Set(["SCRIPT", "STYLE", "NOSCRIPT", "CODE", "PRE", "SVG", "PATH"]);
@@ -43,6 +44,88 @@ function saveClientCache(locale: string, cache: Record<string, string>) {
   }
 }
 
+function buildReverseCache(cache: Record<string, string>) {
+  const reverse: Record<string, string> = {};
+  for (const [source, translated] of Object.entries(cache)) {
+    if (translated && translated !== source) {
+      reverse[translated.trim()] = source;
+    }
+  }
+  return reverse;
+}
+
+function preserveWhitespace(original: string, translated: string) {
+  const leading = original.match(/^\s*/)?.[0] ?? "";
+  const trailing = original.match(/\s*$/)?.[0] ?? "";
+  return `${leading}${translated}${trailing}`;
+}
+
+function resolveSourceText(
+  current: string,
+  originalsRef: WeakMap<Text, string>,
+  textNode: Text,
+  reverseCache: Record<string, string>,
+): string {
+  const stored = originalsRef.get(textNode);
+  if (stored !== undefined) return stored;
+
+  const trimmed = current.trim();
+  if (reverseCache[trimmed]) {
+    const source = reverseCache[trimmed];
+    originalsRef.set(textNode, preserveWhitespace(current, source));
+    return originalsRef.get(textNode) ?? current;
+  }
+
+  originalsRef.set(textNode, current);
+  return current;
+}
+
+function collectTextEntries(
+  root: HTMLElement,
+  originalsRef: WeakMap<Text, string>,
+  reverseCache: Record<string, string>,
+) {
+  const entries: { node: Text; text: string; source: string }[] = [];
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  let node = walker.nextNode();
+
+  while (node) {
+    const textNode = node as Text;
+    if (!shouldSkipNode(textNode)) {
+      const current = textNode.textContent ?? "";
+      const source = resolveSourceText(current, originalsRef, textNode, reverseCache);
+      entries.push({ node: textNode, text: source, source: source.trim() });
+    }
+    node = walker.nextNode();
+  }
+
+  return entries;
+}
+
+function applyCachedTranslations(
+  root: HTMLElement,
+  locale: string,
+  originalsRef: WeakMap<Text, string>,
+  applyingRef: { current: boolean },
+) {
+  const cache = loadClientCache(locale);
+  const reverseCache = buildReverseCache(cache);
+  const entries = collectTextEntries(root, originalsRef, reverseCache);
+
+  applyingRef.current = true;
+  try {
+    for (const entry of entries) {
+      if (!entry.source) continue;
+      const translated = cache[entry.source];
+      if (translated && translated !== entry.source) {
+        entry.node.textContent = preserveWhitespace(entry.text, translated);
+      }
+    }
+  } finally {
+    applyingRef.current = false;
+  }
+}
+
 async function fetchTranslations(texts: string[], target: string): Promise<string[]> {
   const res = await fetch("/api/translate", {
     method: "POST",
@@ -59,63 +142,84 @@ async function fetchTranslations(texts: string[], target: string): Promise<strin
 }
 
 export function AutoPageTranslator() {
-  const { locale, setIsTranslating } = useTranslation();
+  const { locale } = useTranslation();
   const pathname = usePathname();
   const originalsRef = useRef(new WeakMap<Text, string>());
   const runIdRef = useRef(0);
+  const applyingRef = useRef(false);
+  const reapplyTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     const root = document.getElementById("finekarts-marketing-root");
     if (!root) return;
 
+    const marketingRoot = root;
+
     const runId = ++runIdRef.current;
 
     const restoreEnglish = () => {
-      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-      let node = walker.nextNode();
-      while (node) {
-        const textNode = node as Text;
-        const original = originalsRef.current.get(textNode);
-        if (original !== undefined) {
-          textNode.textContent = original;
+      applyingRef.current = true;
+      try {
+        const walker = document.createTreeWalker(marketingRoot, NodeFilter.SHOW_TEXT);
+        let node = walker.nextNode();
+        while (node) {
+          const textNode = node as Text;
+          const original = originalsRef.current.get(textNode);
+          if (original !== undefined) {
+            textNode.textContent = original;
+          }
+          node = walker.nextNode();
         }
-        node = walker.nextNode();
+      } finally {
+        applyingRef.current = false;
       }
     };
 
+    const scheduleReapply = () => {
+      if (locale === SOURCE_LOCALE || runId !== runIdRef.current) return;
+      if (reapplyTimerRef.current) {
+        window.clearTimeout(reapplyTimerRef.current);
+      }
+      reapplyTimerRef.current = window.setTimeout(() => {
+        if (runId !== runIdRef.current || locale === SOURCE_LOCALE) return;
+        applyCachedTranslations(marketingRoot, locale, originalsRef.current, applyingRef);
+      }, 60);
+    };
+
+    const observer = new MutationObserver(() => {
+      if (applyingRef.current || locale === SOURCE_LOCALE) return;
+      scheduleReapply();
+    });
+
+    observer.observe(marketingRoot, {
+      subtree: true,
+      childList: true,
+      characterData: true,
+    });
+
     if (locale === SOURCE_LOCALE) {
       restoreEnglish();
-      setIsTranslating(false);
-      return;
+      setTranslating(false);
+      return () => {
+        observer.disconnect();
+        if (reapplyTimerRef.current) window.clearTimeout(reapplyTimerRef.current);
+      };
     }
 
     let cancelled = false;
 
     async function translatePage() {
-      setIsTranslating(true);
-
-      const entries: { node: Text; text: string }[] = [];
-      const walker = document.createTreeWalker(root!, NodeFilter.SHOW_TEXT);
-      let node = walker.nextNode();
-
-      while (node) {
-        const textNode = node as Text;
-        if (!shouldSkipNode(textNode)) {
-          const current = textNode.textContent ?? "";
-          if (!originalsRef.current.has(textNode)) {
-            originalsRef.current.set(textNode, current);
-          }
-          entries.push({ node: textNode, text: originalsRef.current.get(textNode) ?? current });
-        }
-        node = walker.nextNode();
-      }
-
-      const unique = [...new Set(entries.map((e) => e.text.trim()).filter(Boolean))];
-      const cache = loadClientCache(locale);
-      const missing = unique.filter((t) => !cache[t]);
-      const chunkSize = 40;
+      setTranslating(true);
 
       try {
+        const cache = loadClientCache(locale);
+        const reverseCache = buildReverseCache(cache);
+        const entries = collectTextEntries(marketingRoot, originalsRef.current, reverseCache);
+
+        const unique = [...new Set(entries.map((e) => e.source).filter(Boolean))];
+        const missing = unique.filter((t) => !cache[t]);
+        const chunkSize = 40;
+
         for (let i = 0; i < missing.length; i += chunkSize) {
           if (cancelled || runId !== runIdRef.current) return;
           const chunk = missing.slice(i, i + chunkSize);
@@ -128,37 +232,36 @@ export function AutoPageTranslator() {
 
         if (cancelled || runId !== runIdRef.current) return;
 
-        for (const entry of entries) {
-          const source = (originalsRef.current.get(entry.node) ?? entry.text).trim();
-          const translated = cache[source];
-          if (translated && translated !== source) {
-            entry.node.textContent = preserveWhitespace(entry.text, translated);
-          }
-        }
+        applyCachedTranslations(marketingRoot, locale, originalsRef.current, applyingRef);
+
+        // React may commit after our DOM writes — re-apply once the tree settles.
+        window.requestAnimationFrame(() => {
+          window.requestAnimationFrame(() => {
+            if (!cancelled && runId === runIdRef.current) {
+              applyCachedTranslations(marketingRoot, locale, originalsRef.current, applyingRef);
+            }
+          });
+        });
       } catch (error) {
         console.error("[AutoPageTranslator]", error);
       } finally {
         if (!cancelled && runId === runIdRef.current) {
-          setIsTranslating(false);
+          setTranslating(false);
         }
       }
     }
 
     const timer = window.setTimeout(() => {
       void translatePage();
-    }, 120);
+    }, 80);
 
     return () => {
       cancelled = true;
+      observer.disconnect();
       window.clearTimeout(timer);
+      if (reapplyTimerRef.current) window.clearTimeout(reapplyTimerRef.current);
     };
-  }, [locale, pathname, setIsTranslating]);
+  }, [locale, pathname]);
 
   return null;
-}
-
-function preserveWhitespace(original: string, translated: string) {
-  const leading = original.match(/^\s*/)?.[0] ?? "";
-  const trailing = original.match(/\s*$/)?.[0] ?? "";
-  return `${leading}${translated}${trailing}`;
 }

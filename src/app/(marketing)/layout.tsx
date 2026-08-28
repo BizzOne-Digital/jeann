@@ -18,8 +18,8 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
         <SiteFooter />
         <ClientOnly>
           <AiAssistant />
-          <AutoPageTranslator />
         </ClientOnly>
+        <AutoPageTranslator />
       </div>
     </TranslationProvider>
   );

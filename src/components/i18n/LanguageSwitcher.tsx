@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { cn } from "@/lib/utils/cn";
 import { SUPPORTED_LOCALES, SOURCE_LOCALE } from "@/lib/i18n/locales";
+import { getTranslating, subscribeTranslating } from "@/lib/i18n/translation-runtime";
 import { useTranslation } from "@/components/i18n/TranslationProvider";
 
 export function LanguageSwitcher({ className }: { className?: string }) {
-  const { locale, setLocale, isTranslating } = useTranslation();
+  const { locale, setLocale } = useTranslation();
+  const isTranslating = useSyncExternalStore(subscribeTranslating, getTranslating, () => false);
   const [open, setOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
 

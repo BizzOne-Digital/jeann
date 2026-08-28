@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 /* Hide main site until intro splash finishes (first visit per session). */
-html.intro-active body {
+body.intro-active {
   overflow: hidden;
 }
 
-html.intro-active #finekarts-site-root {
+body.intro-active #finekarts-site-root {
   visibility: hidden;
   pointer-events: none;
 }

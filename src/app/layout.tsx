@@ -47,16 +47,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${sans.variable} ${display.variable} ${mono.variable} h-full overflow-x-clip`}
     >
-      <head>
+      <body
+        suppressHydrationWarning
+        className="min-h-full w-full max-w-full overflow-x-clip antialiased"
+      >
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{if(!sessionStorage.getItem("finekarts-intro-seen")){document.documentElement.classList.add("intro-active");}}catch(e){}})();`,
+            __html: `(function(){try{if(!sessionStorage.getItem("finekarts-intro-seen")){document.body.classList.add("intro-active");}}catch(e){}})();`,
           }}
         />
-      </head>
-      <body className="min-h-full w-full max-w-full overflow-x-clip antialiased">
         <IntroGate />
         <div id="finekarts-site-root">{children}</div>
       </body>

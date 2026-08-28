@@ -23,7 +23,7 @@ function getServerSnapshot(): boolean {
 }
 
 function clearIntroBlock() {
-  document.documentElement.classList.remove(INTRO_ACTIVE_CLASS);
+  document.body.classList.remove(INTRO_ACTIVE_CLASS);
 }
 
 export function IntroOverlay() {

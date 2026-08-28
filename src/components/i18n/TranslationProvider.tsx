@@ -14,8 +14,6 @@ import { LOCALE_COOKIE, SOURCE_LOCALE, isSupportedLocale } from "@/lib/i18n/loca
 type TranslationContextValue = {
   locale: string;
   setLocale: (code: string) => void;
-  isTranslating: boolean;
-  setIsTranslating: (value: boolean) => void;
 };
 
 const TranslationContext = createContext<TranslationContextValue | null>(null);
@@ -34,13 +32,15 @@ function readStoredLocale(): string {
 function persistLocale(code: string) {
   localStorage.setItem(LOCALE_COOKIE, code);
   document.cookie = `${LOCALE_COOKIE}=${code};path=/;max-age=31536000;SameSite=Lax`;
-  document.documentElement.lang = code === SOURCE_LOCALE ? "en" : code;
-  document.documentElement.dir = code === "ar" ? "rtl" : "ltr";
+  // Defer html attribute updates until after hydration.
+  window.requestAnimationFrame(() => {
+    document.documentElement.lang = code === SOURCE_LOCALE ? "en" : code;
+    document.documentElement.dir = code === "ar" ? "rtl" : "ltr";
+  });
 }
 
 export function TranslationProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState(SOURCE_LOCALE);
-  const [isTranslating, setIsTranslating] = useState(false);
 
   useEffect(() => {
     const stored = readStoredLocale();
@@ -54,10 +54,7 @@ export function TranslationProvider({ children }: { children: ReactNode }) {
     persistLocale(next);
   }, []);
 
-  const value = useMemo(
-    () => ({ locale, setLocale, isTranslating, setIsTranslating }),
-    [locale, setLocale, isTranslating],
-  );
+  const value = useMemo(() => ({ locale, setLocale }), [locale, setLocale]);
 
   return <TranslationContext.Provider value={value}>{children}</TranslationContext.Provider>;
 }
