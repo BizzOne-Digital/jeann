@@ -262,8 +262,8 @@ const PULSE_PRODUCTS: Record<string, PulseProductDetail> = {
         alt: "Dry chickpeas — bulk product reference",
       },
       {
-        src: "/images/products/product-4.png",
-        alt: "Beans and pulses commodity reference",
+        src: `${BEANS_BASE}/beans-variety-mosaic.png`,
+        alt: "Dry chickpeas and assorted pulses",
       },
     ],
   },
@@ -330,11 +330,11 @@ const PULSE_PRODUCTS: Record<string, PulseProductDetail> = {
       "Sorted calibration per contract",
       "Container-based supply",
     ],
-    heroImage: `${BEANS_BASE}/beans-variety-bowls.png`,
+    heroImage: `${BEANS_BASE}/white-beans-leaves.png`,
     images: [
       {
-        src: `${BEANS_BASE}/beans-variety-bowls.png`,
-        alt: "Assorted dry bean varieties in ceramic bowls",
+        src: `${BEANS_BASE}/white-beans-leaves.png`,
+        alt: "Yellow and white dry beans with green leaves",
       },
     ],
   },
@@ -362,15 +362,11 @@ const PULSE_PRODUCTS: Record<string, PulseProductDetail> = {
       "Protein specification per contract",
       "Bulk and container options",
     ],
-    heroImage: `${BEANS_BASE}/beans-variety-bowls.png`,
+    heroImage: `${BEANS_BASE}/beans-variety-mosaic.png`,
     images: [
       {
-        src: `${BEANS_BASE}/beans-variety-bowls.png`,
-        alt: "Assorted dry legume varieties",
-      },
-      {
-        src: "/images/products/product-4.png",
-        alt: "Beans and pulses commodity reference",
+        src: `${BEANS_BASE}/beans-variety-mosaic.png`,
+        alt: "Assorted dry legume varieties including soybeans",
       },
     ],
   },

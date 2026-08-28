@@ -10,39 +10,18 @@ import { Reveal } from "@/components/motion/Reveal";
 import { HomeCtaChat } from "@/components/marketing/HomeCtaChat";
 import { HeroVideoBackground } from "@/components/marketing/HeroVideoBackground";
 import type { SeedCategory } from "@/lib/content/catalog";
+import { getCategoryCover } from "@/lib/content/product-images";
 
 const COMMODITY_CARDS = [
-  {
-    slug: "edible-oils",
-    name: "Edible Oils",
-    image: "/images/products/product-1.png",
-    alt: "Edible oils commodity",
-  },
-  {
-    slug: "sugar",
-    name: "Sugar",
-    image: "/images/products/product-2.png",
-    alt: "Sugar commodity",
-  },
-  {
-    slug: "rice-and-grains",
-    name: "Rice & Grains",
-    image: "/images/products/product-3.png",
-    alt: "Rice and grains commodity",
-  },
-  {
-    slug: "beans-and-pulses",
-    name: "Beans & Pulses",
-    image: "/images/products/product-4.png",
-    alt: "Beans and pulses commodity",
-  },
-  {
-    slug: "other-commodities",
-    name: "Coffee & Spices",
-    image: "/images/products/product-5.png",
-    alt: "Coffee and spices commodity",
-  },
-];
+  "edible-oils",
+  "sugar",
+  "rice-and-grains",
+  "beans-and-pulses",
+  "other-commodities",
+].map((slug) => {
+  const cover = getCategoryCover(slug);
+  return { slug, name: cover.shortName, image: cover.image, alt: cover.alt };
+});
 
 const PACKAGING = [
   {

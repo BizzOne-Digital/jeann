@@ -6,7 +6,7 @@ import { PageHero } from "@/components/marketing/PageHero";
 import { Reveal } from "@/components/motion/Reveal";
 import { getCategories, getCategory } from "@/lib/content/catalog";
 import { buyerQuoteHref } from "@/lib/marketing/cta-links";
-import { getCategoryCover } from "@/lib/content/product-images";
+import { getCategoryCover, getProductListingImage } from "@/lib/content/product-images";
 import { SpicesCategorySections } from "@/components/marketing/SpiceSections";
 import { RiceCategorySections } from "@/components/marketing/RiceSections";
 import { BeansCategorySections } from "@/components/marketing/PulseSections";
@@ -126,7 +126,7 @@ export default async function CategoryPage({ params }: Props) {
                 >
                   <div className="relative aspect-[16/11] overflow-hidden bg-[#e4e0d8]">
                     <Image
-                      src={product.image || cover.image}
+                      src={getProductListingImage(product, category.slug)}
                       alt=""
                       fill
                       className="object-cover transition duration-500 group-hover:scale-[1.03]"

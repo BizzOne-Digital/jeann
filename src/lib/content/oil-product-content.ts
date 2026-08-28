@@ -276,11 +276,51 @@ const OIL_PRODUCTS: Record<string, OilProductDetail> = {
       "Refined and crude grades per contract",
       "Bulk container programmes",
     ],
-    heroImage: "/images/products/product-1.png",
+    heroImage: "/images/products/oils/refined-vegetable-bottling.png",
     images: [
       {
-        src: "/images/products/product-1.png",
-        alt: "Edible oils commodity reference",
+        src: "/images/products/oils/refined-vegetable-bottling.png",
+        alt: "Refined coconut oil — bottling line reference",
+      },
+      {
+        src: "/images/products/oils/refined-soybean-carboys.png",
+        alt: "Bulk edible oil carboys",
+      },
+    ],
+  },
+  "olive-oil": {
+    slug: "olive-oil",
+    grade: "Olive oil",
+    subtitle: "Extra virgin and refined olive oil",
+    description:
+      "Olive oil programmes for qualified buyers. Grades, origins, and certifications are confirmed per enquiry and supply contract — not stated publicly without admin verification.",
+    applications: [
+      "Food manufacturing",
+      "Bottling and private-label programmes",
+      "Retail and food-service supply",
+      "Mediterranean export programmes",
+    ],
+    characteristics: [
+      "Extra virgin and refined grades",
+      "Origin and acidity per contract",
+      "Drum and flexitank programmes",
+      "Certificate of analysis per shipment",
+    ],
+    packaging: ["Drums/barrels", "IBC totes", "Flexitanks"],
+    highlights: [
+      "Olive oil for qualified food channels",
+      "Grades confirmed per RFQ",
+      "Export documentation coordinated",
+    ],
+    heroImage: "/images/products/oils/refined-rapeseed-bottling.png",
+    images: [
+      {
+        src: "/images/products/oils/refined-rapeseed-bottling.png",
+        alt: "Refined olive oil bottling line reference",
+      },
+      {
+        src: "/images/products/oils/refined-sunflower-oil.png",
+        alt: "Refined edible oil product sample",
       },
     ],
   },

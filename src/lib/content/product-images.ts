@@ -1,29 +1,30 @@
-/** Category cover images from public/images/products (product-1 … product-5). */
+/** Category and product listing images from client photo folders. */
+
 export const CATEGORY_COVERS: Record<string, { image: string; shortName: string; alt: string }> = {
   "edible-oils": {
     shortName: "Edible Oils",
-    image: "/images/products/product-1.png",
-    alt: "Edible oils commodity",
+    image: "/images/products/oils/refined-sunflower-product.png",
+    alt: "Refined sunflower oil",
   },
   sugar: {
     shortName: "Sugar",
-    image: "/images/products/product-2.png",
-    alt: "Sugar commodity",
+    image: "/images/products/sugar/icumsa-45-white-sugar-3.png",
+    alt: "Refined white sugar",
   },
   "rice-and-grains": {
     shortName: "Rice & Grains",
-    image: "/images/products/product-3.png",
-    alt: "Rice and grains commodity",
+    image: "/images/products/rice/long-grain-bag.png",
+    alt: "Long-grain rice in export bags",
   },
   "beans-and-pulses": {
     shortName: "Beans & Pulses",
-    image: "/images/products/product-4.png",
-    alt: "Beans and pulses commodity",
+    image: "/images/products/beans/beans-variety-mosaic.png",
+    alt: "Assorted dry beans and pulses",
   },
   "other-commodities": {
     shortName: "Coffee & Spices",
-    image: "/images/products/product-5.png",
-    alt: "Coffee, cashews, cinnamon, pepper and spices",
+    image: "/images/products/coffee/fresh-coffee-harvest.png",
+    alt: "Fresh coffee harvest",
   },
 };
 
@@ -31,8 +32,16 @@ export function getCategoryCover(slug: string) {
   return (
     CATEGORY_COVERS[slug] ?? {
       shortName: slug,
-      image: "/images/products/product-1.png",
+      image: "/images/products/oils/refined-sunflower-product.png",
       alt: "Agricultural commodity",
     }
   );
+}
+
+export function getProductListingImage(
+  product: { image?: string },
+  categorySlug: string,
+): string {
+  if (product.image) return product.image;
+  return getCategoryCover(categorySlug).image;
 }

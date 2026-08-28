@@ -7,7 +7,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { PageHero } from "@/components/marketing/PageHero";
 import { searchProducts, type SeedCategory } from "@/lib/content/catalog";
 import { buyerQuoteHref } from "@/lib/marketing/cta-links";
-import { getCategoryCover } from "@/lib/content/product-images";
+import { getCategoryCover, getProductListingImage } from "@/lib/content/product-images";
 
 export function ProductsHero() {
   return (
@@ -138,6 +138,7 @@ export function ProductCatalogSection({
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((product, i) => {
             const cover = getCategoryCover(product.categorySlug);
+            const imageSrc = getProductListingImage(product, product.categorySlug);
             return (
               <Reveal key={`${product.categorySlug}-${product.slug}`} delay={Math.min(i * 0.03, 0.18)}>
                 <Link
@@ -146,8 +147,8 @@ export function ProductCatalogSection({
                 >
                   <div className="relative aspect-[16/11] overflow-hidden bg-[#e4e0d8]">
                     <Image
-                      src={cover.image}
-                      alt=""
+                      src={imageSrc}
+                      alt={product.name}
                       fill
                       className="object-cover transition duration-500 group-hover:scale-[1.03]"
                       sizes="(max-width: 1024px) 50vw, 360px"
