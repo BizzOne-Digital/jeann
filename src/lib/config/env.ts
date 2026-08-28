@@ -59,6 +59,24 @@ const envSchema = z.object({
     .string()
     .optional()
     .transform((v) => v === "true"),
+  INTEGRATIONS_USE_MOCKS: z
+    .string()
+    .optional()
+    .transform((v) => v === "true"),
+  VESPER_API_KEY: z.string().optional(),
+  VESPER_ENABLED: z
+    .string()
+    .optional()
+    .transform((v) => v === "true"),
+  ESIGNATURE_PROVIDER: z.string().optional(),
+  ESIGNATURE_API_KEY: z.string().optional(),
+  ESIGNATURE_WEBHOOK_SECRET: z.string().optional(),
+  SCREENING_PROVIDER: z.string().optional(),
+  ACCOUNTING_PROVIDER: z.string().optional(),
+  ACCOUNTING_PROVIDER_CONFIGURED: z
+    .string()
+    .optional()
+    .transform((v) => v === "true"),
   REQUIRE_PHONE_OTP: z
     .string()
     .optional()

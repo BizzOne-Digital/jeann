@@ -1,19 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createSession } from "@/lib/auth/session";
-import { createDevBuyer, findDevOrganization, findDevUserByEmail } from "@/lib/auth/dev-store";
-import {
-  getSessionConfigError,
-  isDuplicateKeyError,
-  isSessionConfigError,
-} from "@/lib/auth/session-config";
 import { hashPassword } from "@/lib/auth/password";
 import { registerBuyerSchema } from "@/lib/validation/auth";
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
 import { normalizeCompanyName } from "@/lib/db/ids";
+import { splitName } from "@/lib/auth/auth-context";
+import { checkDuplicateOrganization } from "@/lib/onboarding/duplicate-org";
+import {
+  recordTermsAcceptance,
+  BUYER_REQUIRED_TERMS_KEYS,
+  getCurrentTerms,
+} from "@/lib/terms/service";
+import { sendVerificationCode } from "@/lib/auth/verification-service";
 import {
   notifyAdminNewBuyerRegistration,
   notifyBuyerRegistrationReceived,
 } from "@/lib/email/buyer-notifications";
+import { writeAuditEvent } from "@/lib/audit/log";
+import { auditRequestMeta } from "@/lib/api/request-meta";
+import { getClientIp } from "@/lib/api/request-meta";
+import { isDuplicateKeyError, isSessionConfigError } from "@/lib/auth/session-config";
 
 export const runtime = "nodejs";
 
@@ -43,6 +48,10 @@ function validationMessage(issues: { fieldErrors: Record<string, string[] | unde
 }
 
 export async function POST(request: NextRequest) {
+  const meta = auditRequestMeta(request);
+  const ip = getClientIp(request);
+  const ua = request.headers.get("user-agent");
+
   try {
     let body: unknown;
     try {
@@ -55,151 +64,199 @@ export async function POST(request: NextRequest) {
     if (!parsed.success) {
       const flat = parsed.error.flatten();
       return NextResponse.json(
-        {
-          error: validationMessage(flat),
-          issues: flat,
-        },
+        { error: validationMessage(flat), issues: flat },
         { status: 422 },
       );
     }
 
     const input = parsed.data;
     const email = input.email.toLowerCase();
+    const normalizedEmail = email;
     const passwordHash = await hashPassword(input.password);
-    const ua = request.headers.get("user-agent") ?? undefined;
-    const ip = request.headers.get("x-forwarded-for")?.split(",")[0];
+    const nameParts = splitName(input.contactName);
 
-    if (isMongoConfigured()) {
-      if (!(await tryConnectMongo())) {
-        return NextResponse.json(
-          { error: "Database is unavailable. Please try again shortly." },
-          { status: 503 },
-        );
-      }
-
-      const { User, Organization, OrganizationMembership } = await import("@/models");
-      const normalized = normalizeCompanyName(input.legalName) || "buyer";
-      const [emailMatch, companyMatch] = await Promise.all([
-        User.findOne({ email, deletedAt: null }).lean(),
-        Organization.findOne({
-          type: "buyer",
-          normalizedLegalName: normalized,
-          deletedAt: null,
-        }).lean(),
-      ]);
-      if (emailMatch || companyMatch) {
-        return NextResponse.json(
-          { ok: true, status: "review", message: "Registration received for review." },
-          { status: 202 },
-        );
-      }
-
-      const org = await Organization.create({
-        type: "buyer",
-        legalName: input.legalName,
-        normalizedLegalName: normalized,
-        registrationNumber: input.registrationNumber,
-        country: countryCode(input.country),
-        domain: input.domain?.toLowerCase() || undefined,
-        status: "pending",
-      });
-
-      const user = await User.create({
-        email,
-        passwordHash,
-        name: input.contactName,
-        phone: input.phone,
-        status: "active",
-        emailVerifiedAt: new Date(),
-      });
-
-      await OrganizationMembership.create({
-        userId: user._id,
-        organizationId: org._id,
-        roles: ["buyer_org_admin"],
-        customPermissions: [],
-        status: "active",
-      });
-
-      const { Approval } = await import("@/models");
-      await Approval.create({
-        targetType: "buyer_organization",
-        targetId: org._id,
-        decision: "pending",
-        actorUserId: user._id,
-      });
-
-      try {
-        await Promise.all([
-          notifyBuyerRegistrationReceived({
-            contactEmail: email,
-            contactName: input.contactName,
-            organizationName: input.legalName,
-          }),
-          notifyAdminNewBuyerRegistration({
-            organizationName: input.legalName,
-            contactName: input.contactName,
-            contactEmail: email,
-            country: countryCode(input.country),
-            organizationId: String(org._id),
-          }),
-        ]);
-      } catch (emailError) {
-        console.error("[register/buyer] email", emailError);
-      }
-
+    if (!isMongoConfigured()) {
       return NextResponse.json(
-        {
-          ok: true,
-          status: "pending",
-          redirectTo: "/login",
-          message:
-            "Registration received. We will email you when your buyer portal access is approved.",
-        },
-        { status: 201 },
+        { error: "Database is required for registration." },
+        { status: 503 },
       );
     }
 
-    const [emailMatch, companyMatch] = await Promise.all([
-      findDevUserByEmail(email),
-      findDevOrganization(input.legalName),
-    ]);
-    if (emailMatch || companyMatch) {
+    if (!(await tryConnectMongo())) {
       return NextResponse.json(
-        { ok: true, status: "review", message: "Registration received for review." },
+        { error: "Database is unavailable. Please try again shortly." },
+        { status: 503 },
+      );
+    }
+
+    const { User, Organization, OrganizationMembership } = await import("@/models");
+
+    const existingEmail = await User.findOne({ email, deletedAt: null });
+    if (existingEmail) {
+      if (existingEmail.status === "pending_verification") {
+        const verification = await sendVerificationCode({
+          userId: existingEmail._id,
+          channel: "email",
+          purpose: "email_verify",
+          destination: email,
+          name: existingEmail.name,
+        });
+        return NextResponse.json(
+          {
+            ok: true,
+            status: "pending_verification",
+            redirectTo: "/login",
+            message:
+              "This email is already registered but not verified. We sent a new verification code — check your inbox, then sign in.",
+            devVerificationCode: verification.devCode,
+          },
+          { status: 200 },
+        );
+      }
+      return NextResponse.json(
+        {
+          error:
+            "An account with this email already exists. Sign in, or use password reset if you forgot your password.",
+          code: "email_exists",
+        },
+        { status: 409 },
+      );
+    }
+
+    const duplicateCheck = await checkDuplicateOrganization({
+      legalName: input.legalName,
+      registrationNumber: input.registrationNumber,
+      jurisdiction: input.country,
+      domain: input.domain,
+      email,
+    });
+
+    if (duplicateCheck.blockAutoCreate) {
+      await writeAuditEvent({
+        action: "organization.duplicate_blocked",
+        targetType: "organization",
+        ...meta,
+        metadata: { reasons: duplicateCheck.reasons },
+      });
+      return NextResponse.json(
+        {
+          ok: true,
+          status: "review",
+          message:
+            "A company with this registration details already exists. An administrator will review your request.",
+        },
         { status: 202 },
       );
     }
 
-    const user = await createDevBuyer({
-      organizationName: input.legalName,
-      name: input.contactName,
+    const normalized = normalizeCompanyName(input.legalName) || "buyer";
+    const country = countryCode(input.country);
+
+    const org = await Organization.create({
+      type: "buyer",
+      legalName: input.legalName,
+      normalizedLegalName: normalized,
+      registrationNumber: input.registrationNumber,
+      jurisdiction: input.country,
+      country,
+      domain: input.domain?.toLowerCase() || undefined,
+      status: "pending",
+      onboardingStatus: "email_verification_pending",
+      duplicateReviewFlag: duplicateCheck.duplicateReviewFlag,
+      mergeReviewFlag: duplicateCheck.mergeReviewFlag,
+    });
+
+    const user = await User.create({
       email,
-      phone: input.phone,
+      normalizedEmail,
       passwordHash,
+      firstName: nameParts.firstName,
+      lastName: nameParts.lastName,
+      name: input.contactName,
+      phone: input.phone,
+      status: "pending_verification",
+      mfaEnabled: false,
+    });
+
+    org.createdByUserId = user._id;
+    await org.save();
+
+    await OrganizationMembership.create({
+      userId: user._id,
+      organizationId: org._id,
+      roles: ["buyer_org_admin"],
+      customPermissions: [],
+      status: "active",
+    });
+
+    const requiredTerms = await getCurrentTerms([...BUYER_REQUIRED_TERMS_KEYS]);
+    for (const term of requiredTerms) {
+      await recordTermsAcceptance({
+        userId: user._id,
+        organizationId: String(org._id),
+        termsKey: term.key,
+        termsVersion: term.version,
+        ip,
+        userAgent: ua ?? undefined,
+        metadata: { source: "buyer_registration" },
+      });
+    }
+
+    const { Approval } = await import("@/models");
+    await Approval.create({
+      targetType: "buyer_organization",
+      targetId: org._id,
+      decision: "pending",
+      actorUserId: user._id,
+    });
+
+    const verification = await sendVerificationCode({
+      userId: user._id,
+      channel: "email",
+      purpose: "email_verify",
+      destination: email,
+      name: input.contactName,
     });
 
     try {
-      await createSession({ userId: user.id, userAgent: ua, ip });
-    } catch (sessionError) {
-      console.error("[register/buyer] dev session", sessionError);
-      return NextResponse.json(
-        {
-          ok: true,
-          status: "active",
-          redirectTo: "/login",
-          message: "Account created. Please sign in with your email and password.",
-        },
-        { status: 201 },
-      );
+      await Promise.all([
+        notifyBuyerRegistrationReceived({
+          contactEmail: email,
+          contactName: input.contactName,
+          organizationName: input.legalName,
+        }),
+        notifyAdminNewBuyerRegistration({
+          organizationName: input.legalName,
+          contactName: input.contactName,
+          contactEmail: email,
+          country,
+          organizationId: String(org._id),
+        }),
+      ]);
+    } catch (emailError) {
+      console.error("[register/buyer] email", emailError);
     }
+
+    await writeAuditEvent({
+      action: "registration.buyer",
+      targetType: "user",
+      targetId: user._id,
+      actorUserId: user._id,
+      organizationId: String(org._id),
+      ...meta,
+      metadata: {
+        duplicateReviewFlag: duplicateCheck.duplicateReviewFlag,
+        devVerificationCode: verification.devCode,
+      },
+    });
 
     return NextResponse.json(
       {
         ok: true,
-        status: "active",
-        redirectTo: "/portal/buyer",
-        message: "Account created. Redirecting…",
+        status: "pending_verification",
+        redirectTo: "/login",
+        message: "Registration received. Verify your email to continue onboarding.",
+        devVerificationCode: verification.devCode,
       },
       { status: 201 },
     );
@@ -207,8 +264,12 @@ export async function POST(request: NextRequest) {
     console.error("[register/buyer]", error);
     if (isDuplicateKeyError(error)) {
       return NextResponse.json(
-        { ok: true, status: "review", message: "Registration received for review." },
-        { status: 202 },
+        {
+          error:
+            "An account or company with these details may already exist. Sign in or contact support.",
+          code: "duplicate",
+        },
+        { status: 409 },
       );
     }
     if (isSessionConfigError(error)) {

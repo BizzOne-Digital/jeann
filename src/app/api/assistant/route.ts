@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { getAssistantProvider } from "@/lib/ai";
 import { checkRateLimit } from "@/lib/auth/rate-limit";
+import { isFeatureEnabled } from "@/lib/integrations/feature-flags";
 
 const requestSchema = z.object({
   message: z.string().min(2).max(800),
@@ -28,6 +29,17 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    if (!(await isFeatureEnabled("public_ai_chatbot"))) {
+      return NextResponse.json({
+        reply:
+          "The public assistant is temporarily unavailable. Browse products or submit a purchase request at /portal/buyer/new-request.",
+        answer:
+          "The public assistant is temporarily unavailable. Browse products or submit a purchase request at /portal/buyer/new-request.",
+        provider: "disabled",
+        disclaimer: "General trade information only — not a binding quote.",
+      });
+    }
+
     const provider = await getAssistantProvider();
     const result = await provider.chat(
       [{ role: "user", content: parsed.data.message }],

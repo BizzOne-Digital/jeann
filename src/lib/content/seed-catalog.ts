@@ -1,7 +1,15 @@
+import { getOilProductDetail, getOilProductMarketing } from "@/lib/content/oil-product-content";
+import { getPulseProductDetail, getPulseProductMarketing } from "@/lib/content/pulse-product-content";
+import { getRiceProductDetail, getRiceProductMarketing } from "@/lib/content/rice-product-content";
+import { getSpiceProductDetail, getSpiceProductMarketing } from "@/lib/content/spice-product-content";
+import { getSugarGradeDetail, getSugarProductMarketing } from "@/lib/content/sugar-product-content";
+import { PACKAGING_TYPES } from "@/lib/content/packaging-content";
+
 export type SeedProduct = {
   slug: string;
   name: string;
   overview: string;
+  description?: string;
   availabilityText: string;
   originOptions: string[];
   gradeSummary: string;
@@ -12,6 +20,8 @@ export type SeedProduct = {
   minOrderText: string;
   status: "draft" | "pending_verification" | "published";
   image?: string;
+  youtubeVideoId?: string;
+  highlights?: string[];
 };
 
 export type SeedCategory = {
@@ -31,147 +41,170 @@ export const SEED_CATEGORIES: SeedCategory[] = [
     summary:
       "Bulk edible oils for refiners, distributors, and industrial buyers. Specifications and packaging confirmed per enquiry.",
     products: [
-      {
-        slug: "sunflower-oil",
-        name: "Sunflower oil",
-        overview:
+      "sunflower-oil",
+      "soybean-oil",
+      "palm-oil",
+      "rapeseed-oil",
+      "canola-oil",
+      "corn-oil",
+      "coconut-oil",
+      "olive-oil",
+      "vegetable-oil",
+    ].map((slug) => {
+      const oil = getOilProductDetail(slug);
+      const marketing = getOilProductMarketing(slug);
+      const names: Record<string, string> = {
+        "sunflower-oil": "Sunflower oil",
+        "soybean-oil": "Soybean oil",
+        "palm-oil": "Palm oil",
+        "rapeseed-oil": "Rapeseed oil",
+        "canola-oil": "Canola oil",
+        "corn-oil": "Corn oil",
+        "coconut-oil": "Coconut oil",
+        "olive-oil": "Olive oil",
+        "vegetable-oil": "Vegetable oil",
+      };
+      const defaultOverviews: Record<string, string> = {
+        "sunflower-oil":
           "Crude or refined sunflower oil sourced for qualified buyers. Grades and refining level confirmed against enquiry requirements.",
-        availabilityText: "Availability confirmed per enquiry and supplier allocation.",
-        originOptions: ["Origin options confirmed per contract (example field)"],
-        gradeSummary: draftNote,
-        packaging: ["Flexitanks", "IBC totes", "Drums/barrels", "ISO tank containers"],
-        inspectionOptions: ["Inspection options configurable (e.g. SGS, Veritas) when verified"],
+        "soybean-oil":
+          "Soybean oil offered in crude or refined forms subject to supplier programme and buyer specifications.",
+        "palm-oil":
+          "Palm oil programmes for qualified industrial and refining buyers. Sustainability and specification claims only when admin-verified.",
+        "rapeseed-oil":
+          "Rapeseed oil for food and industrial channels. Buyer-focused overview pending admin verification of grades and origins.",
+        "canola-oil":
+          "Canola oil offerings for distributors and processors. Specs, packaging, and Incoterms negotiated per transaction.",
+        "corn-oil":
+          "Corn oil for food manufacturing and distribution channels. Details confirmed after RFQ review.",
+        "coconut-oil":
+          "Coconut oil programmes for food, cosmetic and industrial buyers. Refined and crude grades confirmed per enquiry.",
+        "olive-oil":
+          "Olive oil programmes for qualified buyers. Grades and origins only stated when admin-approved.",
+        "vegetable-oil":
+          "Blended or specified vegetable oil offerings subject to buyer requirements and supplier capability.",
+      };
+      const defaultPackaging: Record<string, string[]> = {
+        "sunflower-oil": ["Flexitanks", "IBC totes", "Drums/barrels", "ISO tank containers"],
+        "soybean-oil": ["Flexitanks", "ISO tank containers", "Drums/barrels"],
+        "palm-oil": ["Flexitanks", "ISO tank containers"],
+        "rapeseed-oil": ["Flexitanks", "IBC totes", "Drums/barrels"],
+        "canola-oil": ["Flexitanks", "IBC totes", "ISO tank containers"],
+        "corn-oil": ["Flexitanks", "Drums/barrels"],
+        "coconut-oil": ["Flexitanks", "Drums/barrels", "IBC totes"],
+        "olive-oil": ["Drums/barrels", "IBC totes", "Flexitanks"],
+        "vegetable-oil": ["Flexitanks", "IBC totes", "Drums/barrels"],
+      };
+      const defaultMinOrder: Record<string, string> = {
+        "sunflower-oil": "Minimum order volumes vary by origin, packaging, and vessel/container programme.",
+        "soybean-oil": "Discuss container or bulk programmes with the trade desk.",
+        "palm-oil": "Volume thresholds depend on route and packaging.",
+        "rapeseed-oil": "Minimums confirmed during RFQ review.",
+        "canola-oil": "Container and bulk programmes available subject to agreement.",
+        "corn-oil": "Discuss with trade desk.",
+        "coconut-oil": "Discuss container or bulk programmes with the trade desk.",
+        "olive-oil": "Volume programmes vary by grade.",
+        "vegetable-oil": "Minimums depend on blend and packaging.",
+      };
+      const name = names[slug] ?? slug;
+      return {
+        slug,
+        name,
+        overview: oil
+          ? `${oil.grade} — ${oil.subtitle}. ${oil.description.slice(0, 120)}…`
+          : defaultOverviews[slug] ?? `${name} enquiries for qualified buyers.`,
+        description: marketing?.description,
+        availabilityText:
+          slug === "olive-oil"
+            ? "Subject to harvest and allocation."
+            : slug === "soybean-oil"
+              ? "Subject to seasonal and logistical confirmation."
+              : slug === "palm-oil" || slug === "canola-oil"
+                ? "Subject to supplier confirmation."
+                : slug === "rapeseed-oil" || slug === "corn-oil" || slug === "vegetable-oil"
+                  ? "Enquiry-based availability."
+                  : "Availability confirmed per enquiry and supplier allocation.",
+        originOptions:
+          slug === "sunflower-oil"
+            ? ["Origin options confirmed per contract (example field)"]
+            : ["Confirmed per enquiry"],
+        gradeSummary: oil
+          ? `${oil.grade} — ${oil.subtitle}. ${draftNote}`
+          : draftNote,
+        packaging: oil?.packaging ?? defaultPackaging[slug] ?? ["Flexitanks", "Drums/barrels"],
+        inspectionOptions:
+          slug === "sunflower-oil"
+            ? ["Inspection options configurable (e.g. SGS, Veritas) when verified"]
+            : ["Configurable when verified"],
         incotermOptions: ["FOB", "CIF"],
-        documentCategories: ["Commercial Invoice", "Packing List", "Certificate of Analysis", "Certificate of Origin"],
-        minOrderText: "Minimum order volumes vary by origin, packaging, and vessel/container programme.",
-        status: "pending_verification",
-      },
-      {
-        slug: "soybean-oil",
-        name: "Soybean oil",
-        overview: "Soybean oil offered in crude or refined forms subject to supplier programme and buyer specifications.",
-        availabilityText: "Subject to seasonal and logistical confirmation.",
-        originOptions: ["Confirmed per enquiry"],
-        gradeSummary: draftNote,
-        packaging: ["Flexitanks", "ISO tank containers", "Drums/barrels"],
-        inspectionOptions: ["Configurable when verified"],
-        incotermOptions: ["FOB", "CIF"],
-        documentCategories: ["Commercial Invoice", "Certificate of Analysis", "Bill of Lading"],
-        minOrderText: "Discuss container or bulk programmes with the trade desk.",
-        status: "pending_verification",
-      },
-      {
-        slug: "palm-oil",
-        name: "Palm oil",
-        overview: "Palm oil programmes for qualified industrial and refining buyers. Sustainability and specification claims only when admin-verified.",
-        availabilityText: "Confirmed case by case.",
-        originOptions: ["Confirmed per enquiry"],
-        gradeSummary: draftNote,
-        packaging: ["Flexitanks", "ISO tank containers"],
-        inspectionOptions: ["Configurable when verified"],
-        incotermOptions: ["FOB", "CIF"],
-        documentCategories: ["Commercial Invoice", "Certificate of Analysis", "Certificate of Origin"],
-        minOrderText: "Volume thresholds depend on route and packaging.",
-        status: "pending_verification",
-      },
-      {
-        slug: "rapeseed-oil",
-        name: "Rapeseed oil",
-        overview: "Rapeseed oil for food and industrial channels. Buyer-focused overview pending admin verification of grades and origins.",
-        availabilityText: "Enquiry-based availability.",
-        originOptions: ["Confirmed per enquiry"],
-        gradeSummary: draftNote,
-        packaging: ["Flexitanks", "IBC totes", "Drums/barrels"],
-        inspectionOptions: ["Configurable when verified"],
-        incotermOptions: ["FOB", "CIF"],
-        documentCategories: ["Commercial Invoice", "Certificate of Analysis"],
-        minOrderText: "Minimums confirmed during RFQ review.",
-        status: "pending_verification",
-        image: "/images/products/rapeseed-oil-reference.png",
-      },
-      {
-        slug: "canola-oil",
-        name: "Canola oil",
-        overview: "Canola oil offerings for distributors and processors. Specs, packaging, and Incoterms negotiated per transaction.",
-        availabilityText: "Subject to supplier confirmation.",
-        originOptions: ["Confirmed per enquiry"],
-        gradeSummary: draftNote,
-        packaging: ["Flexitanks", "IBC totes", "ISO tank containers"],
-        inspectionOptions: ["Configurable when verified"],
-        incotermOptions: ["FOB", "CIF"],
-        documentCategories: ["Commercial Invoice", "Certificate of Analysis", "Packing List"],
-        minOrderText: "Container and bulk programmes available subject to agreement.",
-        status: "pending_verification",
-        image: "/images/products/rapeseed-oil-reference.png",
-      },
-      {
-        slug: "corn-oil",
-        name: "Corn oil",
-        overview: "Corn oil for food manufacturing and distribution channels. Details confirmed after RFQ review.",
-        availabilityText: "Enquiry-based.",
-        originOptions: ["Confirmed per enquiry"],
-        gradeSummary: draftNote,
-        packaging: ["Flexitanks", "Drums/barrels"],
-        inspectionOptions: ["Configurable when verified"],
-        incotermOptions: ["FOB", "CIF"],
-        documentCategories: ["Commercial Invoice", "Certificate of Analysis"],
-        minOrderText: "Discuss with trade desk.",
-        status: "pending_verification",
-      },
-      {
-        slug: "olive-oil",
-        name: "Olive oil",
-        overview: "Olive oil programmes for qualified buyers. Grades and origins only stated when admin-approved.",
-        availabilityText: "Subject to harvest and allocation.",
-        originOptions: ["Confirmed per enquiry"],
-        gradeSummary: draftNote,
-        packaging: ["Drums/barrels", "IBC totes", "Flexitanks"],
-        inspectionOptions: ["Configurable when verified"],
-        incotermOptions: ["FOB", "CIF"],
-        documentCategories: ["Commercial Invoice", "Certificate of Origin", "Certificate of Analysis"],
-        minOrderText: "Volume programmes vary by grade.",
-        status: "pending_verification",
-      },
-      {
-        slug: "vegetable-oil",
-        name: "Vegetable oil",
-        overview: "Blended or specified vegetable oil offerings subject to buyer requirements and supplier capability.",
-        availabilityText: "Confirmed per enquiry.",
-        originOptions: ["Confirmed per enquiry"],
-        gradeSummary: draftNote,
-        packaging: ["Flexitanks", "IBC totes", "Drums/barrels"],
-        inspectionOptions: ["Configurable when verified"],
-        incotermOptions: ["FOB", "CIF"],
-        documentCategories: ["Commercial Invoice", "Certificate of Analysis"],
-        minOrderText: "Minimums depend on blend and packaging.",
-        status: "pending_verification",
-      },
-    ],
+        documentCategories:
+          slug === "soybean-oil"
+            ? ["Commercial Invoice", "Certificate of Analysis", "Bill of Lading"]
+            : slug === "palm-oil" || slug === "olive-oil"
+              ? ["Commercial Invoice", "Certificate of Analysis", "Certificate of Origin"]
+              : slug === "canola-oil"
+                ? ["Commercial Invoice", "Certificate of Analysis", "Packing List"]
+                : ["Commercial Invoice", "Certificate of Analysis"],
+        minOrderText: defaultMinOrder[slug] ?? "Discuss with trade desk.",
+        status: "pending_verification" as const,
+        image: oil?.heroImage,
+        highlights: marketing?.highlights,
+      };
+    }),
   },
   {
     slug: "sugar",
     name: "Sugar",
-    summary: "Refined and other sugar grades commonly requested in international trade. ICUMSA targets discussed per RFQ.",
+    summary:
+      "Refined and other sugar grades for international food, beverage, manufacturing and distribution markets. ICUMSA 45, 100, 150, 600 and 1200 — specifications confirmed per contract.",
     products: [
       ["icumsa-45", "ICUMSA 45"],
       ["icumsa-100", "ICUMSA 100"],
       ["icumsa-150", "ICUMSA 150"],
       ["icumsa-600", "ICUMSA 600"],
       ["icumsa-1200", "ICUMSA 1200"],
-    ].map(([slug, name]) => ({
-      slug,
-      name,
-      overview: `${name} sugar enquiries for qualified buyers. Exact polarity, moisture, and packing confirmed contractually.`,
-      availabilityText: "Subject to crop, refining, and logistics confirmation.",
-      originOptions: ["Confirmed per enquiry"],
-      gradeSummary: draftNote,
-      packaging: ["FIBCs/jumbo bags", "Multi-wall sacks", "Container liners"],
-      inspectionOptions: ["Configurable when verified"],
-      incotermOptions: ["FOB", "CIF"],
-      documentCategories: ["Commercial Invoice", "Certificate of Weight and Quantity", "Certificate of Analysis", "Bill of Lading"],
-      minOrderText: "Typically discussed in container or bulk vessel lots.",
-      status: "pending_verification" as const,
-    })),
+    ].map(([slug, name]) => {
+      const marketing = getSugarProductMarketing(slug);
+      const grade = getSugarGradeDetail(slug);
+      return {
+        slug,
+        name,
+        overview: grade
+          ? `${grade.code} — ${grade.subtitle}. ${grade.description.slice(0, 120)}…`
+          : `${name} sugar enquiries for qualified buyers. Exact polarity, moisture, and packing confirmed contractually.`,
+        description: marketing?.description,
+        availabilityText: "Subject to crop, refining, and logistics confirmation.",
+        originOptions: ["Brazil", "India", "Thailand", "Central America — confirmed per contract"],
+        gradeSummary: grade
+          ? `${grade.code} — ${grade.subtitle}. Colour, polarization, moisture and ash per agreed specification and Certificate of Analysis. ${draftNote}`
+          : draftNote,
+        packaging: grade?.packaging ?? [
+          "FIBCs/jumbo bags",
+          "Multi-wall sacks",
+          "Container liners",
+          "Bulk vessel holds",
+        ],
+        inspectionOptions: [
+          "SGS / Intertek / Bureau Veritas at load or discharge",
+          "Certificate of weight and quantity",
+          "Certificate of analysis (ICUMSA colour, polarization, moisture)",
+        ],
+        incotermOptions: ["FOB", "CIF", "CFR"],
+        documentCategories: [
+          "Commercial Invoice",
+          "Certificate of Weight and Quantity",
+          "Certificate of Analysis",
+          "Bill of Lading",
+          "Certificate of Origin",
+          "Phytosanitary certificate (where required)",
+        ],
+        minOrderText: "Typically discussed in container or bulk vessel lots (e.g. 12,500 MT parcels).",
+        status: "pending_verification" as const,
+        image: grade?.heroImage,
+        youtubeVideoId: marketing?.youtubeVideoId,
+        highlights: marketing?.highlights,
+      };
+    }),
   },
   {
     slug: "beans-and-pulses",
@@ -186,20 +219,30 @@ export const SEED_CATEGORIES: SeedCategory[] = [
       "Pinto beans",
       "Soybeans",
       "Chickpeas",
-    ].map((name) => ({
-      slug: name.toLowerCase().replace(/\s+/g, "-"),
-      name,
-      overview: `${name} offered to qualified buyers. Calibration, moisture, and packing confirmed during RFQ review.`,
-      availabilityText: "Seasonal and origin-dependent.",
-      originOptions: ["Confirmed per enquiry"],
-      gradeSummary: draftNote,
-      packaging: ["FIBCs/jumbo bags", "Multi-wall sacks", "Container liners"],
-      inspectionOptions: ["Configurable when verified"],
-      incotermOptions: ["FOB", "CIF"],
-      documentCategories: ["Commercial Invoice", "Packing List", "Phytosanitary certificate", "Certificate of Origin"],
-      minOrderText: "Container programmes common; bulk discussed where applicable.",
-      status: "pending_verification" as const,
-    })),
+    ].map((name) => {
+      const slug = name.toLowerCase().replace(/\s+/g, "-");
+      const pulse = getPulseProductDetail(slug);
+      const marketing = getPulseProductMarketing(slug);
+      return {
+        slug,
+        name,
+        overview: pulse
+          ? `${pulse.grade} — ${pulse.subtitle}. ${pulse.description.slice(0, 120)}…`
+          : `${name} offered to qualified buyers. Calibration, moisture, and packing confirmed during RFQ review.`,
+        description: marketing?.description,
+        availabilityText: "Seasonal and origin-dependent.",
+        originOptions: ["Confirmed per enquiry"],
+        gradeSummary: pulse ? `${pulse.grade} — ${pulse.subtitle}. ${draftNote}` : draftNote,
+        packaging: pulse?.packaging ?? ["FIBCs/jumbo bags", "Multi-wall sacks", "Container liners"],
+        inspectionOptions: ["Configurable when verified"],
+        incotermOptions: ["FOB", "CIF"],
+        documentCategories: ["Commercial Invoice", "Packing List", "Phytosanitary certificate", "Certificate of Origin"],
+        minOrderText: "Container programmes common; bulk discussed where applicable.",
+        status: "pending_verification" as const,
+        image: pulse?.heroImage,
+        highlights: marketing?.highlights,
+      };
+    }),
   },
   {
     slug: "rice-and-grains",
@@ -209,173 +252,88 @@ export const SEED_CATEGORIES: SeedCategory[] = [
       ["basmati-rice", "Basmati rice"],
       ["parboiled-rice", "Parboiled rice"],
       ["jasmine-rice", "Jasmine rice"],
-    ].map(([slug, name]) => ({
-      slug,
-      name,
-      overview: `${name} for qualified international buyers. Broken percentage, moisture, and packing confirmed per specification.`,
-      availabilityText: "Crop and mill confirmation required.",
-      originOptions: ["Confirmed per enquiry"],
-      gradeSummary: draftNote,
-      packaging: ["Multi-wall sacks", "FIBCs/jumbo bags", "Container liners"],
-      inspectionOptions: ["Configurable when verified"],
-      incotermOptions: ["FOB", "CIF"],
-      documentCategories: ["Commercial Invoice", "Phytosanitary certificate", "Certificate of Origin", "Packing List"],
-      minOrderText: "Typically container-based; larger lots by agreement.",
-      status: "pending_verification" as const,
-    })),
+    ].map(([slug, name]) => {
+      const rice = getRiceProductDetail(slug);
+      const marketing = getRiceProductMarketing(slug);
+      return {
+        slug,
+        name,
+        overview: rice
+          ? `${rice.grade} — ${rice.subtitle}. ${rice.description.slice(0, 120)}…`
+          : `${name} for qualified international buyers. Broken percentage, moisture, and packing confirmed per specification.`,
+        description: marketing?.description,
+        availabilityText: "Crop and mill confirmation required.",
+        originOptions: ["Confirmed per enquiry"],
+        gradeSummary: rice ? `${rice.grade} — ${rice.subtitle}. ${draftNote}` : draftNote,
+        packaging: rice?.packaging ?? ["Multi-wall sacks", "FIBCs/jumbo bags", "Container liners"],
+        inspectionOptions: ["Configurable when verified"],
+        incotermOptions: ["FOB", "CIF"],
+        documentCategories: ["Commercial Invoice", "Phytosanitary certificate", "Certificate of Origin", "Packing List"],
+        minOrderText: "Typically container-based; larger lots by agreement.",
+        status: "pending_verification" as const,
+        image: rice?.heroImage,
+        highlights: marketing?.highlights,
+      };
+    }),
   },
   {
     slug: "other-commodities",
-    name: "Other commodities",
-    summary: "Extensible category for coffee, nuts, spices, and future commodities managed in the CMS.",
+    name: "Coffee, nuts & spices",
+    summary:
+      "Green coffee, cashews, cinnamon sticks, black pepper, turmeric, cloves, cardamom, nutmeg and related specialty products — grades and origins confirmed per enquiry.",
     products: [
-      {
-        slug: "coffee-beans",
-        name: "Coffee beans",
-        overview: "Green coffee bean enquiries for qualified buyers. Origin and grade claims only when verified.",
-        availabilityText: "Crop-dependent.",
+      ["coffee-beans", "Coffee beans"],
+      ["cashews", "Cashews"],
+      ["cinnamon-sticks", "Cinnamon sticks"],
+      ["black-pepper", "Black pepper"],
+      ["turmeric", "Turmeric"],
+      ["cloves", "Cloves"],
+      ["cardamom", "Cardamom"],
+      ["nutmeg", "Nutmeg"],
+    ].map(([slug, name]) => {
+      const spice = getSpiceProductDetail(slug);
+      const marketing = getSpiceProductMarketing(slug);
+      return {
+        slug,
+        name,
+        overview: spice
+          ? `${spice.grade} — ${spice.subtitle}. ${spice.description.slice(0, 120)}…`
+          : `${name} enquiries for qualified buyers. Specifications confirmed per RFQ review.`,
+        description: marketing?.description,
+        availabilityText:
+          slug === "coffee-beans" ? "Crop-dependent." : "Enquiry-based availability.",
         originOptions: ["Confirmed per enquiry"],
-        gradeSummary: draftNote,
-        packaging: ["Multi-wall sacks", "FIBCs/jumbo bags"],
+        gradeSummary: spice ? `${spice.grade} — ${spice.subtitle}. ${draftNote}` : draftNote,
+        packaging: spice?.packaging ?? ["Multi-wall sacks", "Cartons"],
         inspectionOptions: ["Configurable when verified"],
         incotermOptions: ["FOB", "CIF"],
-        documentCategories: ["Commercial Invoice", "Certificate of Origin", "Phytosanitary certificate"],
-        minOrderText: "Discuss lot size with the trade desk.",
-        status: "pending_verification",
-      },
-      {
-        slug: "cashews-and-nuts",
-        name: "Cashews and other nuts",
-        overview: "Cashews and selected nuts for distributors. Specs and food-safety documents confirmed per contract.",
-        availabilityText: "Subject to supplier allocation.",
-        originOptions: ["Confirmed per enquiry"],
-        gradeSummary: draftNote,
-        packaging: ["Cartons", "Multi-wall sacks", "FIBCs/jumbo bags"],
-        inspectionOptions: ["Configurable when verified"],
-        incotermOptions: ["FOB", "CIF"],
-        documentCategories: ["Commercial Invoice", "Health/Veterinary certificate", "Certificate of Origin"],
-        minOrderText: "Minimums vary by nut type and grade.",
-        status: "pending_verification",
-      },
-      {
-        slug: "cinnamon",
-        name: "Cinnamon",
-        overview: "Cinnamon offerings for qualified spice buyers. Form and grade confirmed during RFQ review.",
-        availabilityText: "Enquiry-based.",
-        originOptions: ["Confirmed per enquiry"],
-        gradeSummary: draftNote,
-        packaging: ["Multi-wall sacks", "Cartons"],
-        inspectionOptions: ["Configurable when verified"],
-        incotermOptions: ["FOB", "CIF"],
-        documentCategories: ["Commercial Invoice", "Certificate of Origin", "Phytosanitary certificate"],
-        minOrderText: "Discuss with trade desk.",
-        status: "pending_verification",
-      },
-    ],
+        documentCategories: [
+          "Commercial Invoice",
+          "Certificate of Origin",
+          "Phytosanitary certificate",
+          ...(slug === "cashews" ? ["Health/Veterinary certificate"] : []),
+        ],
+        minOrderText:
+          slug === "coffee-beans"
+            ? "Discuss lot size with the trade desk."
+            : slug === "cashews"
+              ? "Minimums vary by kernel grade and count."
+              : "Discuss with trade desk.",
+        status: "pending_verification" as const,
+        image: spice?.heroImage,
+        highlights: marketing?.highlights,
+      };
+    }),
   },
 ];
 
-export const SEED_PACKAGING = [
-  {
-    slug: "fibc-jumbo-bags",
-    name: "FIBCs / jumbo bags",
-    mode: "dry" as const,
-    description: "Flexible intermediate bulk containers for many dry commodities. Compatibility depends on product and route.",
-    advantages: [
-      "Efficient handling of dry bulk in 500–2000 kg units",
-      "Suitable for rice, pulses, grains, and similar products where agreed",
-      "Stackable on pallets for container or warehouse storage",
-    ],
-  },
-  {
-    slug: "container-liners",
-    name: "Container liners",
-    mode: "dry" as const,
-    description: "Liners for dry bulk in standard containers where suitable.",
-    advantages: [
-      "Converts a standard container into a bulk dry compartment",
-      "Reduces contamination from previous cargoes when properly installed",
-      "Useful for granular products on containerised routes",
-    ],
-  },
-  {
-    slug: "multi-wall-sacks",
-    name: "Multi-wall sacks",
-    mode: "dry" as const,
-    description: "Bagged packaging common for rice, pulses, sugar, and similar goods.",
-    advantages: [
-      "Familiar unit for retail and industrial redistribution",
-      "Easier partial discharge and inventory control",
-      "Often preferred for sugar and specialty rice grades",
-    ],
-  },
-  {
-    slug: "flexitanks",
-    name: "Flexitanks",
-    mode: "liquid" as const,
-    description: "Non-hazardous liquid bulk in containers, subject to product suitability.",
-    advantages: [
-      "Cost-effective liquid bulk in 20ft containers",
-      "Suitable for edible oils and similar non-hazardous liquids",
-      "Single-use bladder reduces cross-contamination risk when properly fitted",
-    ],
-  },
-  {
-    slug: "ibc-totes",
-    name: "IBC totes",
-    mode: "liquid" as const,
-    description: "Intermediate bulk containers for liquid products where agreed.",
-    advantages: [
-      "Reusable or single-trip options depending on programme",
-      "Convenient for smaller liquid lots and multi-drop delivery",
-      "Standard footprint for warehouse and truck handling",
-    ],
-  },
-  {
-    slug: "drums-barrels",
-    name: "Drums / barrels",
-    mode: "liquid" as const,
-    description: "Drum programmes for smaller liquid lots or specific handling needs.",
-    advantages: [
-      "Suitable for sample programmes and smaller industrial buyers",
-      "Well understood for customs and warehouse handling",
-      "Multiple steel or HDPE options per product requirements",
-    ],
-  },
-  {
-    slug: "iso-tank-containers",
-    name: "ISO tank containers",
-    mode: "liquid" as const,
-    description: "Tank containers for suitable liquid commodities and routes.",
-    advantages: [
-      "Dedicated tank for food-grade or chemical-grade liquids",
-      "Efficient intermodal rail/truck/ship transfer",
-      "Temperature-controlled options where route permits",
-    ],
-  },
-  {
-    slug: "dry-bulk-vessel",
-    name: "Dry-bulk vessel holds",
-    mode: "unpackaged" as const,
-    description: "Unpackaged dry bulk where vessel programmes apply. Not available for every product.",
-    advantages: [
-      "Lowest unit cost for very large dry bulk volumes",
-      "Suited to grains, oilseeds, and similar unpackaged programmes",
-      "Requires hold cleanliness and draft survey discipline",
-    ],
-  },
-  {
-    slug: "product-chemical-tankers",
-    name: "Product / chemical tankers",
-    mode: "unpackaged" as const,
-    description: "Tanker programmes where product chemistry and route permit. Subject to agreement.",
-    advantages: [
-      "Dedicated parcel or full-ship liquid bulk",
-      "Pipeline loading/discharge at suitable terminals",
-      "Essential for large edible oil and oleochemical volumes",
-    ],
-  },
-];
+export const SEED_PACKAGING = PACKAGING_TYPES.map((p) => ({
+  slug: p.slug,
+  name: p.name,
+  mode: p.mode,
+  description: p.description,
+  advantages: p.advantages,
+}));
 
 export const SITE = {
   name: "Finekarts Incorporated",

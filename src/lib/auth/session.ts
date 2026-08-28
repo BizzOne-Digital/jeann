@@ -136,7 +136,7 @@ export async function getSession(): Promise<ActiveSession | null> {
     if (!session || session.tokenHash !== payload.tv) return null;
 
     const user = await User.findById(payload.uid).lean();
-    if (!user || user.status === "disabled" || user.deletedAt) return null;
+    if (!user || user.status === "disabled" || user.status === "suspended" || user.deletedAt) return null;
 
     return {
       sessionId: session._id.toString(),

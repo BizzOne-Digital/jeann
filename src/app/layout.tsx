@@ -49,9 +49,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang="en"
       className={`${sans.variable} ${display.variable} ${mono.variable} h-full overflow-x-clip`}
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{if(!sessionStorage.getItem("finekarts-intro-seen")){document.documentElement.classList.add("intro-active");}}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body className="min-h-full w-full max-w-full overflow-x-clip antialiased">
         <IntroGate />
-        {children}
+        <div id="finekarts-site-root">{children}</div>
       </body>
     </html>
   );

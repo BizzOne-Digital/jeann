@@ -1,2 +1,13 @@
 import { PortalPage } from "@/components/portal/PortalPage";
-export default function BankingPage() { return <PortalPage title="Scoped packages" description="Banking access is restricted to documents explicitly shared for assigned transaction packages." />; }
+import { BankingAdviserDashboard } from "@/components/portal/BankingAdviserDashboard";
+
+export default function BankingPortalPage() {
+  return (
+    <PortalPage
+      title="Banking coordination"
+      description="Assigned instrument review, wording comparison, and coordination records."
+    >
+      <BankingAdviserDashboard />
+    </PortalPage>
+  );
+}

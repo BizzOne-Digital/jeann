@@ -221,14 +221,45 @@ async function main() {
   );
 
   await TermsDocument.findOneAndUpdate(
-    { key: "buyer_portal", version: 1, locale: "en" },
+    { key: "buyer_portal_terms", version: 1, locale: "en" },
     {
-      key: "buyer_portal",
+      key: "buyer_portal_terms",
       version: 1,
       locale: "en",
       title: "Buyer Portal Terms (Draft — Legal Review Required)",
       body: "Draft buyer terms placeholder. Must be reviewed by qualified counsel before production use. Version 1 draft.",
       effectiveAt: new Date(),
+      publishedAt: new Date(),
+      requiresAcceptance: true,
+    },
+    { upsert: true },
+  );
+
+  await TermsDocument.findOneAndUpdate(
+    { key: "privacy_notice", version: 1, locale: "en" },
+    {
+      key: "privacy_notice",
+      version: 1,
+      locale: "en",
+      title: "Privacy Notice (Draft)",
+      body: "Draft privacy notice placeholder for development.",
+      effectiveAt: new Date(),
+      publishedAt: new Date(),
+      requiresAcceptance: true,
+    },
+    { upsert: true },
+  );
+
+  await TermsDocument.findOneAndUpdate(
+    { key: "confidentiality_agreement", version: 1, locale: "en" },
+    {
+      key: "confidentiality_agreement",
+      version: 1,
+      locale: "en",
+      title: "Confidentiality Agreement (Draft)",
+      body: "Draft confidentiality terms placeholder for development.",
+      effectiveAt: new Date(),
+      publishedAt: new Date(),
       requiresAcceptance: true,
     },
     { upsert: true },

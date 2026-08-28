@@ -12,6 +12,8 @@ export default async function WorkspaceLayout({ children }: { children: React.Re
         links={[
           { href: "/workspace", label: "Queues" },
           { href: "/workspace/transactions", label: "Assigned transactions" },
+          { href: "/workspace/shipments", label: "Shipment lots" },
+          { href: "/workspace/finance", label: "Finance" },
           { href: "/workspace/suppliers", label: "Supplier organizations" },
         ]}
       />

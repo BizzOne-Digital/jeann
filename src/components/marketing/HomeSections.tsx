@@ -8,6 +8,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { cmsField } from "@/lib/content/cms-field";
 import { Reveal } from "@/components/motion/Reveal";
 import { HomeCtaChat } from "@/components/marketing/HomeCtaChat";
+import { HeroVideoBackground } from "@/components/marketing/HeroVideoBackground";
 import type { SeedCategory } from "@/lib/content/catalog";
 
 const COMMODITY_CARDS = [
@@ -146,15 +147,16 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
 
   return (
     <section className="relative min-h-[100svh] w-full max-w-full overflow-hidden bg-[#071525] text-white">
-      <div className="absolute inset-0">
-        <Image
-          src="/images/hero-commodities.png"
-          alt="Agricultural commodities with port logistics and refining infrastructure"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-[72%_center] sm:object-[78%_center]"
-        />
+      <HeroVideoBackground
+        youtubeInput={cmsField(
+          cms,
+          "youtubeVideoId",
+          process.env.NEXT_PUBLIC_HERO_YOUTUBE_VIDEO_ID ?? "",
+        )}
+        posterSrc="/images/hero-commodities.png"
+        posterAlt="Agricultural commodities with port logistics and refining infrastructure"
+      />
+      <div className="pointer-events-none absolute inset-0">
         <div
           className="absolute inset-0"
           style={{
@@ -584,8 +586,8 @@ export function ShippingTerms() {
             ))}
           </div>
           <Reveal delay={0.16}>
-            <GoldButton href="/shipping" className="mt-8">
-              Choose Your Shipment →
+            <GoldButton href="/logistics" className="mt-8">
+              Explore logistics →
             </GoldButton>
           </Reveal>
         </div>
@@ -683,6 +685,7 @@ export function ReadyCtaBanner() {
               <button
                 type="button"
                 onClick={() => setChatFocus((n) => n + 1)}
+                suppressHydrationWarning
                 className="focus-ring inline-flex items-center gap-2 rounded-md border border-white/70 bg-transparent px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10"
               >
                 <span aria-hidden className="text-[#d4a84b]">

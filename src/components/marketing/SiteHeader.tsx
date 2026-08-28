@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils/cn";
+import { LanguageSwitcher } from "@/components/i18n/LanguageSwitcher";
 
 const NAV = [
   { href: "/", label: "Home" },
@@ -38,17 +38,7 @@ export function SiteHeader() {
         style={{ backgroundColor: "#071525" }}
       >
         <div className="container-page flex h-[4.75rem] min-w-0 items-center justify-between gap-3">
-          <Link href="/" className="focus-ring flex min-w-0 items-center gap-2.5 rounded-sm sm:gap-3">
-            <span className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full bg-white sm:h-11 sm:w-11">
-              <Image
-                src="/brand/finekarts-logo.png"
-                alt="Finekarts"
-                width={44}
-                height={44}
-                priority
-                className="h-full w-full object-cover"
-              />
-            </span>
+          <Link href="/" className="focus-ring flex min-w-0 items-center rounded-sm">
             <span className="min-w-0 leading-tight">
               <span className="block truncate text-[0.85rem] font-bold tracking-[0.16em] text-white uppercase sm:text-[0.95rem] sm:tracking-[0.2em]">
                 Finekarts
@@ -83,7 +73,8 @@ export function SiteHeader() {
             })}
           </nav>
 
-          <div className="hidden items-center xl:flex">
+          <div className="hidden items-center gap-3 xl:flex">
+            <LanguageSwitcher />
             <Link
               href="/login"
               className="focus-ring inline-flex items-center gap-2 rounded-sm border border-[#d4a84b] bg-[#d4a84b]/10 px-5 py-2.5 text-sm font-semibold text-[#f5e6c8] transition hover:bg-[#d4a84b] hover:text-[#071525]"
@@ -167,6 +158,7 @@ export function SiteHeader() {
                 })}
               </nav>
               <div className="space-y-3 border-t border-white/10 p-5">
+                <LanguageSwitcher className="w-full [&_button]:w-full [&_button]:justify-center" />
                 <Link
                   href="/login"
                   onClick={closeMenu}

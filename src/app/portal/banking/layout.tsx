@@ -10,7 +10,7 @@ export default async function BankingLayout({ children }: { children: React.Reac
       <Sidebar
         title="Banking portal"
         links={[
-          { href: "/portal/banking", label: "Scoped packages" },
+          { href: "/portal/banking", label: "Dashboard" },
           { href: "/portal/banking/documents", label: "Documents" },
         ]}
       />

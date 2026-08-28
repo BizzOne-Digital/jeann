@@ -2,9 +2,9 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState, useSyncExternalStore } from "react";
-import Image from "next/image";
 
 const SESSION_KEY = "finekarts-intro-seen";
+const INTRO_ACTIVE_CLASS = "intro-active";
 
 function subscribeIntro() {
   return () => {};
@@ -22,6 +22,10 @@ function getServerSnapshot(): boolean {
   return false;
 }
 
+function clearIntroBlock() {
+  document.documentElement.classList.remove(INTRO_ACTIVE_CLASS);
+}
+
 export function IntroOverlay() {
   const reduce = useReducedMotion();
   const shouldOfferIntro = useSyncExternalStore(subscribeIntro, getIntroSnapshot, getServerSnapshot);
@@ -29,7 +33,10 @@ export function IntroOverlay() {
   const show = shouldOfferIntro && !dismissed;
 
   useEffect(() => {
-    if (!show) return;
+    if (!show) {
+      clearIntroBlock();
+      return;
+    }
     const max = reduce ? 600 : 2400;
     const t = window.setTimeout(() => finish(), max);
     return () => window.clearTimeout(t);
@@ -42,6 +49,7 @@ export function IntroOverlay() {
     } catch {
       /* ignore */
     }
+    clearIntroBlock();
     setDismissed(true);
   }
 
@@ -49,6 +57,7 @@ export function IntroOverlay() {
     <AnimatePresence>
       {show ? (
         <motion.div
+          id="finekarts-intro"
           className="fixed inset-0 z-[100] flex items-center justify-center bg-[#13293d] text-white"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -64,27 +73,21 @@ export function IntroOverlay() {
             Skip
           </button>
           <div className="flex flex-col items-center gap-6 px-6 text-center">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.92 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-            >
-              <Image
-                src="/brand/finekarts-logo.png"
-                alt="Finekarts"
-                width={72}
-                height={72}
-                priority
-                className="rounded-full"
-              />
-            </motion.div>
             <motion.p
-              className="display text-2xl tracking-[0.2em] sm:text-3xl"
+              className="display text-3xl tracking-[0.22em] sm:text-4xl"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15, duration: 0.5 }}
+              transition={{ duration: 0.5 }}
             >
               FINEKARTS
+            </motion.p>
+            <motion.p
+              className="text-[0.65rem] font-medium uppercase tracking-[0.42em] text-[#d4a84b]/90 sm:text-xs"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.1, duration: 0.45 }}
+            >
+              Incorporated
             </motion.p>
             {!reduce ? (
               <svg

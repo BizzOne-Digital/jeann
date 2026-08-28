@@ -164,7 +164,7 @@ export function TradePathways() {
               </Link>{" "}
               and{" "}
               <Link
-                href="/shipping-documents"
+                href="/logistics"
                 className="font-semibold text-[#001a3d] underline decoration-[#c88e4a]/40 underline-offset-2 hover:decoration-[#c88e4a]"
               >
                 shipping documents

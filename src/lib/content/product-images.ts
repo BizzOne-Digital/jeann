@@ -23,7 +23,7 @@ export const CATEGORY_COVERS: Record<string, { image: string; shortName: string;
   "other-commodities": {
     shortName: "Coffee & Spices",
     image: "/images/products/product-5.png",
-    alt: "Coffee, nuts, and spices",
+    alt: "Coffee, cashews, cinnamon, pepper and spices",
   },
 };
 

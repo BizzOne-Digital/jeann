@@ -1,15 +1,26 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { PageHero } from "@/components/marketing/PageHero";
 import { Reveal } from "@/components/motion/Reveal";
-import { getPackagingCatalog } from "@/lib/content/packaging-catalog";
+import {
+  PACKAGING_CTA,
+  PACKAGING_HERO,
+  PACKAGING_SELECTION,
+  PACKAGING_TYPES,
+} from "@/lib/content/packaging-content";
 import { buyerPortalHref } from "@/lib/marketing/cta-links";
 
 export const metadata: Metadata = {
-  title: "Packaging",
+  title: "Packaging types",
   description:
-    "Dry, liquid, and unpackaged bulk packaging modes for commodity trade — advantages, compatibility, and selection in buyer RFQs.",
+    "Packaging and transport modes for international commodity trade — flexitank, tanker vessel, containerized cargo, bulk truck, bulk vessel, bulk railcar, ISO tanks, IBC totes, drums, FIBCs, bulk liners and woven bags.",
 };
+
+const CATEGORY_LABELS = {
+  transport: "Transport & logistics modes",
+  product: "Product packaging formats",
+} as const;
 
 const MODE_LABELS = {
   dry: "Dry bulk",
@@ -17,62 +28,182 @@ const MODE_LABELS = {
   unpackaged: "Unpackaged / vessel",
 } as const;
 
-export default async function PackagingPage() {
-  const packaging = await getPackagingCatalog();
-  const grouped = {
-    dry: packaging.filter((p) => p.mode === "dry"),
-    liquid: packaging.filter((p) => p.mode === "liquid"),
-    unpackaged: packaging.filter((p) => p.mode === "unpackaged"),
-  };
-
+export default function PackagingPage() {
   return (
     <>
       <PageHero
         tone="light"
-        title="Packaging options"
-        description="Finekarts discusses multiple packaging modes depending on product, corridor, and buyer facility constraints. Not every type is available for every product."
-        primaryCta={{ href: buyerPortalHref("/portal/buyer/new-request"), label: "Select in buyer RFQ →" }}
-        secondaryCta={{ href: "/products", label: "View products" }}
+        title={PACKAGING_HERO.title}
+        brand={PACKAGING_HERO.eyebrow}
+        description={PACKAGING_HERO.description}
+        imageSrc="/images/packaging/containerized-cargo-port.png"
+        imageAlt="Container ship at port"
+        primaryCta={PACKAGING_HERO.primaryCta}
+        secondaryCta={PACKAGING_HERO.secondaryCta}
       />
 
-      <section className="bg-white py-16 lg:py-24">
+      <section id="packaging-types" className="bg-white py-16 lg:py-20">
         <div className="container-page">
-          <p className="max-w-2xl text-base leading-relaxed text-[var(--stone)]">
-            Packaging types below are managed in the platform catalogue — admins can add or remove
-            options over time. Signed-in buyers choose packaging per line item in purchase requests.
+          <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">Packaging types</h2>
+          <p className="mt-3 max-w-3xl text-base text-[#555555]">
+            The modes below are presented in the order used for Finekarts commodity programmes.
+            Product suitability and corridor availability are confirmed per transaction.
           </p>
 
-          {(Object.keys(grouped) as Array<keyof typeof grouped>).map((mode) => (
-            <div key={mode} className="mt-14">
-              <h2 className="text-2xl font-semibold text-[var(--navy)]">{MODE_LABELS[mode]}</h2>
-              <ul className="mt-6 divide-y divide-[var(--line)] border-t border-[var(--line)]">
-                {grouped[mode].map((item, i) => (
-                  <Reveal key={item.slug} delay={Math.min(i * 0.04, 0.15)}>
-                    <li className="py-6" id={item.slug}>
-                      <h3 className="text-lg font-semibold text-[var(--navy)]">{item.name}</h3>
-                      <p className="mt-2 max-w-3xl text-base leading-relaxed text-[var(--stone)]">
-                        {item.description}
-                      </p>
-                      {item.advantages.length > 0 ? (
-                        <ul className="mt-4 space-y-2">
-                          {item.advantages.map((adv) => (
-                            <li key={adv} className="flex gap-2 text-base text-[var(--stone)]">
-                              <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--gold)]" />
-                              {adv}
-                            </li>
-                          ))}
-                        </ul>
-                      ) : null}
-                    </li>
-                  </Reveal>
-                ))}
-              </ul>
-            </div>
-          ))}
+          <div className="mt-12 space-y-16">
+            {PACKAGING_TYPES.map((type, index) => {
+              const prev = PACKAGING_TYPES[index - 1];
+              const showCategoryHeader = !prev || prev.category !== type.category;
 
-          <div className="mt-14">
-            <Link href={buyerPortalHref("/portal/buyer/new-request")} className="btn btn-primary">
-              Sign in to submit RFQ with packaging
+              return (
+              <Reveal key={type.slug} delay={index * 0.03}>
+                {showCategoryHeader ? (
+                  <h3
+                    className={`text-lg font-semibold text-[#001a3d] ${
+                      index === 0 ? "" : "mt-4 border-t border-[#e8e4dc] pt-12"
+                    }`}
+                  >
+                    {CATEGORY_LABELS[type.category]}
+                  </h3>
+                ) : null}
+                <article
+                  id={type.slug}
+                  className={`scroll-mt-28 border-t border-[#e8e4dc] pt-12 ${
+                    showCategoryHeader && index > 0 ? "mt-8" : index === 0 ? "" : ""
+                  }`}
+                >
+                  <div
+                    className={`grid items-start gap-10 lg:grid-cols-2 ${
+                      index % 2 === 1 ? "lg:[&>*:first-child]:order-2" : ""
+                    }`}
+                  >
+                    <div>
+                      <p className="text-xs font-semibold tracking-[0.2em] text-[#c88e4a] uppercase">
+                        {String(type.order).padStart(2, "0")} · {MODE_LABELS[type.mode]}
+                      </p>
+                      <h3 className="mt-2 text-2xl font-semibold text-[#001a3d]">{type.name}</h3>
+                      <p className="mt-1 text-sm font-medium text-[#777777]">{type.summary}</p>
+                      <p className="mt-4 text-sm leading-relaxed text-[#555555]">{type.description}</p>
+
+                      <div className="mt-6 grid gap-6 sm:grid-cols-2">
+                        <div>
+                          <h4 className="text-xs font-semibold tracking-wide text-[#001a3d] uppercase">
+                            Typical applications
+                          </h4>
+                          <ul className="mt-3 space-y-2">
+                            {type.applications.map((item) => (
+                              <li key={item} className="flex gap-2 text-sm text-[#555555]">
+                                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#d4a84b]" />
+                                {item}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div>
+                          <h4 className="text-xs font-semibold tracking-wide text-[#001a3d] uppercase">
+                            Advantages
+                          </h4>
+                          <ul className="mt-3 space-y-2">
+                            {type.advantages.map((item) => (
+                              <li key={item} className="flex gap-2 text-sm text-[#555555]">
+                                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#d4a84b]" />
+                                {item}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+
+                      <p className="mt-5 text-xs text-[#888888]">
+                        <span className="font-semibold text-[#001a3d]">Commodities:</span>{" "}
+                        {type.commodities.join(" · ")}
+                      </p>
+                      {type.note ? (
+                        <p className="mt-4 text-xs leading-relaxed text-[#777777]">{type.note}</p>
+                      ) : null}
+                    </div>
+
+                    <div className={`grid gap-4 ${type.images.length > 1 ? "sm:grid-cols-2" : ""}`}>
+                      {type.images.map((image) => (
+                        <div
+                          key={image.src}
+                          className="relative aspect-[4/3] overflow-hidden rounded-lg border border-[#d5d0c8] bg-[#e4e0d8]"
+                        >
+                          <Image
+                            src={image.src}
+                            alt={image.alt}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 1024px) 100vw, 480px"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </article>
+              </Reveal>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-[#f3f1ec] py-16 lg:py-20">
+        <div className="container-page">
+          <h2 className="text-2xl font-semibold text-[#001a3d]">{PACKAGING_SELECTION.title}</h2>
+          <p className="mt-3 max-w-3xl text-base text-[#555555]">{PACKAGING_SELECTION.lead}</p>
+          <ul className="mt-6 grid gap-2 sm:grid-cols-2">
+            {PACKAGING_SELECTION.factors.map((factor) => (
+              <li key={factor} className="flex gap-2 text-sm text-[#555555]">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#d4a84b]" />
+                {factor}
+              </li>
+            ))}
+          </ul>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link href="/products" className="text-sm font-semibold text-[#c88e4a] underline">
+              View products
+            </Link>
+            <span className="text-[#ccc]">·</span>
+            <Link href="/logistics" className="text-sm font-semibold text-[#c88e4a] underline">
+              Logistics
+            </Link>
+            <span className="text-[#ccc]">·</span>
+            <Link href="/inspections" className="text-sm font-semibold text-[#c88e4a] underline">
+              Inspections
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="relative overflow-hidden py-16 text-white lg:py-20">
+        <Image
+          src="/images/packaging/bulk-vessel-hold.png"
+          alt=""
+          fill
+          className="object-cover"
+          sizes="100vw"
+          aria-hidden
+        />
+        <div className="absolute inset-0 bg-[#071525]/88" />
+        <div className="container-page relative">
+          <p className="text-sm font-semibold tracking-[0.18em] text-[#d4a84b] uppercase">
+            {PACKAGING_CTA.tagline}
+          </p>
+          <h2 className="mt-3 text-2xl font-semibold sm:text-3xl">{PACKAGING_CTA.title}</h2>
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/80">{PACKAGING_CTA.lead}</p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              href={buyerPortalHref("/portal/buyer/new-request")}
+              className="focus-ring inline-flex items-center gap-2 rounded-md bg-[#d4a84b] px-6 py-3.5 text-sm font-semibold text-[#071525] transition hover:bg-[#c4983f]"
+            >
+              Buyer portal — submit RFQ <span aria-hidden>→</span>
+            </Link>
+            <Link
+              href="/contact"
+              className="focus-ring inline-flex items-center gap-2 rounded-md border border-white/70 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10"
+            >
+              Contact trade desk
             </Link>
           </div>
         </div>

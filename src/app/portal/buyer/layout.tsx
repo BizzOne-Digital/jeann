@@ -10,17 +10,27 @@ import {
 
 export const dynamic = "force-dynamic";
 
-const links = [
+const fullLinks = [
   { label: "Overview", href: "/portal/buyer" },
+  { label: "Onboarding", href: "/portal/buyer/onboarding" },
   { label: "New request", href: "/portal/buyer/new-request" },
   { label: "Requests", href: "/portal/buyer/requests" },
   { label: "Transactions", href: "/portal/buyer/transactions" },
+  { label: "Shipments", href: "/portal/buyer/shipments" },
+  { label: "Invoices", href: "/portal/buyer/invoices" },
   { label: "Corporate information", href: "/portal/buyer/cis" },
   { label: "Documents", href: "/portal/buyer/documents" },
   { label: "Booking", href: "/portal/buyer/booking" },
   { label: "Contact", href: "/portal/buyer/contact" },
   { label: "Messages", href: "/portal/buyer/messages" },
   { label: "Organization", href: "/portal/buyer/organization" },
+  { label: "Help", href: "/portal/buyer/help" },
+];
+
+const onboardingLinks = [
+  { label: "Onboarding", href: "/portal/buyer/onboarding" },
+  { label: "CIS/KYB", href: "/portal/buyer/cis" },
+  { label: "Documents", href: "/portal/buyer/documents" },
   { label: "Help", href: "/portal/buyer/help" },
 ];
 
@@ -34,29 +44,24 @@ export default async function BuyerLayout({ children }: { children: React.ReactN
 
   if (!verified) {
     return (
-      <div className="portal-shell flex min-h-[70vh] items-center justify-center p-6">
-        <div className="max-w-lg rounded-lg border border-[var(--line)] bg-white p-8 text-center">
-          <h1 className="text-2xl font-semibold text-[var(--navy)]">Approval pending</h1>
-          <p className="mt-3 text-sm text-[var(--stone)]">
-            {org?.legalName
-              ? `${org.legalName} is registered and awaiting Finekarts review.`
-              : "Your buyer organization is awaiting review."}{" "}
-            You will receive an email when your portal access is approved.
-          </p>
-          <p className="mt-2 text-sm capitalize text-[var(--stone)]">
-            Current status: {org?.status ?? "pending"}
-          </p>
-          <Link href="/login" className="btn btn-primary mt-6 inline-flex">
-            Back to sign in
-          </Link>
-        </div>
+      <div className="portal-shell md:flex">
+        <Sidebar title="Buyer onboarding" links={onboardingLinks} />
+        <main className="min-w-0 w-full max-w-full flex-1 overflow-x-clip p-4 sm:p-6 md:p-10">
+          <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+            Complete onboarding and await admin approval before trading functions unlock.{" "}
+            <Link href="/portal/buyer/onboarding" className="font-medium underline">
+              View checklist
+            </Link>
+          </div>
+          {children}
+        </main>
       </div>
     );
   }
 
   return (
     <div className="portal-shell md:flex">
-      <Sidebar title="Buyer portal" links={links} />
+      <Sidebar title="Buyer portal" links={fullLinks} />
       <main className="min-w-0 w-full max-w-full flex-1 overflow-x-clip p-4 sm:p-6 md:p-10">
         {children}
       </main>

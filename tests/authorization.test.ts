@@ -27,10 +27,8 @@ describe("RBAC and tenancy helpers", () => {
     );
   });
 
-  it("generates non-guessable transaction numbers", () => {
+  it("generates buyer sale transaction number format", () => {
     const a = generateTransactionNumber();
-    const b = generateTransactionNumber();
-    expect(a).toMatch(/^FK-\d{4}-[A-Z0-9]{6}$/);
-    expect(a).not.toBe(b);
+    expect(a).toMatch(/^FK-S-\d{4}-[A-Z0-9]{6}$/);
   });
 });

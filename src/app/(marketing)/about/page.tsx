@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getHomeSectionImages } from "@/lib/content/home-images";
 import { getSite } from "@/lib/content/catalog";
 import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
+import { FoodSafetyAgencyMarquee } from "@/components/marketing/FoodSafetyAgencyMarquee";
 import {
   AboutHero,
   AboutWhoWeAre,
@@ -26,6 +27,7 @@ export default async function AboutPage() {
     <>
       <AboutHero positioning={site.positioning} cms={getSectionFields(cms, "hero")} />
       <AboutWhoWeAre home1={home1} home2={home2} cms={getSectionFields(cms, "who-we-are")} />
+      <FoodSafetyAgencyMarquee />
       <AboutCapabilities cms={getSectionFields(cms, "capabilities")} />
       <AboutProcess cms={getSectionFields(cms, "process")} />
       <AboutGlobal home3={home3} cms={getSectionFields(cms, "global")} />

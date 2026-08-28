@@ -7,7 +7,14 @@ import {
   type LeanDoc,
 } from "./shared";
 
-export type CisProfileStatus = "draft" | "submitted" | "approved";
+export type CisProfileStatus =
+  | "draft"
+  | "submitted"
+  | "under_review"
+  | "changes_requested"
+  | "resubmitted"
+  | "approved"
+  | "rejected";
 
 export interface CisRepresentative {
   name: string;
@@ -55,6 +62,13 @@ export interface ICisProfile {
   productInterests: CisProductInterest[];
   authorizedSigners: CisAuthorizedSigner[];
   sensitiveFieldsMasked: CisSensitiveFieldsMasked;
+  businessActivities?: string;
+  reviewComments?: string;
+  reviewedByUserId?: Types.ObjectId;
+  reviewedAt?: Date;
+  rejectionReason?: string;
+  submittedAt?: Date;
+  lockedAt?: Date;
   approvedAt?: Date;
 }
 
@@ -110,7 +124,7 @@ const cisProfileSchema = new Schema<ICisProfile>(
     version: { type: Number, required: true, min: 1 },
     status: {
       type: String,
-      enum: ["draft", "submitted", "approved"],
+      enum: ["draft", "submitted", "under_review", "changes_requested", "resubmitted", "approved", "rejected"],
       default: "draft",
     },
     legalName: { type: String, required: true, trim: true },
@@ -130,6 +144,13 @@ const cisProfileSchema = new Schema<ICisProfile>(
       type: sensitiveFieldsMaskedSchema,
       default: () => ({}),
     },
+    businessActivities: { type: String },
+    reviewComments: { type: String },
+    reviewedByUserId: { type: Schema.Types.ObjectId, ref: "User" },
+    reviewedAt: { type: Date },
+    rejectionReason: { type: String },
+    submittedAt: { type: Date },
+    lockedAt: { type: Date },
     approvedAt: { type: Date },
   },
   { timestamps: true },

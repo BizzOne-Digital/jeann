@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { FormEvent, useState } from "react";
 
 type ApiBody = {
@@ -7,6 +8,9 @@ type ApiBody = {
   message?: string;
   redirectTo?: string;
   status?: string;
+  requiresMfa?: boolean;
+  mfaToken?: string;
+  devCode?: string;
   issues?: {
     fieldErrors?: Record<string, string[] | undefined>;
   };
@@ -42,6 +46,8 @@ function firstFieldError(body: ApiBody): string | undefined {
 export function LoginForm() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [mfaStep, setMfaStep] = useState<{ mfaToken: string; devCode?: string } | null>(null);
+  const [mfaCode, setMfaCode] = useState("");
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -53,6 +59,17 @@ export function LoginForm() {
         email: form.get("email"),
         password: form.get("password"),
       });
+
+      if (result.ok && result.body.requiresMfa && result.body.mfaToken) {
+        setMfaStep({ mfaToken: result.body.mfaToken, devCode: result.body.devCode });
+        setMessage(
+          result.body.devCode
+            ? `Enter the verification code sent to your email. Dev code: ${result.body.devCode}`
+            : "Enter the verification code sent to your email.",
+        );
+        return;
+      }
+
       if (result.ok && result.body.redirectTo) {
         window.location.assign(result.body.redirectTo);
         return;
@@ -65,11 +82,87 @@ export function LoginForm() {
     }
   }
 
+  async function onMfaSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!mfaStep) return;
+    setLoading(true);
+    setMessage("");
+    try {
+      const result = await submit("/api/auth/mfa/verify", {
+        mfaToken: mfaStep.mfaToken,
+        code: mfaCode.trim(),
+      });
+      if (result.ok && result.body.redirectTo) {
+        window.location.assign(result.body.redirectTo);
+        return;
+      }
+      setMessage(result.body.error || "Invalid or expired code. Sign in again to retry.");
+      if (result.status === 401) {
+        setMfaStep(null);
+        setMfaCode("");
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  if (mfaStep) {
+    return (
+      <form onSubmit={onMfaSubmit} className="space-y-4">
+        <p className="text-sm text-[var(--stone)]">
+          Two-step verification is required for this account. Check your email for a one-time code.
+        </p>
+        {mfaStep.devCode ? (
+          <p className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+            Development: your code is <strong>{mfaStep.devCode}</strong> (also logged in the server
+            terminal when <code className="text-[10px]">EMAIL_PROVIDER=console</code>).
+          </p>
+        ) : null}
+        <label className="label">
+          Verification code
+          <input
+            className="field mt-1"
+            name="code"
+            type="text"
+            inputMode="numeric"
+            autoComplete="one-time-code"
+            value={mfaCode}
+            onChange={(e) => setMfaCode(e.target.value)}
+            required
+            suppressHydrationWarning
+          />
+        </label>
+        {message ? <p className="text-sm text-[var(--stone)]">{message}</p> : null}
+        <button className="btn btn-primary w-full" type="submit" disabled={loading || !mfaCode.trim()}>
+          {loading ? "Verifying…" : "Verify and sign in"}
+        </button>
+        <button
+          type="button"
+          className="btn w-full text-sm text-[var(--stone)]"
+          onClick={() => {
+            setMfaStep(null);
+            setMfaCode("");
+            setMessage("");
+          }}
+        >
+          Back to sign in
+        </button>
+      </form>
+    );
+  }
+
   return (
     <form onSubmit={onSubmit} className="space-y-4">
       <label className="label">
         Email
-        <input className="field mt-1" name="email" type="email" autoComplete="email" required />
+        <input
+          className="field mt-1"
+          name="email"
+          type="email"
+          autoComplete="email"
+          required
+          suppressHydrationWarning
+        />
       </label>
       <label className="label">
         Password
@@ -79,10 +172,11 @@ export function LoginForm() {
           type="password"
           autoComplete="current-password"
           required
+          suppressHydrationWarning
         />
       </label>
       {message ? <p className="text-sm text-red-700">{message}</p> : null}
-      <button className="btn btn-primary w-full" type="submit" disabled={loading}>
+      <button className="btn btn-primary w-full" type="submit" disabled={loading} suppressHydrationWarning>
         {loading ? "Signing in…" : "Sign in"}
       </button>
     </form>
@@ -138,16 +232,24 @@ export function BuyerRegistrationForm() {
         acceptPrivacy: true,
       });
 
-      if (result.ok && result.body.status === "pending") {
+      if (
+        result.ok &&
+        (result.body.status === "pending" ||
+          result.body.status === "pending_verification" ||
+          result.body.status === "review")
+      ) {
         setIsError(false);
         setMessage(
           result.body.message ||
             "Registration received. We will email you when your account is approved.",
         );
+        if (result.body.redirectTo) {
+          setTimeout(() => window.location.assign(result.body.redirectTo!), 2500);
+        }
         return;
       }
 
-      if (result.body.redirectTo) {
+      if (result.body.redirectTo && result.ok) {
         window.location.assign(result.body.redirectTo);
         return;
       }
@@ -159,11 +261,11 @@ export function BuyerRegistrationForm() {
       }
 
       setIsError(true);
-      setMessage(
+      const errText =
         firstFieldError(result.body) ||
-          result.body.error ||
-          "Unable to register. Please check your details and try again.",
-      );
+        result.body.error ||
+        "Unable to register. Please check your details and try again.";
+      setMessage(errText);
     } finally {
       setLoading(false);
     }
@@ -214,7 +316,17 @@ export function BuyerRegistrationForm() {
         <input name="privacy" type="checkbox" required />I accept the privacy notice.
       </label>
       {message ? (
-        <p className={`text-sm ${isError ? "text-red-700" : "text-[var(--forest)]"}`}>{message}</p>
+        <p className={`text-sm ${isError ? "text-red-700" : "text-[var(--forest)]"}`}>
+          {message}
+          {isError && message.includes("already exists") ? (
+            <>
+              {" "}
+              <Link href="/login" className="font-semibold underline">
+                Sign in
+              </Link>
+            </>
+          ) : null}
+        </p>
       ) : null}
       <button className="btn btn-primary w-full" type="submit" disabled={loading}>
         {loading ? "Creating account…" : "Create buyer account"}

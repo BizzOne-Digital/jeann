@@ -1,3 +1,18 @@
 import { PortalPage } from "@/components/portal/PortalPage";
-import { TransactionStepper } from "@/components/portal/TransactionStepper";
-export default async function TransactionPage({ params }: { params: Promise<{ id: string }> }) { const { id } = await params; return <PortalPage title={`Transaction ${id}`} description="Follow the six-stage controlled trade workflow."><TransactionStepper current={1} /><section className="mt-6 rounded-lg border border-[var(--line)] bg-white p-5"><h2 className="font-semibold text-[var(--navy)]">Request received</h2><p className="mt-2 text-sm text-[var(--stone)]">No live transaction data is currently connected to this package.</p></section></PortalPage>; }
+import { BuyerTransactionWorkspace } from "@/components/portal/BuyerTransactionWorkspace";
+
+export default async function TransactionPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  return (
+    <PortalPage
+      title="Transaction workspace"
+      description="Track workflow status, documents, and banking setup for this deal."
+    >
+      <BuyerTransactionWorkspace transactionId={id} />
+    </PortalPage>
+  );
+}

@@ -18,6 +18,17 @@ Public site generates qualified buyer/supplier leads and RFQs. Pricing is negoti
 
 Domain logic lives under `src/lib/*` (auth, authorization, storage, AI, finance, workflows, tracking). UI stays in `src/components/*` and `src/app/*`. Mongoose models are in `src/models/*`.
 
+## Documentation
+
+| Document | Purpose |
+|----------|---------|
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Stack, layers, providers |
+| [docs/DATA_MODEL.md](docs/DATA_MODEL.md) | MongoDB entities |
+| [docs/WORKFLOW.md](docs/WORKFLOW.md) | Trade workflows (target vs current) |
+| [docs/PERMISSIONS.md](docs/PERMISSIONS.md) | Roles and enforcement |
+| [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md) | Phased delivery plan |
+| [docs/TESTING_GUIDE.md](docs/TESTING_GUIDE.md) | Staging QA (fake data only) |
+
 ## Prerequisites
 
 - Node.js 20+

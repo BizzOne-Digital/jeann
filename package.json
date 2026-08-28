@@ -11,6 +11,14 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "seed": "tsx src/scripts/seed.ts",
+    "seed:phase2": "tsx src/scripts/seed-phase2.ts",
+    "seed:phase3": "tsx src/scripts/seed-phase3.ts",
+    "seed:phase4": "tsx src/scripts/seed-phase4.ts",
+    "seed:phase5": "tsx src/scripts/seed-phase5.ts",
+    "seed:phase6": "tsx src/scripts/seed-phase6.ts",
+    "seed:phase7": "tsx src/scripts/seed-phase7.ts",
+    "seed:phase8": "tsx src/scripts/seed-phase8.ts",
+    "seed:phase9": "tsx src/scripts/seed-phase9.ts",
     "create-admin": "tsx src/scripts/create-admin.ts"
   },
   "dependencies": {
@@ -27,6 +35,7 @@
     "mongoose": "^9.9.1",
     "nanoid": "^6.0.1",
     "next": "16.3.0",
+    "pdf-lib": "^1.17.1",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "react-hook-form": "^7.85.0",

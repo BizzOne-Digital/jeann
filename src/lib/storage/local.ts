@@ -1,6 +1,7 @@
 import { mkdir, writeFile, readFile, unlink, stat } from "fs/promises";
 import path from "path";
 import { getEnv } from "@/lib/config/env";
+import { signStorageUrl } from "@/lib/storage/signing";
 import type {
   PutObjectInput,
   PutObjectResult,
@@ -51,13 +52,14 @@ export class LocalStorageProvider implements StorageProvider {
     await stat(filePath);
     const env = getEnv();
     const expires = Math.floor(Date.now() / 1000) + (options?.expiresInSeconds ?? 300);
-    const params = new URLSearchParams({
+    const params: Record<string, string> = {
       key,
       exp: String(expires),
       disposition: options?.disposition ?? "attachment",
-    });
-    if (options?.filename) params.set("filename", options.filename);
-    return `${env.APP_URL}/api/storage/local?${params.toString()}`;
+    };
+    if (options?.filename) params.filename = options.filename;
+    const signed = signStorageUrl(params, expires);
+    return `${env.APP_URL}/api/storage/local?${signed}`;
   }
 
   async delete(key: string): Promise<void> {

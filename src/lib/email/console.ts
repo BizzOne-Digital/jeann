@@ -19,6 +19,9 @@ export class ConsoleEmailProvider implements EmailProvider {
       textLength: input.text.length,
       tags: input.tags,
       metadata: input.metadata,
+      ...(input.tags?.includes("invitation") && input.metadata?.inviteUrl
+        ? { inviteUrl: input.metadata.inviteUrl }
+        : {}),
     });
 
     return { id, provider: this.name };

@@ -93,8 +93,8 @@ export default async function ResourcesPage() {
                 "body",
                 "Document sets vary by product, corridor, bank, and contract. Lists below are starting points for discussion — not guarantees that every document will be issued or accepted without amendment.",
               )} See also{" "}
-              <Link href="/shipping" className="font-semibold text-[var(--navy)] underline">
-                Shipping
+              <Link href="/logistics" className="font-semibold text-[var(--navy)] underline">
+                Logistics
               </Link>
               ,{" "}
               <Link href="/inspections" className="font-semibold text-[var(--navy)] underline">

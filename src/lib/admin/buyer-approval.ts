@@ -97,6 +97,11 @@ export async function decideBuyerOrganization(input: {
     : null;
 
   org.status = input.decision === "approved" ? "verified" : "rejected";
+  org.onboardingStatus = input.decision === "approved" ? "approved" : "rejected";
+  if (input.decision === "approved") {
+    org.approvedAt = new Date();
+    org.approvedByUserId = new Types.ObjectId(String(input.actorUserId));
+  }
   if (input.reason) org.verificationNotes = input.reason;
   await org.save();
 

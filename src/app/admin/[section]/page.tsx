@@ -54,9 +54,41 @@ const SECTIONS: Record<string, { title: string; description: string }> = {
     title: "Terms & Policies",
     description: "Versioned legal documents requiring professional review before production.",
   },
+  "buyer-requests": {
+    title: "Buyer Requests",
+    description: "Review and qualify buyer purchase requests before converting to formal transactions.",
+  },
+  "supplier-offers": {
+    title: "Supplier Offers",
+    description: "Review portal supplier trade offers and convert qualified offers to procurement.",
+  },
+  procurement: {
+    title: "Procurement Transactions",
+    description: "Supplier-purchase transactions, workflow status, and assignments.",
+  },
+  "deal-groups": {
+    title: "Deal Groups",
+    description: "Internal buyer–supplier linking and quantity allocations. Never exposed externally.",
+  },
+  banking: {
+    title: "Banking Instruments",
+    description: "Buyer-side and supplier-side banking coordination records. Not bank issuance.",
+  },
   audit: {
     title: "Audit Log",
     description: "Append-only sensitive-action history for authorized reviewers.",
+  },
+  security: {
+    title: "Security Dashboard",
+    description: "Security events, incidents, lockouts, and production validation.",
+  },
+  invitations: {
+    title: "Invitations",
+    description: "Employee, supplier, and banking adviser invitation lifecycle.",
+  },
+  users: {
+    title: "Users",
+    description: "Platform user accounts, verification status, and memberships.",
   },
 };
 

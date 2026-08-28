@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+/* Hide main site until intro splash finishes (first visit per session). */
+html.intro-active body {
+  overflow: hidden;
+}
+
+html.intro-active #finekarts-site-root {
+  visibility: hidden;
+  pointer-events: none;
+}
+
 :root {
   --ink: #13293d;
   --navy: #1b3a5c;
@@ -324,4 +334,32 @@ a {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
+}
+
+@keyframes food-safety-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.food-safety-marquee-track {
+  animation: food-safety-marquee 28s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .food-safety-marquee {
+    overflow-x: auto;
+  }
+
+  .food-safety-marquee-track {
+    animation: none;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+    gap: 0.75rem;
+    padding-inline: 1rem;
+  }
 }

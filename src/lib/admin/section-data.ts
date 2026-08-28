@@ -223,47 +223,53 @@ export async function loadAdminSectionData(section: string): Promise<AdminSectio
         );
       }
       case "shipments": {
-        const total = await models.Shipment.countDocuments();
-        const docs = await models.Shipment.find().sort({ updatedAt: -1 }).limit(50).lean();
-        return table(
-          `${total} total`,
-          ["Mode", "Route", "Status", "Carrier", "Updated"],
-          docs.map((doc) => ({
-            key: String(doc._id),
-            cells: [
-              doc.mode,
-              [doc.originPort, doc.destinationPort].filter(Boolean).join(" → ") || "—",
-              doc.status,
-              doc.carrier || "—",
-              dateCell(doc.updatedAt),
-            ],
-          })),
-          "No shipments yet.",
-        );
-      }
-      case "finance": {
-        const [entryTotal, taxTotal] = await Promise.all([
-          models.FinanceEntry.countDocuments(),
-          models.TaxConfiguration.countDocuments(),
-        ]);
-        const docs = await models.FinanceEntry.find()
-          .sort({ createdAt: -1 })
+        const total = await models.ShipmentLot.countDocuments();
+        const docs = await models.ShipmentLot.find()
+          .sort({ updatedAt: -1 })
           .limit(50)
           .lean();
         return table(
-          `${entryTotal} finance entries / ${taxTotal} tax configs`,
-          ["Label", "Type", "Currency", "Estimate", "Transaction"],
+          `${total} shipment lots`,
+          ["Number", "Side", "Route", "Status", "Quantity", "Updated"],
           docs.map((doc) => ({
-            key: String(doc._id),
+            key: doc.shipmentLotNumber,
             cells: [
-              doc.label,
-              doc.type,
-              doc.currency,
-              doc.isEstimate ? "yes" : "no",
-              String(doc.transactionId),
+              doc.shipmentLotNumber,
+              doc.transactionSide,
+              [doc.loadingPort, doc.destinationPort].filter(Boolean).join(" → ") || "—",
+              doc.currentStatus,
+              `${doc.plannedQuantity?.toString() ?? "—"} ${doc.quantityUnit}`,
+              dateCell(doc.updatedAt),
             ],
           })),
-          "No finance entries yet.",
+          "No shipment lots yet.",
+        );
+      }
+      case "finance": {
+        const [invoiceTotal, billTotal, entryTotal] = await Promise.all([
+          models.BuyerInvoice.countDocuments(),
+          models.SupplierBill.countDocuments(),
+          models.FinancialEntry.countDocuments({ status: "posted" }),
+        ]);
+        const invoices = await models.BuyerInvoice.find()
+          .sort({ createdAt: -1 })
+          .limit(25)
+          .lean();
+        return table(
+          `${invoiceTotal} invoices / ${billTotal} bills / ${entryTotal} posted entries`,
+          ["Invoice", "Buyer org", "Total", "Balance", "Status", "Date"],
+          invoices.map((doc) => ({
+            key: doc.invoiceNumber,
+            cells: [
+              doc.invoiceNumber,
+              String(doc.buyerOrganizationId),
+              `${doc.currency} ${doc.total?.toString()}`,
+              `${doc.currency} ${doc.balance?.toString()}`,
+              doc.status,
+              dateCell(doc.invoiceDate),
+            ],
+          })),
+          "No finance records yet. Run seed:phase7.",
         );
       }
       case "ai": {
@@ -332,22 +338,185 @@ export async function loadAdminSectionData(section: string): Promise<AdminSectio
           "No terms documents yet.",
         );
       }
+      case "buyer-requests": {
+        const total = await models.PurchaseRequest.countDocuments({
+          status: { $in: ["submitted", "under_review", "new", "more_information_required"] },
+        });
+        const docs = await models.PurchaseRequest.find()
+          .sort({ createdAt: -1 })
+          .limit(50)
+          .lean();
+        return table(
+          `${total} open requests`,
+          ["Reference", "Product", "Company", "Status", "Source", "Submitted"],
+          docs.map((doc) => ({
+            key: doc.reference,
+            cells: [
+              doc.reference,
+              doc.productName,
+              doc.contactCompany ?? "—",
+              doc.status,
+              doc.source ?? "—",
+              dateCell(doc.createdAt),
+            ],
+          })),
+          "No buyer requests yet.",
+        );
+      }
+      case "supplier-offers": {
+        const total = await models.SupplierOffer.countDocuments();
+        const docs = await models.SupplierOffer.find()
+          .sort({ createdAt: -1 })
+          .limit(50)
+          .lean();
+        return table(
+          `${total} total`,
+          ["Offer ID", "Product", "Org", "Status", "Source", "Submitted"],
+          docs.map((doc) => ({
+            key: doc.offerId,
+            cells: [
+              doc.offerId,
+              doc.productName,
+              String(doc.organizationId),
+              doc.status,
+              doc.source,
+              dateCell(doc.createdAt),
+            ],
+          })),
+          "No supplier portal offers yet.",
+        );
+      }
+      case "procurement": {
+        const total = await models.Transaction.countDocuments({
+          transactionType: "supplier_purchase",
+          deletedAt: null,
+        });
+        const docs = await models.Transaction.find({
+          transactionType: "supplier_purchase",
+          deletedAt: null,
+        })
+          .sort({ createdAt: -1 })
+          .limit(50)
+          .lean();
+        return table(
+          `${total} procurement transactions`,
+          ["Number", "Supplier org", "Workflow", "Status", "Created"],
+          docs.map((doc) => ({
+            key: doc.transactionNumber,
+            cells: [
+              doc.transactionNumber,
+              String(doc.organizationId),
+              doc.workflowStatus,
+              doc.status,
+              dateCell(doc.createdAt),
+            ],
+          })),
+          "No procurement transactions yet.",
+        );
+      }
+      case "deal-groups": {
+        const total = await models.DealGroup.countDocuments();
+        const docs = await models.DealGroup.find()
+          .sort({ createdAt: -1 })
+          .limit(50)
+          .lean();
+        return table(
+          `${total} deal groups`,
+          ["Number", "Name", "Status", "Compatibility", "Created"],
+          docs.map((doc) => ({
+            key: doc.dealGroupNumber,
+            cells: [
+              doc.dealGroupNumber,
+              doc.name,
+              doc.status,
+              doc.specificationCompatibilityStatus,
+              dateCell(doc.createdAt),
+            ],
+          })),
+          "No deal groups yet.",
+        );
+      }
+      case "banking": {
+        const total = await models.BankingInstrument.countDocuments();
+        const docs = await models.BankingInstrument.find()
+          .sort({ createdAt: -1 })
+          .limit(50)
+          .lean();
+        return table(
+          `${total} instruments`,
+          ["Instrument ID", "Side", "Type", "Status", "Amount", "Verification"],
+          docs.map((doc) => ({
+            key: doc.instrumentId,
+            cells: [
+              doc.instrumentId,
+              doc.transactionSide,
+              doc.instrumentTypeCode,
+              doc.currentStatus,
+              `${doc.currency} ${doc.amount?.toString()}`,
+              doc.issuedCopyVerificationStatus,
+            ],
+          })),
+          "No banking instruments yet.",
+        );
+      }
       case "audit": {
         const total = await models.AuditEvent.countDocuments();
         const docs = await models.AuditEvent.find().sort({ createdAt: -1 }).limit(50).lean();
         return table(
           `${total} events (showing latest 50)`,
-          ["Action", "Target", "Actor", "When"],
+          ["Action", "Target", "Actor", "Result", "When"],
           docs.map((doc) => ({
             key: String(doc._id),
             cells: [
               doc.action,
               doc.targetType ? `${doc.targetType}:${String(doc.targetId ?? "—")}` : "—",
               doc.actorUserId ? String(doc.actorUserId) : "—",
+              doc.result ?? "success",
               dateCell(doc.createdAt),
             ],
           })),
           "No audit events recorded yet.",
+        );
+      }
+      case "invitations": {
+        const total = await models.Invitation.countDocuments();
+        const docs = await models.Invitation.find().sort({ createdAt: -1 }).limit(50).lean();
+        return table(
+          `${total} invitations`,
+          ["Email", "Type", "Roles", "Status", "Expires"],
+          docs.map((doc) => ({
+            key: String(doc._id),
+            cells: [
+              doc.email,
+              doc.organizationType,
+              (doc.roles ?? []).join(", "),
+              doc.status,
+              dateCell(doc.expiresAt),
+            ],
+          })),
+          "No invitations yet.",
+        );
+      }
+      case "users": {
+        const total = await models.User.countDocuments({ deletedAt: null });
+        const docs = await models.User.find({ deletedAt: null })
+          .sort({ createdAt: -1 })
+          .limit(50)
+          .lean();
+        return table(
+          `${total} users`,
+          ["Email", "Name", "Status", "Email verified", "Created"],
+          docs.map((doc) => ({
+            key: String(doc._id),
+            cells: [
+              doc.email,
+              doc.name,
+              doc.status,
+              doc.emailVerifiedAt ? "yes" : "no",
+              dateCell(doc.createdAt),
+            ],
+          })),
+          "No users yet.",
         );
       }
       default:

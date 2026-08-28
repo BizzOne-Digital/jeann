@@ -2,12 +2,18 @@ import { Schema, model, models, Types } from "mongoose";
 import { ROLE_KEYS, type LeanDoc, type RoleKey } from "./shared";
 import type { OrganizationType } from "./Organization";
 
+export type InvitationStatus = "pending" | "accepted" | "expired" | "revoked";
+
 export interface IInvitation {
   tokenHash: string;
   email: string;
-  organizationId: Types.ObjectId;
+  phone?: string;
+  contactName?: string;
+  organizationId?: Types.ObjectId;
   organizationType: OrganizationType;
+  intendedLegalName?: string;
   roles: RoleKey[];
+  status: InvitationStatus;
   expiresAt: Date;
   revokedAt?: Date;
   acceptedAt?: Date;
@@ -20,17 +26,24 @@ const invitationSchema = new Schema<IInvitation>(
   {
     tokenHash: { type: String, required: true, select: false },
     email: { type: String, required: true, lowercase: true, trim: true },
+    phone: { type: String, trim: true },
+    contactName: { type: String, trim: true },
     organizationId: {
       type: Schema.Types.ObjectId,
       ref: "Organization",
-      required: true,
     },
     organizationType: {
       type: String,
-      enum: ["buyer", "supplier", "internal"],
+      enum: ["buyer", "supplier", "internal", "banking_adviser"],
       required: true,
     },
+    intendedLegalName: { type: String, trim: true },
     roles: [{ type: String, enum: ROLE_KEYS }],
+    status: {
+      type: String,
+      enum: ["pending", "accepted", "expired", "revoked"],
+      default: "pending",
+    },
     expiresAt: { type: Date, required: true },
     revokedAt: { type: Date },
     acceptedAt: { type: Date },

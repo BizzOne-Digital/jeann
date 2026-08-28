@@ -269,27 +269,29 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
     slug: "packaging",
     title: "Packaging",
     path: "/packaging",
-    seoTitle: "Packaging options",
-    seoDescription: "Dry bulk, liquid bulk, and unpackaged vessel packaging programmes.",
+    seoTitle: "Packaging types",
+    seoDescription:
+      "Flexitank, tanker vessel, containerized cargo, bulk truck, bulk vessel and bulk railcar for international commodity trade.",
     sections: [
       section("hero", "Hero", {
-        title: "Packaging in bulk trade",
+        title: "Packaging & transport modes",
         description:
-          "Dry goods, liquids, and unpackaged vessel programmes — compatibility is product-specific and confirmed per transaction.",
+          "Finekarts structures programmes across flexitank, tanker vessel, containerized cargo, bulk truck, bulk vessel and bulk railcar — subject to product, volume and corridor.",
       }),
     ],
   },
   {
-    slug: "shipping",
-    title: "Shipping",
-    path: "/shipping",
-    seoTitle: "Shipping & documents",
-    seoDescription: "Shipping corridors, documents, and logistics notes for bulk commodities.",
+    slug: "logistics",
+    title: "Logistics",
+    path: "/logistics",
+    seoTitle: "Global shipping & logistics",
+    seoDescription:
+      "Finekarts coordinates international commodity shipping — FOB and CIF terms, bulk and container programmes, shipment tracking and port-to-port logistics.",
     sections: [
       section("hero", "Hero", {
-        title: "Shipping & documentation",
+        title: "Moving commodities from origin to destination",
         description:
-          "Corridor-specific shipping notes and document categories for bulk agricultural trade. Final requirements are confirmed contractually.",
+          "Global shipping coverage using recognized Incoterms® rules — with FOB and CIF as our primary commercial terms. Final requirements are confirmed contractually.",
       }),
     ],
   },
@@ -304,6 +306,21 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
         title: "Inspection & verification",
         description:
           "Independent inspection supports quality, quantity, and compliance confirmation — scope is defined per contract and corridor.",
+      }),
+    ],
+  },
+  {
+    slug: "verification",
+    title: "Verification",
+    path: "/verification",
+    seoTitle: "Global business verification & due diligence",
+    seoDescription:
+      "Finekarts Verification Services — corporate registration, supplier and buyer due diligence, credit assessment, supply-chain mapping and compliance screening.",
+    sections: [
+      section("hero", "Hero", {
+        title: "Know who you are trading with",
+        description:
+          "Independent business intelligence before significant commercial relationships — verification is a point-in-time assessment, not a guarantee of future performance.",
       }),
     ],
   },

@@ -7,6 +7,16 @@ import { Reveal } from "@/components/motion/Reveal";
 import { getCategories, getCategory } from "@/lib/content/catalog";
 import { buyerQuoteHref } from "@/lib/marketing/cta-links";
 import { getCategoryCover } from "@/lib/content/product-images";
+import { SpicesCategorySections } from "@/components/marketing/SpiceSections";
+import { RiceCategorySections } from "@/components/marketing/RiceSections";
+import { BeansCategorySections } from "@/components/marketing/PulseSections";
+import { EdibleOilsCategorySections } from "@/components/marketing/OilSections";
+import { SugarCategorySections } from "@/components/marketing/SugarSections";
+import { isEdibleOilsCategory, OIL_CATEGORY } from "@/lib/content/oil-product-content";
+import { BEANS_CATEGORY, isBeansCategory } from "@/lib/content/pulse-product-content";
+import { isRiceCategory, RICE_CATEGORY } from "@/lib/content/rice-product-content";
+import { isSpicesCategory, SPICES_CATEGORY } from "@/lib/content/spice-product-content";
+import { isSugarCategory, SUGAR_CATEGORY } from "@/lib/content/sugar-product-content";
 
 type Props = { params: Promise<{ categorySlug: string }> };
 
@@ -30,17 +40,65 @@ export default async function CategoryPage({ params }: Props) {
   if (!category) notFound();
 
   const cover = getCategoryCover(category.slug);
+  const isSugar = isSugarCategory(category.slug);
+  const isEdibleOils = isEdibleOilsCategory(category.slug);
+  const isBeans = isBeansCategory(category.slug);
+  const isRice = isRiceCategory(category.slug);
+  const isSpices = isSpicesCategory(category.slug);
 
   return (
     <>
       <PageHero
-        title={cover.shortName}
-        description={category.summary}
+        title={
+          isSugar
+            ? SUGAR_CATEGORY.title
+            : isEdibleOils
+              ? OIL_CATEGORY.title
+              : isBeans
+                ? BEANS_CATEGORY.title
+                : isRice
+                  ? RICE_CATEGORY.title
+                  : isSpices
+                    ? SPICES_CATEGORY.title
+                    : cover.shortName
+        }
+        brand={
+          isSugar
+            ? SUGAR_CATEGORY.eyebrow
+            : isEdibleOils
+              ? OIL_CATEGORY.eyebrow
+              : isBeans
+                ? BEANS_CATEGORY.eyebrow
+                : isRice
+                  ? RICE_CATEGORY.eyebrow
+                  : isSpices
+                    ? SPICES_CATEGORY.eyebrow
+                    : undefined
+        }
+        description={
+          isSugar
+            ? SUGAR_CATEGORY.lead
+            : isEdibleOils
+              ? OIL_CATEGORY.lead
+              : isBeans
+                ? BEANS_CATEGORY.lead
+                : isRice
+                  ? RICE_CATEGORY.lead
+                  : isSpices
+                    ? SPICES_CATEGORY.lead
+                    : category.summary
+        }
         imageSrc={cover.image}
         imageAlt={cover.alt}
         primaryCta={{ href: buyerQuoteHref(), label: "Request a Quote →" }}
         secondaryCta={{ href: "/products", label: "All categories" }}
       />
+
+      {isSugar ? <SugarCategorySections /> : null}
+      {isEdibleOils ? <EdibleOilsCategorySections /> : null}
+      {isBeans ? <BeansCategorySections /> : null}
+      {isRice ? <RiceCategorySections /> : null}
+      {isSpices ? <SpicesCategorySections /> : null}
 
       <section className="bg-[#f3f1ec] py-14 lg:py-20">
         <div className="container-page">

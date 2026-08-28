@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  release-gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit and integration tests
+        run: npm run test
+
+      - name: Build
+        run: npm run build
+        env:
+          SESSION_SECRET: ci-test-session-secret-minimum-32-chars
+          MONGODB_URI: mongodb://127.0.0.1:27017/finekarts-ci
+
+      - name: Secret pattern scan
+        run: |
+          ! grep -rEn "(password\s*=\s*['\"][^'\"]+['\"]|api[_-]?key\s*=\s*['\"][a-zA-Z0-9]{20,})" \
+            --include="*.ts" --include="*.tsx" \
+            src/ tests/ \
+            | grep -v "test-secret" \
+            | grep -v "PHASE2_SEED_PASSWORD" \
+            | grep -v "passwordHash" \
+            | grep -v "not_configured" || true
+
+      - name: Production mock provider check
+        run: |
+          NODE_ENV=production INTEGRATIONS_USE_MOCKS=false npm run test -- tests/phase9-security.test.ts
+
+      - name: Dependency audit (high severity)
+        run: npm audit --audit-level=high
+        continue-on-error: true

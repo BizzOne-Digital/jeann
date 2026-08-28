@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CmsPageHero } from "@/components/marketing/CmsPageHero";
+import { MarketingStorySection } from "@/components/marketing/MarketingStorySection";
 import { PartnerProfileCard } from "@/components/marketing/PartnerSections";
 import { Reveal } from "@/components/motion/Reveal";
 import { cmsField } from "@/lib/content/cms-field";
 import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
 import { getPartners, PARTNERS_PAGE_INTRO } from "@/lib/content/partners-catalog";
+import { PARTNERS_STORY } from "@/lib/content/marketing-pages";
 
 export const metadata: Metadata = {
   title: "Verification partners",
@@ -27,8 +29,21 @@ export default async function PartnersPage() {
           title: PARTNERS_PAGE_INTRO.title,
           description: PARTNERS_PAGE_INTRO.lead,
           primaryCta: { href: "#partners-list", label: "Browse partners →" },
-          secondaryCta: { href: "/inspections", label: "Inspection overview" },
+          secondaryCta: { href: "/verification", label: "Due diligence overview" },
         }}
+      />
+
+      <MarketingStorySection
+        eyebrow={PARTNERS_STORY.eyebrow}
+        title={PARTNERS_STORY.title}
+        lead={PARTNERS_STORY.lead}
+        boxes={PARTNERS_STORY.boxes}
+        imageSrc={PARTNERS_STORY.imageSrc}
+        imageAlt={PARTNERS_STORY.imageAlt}
+        youtubeUrl={PARTNERS_STORY.youtubeUrl}
+        videoTitle="Verification partners overview"
+        variant="reversed"
+        background="cream"
       />
 
       <section className="bg-white py-16 lg:py-20">

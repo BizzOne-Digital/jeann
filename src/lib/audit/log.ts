@@ -6,8 +6,15 @@ export interface AuditEventInput {
   targetType: string;
   targetId?: string | Types.ObjectId;
   actorUserId?: string | Types.ObjectId;
+  actorOrganizationId?: string | Types.ObjectId;
   organizationId?: string | Types.ObjectId;
   requestId?: string;
+  ipHash?: string;
+  userAgent?: string;
+  result?: "success" | "failure";
+  failureReason?: string;
+  before?: Record<string, unknown>;
+  after?: Record<string, unknown>;
   metadata?: Record<string, unknown>;
 }
 
@@ -55,8 +62,15 @@ export async function writeAuditEvent(input: AuditEventInput): Promise<string | 
     targetType: input.targetType,
     targetId: toObjectId(input.targetId),
     actorUserId: toObjectId(input.actorUserId),
+    actorOrganizationId: toObjectId(input.actorOrganizationId),
     organizationId: toObjectId(input.organizationId),
     requestId: input.requestId,
+    ipHash: input.ipHash,
+    userAgent: input.userAgent,
+    result: input.result ?? "success",
+    failureReason: input.failureReason,
+    before: input.before ? sanitizeMetadata(input.before) : undefined,
+    after: input.after ? sanitizeMetadata(input.after) : undefined,
     metadata: sanitizeMetadata(input.metadata),
   });
 

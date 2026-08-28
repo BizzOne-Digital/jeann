@@ -128,10 +128,12 @@ export function HomeCtaChat({ focusToken = 0 }: { focusToken?: number }) {
             placeholder="Type your message..."
             className="w-full bg-transparent text-sm text-[#222] outline-none placeholder:text-[#9aa3af]"
             autoComplete="off"
+            suppressHydrationWarning
           />
           <button
             type="submit"
             disabled={busy || !input.trim()}
+            suppressHydrationWarning
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#2f6fed] text-white transition hover:bg-[#2558c4] disabled:opacity-50"
             aria-label="Send message"
           >

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { getSite } from "@/lib/content/catalog";
 
 const LINKS = [
@@ -27,8 +26,9 @@ const LINKS = [
     items: [
       { href: "/resources", label: "Documents & terminology" },
       { href: "/packaging", label: "Packaging" },
-      { href: "/shipping", label: "Shipping" },
+      { href: "/logistics", label: "Logistics" },
       { href: "/partners", label: "Verification partners" },
+      { href: "/verification", label: "Due diligence" },
       { href: "/inspections", label: "Inspections" },
       { href: "/insights", label: "Insights" },
     ],
@@ -52,20 +52,11 @@ export function SiteFooter() {
       <div className="container-page section-pad !py-16">
         <div className="grid min-w-0 gap-10 sm:gap-12 lg:grid-cols-[1.1fr_1.6fr_1fr]">
           <div className="min-w-0">
-            <div className="flex items-center gap-3">
-              <Image
-                src="/brand/finekarts-logo.png"
-                alt="Finekarts"
-                width={48}
-                height={48}
-                className="rounded-full bg-white"
-              />
-              <div>
-                <p className="text-lg font-semibold tracking-[0.16em] uppercase">Finekarts</p>
-                <p className="text-[0.65rem] uppercase tracking-[0.28em] text-white/50">
-                  Incorporated
-                </p>
-              </div>
+            <div>
+              <p className="text-lg font-semibold tracking-[0.16em] uppercase">Finekarts</p>
+              <p className="text-[0.65rem] uppercase tracking-[0.28em] text-white/50">
+                Incorporated
+              </p>
             </div>
             <p className="mt-5 max-w-xs text-base leading-relaxed text-white/65">
               Global agricultural commodity trading for qualified international buyers.
@@ -116,6 +107,9 @@ export function SiteFooter() {
               RFQs, consultations, and trade desk messages are submitted after buyer sign-in.
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
+              <Link href="/buyer-request" className="rounded-md border border-white/25 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10">
+                Purchase request
+              </Link>
               <Link href="/login" className="rounded-md bg-[#e89a2d] px-4 py-2.5 text-sm font-semibold text-[#071525] transition hover:bg-[#f0a93c]">
                 Sign in
               </Link>
@@ -123,6 +117,12 @@ export function SiteFooter() {
                 Register
               </Link>
             </div>
+            <p className="mt-4 text-xs text-white/50">
+              Suppliers:{" "}
+              <Link href="/supplier-offer" className="underline hover:text-white">
+                invitation-only trade offers
+              </Link>
+            </p>
           </div>
         </div>
 

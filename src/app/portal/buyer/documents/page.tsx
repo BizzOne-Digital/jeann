@@ -1,2 +1,13 @@
 import { PortalPage } from "@/components/portal/PortalPage";
-export default function DocumentsPage() { return <PortalPage title="Documents" description="Controlled documents and requested uploads are visible by transaction." />; }
+import { BuyerLoiUploadPanel } from "@/components/portal/BuyerLoiUploadPanel";
+
+export default function DocumentsPage() {
+  return (
+    <PortalPage
+      title="Documents"
+      description="Upload your Letter of Intent and view document status by transaction."
+    >
+      <BuyerLoiUploadPanel />
+    </PortalPage>
+  );
+}

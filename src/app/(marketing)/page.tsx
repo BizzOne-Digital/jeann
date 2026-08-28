@@ -3,6 +3,7 @@ import { getPartners } from "@/lib/content/partners-catalog";
 import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
 import { getPublishedTestimonials } from "@/lib/content/testimonials-catalog";
 import { getHomeSectionImages } from "@/lib/content/home-images";
+import { FoodSafetyAgencyMarquee } from "@/components/marketing/FoodSafetyAgencyMarquee";
 import { PartnersHomeTeaser } from "@/components/marketing/PartnerSections";
 import {
   HomeHero,
@@ -30,6 +31,7 @@ export default async function HomePage() {
       <ConnectionSection home1={home1} home2={home2} />
       <CommoditiesWeTrade categories={categories} />
       <SourcedResponsibly home3={home3} />
+      <FoodSafetyAgencyMarquee />
       <ProcessTimeline />
       <ShippingTerms />
       <PartnersHomeTeaser partners={getPartners()} />

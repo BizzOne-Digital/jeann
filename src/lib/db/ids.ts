@@ -4,7 +4,7 @@ const nano = customAlphabet("ABCDEFGHJKLMNPQRSTUVWXYZ23456789", 6);
 
 export function generateTransactionNumber(date = new Date()): string {
   const year = date.getUTCFullYear();
-  return `FK-${year}-${nano()}`;
+  return `FK-S-${year}-${nano().padStart(6, "0").slice(-6)}`;
 }
 
 export function normalizeCompanyName(name: string): string {

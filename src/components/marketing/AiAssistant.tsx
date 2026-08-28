@@ -16,10 +16,10 @@ function answerFor(input: string): string {
     return "Finekarts does not publish fixed prices. Submit a purchase request with quantity, specs, destination, and preferred Incoterm (FOB/CIF) so the trade desk can review. This is general information — not a binding quote.";
   }
   if (/(fob|cif|incoterm)/.test(q)) {
-    return "FOB and CIF are commonly discussed. FOB typically focuses on delivery on board at origin; CIF typically bundles freight and minimum insurance to a destination port. Final allocations follow the signed contract. See /resources and /shipping for more.";
+    return "FOB and CIF are commonly discussed. FOB typically focuses on delivery on board at origin; CIF typically bundles freight and minimum insurance to a destination port. Final allocations follow the signed contract. See /resources and /logistics for more.";
   }
   if (/(packag|flexitank|fibc|drum|tank)/.test(q)) {
-    return "Packaging depends on product, supplier, route, and agreement. Dry bulk may use FIBCs, liners, or sacks; liquids may use flexitanks, IBCs, drums, or ISO tanks. Not every option applies to every product — see /packaging.";
+    return "Packaging depends on product, supplier, route, and agreement. Finekarts programmes include transport modes (flexitank, tanker, container, bulk truck/vessel/railcar) and product formats (ISO tanks, IBC, drums, FIBCs, bulk liners, woven and laminated bags) — see /packaging.";
   }
   if (/(supplier|become a supplier|sell to)/.test(q)) {
     return "Suppliers cannot self-register publicly. Finekarts sends single-use invitation links after review. Contact the trade desk to start a supplier conversation.";
@@ -94,6 +94,7 @@ export function AiAssistant() {
       <button
         type="button"
         onClick={() => setOpen(true)}
+        suppressHydrationWarning
         className="focus-ring fixed bottom-4 right-4 z-40 max-w-[calc(100%-2rem)] rounded-full bg-navy px-4 py-2.5 text-sm font-semibold text-white shadow-[var(--shadow-soft)] sm:bottom-5 sm:right-5 sm:px-5 sm:py-3"
       >
         Ask Finekarts

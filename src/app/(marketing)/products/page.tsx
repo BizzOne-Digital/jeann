@@ -6,6 +6,7 @@ import {
   ProductCatalogSection,
   ProductsCta,
 } from "@/components/marketing/ProductSections";
+import { FoodSafetyAgencyMarquee } from "@/components/marketing/FoodSafetyAgencyMarquee";
 
 export const metadata: Metadata = {
   title: "Products",
@@ -20,6 +21,7 @@ export default function ProductsPage() {
   return (
     <>
       <ProductsHero />
+      <FoodSafetyAgencyMarquee />
       <CategoryShowcase categories={categories} />
       <ProductCatalogSection categories={categories} totalCount={products.length} />
       <ProductsCta />

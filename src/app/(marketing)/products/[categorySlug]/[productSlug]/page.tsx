@@ -7,6 +7,33 @@ import { Reveal } from "@/components/motion/Reveal";
 import { getCategories, getProduct } from "@/lib/content/catalog";
 import { buyerQuoteHref } from "@/lib/marketing/cta-links";
 import { getCategoryCover } from "@/lib/content/product-images";
+import { MarketingStorySection } from "@/components/marketing/MarketingStorySection";
+import { SpiceProductDetailSections } from "@/components/marketing/SpiceSections";
+import { RiceProductDetailSections } from "@/components/marketing/RiceSections";
+import { PulseProductDetailSections } from "@/components/marketing/PulseSections";
+import { OilProductDetailSections } from "@/components/marketing/OilSections";
+import { SugarGradeDetailSections } from "@/components/marketing/SugarSections";
+import {
+  getOilProductDetail,
+  getOilProductMarketing,
+} from "@/lib/content/oil-product-content";
+import {
+  getPulseProductDetail,
+  getPulseProductMarketing,
+} from "@/lib/content/pulse-product-content";
+import {
+  getRiceProductDetail,
+  getRiceProductMarketing,
+} from "@/lib/content/rice-product-content";
+import {
+  getSpiceProductDetail,
+  getSpiceProductMarketing,
+} from "@/lib/content/spice-product-content";
+import {
+  getDefaultProductMarketing,
+  getSugarGradeDetail,
+  getSugarProductMarketing,
+} from "@/lib/content/sugar-product-content";
 
 type Props = { params: Promise<{ categorySlug: string; productSlug: string }> };
 
@@ -35,7 +62,62 @@ export default async function ProductPage({ params }: Props) {
   const cover = getCategoryCover(category.slug);
   const related = category.products.filter((p) => p.slug !== product.slug).slice(0, 3);
   const quoteHref = buyerQuoteHref(product.slug);
-  const heroImage = product.image || cover.image;
+  const sugarMarketing = getSugarProductMarketing(product.slug);
+  const sugarGrade = getSugarGradeDetail(product.slug);
+  const oilMarketing = getOilProductMarketing(product.slug);
+  const oilProduct = getOilProductDetail(product.slug);
+  const pulseMarketing = getPulseProductMarketing(product.slug);
+  const pulseProduct = getPulseProductDetail(product.slug);
+  const riceMarketing = getRiceProductMarketing(product.slug);
+  const riceProduct = getRiceProductDetail(product.slug);
+  const spiceMarketing = getSpiceProductMarketing(product.slug);
+  const spiceProduct = getSpiceProductDetail(product.slug);
+  const marketing =
+    sugarMarketing ??
+    oilMarketing ??
+    pulseMarketing ??
+    riceMarketing ??
+    spiceMarketing ??
+    getDefaultProductMarketing(product.name, category.name);
+  const heroImage =
+    sugarGrade?.heroImage ??
+    oilProduct?.heroImage ??
+    pulseProduct?.heroImage ??
+    riceProduct?.heroImage ??
+    spiceProduct?.heroImage ??
+    product.image ??
+    cover.image;
+  const storyImage =
+    sugarGrade?.images?.[0]?.src ??
+    oilProduct?.images?.[0]?.src ??
+    pulseProduct?.images?.[0]?.src ??
+    riceProduct?.images?.[0]?.src ??
+    spiceProduct?.images?.[0]?.src ??
+    sugarGrade?.heroImage ??
+    oilProduct?.heroImage ??
+    pulseProduct?.heroImage ??
+    riceProduct?.heroImage ??
+    spiceProduct?.heroImage ??
+    product.image ??
+    cover.image;
+  const contentBoxes =
+    sugarMarketing?.contentBoxes ??
+    oilMarketing?.contentBoxes ??
+    pulseMarketing?.contentBoxes ??
+    riceMarketing?.contentBoxes ??
+    spiceMarketing?.contentBoxes ??
+    marketing.contentBoxes;
+  const storyTitle = sugarGrade
+    ? `${sugarGrade.code} — ${sugarGrade.subtitle}`
+    : oilProduct
+      ? `${oilProduct.grade} — ${oilProduct.subtitle}`
+      : pulseProduct
+        ? `${pulseProduct.grade} — ${pulseProduct.subtitle}`
+        : riceProduct
+          ? `${riceProduct.grade} — ${riceProduct.subtitle}`
+          : spiceProduct
+            ? `${spiceProduct.grade} — ${spiceProduct.subtitle}`
+            : `${product.name} — structured for qualified buyers`;
 
   return (
     <>
@@ -47,6 +129,56 @@ export default async function ProductPage({ params }: Props) {
         primaryCta={{ href: quoteHref, label: "Request a Quote →" }}
         secondaryCta={{ href: `/products/${category.slug}`, label: `Back to ${cover.shortName}` }}
       />
+
+      <MarketingStorySection
+        eyebrow={category.name}
+        title={storyTitle}
+        lead={product.description ?? marketing.description}
+        boxes={contentBoxes}
+        imageSrc={storyImage}
+        imageAlt={
+          sugarGrade?.images?.[0]?.alt ??
+          oilProduct?.images?.[0]?.alt ??
+          pulseProduct?.images?.[0]?.alt ??
+          riceProduct?.images?.[0]?.alt ??
+          spiceProduct?.images?.[0]?.alt ??
+          `${product.name} reference`
+        }
+        youtubeUrl={
+          sugarGrade?.youtubeVideoId || product.youtubeVideoId
+            ? `https://www.youtube.com/watch?v=${sugarGrade?.youtubeVideoId ?? product.youtubeVideoId}`
+            : marketing.youtubeVideoId
+              ? `https://www.youtube.com/watch?v=${marketing.youtubeVideoId}`
+              : undefined
+        }
+        videoTitle={`${product.name} overview`}
+        background="cream"
+      />
+
+      {sugarGrade ? <SugarGradeDetailSections grade={sugarGrade} /> : null}
+      {oilProduct ? <OilProductDetailSections product={oilProduct} /> : null}
+      {pulseProduct ? <PulseProductDetailSections product={pulseProduct} /> : null}
+      {riceProduct ? <RiceProductDetailSections product={riceProduct} /> : null}
+      {spiceProduct ? <SpiceProductDetailSections product={spiceProduct} /> : null}
+
+      {(product.highlights ?? marketing.highlights).length > 0 ? (
+        <section className="bg-white py-12 lg:py-14">
+          <div className="container-page">
+            <h2 className="text-xl font-semibold text-[#001a3d]">Why buyers enquire on this grade</h2>
+            <ul className="mt-6 grid gap-4 md:grid-cols-3">
+              {(product.highlights ?? marketing.highlights).map((item) => (
+                <li
+                  key={item}
+                  className="flex gap-3 rounded-lg border border-[#d5d0c8] bg-[#f9f8f5] p-4 text-sm leading-relaxed text-[#444444]"
+                >
+                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#d4a84b]" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      ) : null}
 
       <section className="bg-[#f3f1ec] py-12 lg:py-16">
         <div className="container-page">
