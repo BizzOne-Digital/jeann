@@ -1,7 +1,13 @@
-import { getEnv } from "@/lib/config/env";
 import { getApiLanguageCode, SOURCE_LOCALE } from "@/lib/i18n/locales";
+import { isUsableTranslation } from "@/lib/i18n/translate-utils";
 
 const memoryCache = new Map<string, string>();
+
+export type TranslateResult = {
+  translations: string[];
+  degraded: boolean;
+  provider: "google" | "mymemory" | "none";
+};
 
 function cacheKey(text: string, target: string, source: string) {
   return `${source}::${target}::${text}`;
@@ -13,6 +19,16 @@ function getCached(text: string, target: string, source: string) {
 
 function setCached(text: string, target: string, source: string, translated: string) {
   memoryCache.set(cacheKey(text, target, source), translated);
+}
+
+function preserveWhitespace(original: string, translated: string) {
+  const leading = original.match(/^\s*/)?.[0] ?? "";
+  const trailing = original.match(/\s*$/)?.[0] ?? "";
+  return `${leading}${translated}${trailing}`;
+}
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function translateWithGoogle(
@@ -51,7 +67,12 @@ async function translateWithMyMemory(text: string, target: string, source: strin
   url.searchParams.set("q", text.slice(0, 500));
   url.searchParams.set("langpair", `${source}|${target}`);
 
-  const res = await fetch(url.toString(), { signal: AbortSignal.timeout(15_000) });
+  let res = await fetch(url.toString(), { signal: AbortSignal.timeout(15_000) });
+  if (res.status === 429) {
+    await sleep(1500);
+    res = await fetch(url.toString(), { signal: AbortSignal.timeout(15_000) });
+  }
+
   if (!res.ok) {
     throw new Error(`MyMemory HTTP ${res.status}`);
   }
@@ -60,7 +81,12 @@ async function translateWithMyMemory(text: string, target: string, source: strin
     responseData?: { translatedText?: string };
   };
 
-  return json.responseData?.translatedText?.trim() || text;
+  const translated = json.responseData?.translatedText?.trim() || text;
+  if (!isUsableTranslation(text, translated)) {
+    throw new Error("MyMemory quota exhausted or unusable response");
+  }
+
+  return translated;
 }
 
 async function translateBatchMyMemory(
@@ -71,22 +97,41 @@ async function translateBatchMyMemory(
   const results: string[] = [];
   for (const text of texts) {
     results.push(await translateWithMyMemory(text, target, source));
-    await new Promise((r) => setTimeout(r, 120));
+    await sleep(250);
   }
   return results;
+}
+
+async function translateBatch(
+  texts: string[],
+  targetLocale: string,
+  sourceLocale: string,
+  apiKey: string | undefined,
+): Promise<{ translations: string[]; provider: TranslateResult["provider"] }> {
+  const target = getApiLanguageCode(targetLocale);
+  const source = getApiLanguageCode(sourceLocale);
+
+  if (apiKey) {
+    const translated = await translateWithGoogle(texts, target, source, apiKey);
+    return { translations: translated, provider: "google" };
+  }
+
+  const translated = await translateBatchMyMemory(texts, target, source);
+  return { translations: translated, provider: "mymemory" };
 }
 
 export async function translateTexts(
   texts: string[],
   targetLocale: string,
   sourceLocale: string = SOURCE_LOCALE,
-): Promise<string[]> {
+): Promise<TranslateResult> {
   if (targetLocale === sourceLocale || texts.length === 0) {
-    return texts;
+    return { translations: texts, degraded: false, provider: "none" };
   }
 
   const target = getApiLanguageCode(targetLocale);
   const source = getApiLanguageCode(sourceLocale);
+  const apiKey = process.env.GOOGLE_TRANSLATE_API_KEY?.trim() || undefined;
 
   const results: string[] = new Array(texts.length);
   const pending: { index: number; text: string }[] = [];
@@ -97,58 +142,60 @@ export async function translateTexts(
       results[index] = text;
       return;
     }
+
     const cached = getCached(trimmed, target, source);
-    if (cached) {
+    if (cached && isUsableTranslation(trimmed, cached)) {
       results[index] = preserveWhitespace(text, cached);
       return;
     }
+
     pending.push({ index, text: trimmed });
   });
 
   if (pending.length === 0) {
-    return results;
+    return { translations: results, degraded: false, provider: apiKey ? "google" : "mymemory" };
   }
 
-  const apiKey = process.env.GOOGLE_TRANSLATE_API_KEY;
-  const chunks: typeof pending[] = [];
-  const chunkSize = apiKey ? 40 : 8;
+  let provider: TranslateResult["provider"] = apiKey ? "google" : "mymemory";
+  const chunkSize = apiKey ? 40 : 5;
 
   for (let i = 0; i < pending.length; i += chunkSize) {
-    chunks.push(pending.slice(i, i + chunkSize));
-  }
-
-  for (const chunk of chunks) {
+    const chunk = pending.slice(i, i + chunkSize);
     const chunkTexts = chunk.map((c) => c.text);
-    let translated: string[];
+    let translated: string[] | null = null;
 
     try {
-      if (apiKey) {
-        translated = await translateWithGoogle(chunkTexts, target, source, apiKey);
-      } else {
-        if (getEnv().NODE_ENV === "production") {
-          console.warn(
-            "[translate] GOOGLE_TRANSLATE_API_KEY not set — using rate-limited MyMemory fallback",
-          );
-        }
-        translated = await translateBatchMyMemory(chunkTexts, target, source);
-      }
+      const batch = await translateBatch(chunkTexts, targetLocale, sourceLocale, apiKey);
+      translated = batch.translations;
+      provider = batch.provider;
     } catch (error) {
-      console.error("[translate] batch failed, falling back per string", error);
-      translated = await translateBatchMyMemory(chunkTexts, target, source);
+      console.error("[translate] batch failed", error);
+      if (apiKey) {
+        try {
+          translated = await translateBatchMyMemory(chunkTexts, target, source);
+          provider = "mymemory";
+        } catch (fallbackError) {
+          console.error("[translate] MyMemory fallback failed", fallbackError);
+        }
+      }
     }
 
-    chunk.forEach((item, i) => {
-      const value = translated[i] ?? item.text;
-      setCached(item.text, target, source, value);
-      results[item.index] = preserveWhitespace(texts[item.index], value);
+    chunk.forEach((item, idx) => {
+      const original = texts[item.index];
+      const candidate = translated?.[idx];
+      if (candidate && isUsableTranslation(item.text, candidate)) {
+        setCached(item.text, target, source, candidate);
+        results[item.index] = preserveWhitespace(original, candidate);
+      } else {
+        results[item.index] = original;
+      }
     });
   }
 
-  return results;
-}
-
-function preserveWhitespace(original: string, translated: string) {
-  const leading = original.match(/^\s*/)?.[0] ?? "";
-  const trailing = original.match(/\s*$/)?.[0] ?? "";
-  return `${leading}${translated}${trailing}`;
+  const degraded = pending.some((item) => results[item.index] === texts[item.index]);
+  return {
+    translations: results.map((result, index) => result ?? texts[index]),
+    degraded,
+    provider,
+  };
 }

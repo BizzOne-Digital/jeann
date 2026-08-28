@@ -3,11 +3,11 @@
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { SOURCE_LOCALE } from "@/lib/i18n/locales";
+import { getStaticTranslationMap, lookupStaticTranslation } from "@/lib/i18n/static/catalog";
 import { setTranslating } from "@/lib/i18n/translation-runtime";
 import { useTranslation } from "@/components/i18n/TranslationProvider";
 
 const SKIP_TAGS = new Set(["SCRIPT", "STYLE", "NOSCRIPT", "CODE", "PRE", "SVG", "PATH"]);
-const CLIENT_CACHE_PREFIX = "finekarts-tr-v1";
 
 function shouldSkipNode(node: Text): boolean {
   const parent = node.parentElement;
@@ -27,21 +27,10 @@ function shouldSkipNode(node: Text): boolean {
   return false;
 }
 
-function loadClientCache(locale: string): Record<string, string> {
-  try {
-    const raw = sessionStorage.getItem(`${CLIENT_CACHE_PREFIX}:${locale}`);
-    return raw ? (JSON.parse(raw) as Record<string, string>) : {};
-  } catch {
-    return {};
-  }
-}
-
-function saveClientCache(locale: string, cache: Record<string, string>) {
-  try {
-    sessionStorage.setItem(`${CLIENT_CACHE_PREFIX}:${locale}`, JSON.stringify(cache));
-  } catch {
-    /* quota */
-  }
+function preserveWhitespace(original: string, translated: string) {
+  const leading = original.match(/^\s*/)?.[0] ?? "";
+  const trailing = original.match(/\s*$/)?.[0] ?? "";
+  return `${leading}${translated}${trailing}`;
 }
 
 function buildReverseCache(cache: Record<string, string>) {
@@ -52,12 +41,6 @@ function buildReverseCache(cache: Record<string, string>) {
     }
   }
   return reverse;
-}
-
-function preserveWhitespace(original: string, translated: string) {
-  const leading = original.match(/^\s*/)?.[0] ?? "";
-  const trailing = original.match(/\s*$/)?.[0] ?? "";
-  return `${leading}${translated}${trailing}`;
 }
 
 function resolveSourceText(
@@ -80,65 +63,38 @@ function resolveSourceText(
   return current;
 }
 
-function collectTextEntries(
-  root: HTMLElement,
-  originalsRef: WeakMap<Text, string>,
-  reverseCache: Record<string, string>,
-) {
-  const entries: { node: Text; text: string; source: string }[] = [];
-  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-  let node = walker.nextNode();
-
-  while (node) {
-    const textNode = node as Text;
-    if (!shouldSkipNode(textNode)) {
-      const current = textNode.textContent ?? "";
-      const source = resolveSourceText(current, originalsRef, textNode, reverseCache);
-      entries.push({ node: textNode, text: source, source: source.trim() });
-    }
-    node = walker.nextNode();
-  }
-
-  return entries;
-}
-
-function applyCachedTranslations(
+function applyTranslations(
   root: HTMLElement,
   locale: string,
+  staticMap: Record<string, string>,
   originalsRef: WeakMap<Text, string>,
   applyingRef: { current: boolean },
 ) {
-  const cache = loadClientCache(locale);
-  const reverseCache = buildReverseCache(cache);
-  const entries = collectTextEntries(root, originalsRef, reverseCache);
-
+  const reverseCache = buildReverseCache(staticMap);
   applyingRef.current = true;
+
   try {
-    for (const entry of entries) {
-      if (!entry.source) continue;
-      const translated = cache[entry.source];
-      if (translated && translated !== entry.source) {
-        entry.node.textContent = preserveWhitespace(entry.text, translated);
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    let node = walker.nextNode();
+
+    while (node) {
+      const textNode = node as Text;
+      if (!shouldSkipNode(textNode)) {
+        const current = textNode.textContent ?? "";
+        const source = resolveSourceText(current, originalsRef, textNode, reverseCache);
+        const trimmed = source.trim();
+        const translated =
+          staticMap[trimmed] ?? lookupStaticTranslation(trimmed, locale) ?? null;
+
+        if (translated && translated !== trimmed) {
+          textNode.textContent = preserveWhitespace(source, translated);
+        }
       }
+      node = walker.nextNode();
     }
   } finally {
     applyingRef.current = false;
   }
-}
-
-async function fetchTranslations(texts: string[], target: string): Promise<string[]> {
-  const res = await fetch("/api/translate", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ texts, target, source: SOURCE_LOCALE }),
-  });
-
-  if (!res.ok) {
-    throw new Error("Translation request failed");
-  }
-
-  const json = (await res.json()) as { translations?: string[] };
-  return json.translations ?? texts;
 }
 
 export function AutoPageTranslator() {
@@ -154,8 +110,8 @@ export function AutoPageTranslator() {
     if (!root) return;
 
     const marketingRoot = root;
-
     const runId = ++runIdRef.current;
+    const staticMap = locale === SOURCE_LOCALE ? {} : getStaticTranslationMap(locale);
 
     const restoreEnglish = () => {
       applyingRef.current = true;
@@ -177,12 +133,10 @@ export function AutoPageTranslator() {
 
     const scheduleReapply = () => {
       if (locale === SOURCE_LOCALE || runId !== runIdRef.current) return;
-      if (reapplyTimerRef.current) {
-        window.clearTimeout(reapplyTimerRef.current);
-      }
+      if (reapplyTimerRef.current) window.clearTimeout(reapplyTimerRef.current);
       reapplyTimerRef.current = window.setTimeout(() => {
         if (runId !== runIdRef.current || locale === SOURCE_LOCALE) return;
-        applyCachedTranslations(marketingRoot, locale, originalsRef.current, applyingRef);
+        applyTranslations(marketingRoot, locale, staticMap, originalsRef.current, applyingRef);
       }, 60);
     };
 
@@ -206,57 +160,20 @@ export function AutoPageTranslator() {
       };
     }
 
-    let cancelled = false;
-
-    async function translatePage() {
-      setTranslating(true);
-
-      try {
-        const cache = loadClientCache(locale);
-        const reverseCache = buildReverseCache(cache);
-        const entries = collectTextEntries(marketingRoot, originalsRef.current, reverseCache);
-
-        const unique = [...new Set(entries.map((e) => e.source).filter(Boolean))];
-        const missing = unique.filter((t) => !cache[t]);
-        const chunkSize = 40;
-
-        for (let i = 0; i < missing.length; i += chunkSize) {
-          if (cancelled || runId !== runIdRef.current) return;
-          const chunk = missing.slice(i, i + chunkSize);
-          const translated = await fetchTranslations(chunk, locale);
-          chunk.forEach((source, idx) => {
-            cache[source] = translated[idx] ?? source;
-          });
-          saveClientCache(locale, cache);
-        }
-
-        if (cancelled || runId !== runIdRef.current) return;
-
-        applyCachedTranslations(marketingRoot, locale, originalsRef.current, applyingRef);
-
-        // React may commit after our DOM writes — re-apply once the tree settles.
-        window.requestAnimationFrame(() => {
-          window.requestAnimationFrame(() => {
-            if (!cancelled && runId === runIdRef.current) {
-              applyCachedTranslations(marketingRoot, locale, originalsRef.current, applyingRef);
-            }
-          });
-        });
-      } catch (error) {
-        console.error("[AutoPageTranslator]", error);
-      } finally {
-        if (!cancelled && runId === runIdRef.current) {
-          setTranslating(false);
-        }
-      }
-    }
-
     const timer = window.setTimeout(() => {
-      void translatePage();
+      setTranslating(true);
+      applyTranslations(marketingRoot, locale, staticMap, originalsRef.current, applyingRef);
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          if (runId === runIdRef.current) {
+            applyTranslations(marketingRoot, locale, staticMap, originalsRef.current, applyingRef);
+          }
+          setTranslating(false);
+        });
+      });
     }, 80);
 
     return () => {
-      cancelled = true;
       observer.disconnect();
       window.clearTimeout(timer);
       if (reapplyTimerRef.current) window.clearTimeout(reapplyTimerRef.current);
