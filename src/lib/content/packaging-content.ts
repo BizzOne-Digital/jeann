@@ -24,6 +24,35 @@ export const PACKAGING_HERO = {
   secondaryCta: { href: "/logistics", label: "Logistics overview" },
 };
 
+/** Homepage “Packaging for Every Commodity” grid — uses client photos from public/images/packaging/. */
+export const HOMEPAGE_PACKAGING_TEASER = [
+  {
+    name: "Jumbo Bags",
+    image: "/images/packaging/fibc-jumbo-bags.png",
+    alt: "FIBC jumbo bag filled with granular dry commodity",
+  },
+  {
+    name: "Flexitanks",
+    image: "/images/packaging/flexitank.png",
+    alt: "Flexitank bladder installed inside a shipping container",
+  },
+  {
+    name: "IBC Totes",
+    image: "/images/packaging/ibc-1.png",
+    alt: "Intermediate bulk container tote for liquid commodities",
+  },
+  {
+    name: "Drums",
+    image: "/images/packaging/drums.png",
+    alt: "Steel drums for edible oils and liquid products",
+  },
+  {
+    name: "Bulk Vessels",
+    image: "/images/packaging/bulk-vessel-loading.png",
+    alt: "Bulk vessel loading dry agricultural commodity cargo",
+  },
+] as const;
+
 export const PACKAGING_TYPES: PackagingTypeContent[] = [
   {
     order: 1,

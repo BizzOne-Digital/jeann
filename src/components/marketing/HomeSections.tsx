@@ -10,8 +10,10 @@ import { resolveImageSrc } from "@/lib/media/resolve-image-src";
 import { Reveal } from "@/components/motion/Reveal";
 import { HomeCtaChat } from "@/components/marketing/HomeCtaChat";
 import { HeroVideoBackground } from "@/components/marketing/HeroVideoBackground";
+import { resolveHeroYoutubeInput } from "@/lib/content/hero-video";
 import type { SeedCategory } from "@/lib/content/catalog";
 import { getCategoryCover } from "@/lib/content/product-images";
+import { HOMEPAGE_PACKAGING_TEASER } from "@/lib/content/packaging-content";
 
 const COMMODITY_CARDS = [
   "edible-oils",
@@ -23,34 +25,6 @@ const COMMODITY_CARDS = [
   const cover = getCategoryCover(slug);
   return { slug, name: cover.shortName, image: cover.image, alt: cover.alt };
 });
-
-const PACKAGING = [
-  {
-    name: "Jumbo Bags",
-    image:
-      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=700&q=80",
-  },
-  {
-    name: "Flexitanks",
-    image:
-      "https://images.unsplash.com/photo-1565793298595-6a879b1d9492?auto=format&fit=crop&w=700&q=80",
-  },
-  {
-    name: "IBC Totes",
-    image:
-      "https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=700&q=80",
-  },
-  {
-    name: "Drums",
-    image:
-      "https://images.unsplash.com/photo-1635274605638-d44babc08a4f?auto=format&fit=crop&w=700&q=80",
-  },
-  {
-    name: "Bulk Vessels",
-    image:
-      "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=700&q=80",
-  },
-];
 
 function GoldButton({
   href,
@@ -128,11 +102,7 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
   return (
     <section className="relative min-h-[100svh] w-full max-w-full overflow-hidden bg-[#071525] text-white">
       <HeroVideoBackground
-        youtubeInput={cmsField(
-          cms,
-          "youtubeVideoId",
-          process.env.NEXT_PUBLIC_HERO_YOUTUBE_VIDEO_ID ?? "",
-        )}
+        youtubeInput={resolveHeroYoutubeInput(cmsField(cms, "youtubeVideoId", ""))}
         posterSrc="/images/hero-commodities.png"
         posterAlt="Agricultural commodities with port logistics and refining infrastructure"
       />
@@ -576,8 +546,8 @@ export function ShippingTerms() {
         </div>
         <div className="relative min-h-[320px] lg:min-h-full">
           <Image
-            src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1400&q=80"
-            alt="Container ship at sea"
+            src="/images/packaging/containerized-cargo-port.png"
+            alt="Container ship at port with gantry cranes"
             fill
             className="object-cover"
             sizes="(max-width: 1024px) 100vw, 50vw"
@@ -609,13 +579,13 @@ export function PackagingSection() {
           corridor, and contract terms.
         </p>
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-          {PACKAGING.map((item, i) => (
+          {HOMEPAGE_PACKAGING_TEASER.map((item, i) => (
             <Reveal key={item.name} delay={i * 0.05}>
               <div>
                 <div className="relative aspect-[4/3] overflow-hidden rounded-sm bg-[#dfe5ea]">
                   <Image
                     src={item.image}
-                    alt={item.name}
+                    alt={item.alt}
                     fill
                     className="object-cover"
                     sizes="(max-width: 1024px) 50vw, 220px"
