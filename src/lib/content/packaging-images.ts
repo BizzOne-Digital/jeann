@@ -98,11 +98,11 @@ function teaser(name: string, photo: { src: string; alt: string }) {
   return { name, image: photo.src, alt: photo.alt };
 }
 
-/** Homepage packaging grid — label must match image (client photos only). */
+/** Homepage packaging grid — transport modes with client-verified photos. */
 export const HOMEPAGE_PACKAGING_TEASER = [
-  teaser("Jumbo Bags", PACKAGING_IMAGES.fibcJumboBag),
   teaser("Flexitanks", PACKAGING_IMAGES.flexitank),
-  teaser("IBC Totes", PACKAGING_IMAGES.ibcTote),
-  teaser("Drums", PACKAGING_IMAGES.drums),
+  teaser("Tanker Vessel", PACKAGING_IMAGES.tankerVessel),
   teaser("Bulk Vessels", PACKAGING_IMAGES.bulkVessel),
+  teaser("Bulk Railcar", PACKAGING_IMAGES.bulkRailcar),
+  teaser("ISO Tank Containers", PACKAGING_IMAGES.isoTank1),
 ] as const;

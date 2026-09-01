@@ -34,12 +34,20 @@ describe("packaging images", () => {
     }
   });
 
-  it("exposes distinct photos for flexitank, IBC, drums, and bulk vessel", () => {
+  it("exposes distinct photos for key transport modes on the homepage", () => {
     const teaserImages = HOMEPAGE_PACKAGING_TEASER.map((item) => item.image);
     expect(new Set(teaserImages).size).toBe(teaserImages.length);
+    expect(HOMEPAGE_PACKAGING_TEASER.map((item) => item.name)).toEqual([
+      "Flexitanks",
+      "Tanker Vessel",
+      "Bulk Vessels",
+      "Bulk Railcar",
+      "ISO Tank Containers",
+    ]);
     expect(PACKAGING_IMAGES.flexitank.src).toContain("flexitank");
-    expect(PACKAGING_IMAGES.ibcTote.src).toContain("ibc");
-    expect(PACKAGING_IMAGES.drums.src).toContain("drums");
+    expect(PACKAGING_IMAGES.tankerVessel.src).toContain("tanker-vessel");
     expect(PACKAGING_IMAGES.bulkVessel.src).toContain("bulk-vessel");
+    expect(PACKAGING_IMAGES.bulkRailcar.src).toContain("bulk-railcar");
+    expect(PACKAGING_IMAGES.isoTank1.src).toContain("iso-tank");
   });
 });
