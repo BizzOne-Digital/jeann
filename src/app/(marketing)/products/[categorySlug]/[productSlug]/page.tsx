@@ -4,7 +4,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageHero } from "@/components/marketing/PageHero";
 import { Reveal } from "@/components/motion/Reveal";
-import { getCategories, getProduct } from "@/lib/content/catalog";
+import { getCategories } from "@/lib/content/catalog";
+import { getPublicProduct } from "@/lib/content/catalog-server";
+import { resolveImageSrc } from "@/lib/media/resolve-image-src";
 import { buyerQuoteHref } from "@/lib/marketing/cta-links";
 import { getCategoryCover } from "@/lib/content/product-images";
 import { MarketingStorySection } from "@/components/marketing/MarketingStorySection";
@@ -45,7 +47,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { categorySlug, productSlug } = await params;
-  const result = getProduct(categorySlug, productSlug);
+  const result = await getPublicProduct(categorySlug, productSlug);
   if (!result) return { title: "Product not found" };
   return {
     title: result.product.name,
@@ -55,7 +57,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProductPage({ params }: Props) {
   const { categorySlug, productSlug } = await params;
-  const result = getProduct(categorySlug, productSlug);
+  const result = await getPublicProduct(categorySlug, productSlug);
   if (!result) notFound();
 
   const { category, product } = result;
@@ -79,27 +81,24 @@ export default async function ProductPage({ params }: Props) {
     riceMarketing ??
     spiceMarketing ??
     getDefaultProductMarketing(product.name, category.name);
-  const heroImage =
-    sugarGrade?.heroImage ??
-    oilProduct?.heroImage ??
-    pulseProduct?.heroImage ??
-    riceProduct?.heroImage ??
-    spiceProduct?.heroImage ??
+  const heroImage = resolveImageSrc(
     product.image ??
-    cover.image;
-  const storyImage =
-    sugarGrade?.images?.[0]?.src ??
-    oilProduct?.images?.[0]?.src ??
-    pulseProduct?.images?.[0]?.src ??
-    riceProduct?.images?.[0]?.src ??
-    spiceProduct?.images?.[0]?.src ??
-    sugarGrade?.heroImage ??
-    oilProduct?.heroImage ??
-    pulseProduct?.heroImage ??
-    riceProduct?.heroImage ??
-    spiceProduct?.heroImage ??
+      sugarGrade?.heroImage ??
+      oilProduct?.heroImage ??
+      pulseProduct?.heroImage ??
+      riceProduct?.heroImage ??
+      spiceProduct?.heroImage ??
+      cover.image,
+  );
+  const storyImage = resolveImageSrc(
     product.image ??
-    cover.image;
+      sugarGrade?.images?.[0]?.src ??
+      oilProduct?.images?.[0]?.src ??
+      pulseProduct?.images?.[0]?.src ??
+      riceProduct?.images?.[0]?.src ??
+      spiceProduct?.images?.[0]?.src ??
+      heroImage,
+  );
   const contentBoxes =
     sugarMarketing?.contentBoxes ??
     oilMarketing?.contentBoxes ??

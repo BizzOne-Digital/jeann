@@ -4,7 +4,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageHero } from "@/components/marketing/PageHero";
 import { Reveal } from "@/components/motion/Reveal";
-import { getCategories, getCategory } from "@/lib/content/catalog";
+import { getCategories } from "@/lib/content/catalog";
+import { getPublicCategory } from "@/lib/content/catalog-server";
 import { buyerQuoteHref } from "@/lib/marketing/cta-links";
 import { getCategoryCover, getProductListingImage } from "@/lib/content/product-images";
 import { SpicesCategorySections } from "@/components/marketing/SpiceSections";
@@ -26,7 +27,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { categorySlug } = await params;
-  const category = getCategory(categorySlug);
+  const category = await getPublicCategory(categorySlug);
   if (!category) return { title: "Category not found" };
   return {
     title: getCategoryCover(category.slug).shortName,
@@ -36,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function CategoryPage({ params }: Props) {
   const { categorySlug } = await params;
-  const category = getCategory(categorySlug);
+  const category = await getPublicCategory(categorySlug);
   if (!category) notFound();
 
   const cover = getCategoryCover(category.slug);

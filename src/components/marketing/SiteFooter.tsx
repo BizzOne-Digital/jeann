@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getSite } from "@/lib/content/catalog";
+import { getPublicSite } from "@/lib/content/catalog-server";
 
 const LINKS = [
   {
@@ -44,8 +44,8 @@ const LINKS = [
   },
 ];
 
-export function SiteFooter() {
-  const site = getSite();
+export async function SiteFooter() {
+  const site = await getPublicSite();
 
   return (
     <footer className="mt-auto w-full max-w-full overflow-x-clip bg-[#071525] text-white">

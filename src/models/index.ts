@@ -128,3 +128,4 @@ export * from "./LegalHold";
 export * from "./BackupVerification";
 export * from "./UATTestCase";
 export * from "./ReleaseRecord";
+export * from "./StoredUpload";

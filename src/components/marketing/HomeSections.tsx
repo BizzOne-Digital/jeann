@@ -6,6 +6,7 @@ import { FeaturedTestimonialAside } from "@/components/marketing/TestimonialSect
 import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { cmsField } from "@/lib/content/cms-field";
+import { resolveImageSrc } from "@/lib/media/resolve-image-src";
 import { Reveal } from "@/components/motion/Reveal";
 import { HomeCtaChat } from "@/components/marketing/HomeCtaChat";
 import { HeroVideoBackground } from "@/components/marketing/HeroVideoBackground";
@@ -293,22 +294,24 @@ export function ConnectionSection({
           <Reveal>
             <div className="relative aspect-[3/4] overflow-hidden rounded-sm bg-[#e4e0d8] sm:aspect-[4/5]">
               <Image
-                src={home1}
+                src={resolveImageSrc(home1)}
                 alt="Quality inspection of bulk agricultural grains"
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 50vw, 360px"
+                unoptimized={home1.startsWith("/api/uploads/")}
               />
             </div>
           </Reveal>
           <Reveal delay={0.08}>
             <div className="relative aspect-[3/4] overflow-hidden rounded-sm bg-[#e4e0d8] sm:aspect-[4/5]">
               <Image
-                src={home2}
+                src={resolveImageSrc(home2)}
                 alt="Container ship and port logistics at sunset"
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 50vw, 360px"
+                unoptimized={home2.startsWith("/api/uploads/")}
               />
             </div>
           </Reveal>
@@ -431,12 +434,13 @@ export function SourcedResponsibly({ home3 = "/images/home-3.png" }: { home3?: s
         <Reveal>
           <div className="relative mx-auto aspect-[5/4] w-full max-w-md overflow-hidden bg-white lg:max-w-none">
             <Image
-              src={home3}
+              src={resolveImageSrc(home3)}
               alt="Global commodity sourcing and logistics network"
               fill
               className="object-contain object-center p-2 sm:p-4"
               sizes="(max-width: 1024px) 90vw, 480px"
               priority={false}
+              unoptimized={home3.startsWith("/api/uploads/")}
             />
           </div>
         </Reveal>

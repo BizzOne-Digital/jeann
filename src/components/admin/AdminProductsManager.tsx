@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { AdminCategoryOption, AdminProductItem } from "@/lib/admin/product-serializer";
+import { UploadedImageField } from "@/components/admin/UploadedImageField";
 
 type FormState = {
   slug: string;
@@ -298,15 +299,13 @@ export function AdminProductsManager({
           />
         </label>
 
-        <label className="label">
-          Image path
-          <input
-            className="field mt-1"
-            value={form.image}
-            onChange={(e) => setForm({ ...form, image: e.target.value })}
-            placeholder="/images/products/example.jpg"
-          />
-        </label>
+        <UploadedImageField
+          label="Product image"
+          folder="products"
+          value={form.image}
+          onChange={(url) => setForm({ ...form, image: url })}
+          helpText="Upload a product photo. Stored in MongoDB — works after Vercel deploy."
+        />
 
         <label className="label">
           Display order

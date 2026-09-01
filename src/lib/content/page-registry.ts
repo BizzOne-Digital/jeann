@@ -1,4 +1,4 @@
-export type PageFieldType = "text" | "textarea" | "url";
+export type PageFieldType = "text" | "textarea" | "url" | "image";
 
 export type PageFieldDef = {
   key: string;
@@ -43,17 +43,20 @@ function section(
       .replace(/([A-Z])/g, " $1")
       .replace(/^./, (c) => c.toUpperCase())
       .replace(/Cta/g, "CTA")
+      .replace(/([0-9]+)/g, " $1")
       .trim(),
     type:
-      key.includes("description") ||
-      key.includes("body") ||
-      key.includes("note") ||
-      key.includes("lead") ||
-      key.includes("content")
-        ? "textarea"
-        : key.includes("Href") || key === "path"
-          ? "url"
-          : "text",
+      /image|photo|heroImage|thumbnail|cover/i.test(key)
+        ? "image"
+        : key.includes("description") ||
+            key.includes("body") ||
+            key.includes("note") ||
+            key.includes("lead") ||
+            key.includes("content")
+          ? "textarea"
+          : key.includes("Href") || key === "path"
+            ? "url"
+            : "text",
   }));
   return { id, label, fields, defaults };
 }
@@ -81,6 +84,8 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
         eyebrow: "Your global connection",
         title: "Connecting suppliers and qualified buyers worldwide",
         body: "Finekarts coordinates sourcing, documentation, and logistics for bulk agricultural commodities — with transparency at every step.",
+        image1: "/images/home-1.png",
+        image2: "/images/home-2.png",
       }),
       section("commodities", "Commodities we trade", {
         eyebrow: "Commodities we trade",
@@ -91,6 +96,7 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
         eyebrow: "Sourced responsibly",
         title: "Quality coordination across origins and corridors",
         body: "We work with verified supplier programmes and independent inspection partners where contracts require them.",
+        image: "/images/home-3.png",
       }),
       section("process", "Process timeline", {
         eyebrow: "How we work",

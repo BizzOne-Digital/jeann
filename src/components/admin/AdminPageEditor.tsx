@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import type { EditablePage } from "@/lib/content/page-registry";
+import { UploadedImageField } from "@/components/admin/UploadedImageField";
 
 export function AdminPageEditor({ initialPage }: { initialPage: EditablePage }) {
   const [page, setPage] = useState(initialPage);
@@ -59,6 +60,11 @@ export function AdminPageEditor({ initialPage }: { initialPage: EditablePage }) 
 
   return (
     <div className="space-y-6">
+      {page.status !== "published" ? (
+        <p className="rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+          Set status to <strong>Published</strong> and save — draft pages are not shown on the live site.
+        </p>
+      ) : null}
       <div className="flex flex-wrap items-center gap-3">
         <Link href="/admin/pages" className="text-sm font-semibold text-[var(--ocean)] underline">
           ← All pages
@@ -128,25 +134,35 @@ export function AdminPageEditor({ initialPage }: { initialPage: EditablePage }) 
               Section ID: {section.id}
             </p>
             <div className="mt-4 grid gap-4">
-              {section.fields.map((field) => (
-                <label key={field.key} className="label">
-                  {field.label}
-                  {field.type === "textarea" ? (
-                    <textarea
-                      className="field mt-1 min-h-24"
-                      value={section.defaults[field.key] ?? ""}
-                      onChange={(e) => updateField(section.id, field.key, e.target.value)}
-                    />
-                  ) : (
-                    <input
-                      className="field mt-1"
-                      type={field.type === "url" ? "url" : "text"}
-                      value={section.defaults[field.key] ?? ""}
-                      onChange={(e) => updateField(section.id, field.key, e.target.value)}
-                    />
-                  )}
-                </label>
-              ))}
+              {section.fields.map((field) =>
+                field.type === "image" ? (
+                  <UploadedImageField
+                    key={field.key}
+                    label={field.label}
+                    folder="pages"
+                    value={section.defaults[field.key] ?? ""}
+                    onChange={(url) => updateField(section.id, field.key, url)}
+                  />
+                ) : (
+                  <label key={field.key} className="label">
+                    {field.label}
+                    {field.type === "textarea" ? (
+                      <textarea
+                        className="field mt-1 min-h-24"
+                        value={section.defaults[field.key] ?? ""}
+                        onChange={(e) => updateField(section.id, field.key, e.target.value)}
+                      />
+                    ) : (
+                      <input
+                        className="field mt-1"
+                        type={field.type === "url" ? "url" : "text"}
+                        value={section.defaults[field.key] ?? ""}
+                        onChange={(e) => updateField(section.id, field.key, e.target.value)}
+                      />
+                    )}
+                  </label>
+                ),
+              )}
             </div>
           </section>
         ))}

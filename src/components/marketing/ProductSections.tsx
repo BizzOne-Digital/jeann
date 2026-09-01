@@ -5,7 +5,9 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Reveal } from "@/components/motion/Reveal";
 import { PageHero } from "@/components/marketing/PageHero";
-import { searchProducts, type SeedCategory } from "@/lib/content/catalog";
+import { searchCatalogProducts, type CatalogProduct } from "@/lib/content/catalog-utils";
+import type { SeedCategory } from "@/lib/content/seed-catalog";
+import { resolveImageSrc } from "@/lib/media/resolve-image-src";
 import { buyerQuoteHref } from "@/lib/marketing/cta-links";
 import { getCategoryCover, getProductListingImage } from "@/lib/content/product-images";
 
@@ -70,17 +72,19 @@ export function CategoryShowcase({ categories }: { categories: SeedCategory[] })
 
 export function ProductCatalogSection({
   categories,
+  products,
   totalCount,
 }: {
   categories: SeedCategory[];
+  products: CatalogProduct[];
   totalCount: number;
 }) {
   const [query, setQuery] = useState("");
   const [categorySlug, setCategorySlug] = useState("");
 
   const filtered = useMemo(
-    () => searchProducts(query, categorySlug || undefined),
-    [query, categorySlug],
+    () => searchCatalogProducts(products, query, categorySlug || undefined),
+    [products, query, categorySlug],
   );
 
   return (
@@ -147,11 +151,12 @@ export function ProductCatalogSection({
                 >
                   <div className="relative aspect-[16/11] overflow-hidden bg-[#e4e0d8]">
                     <Image
-                      src={imageSrc}
+                      src={resolveImageSrc(imageSrc)}
                       alt={product.name}
                       fill
                       className="object-cover transition duration-500 group-hover:scale-[1.03]"
                       sizes="(max-width: 1024px) 50vw, 360px"
+                      unoptimized={imageSrc.startsWith("/api/uploads/")}
                     />
                   </div>
                   <p className="mt-3 text-xs font-semibold tracking-[0.16em] text-[#c88e4a] uppercase">

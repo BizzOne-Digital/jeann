@@ -1,8 +1,8 @@
-import { getCategories, SEED_INSIGHTS } from "@/lib/content/catalog";
+import { SEED_INSIGHTS } from "@/lib/content/catalog";
+import { getPublicCategories } from "@/lib/content/catalog-server";
 import { getPartners } from "@/lib/content/partners-catalog";
 import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
 import { getPublishedTestimonials } from "@/lib/content/testimonials-catalog";
-import { getHomeSectionImages } from "@/lib/content/home-images";
 import { FoodSafetyAgencyMarquee } from "@/components/marketing/FoodSafetyAgencyMarquee";
 import { PartnersHomeTeaser } from "@/components/marketing/PartnerSections";
 import {
@@ -18,10 +18,14 @@ import {
 } from "@/components/marketing/HomeSections";
 
 export default async function HomePage() {
-  const categories = getCategories();
+  const categories = await getPublicCategories();
   const posts = SEED_INSIGHTS.slice(0, 3);
-  const { home1, home2, home3 } = getHomeSectionImages();
   const cms = await getPublishedPage("home");
+  const connection = getSectionFields(cms, "connection");
+  const sourced = getSectionFields(cms, "sourced");
+  const home1 = connection.image1 || "/images/home-1.png";
+  const home2 = connection.image2 || "/images/home-2.png";
+  const home3 = sourced.image || "/images/home-3.png";
   const testimonials = await getPublishedTestimonials();
   const featuredTestimonial = testimonials[0] ?? null;
 

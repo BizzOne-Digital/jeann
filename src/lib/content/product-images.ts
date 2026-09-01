@@ -1,3 +1,5 @@
+import { resolveImageSrc } from "@/lib/media/resolve-image-src";
+
 /** Category and product listing images from client photo folders. */
 
 export const CATEGORY_COVERS: Record<string, { image: string; shortName: string; alt: string }> = {
@@ -42,6 +44,6 @@ export function getProductListingImage(
   product: { image?: string },
   categorySlug: string,
 ): string {
-  if (product.image) return product.image;
-  return getCategoryCover(categorySlug).image;
+  if (product.image) return resolveImageSrc(product.image);
+  return resolveImageSrc(getCategoryCover(categorySlug).image);
 }

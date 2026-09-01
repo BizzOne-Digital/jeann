@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getAllProducts, getCategories } from "@/lib/content/catalog";
+import { getAllPublicProducts, getPublicCategories } from "@/lib/content/catalog-server";
 import {
   ProductsHero,
   CategoryShowcase,
@@ -14,16 +14,16 @@ export const metadata: Metadata = {
     "Browse Finekarts commodity categories and product overviews. Specifications are confirmed with the trade desk — not fixed public prices.",
 };
 
-export default function ProductsPage() {
-  const categories = getCategories();
-  const products = getAllProducts();
+export default async function ProductsPage() {
+  const categories = await getPublicCategories();
+  const products = await getAllPublicProducts();
 
   return (
     <>
       <ProductsHero />
       <FoodSafetyAgencyMarquee />
       <CategoryShowcase categories={categories} />
-      <ProductCatalogSection categories={categories} totalCount={products.length} />
+      <ProductCatalogSection categories={categories} products={products} totalCount={products.length} />
       <ProductsCta />
     </>
   );

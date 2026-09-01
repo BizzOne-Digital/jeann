@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { AdminTeamItem } from "@/lib/admin/team-serializer";
+import { UploadedImageField } from "@/components/admin/UploadedImageField";
 
 type FormState = {
   name: string;
@@ -149,15 +150,12 @@ export function AdminTeamManager({ initialItems }: { initialItems: AdminTeamItem
           />
         </label>
 
-        <label className="label">
-          Photo path
-          <input
-            className="field mt-1"
-            value={form.photo}
-            onChange={(e) => setForm({ ...form, photo: e.target.value })}
-            placeholder="/images/team/member.jpg"
-          />
-        </label>
+        <UploadedImageField
+          label="Team photo"
+          folder="gallery"
+          value={form.photo}
+          onChange={(photo) => setForm({ ...form, photo })}
+        />
 
         <label className="label">
           Display order

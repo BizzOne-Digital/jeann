@@ -1,12 +1,15 @@
 import { SEED_CATEGORIES, SEED_PACKAGING, SITE, type SeedCategory, type SeedProduct } from "./seed-catalog";
+import { searchCatalogProducts } from "./catalog-utils";
 
 export type { SeedCategory, SeedProduct };
 export { SEED_CATEGORIES, SEED_PACKAGING, SITE };
 
+/** @deprecated Prefer `getPublicSite()` from catalog-server on server pages. */
 export function getSite() {
   return SITE;
 }
 
+/** @deprecated Prefer `getPublicCategories()` from catalog-server on server pages. */
 export function getCategories(): SeedCategory[] {
   return SEED_CATEGORIES;
 }
@@ -32,17 +35,12 @@ export function getAllProducts(): Array<SeedProduct & { categorySlug: string; ca
   );
 }
 
-export function searchProducts(query: string, categorySlug?: string) {
-  const q = query.trim().toLowerCase();
-  return getAllProducts().filter((p) => {
-    if (categorySlug && p.categorySlug !== categorySlug) return false;
-    if (!q) return true;
-    return (
-      p.name.toLowerCase().includes(q) ||
-      p.overview.toLowerCase().includes(q) ||
-      p.categoryName.toLowerCase().includes(q)
-    );
-  });
+export function searchProducts(
+  query: string,
+  categorySlug?: string,
+  products?: Array<SeedProduct & { categorySlug: string; categoryName: string }>,
+) {
+  return searchCatalogProducts(products ?? getAllProducts(), query, categorySlug);
 }
 
 export function getPackaging() {

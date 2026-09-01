@@ -4,6 +4,14 @@ import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
 export async function requireAdminApiSession() {
   const session = await getSession();
   if (!session) return null;
+
+  const devRole = (session.user as unknown as { role?: string }).role;
+  if (devRole === "admin") {
+    if (!isMongoConfigured()) return null;
+    if (!(await tryConnectMongo())) return null;
+    return session;
+  }
+
   if (!isMongoConfigured()) return null;
   if (!(await tryConnectMongo())) return null;
   const { OrganizationMembership } = await import("@/models");
