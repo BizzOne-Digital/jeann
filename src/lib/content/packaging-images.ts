@@ -45,8 +45,8 @@ export const PACKAGING_IMAGES = {
     alt: "Bagged commodity cargo loaded into a shipping container",
   },
   tankerVessel: {
-    src: "/images/packaging/tanker-vessel.png",
-    alt: "Liquid bulk tanker vessel at sea",
+    src: "/images/packaging/tanker-vessel.jpg",
+    alt: "Liquid bulk tanker vessel at sea with cargo piping on deck",
   },
   bulkTruck: {
     src: "/images/packaging/bulk-truck.png",
@@ -58,7 +58,7 @@ export const PACKAGING_IMAGES = {
   },
   isoTank1: {
     src: "/images/packaging/iso-tank-1.png",
-    alt: "ISO tank container for intermodal liquid bulk",
+    alt: "ISO tank container with blue frame and white cylindrical tank for intermodal liquid bulk",
   },
   isoTank2: {
     src: "/images/packaging/iso-tank-2.png",
