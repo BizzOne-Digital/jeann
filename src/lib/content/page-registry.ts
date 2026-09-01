@@ -85,7 +85,7 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       section("commodities", "Commodities we trade", {
         eyebrow: "Commodities we trade",
         title: "Bulk agricultural products for international programmes",
-        body: "Edible oils, sugar, rice and grains, beans and pulses, and related bulk cargoes — specifications confirmed per enquiry.",
+        body: "Edible oils, sugar, rice and grains, beans, and related bulk cargoes — specifications confirmed per enquiry.",
       }),
       section("sourced", "Sourced responsibly", {
         eyebrow: "Sourced responsibly",

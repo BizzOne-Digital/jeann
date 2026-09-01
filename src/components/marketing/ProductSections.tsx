@@ -13,7 +13,7 @@ export function ProductsHero() {
   return (
     <PageHero
       title="Commodities we trade"
-      description="Browse edible oils, sugar, rice & grains, beans & pulses, and related programmes. Specifications are confirmed with the trade desk — not fixed public prices."
+      description="Browse edible oils, sugar, rice & grains, beans, and related programmes. Specifications are confirmed with the trade desk — not fixed public prices."
       primaryCta={{ href: buyerQuoteHref(), label: "Request a Quote →" }}
       secondaryCta={{ href: "#catalog", label: "Browse catalog" }}
     />

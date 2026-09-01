@@ -134,7 +134,7 @@ export function AboutWhoWeAre({
 
 export function AboutCapabilities({ cms }: { cms?: Record<string, string> }) {
   const capabilities = [
-    "Specification alignment for edible oils, sugar, rice & grains, beans & pulses, and related programmes",
+    "Specification alignment for edible oils, sugar, rice & grains, beans, and related programmes",
     "Third-party inspection coordination when agreed — agency and scope are transaction-specific",
     "FOB and CIF structures commonly discussed; risk transfer follows the signed Incoterms and contract",
     "Documentation discipline for contracts, shipping papers, and bank-facing checklists",

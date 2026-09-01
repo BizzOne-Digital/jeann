@@ -32,16 +32,14 @@ const PILLARS: MarketingContentBox[] = [
 
 export const BEANS_CATEGORY = {
   eyebrow: "Beans",
-  title: "Dry beans and pulses for global food supply chains",
-  lead: "Finekarts supplies kidney, white, red, pinto, chickpea and other pulse programmes for wholesalers, distributors, and food manufacturers. Calibration, moisture, and packing are confirmed per enquiry and contract.",
+  title: "Dry beans for global food supply chains",
+  lead: "Finekarts supplies kidney, white, red, pinto, and other bean programmes for wholesalers, distributors, and food manufacturers. Calibration, moisture, and packing are confirmed per enquiry and contract.",
   products: [
     "Kidney beans",
     "White beans",
     "Red speckled beans",
     "Pinto beans",
-    "Chickpeas",
     "Black beans",
-    "Soybeans",
   ],
   disclaimer:
     "Specifications, availability, origin, and certifications are subject to the individual supply contract and destination-market requirements.",
@@ -264,7 +262,7 @@ const PULSE_PRODUCTS: Record<string, PulseProductDetail> = {
       },
       {
         src: `${BEANS_BASE}/beans-variety-mosaic.png`,
-        alt: "Dry chickpeas and assorted pulses",
+        alt: "Dry chickpeas and assorted beans",
       },
     ],
   },

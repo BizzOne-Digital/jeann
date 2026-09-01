@@ -36,7 +36,7 @@ export const SEED_TESTIMONIALS: SeedTestimonial[] = [
   },
   {
     quote:
-      "We have used Finekarts for beans and pulses across two seasons. Consistent communication and realistic availability updates have made repeat programmes straightforward.",
+      "We have used Finekarts for beans across two seasons. Consistent communication and realistic availability updates have made repeat programmes straightforward.",
     attribution: "Head of Sourcing",
     company: "West Africa Agro Imports",
     status: "published",
