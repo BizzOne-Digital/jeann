@@ -24,7 +24,6 @@ const categories = {
     "white-beans",
     "red-beans",
     "black-beans",
-    "yellow-beans",
     "pinto-beans",
     "soybeans",
     "chickpeas",

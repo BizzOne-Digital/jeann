@@ -41,7 +41,6 @@ export const BEANS_CATEGORY = {
     "Pinto beans",
     "Chickpeas",
     "Black beans",
-    "Yellow beans",
     "Soybeans",
   ],
   disclaimer:
@@ -94,9 +93,9 @@ const PULSE_PRODUCTS: Record<string, PulseProductDetail> = {
   "white-beans": {
     slug: "white-beans",
     grade: "White beans",
-    subtitle: "Large white beans — cannellini and similar grades",
+    subtitle: "Large white kidney beans",
     description:
-      "Large white beans (cannellini, great northern, and similar grades) for food manufacturing and distribution. Clean, uniform calibration and low defect counts are confirmed per shipment.",
+      "Large white kidney beans (cannellini, great northern, and similar grades) for food manufacturing and distribution. Clean, uniform calibration and low defect counts are confirmed per shipment.",
     applications: [
       "Food manufacturing",
       "Soups and prepared meals",
@@ -115,19 +114,19 @@ const PULSE_PRODUCTS: Record<string, PulseProductDetail> = {
       "Uniform calibration programmes",
       "Container-based supply",
     ],
-    heroImage: `${BEANS_BASE}/white-beans-spoons.png`,
+    heroImage: `${BEANS_BASE}/white-beans-plate.png`,
     images: [
+      {
+        src: `${BEANS_BASE}/white-beans-plate.png`,
+        alt: "Large white kidney beans on a serving plate",
+      },
       {
         src: `${BEANS_BASE}/white-beans-spoons.png`,
         alt: "Large white beans presented in wooden spoons",
       },
       {
-        src: `${BEANS_BASE}/white-beans-plate.png`,
-        alt: "White beans piled on a dark serving plate",
-      },
-      {
         src: `${BEANS_BASE}/white-beans-leaves.png`,
-        alt: "Large white beans with decorative green leaves",
+        alt: "Large white kidney beans with decorative green leaves",
       },
     ],
   },
@@ -304,37 +303,6 @@ const PULSE_PRODUCTS: Record<string, PulseProductDetail> = {
       {
         src: `${BEANS_BASE}/beans-variety-mosaic.png`,
         alt: "Assorted dry bean varieties including black, kidney, and speckled grades",
-      },
-    ],
-  },
-  "yellow-beans": {
-    slug: "yellow-beans",
-    grade: "Yellow beans",
-    subtitle: "Yellow dry beans",
-    description:
-      "Yellow bean programmes for qualified buyers. Calibration, moisture, and packing are confirmed per enquiry and supply contract.",
-    applications: [
-      "Food manufacturing",
-      "Wholesale distribution",
-      "Industrial food processing",
-    ],
-    characteristics: [
-      "Pale yellow to golden colour",
-      "Sorted size grades",
-      "Low foreign matter",
-      "Container supply programmes",
-    ],
-    packaging: ["FIBCs/jumbo bags", "Multi-wall sacks", "Container liners"],
-    highlights: [
-      "Yellow beans for food manufacturing",
-      "Sorted calibration per contract",
-      "Container-based supply",
-    ],
-    heroImage: `${BEANS_BASE}/white-beans-leaves.png`,
-    images: [
-      {
-        src: `${BEANS_BASE}/white-beans-leaves.png`,
-        alt: "Yellow and white dry beans with green leaves",
       },
     ],
   },

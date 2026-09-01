@@ -215,7 +215,6 @@ export const SEED_CATEGORIES: SeedCategory[] = [
       "White beans",
       "Red beans",
       "Black beans",
-      "Yellow beans",
       "Pinto beans",
       "Soybeans",
       "Chickpeas",

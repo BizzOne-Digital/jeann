@@ -2,6 +2,20 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  async redirects() {
+    return [
+      {
+        source: "/products/beans-and-pulses/yellow-beans",
+        destination: "/products/beans-and-pulses/white-beans",
+        permanent: true,
+      },
+      {
+        source: "/products/beans-and-pulses/white-kidney-beans",
+        destination: "/products/beans-and-pulses/white-beans",
+        permanent: true,
+      },
+    ];
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [

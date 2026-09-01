@@ -114,11 +114,11 @@ const SPICE_PRODUCTS: Record<string, SpiceProductDetail> = {
       "Count and grade per contract",
       "Health and phytosanitary documentation available",
     ],
-    heroImage: "/images/products/product-5.png",
+    heroImage: "/images/products/product-4.png",
     images: [
       {
-        src: "/images/products/product-5.png",
-        alt: "Cashews and nuts commodity reference",
+        src: "/images/products/product-4.png",
+        alt: "Raw cashew kernels in wooden bowls",
       },
     ],
   },
@@ -146,11 +146,12 @@ const SPICE_PRODUCTS: Record<string, SpiceProductDetail> = {
       "Grade and origin confirmed per RFQ",
       "Phytosanitary documentation available",
     ],
-    heroImage: "/images/products/product-5.png",
+    heroImage:
+      "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=1200&q=80",
     images: [
       {
-        src: "/images/products/product-5.png",
-        alt: "Cinnamon sticks and spices commodity reference",
+        src: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=1200&q=80",
+        alt: "Whole cinnamon sticks",
       },
     ],
   },
@@ -178,11 +179,12 @@ const SPICE_PRODUCTS: Record<string, SpiceProductDetail> = {
       "Density and moisture per contract",
       "Independent inspection available",
     ],
-    heroImage: "/images/products/product-5.png",
+    heroImage:
+      "https://images.unsplash.com/photo-1615485290382-441d4c0695bc?auto=format&fit=crop&w=1200&q=80",
     images: [
       {
-        src: "/images/products/product-5.png",
-        alt: "Black pepper and spices commodity reference",
+        src: "https://images.unsplash.com/photo-1615485290382-441d4c0695bc?auto=format&fit=crop&w=1200&q=80",
+        alt: "Whole black peppercorns",
       },
     ],
   },
