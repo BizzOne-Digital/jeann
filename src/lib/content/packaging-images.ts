@@ -50,7 +50,7 @@ export const PACKAGING_IMAGES = {
   },
   bulkTruck: {
     src: "/images/packaging/bulk-truck.png",
-    alt: "Hopper bulk truck at an industrial grain terminal",
+    alt: "Hopper bulk truck and trailer at a grain elevator with storage silos",
   },
   bulkRailcar: {
     src: "/images/packaging/bulk-railcar.png",
