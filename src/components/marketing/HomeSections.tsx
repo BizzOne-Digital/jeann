@@ -13,7 +13,7 @@ import { HeroVideoBackground } from "@/components/marketing/HeroVideoBackground"
 import { resolveHeroYoutubeInput } from "@/lib/content/hero-video";
 import type { SeedCategory } from "@/lib/content/catalog";
 import { getCategoryCover } from "@/lib/content/product-images";
-import { HOMEPAGE_PACKAGING_TEASER } from "@/lib/content/packaging-content";
+import { HOMEPAGE_PACKAGING_TEASER, PACKAGING_IMAGES } from "@/lib/content/packaging-images";
 
 const COMMODITY_CARDS = [
   "edible-oils",
@@ -546,8 +546,8 @@ export function ShippingTerms() {
         </div>
         <div className="relative min-h-[320px] lg:min-h-full">
           <Image
-            src="/images/packaging/containerized-cargo-port.png"
-            alt="Container ship at port with gantry cranes"
+            src={PACKAGING_IMAGES.containerizedCargoPort.src}
+            alt={PACKAGING_IMAGES.containerizedCargoPort.alt}
             fill
             className="object-cover"
             sizes="(max-width: 1024px) 100vw, 50vw"
@@ -673,8 +673,8 @@ export function InsightsAndNotes({
 }) {
   const cardImages = [
     "/images/products/rapeseed-oil-reference.png",
-    "https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?auto=format&fit=crop&w=900&q=80",
-    "https://images.unsplash.com/photo-1536304993881-ff6e9eefa2a6?auto=format&fit=crop&w=900&q=80",
+    "/images/products/oils/refined-sunflower-oil.png",
+    "/images/products/sugar/icumsa-45-white-sugar.png",
   ];
 
   return (

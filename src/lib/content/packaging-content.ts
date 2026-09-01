@@ -1,5 +1,9 @@
 /** Client-approved packaging types — display order is fixed. */
 
+import { PACKAGING_IMAGES } from "./packaging-images";
+
+export { HOMEPAGE_PACKAGING_TEASER } from "./packaging-images";
+
 export type PackagingTypeContent = {
   order: number;
   slug: string;
@@ -24,35 +28,6 @@ export const PACKAGING_HERO = {
   secondaryCta: { href: "/logistics", label: "Logistics overview" },
 };
 
-/** Homepage “Packaging for Every Commodity” grid — uses client photos from public/images/packaging/. */
-export const HOMEPAGE_PACKAGING_TEASER = [
-  {
-    name: "Jumbo Bags",
-    image: "/images/packaging/fibc-jumbo-bags.png",
-    alt: "FIBC jumbo bag filled with granular dry commodity",
-  },
-  {
-    name: "Flexitanks",
-    image: "/images/packaging/flexitank.png",
-    alt: "Flexitank bladder installed inside a shipping container",
-  },
-  {
-    name: "IBC Totes",
-    image: "/images/packaging/ibc-1.png",
-    alt: "Intermediate bulk container tote for liquid commodities",
-  },
-  {
-    name: "Drums",
-    image: "/images/packaging/drums.png",
-    alt: "Steel drums for edible oils and liquid products",
-  },
-  {
-    name: "Bulk Vessels",
-    image: "/images/packaging/bulk-vessel-hold.png",
-    alt: "Dry bulk carrier with open cargo holds loading unpackaged agricultural commodity",
-  },
-] as const;
-
 export const PACKAGING_TYPES: PackagingTypeContent[] = [
   {
     order: 1,
@@ -74,12 +49,7 @@ export const PACKAGING_TYPES: PackagingTypeContent[] = [
       "Suitable for medium-volume liquid shipments on established container routes",
     ],
     commodities: ["Sunflower oil", "Soybean oil", "Palm oil", "Rapeseed oil", "Other suitable liquids"],
-    images: [
-      {
-        src: "/images/packaging/flexitank.png",
-        alt: "Flexitank bladder installed inside a shipping container for liquid bulk transport",
-      },
-    ],
+    images: [{ ...PACKAGING_IMAGES.flexitank }],
     note: "Product compatibility, container condition, reinforcement and discharge method must be confirmed before nomination.",
   },
   {
@@ -102,12 +72,7 @@ export const PACKAGING_TYPES: PackagingTypeContent[] = [
       "Pipeline loading and discharge at suitable marine terminals",
     ],
     commodities: ["Crude edible oils", "Refined oils", "Liquid bulk food products where agreed"],
-    images: [
-      {
-        src: "/images/packaging/tanker-vessel.png",
-        alt: "Product tanker vessel underway at sea",
-      },
-    ],
+    images: [{ ...PACKAGING_IMAGES.tankerVessel }],
     note: "Tank preparation, prior-cargo history, heating and coating requirements are confirmed per contract and terminal rules.",
   },
   {
@@ -131,14 +96,8 @@ export const PACKAGING_TYPES: PackagingTypeContent[] = [
     ],
     commodities: ["ICUMSA sugar (bagged)", "Rice", "Grains", "Pulses", "Packaged food products"],
     images: [
-      {
-        src: "/images/packaging/containerized-cargo-loading.png",
-        alt: "Bagged commodity cargo loaded into a shipping container via conveyor",
-      },
-      {
-        src: "/images/packaging/containerized-cargo-port.png",
-        alt: "Container ship at port with gantry cranes loading containers",
-      },
+      { ...PACKAGING_IMAGES.containerizedCargoLoading },
+      { ...PACKAGING_IMAGES.containerizedCargoPort },
     ],
   },
   {
@@ -161,12 +120,7 @@ export const PACKAGING_TYPES: PackagingTypeContent[] = [
       "Gravity or pneumatic discharge into storage and conveyor systems",
     ],
     commodities: ["Grains", "Sugar (bulk where agreed)", "Pulses", "Other dry flowable commodities"],
-    images: [
-      {
-        src: "/images/packaging/bulk-truck.png",
-        alt: "Hopper bulk truck at an industrial grain terminal with storage silos",
-      },
-    ],
+    images: [{ ...PACKAGING_IMAGES.bulkTruck }],
     note: "Trailer type, moisture limits and weighbridge documentation should be agreed for each programme.",
   },
   {
@@ -190,14 +144,8 @@ export const PACKAGING_TYPES: PackagingTypeContent[] = [
     ],
     commodities: ["ICUMSA sugar (bulk)", "Wheat", "Corn", "Rice", "Soybeans", "Other dry bulk"],
     images: [
-      {
-        src: "/images/packaging/bulk-vessel-hold.png",
-        alt: "Dry bulk carrier with open cargo holds loading unpackaged commodity",
-      },
-      {
-        src: "/images/packaging/bulk-vessel-loading.png",
-        alt: "Bulk vessel being loaded from shore silos via conveyor at port",
-      },
+      { ...PACKAGING_IMAGES.bulkVessel },
+      { ...PACKAGING_IMAGES.bulkVesselLoading },
     ],
     note: "Hold cleanliness, fumigation, moisture and draft survey methods are defined in the sales contract.",
   },
@@ -221,12 +169,7 @@ export const PACKAGING_TYPES: PackagingTypeContent[] = [
       "Cost-effective over long inland distances versus road only",
     ],
     commodities: ["Grains", "Oilseeds", "Sugar (bulk where rail programme exists)", "Pulses"],
-    images: [
-      {
-        src: "/images/packaging/bulk-railcar.png",
-        alt: "BNSF freight train with covered hopper railcars at a grain elevator facility",
-      },
-    ],
+    images: [{ ...PACKAGING_IMAGES.bulkRailcar }],
     note: "Rail routing, car type, demurrage and destination unloading capability must be confirmed per corridor.",
   },
   {
@@ -249,12 +192,7 @@ export const PACKAGING_TYPES: PackagingTypeContent[] = [
       "Reusable asset subject to cleaning, inspection and prior-cargo approval",
     ],
     commodities: ["Sunflower oil", "Soybean oil", "Palm oil", "Rapeseed oil", "Other suitable liquids"],
-    images: [
-      {
-        src: "/images/packaging/iso-tank-2.png",
-        alt: "White ISO tank container with orange stripe in a standard container frame",
-      },
-    ],
+    images: [{ ...PACKAGING_IMAGES.isoTank2 }],
     note: "Tank condition, heating, prior-cargo history and terminal acceptance must be confirmed before booking.",
   },
   {
@@ -277,12 +215,7 @@ export const PACKAGING_TYPES: PackagingTypeContent[] = [
       "Single-trip or returnable programmes depending on corridor",
     ],
     commodities: ["Edible oils", "Liquid food ingredients", "Non-hazardous industrial liquids where agreed"],
-    images: [
-      {
-        src: "/images/packaging/ibc-2.png",
-        alt: "White IBC tote with metal cage in an industrial warehouse",
-      },
-    ],
+    images: [{ ...PACKAGING_IMAGES.ibcToteWarehouse }],
   },
   {
     order: 9,
@@ -304,12 +237,7 @@ export const PACKAGING_TYPES: PackagingTypeContent[] = [
       "Widely accepted in warehouses and customs corridors",
     ],
     commodities: ["Edible oils", "Syrups and liquid food products", "Suitable non-hazardous liquids"],
-    images: [
-      {
-        src: "/images/packaging/ibc-1.png",
-        alt: "IBC container on pallet with discharge valve and protective cage",
-      },
-    ],
+    images: [{ ...PACKAGING_IMAGES.ibcTote }],
   },
   {
     order: 10,
@@ -331,12 +259,7 @@ export const PACKAGING_TYPES: PackagingTypeContent[] = [
       "Steel or plastic options per product and regulatory requirements",
     ],
     commodities: ["Edible oils", "Specialty liquids", "Food-grade industrial products"],
-    images: [
-      {
-        src: "/images/packaging/drums.png",
-        alt: "Stacked yellow metal drums on pallets in a warehouse",
-      },
-    ],
+    images: [{ ...PACKAGING_IMAGES.drums }],
   },
   {
     order: 11,
@@ -358,12 +281,7 @@ export const PACKAGING_TYPES: PackagingTypeContent[] = [
       "Easier partial discharge than loose bag stuffing",
     ],
     commodities: ["ICUMSA sugar (bagged)", "Rice", "Pulses", "Grains"],
-    images: [
-      {
-        src: "/images/packaging/palletized-bags.png",
-        alt: "Palletized commodity bags stacked in a warehouse",
-      },
-    ],
+    images: [{ ...PACKAGING_IMAGES.palletizedBags }],
   },
   {
     order: 12,
@@ -386,14 +304,8 @@ export const PACKAGING_TYPES: PackagingTypeContent[] = [
     ],
     commodities: ["Sugar", "Rice", "Grains", "Pulses", "Other dry flowable products"],
     images: [
-      {
-        src: "/images/packaging/fibc-jumbo-bags.png",
-        alt: "Single FIBC jumbo bag filled with granular dry commodity",
-      },
-      {
-        src: "/images/packaging/fibc-jumbo-bags-2.png",
-        alt: "Warehouse stacked with white FIBC jumbo bags",
-      },
+      { ...PACKAGING_IMAGES.fibcJumboBag },
+      { ...PACKAGING_IMAGES.fibcJumboBagsStacked },
     ],
   },
   {
@@ -416,12 +328,7 @@ export const PACKAGING_TYPES: PackagingTypeContent[] = [
       "Suitable for medium-volume dry bulk on liner services",
     ],
     commodities: ["Sugar", "Grains", "Plastic pellets", "Other free-flowing dry bulk"],
-    images: [
-      {
-        src: "/images/packaging/bulk-liner.png",
-        alt: "Shipping container with bulk liner bag and discharge equipment",
-      },
-    ],
+    images: [{ ...PACKAGING_IMAGES.bulkLiner }],
     note: "Container reinforcement, loading method and discharge equipment must be agreed before shipment.",
   },
   {
@@ -444,12 +351,7 @@ export const PACKAGING_TYPES: PackagingTypeContent[] = [
       "Efficient versus drums for medium-to-large liquid volumes",
     ],
     commodities: ["Edible oils", "Food-grade liquids", "Suitable industrial liquids"],
-    images: [
-      {
-        src: "/images/packaging/iso-tank-1.png",
-        alt: "ISO tank container with blue frame and white cylindrical tank",
-      },
-    ],
+    images: [{ ...PACKAGING_IMAGES.isoTank1 }],
   },
   {
     order: 15,
@@ -471,12 +373,7 @@ export const PACKAGING_TYPES: PackagingTypeContent[] = [
       "Palletized for efficient handling and stowage",
     ],
     commodities: ["Rice", "Flour", "Sugar", "Pulses"],
-    images: [
-      {
-        src: "/images/packaging/kraft-paper-bags.png",
-        alt: "Stacks of brown kraft paper bags on wooden pallets in a warehouse",
-      },
-    ],
+    images: [{ ...PACKAGING_IMAGES.kraftPaperBags }],
   },
   {
     order: 16,
@@ -498,12 +395,7 @@ export const PACKAGING_TYPES: PackagingTypeContent[] = [
       "Durable handling through port and warehouse chains",
     ],
     commodities: ["Rice", "Grains", "Sugar", "Pulses"],
-    images: [
-      {
-        src: "/images/packaging/laminated-pp-bags.png",
-        alt: "Assorted laminated polypropylene commodity bags in multiple sizes",
-      },
-    ],
+    images: [{ ...PACKAGING_IMAGES.laminatedPpBags }],
   },
   {
     order: 17,
@@ -525,12 +417,7 @@ export const PACKAGING_TYPES: PackagingTypeContent[] = [
       "Clear weight declaration for customs and inventory",
     ],
     commodities: ["Rice", "Sugar", "Grains", "Pulses"],
-    images: [
-      {
-        src: "/images/packaging/bags-50kg.png",
-        alt: "Stacked white woven bags marked 50 kg net weight",
-      },
-    ],
+    images: [{ ...PACKAGING_IMAGES.bags50kg }],
     note: "Actual net weight, bag construction and marking must match the sales contract and packing list.",
   },
   {
@@ -553,12 +440,7 @@ export const PACKAGING_TYPES: PackagingTypeContent[] = [
       "Widely produced and accepted globally",
     ],
     commodities: ["Sugar", "Rice", "Grains", "Pulses", "Animal feed"],
-    images: [
-      {
-        src: "/images/packaging/pp-woven-bags.png",
-        alt: "White woven polypropylene bags filled with grain",
-      },
-    ],
+    images: [{ ...PACKAGING_IMAGES.ppWovenBags }],
   },
   {
     order: 19,
@@ -580,12 +462,7 @@ export const PACKAGING_TYPES: PackagingTypeContent[] = [
       "Efficient palletization for container programmes",
     ],
     commodities: ["ICUMSA sugar", "Rice", "Flour", "Pulses"],
-    images: [
-      {
-        src: "/images/packaging/bags-25kg.png",
-        alt: "White 25 kg bags stacked on a wooden shipping pallet",
-      },
-    ],
+    images: [{ ...PACKAGING_IMAGES.bags25kg }],
     note: "Bag weight, stitching and pallet configuration are confirmed in the contract specification.",
   },
 ];

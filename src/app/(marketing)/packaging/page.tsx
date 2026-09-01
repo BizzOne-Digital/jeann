@@ -9,6 +9,7 @@ import {
   PACKAGING_SELECTION,
   PACKAGING_TYPES,
 } from "@/lib/content/packaging-content";
+import { PACKAGING_IMAGES } from "@/lib/content/packaging-images";
 import { buyerPortalHref } from "@/lib/marketing/cta-links";
 
 export const metadata: Metadata = {
@@ -36,8 +37,8 @@ export default function PackagingPage() {
         title={PACKAGING_HERO.title}
         brand={PACKAGING_HERO.eyebrow}
         description={PACKAGING_HERO.description}
-        imageSrc="/images/packaging/containerized-cargo-port.png"
-        imageAlt="Container ship at port"
+        imageSrc={PACKAGING_IMAGES.containerizedCargoPort.src}
+        imageAlt={PACKAGING_IMAGES.containerizedCargoPort.alt}
         primaryCta={PACKAGING_HERO.primaryCta}
         secondaryCta={PACKAGING_HERO.secondaryCta}
       />
@@ -178,7 +179,7 @@ export default function PackagingPage() {
 
       <section className="relative overflow-hidden py-16 text-white lg:py-20">
         <Image
-          src="/images/packaging/bulk-vessel-hold.png"
+          src={PACKAGING_IMAGES.bulkVessel.src}
           alt=""
           fill
           className="object-cover"
