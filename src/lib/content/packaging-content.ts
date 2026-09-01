@@ -48,8 +48,8 @@ export const HOMEPAGE_PACKAGING_TEASER = [
   },
   {
     name: "Bulk Vessels",
-    image: "/images/packaging/bulk-vessel-loading.png",
-    alt: "Bulk vessel loading dry agricultural commodity cargo",
+    image: "/images/packaging/bulk-vessel-hold.png",
+    alt: "Dry bulk carrier with open cargo holds loading unpackaged agricultural commodity",
   },
 ] as const;
 
@@ -191,12 +191,12 @@ export const PACKAGING_TYPES: PackagingTypeContent[] = [
     commodities: ["ICUMSA sugar (bulk)", "Wheat", "Corn", "Rice", "Soybeans", "Other dry bulk"],
     images: [
       {
-        src: "/images/packaging/bulk-vessel-loading.png",
-        alt: "Bulk vessel being loaded from shore silos via conveyor at port",
+        src: "/images/packaging/bulk-vessel-hold.png",
+        alt: "Dry bulk carrier with open cargo holds loading unpackaged commodity",
       },
       {
-        src: "/images/packaging/bulk-vessel-hold.png",
-        alt: "Dry bulk commodity in an open vessel hold during loading",
+        src: "/images/packaging/bulk-vessel-loading.png",
+        alt: "Bulk vessel being loaded from shore silos via conveyor at port",
       },
     ],
     note: "Hold cleanliness, fumigation, moisture and draft survey methods are defined in the sales contract.",
