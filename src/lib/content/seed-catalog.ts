@@ -208,8 +208,8 @@ export const SEED_CATEGORIES: SeedCategory[] = [
   },
   {
     slug: "beans-and-pulses",
-    name: "Beans and pulses",
-    summary: "Beans and pulses for wholesalers, distributors, and food manufacturers. Grades and calibrations confirmed per enquiry.",
+    name: "Beans",
+    summary: "Dry beans for wholesalers, distributors, and food manufacturers. Grades and calibrations confirmed per enquiry.",
     products: [
       "Kidney beans",
       "White beans",

@@ -17,9 +17,9 @@ export const CATEGORY_COVERS: Record<string, { image: string; shortName: string;
     alt: "Long-grain rice in export bags",
   },
   "beans-and-pulses": {
-    shortName: "Beans & Pulses",
-    image: "/images/products/beans/beans-variety-mosaic.png",
-    alt: "Assorted dry beans and pulses",
+    shortName: "Beans",
+    image: "/images/products/beans/red-kidney-bowl.png",
+    alt: "Dark red kidney beans",
   },
   "other-commodities": {
     shortName: "Coffee & Spices",

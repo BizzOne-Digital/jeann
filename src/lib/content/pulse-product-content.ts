@@ -31,7 +31,7 @@ const PILLARS: MarketingContentBox[] = [
 ];
 
 export const BEANS_CATEGORY = {
-  eyebrow: "Beans & pulses",
+  eyebrow: "Beans",
   title: "Dry beans and pulses for global food supply chains",
   lead: "Finekarts supplies kidney, white, red, pinto, chickpea and other pulse programmes for wholesalers, distributors, and food manufacturers. Calibration, moisture, and packing are confirmed per enquiry and contract.",
   products: [
@@ -48,6 +48,8 @@ export const BEANS_CATEGORY = {
 };
 
 const BEANS_BASE = "/images/products/beans";
+/** Client-approved mosaic used on every beans catalog listing. */
+const BEANS_LISTING_IMAGE = `${BEANS_BASE}/beans-variety-mosaic.png`;
 
 const PULSE_PRODUCTS: Record<string, PulseProductDetail> = {
   "kidney-beans": {
@@ -74,7 +76,7 @@ const PULSE_PRODUCTS: Record<string, PulseProductDetail> = {
       "Calibration and moisture per contract",
       "Independent inspection available",
     ],
-    heroImage: `${BEANS_BASE}/red-kidney-bowl.png`,
+    heroImage: BEANS_LISTING_IMAGE,
     images: [
       {
         src: `${BEANS_BASE}/red-kidney-bowl.png`,
@@ -114,7 +116,7 @@ const PULSE_PRODUCTS: Record<string, PulseProductDetail> = {
       "Uniform calibration programmes",
       "Container-based supply",
     ],
-    heroImage: `${BEANS_BASE}/white-beans-plate.png`,
+    heroImage: BEANS_LISTING_IMAGE,
     images: [
       {
         src: `${BEANS_BASE}/white-beans-plate.png`,
@@ -154,7 +156,7 @@ const PULSE_PRODUCTS: Record<string, PulseProductDetail> = {
       "Sorted calibration per contract",
       "Phytosanitary documentation available",
     ],
-    heroImage: `${BEANS_BASE}/red-speckled-pile.png`,
+    heroImage: BEANS_LISTING_IMAGE,
     images: [
       {
         src: `${BEANS_BASE}/red-speckled-pile.png`,
@@ -206,7 +208,7 @@ const PULSE_PRODUCTS: Record<string, PulseProductDetail> = {
       "Sorted calibration programmes",
       "Independent inspection aligned to contract",
     ],
-    heroImage: `${BEANS_BASE}/pinto-beans-basket.png`,
+    heroImage: BEANS_LISTING_IMAGE,
     images: [
       {
         src: `${BEANS_BASE}/pinto-beans-basket.png`,
@@ -254,7 +256,7 @@ const PULSE_PRODUCTS: Record<string, PulseProductDetail> = {
       "Calibre sorting per contract",
       "Container programmes common",
     ],
-    heroImage: `${BEANS_BASE}/dry-chickpeas.png`,
+    heroImage: BEANS_LISTING_IMAGE,
     images: [
       {
         src: `${BEANS_BASE}/dry-chickpeas.png`,
@@ -290,7 +292,7 @@ const PULSE_PRODUCTS: Record<string, PulseProductDetail> = {
       "Calibration per contract",
       "Phytosanitary documentation available",
     ],
-    heroImage: `${BEANS_BASE}/black-beans-wooden-bowl.png`,
+    heroImage: BEANS_LISTING_IMAGE,
     images: [
       {
         src: `${BEANS_BASE}/black-beans-wooden-bowl.png`,
@@ -330,7 +332,7 @@ const PULSE_PRODUCTS: Record<string, PulseProductDetail> = {
       "Protein specification per contract",
       "Bulk and container options",
     ],
-    heroImage: `${BEANS_BASE}/beans-variety-mosaic.png`,
+    heroImage: BEANS_LISTING_IMAGE,
     images: [
       {
         src: `${BEANS_BASE}/beans-variety-mosaic.png`,

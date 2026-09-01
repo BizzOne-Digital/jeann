@@ -16,7 +16,7 @@ const LINKS = [
     items: [
       { href: "/products/edible-oils", label: "Edible oils" },
       { href: "/products/sugar", label: "Sugar" },
-      { href: "/products/beans-and-pulses", label: "Beans & pulses" },
+      { href: "/products/beans-and-pulses", label: "Beans" },
       { href: "/products/rice-and-grains", label: "Rice & grains" },
       { href: "/products", label: "All products" },
     ],
