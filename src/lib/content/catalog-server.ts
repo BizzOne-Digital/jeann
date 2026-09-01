@@ -1,9 +1,13 @@
 import type { SeedCategory, SeedProduct } from "./seed-catalog";
-import { getMergedCategories, getMergedSite } from "./products-catalog";
+import { getMergedCategories } from "./products-catalog";
+import { getPublicSiteSettings } from "./site-settings-public";
 
 export async function getPublicSite() {
-  return getMergedSite();
+  const settings = await getPublicSiteSettings();
+  return settings;
 }
+
+export { getPublicSiteSettings };
 
 export async function getPublicCategories(): Promise<SeedCategory[]> {
   return getMergedCategories();

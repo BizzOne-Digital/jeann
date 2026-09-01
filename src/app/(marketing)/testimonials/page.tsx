@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHero } from "@/components/marketing/PageHero";
 import { TestimonialsGrid } from "@/components/marketing/TestimonialSections";
+import { AnimatedSection } from "@/components/motion/AnimatedSection";
 import { getPublishedTestimonials } from "@/lib/content/testimonials-catalog";
 import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
 
@@ -34,12 +35,12 @@ export default async function TestimonialsPage() {
         <div className="container-page">
           <TestimonialsGrid testimonials={testimonials} />
           {testimonials.length > 0 ? (
-            <p className="mt-10 text-center text-sm text-[#666666]">
+            <AnimatedSection className="mt-10 text-center text-sm text-[#666666]" delay={0.12}>
               Interested in working with Finekarts?{" "}
               <Link href="/contact" className="font-semibold text-[#c88e4a] underline">
                 Contact the trade desk
               </Link>
-            </p>
+            </AnimatedSection>
           ) : null}
         </div>
       </section>

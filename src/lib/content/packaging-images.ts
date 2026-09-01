@@ -94,15 +94,26 @@ export const PACKAGING_IMAGES = {
   },
 } as const;
 
-function teaser(name: string, photo: { src: string; alt: string }) {
-  return { name, image: photo.src, alt: photo.alt };
+function teaser(
+  name: string,
+  slug: string,
+  photo: { src: string; alt: string },
+) {
+  return { name, slug, image: photo.src, alt: photo.alt };
 }
 
-/** Homepage packaging grid — client-verified photos; full catalogue on /packaging. */
+/** Slugs featured on the homepage packaging grid — full catalogue lives on /packaging. */
+export const HOMEPAGE_PACKAGING_SLUGS = [
+  "flexitank",
+  "bulk-railcar",
+  "tanker-vessel",
+  "bulk-truck",
+] as const;
+
+/** Homepage packaging grid — client-verified transport modes; full catalogue on /packaging. */
 export const HOMEPAGE_PACKAGING_TEASER = [
-  teaser("Jumbo Bags", PACKAGING_IMAGES.fibcJumboBag),
-  teaser("Flexitanks", PACKAGING_IMAGES.flexitank),
-  teaser("IBC Totes", PACKAGING_IMAGES.ibcTote),
-  teaser("Drums", PACKAGING_IMAGES.drums),
-  teaser("Bulk Vessels", PACKAGING_IMAGES.bulkVessel),
+  teaser("Flexitank", "flexitank", PACKAGING_IMAGES.flexitank),
+  teaser("Bulk Railcar", "bulk-railcar", PACKAGING_IMAGES.bulkRailcar),
+  teaser("Tanker Vessel", "tanker-vessel", PACKAGING_IMAGES.tankerVessel),
+  teaser("Bulk Truck", "bulk-truck", PACKAGING_IMAGES.bulkTruck),
 ] as const;

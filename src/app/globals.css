@@ -349,9 +349,21 @@ a {
   animation: food-safety-marquee 28s linear infinite;
 }
 
+.trade-alert-marquee {
+  animation: food-safety-marquee 40s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .food-safety-marquee {
     overflow-x: auto;
+  }
+
+  .trade-alert-marquee {
+    animation: none;
+    flex-wrap: wrap;
+    width: 100%;
+    white-space: normal;
+    gap: 0.5rem 1.5rem;
   }
 
   .food-safety-marquee-track {

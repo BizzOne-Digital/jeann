@@ -9,6 +9,11 @@ export type AdminSiteSettings = {
   addressLine1: string;
   addressCity: string;
   addressCountry: string;
+  linkedinUrl: string;
+  facebookUrl: string;
+  instagramUrl: string;
+  youtubeUrl: string;
+  xUrl: string;
   seoTitle: string;
   seoDescription: string;
   aiAssistantEnabled: boolean;
@@ -18,6 +23,25 @@ export type AdminSiteSettings = {
   financeModule: boolean;
   locales: string;
 };
+
+function socialLinksFromDoc(doc: SiteSettingsLean): {
+  linkedinUrl: string;
+  facebookUrl: string;
+  instagramUrl: string;
+  youtubeUrl: string;
+  xUrl: string;
+} {
+  const byPlatform = new Map(
+    (doc.socialLinks ?? []).map((link) => [link.platform.toLowerCase(), link.url]),
+  );
+  return {
+    linkedinUrl: byPlatform.get("linkedin") ?? "",
+    facebookUrl: byPlatform.get("facebook") ?? "",
+    instagramUrl: byPlatform.get("instagram") ?? "",
+    youtubeUrl: byPlatform.get("youtube") ?? "",
+    xUrl: byPlatform.get("x") ?? byPlatform.get("twitter") ?? "",
+  };
+}
 
 export function serializeSiteSettings(doc: SiteSettingsLean): AdminSiteSettings {
   const flags = doc.featureFlags ?? {};
@@ -30,6 +54,7 @@ export function serializeSiteSettings(doc: SiteSettingsLean): AdminSiteSettings 
     addressLine1: doc.address?.line1 ?? "",
     addressCity: doc.address?.city ?? "",
     addressCountry: doc.address?.country ?? "",
+    ...socialLinksFromDoc(doc),
     seoTitle: doc.seoDefaults?.title ?? "",
     seoDescription: doc.seoDefaults?.description ?? "",
     aiAssistantEnabled: doc.aiAssistantEnabled,
@@ -50,6 +75,11 @@ export const DEFAULT_SITE_SETTINGS: AdminSiteSettings = {
   addressLine1: "",
   addressCity: "",
   addressCountry: "",
+  linkedinUrl: "",
+  facebookUrl: "",
+  instagramUrl: "",
+  youtubeUrl: "",
+  xUrl: "",
   seoTitle: "",
   seoDescription: "",
   aiAssistantEnabled: true,

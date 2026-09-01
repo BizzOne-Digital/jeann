@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHero } from "@/components/marketing/PageHero";
 import { TeamGrid } from "@/components/marketing/TeamSections";
+import { AnimatedSection } from "@/components/motion/AnimatedSection";
 import { getPublishedTeamMembers } from "@/lib/content/team-catalog";
 
 export const metadata: Metadata = {
@@ -25,12 +26,12 @@ export default async function TeamPage() {
         <div className="container-page">
           <TeamGrid members={members} />
           {members.length > 0 ? (
-            <p className="mt-10 text-center text-sm text-[#666666]">
+            <AnimatedSection className="mt-10 text-center text-sm text-[#666666]" delay={0.12}>
               Want to work with us?{" "}
               <Link href="/contact" className="font-semibold text-[#c88e4a] underline">
                 Contact the trade desk
               </Link>
-            </p>
+            </AnimatedSection>
           ) : null}
         </div>
       </section>

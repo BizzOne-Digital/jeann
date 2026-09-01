@@ -4,11 +4,14 @@ import Link from "next/link";
 import { PageHero } from "@/components/marketing/PageHero";
 import { Reveal } from "@/components/motion/Reveal";
 import {
+  getOrderedPackagingTypes,
+  isHomepageFeaturedPackaging,
   PACKAGING_CTA,
   PACKAGING_HERO,
+  PACKAGING_PAGE_INTRO,
   PACKAGING_SELECTION,
-  PACKAGING_TYPES,
 } from "@/lib/content/packaging-content";
+import { PackagingTypeIndex } from "@/components/marketing/PackagingTypeIndex";
 import { PACKAGING_IMAGES } from "@/lib/content/packaging-images";
 import { buyerPortalHref } from "@/lib/marketing/cta-links";
 
@@ -30,6 +33,8 @@ const MODE_LABELS = {
 } as const;
 
 export default function PackagingPage() {
+  const packagingTypes = getOrderedPackagingTypes();
+
   return (
     <>
       <PageHero
@@ -43,18 +48,31 @@ export default function PackagingPage() {
         secondaryCta={PACKAGING_HERO.secondaryCta}
       />
 
+      <section className="bg-[#f3f1ec] py-16 lg:py-20">
+        <div className="container-page">
+          <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">
+            {PACKAGING_PAGE_INTRO.title}
+          </h2>
+          <p className="mt-3 max-w-3xl text-base text-[#555555]">
+            {PACKAGING_PAGE_INTRO.description}
+          </p>
+          <PackagingTypeIndex />
+        </div>
+      </section>
+
       <section id="packaging-types" className="bg-white py-16 lg:py-20">
         <div className="container-page">
-          <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">Packaging types</h2>
+          <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">Detailed specifications</h2>
           <p className="mt-3 max-w-3xl text-base text-[#555555]">
-            The modes below are presented in the order used for Finekarts commodity programmes.
-            Product suitability and corridor availability are confirmed per transaction.
+            Each packaging type below includes typical applications, advantages, suitable commodities
+            and notes where corridor or product confirmation is required.
           </p>
 
           <div className="mt-12 space-y-16">
-            {PACKAGING_TYPES.map((type, index) => {
-              const prev = PACKAGING_TYPES[index - 1];
+            {packagingTypes.map((type, index) => {
+              const prev = packagingTypes[index - 1];
               const showCategoryHeader = !prev || prev.category !== type.category;
+              const featured = isHomepageFeaturedPackaging(type.slug);
 
               return (
               <Reveal key={type.slug} delay={index * 0.03}>
@@ -81,6 +99,11 @@ export default function PackagingPage() {
                     <div>
                       <p className="text-xs font-semibold tracking-[0.2em] text-[#c88e4a] uppercase">
                         {String(type.order).padStart(2, "0")} · {MODE_LABELS[type.mode]}
+                        {featured ? (
+                          <span className="ml-2 rounded bg-[#001a3d] px-1.5 py-0.5 text-[0.6rem] tracking-wide text-white normal-case">
+                            Also on homepage
+                          </span>
+                        ) : null}
                       </p>
                       <h3 className="mt-2 text-2xl font-semibold text-[#001a3d]">{type.name}</h3>
                       <p className="mt-1 text-sm font-medium text-[#777777]">{type.summary}</p>

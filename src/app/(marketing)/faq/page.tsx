@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { FaqAccordion } from "@/components/marketing/FaqAccordion";
 import { PageHero } from "@/components/marketing/PageHero";
+import { AnimatedSection } from "@/components/motion/AnimatedSection";
 import { buyerQuoteHref } from "@/lib/marketing/cta-links";
 import { getPublishedFaqs } from "@/lib/content/faqs-catalog";
 
@@ -25,7 +26,7 @@ export default async function FaqPage() {
       <section className="bg-[#f3f1ec] py-16 lg:py-24">
         <div className="container-narrow">
           <FaqAccordion items={faqs} />
-          <div className="mt-12 flex flex-wrap gap-3">
+          <AnimatedSection className="mt-12 flex flex-wrap gap-3" delay={0.1}>
             <Link
               href={buyerQuoteHref()}
               className="focus-ring inline-flex items-center gap-2 rounded-md bg-[#d4a84b] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#c4983f]"
@@ -38,7 +39,7 @@ export default async function FaqPage() {
             >
               Contact us
             </Link>
-          </div>
+          </AnimatedSection>
         </div>
       </section>
     </>

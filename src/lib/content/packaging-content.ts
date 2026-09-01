@@ -1,8 +1,14 @@
 /** Client-approved packaging types — display order is fixed. */
 
-import { PACKAGING_IMAGES } from "./packaging-images";
+import {
+  HOMEPAGE_PACKAGING_SLUGS,
+  PACKAGING_IMAGES,
+} from "./packaging-images";
 
-export { HOMEPAGE_PACKAGING_TEASER } from "./packaging-images";
+export {
+  HOMEPAGE_PACKAGING_SLUGS,
+  HOMEPAGE_PACKAGING_TEASER,
+} from "./packaging-images";
 
 export type PackagingTypeContent = {
   order: number;
@@ -23,9 +29,15 @@ export const PACKAGING_HERO = {
   eyebrow: "Packaging types",
   title: "Packaging & transport modes for global commodity trade",
   description:
-    "Finekarts structures commodity programmes across transport modes — flexitank, tanker vessel, containerized cargo, bulk truck, bulk vessel and bulk railcar — and product packaging formats including ISO tanks, IBC totes, drums, bulk liners, FIBCs, woven and laminated bags. Not every option is available for every commodity or corridor.",
-  primaryCta: { href: "#packaging-types", label: "View packaging types →" },
+    "The homepage highlights four core transport modes — flexitank, bulk railcar, tanker vessel and bulk truck. This page explains every packaging and logistics option Finekarts structures for international commodity trade, including containerized cargo, bulk vessel, ISO tanks, IBC totes, drums, FIBCs, bulk liners, woven bags and more. Not every option is available for every commodity or corridor.",
+  primaryCta: { href: "#packaging-index", label: "Browse all packaging types →" },
   secondaryCta: { href: "/logistics", label: "Logistics overview" },
+};
+
+export const PACKAGING_PAGE_INTRO = {
+  title: "Full packaging catalogue",
+  description:
+    "Below is the complete list of transport modes and product packaging formats. Each section includes applications, advantages, suitable commodities and client-approved photography where available.",
 };
 
 export const PACKAGING_TYPES: PackagingTypeContent[] = [
@@ -466,6 +478,33 @@ export const PACKAGING_TYPES: PackagingTypeContent[] = [
     note: "Bag weight, stitching and pallet configuration are confirmed in the contract specification.",
   },
 ];
+
+const homepageSlugSet = new Set<string>(HOMEPAGE_PACKAGING_SLUGS);
+
+export function isHomepageFeaturedPackaging(slug: string) {
+  return homepageSlugSet.has(slug);
+}
+
+/** Transport modes first (homepage featured order), then remaining types by catalogue order. */
+export function getOrderedPackagingTypes(): PackagingTypeContent[] {
+  const homepageIndex = (slug: string) => {
+    const index = HOMEPAGE_PACKAGING_SLUGS.indexOf(
+      slug as (typeof HOMEPAGE_PACKAGING_SLUGS)[number],
+    );
+    return index === -1 ? Number.MAX_SAFE_INTEGER : index;
+  };
+
+  return [...PACKAGING_TYPES].sort((a, b) => {
+    const featuredDiff = homepageIndex(a.slug) - homepageIndex(b.slug);
+    if (featuredDiff !== 0) return featuredDiff;
+
+    if (a.category !== b.category) {
+      return a.category === "transport" ? -1 : 1;
+    }
+
+    return a.order - b.order;
+  });
+}
 
 export const PACKAGING_SELECTION = {
   title: "Choosing the right packaging mode",

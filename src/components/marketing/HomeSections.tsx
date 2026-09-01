@@ -575,24 +575,30 @@ export function PackagingSection() {
           </Reveal>
         </div>
         <p className="mt-3 max-w-2xl text-sm text-stone">
-          Not every package type is available for every product. Compatibility depends on product,
-          corridor, and contract terms.
+          Featured transport modes below. All other packaging types — IBC totes, drums, jumbo bags,
+          ISO tanks, bulk vessel, containerized cargo and more — are explained on the{" "}
+          <Link href="/packaging" className="font-semibold text-[#c88e4a] hover:underline">
+            full packaging page
+          </Link>
+          .
         </p>
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {HOMEPAGE_PACKAGING_TEASER.map((item, i) => (
-            <Reveal key={item.name} delay={i * 0.05}>
-              <div>
+            <Reveal key={item.slug} delay={i * 0.05}>
+              <Link href={`/packaging#${item.slug}`} className="group block">
                 <div className="relative aspect-[4/3] overflow-hidden rounded-sm bg-[#dfe5ea]">
                   <Image
                     src={item.image}
                     alt={item.alt}
                     fill
-                    className="object-cover"
+                    className="object-cover transition duration-300 group-hover:scale-[1.03]"
                     sizes="(max-width: 1024px) 50vw, 220px"
                   />
                 </div>
-                <p className="mt-3 text-center text-sm font-semibold text-[#0b1f33]">{item.name}</p>
-              </div>
+                <p className="mt-3 text-center text-sm font-semibold text-[#0b1f33] group-hover:text-[#c88e4a]">
+                  {item.name}
+                </p>
+              </Link>
             </Reveal>
           ))}
         </div>

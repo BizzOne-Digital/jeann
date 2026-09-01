@@ -104,6 +104,32 @@ export function AdminSettingsEditor({ initialSettings }: { initialSettings: Admi
         />
       </label>
 
+      <h2 className="lg:col-span-2 pt-2 font-semibold text-[var(--navy)]">Social media</h2>
+      <p className="lg:col-span-2 text-sm text-[var(--stone)]">
+        Full URLs to your official profiles. Leave blank to hide a network on the public site.
+      </p>
+
+      {(
+        [
+          ["linkedinUrl", "LinkedIn"],
+          ["facebookUrl", "Facebook"],
+          ["instagramUrl", "Instagram"],
+          ["youtubeUrl", "YouTube"],
+          ["xUrl", "X (Twitter)"],
+        ] as const
+      ).map(([key, label]) => (
+        <label key={key} className="label">
+          {label}
+          <input
+            className="field mt-1"
+            type="url"
+            value={settings[key]}
+            onChange={(e) => setSettings({ ...settings, [key]: e.target.value })}
+            placeholder={`https://${label.toLowerCase().replace(/[^a-z]/g, "")}.com/...`}
+          />
+        </label>
+      ))}
+
       <h2 className="lg:col-span-2 pt-2 font-semibold text-[var(--navy)]">SEO defaults</h2>
 
       <label className="label lg:col-span-2">

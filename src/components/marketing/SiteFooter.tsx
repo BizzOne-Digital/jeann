@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { getPublicSite } from "@/lib/content/catalog-server";
+import { getPublicSiteSettings } from "@/lib/content/site-settings-public";
+import { SocialLinks } from "@/components/marketing/SocialLinks";
+import { FooterReveal } from "@/components/motion/FooterReveal";
 
 const LINKS = [
   {
@@ -45,12 +47,13 @@ const LINKS = [
 ];
 
 export async function SiteFooter() {
-  const site = await getPublicSite();
+  const site = await getPublicSiteSettings();
 
   return (
     <footer className="mt-auto w-full max-w-full overflow-x-clip bg-[#071525] text-white">
       <div className="container-page section-pad !py-16">
         <div className="grid min-w-0 gap-10 sm:gap-12 lg:grid-cols-[1.1fr_1.6fr_1fr]">
+          <FooterReveal>
           <div className="min-w-0">
             <div>
               <p className="text-lg font-semibold tracking-[0.16em] uppercase">Finekarts</p>
@@ -78,8 +81,11 @@ export async function SiteFooter() {
                 {site.addressLine2}
               </p>
             </div>
+            <SocialLinks links={site.socialLinks} className="mt-6" />
           </div>
+          </FooterReveal>
 
+          <FooterReveal delay={0.08}>
           <div className="grid min-w-0 grid-cols-2 gap-6 sm:grid-cols-4 sm:gap-8">
             {LINKS.map((group) => (
               <div key={group.title} className="min-w-0">
@@ -98,7 +104,9 @@ export async function SiteFooter() {
               </div>
             ))}
           </div>
+          </FooterReveal>
 
+          <FooterReveal delay={0.14}>
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#e89a2d]">
               Buyer portal
@@ -124,12 +132,15 @@ export async function SiteFooter() {
               </Link>
             </p>
           </div>
+          </FooterReveal>
         </div>
 
+        <FooterReveal delay={0.18}>
         <div className="mt-14 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-white/40 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} Finekarts Incorporated. All rights reserved.</p>
           <p>Enquiry submission does not guarantee acceptance, pricing, or shipment.</p>
         </div>
+        </FooterReveal>
       </div>
     </footer>
   );

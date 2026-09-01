@@ -79,6 +79,7 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
         primaryCtaHref: "/login",
         secondaryCtaLabel: "Explore Products",
         secondaryCtaHref: "/products",
+        youtubeVideoId: "gADVpRPdr7E",
       }),
       section("connection", "Connection", {
         eyebrow: "Your global connection",

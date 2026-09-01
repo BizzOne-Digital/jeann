@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CmsPageHero } from "@/components/marketing/CmsPageHero";
+import { LegalDocumentsPanel } from "@/components/marketing/LegalDocumentsPanel";
 import { PaymentTermsTable } from "@/components/marketing/PaymentTermsTable";
 import { Reveal } from "@/components/motion/Reveal";
 import { cmsField } from "@/lib/content/cms-field";
@@ -108,8 +109,10 @@ export default async function ResourcesPage() {
             </p>
           </Reveal>
 
+          <LegalDocumentsPanel category="trade" title="Legal & trade documents (PDF)" />
+
           <Reveal>
-            <h2 className="text-2xl font-semibold text-[var(--navy)]">Downloadable references</h2>
+            <h2 className="mt-12 text-2xl font-semibold text-[var(--navy)]">Downloadable references</h2>
             <ul className="mt-6 divide-y divide-[var(--line)] border-t border-[var(--line)]">
               {DOWNLOADS.map((file) => (
                 <li key={file.href} className="flex flex-col gap-1 py-5 sm:flex-row sm:items-center sm:justify-between">

@@ -40,6 +40,21 @@ export const metadata: Metadata = {
     title: "Finekarts Incorporated | Global Agricultural Commodity Trading",
     description:
       "Bulk edible oils, sugar, beans, rice, and more. RFQ-driven commodity trading for qualified counterparties.",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Finekarts Incorporated | Global Agricultural Commodity Trading",
+    description:
+      "Bulk edible oils, sugar, beans, rice, and more. RFQ-driven commodity trading for qualified counterparties.",
+  },
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
   },
 };
 

@@ -8,6 +8,11 @@ export const adminSiteSettingsSchema = z.object({
   addressLine1: z.string().trim().max(200).optional().default(""),
   addressCity: z.string().trim().max(120).optional().default(""),
   addressCountry: z.string().trim().max(2).optional().default(""),
+  linkedinUrl: z.string().trim().url().or(z.literal("")).optional().default(""),
+  facebookUrl: z.string().trim().url().or(z.literal("")).optional().default(""),
+  instagramUrl: z.string().trim().url().or(z.literal("")).optional().default(""),
+  youtubeUrl: z.string().trim().url().or(z.literal("")).optional().default(""),
+  xUrl: z.string().trim().url().or(z.literal("")).optional().default(""),
   seoTitle: z.string().trim().max(200).optional().default(""),
   seoDescription: z.string().trim().max(500).optional().default(""),
   aiAssistantEnabled: z.boolean().default(false),
@@ -26,6 +31,14 @@ export function siteSettingsInputToMongo(input: AdminSiteSettingsInput) {
     .map((value) => value.trim())
     .filter(Boolean);
 
+  const socialLinks = [
+    { platform: "linkedin", url: input.linkedinUrl },
+    { platform: "facebook", url: input.facebookUrl },
+    { platform: "instagram", url: input.instagramUrl },
+    { platform: "youtube", url: input.youtubeUrl },
+    { platform: "x", url: input.xUrl },
+  ].filter((link) => link.url?.trim());
+
   return {
     key: "default",
     companyName: input.companyName,
@@ -40,6 +53,7 @@ export function siteSettingsInputToMongo(input: AdminSiteSettingsInput) {
             country: input.addressCountry.toUpperCase(),
           }
         : undefined,
+    socialLinks,
     seoDefaults: {
       title: input.seoTitle || undefined,
       description: input.seoDescription || undefined,

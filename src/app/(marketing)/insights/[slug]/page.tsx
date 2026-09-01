@@ -3,7 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageHero } from "@/components/marketing/PageHero";
+import { InsightArticleBody } from "@/components/marketing/InsightArticleBody";
 import { InsightRelated, InsightsCta } from "@/components/marketing/InsightSections";
+import { AnimatedSection } from "@/components/motion/AnimatedSection";
 import { getInsightCover } from "@/lib/content/insight-images";
 import { buyerQuoteHref } from "@/lib/marketing/cta-links";
 import { getInsight, SEED_INSIGHTS } from "@/lib/content/catalog";
@@ -54,6 +56,7 @@ export default async function InsightArticlePage({ params }: Props) {
       <article className="bg-[#f3f1ec] py-14 lg:py-20">
         <div className="container-page grid gap-12 lg:grid-cols-[minmax(0,1fr)_280px] lg:gap-16">
           <div>
+            <AnimatedSection y={16}>
             <nav className="text-sm text-[#666666]">
               <Link href="/insights" className="transition hover:text-[#c88e4a]">
                 Insights
@@ -61,28 +64,32 @@ export default async function InsightArticlePage({ params }: Props) {
               <span className="mx-2 text-[#ccc]">/</span>
               <span className="text-[#001a3d]">{post.category}</span>
             </nav>
+            </AnimatedSection>
 
+            <AnimatedSection delay={0.06} y={16}>
             <p className="mt-6 text-xs font-semibold tracking-[0.16em] text-[#c88e4a] uppercase">
               {post.category} · {formatDate(post.publishedAt)}
             </p>
+            </AnimatedSection>
 
+            <AnimatedSection delay={0.08} y={20}>
             <div className="relative mt-8 aspect-[16/9] overflow-hidden bg-[#e4e0d8] lg:hidden">
               <Image src={cover} alt="" fill className="object-cover" sizes="100vw" />
             </div>
+            </AnimatedSection>
 
+            <AnimatedSection delay={0.1} y={16}>
             <aside className="mt-8 border-l-2 border-[#d4a84b] bg-white/70 px-5 py-4 text-sm leading-relaxed text-[#555555]">
               Educational content only — not legal, regulatory, tax, or shipping advice. Confirm
               Incoterms, contracts, and document requirements with qualified advisers for your
               transaction.
             </aside>
+            </AnimatedSection>
 
-            <div className="prose-trade mt-10 space-y-6 text-base leading-relaxed text-[#333333]">
-              {post.body.map((paragraph) => (
-                <p key={paragraph.slice(0, 48)}>{paragraph}</p>
-              ))}
-            </div>
+            <InsightArticleBody paragraphs={post.body} />
 
-            <div className="mt-12 flex flex-wrap gap-3 border-t border-[#d5d0c8] pt-10">
+            <AnimatedSection className="mt-12 flex flex-wrap gap-3 border-t border-[#d5d0c8] pt-10" delay={0.08}>
+            <div className="flex flex-wrap gap-3">
               <Link
                 href={buyerQuoteHref()}
                 className="focus-ring inline-flex items-center gap-2 rounded-md bg-[#d4a84b] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#c4983f]"
@@ -96,9 +103,10 @@ export default async function InsightArticlePage({ params }: Props) {
                 All insights
               </Link>
             </div>
+            </AnimatedSection>
           </div>
 
-          <aside className="hidden lg:block">
+          <AnimatedSection className="hidden lg:block" delay={0.12} y={24}>
             <div className="sticky top-28 space-y-8">
               <div className="relative aspect-[4/5] overflow-hidden bg-[#e4e0d8]">
                 <Image
@@ -138,7 +146,7 @@ export default async function InsightArticlePage({ params }: Props) {
                 </ul>
               </div>
             </div>
-          </aside>
+          </AnimatedSection>
         </div>
       </article>
 
