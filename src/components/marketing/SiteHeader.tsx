@@ -45,9 +45,9 @@ export function SiteHeader({ embedded = false }: Props) {
         )}
       >
         <div className="container-page flex h-[4.75rem] min-w-0 items-center justify-between gap-2 lg:gap-3">
-          <Link href="/" className="focus-ring flex shrink-0 items-center gap-2.5 rounded-sm sm:gap-3">
-            <BrandLogo size="sm" priority />
-            <span className="hidden leading-tight sm:block">
+          <Link href="/" className="focus-ring flex shrink-0 items-center gap-3 rounded-sm">
+            <BrandLogo size="md" priority />
+            <span className="hidden leading-tight md:block">
               <span className="block whitespace-nowrap text-[0.85rem] font-bold tracking-[0.16em] text-white uppercase sm:text-[0.95rem] sm:tracking-[0.2em]">
                 Finekarts
               </span>

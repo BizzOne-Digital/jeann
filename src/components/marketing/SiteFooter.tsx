@@ -56,15 +56,15 @@ export async function SiteFooter() {
         <div className="grid min-w-0 gap-10 sm:gap-12 lg:grid-cols-[1.1fr_1.6fr_1fr]">
           <FooterReveal>
           <div className="min-w-0">
-            <div className="flex items-center gap-3">
-              <BrandLogo size="md" />
-              <div>
+            <Link href="/" className="focus-ring inline-flex shrink-0 items-center gap-3">
+              <BrandLogo size="lg" />
+              <div className="shrink-0">
                 <p className="text-lg font-semibold tracking-[0.16em] uppercase">Finekarts</p>
                 <p className="text-[0.65rem] uppercase tracking-[0.28em] text-white/50">
                   Incorporated
                 </p>
               </div>
-            </div>
+            </Link>
             <p className="mt-5 max-w-xs text-base leading-relaxed text-white/65">
               Global agricultural commodity trading for qualified international buyers.
             </p>
