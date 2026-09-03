@@ -100,32 +100,26 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
   ];
 
   return (
-    <section className="relative left-0 right-0 min-h-[100svh] w-full min-w-full overflow-hidden bg-[#071525] text-white">
-      <HeroVideoBackground
-        youtubeInput={resolveHeroYoutubeInput(cmsField(cms, "youtubeVideoId", ""))}
-        posterSrc="/images/hero-commodities.png"
-        posterAlt="Agricultural commodities with port logistics and refining infrastructure"
-      />
-      <div className="pointer-events-none absolute inset-0">
-        {/* Light navy wash over full video — similar to card white overlay in reference */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(180deg, rgba(7,21,37,0.28) 0%, rgba(7,21,37,0.38) 45%, rgba(7,21,37,0.55) 100%)",
-          }}
-        />
-        {/* Left readability gradient for headline text */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(90deg, rgba(4,14,28,0.72) 0%, rgba(4,14,28,0.45) 38%, rgba(4,14,28,0.12) 68%, transparent 100%)",
-          }}
+    <section className="relative min-h-[100svh] w-full max-w-full overflow-hidden bg-[#1b3a5c] text-white">
+      <div className="absolute inset-0 z-0">
+        <HeroVideoBackground
+          youtubeInput={resolveHeroYoutubeInput(cmsField(cms, "youtubeVideoId", ""))}
+          posterSrc="/images/hero-commodities.png"
+          posterAlt="Agricultural commodities with port logistics and refining infrastructure"
         />
       </div>
+      <div className="pointer-events-none absolute inset-0 z-[1]">
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(90deg, rgba(4,14,28,0.97) 0%, rgba(4,14,28,0.92) 24%, rgba(4,14,28,0.58) 48%, rgba(4,14,28,0.22) 70%, rgba(4,14,28,0.12) 100%)",
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1b3a5c]/70 via-transparent to-[#1b3a5c]/25" />
+      </div>
 
-      <div className="container-page relative flex min-h-[100svh] flex-col justify-center pb-28 pt-28 lg:pb-32 lg:pt-32">
+      <div className="container-page relative z-[2] flex min-h-[100svh] flex-col justify-center pb-28 pt-28 lg:pb-32 lg:pt-32">
         <div className="min-w-0 max-w-xl lg:max-w-2xl">
           <Reveal>
             <p className="text-[0.65rem] font-semibold tracking-[0.18em] text-[#d4a84b] uppercase sm:text-xs sm:tracking-[0.26em]">
@@ -231,7 +225,7 @@ export function ConnectionSection({
   home2?: string;
 }) {
   return (
-    <section className="bg-[#f3f1ec] py-16 lg:py-24">
+    <section className="bg-[#f4f6f8] py-16 lg:py-24">
       <div className="container-page grid items-center gap-10 lg:grid-cols-[0.95fr_1.15fr] lg:gap-14">
         <div className="max-w-xl">
           <Reveal>
@@ -406,7 +400,7 @@ export function SourcedResponsibly({ home3 = "/images/home-3.png" }: { home3?: s
   ];
 
   return (
-    <section className="bg-[#f3f1ec] py-16 lg:py-24">
+    <section className="bg-[#f4f6f8] py-16 lg:py-24">
       <div className="container-page grid items-center gap-12 lg:grid-cols-[0.95fr_1.15fr] lg:gap-16">
         <Reveal>
           <div className="relative mx-auto aspect-[5/4] w-full max-w-md overflow-hidden bg-white lg:max-w-none">
@@ -691,7 +685,7 @@ export function InsightsAndNotes({
   ];
 
   return (
-    <section className="relative w-full overflow-hidden bg-[#f3f1ec] py-16 lg:py-24">
+    <section className="relative w-full overflow-hidden bg-[#f4f6f8] py-16 lg:py-24">
       <div className="container-page relative z-10 w-full">
         <div className="grid w-full gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:gap-16">
           {/* Insights Cards Column */}

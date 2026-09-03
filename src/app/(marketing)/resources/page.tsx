@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CmsPageHero } from "@/components/marketing/CmsPageHero";
 import { LegalDocumentsPanel } from "@/components/marketing/LegalDocumentsPanel";
+import { PageHero } from "@/components/marketing/PageHero";
 import { PaymentTermsTable } from "@/components/marketing/PaymentTermsTable";
 import { Reveal } from "@/components/motion/Reveal";
 import { cmsField } from "@/lib/content/cms-field";
@@ -67,19 +67,27 @@ const DOCUMENT_GROUPS = [
 
 export default async function ResourcesPage() {
   const cms = await getPublishedPage("resources");
+  const hero = getSectionFields(cms, "hero");
   const intro = getSectionFields(cms, "intro");
 
   return (
     <>
-      <CmsPageHero
-        pageSlug="resources"
-        tone="dark"
-        defaults={{
-          title: "Resources",
-          description:
-            "Educational reference for trade documents, terminology, and process notes. Purchase requests and consultations are submitted through the buyer portal after sign-in.",
-          primaryCta: { href: "/login", label: "Buyer portal sign-in →" },
-          secondaryCta: { href: "/register/buyer", label: "Register as buyer" },
+      <PageHero
+        tone="light"
+        title={cmsField(hero, "title", "Resources")}
+        brand="Trade reference"
+        description={cmsField(
+          hero,
+          "description",
+          "Educational reference for trade documents, terminology, and process notes. Purchase requests and consultations are submitted through the buyer portal after sign-in.",
+        )}
+        primaryCta={{
+          href: cmsField(hero, "primaryCtaHref", "/login"),
+          label: cmsField(hero, "primaryCtaLabel", "Buyer portal sign-in →"),
+        }}
+        secondaryCta={{
+          href: cmsField(hero, "secondaryCtaHref", "/register/buyer"),
+          label: cmsField(hero, "secondaryCtaLabel", "Register as buyer"),
         }}
       />
 
@@ -88,78 +96,104 @@ export default async function ResourcesPage() {
       <section className="bg-white py-16 lg:py-20">
         <div className="container-page">
           <Reveal>
-            <p className="max-w-3xl text-base leading-relaxed text-[var(--stone)]">
+            <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">Document overview</h2>
+            <p className="mt-4 max-w-3xl text-base leading-relaxed text-[#555555]">
               {cmsField(
                 intro,
                 "body",
                 "Document sets vary by product, corridor, bank, and contract. Lists below are starting points for discussion — not guarantees that every document will be issued or accepted without amendment.",
-              )} See also{" "}
-              <Link href="/logistics" className="font-semibold text-[var(--navy)] underline">
+              )}{" "}
+              See also{" "}
+              <Link href="/logistics" className="font-semibold text-[#1b3a5c] underline">
                 Logistics
               </Link>
               ,{" "}
-              <Link href="/inspections" className="font-semibold text-[var(--navy)] underline">
+              <Link href="/inspections" className="font-semibold text-[#1b3a5c] underline">
                 Inspections
               </Link>
               , and{" "}
-              <Link href="/insights" className="font-semibold text-[var(--navy)] underline">
+              <Link href="/insights" className="font-semibold text-[#1b3a5c] underline">
                 Insights
               </Link>
               .
             </p>
           </Reveal>
 
-          <LegalDocumentsPanel category="trade" title="Legal & trade documents (PDF)" />
+          <Reveal delay={0.06}>
+            <LegalDocumentsPanel category="trade" title="Legal & trade documents (PDF)" />
+          </Reveal>
+        </div>
+      </section>
 
+      <section className="bg-[#f4f6f8] py-16 lg:py-20">
+        <div className="container-page">
           <Reveal>
-            <h2 className="mt-12 text-2xl font-semibold text-[var(--navy)]">Downloadable references</h2>
-            <ul className="mt-6 divide-y divide-[var(--line)] border-t border-[var(--line)]">
-              {DOWNLOADS.map((file) => (
-                <li key={file.href} className="flex flex-col gap-1 py-5 sm:flex-row sm:items-center sm:justify-between">
+            <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">Downloadable references</h2>
+          </Reveal>
+          <ul className="mt-6 divide-y divide-[#d5d0c8] border-t border-[#d5d0c8] bg-white">
+            {DOWNLOADS.map((file, i) => (
+              <Reveal key={file.href} delay={i * 0.04}>
+                <li className="flex flex-col gap-1 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <p className="text-base font-semibold text-[var(--ink)]">{file.title}</p>
-                    <p className="mt-1 text-base text-[var(--stone)]">{file.note}</p>
+                    <p className="text-base font-semibold text-[#001a3d]">{file.title}</p>
+                    <p className="mt-1 text-sm text-[#666666]">{file.note}</p>
                   </div>
-                  <a href={file.href} download className="btn btn-secondary mt-2 w-fit shrink-0 sm:mt-0">
+                  <a
+                    href={file.href}
+                    download
+                    className="focus-ring mt-2 inline-flex w-fit shrink-0 items-center rounded-md border border-[#1b3a5c] px-4 py-2.5 text-sm font-semibold text-[#1b3a5c] transition hover:bg-[#1b3a5c] hover:text-white sm:mt-0"
+                  >
                     Download
                   </a>
                 </li>
-              ))}
-            </ul>
-          </Reveal>
-
-          <div className="mt-12 space-y-12">
-            {DOCUMENT_GROUPS.map((group, gi) => (
-              <div key={group.title}>
-                <Reveal delay={gi * 0.04}>
-                  <h2 className="text-2xl font-semibold text-[var(--navy)]">{group.title}</h2>
-                </Reveal>
-                <ul className="mt-6 divide-y divide-[var(--line)] border-t border-[var(--line)]">
-                  {group.items.map((item, i) => (
-                    <Reveal key={item.name} delay={0.05 + i * 0.03}>
-                      <li className="py-5">
-                        <p className="text-base font-semibold text-[var(--ink)]">{item.name}</p>
-                        <p className="mt-1.5 text-base leading-relaxed text-[var(--stone)]">{item.note}</p>
-                      </li>
-                    </Reveal>
-                  ))}
-                </ul>
-              </div>
+              </Reveal>
             ))}
-          </div>
+          </ul>
+        </div>
+      </section>
 
-          <Reveal delay={0.1}>
-            <div className="mt-14 rounded-lg border border-[var(--line)] bg-[var(--cream)] p-6 sm:p-8">
-              <h2 className="text-xl font-semibold text-[var(--navy)]">Submit an enquiry</h2>
-              <p className="mt-2 max-w-2xl text-base leading-relaxed text-[var(--stone)]">
+      <section className="bg-white py-16 lg:py-20">
+        <div className="container-page space-y-14">
+          {DOCUMENT_GROUPS.map((group, gi) => (
+            <div key={group.title}>
+              <Reveal delay={gi * 0.04}>
+                <h2 className="text-xl font-semibold text-[#001a3d] sm:text-2xl">{group.title}</h2>
+              </Reveal>
+              <ul className="mt-6 divide-y divide-[#d5d0c8] border-t border-[#d5d0c8]">
+                {group.items.map((item, i) => (
+                  <Reveal key={item.name} delay={0.05 + i * 0.03}>
+                    <li className="py-5">
+                      <p className="text-base font-semibold text-[#001a3d]">{item.name}</p>
+                      <p className="mt-1.5 text-sm leading-relaxed text-[#666666]">{item.note}</p>
+                    </li>
+                  </Reveal>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="bg-[#f4f6f8] py-16 lg:py-20">
+        <div className="container-page">
+          <Reveal>
+            <div className="rounded-lg border border-[#d5d0c8] bg-white p-6 sm:p-8">
+              <h2 className="text-xl font-semibold text-[#001a3d]">Submit an enquiry</h2>
+              <p className="mt-3 max-w-2xl text-base leading-relaxed text-[#666666]">
                 Signed-in buyers can submit purchase requests, book consultations, and message the
                 trade desk from the buyer portal.
               </p>
-              <div className="mt-5 flex flex-wrap gap-3">
-                <Link href="/login" className="btn btn-primary">
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link
+                  href="/login"
+                  className="focus-ring inline-flex items-center rounded-md bg-[#1b3a5c] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#13293d]"
+                >
                   Sign in
                 </Link>
-                <Link href="/register/buyer" className="btn btn-secondary">
+                <Link
+                  href="/register/buyer"
+                  className="focus-ring inline-flex items-center rounded-md border border-[#1b3a5c] px-6 py-3 text-sm font-semibold text-[#1b3a5c] transition hover:bg-[#1b3a5c] hover:text-white"
+                >
                   Register
                 </Link>
               </div>
