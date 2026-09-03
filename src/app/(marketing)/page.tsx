@@ -1,4 +1,4 @@
-import { SEED_INSIGHTS } from "@/lib/content/catalog";
+import { getPublishedInsights } from "@/lib/content/insights-catalog";
 import { getPublicCategories } from "@/lib/content/catalog-server";
 import { getPartners } from "@/lib/content/partners-catalog";
 import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
@@ -20,7 +20,7 @@ import {
 
 export default async function HomePage() {
   const categories = await getPublicCategories();
-  const posts = SEED_INSIGHTS.slice(0, 3);
+  const posts = (await getPublishedInsights()).slice(0, 3);
   const cms = await getPublishedPage("home");
   const connection = getSectionFields(cms, "connection");
   const sourced = getSectionFields(cms, "sourced");

@@ -1,13 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils/cn";
+import { BrandLogo } from "@/components/marketing/BrandLogo";
 import { LanguageSwitcher } from "@/components/i18n/LanguageSwitcher";
-import { isHeroMarketingPage, isLightHeroPage } from "@/lib/marketing/hero-pages";
 
 const NAV = [
   { href: "/", label: "Home" },
@@ -18,21 +17,15 @@ const NAV = [
   { href: "/contact", label: "Contact" },
 ];
 
-export function SiteHeader() {
+type Props = {
+  /** When true, header is not individually fixed (parent shell handles stacking). */
+  embedded?: boolean;
+};
+
+export function SiteHeader({ embedded = false }: Props) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const reduce = useReducedMotion();
-  const isHero = isHeroMarketingPage(pathname);
-  const isLight = isLightHeroPage(pathname);
-  const transparent = isHero && !isLight && !scrolled && !open;
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 16);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -47,41 +40,18 @@ export function SiteHeader() {
     <>
       <header
         className={cn(
-          "fixed inset-x-0 top-0 z-[70] w-full max-w-full overflow-x-clip transition-[background-color,box-shadow,backdrop-filter,border-color] duration-300",
-          transparent
-            ? "border-b border-transparent bg-transparent"
-            : isLight
-              ? "border-b border-[var(--line)] bg-white/95 text-[var(--ink)] shadow-[0_4px_24px_rgba(27,58,92,0.08)] backdrop-blur-md"
-              : "border-b border-white/10 bg-[#1b3a5c]/95 text-white shadow-[0_8px_30px_rgba(0,0,0,0.25)] backdrop-blur-md",
+          "w-full max-w-full overflow-x-clip border-b border-white/10 bg-[#1b3a5c] text-white shadow-[0_8px_30px_rgba(0,0,0,0.25)]",
+          !embedded && "fixed inset-x-0 top-0 z-[70]",
         )}
       >
         <div className="container-page flex h-[4.75rem] min-w-0 items-center justify-between gap-3">
           <Link href="/" className="focus-ring flex min-w-0 items-center gap-2.5 rounded-sm sm:gap-3">
-            <span className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full bg-white sm:h-11 sm:w-11">
-              <Image
-                src="/brand/finekarts-logo.png"
-                alt="Finekarts"
-                width={44}
-                height={44}
-                priority
-                className="h-full w-full object-cover"
-              />
-            </span>
+            <BrandLogo size="sm" priority />
             <span className="min-w-0 leading-tight">
-              <span
-                className={cn(
-                  "block truncate text-base font-bold tracking-[0.14em] uppercase sm:text-lg sm:tracking-[0.18em]",
-                  transparent || !isLight ? "text-white" : "text-[var(--navy)]",
-                )}
-              >
+              <span className="block truncate text-base font-bold tracking-[0.14em] text-white uppercase sm:text-lg sm:tracking-[0.18em]">
                 Finekarts
               </span>
-              <span
-                className={cn(
-                  "block truncate text-xs font-medium uppercase tracking-[0.2em] sm:text-sm sm:tracking-[0.26em]",
-                  transparent ? "text-white/55" : isLight ? "text-[var(--stone)]" : "text-white/55",
-                )}
-              >
+              <span className="block truncate text-xs font-medium uppercase tracking-[0.2em] text-white/55 sm:text-sm sm:tracking-[0.26em]">
                 Incorporated
               </span>
             </span>
@@ -99,27 +69,12 @@ export function SiteHeader() {
                   href={item.href}
                   className={cn(
                     "focus-ring relative px-3.5 py-2 text-base font-medium tracking-wide transition-colors",
-                    transparent
-                      ? active
-                        ? "text-white"
-                        : "text-[#d8e0ea] hover:text-white"
-                      : isLight
-                        ? active
-                          ? "text-[var(--navy)]"
-                          : "text-[var(--stone)] hover:text-[var(--navy)]"
-                        : active
-                          ? "text-[#d4a84b]"
-                          : "text-[#e8eef2] hover:text-white",
+                    active ? "text-[#d4a84b]" : "text-[#e8eef2] hover:text-white",
                   )}
                 >
                   {item.label}
                   {active ? (
-                    <span
-                      className={cn(
-                        "absolute inset-x-3.5 -bottom-0.5 h-[2px]",
-                        isLight && !transparent ? "bg-[var(--ocean)]" : "bg-[#d4a84b]",
-                      )}
-                    />
+                    <span className="absolute inset-x-3.5 -bottom-0.5 h-[2px] bg-[#d4a84b]" />
                   ) : null}
                 </Link>
               );
@@ -130,14 +85,7 @@ export function SiteHeader() {
             <LanguageSwitcher />
             <Link
               href="/login"
-              className={cn(
-                "focus-ring inline-flex items-center gap-2 rounded-sm border px-5 py-2.5 text-base font-semibold transition",
-                transparent
-                  ? "border-[#d4a84b] text-white hover:bg-[#d4a84b] hover:text-[#071525]"
-                  : isLight
-                    ? "border-[var(--navy)] text-[var(--navy)] hover:bg-[var(--navy)] hover:text-white"
-                    : "border-[#d4a84b] bg-[#d4a84b]/10 text-[#f5e6c8] hover:bg-[#d4a84b] hover:text-[#071525]",
-              )}
+              className="focus-ring inline-flex items-center gap-2 rounded-sm border border-[#d4a84b] bg-[#d4a84b]/10 px-5 py-2.5 text-base font-semibold text-[#f5e6c8] transition hover:bg-[#d4a84b] hover:text-[#071525]"
             >
               Buyer Portal
               <span aria-hidden>→</span>
@@ -146,23 +94,16 @@ export function SiteHeader() {
 
           <button
             type="button"
-            className={cn(
-              "focus-ring flex h-11 w-11 items-center justify-center rounded-full border xl:hidden",
-              transparent
-                ? "border-white/25 text-white"
-                : isLight
-                  ? "border-[var(--line-strong)] text-[var(--navy)]"
-                  : "border-[#d4a84b]/50 bg-[#0a2844] text-[#d4a84b]",
-            )}
+            className="focus-ring flex h-11 w-11 items-center justify-center rounded-full border border-[#d4a84b]/50 bg-[#0a2844] text-[#d4a84b] xl:hidden"
             aria-expanded={open}
             aria-controls="mobile-nav"
             onClick={() => setOpen((v) => !v)}
           >
             <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
             <span className="flex w-5 flex-col gap-1.5">
-              <span className={cn("h-0.5 transition", open && "translate-y-2 rotate-45", transparent || !isLight ? "bg-white" : "bg-[var(--navy)]")} />
-              <span className={cn("h-0.5 transition", open && "opacity-0", transparent || !isLight ? "bg-white" : "bg-[var(--navy)]")} />
-              <span className={cn("h-0.5 transition", open && "-translate-y-2 -rotate-45", transparent || !isLight ? "bg-white" : "bg-[var(--navy)]")} />
+              <span className={cn("h-0.5 bg-white transition", open && "translate-y-2 rotate-45")} />
+              <span className={cn("h-0.5 bg-white transition", open && "opacity-0")} />
+              <span className={cn("h-0.5 bg-white transition", open && "-translate-y-2 -rotate-45")} />
             </span>
           </button>
         </div>

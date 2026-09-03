@@ -66,10 +66,11 @@ export function AdminInvitationsManager() {
     load();
   }, []);
 
-  useEffect(() => {
-    const defaults = ROLE_OPTIONS[organizationType] ?? [];
+  function handleOrganizationTypeChange(next: string) {
+    setOrganizationType(next);
+    const defaults = ROLE_OPTIONS[next] ?? [];
     setRoles(defaults[0] ? [defaults[0].value] : []);
-  }, [organizationType]);
+  }
 
   function toggleRole(role: string) {
     setRoles((current) =>
@@ -178,7 +179,7 @@ export function AdminInvitationsManager() {
           <select
             className="field mt-1"
             value={organizationType}
-            onChange={(e) => setOrganizationType(e.target.value)}
+            onChange={(e) => handleOrganizationTypeChange(e.target.value)}
           >
             {ORG_TYPES.map((t) => (
               <option key={t.value} value={t.value}>

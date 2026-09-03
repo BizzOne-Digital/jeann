@@ -6,10 +6,6 @@ import { loadAdminSectionData } from "@/lib/admin/section-data";
 export const dynamic = "force-dynamic";
 
 const SECTIONS: Record<string, { title: string; description: string }> = {
-  "purchase-requests": {
-    title: "Purchase Requests",
-    description: "Review inbound buyer RFQs and convert qualified requests into transactions.",
-  },
   "trade-offers": {
     title: "Trade Offers",
     description: "Review supplier trade offers received through invitation or trade desk intake.",

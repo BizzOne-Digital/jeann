@@ -4,21 +4,23 @@ import {
   TRADE_INDEX_LINES,
 } from "@/lib/content/trade-alert-indices";
 
-export function TradeAlertStrip() {
+export function TradeAlertStrip({ compact = false }: { compact?: boolean }) {
   const items = [...TRADE_INDEX_LINES, ...TRADE_INDEX_LINES];
 
   return (
     <section
-      className="border-b border-[#d5d0c8] bg-[#f8f6f1]"
+      className="border-b border-[#d5d0c8] bg-[#f4f6f8]"
       aria-label="Trade reference alert"
     >
-      <div className="container-page flex flex-col gap-2 py-2.5 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex shrink-0 items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#001a3d]">
+      <div className="container-page flex items-center gap-3 py-2 sm:gap-4">
+        <div className="flex shrink-0 items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#001a3d] sm:text-sm">
           <span className="inline-flex h-2 w-2 animate-pulse rounded-full bg-[#c88e4a]" aria-hidden />
           Trade alert
-          <Link href="/resources" className="normal-case tracking-normal text-[#c88e4a] hover:underline">
-            Resources →
-          </Link>
+          {!compact ? (
+            <Link href="/resources" className="normal-case tracking-normal text-[#c88e4a] hover:underline">
+              Resources →
+            </Link>
+          ) : null}
         </div>
         <div className="relative min-w-0 flex-1 overflow-hidden">
           <div className="trade-alert-marquee flex w-max gap-8 whitespace-nowrap text-sm text-[#333333]">
@@ -42,9 +44,9 @@ export function TradeAlertStrip() {
           </div>
         </div>
       </div>
-      <p className="container-page pb-2 text-[0.65rem] leading-snug text-[#888888]">
-        {TRADE_ALERT_DISCLAIMER}
-      </p>
+      {!compact ? (
+        <p className="container-page pb-2 text-xs leading-snug text-[#888888]">{TRADE_ALERT_DISCLAIMER}</p>
+      ) : null}
     </section>
   );
 }

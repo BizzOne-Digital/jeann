@@ -1,2 +1,13 @@
 import { PortalPage } from "@/components/portal/PortalPage";
-export default function WorkspacePage() { return <PortalPage title="Employee queues" description="Review and assignment queues are empty until operational integrations are configured." />; }
+import { WorkspaceDashboard } from "@/components/workspace/WorkspaceDashboard";
+
+export default function WorkspacePage() {
+  return (
+    <PortalPage
+      title="Employee workspace"
+      description="Operational queues for purchase requests, transactions, shipments, and finance."
+    >
+      <WorkspaceDashboard />
+    </PortalPage>
+  );
+}

@@ -1,8 +1,7 @@
-import { SiteHeader } from "@/components/marketing/SiteHeader";
 import { SiteFooter } from "@/components/marketing/SiteFooter";
 import { SiteJsonLd } from "@/components/marketing/SiteJsonLd";
+import { MarketingShell } from "@/components/marketing/MarketingShell";
 import { AiAssistant } from "@/components/marketing/AiAssistant";
-import { MarketingMain } from "@/components/marketing/MarketingMain";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { ClientOnly } from "@/components/ui/ClientOnly";
 import { AutoPageTranslator } from "@/components/i18n/AutoPageTranslator";
@@ -13,10 +12,9 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
     <TranslationProvider>
       <SiteJsonLd />
       <div id="finekarts-marketing-root" className="flex min-h-full w-full max-w-full flex-col overflow-x-clip">
-        <SiteHeader />
-        <MarketingMain>
+        <MarketingShell>
           <PageTransition>{children}</PageTransition>
-        </MarketingMain>
+        </MarketingShell>
         <SiteFooter />
         <ClientOnly>
           <AiAssistant />

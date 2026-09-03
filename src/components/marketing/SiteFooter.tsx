@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BrandLogo } from "@/components/marketing/BrandLogo";
 import { getPublicSiteSettings } from "@/lib/content/site-settings-public";
 import { SocialLinks } from "@/components/marketing/SocialLinks";
 import { FooterReveal } from "@/components/motion/FooterReveal";
@@ -55,11 +56,14 @@ export async function SiteFooter() {
         <div className="grid min-w-0 gap-10 sm:gap-12 lg:grid-cols-[1.1fr_1.6fr_1fr]">
           <FooterReveal>
           <div className="min-w-0">
-            <div>
-              <p className="text-lg font-semibold tracking-[0.16em] uppercase">Finekarts</p>
-              <p className="text-xs uppercase tracking-[0.28em] text-white/50 sm:text-sm">
-                Incorporated
-              </p>
+            <div className="flex items-center gap-3">
+              <BrandLogo size="md" />
+              <div>
+                <p className="text-lg font-semibold tracking-[0.16em] uppercase">Finekarts</p>
+                <p className="text-xs uppercase tracking-[0.28em] text-white/50 sm:text-sm">
+                  Incorporated
+                </p>
+              </div>
             </div>
             <p className="mt-5 max-w-xs text-base leading-relaxed text-white/65">
               Global agricultural commodity trading for qualified international buyers.

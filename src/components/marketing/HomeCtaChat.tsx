@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { BrandLogo } from "@/components/marketing/BrandLogo";
 import { FormEvent, useEffect, useRef, useState } from "react";
 
 type Msg = { role: "user" | "assistant"; text: string };
@@ -77,15 +77,7 @@ export function HomeCtaChat({ focusToken = 0 }: { focusToken?: number }) {
   return (
     <div className="overflow-hidden rounded-xl bg-white shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
       <div className="flex items-center gap-3 bg-[#0b1f33] px-4 py-3 text-white">
-        <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-white">
-          <Image
-            src="/brand/finekarts-logo.png"
-            alt=""
-            width={40}
-            height={40}
-            className="h-full w-full object-cover"
-          />
-        </div>
+        <BrandLogo size="sm" alt="" />
         <div>
           <p className="text-sm font-semibold">Finekarts AI</p>
           <p className="flex items-center gap-1.5 text-xs text-white/70">

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
+import { BrandLogo } from "@/components/marketing/BrandLogo";
 import { Reveal } from "@/components/motion/Reveal";
 
 export type PageHeroCta = {
@@ -106,7 +107,12 @@ export function PageHero({
         }`}
       >
         <div className={`min-w-0 ${full ? "max-w-xl lg:max-w-2xl" : "max-w-2xl"}`}>
-          <Reveal>
+          {full ? (
+            <Reveal>
+              <BrandLogo size="xl" priority className="mb-6 shadow-[0_8px_32px_rgba(0,0,0,0.35)]" />
+            </Reveal>
+          ) : null}
+          <Reveal delay={full ? 0.04 : 0}>
             <p
               className={`display tracking-tight break-words ${
                 light ? "text-[var(--ocean)]" : "text-white"

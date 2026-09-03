@@ -8,7 +8,8 @@ import { InsightRelated, InsightsCta } from "@/components/marketing/InsightSecti
 import { AnimatedSection } from "@/components/motion/AnimatedSection";
 import { getInsightCover } from "@/lib/content/insight-images";
 import { buyerQuoteHref } from "@/lib/marketing/cta-links";
-import { getInsight, SEED_INSIGHTS } from "@/lib/content/catalog";
+import { getPublishedInsight, getPublishedInsights } from "@/lib/content/insights-catalog";
+import { SEED_INSIGHTS } from "@/lib/content/catalog";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -18,7 +19,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = getInsight(slug);
+  const post = await getPublishedInsight(slug);
   if (!post) return { title: "Article not found" };
   return { title: post.title, description: post.excerpt };
 }
@@ -37,10 +38,12 @@ function formatDate(iso: string) {
 
 export default async function InsightArticlePage({ params }: Props) {
   const { slug } = await params;
-  const post = getInsight(slug);
+  const post = await getPublishedInsight(slug);
   if (!post) notFound();
 
   const cover = getInsightCover(post.slug);
+  const paragraphs = post.body.includes("\n\n") ? post.body.split("\n\n") : [post.body];
+  const allPosts = await getPublishedInsights();
 
   return (
     <>
@@ -86,7 +89,7 @@ export default async function InsightArticlePage({ params }: Props) {
             </aside>
             </AnimatedSection>
 
-            <InsightArticleBody paragraphs={post.body} />
+            <InsightArticleBody paragraphs={paragraphs} />
 
             <AnimatedSection className="mt-12 flex flex-wrap gap-3 border-t border-[#d5d0c8] pt-10" delay={0.08}>
             <div className="flex flex-wrap gap-3">
@@ -150,7 +153,7 @@ export default async function InsightArticlePage({ params }: Props) {
         </div>
       </article>
 
-      <InsightRelated posts={SEED_INSIGHTS} currentSlug={post.slug} />
+      <InsightRelated posts={allPosts} currentSlug={post.slug} />
       <InsightsCta />
     </>
   );

@@ -1,12 +1,12 @@
 import { money, type MoneyInput } from "@/lib/finance/money";
 import Decimal from "decimal.js";
+import { Types } from "mongoose";
 
 export function roundMoney(value: MoneyInput, precision = 2, mode: Decimal.Rounding = Decimal.ROUND_HALF_UP): Decimal {
   return money(value).toDecimalPlaces(precision, mode);
 }
 
-export function decimal128(value: MoneyInput): import("mongoose").Types.Decimal128 {
-  const { Types } = require("mongoose") as typeof import("mongoose");
+export function decimal128(value: MoneyInput): Types.Decimal128 {
   return Types.Decimal128.fromString(money(value).toString());
 }
 

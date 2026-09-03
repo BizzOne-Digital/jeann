@@ -1,1 +1,15 @@
-export default function VerifyPhonePage() { return <><h1 className="display text-3xl text-[var(--navy)]">Verify your phone</h1><p className="mt-3 text-[var(--stone)]">Phone verification is required only when enabled for your organization. Enter the code sent by the Finekarts team.</p><input className="field mt-6" inputMode="numeric" placeholder="Verification code" /><button className="btn btn-primary mt-3">Verify code</button></>; }
+import { VerifyPhoneForm } from "@/components/auth/VerifyPhoneForm";
+
+export default function VerifyPhonePage() {
+  return (
+    <>
+      <h1 className="display text-3xl text-[var(--navy)]">Verify your phone</h1>
+      <p className="mt-3 text-[var(--stone)]">
+        Phone verification helps secure your buyer account and trade desk communications.
+      </p>
+      <div className="mt-6">
+        <VerifyPhoneForm />
+      </div>
+    </>
+  );
+}

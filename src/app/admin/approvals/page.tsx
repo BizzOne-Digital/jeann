@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { requirePortalAccess } from "@/lib/auth/portal-access";
 import { tryConnectMongo } from "@/lib/db/mongoose";
 import { PortalPage } from "@/components/portal/PortalPage";
@@ -52,9 +53,9 @@ export default async function AdminApprovalsPage() {
         />
         <p className="text-sm text-[var(--stone)]">
           Open a buyer from{" "}
-          <a href="/admin/buyers" className="font-semibold text-[var(--navy)] underline">
+          <Link href="/admin/buyers" className="font-semibold text-[var(--navy)] underline">
             Buyer Organizations
-          </a>{" "}
+          </Link>{" "}
           to approve or reject.
         </p>
       </div>

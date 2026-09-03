@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { BrandLogo } from "@/components/marketing/BrandLogo";
 import { FeaturedTestimonialAside } from "@/components/marketing/TestimonialSections";
 import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
@@ -100,7 +101,7 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
   ];
 
   return (
-    <section className="relative min-h-[100svh] w-full max-w-full overflow-hidden bg-[#071525] text-white">
+    <section className="relative min-h-[min(88svh,720px)] w-full max-w-full overflow-hidden bg-[#071525] text-white">
       <div className="absolute inset-0">
         <Image
           src="/images/hero-commodities.png"
@@ -120,9 +121,12 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
         <div className="absolute inset-0 bg-gradient-to-t from-[#071525]/70 via-transparent to-[#071525]/25" />
       </div>
 
-      <div className="container-page relative flex min-h-[100svh] flex-col justify-center pb-28 pt-28 lg:pb-32 lg:pt-32">
+      <div className="container-page relative flex min-h-[min(88svh,720px)] flex-col justify-center pb-16 pt-[7.5rem] lg:pb-20 lg:pt-[8rem]">
         <div className="min-w-0 max-w-xl lg:max-w-2xl">
           <Reveal>
+            <BrandLogo size="lg" priority className="mb-6 shadow-[0_8px_32px_rgba(0,0,0,0.35)]" />
+          </Reveal>
+          <Reveal delay={0.04}>
             <p className="text-sm font-semibold tracking-[0.14em] text-[#d4a84b] uppercase sm:text-base sm:tracking-[0.2em]">
               {cmsField(
                 cms,

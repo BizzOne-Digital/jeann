@@ -4,9 +4,8 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
-  useState,
+  useSyncExternalStore,
   type ReactNode,
 } from "react";
 import { LOCALE_COOKIE, SOURCE_LOCALE, isSupportedLocale } from "@/lib/i18n/locales";
@@ -17,6 +16,19 @@ type TranslationContextValue = {
 };
 
 const TranslationContext = createContext<TranslationContextValue | null>(null);
+
+const localeListeners = new Set<() => void>();
+
+function emitLocaleChange() {
+  localeListeners.forEach((listener) => listener());
+}
+
+function subscribeLocale(listener: () => void) {
+  localeListeners.add(listener);
+  return () => {
+    localeListeners.delete(listener);
+  };
+}
 
 function readStoredLocale(): string {
   if (typeof window === "undefined") return SOURCE_LOCALE;
@@ -32,7 +44,6 @@ function readStoredLocale(): string {
 function persistLocale(code: string) {
   localStorage.setItem(LOCALE_COOKIE, code);
   document.cookie = `${LOCALE_COOKIE}=${code};path=/;max-age=31536000;SameSite=Lax`;
-  // Defer html attribute updates until after hydration.
   window.requestAnimationFrame(() => {
     document.documentElement.lang = code === SOURCE_LOCALE ? "en" : code;
     document.documentElement.dir = code === "ar" ? "rtl" : "ltr";
@@ -40,18 +51,12 @@ function persistLocale(code: string) {
 }
 
 export function TranslationProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState(SOURCE_LOCALE);
-
-  useEffect(() => {
-    const stored = readStoredLocale();
-    setLocaleState(stored);
-    persistLocale(stored);
-  }, []);
+  const locale = useSyncExternalStore(subscribeLocale, readStoredLocale, () => SOURCE_LOCALE);
 
   const setLocale = useCallback((code: string) => {
     const next = isSupportedLocale(code) ? code : SOURCE_LOCALE;
-    setLocaleState(next);
     persistLocale(next);
+    emitLocaleChange();
   }, []);
 
   const value = useMemo(() => ({ locale, setLocale }), [locale, setLocale]);

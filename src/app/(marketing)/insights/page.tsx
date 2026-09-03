@@ -5,7 +5,7 @@ import {
   InsightsCatalog,
   InsightsCta,
 } from "@/components/marketing/InsightSections";
-import { SEED_INSIGHTS } from "@/lib/content/catalog";
+import { getPublishedInsights } from "@/lib/content/insights-catalog";
 
 export const metadata: Metadata = {
   title: "Insights",
@@ -13,10 +13,10 @@ export const metadata: Metadata = {
     "Educational articles on Incoterms, purchase requests, packaging, and shipping documents — not legal advice.",
 };
 
-export default function InsightsPage() {
-  const posts = [...SEED_INSIGHTS].sort(
-    (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
-  );
+export const dynamic = "force-dynamic";
+
+export default async function InsightsPage() {
+  const posts = await getPublishedInsights();
   const [featured, ...rest] = posts;
   const catalog = rest.length > 0 ? rest : posts;
 
