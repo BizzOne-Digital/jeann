@@ -48,10 +48,10 @@ export function HeroVideoBackground({
         }`}
       />
       {videoId && active ? (
-        <div className="absolute inset-0 overflow-hidden">
+        <div className="hero-video-frame absolute inset-0 overflow-hidden">
           <iframe
             title="Refinery and commodity logistics background video"
-            className="pointer-events-none absolute top-1/2 left-1/2 h-[56.25vw] min-h-full w-[177.78vh] min-w-full -translate-x-1/2 -translate-y-1/2 border-0"
+            className="hero-video-iframe"
             src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1`}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             loading="lazy"

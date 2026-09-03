@@ -106,13 +106,31 @@ body {
 img,
 video,
 svg,
-canvas,
-iframe {
+canvas {
   max-width: 100%;
 }
 
-video,
-iframe {
+video {
+  height: auto;
+}
+
+/* Hero background video must scale past 100% to cover like object-fit: cover */
+.hero-video-frame iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, 177.78vh);
+  height: max(100%, 56.25vw);
+  min-width: 100%;
+  min-height: 100%;
+  max-width: none;
+  transform: translate(-50%, -50%);
+  border: 0;
+  pointer-events: none;
+}
+
+iframe:not(.hero-video-iframe) {
+  max-width: 100%;
   height: auto;
 }
 

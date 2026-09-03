@@ -100,7 +100,7 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
   ];
 
   return (
-    <section className="relative min-h-[100svh] w-full max-w-full overflow-hidden bg-[#071525] text-white">
+    <section className="relative left-0 right-0 min-h-[100svh] w-full min-w-full overflow-hidden bg-[#071525] text-white">
       <HeroVideoBackground
         youtubeInput={resolveHeroYoutubeInput(cmsField(cms, "youtubeVideoId", ""))}
         posterSrc="/images/hero-commodities.png"
