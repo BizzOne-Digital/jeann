@@ -129,7 +129,17 @@ video {
   pointer-events: none;
 }
 
-iframe:not(.hero-video-iframe) {
+/* Embedded YouTube players (aspect-ratio boxes) */
+.youtube-embed-frame iframe.youtube-embed-iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  border: 0;
+}
+
+iframe:not(.hero-video-iframe):not(.youtube-embed-iframe) {
   max-width: 100%;
   height: auto;
 }

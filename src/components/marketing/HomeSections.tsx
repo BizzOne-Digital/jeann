@@ -236,6 +236,7 @@ export function HomeVideoSection({ cms }: { cms?: Record<string, string> }) {
           <YouTubeEmbed
             youtubeInput={youtubeInput}
             title="Finekarts commodity trade overview"
+            autoplay
           />
         </Reveal>
       </div>
