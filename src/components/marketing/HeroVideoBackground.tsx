@@ -36,25 +36,27 @@ export function HeroVideoBackground({
   }, [videoId, active]);
 
   return (
-    <div ref={containerRef} className="absolute inset-0">
+    <div ref={containerRef} className="absolute inset-0 overflow-hidden">
       <Image
         src={posterSrc}
         alt={posterAlt}
         fill
         priority
         sizes="100vw"
-        className={`object-cover object-[72%_center] transition-opacity duration-700 sm:object-[78%_center] ${
+        className={`object-cover object-center transition-opacity duration-700 ${
           active && videoId ? "opacity-0" : "opacity-100"
         }`}
       />
       {videoId && active ? (
-        <iframe
-          title="Refinery and commodity logistics background video"
-          className="absolute inset-0 h-full w-full object-cover"
-          src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}&playsinline=1&rel=0&modestbranding=1`}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          loading="lazy"
-        />
+        <div className="absolute inset-0 overflow-hidden">
+          <iframe
+            title="Refinery and commodity logistics background video"
+            className="pointer-events-none absolute top-1/2 left-1/2 h-[56.25vw] min-h-full w-[177.78vh] min-w-full -translate-x-1/2 -translate-y-1/2 border-0"
+            src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1`}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            loading="lazy"
+          />
+        </div>
       ) : null}
     </div>
   );

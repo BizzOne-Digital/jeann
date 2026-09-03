@@ -107,15 +107,22 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
         posterAlt="Agricultural commodities with port logistics and refining infrastructure"
       />
       <div className="pointer-events-none absolute inset-0">
+        {/* Light navy wash over full video — similar to card white overlay in reference */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(90deg, rgba(4,14,28,0.92) 0%, rgba(4,14,28,0.86) 24%, rgba(4,14,28,0.52) 48%, rgba(4,14,28,0.26) 70%, rgba(4,14,28,0.14) 100%)",
+              "linear-gradient(180deg, rgba(7,21,37,0.28) 0%, rgba(7,21,37,0.38) 45%, rgba(7,21,37,0.55) 100%)",
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#071525]/65 via-transparent to-[#071525]/20" />
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0a2844]/40 via-transparent to-[#d4a84b]/10" />
+        {/* Left readability gradient for headline text */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(90deg, rgba(4,14,28,0.72) 0%, rgba(4,14,28,0.45) 38%, rgba(4,14,28,0.12) 68%, transparent 100%)",
+          }}
+        />
       </div>
 
       <div className="container-page relative flex min-h-[100svh] flex-col justify-center pb-28 pt-28 lg:pb-32 lg:pt-32">
