@@ -57,14 +57,14 @@ export async function SiteFooter() {
           <div className="min-w-0">
             <div>
               <p className="text-lg font-semibold tracking-[0.16em] uppercase">Finekarts</p>
-              <p className="text-[0.65rem] uppercase tracking-[0.28em] text-white/50">
+              <p className="text-xs uppercase tracking-[0.28em] text-white/50 sm:text-sm">
                 Incorporated
               </p>
             </div>
             <p className="mt-5 max-w-xs text-base leading-relaxed text-white/65">
               Global agricultural commodity trading for qualified international buyers.
             </p>
-            <div className="mt-5 space-y-1 text-sm text-white/75">
+            <div className="mt-5 space-y-1 text-base text-white/75">
               <p>
                 <a className="hover:text-[#e89a2d]" href={`mailto:${site.email}`}>
                   {site.email}
@@ -89,10 +89,10 @@ export async function SiteFooter() {
           <div className="grid min-w-0 grid-cols-2 gap-6 sm:grid-cols-4 sm:gap-8">
             {LINKS.map((group) => (
               <div key={group.title} className="min-w-0">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#e89a2d]">
+                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#e89a2d]">
                   {group.title}
                 </p>
-                <ul className="mt-4 space-y-2 text-sm text-white/70">
+                <ul className="mt-4 space-y-2 text-base text-white/70">
                   {group.items.map((item) => (
                     <li key={item.href}>
                       <Link href={item.href} className="break-words hover:text-white">
@@ -108,24 +108,24 @@ export async function SiteFooter() {
 
           <FooterReveal delay={0.14}>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#e89a2d]">
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#e89a2d]">
               Buyer portal
             </p>
-            <p className="mt-3 text-sm text-white/65">
+            <p className="mt-3 text-base text-white/65">
               RFQs, consultations, and trade desk messages are submitted after buyer sign-in.
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
-              <Link href="/buyer-request" className="rounded-md border border-white/25 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10">
+              <Link href="/buyer-request" className="rounded-md border border-white/25 px-4 py-2.5 text-base font-semibold text-white transition hover:bg-white/10">
                 Purchase request
               </Link>
-              <Link href="/login" className="rounded-md bg-[#e89a2d] px-4 py-2.5 text-sm font-semibold text-[#071525] transition hover:bg-[#f0a93c]">
+              <Link href="/login" className="rounded-md bg-[#e89a2d] px-4 py-2.5 text-base font-semibold text-[#071525] transition hover:bg-[#f0a93c]">
                 Sign in
               </Link>
-              <Link href="/register/buyer" className="rounded-md border border-white/25 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10">
+              <Link href="/register/buyer" className="rounded-md border border-white/25 px-4 py-2.5 text-base font-semibold text-white transition hover:bg-white/10">
                 Register
               </Link>
             </div>
-            <p className="mt-4 text-xs text-white/50">
+            <p className="mt-4 text-sm text-white/50">
               Suppliers:{" "}
               <Link href="/supplier-offer" className="underline hover:text-white">
                 invitation-only trade offers
@@ -136,7 +136,7 @@ export async function SiteFooter() {
         </div>
 
         <FooterReveal delay={0.18}>
-        <div className="mt-14 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-white/40 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-14 flex flex-col gap-3 border-t border-white/10 pt-6 text-sm text-white/40 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} Finekarts Incorporated. All rights reserved.</p>
           <p>Enquiry submission does not guarantee acceptance, pricing, or shipment.</p>
         </div>

@@ -103,6 +103,59 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Marketing site — larger readable type (public pages only; admin/portal unchanged) */
+html:has(#finekarts-marketing-root) {
+  font-size: 18px;
+}
+
+@media (min-width: 640px) {
+  html:has(#finekarts-marketing-root) {
+    font-size: 19px;
+  }
+}
+
+@media (min-width: 1024px) {
+  html:has(#finekarts-marketing-root) {
+    font-size: 20px;
+  }
+}
+
+#finekarts-marketing-root {
+  line-height: 1.65;
+}
+
+#finekarts-marketing-root .text-xs {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+#finekarts-marketing-root .text-sm {
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+@media (min-width: 1024px) {
+  #finekarts-marketing-root .text-xs {
+    font-size: 0.875rem;
+  }
+
+  #finekarts-marketing-root .text-sm {
+    font-size: 1rem;
+  }
+}
+
+#finekarts-marketing-root .btn {
+  font-size: 1rem;
+}
+
+#finekarts-marketing-root .prose-trade {
+  font-size: 1.0625rem;
+}
+
+#finekarts-marketing-root .prose-trade p {
+  line-height: 1.75;
+}
+
 img,
 video,
 svg,

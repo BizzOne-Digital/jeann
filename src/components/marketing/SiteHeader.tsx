@@ -70,7 +70,7 @@ export function SiteHeader() {
             <span className="min-w-0 leading-tight">
               <span
                 className={cn(
-                  "block truncate text-[0.85rem] font-bold tracking-[0.16em] uppercase sm:text-[0.95rem] sm:tracking-[0.2em]",
+                  "block truncate text-base font-bold tracking-[0.14em] uppercase sm:text-lg sm:tracking-[0.18em]",
                   transparent || !isLight ? "text-white" : "text-[var(--navy)]",
                 )}
               >
@@ -78,7 +78,7 @@ export function SiteHeader() {
               </span>
               <span
                 className={cn(
-                  "block truncate text-[0.55rem] font-medium uppercase tracking-[0.24em] sm:text-[0.6rem] sm:tracking-[0.32em]",
+                  "block truncate text-xs font-medium uppercase tracking-[0.2em] sm:text-sm sm:tracking-[0.26em]",
                   transparent ? "text-white/55" : isLight ? "text-[var(--stone)]" : "text-white/55",
                 )}
               >
@@ -98,7 +98,7 @@ export function SiteHeader() {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "focus-ring relative px-3.5 py-2 text-[0.95rem] font-medium tracking-wide transition-colors",
+                    "focus-ring relative px-3.5 py-2 text-base font-medium tracking-wide transition-colors",
                     transparent
                       ? active
                         ? "text-white"
@@ -131,7 +131,7 @@ export function SiteHeader() {
             <Link
               href="/login"
               className={cn(
-                "focus-ring inline-flex items-center gap-2 rounded-sm border px-5 py-2.5 text-sm font-semibold transition",
+                "focus-ring inline-flex items-center gap-2 rounded-sm border px-5 py-2.5 text-base font-semibold transition",
                 transparent
                   ? "border-[#d4a84b] text-white hover:bg-[#d4a84b] hover:text-[#071525]"
                   : isLight

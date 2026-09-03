@@ -9,10 +9,10 @@ export function FoodSafetyAgencyMarquee() {
       aria-label="Food safety standards in key trade markets"
     >
       <div className="container-page mb-4">
-        <p className="text-[0.65rem] font-semibold tracking-[0.18em] text-[#c88e4a] uppercase">
+        <p className="text-sm font-semibold tracking-[0.18em] text-[#c88e4a] uppercase sm:text-base">
           Food safety & standards
         </p>
-        <p className="mt-1 text-sm text-[#666666]">
+        <p className="mt-1 text-base text-[#666666]">
           Countries we trade most — shipments aligned with destination food safety requirements
         </p>
       </div>
@@ -24,11 +24,11 @@ export function FoodSafetyAgencyMarquee() {
               key={`${market.id}-${index}`}
               className="flex shrink-0 items-center gap-2 rounded-full border border-[#d5d0c8] bg-white px-3.5 py-1.5 shadow-sm"
             >
-              <span className="text-xs font-semibold text-[#001a3d]">{market.country}</span>
-              <span className="hidden text-[0.65rem] text-[#888888] sm:inline" aria-hidden>
+              <span className="text-sm font-semibold text-[#001a3d]">{market.country}</span>
+              <span className="hidden text-sm text-[#888888] sm:inline" aria-hidden>
                 ·
               </span>
-              <span className="hidden text-[0.65rem] text-[#888888] sm:inline">{market.note}</span>
+              <span className="hidden text-sm text-[#888888] sm:inline">{market.note}</span>
             </div>
           ))}
         </div>

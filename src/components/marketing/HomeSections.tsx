@@ -38,7 +38,7 @@ function GoldButton({
   return (
     <Link
       href={href}
-      className={`focus-ring inline-flex items-center justify-center gap-2 rounded-md bg-[#e89a2d] px-6 py-3.5 text-sm font-semibold text-[#071525] transition hover:bg-[#f0a93c] ${className}`}
+      className={`focus-ring inline-flex items-center justify-center gap-2 rounded-md bg-[#e89a2d] px-6 py-3.5 text-base font-semibold text-[#071525] transition hover:bg-[#f0a93c] ${className}`}
     >
       {children}
     </Link>
@@ -123,7 +123,7 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
       <div className="container-page relative flex min-h-[100svh] flex-col justify-center pb-28 pt-28 lg:pb-32 lg:pt-32">
         <div className="min-w-0 max-w-xl lg:max-w-2xl">
           <Reveal>
-            <p className="text-[0.65rem] font-semibold tracking-[0.18em] text-[#d4a84b] uppercase sm:text-xs sm:tracking-[0.26em]">
+            <p className="text-sm font-semibold tracking-[0.14em] text-[#d4a84b] uppercase sm:text-base sm:tracking-[0.2em]">
               {cmsField(
                 cms,
                 "eyebrow",
@@ -142,7 +142,7 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
           </motion.h1>
 
           <Reveal delay={0.1}>
-            <p className="mt-6 max-w-lg text-base leading-relaxed text-white/80 sm:text-lg">
+            <p className="mt-6 max-w-lg text-lg leading-relaxed text-white/85 sm:text-xl">
               {cmsField(
                 cms,
                 "description",
@@ -161,7 +161,7 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
               </Link>
               <Link
                 href={cmsField(cms, "secondaryCtaHref", "/products")}
-                className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-sm border border-white/75 bg-transparent px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10 sm:w-auto"
+                className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-sm border border-white/75 bg-transparent px-6 py-3.5 text-base font-semibold text-white transition hover:bg-white/10 sm:w-auto"
               >
                 {cmsField(cms, "secondaryCtaLabel", "Explore Products")}
               </Link>
@@ -169,7 +169,7 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
           </Reveal>
 
           <Reveal delay={0.22}>
-            <ul className="mt-10 flex flex-col gap-3 text-[0.88rem] text-[#d4a84b] sm:mt-12 sm:flex-row sm:flex-wrap sm:items-center sm:gap-y-4 sm:text-[0.92rem]">
+            <ul className="mt-10 flex flex-col gap-3 text-base text-[#d4a84b] sm:mt-12 sm:flex-row sm:flex-wrap sm:items-center sm:gap-y-4 sm:text-lg">
               {trust.map((item, i) => (
                 <li key={item.label} className="flex items-center">
                   {i > 0 ? (
@@ -208,7 +208,7 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
                 />
               </svg>
             </motion.span>
-            <span className="text-[0.62rem] font-medium tracking-[0.3em] text-white/65 uppercase">
+            <span className="text-xs font-medium tracking-[0.22em] text-white/65 uppercase sm:text-sm">
               Scroll to discover
             </span>
           </motion.div>
@@ -256,7 +256,7 @@ export function ConnectionSection({
       <div className="container-page grid items-center gap-10 lg:grid-cols-[0.95fr_1.15fr] lg:gap-14">
         <div className="max-w-xl">
           <Reveal>
-            <p className="text-xs font-semibold tracking-[0.22em] text-[#c88e4a] uppercase">
+            <p className="text-sm font-semibold tracking-[0.22em] text-[#c88e4a] uppercase sm:text-base">
               Who We Are
             </p>
           </Reveal>
@@ -281,7 +281,7 @@ export function ConnectionSection({
           <Reveal delay={0.18}>
             <Link
               href="/about"
-              className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-[#c88e4a] transition hover:gap-3"
+              className="mt-7 inline-flex items-center gap-2 text-base font-semibold text-[#c88e4a] transition hover:gap-3"
             >
               Discover Finekarts <span aria-hidden>→</span>
             </Link>
@@ -330,7 +330,7 @@ export function CommoditiesWeTrade({ categories }: { categories: SeedCategory[] 
           </h2>
           <Link
             href="/products"
-            className="text-sm font-medium text-[#d4a84b] transition hover:text-[#e8bc5c]"
+            className="text-base font-medium text-[#d4a84b] transition hover:text-[#e8bc5c]"
           >
             View All Products →
           </Link>
@@ -349,7 +349,7 @@ export function CommoditiesWeTrade({ categories }: { categories: SeedCategory[] 
                     sizes="(max-width: 1024px) 50vw, 220px"
                   />
                 </div>
-                <p className="mt-3 text-left text-sm font-medium tracking-wide text-white">
+                <p className="mt-3 text-left text-base font-medium tracking-wide text-white">
                   {card.name}
                 </p>
               </Link>
@@ -465,8 +465,8 @@ export function SourcedResponsibly({ home3 = "/images/home-3.png" }: { home3?: s
                   className={`sm:px-5 ${i > 0 ? "sm:border-l sm:border-[#d5d0c8]" : "sm:pl-0"} ${i === 0 ? "sm:pr-5" : ""}`}
                 >
                   <FeatureIcon type={item.icon} />
-                  <h3 className="mt-4 text-sm font-semibold text-[#001a3d]">{item.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[#666666]">{item.text}</p>
+                  <h3 className="mt-4 text-base font-semibold text-[#001a3d]">{item.title}</h3>
+                  <p className="mt-2 text-base leading-relaxed text-[#666666]">{item.text}</p>
                 </div>
               </Reveal>
             ))}
@@ -527,7 +527,7 @@ export function ProcessTimeline() {
                   {step.n}
                 </div>
                 <h3 className="mt-5 font-semibold text-[#0b1f33]">{step.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-stone">{step.text}</p>
+                <p className="mt-2 text-base leading-relaxed text-stone">{step.text}</p>
               </div>
             </Reveal>
           ))}
@@ -561,7 +561,7 @@ export function ShippingTerms() {
               <Reveal key={item.term} delay={i * 0.08}>
                 <div className="border border-white/15 bg-white/5 p-5">
                   <p className="text-lg font-semibold text-[#e89a2d]">{item.term}</p>
-                  <p className="mt-2 text-sm leading-relaxed text-white/70">{item.text}</p>
+                  <p className="mt-2 text-base leading-relaxed text-white/70">{item.text}</p>
                 </div>
               </Reveal>
             ))}
@@ -597,12 +597,12 @@ export function PackagingSection() {
             </h2>
           </Reveal>
           <Reveal delay={0.08}>
-            <Link href="/packaging" className="text-sm font-semibold text-[#e89a2d] hover:underline">
+            <Link href="/packaging" className="text-base font-semibold text-[#e89a2d] hover:underline">
               View packaging options →
             </Link>
           </Reveal>
         </div>
-        <p className="mt-3 max-w-2xl text-sm text-stone">
+        <p className="mt-3 max-w-2xl text-base text-stone">
           Featured transport modes below. All other packaging types — IBC totes, drums, jumbo bags,
           ISO tanks, bulk vessel, containerized cargo and more — are explained on the{" "}
           <Link href="/packaging" className="font-semibold text-[#c88e4a] hover:underline">
@@ -623,7 +623,7 @@ export function PackagingSection() {
                     sizes="(max-width: 1024px) 50vw, 220px"
                   />
                 </div>
-                <p className="mt-3 text-center text-sm font-semibold text-[#0b1f33] group-hover:text-[#c88e4a]">
+                <p className="mt-3 text-center text-base font-semibold text-[#0b1f33] group-hover:text-[#c88e4a]">
                   {item.name}
                 </p>
               </Link>
@@ -665,7 +665,7 @@ export function ReadyCtaBanner() {
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href="/login"
-                className="focus-ring inline-flex items-center gap-2 rounded-md bg-[#d4a84b] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#c4983f]"
+                className="focus-ring inline-flex items-center gap-2 rounded-md bg-[#d4a84b] px-6 py-3.5 text-base font-semibold text-white transition hover:bg-[#c4983f]"
               >
                 Buyer portal sign in <span aria-hidden>→</span>
               </Link>
@@ -673,7 +673,7 @@ export function ReadyCtaBanner() {
                 type="button"
                 onClick={() => setChatFocus((n) => n + 1)}
                 suppressHydrationWarning
-                className="focus-ring inline-flex items-center gap-2 rounded-md border border-white/70 bg-transparent px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10"
+                className="focus-ring inline-flex items-center gap-2 rounded-md border border-white/70 bg-transparent px-6 py-3.5 text-base font-semibold text-white transition hover:bg-white/10"
               >
                 <span aria-hidden className="text-[#d4a84b]">
                   ✧
@@ -723,7 +723,7 @@ export function InsightsAndNotes({
               </h2>
               <Link
                 href="/insights"
-                className="text-sm font-medium text-[#c88e4a] transition-colors hover:text-[#b57d3c]"
+                className="text-base font-medium text-[#c88e4a] transition-colors hover:text-[#b57d3c]"
               >
                 View All Insights →
               </Link>
@@ -747,10 +747,10 @@ export function InsightsAndNotes({
                         <h3 className="text-base font-semibold leading-snug text-[#001a3d] transition-colors group-hover:text-[#c88e4a]">
                           {post.title}
                         </h3>
-                        <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-[#666666]">
+                        <p className="mt-2 line-clamp-3 text-base leading-relaxed text-[#666666]">
                           {post.excerpt}
                         </p>
-                        <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-[#c88e4a]">
+                        <span className="mt-3 inline-flex items-center gap-1 text-base font-medium text-[#c88e4a]">
                           Read More <span aria-hidden="true">→</span>
                         </span>
                       </div>

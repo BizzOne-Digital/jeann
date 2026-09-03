@@ -45,7 +45,7 @@ function PackagingIndexGroup({
                     sizes="(max-width: 1024px) 50vw, 240px"
                   />
                   {featured ? (
-                    <span className="absolute top-2 left-2 rounded bg-[#001a3d]/90 px-2 py-0.5 text-[0.65rem] font-semibold tracking-wide text-white uppercase">
+                    <span className="absolute top-2 left-2 rounded bg-[#001a3d]/90 px-2 py-0.5 text-xs font-semibold tracking-wide text-white uppercase">
                       Homepage
                     </span>
                   ) : null}
