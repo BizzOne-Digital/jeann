@@ -144,7 +144,7 @@ export function PageHero({
           <Reveal delay={0.12}>
             <p
               className={`mt-4 max-w-xl leading-relaxed ${
-                light ? "text-lg text-[var(--stone)] sm:text-xl" : "text-white/70 text-lg sm:text-xl"
+                light ? "text-base text-[var(--stone)] sm:text-lg" : "text-white/70 text-base sm:text-lg"
               }`}
             >
               {description}

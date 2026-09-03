@@ -44,20 +44,20 @@ export function SiteHeader({ embedded = false }: Props) {
           !embedded && "fixed inset-x-0 top-0 z-[70]",
         )}
       >
-        <div className="container-page flex h-[4.75rem] min-w-0 items-center justify-between gap-3">
-          <Link href="/" className="focus-ring flex min-w-0 items-center gap-2.5 rounded-sm sm:gap-3">
+        <div className="container-page flex h-[4.75rem] min-w-0 items-center justify-between gap-2 lg:gap-3">
+          <Link href="/" className="focus-ring flex shrink-0 items-center gap-2.5 rounded-sm sm:gap-3">
             <BrandLogo size="sm" priority />
-            <span className="min-w-0 leading-tight">
-              <span className="block truncate text-base font-bold tracking-[0.14em] text-white uppercase sm:text-lg sm:tracking-[0.18em]">
+            <span className="hidden leading-tight sm:block">
+              <span className="block whitespace-nowrap text-[0.85rem] font-bold tracking-[0.16em] text-white uppercase sm:text-[0.95rem] sm:tracking-[0.2em]">
                 Finekarts
               </span>
-              <span className="block truncate text-xs font-medium uppercase tracking-[0.2em] text-white/55 sm:text-sm sm:tracking-[0.26em]">
+              <span className="block whitespace-nowrap text-[0.55rem] font-medium uppercase tracking-[0.24em] text-white/55 sm:text-[0.6rem] sm:tracking-[0.32em]">
                 Incorporated
               </span>
             </span>
           </Link>
 
-          <nav className="hidden items-center gap-0.5 xl:flex" aria-label="Primary">
+          <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Primary">
             {NAV.map((item) => {
               const active =
                 item.href === "/"
@@ -68,7 +68,7 @@ export function SiteHeader({ embedded = false }: Props) {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "focus-ring relative px-3.5 py-2 text-base font-medium tracking-wide transition-colors",
+                    "focus-ring relative px-3 py-2 text-[0.95rem] font-medium tracking-wide transition-colors",
                     active ? "text-[#d4a84b]" : "text-[#e8eef2] hover:text-white",
                   )}
                 >
@@ -81,11 +81,11 @@ export function SiteHeader({ embedded = false }: Props) {
             })}
           </nav>
 
-          <div className="hidden items-center gap-3 xl:flex">
+          <div className="hidden shrink-0 items-center gap-2 lg:flex lg:gap-3">
             <LanguageSwitcher />
             <Link
               href="/login"
-              className="focus-ring inline-flex items-center gap-2 rounded-sm border border-[#d4a84b] bg-[#d4a84b]/10 px-5 py-2.5 text-base font-semibold text-[#f5e6c8] transition hover:bg-[#d4a84b] hover:text-[#071525]"
+              className="focus-ring inline-flex items-center gap-2 whitespace-nowrap rounded-sm border border-[#d4a84b] bg-[#d4a84b]/10 px-4 py-2 text-sm font-semibold text-[#f5e6c8] transition hover:bg-[#d4a84b] hover:text-[#071525] lg:px-5 lg:py-2.5"
             >
               Buyer Portal
               <span aria-hidden>→</span>
@@ -94,7 +94,7 @@ export function SiteHeader({ embedded = false }: Props) {
 
           <button
             type="button"
-            className="focus-ring flex h-11 w-11 items-center justify-center rounded-full border border-[#d4a84b]/50 bg-[#0a2844] text-[#d4a84b] xl:hidden"
+            className="focus-ring flex h-11 w-11 items-center justify-center rounded-full border border-[#d4a84b]/50 bg-[#0a2844] text-[#d4a84b] lg:hidden"
             aria-expanded={open}
             aria-controls="mobile-nav"
             onClick={() => setOpen((v) => !v)}
@@ -116,7 +116,7 @@ export function SiteHeader({ embedded = false }: Props) {
             role="dialog"
             aria-modal="true"
             aria-label="Site menu"
-            className="fixed inset-0 z-[80] xl:hidden"
+            className="fixed inset-0 z-[80] lg:hidden"
             initial={reduce ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

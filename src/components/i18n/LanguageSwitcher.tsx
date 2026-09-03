@@ -45,7 +45,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
             strokeWidth="1.4"
           />
         </svg>
-        <span className="max-w-[5.5rem] truncate sm:max-w-none">
+        <span className="whitespace-nowrap">
           {isTranslating ? "…" : (current?.nativeName ?? "English")}
         </span>
         <svg width="10" height="10" viewBox="0 0 12 12" fill="none" aria-hidden className="opacity-70">

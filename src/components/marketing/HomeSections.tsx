@@ -39,7 +39,7 @@ function GoldButton({
   return (
     <Link
       href={href}
-      className={`focus-ring inline-flex items-center justify-center gap-2 rounded-md bg-[#e89a2d] px-6 py-3.5 text-base font-semibold text-[#071525] transition hover:bg-[#f0a93c] ${className}`}
+      className={`focus-ring inline-flex items-center justify-center gap-2 rounded-md bg-[#e89a2d] px-6 py-3.5 text-sm font-semibold text-[#071525] transition hover:bg-[#f0a93c] ${className}`}
     >
       {children}
     </Link>
@@ -127,7 +127,7 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
             <BrandLogo size="lg" priority className="mb-6 shadow-[0_8px_32px_rgba(0,0,0,0.35)]" />
           </Reveal>
           <Reveal delay={0.04}>
-            <p className="text-sm font-semibold tracking-[0.14em] text-[#d4a84b] uppercase sm:text-base sm:tracking-[0.2em]">
+            <p className="text-[0.65rem] font-semibold tracking-[0.18em] text-[#d4a84b] uppercase sm:text-xs sm:tracking-[0.26em]">
               {cmsField(
                 cms,
                 "eyebrow",
@@ -146,7 +146,7 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
           </motion.h1>
 
           <Reveal delay={0.1}>
-            <p className="mt-6 max-w-lg text-lg leading-relaxed text-white/85 sm:text-xl">
+            <p className="mt-6 max-w-lg text-base leading-relaxed text-white/80 sm:text-lg">
               {cmsField(
                 cms,
                 "description",
@@ -159,13 +159,13 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
             <div className="mt-9 flex w-full max-w-full flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Link
                 href={cmsField(cms, "primaryCtaHref", "/login")}
-                className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-sm bg-[#d4a84b] px-6 py-3.5 text-base font-semibold text-white transition hover:bg-[#c4983f] sm:w-auto"
+                className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-sm bg-[#d4a84b] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#c4983f] sm:w-auto"
               >
                 {cmsField(cms, "primaryCtaLabel", "Buyer portal")} <span aria-hidden>→</span>
               </Link>
               <Link
                 href={cmsField(cms, "secondaryCtaHref", "/products")}
-                className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-sm border border-white/75 bg-transparent px-6 py-3.5 text-base font-semibold text-white transition hover:bg-white/10 sm:w-auto"
+                className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-sm border border-white/75 bg-transparent px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10 sm:w-auto"
               >
                 {cmsField(cms, "secondaryCtaLabel", "Explore Products")}
               </Link>
@@ -173,7 +173,7 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
           </Reveal>
 
           <Reveal delay={0.22}>
-            <ul className="mt-10 flex flex-col gap-3 text-base text-[#d4a84b] sm:mt-12 sm:flex-row sm:flex-wrap sm:items-center sm:gap-y-4 sm:text-lg">
+            <ul className="mt-10 flex flex-col gap-3 text-[0.88rem] text-[#d4a84b] sm:mt-12 sm:flex-row sm:flex-wrap sm:items-center sm:gap-y-4 sm:text-[0.92rem]">
               {trust.map((item, i) => (
                 <li key={item.label} className="flex items-center">
                   {i > 0 ? (
@@ -212,7 +212,7 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
                 />
               </svg>
             </motion.span>
-            <span className="text-xs font-medium tracking-[0.22em] text-white/65 uppercase sm:text-sm">
+            <span className="text-[0.62rem] font-medium tracking-[0.3em] text-white/65 uppercase">
               Scroll to discover
             </span>
           </motion.div>
