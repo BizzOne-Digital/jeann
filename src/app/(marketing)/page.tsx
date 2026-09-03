@@ -7,6 +7,7 @@ import { FoodSafetyAgencyMarquee } from "@/components/marketing/FoodSafetyAgency
 import { PartnersHomeTeaser } from "@/components/marketing/PartnerSections";
 import {
   HomeHero,
+  HomeVideoSection,
   ConnectionSection,
   CommoditiesWeTrade,
   SourcedResponsibly,
@@ -32,6 +33,7 @@ export default async function HomePage() {
   return (
     <>
       <HomeHero cms={getSectionFields(cms, "hero")} />
+      <HomeVideoSection cms={getSectionFields(cms, "hero")} />
       <ConnectionSection home1={home1} home2={home2} />
       <CommoditiesWeTrade categories={categories} />
       <SourcedResponsibly home3={home3} />

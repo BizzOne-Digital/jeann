@@ -9,7 +9,7 @@ import { cmsField } from "@/lib/content/cms-field";
 import { resolveImageSrc } from "@/lib/media/resolve-image-src";
 import { Reveal } from "@/components/motion/Reveal";
 import { HomeCtaChat } from "@/components/marketing/HomeCtaChat";
-import { HeroVideoBackground } from "@/components/marketing/HeroVideoBackground";
+import { YouTubeEmbed } from "@/components/marketing/YouTubeEmbed";
 import { resolveHeroYoutubeInput } from "@/lib/content/hero-video";
 import type { SeedCategory } from "@/lib/content/catalog";
 import { getCategoryCover } from "@/lib/content/product-images";
@@ -100,15 +100,16 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
   ];
 
   return (
-    <section className="relative min-h-[100svh] w-full max-w-full overflow-hidden bg-[#1b3a5c] text-white">
-      <div className="absolute inset-0 z-0">
-        <HeroVideoBackground
-          youtubeInput={resolveHeroYoutubeInput(cmsField(cms, "youtubeVideoId", ""))}
-          posterSrc="/images/hero-commodities.png"
-          posterAlt="Agricultural commodities with port logistics and refining infrastructure"
+    <section className="relative min-h-[100svh] w-full max-w-full overflow-hidden bg-[#071525] text-white">
+      <div className="absolute inset-0">
+        <Image
+          src="/images/hero-commodities.png"
+          alt="Agricultural commodities with port logistics and refining infrastructure"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-[72%_center] sm:object-[78%_center]"
         />
-      </div>
-      <div className="pointer-events-none absolute inset-0 z-[1]">
         <div
           className="absolute inset-0"
           style={{
@@ -116,10 +117,10 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
               "linear-gradient(90deg, rgba(4,14,28,0.97) 0%, rgba(4,14,28,0.92) 24%, rgba(4,14,28,0.58) 48%, rgba(4,14,28,0.22) 70%, rgba(4,14,28,0.12) 100%)",
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1b3a5c]/70 via-transparent to-[#1b3a5c]/25" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#071525]/70 via-transparent to-[#071525]/25" />
       </div>
 
-      <div className="container-page relative z-[2] flex min-h-[100svh] flex-col justify-center pb-28 pt-28 lg:pb-32 lg:pt-32">
+      <div className="container-page relative flex min-h-[100svh] flex-col justify-center pb-28 pt-28 lg:pb-32 lg:pt-32">
         <div className="min-w-0 max-w-xl lg:max-w-2xl">
           <Reveal>
             <p className="text-[0.65rem] font-semibold tracking-[0.18em] text-[#d4a84b] uppercase sm:text-xs sm:tracking-[0.26em]">
@@ -212,6 +213,31 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
             </span>
           </motion.div>
         ) : null}
+      </div>
+    </section>
+  );
+}
+
+export function HomeVideoSection({ cms }: { cms?: Record<string, string> }) {
+  const youtubeInput = resolveHeroYoutubeInput(cmsField(cms, "youtubeVideoId", ""));
+
+  return (
+    <section className="bg-[#f4f6f8] py-12 lg:py-16" aria-label="Company overview video">
+      <div className="container-page">
+        <Reveal>
+          <p className="text-xs font-semibold tracking-[0.2em] text-[#c88e4a] uppercase">
+            {cmsField(cms, "videoEyebrow", "See how we work")}
+          </p>
+          <h2 className="mt-2 text-2xl font-semibold text-[#001a3d] sm:text-3xl">
+            {cmsField(cms, "videoTitle", "Global commodity trade in action")}
+          </h2>
+        </Reveal>
+        <Reveal delay={0.08} className="mt-8">
+          <YouTubeEmbed
+            youtubeInput={youtubeInput}
+            title="Finekarts commodity trade overview"
+          />
+        </Reveal>
       </div>
     </section>
   );
