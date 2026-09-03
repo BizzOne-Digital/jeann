@@ -6,6 +6,13 @@ import {
 } from "./seed-catalog";
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
 
+/** Legacy Mongo-only catalogue rows replaced by canonical seed slugs. */
+export const DEPRECATED_PRODUCT_SLUGS = new Set([
+  "cashews-and-nuts",
+  "cinnamon",
+  "seed",
+]);
+
 function isPublicProductStatus(status: string): boolean {
   return status === "published" || status === "pending_verification";
 }
@@ -28,7 +35,7 @@ function mongoProductToSeed(
 ): SeedProduct | null {
   if (!isPublicProductStatus(product.status)) return null;
 
-  const image = product.gallery?.[0]?.storageKey || seedFallback?.image;
+  const image = seedFallback?.image || product.gallery?.[0]?.storageKey;
 
   return {
     slug: product.slug,
@@ -106,6 +113,7 @@ export async function getMergedCategories(): Promise<SeedCategory[]> {
 
     for (const mongoProduct of mongoForCategory) {
       if (seen.has(mongoProduct.slug)) continue;
+      if (DEPRECATED_PRODUCT_SLUGS.has(mongoProduct.slug)) continue;
       const merged = mongoProductToSeed(mongoProduct);
       if (merged) mergedProducts.push(merged);
     }

@@ -128,6 +128,15 @@ async function main() {
     }
   }
 
+  const { DEPRECATED_PRODUCT_SLUGS } = await import("@/lib/content/products-catalog");
+  const archived = await Product.updateMany(
+    { slug: { $in: [...DEPRECATED_PRODUCT_SLUGS] }, deletedAt: null },
+    { $set: { deletedAt: new Date(), status: "archived" } },
+  );
+  if (archived.modifiedCount > 0) {
+    console.log(`Archived ${archived.modifiedCount} deprecated product(s).`);
+  }
+
   for (const [i, faq] of SEED_FAQS.entries()) {
     await Faq.findOneAndUpdate(
       { question: faq.question },

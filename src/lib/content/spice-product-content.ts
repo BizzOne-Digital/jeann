@@ -114,10 +114,10 @@ const SPICE_PRODUCTS: Record<string, SpiceProductDetail> = {
       "Count and grade per contract",
       "Health and phytosanitary documentation available",
     ],
-    heroImage: "/images/products/product-4.png",
+    heroImage: "/images/products/spices/cashews.png",
     images: [
       {
-        src: "/images/products/product-4.png",
+        src: "/images/products/spices/cashews.png",
         alt: "Raw cashew kernels in wooden bowls",
       },
     ],
@@ -146,11 +146,10 @@ const SPICE_PRODUCTS: Record<string, SpiceProductDetail> = {
       "Grade and origin confirmed per RFQ",
       "Phytosanitary documentation available",
     ],
-    heroImage:
-      "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=1200&q=80",
+    heroImage: "/images/products/spices/cinnamon-sticks.png",
     images: [
       {
-        src: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=1200&q=80",
+        src: "/images/products/spices/cinnamon-sticks.png",
         alt: "Whole cinnamon sticks",
       },
     ],
@@ -179,11 +178,10 @@ const SPICE_PRODUCTS: Record<string, SpiceProductDetail> = {
       "Density and moisture per contract",
       "Independent inspection available",
     ],
-    heroImage:
-      "https://images.unsplash.com/photo-1615485290382-441d4c0695bc?auto=format&fit=crop&w=1200&q=80",
+    heroImage: "/images/products/spices/black-pepper.png",
     images: [
       {
-        src: "https://images.unsplash.com/photo-1615485290382-441d4c0695bc?auto=format&fit=crop&w=1200&q=80",
+        src: "/images/products/spices/black-pepper.png",
         alt: "Whole black peppercorns",
       },
     ],
@@ -212,11 +210,11 @@ const SPICE_PRODUCTS: Record<string, SpiceProductDetail> = {
       "Grade and curcumin per contract",
       "Container programmes common",
     ],
-    heroImage: "/images/products/product-5.png",
+    heroImage: "/images/products/spices/turmeric.png",
     images: [
       {
-        src: "/images/products/product-5.png",
-        alt: "Turmeric and spices commodity reference",
+        src: "/images/products/spices/turmeric.png",
+        alt: "Turmeric fingers and ground turmeric",
       },
     ],
   },
@@ -244,11 +242,11 @@ const SPICE_PRODUCTS: Record<string, SpiceProductDetail> = {
       "Oil content per specification",
       "Phytosanitary documentation available",
     ],
-    heroImage: "/images/products/product-5.png",
+    heroImage: "/images/products/spices/cloves.png",
     images: [
       {
-        src: "/images/products/product-5.png",
-        alt: "Cloves and spices commodity reference",
+        src: "/images/products/spices/cloves.png",
+        alt: "Whole dried cloves",
       },
     ],
   },
@@ -276,11 +274,11 @@ const SPICE_PRODUCTS: Record<string, SpiceProductDetail> = {
       "Size grade per contract",
       "Independent inspection available",
     ],
-    heroImage: "/images/products/product-5.png",
+    heroImage: "/images/products/spices/cardamom.png",
     images: [
       {
-        src: "/images/products/product-5.png",
-        alt: "Cardamom and spices commodity reference",
+        src: "/images/products/spices/cardamom.png",
+        alt: "Green cardamom pods",
       },
     ],
   },
@@ -308,11 +306,11 @@ const SPICE_PRODUCTS: Record<string, SpiceProductDetail> = {
       "Oil content per specification",
       "Phytosanitary documentation available",
     ],
-    heroImage: "/images/products/product-5.png",
+    heroImage: "/images/products/spices/nutmeg.png",
     images: [
       {
-        src: "/images/products/product-5.png",
-        alt: "Nutmeg and spices commodity reference",
+        src: "/images/products/spices/nutmeg.png",
+        alt: "Whole nutmeg and ground nutmeg",
       },
     ],
   },
