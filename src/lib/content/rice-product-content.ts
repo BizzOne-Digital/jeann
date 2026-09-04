@@ -150,8 +150,12 @@ const RICE_PRODUCTS: Record<string, RiceProductDetail> = {
       "Broken percentage per contract",
       "Container-based supply programmes",
     ],
-    heroImage: `${RICE_BASE}/long-grain-scattered.png`,
+    heroImage: `${RICE_BASE}/jasmine-rice.jpg`,
     images: [
+      {
+        src: `${RICE_BASE}/jasmine-rice.jpg`,
+        alt: "Long-grain jasmine rice grains — close-up on black background",
+      },
       {
         src: `${RICE_BASE}/long-grain-scattered.png`,
         alt: "Long-grain jasmine rice grains — close-up",
