@@ -69,7 +69,7 @@ export function SiteHeader({ embedded = false }: Props) {
                   href={item.href}
                   className={cn(
                     "focus-ring relative px-3 py-2 text-[0.95rem] font-medium tracking-wide transition-colors",
-                    active ? "text-[#d4a84b]" : "text-[#e8eef2] hover:text-white",
+                    active ? "text-[#d4a84b]" : "text-[#e8eef2] hover:text-[#d4a84b]",
                   )}
                 >
                   {item.label}
@@ -157,7 +157,7 @@ export function SiteHeader({ embedded = false }: Props) {
                       onClick={closeMenu}
                       className={cn(
                         "block border-b border-white/10 py-4 text-lg font-semibold",
-                        active ? "text-[#d4a84b]" : "text-white",
+                        active ? "text-[#d4a84b]" : "text-white hover:text-[#d4a84b]",
                       )}
                     >
                       {item.label}
