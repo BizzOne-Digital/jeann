@@ -290,7 +290,7 @@ const PULSE_PRODUCTS: Record<string, PulseProductDetail> = {
       "Calibration per contract",
       "Phytosanitary documentation available",
     ],
-    heroImage: BEANS_LISTING_IMAGE,
+    heroImage: `${BEANS_BASE}/black-beans-wooden-bowl.png`,
     images: [
       {
         src: `${BEANS_BASE}/black-beans-wooden-bowl.png`,
