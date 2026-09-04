@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { BrandLogo } from "@/components/marketing/BrandLogo";
 import { FeaturedTestimonialAside } from "@/components/marketing/TestimonialSections";
 import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
@@ -121,12 +120,9 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
         <div className="absolute inset-0 bg-gradient-to-t from-[#071525]/70 via-transparent to-[#071525]/25" />
       </div>
 
-      <div className="container-page relative flex min-h-[min(88svh,720px)] flex-col justify-center pb-16 pt-[7.5rem] lg:pb-20 lg:pt-[8rem]">
+      <div className="container-page relative flex min-h-[min(88svh,720px)] flex-col justify-center pb-16 pt-[6rem] lg:pb-20 lg:pt-[6.5rem]">
         <div className="min-w-0 max-w-xl lg:max-w-2xl">
           <Reveal>
-            <BrandLogo size="lg" priority className="mb-6 shadow-[0_8px_32px_rgba(0,0,0,0.35)]" />
-          </Reveal>
-          <Reveal delay={0.04}>
             <p className="text-[0.65rem] font-semibold tracking-[0.18em] text-[#d4a84b] uppercase sm:text-xs sm:tracking-[0.26em]">
               {cmsField(
                 cms,
@@ -222,39 +218,17 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
   );
 }
 
-export function HomeVideoSection({ cms }: { cms?: Record<string, string> }) {
-  const youtubeInput = resolveHeroYoutubeInput(cmsField(cms, "youtubeVideoId", ""));
-
-  return (
-    <section className="bg-[#f4f6f8] py-12 lg:py-16" aria-label="Company overview video">
-      <div className="container-page">
-        <Reveal>
-          <p className="text-xs font-semibold tracking-[0.2em] text-[#c88e4a] uppercase">
-            {cmsField(cms, "videoEyebrow", "See how we work")}
-          </p>
-          <h2 className="mt-2 text-2xl font-semibold text-[#001a3d] sm:text-3xl">
-            {cmsField(cms, "videoTitle", "Global commodity trade in action")}
-          </h2>
-        </Reveal>
-        <Reveal delay={0.08} className="mt-8">
-          <YouTubeEmbed
-            youtubeInput={youtubeInput}
-            title="Finekarts commodity trade overview"
-            autoplay
-          />
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-
 export function ConnectionSection({
   home1 = "/images/home-1.png",
   home2 = "/images/home-2.png",
+  cms,
 }: {
   home1?: string;
   home2?: string;
+  cms?: Record<string, string>;
 }) {
+  const youtubeInput = resolveHeroYoutubeInput(cmsField(cms, "youtubeVideoId", ""));
+
   return (
     <section className="bg-[#f4f6f8] py-16 lg:py-24">
       <div className="container-page grid items-center gap-10 lg:grid-cols-[0.95fr_1.15fr] lg:gap-14">
@@ -266,9 +240,18 @@ export function ConnectionSection({
           </Reveal>
           <Reveal delay={0.06}>
             <h2 className="mt-3 text-3xl font-semibold leading-tight text-[#001a3d] sm:text-4xl lg:text-[2.65rem]">
-              Your Connection to Global Commodity Markets
+              Your Connection to Global Commodity Distributions
             </h2>
           </Reveal>
+          {youtubeInput ? (
+            <Reveal delay={0.08} className="mt-6">
+              <YouTubeEmbed
+                youtubeInput={youtubeInput}
+                title="Finekarts commodity trade overview"
+                autoplay
+              />
+            </Reveal>
+          ) : null}
           <Reveal delay={0.1}>
             <p className="mt-5 text-base leading-relaxed text-[#555555]">
               Finekarts Incorporated connects qualified buyers with established origin programmes worldwide. We
