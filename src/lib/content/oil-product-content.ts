@@ -276,8 +276,12 @@ const OIL_PRODUCTS: Record<string, OilProductDetail> = {
       "Refined and crude grades per contract",
       "Bulk container programmes",
     ],
-    heroImage: "/images/products/oils/refined-vegetable-bottling.png",
+    heroImage: "/images/products/oils/coconut-oil.png",
     images: [
+      {
+        src: "/images/products/oils/coconut-oil.png",
+        alt: "Coconut oil in glass vessels with fresh coconut — product reference",
+      },
       {
         src: "/images/products/oils/refined-vegetable-bottling.png",
         alt: "Refined coconut oil — bottling line reference",
