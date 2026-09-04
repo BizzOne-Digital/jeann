@@ -1,6 +1,7 @@
 import { getOilProductDetail, getOilProductMarketing } from "@/lib/content/oil-product-content";
 import { getPulseProductDetail, getPulseProductMarketing } from "@/lib/content/pulse-product-content";
 import { getRiceProductDetail, getRiceProductMarketing } from "@/lib/content/rice-product-content";
+import { RICE_CATALOG } from "@/lib/content/rice-catalog";
 import { getSpiceProductDetail, getSpiceProductMarketing } from "@/lib/content/spice-product-content";
 import { getSugarGradeDetail, getSugarProductMarketing } from "@/lib/content/sugar-product-content";
 import { PACKAGING_TYPES } from "@/lib/content/packaging-content";
@@ -244,24 +245,23 @@ export const SEED_CATEGORIES: SeedCategory[] = [
   {
     slug: "rice-and-grains",
     name: "Rice and grains",
-    summary: "Rice programmes for importers and distributors. Additional grain entries can be added through the CMS.",
-    products: [
-      ["basmati-rice", "Basmati rice"],
-      ["parboiled-rice", "Parboiled rice"],
-      ["jasmine-rice", "Jasmine rice"],
-    ].map(([slug, name]) => {
+    summary:
+      "Long-grain white, jasmine, parboiled, and basmati rice programmes for importers and distributors — grades and origins confirmed per contract.",
+    products: RICE_CATALOG.map(({ slug, name }) => {
       const rice = getRiceProductDetail(slug);
       const marketing = getRiceProductMarketing(slug);
       return {
         slug,
         name,
         overview: rice
-          ? `${rice.grade} — ${rice.subtitle}. ${rice.description.slice(0, 120)}…`
-          : `${name} for qualified international buyers. Broken percentage, moisture, and packing confirmed per specification.`,
+          ? `${rice.grade} — ${rice.subtitle}. Illustrative specs on the product page.`
+          : `${name} for qualified international buyers.`,
         description: marketing?.description,
         availabilityText: "Crop and mill confirmation required.",
-        originOptions: ["Confirmed per enquiry"],
-        gradeSummary: rice ? `${rice.grade} — ${rice.subtitle}. ${draftNote}` : draftNote,
+        originOptions: rice?.origin ? [rice.origin, "Confirmed per enquiry"] : ["Confirmed per enquiry"],
+        gradeSummary: rice
+          ? `${rice.grade} — ${rice.specs.map((s) => `${s.label} ${s.value}`).join("; ")}`
+          : draftNote,
         packaging: rice?.packaging ?? ["Multi-wall sacks", "FIBCs/jumbo bags", "Container liners"],
         inspectionOptions: ["Configurable when verified"],
         incotermOptions: ["FOB", "CIF"],

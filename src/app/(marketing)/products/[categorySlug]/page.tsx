@@ -9,7 +9,7 @@ import { getPublicCategory } from "@/lib/content/catalog-server";
 import { buyerQuoteHref } from "@/lib/marketing/cta-links";
 import { getCategoryCover, getProductListingImage } from "@/lib/content/product-images";
 import { SpicesCategorySections } from "@/components/marketing/SpiceSections";
-import { RiceCategorySections } from "@/components/marketing/RiceSections";
+import { RiceCategoryProductGrid, RiceCategorySections } from "@/components/marketing/RiceSections";
 import { BeansCategorySections } from "@/components/marketing/PulseSections";
 import { EdibleOilsCategorySections } from "@/components/marketing/OilSections";
 import { SugarCategorySections } from "@/components/marketing/SugarSections";
@@ -118,34 +118,40 @@ export default async function CategoryPage({ params }: Props) {
             </p>
           </div>
 
-          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {category.products.map((product, i) => (
-              <Reveal key={product.slug} delay={Math.min(i * 0.04, 0.2)}>
-                <Link
-                  href={`/products/${category.slug}/${product.slug}`}
-                  className="group block"
-                >
-                  <div className="relative aspect-[16/11] overflow-hidden bg-[#e4e0d8]">
-                    <Image
-                      src={getProductListingImage(product, category.slug)}
-                      alt=""
-                      fill
-                      className="object-cover transition duration-500 group-hover:scale-[1.03]"
-                      sizes="(max-width: 1024px) 50vw, 360px"
-                    />
-                  </div>
-                  <h3 className="mt-3 text-lg font-semibold text-[#001a3d] transition group-hover:text-[#c88e4a]">
-                    {product.name}
-                  </h3>
-                  <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-[#666666]">
-                    {product.overview}
-                  </p>
-                  <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[#c88e4a]">
-                    View details <span aria-hidden>→</span>
-                  </span>
-                </Link>
-              </Reveal>
-            ))}
+          <div className="mt-10">
+            {isRice ? (
+              <RiceCategoryProductGrid products={category.products} categorySlug={category.slug} />
+            ) : (
+              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {category.products.map((product, i) => (
+                  <Reveal key={product.slug} delay={Math.min(i * 0.04, 0.2)}>
+                    <Link
+                      href={`/products/${category.slug}/${product.slug}`}
+                      className="group block"
+                    >
+                      <div className="relative aspect-[16/11] overflow-hidden bg-[#e4e0d8]">
+                        <Image
+                          src={getProductListingImage(product, category.slug)}
+                          alt=""
+                          fill
+                          className="object-cover transition duration-500 group-hover:scale-[1.03]"
+                          sizes="(max-width: 1024px) 50vw, 360px"
+                        />
+                      </div>
+                      <h3 className="mt-3 text-lg font-semibold text-[#001a3d] transition group-hover:text-[#c88e4a]">
+                        {product.name}
+                      </h3>
+                      <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-[#666666]">
+                        {product.overview}
+                      </p>
+                      <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[#c88e4a]">
+                        View details <span aria-hidden>→</span>
+                      </span>
+                    </Link>
+                  </Reveal>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </section>
