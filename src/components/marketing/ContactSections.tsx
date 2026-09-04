@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Reveal } from "@/components/motion/Reveal";
 import { cmsField } from "@/lib/content/cms-field";
 import { PageHero } from "@/components/marketing/PageHero";
-import { BuyerPortalGate } from "@/components/marketing/BuyerPortalGate";
+import { ContactForm } from "@/components/marketing/ContactForm";
 
 export function ContactHero({ cms }: { cms?: Record<string, string> }) {
   return (
@@ -15,7 +15,7 @@ export function ContactHero({ cms }: { cms?: Record<string, string> }) {
       description={cmsField(
         cms,
         "description",
-        "Reach the Finekarts trade desk for qualified buyer enquiries. Signed-in buyers can send messages, book consultations, and submit purchase requests from the buyer portal.",
+        "Reach the Finekarts trade desk for qualified buyer enquiries. Use the contact form below, or sign in to the buyer portal for RFQs and consultations.",
       )}
       primaryCta={{
         href: cmsField(cms, "primaryCtaHref", "/login"),
@@ -53,7 +53,7 @@ export function ContactChannels({
     },
     {
       title: "General enquiries",
-      text: "Company information, compliance, and careers — email or use the form after sign-in.",
+      text: "Company information, compliance, and careers — email us or use the form below.",
       href: "#contact-form",
       linkLabel: "Contact form",
     },
@@ -188,10 +188,9 @@ export function ContactFormSection({
         </div>
 
         <Reveal delay={0.08} y={20}>
-          <BuyerPortalGate
-            title="Message the trade desk"
-            description="Contact and consultation forms are available after buyer sign-in. Register or sign in to send a message from your portal."
-          />
+          <div className="rounded-lg border border-[#d5d0c8] bg-white p-6 shadow-sm sm:p-8">
+            <ContactForm />
+          </div>
         </Reveal>
       </div>
     </section>

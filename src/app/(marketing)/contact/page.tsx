@@ -10,7 +10,7 @@ import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Reach the Finekarts trade desk. Buyer messages and consultations are submitted through the buyer portal after sign-in.",
+  description: "Reach the Finekarts trade desk by email, phone, or the contact form.",
 };
 
 export default async function ContactPage() {
