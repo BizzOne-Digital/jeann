@@ -9,7 +9,7 @@ import { cmsField } from "@/lib/content/cms-field";
 import { resolveImageSrc } from "@/lib/media/resolve-image-src";
 import { Reveal } from "@/components/motion/Reveal";
 import { HomeCtaChat } from "@/components/marketing/HomeCtaChat";
-import { YouTubeEmbed } from "@/components/marketing/YouTubeEmbed";
+import { HeroVideoBackground } from "@/components/marketing/HeroVideoBackground";
 import { resolveHeroYoutubeInput } from "@/lib/content/hero-video";
 import type { SeedCategory } from "@/lib/content/catalog";
 import { getCategoryCover } from "@/lib/content/product-images";
@@ -297,17 +297,23 @@ export function ConnectionSection({
       </section>
 
       {youtubeInput ? (
-        <section className="bg-[#f4f6f8] pb-16 lg:pb-24" aria-label="Company overview video">
-          <div className="container-page">
-            <Reveal>
-              <YouTubeEmbed
-                youtubeInput={youtubeInput}
-                title="Finekarts commodity trade overview"
-                autoplay
-                className="w-full [&>div]:min-h-[220px] [&>div]:rounded-xl [&>div]:shadow-lg sm:[&>div]:min-h-[320px] lg:[&>div]:min-h-[min(56vw,560px)]"
-              />
-            </Reveal>
-          </div>
+        <section
+          className="relative min-h-[min(72svh,680px)] w-full overflow-hidden bg-[#071525]"
+          aria-label="Company overview video"
+        >
+          <HeroVideoBackground
+            youtubeInput={youtubeInput}
+            posterSrc={resolveImageSrc(home2)}
+            posterAlt="Container ship and port logistics at sunset"
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(90deg, rgba(4,14,28,0.97) 0%, rgba(4,14,28,0.92) 24%, rgba(4,14,28,0.58) 48%, rgba(4,14,28,0.22) 70%, rgba(4,14,28,0.12) 100%)",
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#071525]/70 via-transparent to-[#071525]/25" />
         </section>
       ) : null}
     </>
