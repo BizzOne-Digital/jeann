@@ -114,8 +114,12 @@ const PULSE_PRODUCTS: Record<string, PulseProductDetail> = {
       "Uniform calibration programmes",
       "Container-based supply",
     ],
-    heroImage: BEANS_LISTING_IMAGE,
+    heroImage: `${BEANS_BASE}/white-beans-leaves.png`,
     images: [
+      {
+        src: `${BEANS_BASE}/white-beans-leaves.png`,
+        alt: "Large white kidney beans with decorative green leaves",
+      },
       {
         src: `${BEANS_BASE}/white-beans-plate.png`,
         alt: "Large white kidney beans on a serving plate",
@@ -123,10 +127,6 @@ const PULSE_PRODUCTS: Record<string, PulseProductDetail> = {
       {
         src: `${BEANS_BASE}/white-beans-spoons.png`,
         alt: "Large white beans presented in wooden spoons",
-      },
-      {
-        src: `${BEANS_BASE}/white-beans-leaves.png`,
-        alt: "Large white kidney beans with decorative green leaves",
       },
     ],
   },
