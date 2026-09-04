@@ -240,11 +240,11 @@ const OIL_PRODUCTS: Record<string, OilProductDetail> = {
       "Flexible packaging and Incoterm options",
       "Specifications confirmed per RFQ",
     ],
-    heroImage: "/images/products/oils/refined-rapeseed-production.png",
+    heroImage: "/images/products/oils/canola-oil.png",
     images: [
       {
-        src: "/images/products/oils/refined-rapeseed-production.png",
-        alt: "Refined canola oil — product sample with rapeseed flowers",
+        src: "/images/products/oils/canola-oil.png",
+        alt: "Refined canola oil poured into a bowl with rapeseed flowers",
       },
       {
         src: "/images/products/rapeseed-oil-reference.png",
