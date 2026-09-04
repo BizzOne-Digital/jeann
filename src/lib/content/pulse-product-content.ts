@@ -206,8 +206,12 @@ const PULSE_PRODUCTS: Record<string, PulseProductDetail> = {
       "Sorted calibration programmes",
       "Independent inspection aligned to contract",
     ],
-    heroImage: `${BEANS_BASE}/pinto-beans-bowls.jpg`,
+    heroImage: `${BEANS_BASE}/pinto-beans-pile.png`,
     images: [
+      {
+        src: `${BEANS_BASE}/pinto-beans-pile.png`,
+        alt: "Speckled pinto beans — close-up product reference",
+      },
       {
         src: `${BEANS_BASE}/pinto-beans-bowls.jpg`,
         alt: "Speckled pinto beans in white ceramic bowls",
