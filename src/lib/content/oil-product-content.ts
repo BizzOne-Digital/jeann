@@ -388,8 +388,12 @@ const OIL_PRODUCTS: Record<string, OilProductDetail> = {
       "Flexible blend specifications",
       "Production-scale supply programmes",
     ],
-    heroImage: "/images/products/oils/refined-vegetable-bottling.png",
+    heroImage: "/images/products/oils/vegetable-oil.png",
     images: [
+      {
+        src: "/images/products/oils/vegetable-oil.png",
+        alt: "Vegetable oil being poured into a glass — product reference",
+      },
       {
         src: "/images/products/oils/refined-vegetable-bottling.png",
         alt: "Refined vegetable oil bottling on automated production line",
