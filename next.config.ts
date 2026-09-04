@@ -24,23 +24,12 @@ const nextConfig: NextConfig = {
         destination: "/products/beans-and-pulses",
         permanent: true,
       },
-      {
-        source: "/products/rice-and-grains/basmati-rice",
-        destination: "/products/rice-and-grains/basmati-370",
-        permanent: true,
-      },
-      {
-        source: "/products/rice-and-grains/parboiled-rice",
-        destination: "/products/rice-and-grains/white-parboiled-rice",
-        permanent: true,
-      },
     ];
   },
   images: {
     formats: ["image/avif", "image/webp"],
     localPatterns: [
       { pathname: "/images/**" },
-      { pathname: "/products/**" },
       { pathname: "/brand/**" },
       { pathname: "/api/uploads/**" },
     ],

@@ -11,8 +11,6 @@ export const DEPRECATED_PRODUCT_SLUGS = new Set([
   "cashews-and-nuts",
   "cinnamon",
   "seed",
-  "basmati-rice",
-  "parboiled-rice",
 ]);
 
 function isPublicProductStatus(status: string): boolean {

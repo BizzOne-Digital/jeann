@@ -27,13 +27,6 @@ describe("public catalog seed", () => {
     );
   });
 
-  it("seeds rice catalogue with long-grain, parboiled, and basmati grades", () => {
-    const rice = getCategories().find((c) => c.slug === "rice-and-grains");
-    expect(rice?.products.length).toBe(36);
-    expect(rice?.products.map((p) => p.slug)).toEqual(
-      expect.arrayContaining(["jasmine-rice", "white-parboiled-rice", "basmati-370"]),
-    );
-  });
   it("resolves product routes", () => {
     const hit = getProduct("edible-oils", "canola-oil");
     expect(hit?.product.name).toBe("Canola oil");
