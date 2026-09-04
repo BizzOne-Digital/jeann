@@ -154,10 +154,10 @@ const PULSE_PRODUCTS: Record<string, PulseProductDetail> = {
       "Sorted calibration per contract",
       "Phytosanitary documentation available",
     ],
-    heroImage: BEANS_LISTING_IMAGE,
+    heroImage: `${BEANS_BASE}/red-speckled-pile.jpg`,
     images: [
       {
-        src: `${BEANS_BASE}/red-speckled-pile.png`,
+        src: `${BEANS_BASE}/red-speckled-pile.jpg`,
         alt: "Red speckled beans — top-down product reference",
       },
       {
@@ -206,8 +206,12 @@ const PULSE_PRODUCTS: Record<string, PulseProductDetail> = {
       "Sorted calibration programmes",
       "Independent inspection aligned to contract",
     ],
-    heroImage: BEANS_LISTING_IMAGE,
+    heroImage: `${BEANS_BASE}/pinto-beans-bowls.jpg`,
     images: [
+      {
+        src: `${BEANS_BASE}/pinto-beans-bowls.jpg`,
+        alt: "Speckled pinto beans in white ceramic bowls",
+      },
       {
         src: `${BEANS_BASE}/pinto-beans-basket.png`,
         alt: "Speckled pinto beans in a woven basket",
