@@ -74,7 +74,7 @@ const PULSE_PRODUCTS: Record<string, PulseProductDetail> = {
       "Calibration and moisture per contract",
       "Independent inspection available",
     ],
-    heroImage: BEANS_LISTING_IMAGE,
+    heroImage: `${BEANS_BASE}/red-kidney-bowl.png`,
     images: [
       {
         src: `${BEANS_BASE}/red-kidney-bowl.png`,
