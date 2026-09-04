@@ -334,11 +334,11 @@ const PULSE_PRODUCTS: Record<string, PulseProductDetail> = {
       "Protein specification per contract",
       "Bulk and container options",
     ],
-    heroImage: BEANS_LISTING_IMAGE,
+    heroImage: `${BEANS_BASE}/soybeans.png`,
     images: [
       {
-        src: `${BEANS_BASE}/beans-variety-mosaic.png`,
-        alt: "Assorted dry legume varieties including soybeans",
+        src: `${BEANS_BASE}/soybeans.png`,
+        alt: "Yellow soybeans with wooden spoon — product reference",
       },
     ],
   },

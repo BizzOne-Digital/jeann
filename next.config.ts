@@ -19,11 +19,6 @@ const nextConfig: NextConfig = {
         destination: "/products/beans-and-pulses",
         permanent: true,
       },
-      {
-        source: "/products/beans-and-pulses/soybeans",
-        destination: "/products/beans-and-pulses",
-        permanent: true,
-      },
     ];
   },
   images: {

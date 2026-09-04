@@ -216,6 +216,7 @@ export const SEED_CATEGORIES: SeedCategory[] = [
       "Red beans",
       "Black beans",
       "Pinto beans",
+      "Soybeans",
     ].map((name) => {
       const slug = name.toLowerCase().replace(/\s+/g, "-");
       const pulse = getPulseProductDetail(slug);

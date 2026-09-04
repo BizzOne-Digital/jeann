@@ -25,6 +25,7 @@ const categories = {
     "red-beans",
     "black-beans",
     "pinto-beans",
+    "soybeans",
   ],
   "rice-and-grains": ["basmati-rice", "parboiled-rice", "jasmine-rice"],
   "other-commodities": [
