@@ -230,79 +230,87 @@ export function ConnectionSection({
   const youtubeInput = resolveHeroYoutubeInput(cmsField(cms, "youtubeVideoId", ""));
 
   return (
-    <section className="bg-[#f4f6f8] py-16 lg:py-24">
-      <div className="container-page grid items-center gap-10 lg:grid-cols-[0.95fr_1.15fr] lg:gap-14">
-        <div className="max-w-xl">
-          <Reveal>
-            <p className="text-sm font-semibold tracking-[0.22em] text-[#c88e4a] uppercase sm:text-base">
-              Who We Are
-            </p>
-          </Reveal>
-          <Reveal delay={0.06}>
-            <h2 className="mt-3 text-3xl font-semibold leading-tight text-[#001a3d] sm:text-4xl lg:text-[2.65rem]">
-              Your Connection to Global Commodity Distributions
-            </h2>
-          </Reveal>
-          {youtubeInput ? (
-            <Reveal delay={0.08} className="mt-6">
+    <>
+      <section className="bg-[#f4f6f8] py-16 lg:py-24">
+        <div className="container-page grid items-center gap-10 lg:grid-cols-[0.95fr_1.15fr] lg:gap-14">
+          <div className="max-w-xl">
+            <Reveal>
+              <p className="text-sm font-semibold tracking-[0.22em] text-[#c88e4a] uppercase sm:text-base">
+                Who We Are
+              </p>
+            </Reveal>
+            <Reveal delay={0.06}>
+              <h2 className="mt-3 text-3xl font-semibold leading-tight text-[#001a3d] sm:text-4xl lg:text-[2.65rem]">
+                Your Connection to Global Commodity Distributions
+              </h2>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <p className="mt-5 text-base leading-relaxed text-[#555555]">
+                Finekarts Incorporated connects qualified buyers with established origin programmes worldwide. We
+                specialize in the sourcing, quality coordination, and logistics of bulk agricultural
+                commodities with integrity and professionalism.
+              </p>
+            </Reveal>
+            <Reveal delay={0.14}>
+              <p className="mt-4 text-base leading-relaxed text-[#555555]">
+                From origin to destination, our team ensures reliable execution, transparent
+                communication, and consistent value at every step.
+              </p>
+            </Reveal>
+            <Reveal delay={0.18}>
+              <Link
+                href="/about"
+                className="mt-7 inline-flex items-center gap-2 text-base font-semibold text-[#c88e4a] transition hover:gap-3"
+              >
+                Discover Finekarts <span aria-hidden>→</span>
+              </Link>
+            </Reveal>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
+            <Reveal>
+              <div className="relative aspect-[3/4] overflow-hidden rounded-sm bg-[#e4e0d8] sm:aspect-[4/5]">
+                <Image
+                  src={resolveImageSrc(home1)}
+                  alt="Quality inspection of bulk agricultural grains"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 50vw, 360px"
+                  unoptimized={home1.startsWith("/api/uploads/")}
+                />
+              </div>
+            </Reveal>
+            <Reveal delay={0.08}>
+              <div className="relative aspect-[3/4] overflow-hidden rounded-sm bg-[#e4e0d8] sm:aspect-[4/5]">
+                <Image
+                  src={resolveImageSrc(home2)}
+                  alt="Container ship and port logistics at sunset"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 50vw, 360px"
+                  unoptimized={home2.startsWith("/api/uploads/")}
+                />
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {youtubeInput ? (
+        <section className="bg-[#f4f6f8] pb-16 lg:pb-24" aria-label="Company overview video">
+          <div className="container-page">
+            <Reveal>
               <YouTubeEmbed
                 youtubeInput={youtubeInput}
                 title="Finekarts commodity trade overview"
                 autoplay
+                className="w-full [&>div]:min-h-[220px] [&>div]:rounded-xl [&>div]:shadow-lg sm:[&>div]:min-h-[320px] lg:[&>div]:min-h-[min(56vw,560px)]"
               />
             </Reveal>
-          ) : null}
-          <Reveal delay={0.1}>
-            <p className="mt-5 text-base leading-relaxed text-[#555555]">
-              Finekarts Incorporated connects qualified buyers with established origin programmes worldwide. We
-              specialize in the sourcing, quality coordination, and logistics of bulk agricultural
-              commodities with integrity and professionalism.
-            </p>
-          </Reveal>
-          <Reveal delay={0.14}>
-            <p className="mt-4 text-base leading-relaxed text-[#555555]">
-              From origin to destination, our team ensures reliable execution, transparent
-              communication, and consistent value at every step.
-            </p>
-          </Reveal>
-          <Reveal delay={0.18}>
-            <Link
-              href="/about"
-              className="mt-7 inline-flex items-center gap-2 text-base font-semibold text-[#c88e4a] transition hover:gap-3"
-            >
-              Discover Finekarts <span aria-hidden>→</span>
-            </Link>
-          </Reveal>
-        </div>
-
-        <div className="grid grid-cols-2 gap-3 sm:gap-4">
-          <Reveal>
-            <div className="relative aspect-[3/4] overflow-hidden rounded-sm bg-[#e4e0d8] sm:aspect-[4/5]">
-              <Image
-                src={resolveImageSrc(home1)}
-                alt="Quality inspection of bulk agricultural grains"
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 50vw, 360px"
-                unoptimized={home1.startsWith("/api/uploads/")}
-              />
-            </div>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <div className="relative aspect-[3/4] overflow-hidden rounded-sm bg-[#e4e0d8] sm:aspect-[4/5]">
-              <Image
-                src={resolveImageSrc(home2)}
-                alt="Container ship and port logistics at sunset"
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 50vw, 360px"
-                unoptimized={home2.startsWith("/api/uploads/")}
-              />
-            </div>
-          </Reveal>
-        </div>
-      </div>
-    </section>
+          </div>
+        </section>
+      ) : null}
+    </>
   );
 }
 
