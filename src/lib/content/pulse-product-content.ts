@@ -37,6 +37,7 @@ export const BEANS_CATEGORY = {
   products: [
     "Kidney beans",
     "White beans",
+    "Yellow beans",
     "Red speckled beans",
     "Pinto beans",
     "Black beans",
@@ -127,6 +128,38 @@ const PULSE_PRODUCTS: Record<string, PulseProductDetail> = {
       {
         src: `${BEANS_BASE}/white-beans-spoons.png`,
         alt: "Large white beans presented in wooden spoons",
+      },
+    ],
+  },
+  "yellow-beans": {
+    slug: "yellow-beans",
+    grade: "Yellow beans",
+    subtitle: "Canary and Peruvian-style yellow beans",
+    description:
+      "Yellow beans (canary, Peruvian, and similar grades) for food manufacturing and distribution. Calibration, moisture, and defect limits are confirmed per contract and Certificate of Analysis.",
+    applications: [
+      "Food manufacturing",
+      "Soups and prepared meals",
+      "Wholesale distribution",
+      "Latin American food programmes",
+    ],
+    characteristics: [
+      "Pale yellow to cream colour",
+      "Oval shape with smooth skin",
+      "Sorted calibration per contract",
+      "Low foreign matter",
+    ],
+    packaging: ["FIBCs/jumbo bags", "Multi-wall sacks", "Container liners"],
+    highlights: [
+      "Yellow beans for food and canning channels",
+      "Calibration per contract",
+      "Container-based supply programmes",
+    ],
+    heroImage: `${BEANS_BASE}/yellow-beans.png`,
+    images: [
+      {
+        src: `${BEANS_BASE}/yellow-beans.png`,
+        alt: "Yellow beans in a wooden spoon — product reference",
       },
     ],
   },

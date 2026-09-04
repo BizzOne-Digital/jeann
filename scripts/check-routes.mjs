@@ -22,6 +22,7 @@ const categories = {
   "beans-and-pulses": [
     "kidney-beans",
     "white-beans",
+    "yellow-beans",
     "red-beans",
     "black-beans",
     "pinto-beans",

@@ -213,6 +213,7 @@ export const SEED_CATEGORIES: SeedCategory[] = [
     products: [
       "Kidney beans",
       "White beans",
+      "Yellow beans",
       "Red beans",
       "Black beans",
       "Pinto beans",

@@ -5,11 +5,6 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
-        source: "/products/beans-and-pulses/yellow-beans",
-        destination: "/products/beans-and-pulses/white-beans",
-        permanent: true,
-      },
-      {
         source: "/products/beans-and-pulses/white-kidney-beans",
         destination: "/products/beans-and-pulses/white-beans",
         permanent: true,
