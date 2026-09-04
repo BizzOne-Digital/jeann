@@ -20,8 +20,8 @@ export const CATEGORY_COVERS: Record<string, { image: string; shortName: string;
   },
   "beans-and-pulses": {
     shortName: "Beans",
-    image: "/images/products/beans/red-kidney-bowl.png",
-    alt: "Dark red kidney beans",
+    image: "/images/products/beans/beans-category-cover.jpg",
+    alt: "Assorted dry bean varieties including pinto, kidney, and speckled grades",
   },
   "other-commodities": {
     shortName: "Coffee & Spices",
