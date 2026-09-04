@@ -22,6 +22,8 @@ type Props = {
   size?: "full" | "standard";
   /** dark = navy overlay (default); light = cream/paper band for readability */
   tone?: "dark" | "light";
+  /** Softer image overlay for dark heroes (e.g. contact page) */
+  overlay?: "default" | "soft";
   imageSrc?: string;
   imageAlt?: string;
   imageClassName?: string;
@@ -36,6 +38,7 @@ export function PageHero({
   secondaryCta,
   size = "standard",
   tone = "dark",
+  overlay = "default",
   imageSrc = "/images/hero-commodities.png",
   imageAlt = "",
   imageClassName = "object-cover object-center",
@@ -44,6 +47,7 @@ export function PageHero({
   const reduce = useReducedMotion();
   const full = size === "full";
   const light = tone === "light";
+  const softOverlay = !light && overlay === "soft";
 
   return (
     <section
@@ -75,12 +79,15 @@ export function PageHero({
           </>
         ) : (
           <>
-            <div className="absolute inset-0 bg-[#071525]/88" />
+            <div
+              className={`absolute inset-0 ${softOverlay ? "bg-[#071525]/58" : "bg-[#071525]/88"}`}
+            />
             <div
               className="absolute inset-0"
               style={{
-                background:
-                  "linear-gradient(105deg, rgba(4,14,28,0.95) 0%, rgba(4,14,28,0.75) 55%, rgba(4,14,28,0.45) 100%)",
+                background: softOverlay
+                  ? "linear-gradient(105deg, rgba(4,14,28,0.62) 0%, rgba(4,14,28,0.42) 55%, rgba(4,14,28,0.22) 100%)"
+                  : "linear-gradient(105deg, rgba(4,14,28,0.95) 0%, rgba(4,14,28,0.75) 55%, rgba(4,14,28,0.45) 100%)",
               }}
             />
           </>

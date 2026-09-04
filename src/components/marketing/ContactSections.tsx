@@ -11,6 +11,7 @@ export function ContactHero({ cms }: { cms?: Record<string, string> }) {
   return (
     <PageHero
       tone="dark"
+      overlay="soft"
       title={cmsField(cms, "title", "Speak with our team")}
       description={cmsField(
         cms,
@@ -60,7 +61,7 @@ export function ContactChannels({
   ];
 
   return (
-    <section className="bg-[#0a1628] py-14 text-white lg:py-20">
+    <section className="bg-gradient-to-br from-[#1a3352] via-[#1f3d5c] to-[#25466a] py-14 text-white lg:py-20">
       <div className="container-page">
         <Reveal>
           <p className="text-xs font-semibold tracking-[0.22em] text-[#d4a84b] uppercase">
@@ -208,7 +209,7 @@ export function ContactCta() {
         sizes="100vw"
         aria-hidden
       />
-      <div className="absolute inset-0 bg-[#071525]/85" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#071525]/55 via-[#071525]/45 to-[#071525]/35" />
       <div className="container-page relative text-center">
         <Reveal>
           <h2 className="mx-auto max-w-2xl text-3xl font-semibold leading-tight sm:text-4xl">
