@@ -201,11 +201,11 @@ const OIL_PRODUCTS: Record<string, OilProductDetail> = {
       "Production and bottling-scale supply",
       "Independent inspection available",
     ],
-    heroImage: "/images/products/oils/refined-rapeseed-production.png",
+    heroImage: "/images/products/oils/rapeseed-oil.png",
     images: [
       {
-        src: "/images/products/oils/refined-rapeseed-production.png",
-        alt: "Refined rapeseed oil — product sample with rapeseed flowers",
+        src: "/images/products/oils/rapeseed-oil.png",
+        alt: "Rapeseed oil bottle held in a blooming rapeseed field",
       },
       {
         src: "/images/products/oils/refined-rapeseed-bottling.png",
