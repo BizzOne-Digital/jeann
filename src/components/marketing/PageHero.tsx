@@ -8,6 +8,7 @@ import {
   MARKETING_HERO_INNER_CLASS,
   MARKETING_HERO_SECTION_CLASS,
 } from "@/lib/marketing/hero-layout";
+import { AGRICULTURE_IMAGES } from "@/lib/content/agriculture-images";
 
 export type PageHeroCta = {
   href: string;
@@ -36,7 +37,7 @@ export function PageHero({
   primaryCta,
   secondaryCta,
   tone = "dark",
-  imageSrc = "/images/hero-commodities.png",
+  imageSrc = AGRICULTURE_IMAGES.combineHarvest.src,
   imageAlt = "",
   imageClassName = "object-cover object-center",
   priority = true,

@@ -15,6 +15,7 @@ import type { SeedCategory } from "@/lib/content/catalog";
 import { getCategoryCover } from "@/lib/content/product-images";
 import { HOMEPAGE_PACKAGING_TEASER, PACKAGING_IMAGES } from "@/lib/content/packaging-images";
 import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
+import { AGRICULTURE_IMAGES } from "@/lib/content/agriculture-images";
 import {
   MARKETING_HERO_INNER_CLASS,
   MARKETING_HERO_SECTION_CLASS,
@@ -646,8 +647,8 @@ export function ReadyCtaBanner() {
   return (
     <section className="relative overflow-hidden py-16 text-white lg:py-24">
       <Image
-        src="/images/hero-commodities.png"
-        alt="Port logistics and agricultural commodities at sunset"
+        src={AGRICULTURE_IMAGES.grainSilos.src}
+        alt={AGRICULTURE_IMAGES.grainSilos.alt}
         fill
         className="object-cover object-center"
         sizes="100vw"

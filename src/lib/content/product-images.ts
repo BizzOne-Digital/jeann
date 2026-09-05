@@ -1,37 +1,38 @@
 import { resolveImageSrc } from "@/lib/media/resolve-image-src";
+import { AGRICULTURE_IMAGES } from "@/lib/content/agriculture-images";
 
 /** Category and product listing images from client photo folders. */
 
 export const CATEGORY_COVERS: Record<string, { image: string; shortName: string; alt: string }> = {
   "edible-oils": {
     shortName: "Edible Oils",
-    image: "/images/products/oils/refined-sunflower-product.png",
-    alt: "Refined sunflower oil",
+    image: AGRICULTURE_IMAGES.tractorPlowing.src,
+    alt: AGRICULTURE_IMAGES.tractorPlowing.alt,
   },
   sugar: {
     shortName: "Sugar",
-    image: "/images/products/sugar/icumsa-45-white-sugar-3.png",
-    alt: "Refined white sugar",
+    image: AGRICULTURE_IMAGES.combineHarvest.src,
+    alt: AGRICULTURE_IMAGES.combineHarvest.alt,
   },
   "rice-and-grains": {
     shortName: "Rice & Grains",
-    image: "/images/products/rice/long-grain-bag.png",
-    alt: "Long-grain rice in export bags",
+    image: AGRICULTURE_IMAGES.riceTerraces.src,
+    alt: AGRICULTURE_IMAGES.riceTerraces.alt,
   },
   "beans-and-pulses": {
     shortName: "Beans",
-    image: "/images/products/beans/beans-category-cover.jpg",
-    alt: "Assorted dry bean varieties including pinto, kidney, and speckled grades",
+    image: AGRICULTURE_IMAGES.greenGrainField.src,
+    alt: AGRICULTURE_IMAGES.greenGrainField.alt,
   },
   coffee: {
     shortName: "Coffee",
-    image: "/images/products/coffee/fresh-coffee-harvest.png",
-    alt: "Fresh coffee harvest",
+    image: AGRICULTURE_IMAGES.teaPlantation.src,
+    alt: "Coffee and plantation crops at origin",
   },
   spices: {
     shortName: "Spices",
-    image: "/images/products/spices/cinnamon-sticks.png",
-    alt: "Cinnamon sticks and specialty spices",
+    image: AGRICULTURE_IMAGES.teaPlantation.src,
+    alt: AGRICULTURE_IMAGES.teaPlantation.alt,
   },
 };
 
@@ -39,8 +40,8 @@ export function getCategoryCover(slug: string) {
   return (
     CATEGORY_COVERS[slug] ?? {
       shortName: slug,
-      image: "/images/products/oils/refined-sunflower-product.png",
-      alt: "Agricultural commodity",
+      image: AGRICULTURE_IMAGES.greenGrainField.src,
+      alt: AGRICULTURE_IMAGES.greenGrainField.alt,
     }
   );
 }

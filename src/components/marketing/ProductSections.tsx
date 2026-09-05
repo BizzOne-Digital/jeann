@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Reveal } from "@/components/motion/Reveal";
 import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
+import { AGRICULTURE_IMAGES } from "@/lib/content/agriculture-images";
 import { PageHero } from "@/components/marketing/PageHero";
 import { searchCatalogProducts, type CatalogProduct } from "@/lib/content/catalog-utils";
 import type { SeedCategory } from "@/lib/content/seed-catalog";
@@ -193,7 +194,7 @@ export function ProductsCta() {
   return (
     <section className="relative overflow-hidden py-16 text-white lg:py-20">
       <Image
-        src="/images/hero-commodities.png"
+        src={AGRICULTURE_IMAGES.combineHarvest.src}
         alt=""
         fill
         className="object-cover object-center"

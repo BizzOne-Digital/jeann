@@ -1,3 +1,5 @@
+import { AGRICULTURE_IMAGES } from "@/lib/content/agriculture-images";
+
 export type PageHeroImageKey =
   | "home"
   | "about"
@@ -25,20 +27,11 @@ export type PageHeroImage = {
   alt: string;
 };
 
-/** Distinct hero photography per marketing page — different aspects of the business. */
+/** Distinct hero photography per marketing page — agriculture pages use client-supplied field imagery. */
 export const PAGE_HERO_IMAGES: Record<PageHeroImageKey, PageHeroImage> = {
-  home: {
-    src: "/images/hero-commodities.png",
-    alt: "Agricultural commodities with port logistics and refining infrastructure",
-  },
-  about: {
-    src: "/images/home-1.png",
-    alt: "Global commodity markets and trade relationships",
-  },
-  products: {
-    src: "/images/products/oils/refined-sunflower-product.png",
-    alt: "Refined edible oils and bulk agricultural products",
-  },
+  home: AGRICULTURE_IMAGES.combineHarvest,
+  about: AGRICULTURE_IMAGES.riceTerraces,
+  products: AGRICULTURE_IMAGES.greenGrainField,
   resources: {
     src: "/images/packaging/containerized-cargo-loading.png",
     alt: "Containerized commodity exports and trade documentation",
@@ -47,22 +40,10 @@ export const PAGE_HERO_IMAGES: Record<PageHeroImageKey, PageHeroImage> = {
     src: "/images/inspections/port-sampling.png",
     alt: "Trade desk support at the port",
   },
-  insights: {
-    src: "/images/home-3.png",
-    alt: "Market insights for international commodity trade",
-  },
-  faq: {
-    src: "/images/products/rice/long-grain-pile.png",
-    alt: "Bulk rice and grains traded internationally",
-  },
-  team: {
-    src: "/images/products/coffee/fresh-coffee-harvest.png",
-    alt: "Harvest and operations across commodity supply chains",
-  },
-  testimonials: {
-    src: "/images/products/sugar/icumsa-45-white-sugar-3.png",
-    alt: "Refined sugar programmes for global buyers",
-  },
+  insights: AGRICULTURE_IMAGES.teaPlantation,
+  faq: AGRICULTURE_IMAGES.greenGrainField,
+  team: AGRICULTURE_IMAGES.teaPlantation,
+  testimonials: AGRICULTURE_IMAGES.grainSilos,
   booking: {
     src: "/images/inspections/liquid-sampling.png",
     alt: "Quality consultation and commodity sampling",
@@ -87,26 +68,14 @@ export const PAGE_HERO_IMAGES: Record<PageHeroImageKey, PageHeroImage> = {
     src: "/images/packaging/containerized-cargo-port.png",
     alt: "Containerized cargo at port for export",
   },
-  buyerTerms: {
-    src: "/images/products/beans/beans-variety-mosaic.png",
-    alt: "Beans, pulses, and agricultural commodities for buyers",
-  },
+  buyerTerms: AGRICULTURE_IMAGES.greenGrainField,
   cookies: {
     src: "/images/packaging/palletized-bags.png",
     alt: "Palletized commodity bags in warehouse storage",
   },
-  accessibility: {
-    src: "/images/home-2.png",
-    alt: "Finekarts marketing and portal experience",
-  },
-  buyerRequest: {
-    src: "/images/products/oils/refined-vegetable-bottling.png",
-    alt: "Refined vegetable oil production for buyer programmes",
-  },
-  supplierOffer: {
-    src: "/images/packaging/bulk-truck-terminal.png",
-    alt: "Bulk truck loading at a commodity terminal",
-  },
+  accessibility: AGRICULTURE_IMAGES.riceTerraces,
+  buyerRequest: AGRICULTURE_IMAGES.grainSilos,
+  supplierOffer: AGRICULTURE_IMAGES.tractorPlowing,
 };
 
 export function getPageHeroImage(key: PageHeroImageKey): PageHeroImage {
