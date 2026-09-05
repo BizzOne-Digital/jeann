@@ -320,6 +320,29 @@ a {
   line-height: 1.7;
 }
 
+.legal-document {
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+.legal-document .legal-body {
+  text-align: justify;
+}
+
+.legal-section {
+  break-inside: avoid-page;
+}
+
+@media print {
+  .legal-document {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+
+  .legal-section {
+    page-break-inside: avoid;
+  }
+}
+
 .portal-shell {
   background: #f3f6f8;
   min-height: 100vh;

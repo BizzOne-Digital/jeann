@@ -40,8 +40,8 @@ const LINKS = [
     title: "Support",
     items: [
       { href: "/login", label: "Buyer portal" },
-      { href: "/privacy", label: "Privacy" },
-      { href: "/terms", label: "Terms" },
+      { href: "/privacy", label: "Privacy Policy" },
+      { href: "/terms", label: "Terms & Conditions" },
       { href: "/accessibility", label: "Accessibility" },
     ],
   },
@@ -142,7 +142,16 @@ export async function SiteFooter() {
         <FooterReveal delay={0.18}>
         <div className="mt-14 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-white/40 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} Finekarts Incorporated. All rights reserved.</p>
-          <p>Enquiry submission does not guarantee acceptance, pricing, or shipment.</p>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            <Link href="/privacy" className="hover:text-white">
+              Privacy Policy
+            </Link>
+            <Link href="/terms" className="hover:text-white">
+              Terms &amp; Conditions
+            </Link>
+            <span className="hidden text-white/25 sm:inline" aria-hidden>|</span>
+            <p>Enquiry submission does not guarantee acceptance, pricing, or shipment.</p>
+          </div>
         </div>
         </FooterReveal>
       </div>

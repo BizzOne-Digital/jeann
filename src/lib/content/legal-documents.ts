@@ -12,7 +12,7 @@ export type LegalDocument = {
 export const LEGAL_DOCUMENTS: LegalDocument[] = [
   {
     id: "terms-of-use",
-    title: "Website terms of use",
+    title: "Website terms and conditions",
     description: "Governs access to the Finekarts marketing website and enquiry forms.",
     pdfHref: "/docs/legal/finekarts-terms-of-use.pdf",
     pageHref: "/terms",
