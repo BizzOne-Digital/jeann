@@ -332,7 +332,15 @@ a {
   break-inside: avoid-page;
 }
 
+.legal-shell details summary::-webkit-details-marker {
+  display: none;
+}
+
 @media print {
+  .legal-shell {
+    background: white !important;
+  }
+
   .legal-document {
     max-width: none !important;
     padding: 0 !important;
@@ -340,6 +348,12 @@ a {
 
   .legal-section {
     page-break-inside: avoid;
+  }
+
+  .legal-quad-strip,
+  .legal-shell header,
+  .legal-shell footer a {
+    display: none !important;
   }
 }
 
