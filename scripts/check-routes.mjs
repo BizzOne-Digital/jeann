@@ -29,8 +29,8 @@ const categories = {
     "soybeans",
   ],
   "rice-and-grains": ["basmati-rice", "parboiled-rice", "jasmine-rice"],
-  "other-commodities": [
-    "coffee-beans",
+  coffee: ["green-coffee-beans", "dry-coffee-beans", "roasted-arabica-coffee-beans"],
+  spices: [
     "cashews",
     "cinnamon-sticks",
     "black-pepper",

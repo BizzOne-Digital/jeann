@@ -26,6 +26,10 @@ import {
   getRiceProductMarketing,
 } from "@/lib/content/rice-product-content";
 import {
+  getCoffeeProductDetail,
+  getCoffeeProductMarketing,
+} from "@/lib/content/coffee-product-content";
+import {
   getSpiceProductDetail,
   getSpiceProductMarketing,
 } from "@/lib/content/spice-product-content";
@@ -70,6 +74,8 @@ export default async function ProductPage({ params }: Props) {
   const pulseProduct = getPulseProductDetail(product.slug);
   const riceMarketing = getRiceProductMarketing(product.slug);
   const riceProduct = getRiceProductDetail(product.slug);
+  const coffeeMarketing = getCoffeeProductMarketing(product.slug);
+  const coffeeProduct = getCoffeeProductDetail(product.slug);
   const spiceMarketing = getSpiceProductMarketing(product.slug);
   const spiceProduct = getSpiceProductDetail(product.slug);
   const marketing =
@@ -78,6 +84,7 @@ export default async function ProductPage({ params }: Props) {
     pulseMarketing ??
     riceMarketing ??
     spiceMarketing ??
+    coffeeMarketing ??
     getDefaultProductMarketing(product.name, category.name);
 
   const heroImage = resolveImageSrc(
@@ -87,6 +94,7 @@ export default async function ProductPage({ params }: Props) {
       pulseProduct?.heroImage ??
       riceProduct?.heroImage ??
       spiceProduct?.heroImage ??
+      coffeeProduct?.heroImage ??
       cover.image,
   );
 
@@ -96,6 +104,7 @@ export default async function ProductPage({ params }: Props) {
     pulseProduct?.images?.[0]?.alt ??
     riceProduct?.images?.[0]?.alt ??
     spiceProduct?.images?.[0]?.alt ??
+    coffeeProduct?.images?.[0]?.alt ??
     `${product.name} reference`;
 
   const contentBoxes =
@@ -104,6 +113,7 @@ export default async function ProductPage({ params }: Props) {
     pulseMarketing?.contentBoxes ??
     riceMarketing?.contentBoxes ??
     spiceMarketing?.contentBoxes ??
+    coffeeMarketing?.contentBoxes ??
     marketing.contentBoxes;
 
   const detailContent = buildDetailContent({
@@ -115,6 +125,7 @@ export default async function ProductPage({ params }: Props) {
     pulseProduct,
     riceProduct,
     spiceProduct,
+    coffeeProduct,
   });
 
   const youtubeUrl =
@@ -209,6 +220,7 @@ function buildDetailContent({
   pulseProduct,
   riceProduct,
   spiceProduct,
+  coffeeProduct,
 }: {
   productName: string;
   productDescription: string;
@@ -218,6 +230,7 @@ function buildDetailContent({
   pulseProduct: ReturnType<typeof getPulseProductDetail>;
   riceProduct: ReturnType<typeof getRiceProductDetail>;
   spiceProduct: ReturnType<typeof getSpiceProductDetail>;
+  coffeeProduct: ReturnType<typeof getCoffeeProductDetail>;
 }): ProductDetailContent {
   if (sugarGrade) {
     return {
@@ -233,7 +246,7 @@ function buildDetailContent({
     };
   }
 
-  const rich = oilProduct ?? pulseProduct ?? riceProduct ?? spiceProduct;
+  const rich = oilProduct ?? pulseProduct ?? riceProduct ?? spiceProduct ?? coffeeProduct;
   if (rich) {
     return {
       grade: rich.grade,

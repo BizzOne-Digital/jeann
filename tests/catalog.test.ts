@@ -15,7 +15,8 @@ describe("public catalog seed", () => {
         "sugar",
         "beans-and-pulses",
         "rice-and-grains",
-        "other-commodities",
+        "coffee",
+        "spices",
       ]),
     );
   });

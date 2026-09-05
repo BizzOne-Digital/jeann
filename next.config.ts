@@ -14,6 +14,51 @@ const nextConfig: NextConfig = {
         destination: "/products/beans-and-pulses",
         permanent: true,
       },
+      {
+        source: "/products/other-commodities",
+        destination: "/products",
+        permanent: true,
+      },
+      {
+        source: "/products/other-commodities/coffee-beans",
+        destination: "/products/coffee/green-coffee-beans",
+        permanent: true,
+      },
+      {
+        source: "/products/other-commodities/cashews",
+        destination: "/products/spices/cashews",
+        permanent: true,
+      },
+      {
+        source: "/products/other-commodities/cinnamon-sticks",
+        destination: "/products/spices/cinnamon-sticks",
+        permanent: true,
+      },
+      {
+        source: "/products/other-commodities/black-pepper",
+        destination: "/products/spices/black-pepper",
+        permanent: true,
+      },
+      {
+        source: "/products/other-commodities/turmeric",
+        destination: "/products/spices/turmeric",
+        permanent: true,
+      },
+      {
+        source: "/products/other-commodities/cloves",
+        destination: "/products/spices/cloves",
+        permanent: true,
+      },
+      {
+        source: "/products/other-commodities/cardamom",
+        destination: "/products/spices/cardamom",
+        permanent: true,
+      },
+      {
+        source: "/products/other-commodities/nutmeg",
+        destination: "/products/spices/nutmeg",
+        permanent: true,
+      },
     ];
   },
   images: {

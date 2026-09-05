@@ -31,65 +31,23 @@ const PILLARS: MarketingContentBox[] = [
 ];
 
 export const SPICES_CATEGORY = {
-  eyebrow: "Coffee, nuts & spices",
-  title: "Coffee, cashews, cinnamon, pepper and specialty spices",
-  lead: "Finekarts supplies green coffee, cashew kernels, cinnamon sticks, black pepper and other spices for qualified wholesalers, distributors, and food manufacturers. Grades, origins, and certifications are confirmed per enquiry and contract.",
+  eyebrow: "Spices",
+  title: "Cinnamon, pepper, turmeric, cloves, cardamom, nutmeg and cashews",
+  lead: "Finekarts supplies cinnamon sticks, black pepper, turmeric, cloves, cardamom, nutmeg, cashews and related specialty products for qualified wholesalers, distributors, and food manufacturers. Grades, origins, and certifications are confirmed per enquiry and contract.",
   products: [
-    "Coffee beans",
-    "Cashews",
     "Cinnamon sticks",
     "Black pepper",
     "Turmeric",
     "Cloves",
     "Cardamom",
     "Nutmeg",
+    "Cashews",
   ],
   disclaimer:
     "Specifications, availability, origin, and organic or fair-trade claims are subject to the individual supply contract and destination-market requirements.",
 };
 
 const SPICE_PRODUCTS: Record<string, SpiceProductDetail> = {
-  "coffee-beans": {
-    slug: "coffee-beans",
-    grade: "Coffee beans",
-    subtitle: "Fresh harvest and green coffee beans",
-    description:
-      "Green coffee bean programmes for roasters, traders, and distributors. From cherry harvest through dried green bean supply, origin, screen size, and defect counts are confirmed per contract.",
-    applications: [
-      "Roasting and specialty coffee",
-      "Commercial blending",
-      "Wholesale green coffee trade",
-      "Export and import programmes",
-    ],
-    characteristics: [
-      "Arabica and Robusta grades subject to contract",
-      "Screen size and defect count per specification",
-      "Crop year and origin traceability",
-      "Bagged and bulk container programmes",
-    ],
-    packaging: ["Multi-wall sacks", "FIBCs/jumbo bags", "GrainPro or similar liners where agreed"],
-    note: "Origin, grade, and cupping scores are only stated when verified for the specific supply contract.",
-    highlights: [
-      "Green coffee from harvest to export",
-      "Screen size and defect count per contract",
-      "Origin traceability when verified",
-    ],
-    heroImage: "/images/products/coffee/fresh-coffee-harvest.png",
-    images: [
-      {
-        src: "/images/products/coffee/fresh-coffee-harvest.png",
-        alt: "Fresh coffee cherries harvested at the farm",
-      },
-      {
-        src: "/images/products/coffee/fresh-coffee-branch.png",
-        alt: "Ripe yellow coffee cherries on the branch",
-      },
-      {
-        src: "/images/products/coffee/green-coffee-beans.png",
-        alt: "Green coffee beans — dried, unroasted product",
-      },
-    ],
-  },
   cashews: {
     slug: "cashews",
     grade: "Cashews",
@@ -331,5 +289,5 @@ export function getSpiceProductMarketing(slug: string): ProductMarketingExtras |
 }
 
 export function isSpicesCategory(slug: string): boolean {
-  return slug === "other-commodities";
+  return slug === "spices";
 }

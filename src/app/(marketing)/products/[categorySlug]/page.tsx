@@ -8,6 +8,7 @@ import { getCategories } from "@/lib/content/catalog";
 import { getPublicCategory } from "@/lib/content/catalog-server";
 import { buyerQuoteHref } from "@/lib/marketing/cta-links";
 import { getCategoryCover, getProductListingImage } from "@/lib/content/product-images";
+import { CoffeeCategorySections } from "@/components/marketing/CoffeeSections";
 import { SpicesCategorySections } from "@/components/marketing/SpiceSections";
 import { RiceCategorySections } from "@/components/marketing/RiceSections";
 import { BeansCategorySections } from "@/components/marketing/PulseSections";
@@ -16,6 +17,7 @@ import { SugarCategorySections } from "@/components/marketing/SugarSections";
 import { isEdibleOilsCategory, OIL_CATEGORY } from "@/lib/content/oil-product-content";
 import { BEANS_CATEGORY, isBeansCategory } from "@/lib/content/pulse-product-content";
 import { isRiceCategory, RICE_CATEGORY } from "@/lib/content/rice-product-content";
+import { isCoffeeCategory, COFFEE_CATEGORY } from "@/lib/content/coffee-product-content";
 import { isSpicesCategory, SPICES_CATEGORY } from "@/lib/content/spice-product-content";
 import { isSugarCategory, SUGAR_CATEGORY } from "@/lib/content/sugar-product-content";
 
@@ -45,6 +47,7 @@ export default async function CategoryPage({ params }: Props) {
   const isEdibleOils = isEdibleOilsCategory(category.slug);
   const isBeans = isBeansCategory(category.slug);
   const isRice = isRiceCategory(category.slug);
+  const isCoffee = isCoffeeCategory(category.slug);
   const isSpices = isSpicesCategory(category.slug);
 
   return (
@@ -59,9 +62,11 @@ export default async function CategoryPage({ params }: Props) {
                 ? BEANS_CATEGORY.title
                 : isRice
                   ? RICE_CATEGORY.title
-                  : isSpices
-                    ? SPICES_CATEGORY.title
-                    : cover.shortName
+                  : isCoffee
+                    ? COFFEE_CATEGORY.title
+                    : isSpices
+                      ? SPICES_CATEGORY.title
+                      : cover.shortName
         }
         brand={
           isSugar
@@ -72,9 +77,11 @@ export default async function CategoryPage({ params }: Props) {
                 ? BEANS_CATEGORY.eyebrow
                 : isRice
                   ? RICE_CATEGORY.eyebrow
-                  : isSpices
-                    ? SPICES_CATEGORY.eyebrow
-                    : undefined
+                  : isCoffee
+                    ? COFFEE_CATEGORY.eyebrow
+                    : isSpices
+                      ? SPICES_CATEGORY.eyebrow
+                      : undefined
         }
         description={
           isSugar
@@ -85,9 +92,11 @@ export default async function CategoryPage({ params }: Props) {
                 ? BEANS_CATEGORY.lead
                 : isRice
                   ? RICE_CATEGORY.lead
-                  : isSpices
-                    ? SPICES_CATEGORY.lead
-                    : category.summary
+                  : isCoffee
+                    ? COFFEE_CATEGORY.lead
+                    : isSpices
+                      ? SPICES_CATEGORY.lead
+                      : category.summary
         }
         imageSrc={cover.image}
         imageAlt={cover.alt}
@@ -99,6 +108,7 @@ export default async function CategoryPage({ params }: Props) {
       {isEdibleOils ? <EdibleOilsCategorySections /> : null}
       {isBeans ? <BeansCategorySections /> : null}
       {isRice ? <RiceCategorySections /> : null}
+      {isCoffee ? <CoffeeCategorySections /> : null}
       {isSpices ? <SpicesCategorySections /> : null}
 
       <section className="bg-[#f3f1ec] py-14 lg:py-20">

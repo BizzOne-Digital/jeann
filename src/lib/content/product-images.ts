@@ -23,10 +23,15 @@ export const CATEGORY_COVERS: Record<string, { image: string; shortName: string;
     image: "/images/products/beans/beans-category-cover.jpg",
     alt: "Assorted dry bean varieties including pinto, kidney, and speckled grades",
   },
-  "other-commodities": {
-    shortName: "Coffee & Spices",
+  coffee: {
+    shortName: "Coffee",
     image: "/images/products/coffee/fresh-coffee-harvest.png",
     alt: "Fresh coffee harvest",
+  },
+  spices: {
+    shortName: "Spices",
+    image: "/images/products/spices/cinnamon-sticks.png",
+    alt: "Cinnamon sticks and specialty spices",
   },
 };
 

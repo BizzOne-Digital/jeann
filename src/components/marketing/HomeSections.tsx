@@ -20,7 +20,8 @@ const COMMODITY_CARDS = [
   "sugar",
   "rice-and-grains",
   "beans-and-pulses",
-  "other-commodities",
+  "coffee",
+  "spices",
 ].map((slug) => {
   const cover = getCategoryCover(slug);
   return { slug, name: cover.shortName, image: cover.image, alt: cover.alt };
@@ -337,7 +338,7 @@ export function CommoditiesWeTrade({ categories }: { categories: SeedCategory[] 
           </Link>
         </div>
 
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-5 lg:gap-6">
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {COMMODITY_CARDS.map((card, i) => (
             <Reveal key={card.slug} delay={i * 0.05}>
               <Link href={`/products/${card.slug}`} className="group block">

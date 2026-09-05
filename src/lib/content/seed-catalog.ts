@@ -1,6 +1,7 @@
 import { getOilProductDetail, getOilProductMarketing } from "@/lib/content/oil-product-content";
 import { getPulseProductDetail, getPulseProductMarketing } from "@/lib/content/pulse-product-content";
 import { getRiceProductDetail, getRiceProductMarketing } from "@/lib/content/rice-product-content";
+import { getCoffeeProductDetail, getCoffeeProductMarketing } from "@/lib/content/coffee-product-content";
 import { getSpiceProductDetail, getSpiceProductMarketing } from "@/lib/content/spice-product-content";
 import { getSugarGradeDetail, getSugarProductMarketing } from "@/lib/content/sugar-product-content";
 import { PACKAGING_TYPES } from "@/lib/content/packaging-content";
@@ -276,12 +277,48 @@ export const SEED_CATEGORIES: SeedCategory[] = [
     }),
   },
   {
-    slug: "other-commodities",
-    name: "Coffee, nuts & spices",
+    slug: "coffee",
+    name: "Coffee",
     summary:
-      "Green coffee, cashews, cinnamon sticks, black pepper, turmeric, cloves, cardamom, nutmeg and related specialty products — grades and origins confirmed per enquiry.",
+      "Green coffee, dry Arabica beans, and roasted Arabica coffee for qualified roasters, traders, and distributors — origins and grades confirmed per enquiry.",
     products: [
-      ["coffee-beans", "Coffee beans"],
+      ["green-coffee-beans", "Green coffee beans"],
+      ["dry-coffee-beans", "Dry coffee beans"],
+      ["roasted-arabica-coffee-beans", "Roasted Arabica coffee beans"],
+    ].map(([slug, name]) => {
+      const coffee = getCoffeeProductDetail(slug);
+      const marketing = getCoffeeProductMarketing(slug);
+      return {
+        slug,
+        name,
+        overview: coffee
+          ? `${coffee.grade} — ${coffee.subtitle}. ${coffee.description.slice(0, 120)}…`
+          : `${name} enquiries for qualified buyers. Specifications confirmed per RFQ review.`,
+        description: marketing?.description,
+        availabilityText: "Crop-dependent.",
+        originOptions: ["Confirmed per enquiry"],
+        gradeSummary: coffee ? `${coffee.grade} — ${coffee.subtitle}. ${draftNote}` : draftNote,
+        packaging: coffee?.packaging ?? ["Multi-wall sacks", "FIBCs/jumbo bags"],
+        inspectionOptions: ["Configurable when verified"],
+        incotermOptions: ["FOB", "CIF"],
+        documentCategories: [
+          "Commercial Invoice",
+          "Certificate of Origin",
+          "Phytosanitary certificate",
+        ],
+        minOrderText: "Discuss lot size with the trade desk.",
+        status: "pending_verification" as const,
+        image: coffee?.heroImage,
+        highlights: marketing?.highlights,
+      };
+    }),
+  },
+  {
+    slug: "spices",
+    name: "Spices",
+    summary:
+      "Cinnamon sticks, black pepper, turmeric, cloves, cardamom, nutmeg, cashews and related specialty products — grades and origins confirmed per enquiry.",
+    products: [
       ["cashews", "Cashews"],
       ["cinnamon-sticks", "Cinnamon sticks"],
       ["black-pepper", "Black pepper"],
@@ -299,8 +336,7 @@ export const SEED_CATEGORIES: SeedCategory[] = [
           ? `${spice.grade} — ${spice.subtitle}. ${spice.description.slice(0, 120)}…`
           : `${name} enquiries for qualified buyers. Specifications confirmed per RFQ review.`,
         description: marketing?.description,
-        availabilityText:
-          slug === "coffee-beans" ? "Crop-dependent." : "Enquiry-based availability.",
+        availabilityText: "Enquiry-based availability.",
         originOptions: ["Confirmed per enquiry"],
         gradeSummary: spice ? `${spice.grade} — ${spice.subtitle}. ${draftNote}` : draftNote,
         packaging: spice?.packaging ?? ["Multi-wall sacks", "Cartons"],
@@ -313,11 +349,7 @@ export const SEED_CATEGORIES: SeedCategory[] = [
           ...(slug === "cashews" ? ["Health/Veterinary certificate"] : []),
         ],
         minOrderText:
-          slug === "coffee-beans"
-            ? "Discuss lot size with the trade desk."
-            : slug === "cashews"
-              ? "Minimums vary by kernel grade and count."
-              : "Discuss with trade desk.",
+          slug === "cashews" ? "Minimums vary by kernel grade and count." : "Discuss with trade desk.",
         status: "pending_verification" as const,
         image: spice?.heroImage,
         highlights: marketing?.highlights,
