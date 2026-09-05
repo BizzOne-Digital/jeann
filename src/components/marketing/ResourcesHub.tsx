@@ -418,25 +418,34 @@ export function ResourcesHub({ introBody }: { introBody: string }) {
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {RESOURCES_PILLARS.map((pillar) => {
               const active = activeTab === pillar.id;
+              const accent = pillar.accent;
               return (
                 <button
                   key={pillar.id}
                   type="button"
                   onClick={() => selectTab(pillar.id)}
                   className={cn(
-                    "focus-ring group flex h-full flex-col rounded-lg border p-5 text-left transition",
-                    active
-                      ? "border-[#001a3d] bg-[#001a3d] text-white shadow-md"
-                      : "border-[#d5d0c8] bg-[#f9f8f5] hover:border-[#c88e4a] hover:shadow-sm",
+                    "focus-ring group flex h-full flex-col rounded-lg border-2 p-5 text-left transition shadow-sm",
+                    active ? "text-white shadow-md" : "hover:shadow-md",
                   )}
+                  style={
+                    active
+                      ? {
+                          borderColor: accent.main,
+                          backgroundColor: accent.main,
+                        }
+                      : {
+                          borderColor: accent.ring,
+                          backgroundColor: accent.light,
+                        }
+                  }
                 >
                   <span
                     className={cn(
                       "flex h-11 w-11 items-center justify-center rounded-full transition",
-                      active
-                        ? "bg-[#d4a84b] text-[#001a3d]"
-                        : "bg-white text-[#1b3a5c] group-hover:text-[#c88e4a]",
+                      active ? "bg-white/20 text-white" : "bg-white text-[#1b3a5c]",
                     )}
+                    style={active ? undefined : { color: accent.main }}
                   >
                     <PillarIcon type={pillar.icon} />
                   </span>
@@ -444,7 +453,7 @@ export function ResourcesHub({ introBody }: { introBody: string }) {
                   <span
                     className={cn(
                       "mt-2 flex-1 text-sm leading-relaxed",
-                      active ? "text-white/80" : "text-[#666666]",
+                      active ? "text-white/85" : "text-[#555555]",
                     )}
                   >
                     {pillar.summary}
@@ -468,9 +477,14 @@ export function ResourcesHub({ introBody }: { introBody: string }) {
                   className={cn(
                     "focus-ring border-b-2 px-4 py-3 text-sm font-semibold transition",
                     activeTab === tab.id
-                      ? "border-[#c88e4a] text-[#001a3d]"
+                      ? "text-[#001a3d]"
                       : "border-transparent text-[#888] hover:text-[#001a3d]",
                   )}
+                  style={
+                    activeTab === tab.id
+                      ? { borderColor: tab.accent.main }
+                      : undefined
+                  }
                 >
                   {tab.title}
                 </button>

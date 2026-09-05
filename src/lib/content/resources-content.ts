@@ -4,24 +4,44 @@ export const RESOURCES_PILLARS = [
     title: "Banking & SPA",
     summary: "Illustrative PSA clauses for LC, SBLC, guarantees, and collections.",
     icon: "bank",
+    accent: {
+      main: "#1b7a4a",
+      light: "#edf7f1",
+      ring: "#1b7a4a",
+    },
   },
   {
     id: "payments",
     title: "Payment structures",
     summary: "How 12-month commodity programmes are commonly ranked for buyer and seller risk.",
     icon: "chart",
+    accent: {
+      main: "#1e4d8f",
+      light: "#eef3fa",
+      ring: "#1e4d8f",
+    },
   },
   {
     id: "documents",
     title: "Trade documents",
     summary: "Commercial, transport, origin, quality, and negotiation instruments explained.",
     icon: "folder",
+    accent: {
+      main: "#c41e3a",
+      light: "#fdf0f2",
+      ring: "#c41e3a",
+    },
   },
   {
     id: "downloads",
     title: "Downloads",
     summary: "Checklists and counsel-approved PDF references for internal review.",
     icon: "download",
+    accent: {
+      main: "#d4a017",
+      light: "#fff9eb",
+      ring: "#d4a017",
+    },
   },
 ] as const;
 
