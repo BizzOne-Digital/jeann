@@ -1,8 +1,8 @@
 {
   "company": "FINEKARTS INC.",
   "title": "PRIVACY POLICY",
-  "effectiveDate": "[INSERT DATE]",
-  "lastUpdated": "[INSERT DATE]",
+  "effectiveDate": "September 5, 2026",
+  "lastUpdated": "September 5, 2026",
   "intro": [
     "Finekarts Inc.",
     "(\"Finekarts,\" \"we,\" \"us,\" \"our\") respects the privacy of individuals and is committed to protecting personal information collected through our website, online platforms, business communications, customer and supplier relationships, commodity-trading activities, procurement activities, and related services.",
@@ -1774,10 +1774,10 @@
       "paragraphs": [
         "Privacy-related questions, requests, complaints, or concerns may be directed to:",
         "Finekarts Inc.",
-        "Privacy Officer: [INSERT NAME / TITLE]",
-        "Address: [INSERT BUSINESS ADDRESS]",
-        "Email: [INSERT PRIVACY EMAIL]",
-        "Telephone: [INSERT TELEPHONE NUMBER]",
+        "Privacy Officer: Finekarts Inc.",
+        "Address: 4275 Village Center Court, Mississauga, Ontario L4Z 1V3, Canada",
+        "Email: Info@finekarts.com",
+        "Telephone: +1 (416) 985-8772",
         "For privacy requests, please clearly identify the nature of your request and provide sufficient information to",
         "allow Finekarts to respond."
       ],
@@ -1942,12 +1942,12 @@
       "id": "111",
       "title": "111. EFFECTIVE DATE",
       "paragraphs": [
-        "Effective Date:",
-        "Last Updated:",
+        "Effective Date: September 5, 2026",
+        "Last Updated: September 5, 2026",
         "Finekarts Inc.",
         "International Commodity Trading & Distribution",
-        "Privacy Contact:",
-        "Website: [INSERT WEBSITE URL]"
+        "Privacy Contact: Info@finekarts.com",
+        "Website: https://www.finekarts.com"
       ],
       "bullets": [],
       "subsections": []
