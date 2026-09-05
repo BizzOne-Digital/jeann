@@ -39,7 +39,7 @@ export function CategoryShowcase({ categories }: { categories: SeedCategory[] })
           </Reveal>
         </div>
 
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-5 lg:gap-6">
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
           {categories.map((cat, i) => {
             const cover = getCategoryCover(cat.slug);
             return (
@@ -51,7 +51,7 @@ export function CategoryShowcase({ categories }: { categories: SeedCategory[] })
                       alt={cover.alt}
                       fill
                       className="object-cover transition duration-500 group-hover:scale-[1.03]"
-                      sizes="(max-width: 1024px) 50vw, 220px"
+                      sizes="(max-width: 1024px) 50vw, 320px"
                     />
                   </div>
                   <p className="mt-3 text-left text-sm font-medium tracking-wide text-white">
