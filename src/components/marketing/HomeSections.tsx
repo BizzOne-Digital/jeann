@@ -14,6 +14,11 @@ import { resolveHeroYoutubeInput } from "@/lib/content/hero-video";
 import type { SeedCategory } from "@/lib/content/catalog";
 import { getCategoryCover } from "@/lib/content/product-images";
 import { HOMEPAGE_PACKAGING_TEASER, PACKAGING_IMAGES } from "@/lib/content/packaging-images";
+import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
+import {
+  MARKETING_HERO_INNER_CLASS,
+  MARKETING_HERO_SECTION_CLASS,
+} from "@/lib/marketing/hero-layout";
 
 const COMMODITY_CARDS = [
   "edible-oils",
@@ -48,6 +53,7 @@ function GoldButton({
 
 export function HomeHero({ cms }: { cms?: Record<string, string> }) {
   const reduce = useReducedMotion();
+  const hero = getPageHeroImage("home");
 
   const trust = [
     {
@@ -101,11 +107,11 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
   ];
 
   return (
-    <section className="relative min-h-[min(88svh,720px)] w-full max-w-full overflow-hidden bg-[#071525] text-white">
+    <section className={`${MARKETING_HERO_SECTION_CLASS} bg-[var(--navy)] text-white`}>
       <div className="absolute inset-0">
         <Image
-          src="/images/hero-commodities.png"
-          alt="Agricultural commodities with port logistics and refining infrastructure"
+          src={hero.src}
+          alt={hero.alt}
           fill
           priority
           sizes="100vw"
@@ -113,15 +119,12 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
         />
         <div
           className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(90deg, rgba(4,14,28,0.97) 0%, rgba(4,14,28,0.92) 24%, rgba(4,14,28,0.58) 48%, rgba(4,14,28,0.22) 70%, rgba(4,14,28,0.12) 100%)",
-          }}
+          style={{ background: "var(--hero-gradient-full)" }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#071525]/70 via-transparent to-[#071525]/25" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[rgb(var(--navy-rgb)/0.5)] via-transparent to-[rgb(var(--navy-rgb)/0.18)]" />
       </div>
 
-      <div className="container-page relative flex min-h-[min(88svh,720px)] flex-col justify-center pb-16 pt-[6rem] lg:pb-20 lg:pt-[6.5rem]">
+      <div className={MARKETING_HERO_INNER_CLASS}>
         <div className="min-w-0 max-w-xl lg:max-w-2xl">
           <Reveal>
             <p className="text-[0.65rem] font-semibold tracking-[0.18em] text-[#d4a84b] uppercase sm:text-xs sm:tracking-[0.26em]">

@@ -51,7 +51,7 @@ export async function SiteFooter() {
   const site = await getPublicSiteSettings();
 
   return (
-    <footer className="mt-auto w-full max-w-full overflow-x-clip bg-[#071525] text-white">
+    <footer className="mt-auto w-full max-w-full overflow-x-clip bg-[var(--navy)] text-white">
       <div className="container-page section-pad !py-16">
         <div className="grid min-w-0 gap-10 sm:gap-12 lg:grid-cols-[1.1fr_1.6fr_1fr]">
           <FooterReveal>

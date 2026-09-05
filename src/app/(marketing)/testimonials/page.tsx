@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHero } from "@/components/marketing/PageHero";
+import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 import { TestimonialsGrid } from "@/components/marketing/TestimonialSections";
 import { AnimatedSection } from "@/components/motion/AnimatedSection";
 import { getPublishedTestimonials } from "@/lib/content/testimonials-catalog";
@@ -17,16 +18,19 @@ export default async function TestimonialsPage() {
     getPublishedTestimonials(),
     getPublishedPage("testimonials"),
   ]);
-  const hero = getSectionFields(cms, "hero");
+  const heroFields = getSectionFields(cms, "hero");
+  const heroImage = getPageHeroImage("testimonials");
 
   return (
     <>
       <PageHero
-        title={hero.title || "What counterparties say"}
+        title={heroFields.title || "What counterparties say"}
         description={
-          hero.description ||
+          heroFields.description ||
           "Verified buyers and trade partners share their experience working with Finekarts."
         }
+        imageSrc={heroImage.src}
+        imageAlt={heroImage.alt}
         primaryCta={{ href: "/contact", label: "Start a conversation →" }}
         secondaryCta={{ href: "/resources", label: "Trade resources" }}
       />

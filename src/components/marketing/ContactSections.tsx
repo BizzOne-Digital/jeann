@@ -4,20 +4,22 @@ import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/motion/Reveal";
 import { cmsField } from "@/lib/content/cms-field";
+import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 import { PageHero } from "@/components/marketing/PageHero";
 import { ContactForm } from "@/components/marketing/ContactForm";
 
 export function ContactHero({ cms }: { cms?: Record<string, string> }) {
+  const hero = getPageHeroImage("contact");
   return (
     <PageHero
-      tone="dark"
-      overlay="soft"
       title={cmsField(cms, "title", "Speak with our team")}
       description={cmsField(
         cms,
         "description",
         "Reach the Finekarts trade desk for qualified buyer enquiries. Use the contact form below, or sign in to the buyer portal for RFQs and consultations.",
       )}
+      imageSrc={hero.src}
+      imageAlt={hero.alt}
       primaryCta={{
         href: cmsField(cms, "primaryCtaHref", "/login"),
         label: cmsField(cms, "primaryCtaLabel", "Buyer sign in →"),

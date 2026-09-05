@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { LegalPageBody } from "@/components/marketing/LegalPageBody";
 import { LegalReviewBanner } from "@/components/marketing/LegalReviewBanner";
 import { PageHero } from "@/components/marketing/PageHero";
+import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 
 export const metadata: Metadata = {
   title: "Cookie policy",
@@ -9,11 +10,15 @@ export const metadata: Metadata = {
 };
 
 export default function CookiesPage() {
+  const hero = getPageHeroImage("cookies");
+
   return (
     <>
       <PageHero
         title="Cookie policy"
         description="Draft explanation of how Finekarts may use cookies and similar technologies — pending legal review."
+        imageSrc={hero.src}
+        imageAlt={hero.alt}
       />
       <article className="bg-[#f3f1ec] py-14 lg:py-20">
         <div className="container-narrow">

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { PageHero } from "@/components/marketing/PageHero";
+import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 import { MarketingStorySection } from "@/components/marketing/MarketingStorySection";
 import { Reveal } from "@/components/motion/Reveal";
 import { INSPECTIONS_STORY } from "@/lib/content/marketing-pages";
@@ -32,16 +33,16 @@ const GALLERY = [
 
 export default function InspectionsPage() {
   const story = INSPECTIONS_STORY;
+  const heroImage = getPageHeroImage("inspections");
 
   return (
     <>
       <PageHero
-        tone="light"
         title={INSPECTIONS_HERO.title}
         brand={INSPECTIONS_HERO.eyebrow}
         description={INSPECTIONS_HERO.description}
-        imageSrc={story.imageSrc}
-        imageAlt={story.imageAlt}
+        imageSrc={heroImage.src}
+        imageAlt={heroImage.alt}
         primaryCta={INSPECTIONS_HERO.primaryCta}
         secondaryCta={INSPECTIONS_HERO.secondaryCta}
       />

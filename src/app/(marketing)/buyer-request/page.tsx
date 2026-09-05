@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CmsPageHero } from "@/components/marketing/CmsPageHero";
+import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 import { Reveal } from "@/components/motion/Reveal";
 
 export const metadata: Metadata = {
@@ -15,6 +16,7 @@ export default function BuyerRequestPage() {
       <CmsPageHero
         pageSlug="buyer-request"
         tone="dark"
+        image={getPageHeroImage("buyerRequest")}
         defaults={{
           title: "Buyer purchase request",
           description:

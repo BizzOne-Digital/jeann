@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/marketing/PageHero";
+import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 import { ResourcesHub } from "@/components/marketing/ResourcesHub";
 import { ResourcesEnquiryCta } from "@/components/marketing/ResourcesSections";
 import { cmsField } from "@/lib/content/cms-field";
@@ -22,6 +23,8 @@ export default async function ResourcesPage() {
     "Document sets vary by product, corridor, bank, and contract. Lists below are starting points for discussion — not guarantees that every document will be issued or accepted without amendment.",
   )}`;
 
+  const heroImage = getPageHeroImage("resources");
+
   return (
     <>
       <PageHero
@@ -32,8 +35,8 @@ export default async function ResourcesPage() {
           "description",
           "Educational reference for trade documents, banking terminology, and payment structures. Browse by topic below — purchase requests are submitted through the buyer portal.",
         )}
-        imageSrc="/images/home-2.png"
-        imageAlt="International commodity trade"
+        imageSrc={heroImage.src}
+        imageAlt={heroImage.alt}
         primaryCta={{
           href: "#resources-hub",
           label: "Browse topics →",

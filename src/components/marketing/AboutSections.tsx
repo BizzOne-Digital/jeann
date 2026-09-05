@@ -6,6 +6,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { buyerQuoteHref } from "@/lib/marketing/cta-links";
 import { cmsField } from "@/lib/content/cms-field";
 import { PageHero } from "@/components/marketing/PageHero";
+import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 
 function GoldButton({
   href,
@@ -33,12 +34,13 @@ export function AboutHero({
   positioning: string;
   cms?: Record<string, string>;
 }) {
+  const aboutHero = getPageHeroImage("about");
   return (
     <PageHero
-      size="full"
       title={cmsField(cms, "title", "Your connection to global commodity markets")}
       description={cmsField(cms, "description", positioning)}
-      imageAlt="Agricultural commodities and global logistics"
+      imageSrc={aboutHero.src}
+      imageAlt={aboutHero.alt}
       imageClassName="object-cover object-[72%_center] sm:object-[78%_center]"
       primaryCta={{
         href: cmsField(cms, "primaryCtaHref", buyerQuoteHref()),

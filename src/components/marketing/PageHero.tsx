@@ -3,8 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import { BrandLogo } from "@/components/marketing/BrandLogo";
 import { Reveal } from "@/components/motion/Reveal";
+import {
+  MARKETING_HERO_INNER_CLASS,
+  MARKETING_HERO_SECTION_CLASS,
+} from "@/lib/marketing/hero-layout";
 
 export type PageHeroCta = {
   href: string;
@@ -18,12 +21,8 @@ type Props = {
   brand?: string;
   primaryCta?: PageHeroCta;
   secondaryCta?: PageHeroCta;
-  /** full = about-style viewport hero; standard = compact band for inner pages */
-  size?: "full" | "standard";
   /** dark = navy overlay (default); light = cream/paper band for readability */
   tone?: "dark" | "light";
-  /** Softer image overlay for dark heroes (e.g. contact page) */
-  overlay?: "default" | "soft";
   imageSrc?: string;
   imageAlt?: string;
   imageClassName?: string;
@@ -36,63 +35,38 @@ export function PageHero({
   brand = "Finekarts Incorporated",
   primaryCta,
   secondaryCta,
-  size = "standard",
   tone = "dark",
-  overlay = "default",
   imageSrc = "/images/hero-commodities.png",
   imageAlt = "",
   imageClassName = "object-cover object-center",
   priority = true,
 }: Props) {
   const reduce = useReducedMotion();
-  const full = size === "full";
   const light = tone === "light";
-  const softOverlay = !light && overlay === "soft";
 
   return (
     <section
-      className={`relative w-full max-w-full overflow-hidden ${
-        light ? "bg-[var(--cream)] text-[var(--ink)]" : "bg-[#071525] text-white"
-      } ${full ? "min-h-[100svh]" : ""}`}
+      className={`${MARKETING_HERO_SECTION_CLASS} ${
+        light ? "bg-[var(--cream)] text-[var(--ink)]" : "bg-[var(--navy)] text-white"
+      }`}
     >
       {!light ? (
-      <div className="absolute inset-0">
-        <Image
-          src={imageSrc}
-          alt={imageAlt}
-          fill
-          priority={priority}
-          sizes="100vw"
-          className={imageClassName}
-          aria-hidden={!imageAlt}
-        />
-        {full ? (
-          <>
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(90deg, rgba(4,14,28,0.97) 0%, rgba(4,14,28,0.92) 24%, rgba(4,14,28,0.58) 48%, rgba(4,14,28,0.22) 70%, rgba(4,14,28,0.12) 100%)",
-              }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#071525]/70 via-transparent to-[#071525]/25" />
-          </>
-        ) : (
-          <>
-            <div
-              className={`absolute inset-0 ${softOverlay ? "bg-[#071525]/58" : "bg-[#071525]/88"}`}
-            />
-            <div
-              className="absolute inset-0"
-              style={{
-                background: softOverlay
-                  ? "linear-gradient(105deg, rgba(4,14,28,0.62) 0%, rgba(4,14,28,0.42) 55%, rgba(4,14,28,0.22) 100%)"
-                  : "linear-gradient(105deg, rgba(4,14,28,0.95) 0%, rgba(4,14,28,0.75) 55%, rgba(4,14,28,0.45) 100%)",
-              }}
-            />
-          </>
-        )}
-      </div>
+        <div className="absolute inset-0">
+          <Image
+            src={imageSrc}
+            alt={imageAlt}
+            fill
+            priority={priority}
+            sizes="100vw"
+            className={imageClassName}
+            aria-hidden={!imageAlt}
+          />
+          <div
+            className="absolute inset-0"
+            style={{ background: "var(--hero-gradient-full)" }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[rgb(var(--navy-rgb)/0.5)] via-transparent to-[rgb(var(--navy-rgb)/0.18)]" />
+        </div>
       ) : (
         <div
           className="absolute inset-0 opacity-40"
@@ -104,30 +78,13 @@ export function PageHero({
         />
       )}
 
-      <div
-        className={`container-page relative ${
-          full
-            ? "flex min-h-[100svh] flex-col justify-center pb-24 pt-28 lg:pb-28 lg:pt-32"
-            : light
-              ? "pt-24 pb-12 sm:pt-28 sm:pb-14 lg:pt-32 lg:pb-16"
-              : "pt-24 pb-14 sm:pt-28 sm:pb-16 lg:pt-32 lg:pb-20"
-        }`}
-      >
-        <div className={`min-w-0 ${full ? "max-w-xl lg:max-w-2xl" : "max-w-2xl"}`}>
-          {full ? (
-            <Reveal>
-              <BrandLogo size="xl" priority className="mb-6 shadow-[0_8px_32px_rgba(0,0,0,0.35)]" />
-            </Reveal>
-          ) : null}
-          <Reveal delay={full ? 0.04 : 0}>
+      <div className={MARKETING_HERO_INNER_CLASS}>
+        <div className="min-w-0 max-w-xl lg:max-w-2xl">
+          <Reveal>
             <p
               className={`display tracking-tight break-words ${
                 light ? "text-[var(--ocean)]" : "text-white"
-              } ${
-                full
-                  ? "text-2xl sm:text-4xl lg:text-[2.75rem]"
-                  : "text-xl sm:text-3xl"
-              }`}
+              } text-xl sm:text-3xl`}
             >
               {brand}
             </p>
@@ -136,11 +93,7 @@ export function PageHero({
           <motion.h1
             className={`mt-4 break-words font-semibold leading-tight tracking-tight ${
               light ? "text-[var(--navy)]" : ""
-            } ${
-              full
-                ? "text-[1.75rem] sm:text-4xl lg:text-[2.85rem]"
-                : "text-[1.75rem] sm:text-4xl lg:text-[2.75rem]"
-            }`}
+            } text-[1.75rem] sm:text-4xl lg:text-[2.85rem]`}
             initial={reduce ? false : { opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.06 }}

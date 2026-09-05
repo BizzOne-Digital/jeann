@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHero } from "@/components/marketing/PageHero";
+import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 import { TeamGrid } from "@/components/marketing/TeamSections";
 import { AnimatedSection } from "@/components/motion/AnimatedSection";
 import { getPublishedTeamMembers } from "@/lib/content/team-catalog";
@@ -13,11 +14,15 @@ export const metadata: Metadata = {
 export default async function TeamPage() {
   const members = await getPublishedTeamMembers();
 
+  const hero = getPageHeroImage("team");
+
   return (
     <>
       <PageHero
         title="People behind the trade desk"
         description="Our operations, logistics, and compliance leads support qualified buyer and supplier programmes."
+        imageSrc={hero.src}
+        imageAlt={hero.alt}
         primaryCta={{ href: "/contact", label: "Contact the trade desk →" }}
         secondaryCta={{ href: "/about", label: "About Finekarts" }}
       />

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { PageHero } from "@/components/marketing/PageHero";
+import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 import { MarketingStorySection } from "@/components/marketing/MarketingStorySection";
 import { Reveal } from "@/components/motion/Reveal";
 import { LOGISTICS_STORY } from "@/lib/content/marketing-pages";
@@ -30,16 +31,16 @@ export const metadata: Metadata = {
 
 export default function LogisticsPage() {
   const story = LOGISTICS_STORY;
+  const heroImage = getPageHeroImage("logistics");
 
   return (
     <>
       <PageHero
-        tone="light"
         title={LOGISTICS_HERO.title}
         brand={LOGISTICS_HERO.eyebrow}
         description={LOGISTICS_HERO.description}
-        imageSrc={story.imageSrc}
-        imageAlt={story.imageAlt}
+        imageSrc={heroImage.src}
+        imageAlt={heroImage.alt}
         primaryCta={LOGISTICS_HERO.primaryCta}
         secondaryCta={LOGISTICS_HERO.secondaryCta}
       />

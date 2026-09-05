@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { PageHero } from "@/components/marketing/PageHero";
+import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 import { Reveal } from "@/components/motion/Reveal";
 import {
   getOrderedPackagingTypes,
@@ -35,15 +36,16 @@ const MODE_LABELS = {
 export default function PackagingPage() {
   const packagingTypes = getOrderedPackagingTypes();
 
+  const heroImage = getPageHeroImage("packaging");
+
   return (
     <>
       <PageHero
-        tone="light"
         title={PACKAGING_HERO.title}
         brand={PACKAGING_HERO.eyebrow}
         description={PACKAGING_HERO.description}
-        imageSrc={PACKAGING_IMAGES.containerizedCargoPort.src}
-        imageAlt={PACKAGING_IMAGES.containerizedCargoPort.alt}
+        imageSrc={heroImage.src}
+        imageAlt={heroImage.alt}
         primaryCta={PACKAGING_HERO.primaryCta}
         secondaryCta={PACKAGING_HERO.secondaryCta}
       />

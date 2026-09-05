@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { FaqAccordion } from "@/components/marketing/FaqAccordion";
 import { PageHero } from "@/components/marketing/PageHero";
+import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 import { AnimatedSection } from "@/components/motion/AnimatedSection";
 import { buyerQuoteHref } from "@/lib/marketing/cta-links";
 import { getPublishedFaqs } from "@/lib/content/faqs-catalog";
@@ -14,11 +15,15 @@ export const metadata: Metadata = {
 export default async function FaqPage() {
   const faqs = await getPublishedFaqs();
 
+  const hero = getPageHeroImage("faq");
+
   return (
     <>
       <PageHero
         title="Common questions"
         description="Straight answers about how we trade. For deal-specific advice, contact the trade desk."
+        imageSrc={hero.src}
+        imageAlt={hero.alt}
         primaryCta={{ href: buyerQuoteHref(), label: "Request a Quote →" }}
         secondaryCta={{ href: "/contact", label: "Contact us" }}
       />

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Reveal } from "@/components/motion/Reveal";
+import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 import { PageHero } from "@/components/marketing/PageHero";
 import { searchCatalogProducts, type CatalogProduct } from "@/lib/content/catalog-utils";
 import type { SeedCategory } from "@/lib/content/seed-catalog";
@@ -12,10 +13,13 @@ import { buyerQuoteHref } from "@/lib/marketing/cta-links";
 import { getCategoryCover, getProductListingImage } from "@/lib/content/product-images";
 
 export function ProductsHero() {
+  const hero = getPageHeroImage("products");
   return (
     <PageHero
       title="Commodities we trade"
       description="Browse edible oils, sugar, rice & grains, beans, and related programmes. Specifications are confirmed with the trade desk — not fixed public prices."
+      imageSrc={hero.src}
+      imageAlt={hero.alt}
       primaryCta={{ href: buyerQuoteHref(), label: "Request a Quote →" }}
       secondaryCta={{ href: "#catalog", label: "Browse catalog" }}
     />

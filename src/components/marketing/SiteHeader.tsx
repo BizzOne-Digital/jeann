@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils/cn";
+import { MARKETING_HEADER_HEIGHT_CLASS } from "@/lib/marketing/hero-layout";
 import { BrandLogo } from "@/components/marketing/BrandLogo";
 import { LanguageSwitcher } from "@/components/i18n/LanguageSwitcher";
 
@@ -40,11 +41,11 @@ export function SiteHeader({ embedded = false }: Props) {
     <>
       <header
         className={cn(
-          "w-full max-w-full overflow-x-clip border-b border-white/10 bg-[#1b3a5c] text-white shadow-[0_8px_30px_rgba(0,0,0,0.25)]",
+          "w-full max-w-full overflow-x-clip border-b border-white/10 bg-[var(--navy)] text-white shadow-[0_8px_30px_rgba(0,0,0,0.25)]",
           !embedded && "fixed inset-x-0 top-0 z-[70]",
         )}
       >
-        <div className="container-page flex h-[4.75rem] min-w-0 items-center justify-between gap-2 lg:gap-3">
+        <div className={`container-page flex ${MARKETING_HEADER_HEIGHT_CLASS} min-w-0 items-center justify-between gap-2 lg:gap-3`}>
           <Link href="/" className="focus-ring flex shrink-0 items-center gap-3 rounded-sm">
             <BrandLogo size="md" priority />
             <span className="hidden leading-tight md:block">
@@ -128,7 +129,7 @@ export function SiteHeader({ embedded = false }: Props) {
               onClick={closeMenu}
             />
             <motion.div
-              className="absolute inset-y-0 right-0 flex w-[min(100%,22rem)] flex-col bg-[#1b3a5c] text-white shadow-[-12px_0_40px_rgba(0,0,0,0.35)]"
+              className="absolute inset-y-0 right-0 flex w-[min(100%,22rem)] flex-col bg-[var(--navy)] text-white shadow-[-12px_0_40px_rgba(0,0,0,0.35)]"
               initial={reduce ? false : { x: "100%" }}
               animate={{ x: 0 }}
               exit={reduce ? undefined : { x: "100%" }}

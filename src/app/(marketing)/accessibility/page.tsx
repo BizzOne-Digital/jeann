@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { LegalPageBody } from "@/components/marketing/LegalPageBody";
 import { LegalReviewBanner } from "@/components/marketing/LegalReviewBanner";
 import { PageHero } from "@/components/marketing/PageHero";
+import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 
 export const metadata: Metadata = {
   title: "Accessibility",
@@ -9,11 +10,15 @@ export const metadata: Metadata = {
 };
 
 export default function AccessibilityPage() {
+  const hero = getPageHeroImage("accessibility");
+
   return (
     <>
       <PageHero
         title="Accessibility statement"
         description="Draft commitment to making Finekarts marketing pages and portals usable for people with diverse abilities."
+        imageSrc={hero.src}
+        imageAlt={hero.alt}
         primaryCta={{ href: "mailto:Info@finekarts.com?subject=Accessibility", label: "Report an issue →" }}
         secondaryCta={{ href: "/contact", label: "Contact us" }}
       />

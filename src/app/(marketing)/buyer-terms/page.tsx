@@ -3,6 +3,7 @@ import { LegalDocumentsPanel } from "@/components/marketing/LegalDocumentsPanel"
 import { LegalPageBody } from "@/components/marketing/LegalPageBody";
 import { LegalReviewBanner } from "@/components/marketing/LegalReviewBanner";
 import { PageHero } from "@/components/marketing/PageHero";
+import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 
 export const metadata: Metadata = {
   title: "Buyer terms",
@@ -10,11 +11,15 @@ export const metadata: Metadata = {
 };
 
 export default function BuyerTermsPage() {
+  const hero = getPageHeroImage("buyerTerms");
+
   return (
     <>
       <PageHero
         title="Buyer terms"
         description="Draft terms for purchase requests and buyer portal use — pending legal review and admin versioning."
+        imageSrc={hero.src}
+        imageAlt={hero.alt}
       />
       <article className="bg-[#f3f1ec] py-14 lg:py-20">
         <div className="container-narrow">

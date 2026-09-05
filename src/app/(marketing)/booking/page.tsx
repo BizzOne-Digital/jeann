@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHero } from "@/components/marketing/PageHero";
+import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 import { Reveal } from "@/components/motion/Reveal";
 import { BuyerPortalGate } from "@/components/marketing/BuyerPortalGate";
 import { getSite } from "@/lib/content/catalog";
@@ -14,12 +15,15 @@ export const metadata: Metadata = {
 export default function BookingPage() {
   const site = getSite();
 
+  const hero = getPageHeroImage("booking");
+
   return (
     <>
       <PageHero
-        tone="light"
         title="Book a consultation"
         description="Request a conversation about RFQs, logistics, or qualification. A submitted request is not a confirmed appointment."
+        imageSrc={hero.src}
+        imageAlt={hero.alt}
         primaryCta={{ href: "/login", label: "Sign in to book →" }}
         secondaryCta={{ href: "/register/buyer", label: "Register" }}
       />

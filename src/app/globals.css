@@ -24,7 +24,22 @@ body.intro-active #finekarts-site-root {
   --gold: #c4a35a;
   --gold-bright: #d4b56a;
   --accent-orange: #e89a2d;
-  --hero-ink: #071525;
+  --hero-ink: #1b3a5c;
+  --navy-rgb: 27 58 92;
+  --hero-gradient-standard: linear-gradient(
+    105deg,
+    rgb(var(--navy-rgb) / 0.65) 0%,
+    rgb(var(--navy-rgb) / 0.42) 55%,
+    rgb(var(--navy-rgb) / 0.2) 100%
+  );
+  --hero-gradient-full: linear-gradient(
+    90deg,
+    rgb(var(--navy-rgb) / 0.84) 0%,
+    rgb(var(--navy-rgb) / 0.68) 26%,
+    rgb(var(--navy-rgb) / 0.4) 50%,
+    rgb(var(--navy-rgb) / 0.14) 72%,
+    rgb(var(--navy-rgb) / 0.05) 100%
+  );
   --line: rgba(19, 41, 61, 0.12);
   --line-strong: rgba(19, 41, 61, 0.22);
   --shadow-soft: 0 18px 50px rgba(19, 41, 61, 0.08);

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Reveal } from "@/components/motion/Reveal";
+import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 import { PageHero } from "@/components/marketing/PageHero";
 import { buyerQuoteHref } from "@/lib/marketing/cta-links";
 import { getInsightCover } from "@/lib/content/insight-images";
@@ -29,10 +30,13 @@ function formatDate(iso: string) {
 }
 
 export function InsightsHero() {
+  const hero = getPageHeroImage("insights");
   return (
     <PageHero
       title="Market insights"
       description="Plain-language explainers on Incoterms, RFQs, packaging, and shipping documents for qualified counterparties. Educational only — not legal advice."
+      imageSrc={hero.src}
+      imageAlt={hero.alt}
       primaryCta={{ href: "#insights-list", label: "Browse articles →" }}
       secondaryCta={{ href: "/resources", label: "Trade resources" }}
     />

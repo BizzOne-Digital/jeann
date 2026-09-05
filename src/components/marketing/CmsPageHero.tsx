@@ -1,12 +1,13 @@
 import { PageHero, type PageHeroCta } from "@/components/marketing/PageHero";
 import { cmsField } from "@/lib/content/cms-field";
 import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
+import type { PageHeroImage } from "@/lib/marketing/page-hero-images";
 
 type Props = {
   pageSlug: string;
   sectionId?: string;
   tone?: "dark" | "light";
-  size?: "full" | "standard";
+  image?: PageHeroImage;
   defaults: {
     title: string;
     description: string;
@@ -19,7 +20,7 @@ export async function CmsPageHero({
   pageSlug,
   sectionId = "hero",
   tone = "dark",
-  size = "standard",
+  image,
   defaults,
 }: Props) {
   const page = await getPublishedPage(pageSlug);
@@ -42,9 +43,10 @@ export async function CmsPageHero({
   return (
     <PageHero
       tone={tone}
-      size={size}
       title={cmsField(fields, "title", defaults.title)}
       description={cmsField(fields, "description", defaults.description)}
+      imageSrc={image?.src}
+      imageAlt={image?.alt ?? ""}
       primaryCta={primaryCta}
       secondaryCta={secondaryCta}
     />

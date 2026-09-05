@@ -5,7 +5,9 @@ import { cn } from "@/lib/utils/cn";
 import { isHeroMarketingPage } from "@/lib/marketing/hero-pages";
 import type { ReactNode } from "react";
 
-const HEADER_HEIGHT = "4.75rem";
+import { MARKETING_HEADER_HEIGHT } from "@/lib/marketing/hero-layout";
+
+const HEADER_HEIGHT = MARKETING_HEADER_HEIGHT;
 
 export function MarketingMain({ children }: { children: ReactNode }) {
   const pathname = usePathname();

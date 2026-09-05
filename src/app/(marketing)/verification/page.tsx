@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { PageHero } from "@/components/marketing/PageHero";
+import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 import { MarketingStorySection } from "@/components/marketing/MarketingStorySection";
 import { Reveal } from "@/components/motion/Reveal";
 import { VERIFICATION_STORY } from "@/lib/content/marketing-pages";
@@ -24,16 +25,16 @@ export const metadata: Metadata = {
 
 export default function VerificationPage() {
   const story = VERIFICATION_STORY;
+  const heroImage = getPageHeroImage("verification");
 
   return (
     <>
       <PageHero
-        tone="light"
         title={VERIFICATION_HERO.title}
         brand={VERIFICATION_HERO.eyebrow}
         description={VERIFICATION_HERO.description}
-        imageSrc={story.imageSrc}
-        imageAlt={story.imageAlt}
+        imageSrc={heroImage.src}
+        imageAlt={heroImage.alt}
         primaryCta={VERIFICATION_HERO.primaryCta}
         secondaryCta={VERIFICATION_HERO.secondaryCta}
       />
