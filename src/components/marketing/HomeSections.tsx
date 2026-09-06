@@ -116,13 +116,17 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
           fill
           priority
           sizes="100vw"
-          className="object-cover object-[72%_center] sm:object-[78%_center]"
+          className="object-cover object-[center_center] sm:object-[55%_center]"
         />
+        <div className="absolute inset-0 bg-[rgb(var(--navy-rgb)/0.12)]" />
         <div
           className="absolute inset-0"
-          style={{ background: "var(--hero-gradient-full)" }}
+          style={{
+            background:
+              "linear-gradient(90deg, rgb(var(--navy-rgb) / 0.42) 0%, rgb(var(--navy-rgb) / 0.18) 32%, transparent 58%)",
+          }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[rgb(var(--navy-rgb)/0.5)] via-transparent to-[rgb(var(--navy-rgb)/0.18)]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[rgb(var(--navy-rgb)/0.45)] via-transparent to-transparent" />
       </div>
 
       <div className={MARKETING_HERO_INNER_CLASS}>

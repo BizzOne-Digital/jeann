@@ -30,7 +30,10 @@ export type PageHeroImage = {
 
 /** Distinct hero photography per marketing page — agriculture pages use client-supplied field imagery. */
 export const PAGE_HERO_IMAGES: Record<PageHeroImageKey, PageHeroImage> = {
-  home: AGRICULTURE_IMAGES.combineHarvest,
+  home: {
+    src: "/images/hero-home.jpg",
+    alt: "Agricultural commodities, port logistics, and refining infrastructure",
+  },
   about: AGRICULTURE_IMAGES.riceTerraces,
   products: AGRICULTURE_IMAGES.greenGrainField,
   resources: {
