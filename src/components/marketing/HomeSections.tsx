@@ -616,7 +616,7 @@ export function PackagingSection() {
           </Link>
           .
         </p>
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {HOMEPAGE_PACKAGING_TEASER.map((item, i) => (
             <Reveal key={item.slug} delay={i * 0.05}>
               <Link href={`/packaging#${item.slug}`} className="group block">

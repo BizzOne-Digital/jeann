@@ -1,4 +1,5 @@
 import { AGRICULTURE_IMAGES } from "@/lib/content/agriculture-images";
+import { PACKAGING_IMAGES } from "@/lib/content/packaging-images";
 
 export type PageHeroImageKey =
   | "home"
@@ -60,14 +61,8 @@ export const PAGE_HERO_IMAGES: Record<PageHeroImageKey, PageHeroImage> = {
     src: "/images/inspections/cargo-inspector-loading.png",
     alt: "Cargo loading supervision and due diligence",
   },
-  logistics: {
-    src: "/images/packaging/bulk-vessel-loading.png",
-    alt: "Bulk vessel loading at port for international shipment",
-  },
-  packaging: {
-    src: "/images/packaging/containerized-cargo-port.png",
-    alt: "Containerized cargo at port for export",
-  },
+  logistics: PACKAGING_IMAGES.bulkVessel,
+  packaging: PACKAGING_IMAGES.bulkVessel,
   buyerTerms: AGRICULTURE_IMAGES.greenGrainField,
   cookies: {
     src: "/images/packaging/palletized-bags.png",

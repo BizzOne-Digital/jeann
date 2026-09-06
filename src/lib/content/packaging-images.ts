@@ -29,12 +29,12 @@ export const PACKAGING_IMAGES = {
     alt: "Warehouse stacked with white FIBC jumbo bags",
   },
   bulkVessel: {
-    src: "/images/packaging/bulk-vessel-hold.png",
-    alt: "Dry bulk carrier with open cargo holds loading unpackaged commodity",
+    src: "/images/packaging/bulk-vessel-cargo-loading.png",
+    alt: "Bulk carrier vessel loading dry commodity cargo at port",
   },
   bulkVesselLoading: {
-    src: "/images/packaging/bulk-vessel-loading.png",
-    alt: "Bulk vessel being loaded from shore silos via conveyor at port",
+    src: "/images/packaging/bulk-vessel-cargo-loading.png",
+    alt: "Bulk vessel being loaded with dry bulk cargo at a marine terminal",
   },
   containerizedCargoPort: {
     src: "/images/packaging/containerized-cargo-port.png",
@@ -107,6 +107,7 @@ export const HOMEPAGE_PACKAGING_SLUGS = [
   "flexitank",
   "bulk-railcar",
   "tanker-vessel",
+  "bulk-vessel",
   "bulk-truck",
 ] as const;
 
@@ -115,5 +116,6 @@ export const HOMEPAGE_PACKAGING_TEASER = [
   teaser("Flexitank", "flexitank", PACKAGING_IMAGES.flexitank),
   teaser("Bulk Railcar", "bulk-railcar", PACKAGING_IMAGES.bulkRailcar),
   teaser("Tanker Vessel", "tanker-vessel", PACKAGING_IMAGES.tankerVessel),
+  teaser("Bulk Vessel", "bulk-vessel", PACKAGING_IMAGES.bulkVessel),
   teaser("Bulk Truck", "bulk-truck", PACKAGING_IMAGES.bulkTruck),
 ] as const;

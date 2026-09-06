@@ -29,7 +29,7 @@ export const PACKAGING_HERO = {
   eyebrow: "Packaging types",
   title: "Packaging & transport modes for global commodity trade",
   description:
-    "The homepage highlights four core transport modes — flexitank, bulk railcar, tanker vessel and bulk truck. This page explains every packaging and logistics option Finekarts structures for international commodity trade, including containerized cargo, bulk vessel, ISO tanks, IBC totes, drums, FIBCs, bulk liners, woven bags and more. Not every option is available for every commodity or corridor.",
+    "The homepage highlights core transport modes — flexitank, bulk railcar, tanker vessel, bulk vessel and bulk truck. This page explains every packaging and logistics option Finekarts structures for international commodity trade, including containerized cargo, ISO tanks, IBC totes, drums, FIBCs, bulk liners, woven bags and more. Not every option is available for every commodity or corridor.",
   primaryCta: { href: "#packaging-index", label: "Browse all packaging types →" },
   secondaryCta: { href: "/logistics", label: "Logistics overview" },
 };
@@ -114,29 +114,6 @@ export const PACKAGING_TYPES: PackagingTypeContent[] = [
   },
   {
     order: 4,
-    slug: "bulk-truck",
-    name: "Bulk truck",
-    mode: "dry",
-    category: "transport",
-    summary: "Road transport of unpackaged or pneumatic dry bulk.",
-    description:
-      "Bulk trucks — including hopper trailers and pneumatic tankers — move dry commodities by road between farms, mills, warehouses, silos and port terminals. This mode bridges origin storage and export loading points in domestic and cross-border corridors.",
-    applications: [
-      "Farm-to-silo or mill-to-terminal dry bulk movements",
-      "Pneumatic discharge into storage or ship-loading systems",
-      "Regional redistribution before ocean or rail export",
-    ],
-    advantages: [
-      "Direct road access where rail or vessel cannot reach origin",
-      "Efficient for staged delivery to port silos and loading facilities",
-      "Gravity or pneumatic discharge into storage and conveyor systems",
-    ],
-    commodities: ["Grains", "Sugar (bulk where agreed)", "Pulses", "Other dry flowable commodities"],
-    images: [{ ...PACKAGING_IMAGES.bulkTruck }],
-    note: "Trailer type, moisture limits and weighbridge documentation should be agreed for each programme.",
-  },
-  {
-    order: 5,
     slug: "bulk-vessel",
     name: "Bulk vessel",
     mode: "unpackaged",
@@ -160,6 +137,29 @@ export const PACKAGING_TYPES: PackagingTypeContent[] = [
       { ...PACKAGING_IMAGES.bulkVesselLoading },
     ],
     note: "Hold cleanliness, fumigation, moisture and draft survey methods are defined in the sales contract.",
+  },
+  {
+    order: 5,
+    slug: "bulk-truck",
+    name: "Bulk truck",
+    mode: "dry",
+    category: "transport",
+    summary: "Road transport of unpackaged or pneumatic dry bulk.",
+    description:
+      "Bulk trucks — including hopper trailers and pneumatic tankers — move dry commodities by road between farms, mills, warehouses, silos and port terminals. This mode bridges origin storage and export loading points in domestic and cross-border corridors.",
+    applications: [
+      "Farm-to-silo or mill-to-terminal dry bulk movements",
+      "Pneumatic discharge into storage or ship-loading systems",
+      "Regional redistribution before ocean or rail export",
+    ],
+    advantages: [
+      "Direct road access where rail or vessel cannot reach origin",
+      "Efficient for staged delivery to port silos and loading facilities",
+      "Gravity or pneumatic discharge into storage and conveyor systems",
+    ],
+    commodities: ["Grains", "Sugar (bulk where agreed)", "Pulses", "Other dry flowable commodities"],
+    images: [{ ...PACKAGING_IMAGES.bulkTruck }],
+    note: "Trailer type, moisture limits and weighbridge documentation should be agreed for each programme.",
   },
   {
     order: 6,
