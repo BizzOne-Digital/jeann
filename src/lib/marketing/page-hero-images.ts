@@ -28,7 +28,7 @@ export type PageHeroImage = {
   alt: string;
 };
 
-/** Distinct hero photography per marketing page — agriculture pages use client-supplied field imagery. */
+/** One distinct hero photograph per marketing page — no shared paths across keys. */
 export const PAGE_HERO_IMAGES: Record<PageHeroImageKey, PageHeroImage> = {
   home: {
     src: "/images/hero-home.jpg",
@@ -42,9 +42,9 @@ export const PAGE_HERO_IMAGES: Record<PageHeroImageKey, PageHeroImage> = {
     alt: "Trade desk support at the port",
   },
   insights: AGRICULTURE_IMAGES.teaPlantation,
-  faq: AGRICULTURE_IMAGES.greenGrainField,
-  team: AGRICULTURE_IMAGES.teaPlantation,
-  testimonials: AGRICULTURE_IMAGES.grainSilos,
+  faq: AGRICULTURE_IMAGES.combineHarvest,
+  team: AGRICULTURE_IMAGES.grainSilos,
+  testimonials: AGRICULTURE_IMAGES.tractorPlowing,
   booking: {
     src: "/images/inspections/liquid-sampling.png",
     alt: "Quality consultation and commodity sampling",
@@ -62,15 +62,15 @@ export const PAGE_HERO_IMAGES: Record<PageHeroImageKey, PageHeroImage> = {
     alt: "Cargo loading supervision and due diligence",
   },
   logistics: PACKAGING_IMAGES.bulkVessel,
-  packaging: PACKAGING_IMAGES.bulkVessel,
-  buyerTerms: AGRICULTURE_IMAGES.greenGrainField,
-  cookies: {
-    src: "/images/packaging/palletized-bags.png",
-    alt: "Palletized commodity bags in warehouse storage",
+  packaging: PACKAGING_IMAGES.tankerVessel,
+  buyerTerms: PACKAGING_IMAGES.containerizedCargoPort,
+  cookies: PACKAGING_IMAGES.palletizedBags,
+  accessibility: PACKAGING_IMAGES.bulkRailcar,
+  buyerRequest: {
+    src: "/images/inspections/sugar-bags-hold.png",
+    alt: "Bagged sugar quantity verification in a vessel hold",
   },
-  accessibility: AGRICULTURE_IMAGES.riceTerraces,
-  buyerRequest: AGRICULTURE_IMAGES.grainSilos,
-  supplierOffer: AGRICULTURE_IMAGES.tractorPlowing,
+  supplierOffer: PACKAGING_IMAGES.bulkTruck,
 };
 
 export function getPageHeroImage(key: PageHeroImageKey): PageHeroImage {

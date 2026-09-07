@@ -205,7 +205,7 @@ export function InsightsCta() {
   return (
     <section className="relative overflow-hidden py-16 text-white lg:py-20">
       <Image
-        src="/images/hero-commodities.png"
+        src="/images/agriculture/tea-plantation.png"
         alt=""
         fill
         className="object-cover object-center"

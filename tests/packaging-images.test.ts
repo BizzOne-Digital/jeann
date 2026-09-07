@@ -34,20 +34,22 @@ describe("packaging images", () => {
     }
   });
 
-  it("homepage packaging shows four client transport modes", () => {
+  it("homepage packaging shows five client transport modes", () => {
     const teaserImages = HOMEPAGE_PACKAGING_TEASER.map((item) => item.image);
     expect(new Set(teaserImages).size).toBe(teaserImages.length);
-    expect(HOMEPAGE_PACKAGING_TEASER).toHaveLength(4);
+    expect(HOMEPAGE_PACKAGING_TEASER).toHaveLength(5);
     expect(HOMEPAGE_PACKAGING_TEASER.map((item) => item.name)).toEqual([
       "Flexitank",
       "Bulk Railcar",
       "Tanker Vessel",
+      "Bulk Vessel",
       "Bulk Truck",
     ]);
     expect(HOMEPAGE_PACKAGING_TEASER.map((item) => item.slug)).toEqual([
       "flexitank",
       "bulk-railcar",
       "tanker-vessel",
+      "bulk-vessel",
       "bulk-truck",
     ]);
     expect(PACKAGING_IMAGES.flexitank.src).toContain("flexitank");

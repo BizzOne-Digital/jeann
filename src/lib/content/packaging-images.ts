@@ -33,7 +33,7 @@ export const PACKAGING_IMAGES = {
     alt: "Bulk carrier vessel loading dry commodity cargo at port",
   },
   bulkVesselLoading: {
-    src: "/images/packaging/bulk-vessel-cargo-loading.png",
+    src: "/images/packaging/bulk-vessel-loading.png",
     alt: "Bulk vessel being loaded with dry bulk cargo at a marine terminal",
   },
   containerizedCargoPort: {

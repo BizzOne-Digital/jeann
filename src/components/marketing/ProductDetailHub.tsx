@@ -326,7 +326,7 @@ function GalleryPanel({
   heroImage,
   heroImageAlt,
 }: Pick<ProductHubProps, "content" | "heroImage" | "heroImageAlt">) {
-  const gallery = content.images ?? [];
+  const gallery = (content.images ?? []).filter((image) => image.src !== heroImage);
   const hasGallery = gallery.length > 0;
 
   return (

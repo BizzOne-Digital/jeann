@@ -9,11 +9,11 @@ export function ShippingHero() {
     <section className="relative min-h-[min(70vh,640px)] overflow-hidden bg-[var(--cream)] text-[var(--navy)]">
       <div className="absolute inset-0">
         <VideoBackground
-          poster="/images/home-2.png"
+          poster="/images/packaging/tanker-vessel.jpg"
           overlayClassName="absolute inset-0 bg-gradient-to-b from-white/75 via-white/55 to-[var(--cream)]/90"
         />
         <Image
-          src="/images/home-2.png"
+          src="/images/packaging/tanker-vessel.jpg"
           alt=""
           fill
           className="object-cover opacity-0"

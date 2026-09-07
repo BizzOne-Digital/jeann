@@ -244,7 +244,7 @@ export default function InspectionsPage() {
       </section>
 
       <section id="request-inspection" className="relative overflow-hidden py-16 text-white lg:py-20">
-        <Image src="/images/hero-commodities.png" alt="" fill className="object-cover" sizes="100vw" aria-hidden />
+        <Image src="/images/inspections/sampling-grain.png" alt="" fill className="object-cover" sizes="100vw" aria-hidden />
         <div className="absolute inset-0 bg-[#071525]/88" />
         <div className="container-page relative">
           <p className="text-sm font-semibold tracking-[0.18em] text-[#d4a84b] uppercase">

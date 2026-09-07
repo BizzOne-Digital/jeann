@@ -164,7 +164,7 @@ function BankingPanel() {
       <div className="space-y-6">
         <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-[#d5d0c8]">
           <Image
-            src="/images/home-2.png"
+            src="/images/packaging/iso-tank-1.png"
             alt="International trade and commodity documentation"
             fill
             className="object-cover"

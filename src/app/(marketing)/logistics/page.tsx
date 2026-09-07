@@ -50,7 +50,7 @@ export default function LogisticsPage() {
         title={story.title}
         lead={story.lead}
         boxes={story.boxes}
-        imageSrc="/images/home-2.png"
+        imageSrc="/images/packaging/containerized-cargo-loading.png"
         imageAlt="International port and commodity logistics"
         youtubeUrl={story.youtubeUrl}
         videoTitle="Logistics overview"
@@ -243,7 +243,7 @@ export default function LogisticsPage() {
       </section>
 
       <section id="request-quote" className="relative overflow-hidden py-16 text-white lg:py-20">
-        <Image src="/images/hero-commodities.png" alt="" fill className="object-cover" sizes="100vw" aria-hidden />
+        <Image src="/images/packaging/containerized-cargo-port.png" alt="" fill className="object-cover" sizes="100vw" aria-hidden />
         <div className="absolute inset-0 bg-[#071525]/88" />
         <div className="container-page relative">
           <h2 className="text-2xl font-semibold sm:text-3xl">{LOGISTICS_CTA.title}</h2>

@@ -229,7 +229,7 @@ export function TradeIncoterms() {
         </div>
         <div className="relative min-h-[280px] lg:min-h-full">
           <Image
-            src="/images/home-2.png"
+            src="/images/packaging/tanker-vessel.jpg"
             alt="Container ship and port logistics"
             fill
             className="object-cover"
