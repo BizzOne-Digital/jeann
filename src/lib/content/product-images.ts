@@ -25,8 +25,8 @@ export const CATEGORY_COVERS: Record<string, { image: string; shortName: string;
   },
   coffee: {
     shortName: "Coffee",
-    image: "/images/products/coffee/fresh-coffee-harvest.png",
-    alt: "Fresh coffee harvest",
+    image: "/images/products/coffee/coffee-category-cover.png",
+    alt: "Roasted coffee beans",
   },
   spices: {
     shortName: "Spices",
