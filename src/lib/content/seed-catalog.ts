@@ -280,11 +280,11 @@ export const SEED_CATEGORIES: SeedCategory[] = [
     slug: "coffee",
     name: "Coffee",
     summary:
-      "Green coffee, dry Arabica beans, and roasted Arabica coffee for qualified roasters, traders, and distributors — origins and grades confirmed per enquiry.",
+      "Green coffee, dry coffee, and roasted dry coffee for qualified roasters, traders, and distributors — Arabica, Robusta, Liberica, and Excelsa subject to enquiry.",
     products: [
-      ["green-coffee-beans", "Green coffee beans"],
-      ["dry-coffee-beans", "Dry coffee beans"],
-      ["roasted-arabica-coffee-beans", "Roasted Arabica coffee beans"],
+      ["green-coffee-beans", "Green coffee"],
+      ["dry-coffee-beans", "Dry coffee"],
+      ["roasted-arabica-coffee-beans", "Roasted dry coffee"],
     ].map(([slug, name]) => {
       const coffee = getCoffeeProductDetail(slug);
       const marketing = getCoffeeProductMarketing(slug);

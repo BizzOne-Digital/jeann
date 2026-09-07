@@ -9,8 +9,21 @@ export function CoffeeCategorySections() {
         <p className="text-xs font-semibold tracking-[0.2em] text-[#c88e4a] uppercase">{cat.eyebrow}</p>
         <h2 className="mt-2 text-2xl font-semibold text-[#001a3d] sm:text-3xl">{cat.title}</h2>
         <p className="mt-4 max-w-3xl text-base leading-relaxed text-[#555555]">{cat.lead}</p>
-        <p className="mt-4 text-sm font-medium text-[#001a3d]">Products in this category include:</p>
-        <div className="mt-4 flex flex-wrap gap-2">
+
+        <p className="mt-6 text-sm font-medium text-[#001a3d]">Coffee types available:</p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {cat.varieties.map((variety) => (
+            <span
+              key={variety}
+              className="rounded-full border border-[#1b3a5c]/20 bg-[#f0f4f8] px-3 py-1 text-sm font-medium text-[#001a3d]"
+            >
+              {variety}
+            </span>
+          ))}
+        </div>
+
+        <p className="mt-6 text-sm font-medium text-[#001a3d]">Products in this category include:</p>
+        <div className="mt-3 flex flex-wrap gap-2">
           {cat.products.map((product) => (
             <span
               key={product}

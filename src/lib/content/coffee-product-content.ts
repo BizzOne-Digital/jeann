@@ -15,6 +15,8 @@ export type CoffeeProductDetail = {
   images?: { src: string; alt: string }[];
 };
 
+const COFFEE_VARIETIES = ["Arabica", "Robusta", "Liberica", "Excelsa"] as const;
+
 const PILLARS: MarketingContentBox[] = [
   {
     title: "Quality",
@@ -32,9 +34,11 @@ const PILLARS: MarketingContentBox[] = [
 
 export const COFFEE_CATEGORY = {
   eyebrow: "Coffee",
-  title: "Green, dry, and roasted Arabica coffee programmes",
-  lead: "Finekarts supplies green coffee, dried Arabica beans, and roasted Arabica coffee for qualified roasters, traders, and distributors. Origin, screen size, defect count, and cup characteristics are confirmed per enquiry and contract.",
-  products: ["Green coffee beans", "Dry coffee beans", "Roasted Arabica coffee beans"],
+  title: "Green and roasted dry coffee programmes",
+  lead:
+    "Finekarts supplies green coffee and roasted dry coffee for qualified roasters, traders, and distributors. Programmes can be structured across Arabica, Robusta, Liberica, and Excelsa — with origin, screen size, defect count, and cup characteristics confirmed per enquiry and contract.",
+  varieties: [...COFFEE_VARIETIES],
+  products: ["Green coffee", "Dry coffee", "Roasted dry coffee"],
   disclaimer:
     "Crop year, origin, organic or fair-trade claims, and cupping scores are stated only when verified for the specific supply contract.",
 };
@@ -42,10 +46,10 @@ export const COFFEE_CATEGORY = {
 const COFFEE_PRODUCTS: Record<string, CoffeeProductDetail> = {
   "green-coffee-beans": {
     slug: "green-coffee-beans",
-    grade: "Green coffee beans",
-    subtitle: "Unroasted green Arabica and related grades",
+    grade: "Green coffee",
+    subtitle: "Unroasted green coffee — Arabica, Robusta, Liberica, and Excelsa",
     description:
-      "Green coffee bean programmes for roasters, traders, and distributors. Origin, screen size, defect count, and moisture are confirmed per contract. From harvest through export-ready green bean supply.",
+      "Green coffee programmes for roasters, traders, and distributors. Arabica, Robusta, Liberica, and Excelsa grades can be quoted subject to origin and availability. Screen size, defect count, and moisture are confirmed per contract.",
     applications: [
       "Roasting and specialty coffee",
       "Commercial blending",
@@ -53,15 +57,15 @@ const COFFEE_PRODUCTS: Record<string, CoffeeProductDetail> = {
       "Export and import programmes",
     ],
     characteristics: [
-      "Arabica grades subject to contract",
+      "Arabica, Robusta, Liberica, and Excelsa subject to contract",
       "Screen size and defect count per specification",
       "Crop year and origin traceability when verified",
       "Bagged and bulk container programmes",
     ],
     packaging: ["Multi-wall sacks", "FIBCs/jumbo bags", "GrainPro or similar liners where agreed"],
-    note: "Origin, grade, and cupping scores are only stated when verified for the specific supply contract.",
+    note: "Origin, species, grade, and cupping scores are only stated when verified for the specific supply contract.",
     highlights: [
-      "Green coffee for roasters and traders",
+      "Green coffee across major species",
       "Screen size and defect count per contract",
       "Origin traceability when verified",
     ],
@@ -83,10 +87,10 @@ const COFFEE_PRODUCTS: Record<string, CoffeeProductDetail> = {
   },
   "dry-coffee-beans": {
     slug: "dry-coffee-beans",
-    grade: "Dry coffee beans",
-    subtitle: "Dried Arabica coffee beans for export",
+    grade: "Dry coffee",
+    subtitle: "Dried coffee beans for export — Arabica, Robusta, Liberica, and Excelsa",
     description:
-      "Dried coffee bean programmes for traders and roasters sourcing export-ready Arabica. Drying level, moisture, screen size, and defect counts are confirmed per contract and Certificate of Analysis where agreed.",
+      "Dry coffee programmes for traders and roasters sourcing export-ready beans. Arabica, Robusta, Liberica, and Excelsa can be quoted subject to origin. Drying level, moisture, screen size, and defect counts are confirmed per contract and Certificate of Analysis where agreed.",
     applications: [
       "Roasting programmes",
       "Green coffee trading",
@@ -95,14 +99,14 @@ const COFFEE_PRODUCTS: Record<string, CoffeeProductDetail> = {
     ],
     characteristics: [
       "Dried, export-ready beans",
+      "Arabica, Robusta, Liberica, and Excelsa subject to contract",
       "Moisture and screen size per specification",
-      "Arabica-focused grades subject to contract",
       "Sack and container export programmes",
     ],
     packaging: ["Multi-wall sacks", "FIBCs/jumbo bags", "GrainPro or similar liners where agreed"],
     highlights: [
-      "Dried Arabica for qualified buyers",
-      "Moisture and screen size per contract",
+      "Dry coffee for qualified buyers",
+      "Multiple species subject to contract",
       "Container programmes common",
     ],
     heroImage: "/images/products/coffee/dry-coffee-beans.png",
@@ -115,10 +119,10 @@ const COFFEE_PRODUCTS: Record<string, CoffeeProductDetail> = {
   },
   "roasted-arabica-coffee-beans": {
     slug: "roasted-arabica-coffee-beans",
-    grade: "Roasted Arabica coffee beans",
-    subtitle: "Roasted Arabica coffee for food and beverage channels",
+    grade: "Roasted dry coffee",
+    subtitle: "Roasted dry coffee — Arabica, Robusta, Liberica, and Excelsa",
     description:
-      "Roasted Arabica coffee programmes for distributors, roasters, and food manufacturers. Roast level, origin, grind or whole bean format, and packaging are confirmed per contract.",
+      "Roasted dry coffee programmes for distributors, roasters, and food manufacturers. Arabica, Robusta, Liberica, and Excelsa roast profiles can be quoted subject to origin and specification. Roast level, whole bean or ground format, and packaging are confirmed per contract.",
     applications: [
       "Retail and food-service distribution",
       "Private-label roasting programmes",
@@ -126,15 +130,15 @@ const COFFEE_PRODUCTS: Record<string, CoffeeProductDetail> = {
       "Wholesale roasted coffee trade",
     ],
     characteristics: [
-      "Arabica-focused roast profiles subject to contract",
+      "Arabica, Robusta, Liberica, and Excelsa roast profiles subject to contract",
       "Whole bean or ground formats",
       "Vacuum and nitrogen-flushed packaging options",
       "Shelf-life and moisture per specification",
     ],
     packaging: ["Cartons", "Vacuum bags", "Multi-wall sacks", "Retail-ready packs where agreed"],
-    note: "Roast profile, origin, and organic claims are only stated when verified for the specific supply contract.",
+    note: "Roast profile, species, origin, and organic claims are only stated when verified for the specific supply contract.",
     highlights: [
-      "Roasted Arabica for distribution channels",
+      "Roasted dry coffee for distribution channels",
       "Roast level and format per contract",
       "Export carton programmes available",
     ],
@@ -142,7 +146,7 @@ const COFFEE_PRODUCTS: Record<string, CoffeeProductDetail> = {
     images: [
       {
         src: "/images/products/coffee/roasted-arabica-coffee-beans.png",
-        alt: "Roasted Arabica coffee beans over a coffee plantation",
+        alt: "Roasted dry coffee beans close-up",
       },
     ],
   },
