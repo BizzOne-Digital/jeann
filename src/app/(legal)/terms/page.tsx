@@ -4,7 +4,8 @@ import { TERMS_AND_CONDITIONS_DOCUMENT } from "@/lib/content/legal/terms-and-con
 
 export const metadata: Metadata = {
   title: "Terms and Conditions",
-  description: "Finekarts Inc. website terms and conditions.",
+  description:
+    "Finekarts Incorporated standard international commodity trade FCO/SPA terms and conditions.",
 };
 
 export default function TermsAndConditionsPage() {
