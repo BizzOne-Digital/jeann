@@ -228,6 +228,61 @@ if (s100) {
   s100.bullets = [];
 }
 
+function formatLegalList(items, { useOrBeforeLast = false } = {}) {
+  return items.map((item, index) => {
+    const clean = item.replace(/[.;]+$/g, "").trim();
+    if (index === items.length - 1) return `${clean}.`;
+    if (useOrBeforeLast && index === items.length - 2) return `${clean}; or`;
+    return `${clean};`;
+  });
+}
+
+const s3 = sections.find((s) => s.id === "3");
+if (s3) {
+  s3.listStyle = "ordered";
+  s3.bullets = formatLegalList(s3.bullets, { useOrBeforeLast: true });
+}
+
+const s5 = sections.find((s) => s.id === "5");
+const s52 = s5?.subsections?.find((sub) => sub.title.startsWith("5.2"));
+if (s52) {
+  s52.bullets = formatLegalList(s52.bullets, { useOrBeforeLast: true });
+}
+
+const s11 = sections.find((s) => s.id === "11");
+if (s11) {
+  s11.listStyle = "ordered";
+  s11.bullets = formatLegalList(s11.bullets, { useOrBeforeLast: true });
+}
+
+const s13 = sections.find((s) => s.id === "13");
+if (s13) {
+  s13.paragraphs = [
+    "Where applicable law requires consent, Finekarts will obtain consent before collecting, using, or disclosing personal information.",
+    "Consent may be:",
+    "You may withdraw consent where permitted by applicable law.",
+    "Withdrawal of consent does not necessarily affect processing already carried out lawfully before withdrawal.",
+  ];
+  s13.bullets = formatLegalList(
+    ["Express", "Implied where legally permitted", "Written", "Electronic", "Given through other legally recognized means"],
+    { useOrBeforeLast: true },
+  );
+}
+
+const s35 = sections.find((s) => s.id === "35");
+if (s35) {
+  s35.bullets = formatLegalList(s35.bullets, { useOrBeforeLast: true });
+}
+
+const s102 = sections.find((s) => s.id === "102");
+if (s102) {
+  s102.paragraphs = [
+    "Finekarts may designate a Privacy Officer or responsible privacy contact to oversee privacy matters.",
+    "The Privacy Officer may be responsible for:",
+  ];
+  s102.bullets = formatLegalList(s102.bullets, { useOrBeforeLast: true });
+}
+
 fs.writeFileSync(outPath, JSON.stringify(doc, null, 2));
 console.log(`Wrote ${sections.length} sections to ${outPath}`);
 

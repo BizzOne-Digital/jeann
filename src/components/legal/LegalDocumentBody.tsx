@@ -1,12 +1,42 @@
-import type { LegalDocument, LegalSection } from "@/lib/content/legal/types";
+import type { LegalDocument, LegalListStyle, LegalSection } from "@/lib/content/legal/types";
 
 function Paragraph({ children, className = "mt-3" }: { children: string; className?: string }) {
   return <p className={`${className} text-sm leading-[1.75]`}>{children}</p>;
 }
 
-function BulletList({ items, className = "mt-3" }: { items: string[]; className?: string }) {
+function findBulletsInsertIndex(paragraphs: string[]) {
+  if (paragraphs.length <= 1) return 0;
+  for (let i = paragraphs.length - 1; i >= 0; i--) {
+    if (paragraphs[i].trim().endsWith(":")) return i;
+  }
+  return 0;
+}
+
+function ItemList({
+  items,
+  className = "mt-3",
+  listStyle = "unordered",
+}: {
+  items: string[];
+  className?: string;
+  listStyle?: LegalListStyle;
+}) {
+  const listClassName = `${className} space-y-1 pl-6 text-sm leading-[1.75] ${
+    listStyle === "ordered" ? "list-decimal" : "list-disc"
+  }`;
+
+  if (listStyle === "ordered") {
+    return (
+      <ol className={listClassName}>
+        {items.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ol>
+    );
+  }
+
   return (
-    <ul className={`${className} list-disc space-y-1 pl-6 text-sm leading-[1.75]`}>
+    <ul className={listClassName}>
       {items.map((item) => (
         <li key={item}>{item}</li>
       ))}
@@ -17,11 +47,13 @@ function BulletList({ items, className = "mt-3" }: { items: string[]; className?
 function ParagraphsAndBullets({
   paragraphs = [],
   bullets = [],
+  listStyle = "unordered",
   paragraphClassName = "mt-3",
   listClassName = "mt-3",
 }: {
   paragraphs?: string[];
   bullets?: string[];
+  listStyle?: LegalListStyle;
   paragraphClassName?: string;
   listClassName?: string;
 }) {
@@ -41,17 +73,24 @@ function ParagraphsAndBullets({
             {paragraph}
           </Paragraph>
         ))}
-        <BulletList items={bullets} className={listClassName} />
+        <ItemList items={bullets} className={listClassName} listStyle={listStyle} />
       </>
     );
   }
 
-  const [first, ...rest] = paragraphs;
+  const insertAt = findBulletsInsertIndex(paragraphs);
+  const before = paragraphs.slice(0, insertAt + 1);
+  const after = paragraphs.slice(insertAt + 1);
+
   return (
     <>
-      <Paragraph className={paragraphClassName}>{first}</Paragraph>
-      <BulletList items={bullets} className={listClassName} />
-      {rest.map((paragraph) => (
+      {before.map((paragraph) => (
+        <Paragraph key={paragraph.slice(0, 48)} className={paragraphClassName}>
+          {paragraph}
+        </Paragraph>
+      ))}
+      <ItemList items={bullets} className={listClassName} listStyle={listStyle} />
+      {after.map((paragraph) => (
         <Paragraph key={paragraph.slice(0, 48)} className={paragraphClassName}>
           {paragraph}
         </Paragraph>
@@ -65,7 +104,11 @@ function SectionBlock({ section }: { section: LegalSection }) {
     <section id={`section-${section.id}`} className="legal-section">
       <h2 className="mt-8 text-base font-bold">{section.title}</h2>
 
-      <ParagraphsAndBullets paragraphs={section.paragraphs} bullets={section.bullets} />
+      <ParagraphsAndBullets
+        paragraphs={section.paragraphs}
+        bullets={section.bullets}
+        listStyle={section.listStyle}
+      />
 
       {section.subsections?.map((sub) => (
         <div key={sub.title} className="mt-4">
@@ -73,6 +116,7 @@ function SectionBlock({ section }: { section: LegalSection }) {
           <ParagraphsAndBullets
             paragraphs={sub.paragraphs}
             bullets={sub.bullets}
+            listStyle={sub.listStyle}
             paragraphClassName="mt-2"
             listClassName="mt-2"
           />
