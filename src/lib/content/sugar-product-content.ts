@@ -56,27 +56,27 @@ export const SUGAR_CATEGORY = {
       },
       {
         grade: "ICUMSA 100",
-        position: "Refined white sugar",
+        position: "Lite cream refined sugar",
         marketUse: "Food & commercial processing",
-        colour: "Low",
+        colour: "Lite cream",
       },
       {
         grade: "ICUMSA 150",
-        position: "Refined commercial sugar",
+        position: "Brown-tone commercial sugar",
         marketUse: "Food & industrial processing",
-        colour: "Controlled",
+        colour: "Light brown",
       },
       {
         grade: "ICUMSA 600",
-        position: "Commercial refined sugar",
+        position: "Brown commercial sugar",
         marketUse: "Processing & industrial applications",
-        colour: "Higher",
+        colour: "Brown",
       },
       {
         grade: "ICUMSA 1200",
-        position: "Higher-colour commercial sugar",
+        position: "Red sugar — higher-colour commercial grade",
         marketUse: "Industrial & selected food applications",
-        colour: "Higher",
+        colour: "Red",
       },
     ],
   },
@@ -176,9 +176,9 @@ const SUGAR_GRADES: Record<string, SugarGradeDetail> = {
   "icumsa-100": {
     slug: "icumsa-100",
     code: "ICUMSA 100",
-    subtitle: "Refined white sugar for commercial applications",
+    subtitle: "Lite cream refined sugar for commercial applications",
     description:
-      "ICUMSA 100 represents a refined white sugar grade suitable for a wide range of commercial food-processing and industrial applications. It provides a balance between refined quality, consistent colour and commercial versatility.",
+      "ICUMSA 100 is a lite cream refined sugar grade suitable for a wide range of commercial food-processing and industrial applications. It provides a balance between refined quality, consistent colour and commercial versatility.",
     applications: [
       "Food processing",
       "Beverage manufacturing",
@@ -189,7 +189,7 @@ const SUGAR_GRADES: Record<string, SugarGradeDetail> = {
       "Industrial applications",
     ],
     characteristics: [
-      "Refined white sugar",
+      "Lite cream refined sugar",
       "Controlled colour specification",
       "High purity",
       "Consistent crystal structure",
@@ -200,7 +200,7 @@ const SUGAR_GRADES: Record<string, SugarGradeDetail> = {
     note: "Exact specifications depend on the producer, origin and agreed contract specification.",
     youtubeVideoId: "gADVpRPdr7E",
     highlights: [
-      "Refined white sugar for commercial food processing",
+      "Lite cream refined sugar for commercial food processing",
       "Controlled colour and consistent crystal structure",
       "Domestic and international supply programmes",
     ],
@@ -208,20 +208,20 @@ const SUGAR_GRADES: Record<string, SugarGradeDetail> = {
     images: [
       {
         src: "/images/products/sugar/icumsa-100-crystal-white-sugar.png",
-        alt: "ICUMSA 100 crystal white sugar grains in hand",
+        alt: "ICUMSA 100 lite cream crystal sugar grains",
       },
       {
         src: "/images/products/sugar/icumsa-100-crystal-white-sugar-2.png",
-        alt: "50 kg bag of ICUMSA 100 white crystal sugar",
+        alt: "50 kg bag of ICUMSA 100 lite cream crystal sugar",
       },
     ],
   },
   "icumsa-150": {
     slug: "icumsa-150",
     code: "ICUMSA 150",
-    subtitle: "Refined white sugar for food & industrial markets",
+    subtitle: "Brown-tone sugar for food & industrial markets",
     description:
-      "ICUMSA 150 is a commercially traded refined white sugar grade used across food-processing, manufacturing and distribution markets. Its controlled colour and refined characteristics make it suitable for applications where consistent sugar quality is required while allowing flexibility across different industrial uses.",
+      "ICUMSA 150 is a commercially traded sugar grade with a light brown appearance, used across food-processing, manufacturing and distribution markets. Its colour and refined characteristics make it suitable for applications where consistent sugar quality is required while allowing flexibility across different industrial uses.",
     applications: [
       "Food manufacturing",
       "Beverage production",
@@ -232,8 +232,8 @@ const SUGAR_GRADES: Record<string, SugarGradeDetail> = {
       "Industrial processing",
     ],
     characteristics: [
-      "Refined crystalline sugar",
-      "Controlled colour",
+      "Light brown crystalline sugar",
+      "Brown-tone colour profile",
       "Consistent quality",
       "High commercial versatility",
       "Suitable for bulk and packaged supply",
@@ -242,24 +242,24 @@ const SUGAR_GRADES: Record<string, SugarGradeDetail> = {
     note: "Final product specifications are confirmed by the supplier's technical specification and applicable Certificate of Analysis.",
     youtubeVideoId: "gADVpRPdr7E",
     highlights: [
-      "Refined commercial grade for food and industrial markets",
-      "Controlled colour with consistent quality",
+      "Light brown commercial grade for food and industrial markets",
+      "Brown-tone colour with consistent quality",
       "Bulk vessel and bagged cargo formats",
     ],
     heroImage: "/images/products/sugar/icumsa-150-raw-sugar-cane.png",
     images: [
       {
         src: "/images/products/sugar/icumsa-150-raw-sugar-cane.png",
-        alt: "ICUMSA 150 raw cane sugar in FIBC jumbo bags on pallet",
+        alt: "ICUMSA 150 light brown sugar in FIBC jumbo bags on pallet",
       },
     ],
   },
   "icumsa-600": {
     slug: "icumsa-600",
     code: "ICUMSA 600",
-    subtitle: "Commercial refined sugar",
+    subtitle: "Brown commercial refined sugar",
     description:
-      "ICUMSA 600 is a commercially traded sugar grade with a higher colour value than lower-ICUMSA refined white sugar grades. It can be suitable for food processing and industrial applications where ultra-low colour is not a primary requirement.",
+      "ICUMSA 600 is a commercially traded brown sugar grade with a higher colour value than lower-ICUMSA refined grades. It is suitable for food processing and industrial applications where a brown sugar specification is required.",
     applications: [
       "Food processing",
       "Bakery products",
@@ -269,7 +269,7 @@ const SUGAR_GRADES: Record<string, SugarGradeDetail> = {
       "Food-service markets",
     ],
     characteristics: [
-      "Refined sugar",
+      "Brown refined sugar",
       "Higher colour specification than ICUMSA 45",
       "Suitable for a range of processing applications",
       "Competitive option for commercial users",
@@ -279,24 +279,24 @@ const SUGAR_GRADES: Record<string, SugarGradeDetail> = {
     note: "Buyers should confirm the exact colour, polarization, moisture, ash and other parameters before contracting.",
     youtubeVideoId: "gADVpRPdr7E",
     highlights: [
-      "Commercial refined sugar with higher colour specification",
-      "Suitable where ultra-low colour is not required",
+      "Brown commercial refined sugar",
+      "Suitable for brown-sugar processing specifications",
       "Competitive option for processing and industrial users",
     ],
-    heroImage: "/images/products/sugar/icumsa-600-raw-sugar-cane.jpg",
+    heroImage: "/images/products/sugar/icumsa-600-brown-sugar.jpg",
     images: [
       {
-        src: "/images/products/sugar/icumsa-600-raw-sugar-cane.jpg",
-        alt: "ICUMSA 600 raw sugar cane crystals in bulk presentation",
+        src: "/images/products/sugar/icumsa-600-brown-sugar.jpg",
+        alt: "ICUMSA 600 brown sugar crystals in bulk presentation",
       },
     ],
   },
   "icumsa-1200": {
     slug: "icumsa-1200",
     code: "ICUMSA 1200",
-    subtitle: "Commercial sugar for industrial applications",
+    subtitle: "Red sugar for industrial applications",
     description:
-      "ICUMSA 1200 is a higher-colour sugar grade used in selected industrial and food-processing applications where the very bright appearance associated with premium refined sugar is not required. It can provide a commercially attractive option for customers seeking suitable sugar specifications for manufacturing and processing.",
+      "ICUMSA 1200 is a red sugar grade used in selected industrial and food-processing applications where premium refined white sugar is not required. It provides a commercially attractive option for customers seeking a higher-colour red sugar specification for manufacturing and processing.",
     applications: [
       "Industrial food processing",
       "Bakery applications",
@@ -306,8 +306,8 @@ const SUGAR_GRADES: Record<string, SugarGradeDetail> = {
       "Selected industrial uses",
     ],
     characteristics: [
-      "Crystalline sugar",
-      "Higher colour value",
+      "Red crystalline sugar",
+      "Highest colour value in this range",
       "Suitable for selected processing applications",
       "Commercially competitive",
       "Available in bulk and packaged formats depending on origin",
@@ -316,7 +316,7 @@ const SUGAR_GRADES: Record<string, SugarGradeDetail> = {
     note: "Exact quality parameters are confirmed against the applicable supplier specification and Certificate of Analysis.",
     youtubeVideoId: "gADVpRPdr7E",
     highlights: [
-      "Higher-colour commercial grade for industrial processing",
+      "Red sugar commercial grade for industrial processing",
       "Commercially competitive for selected applications",
       "Bulk and packaged formats depending on origin",
     ],
@@ -324,11 +324,11 @@ const SUGAR_GRADES: Record<string, SugarGradeDetail> = {
     images: [
       {
         src: "/images/products/sugar/icumsa-1200-cream-sugar-cane.jpg",
-        alt: "ICUMSA 1200 cream sugar cane crystals",
+        alt: "ICUMSA 1200 red sugar crystals",
       },
       {
         src: "/images/products/sugar/icumsa-1200-cream-sugar-cane-2.png",
-        alt: "Close-up of ICUMSA 1200 cream sugar cane granules",
+        alt: "Close-up of ICUMSA 1200 red sugar granules",
       },
     ],
   },

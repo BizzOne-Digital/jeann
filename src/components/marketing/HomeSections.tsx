@@ -718,7 +718,7 @@ export function InsightsAndNotes({
   const cardImages = [
     "/images/products/rapeseed-oil-reference.png",
     "/images/products/oils/refined-sunflower-oil.png",
-    "/images/products/sugar/icumsa-45-white-sugar.png",
+    "/images/products/sugar/icumsa-45-white-sugar.jpg",
   ];
 
   return (

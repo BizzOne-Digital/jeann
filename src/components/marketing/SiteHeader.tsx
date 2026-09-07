@@ -36,6 +36,7 @@ export function SiteHeader({ embedded = false }: Props) {
   }, [open]);
 
   const closeMenu = () => setOpen(false);
+  const hideLogo = pathname === "/about";
 
   return (
     <>
@@ -46,17 +47,21 @@ export function SiteHeader({ embedded = false }: Props) {
         )}
       >
         <div className={`container-page flex ${MARKETING_HEADER_HEIGHT_CLASS} min-w-0 items-center justify-between gap-2 lg:gap-3`}>
-          <Link href="/" className="focus-ring flex shrink-0 items-center gap-3 rounded-sm">
-            <BrandLogo size="md" priority />
-            <span className="hidden leading-tight md:block">
-              <span className="block whitespace-nowrap text-[0.85rem] font-bold tracking-[0.16em] text-white uppercase sm:text-[0.95rem] sm:tracking-[0.2em]">
-                Finekarts
+          {hideLogo ? (
+            <div className="hidden shrink-0 lg:block lg:w-0" aria-hidden />
+          ) : (
+            <Link href="/" className="focus-ring flex shrink-0 items-center gap-3 rounded-sm">
+              <BrandLogo size="md" priority />
+              <span className="hidden leading-tight md:block">
+                <span className="block whitespace-nowrap text-[0.85rem] font-bold tracking-[0.16em] text-white uppercase sm:text-[0.95rem] sm:tracking-[0.2em]">
+                  Finekarts
+                </span>
+                <span className="block whitespace-nowrap text-[0.55rem] font-medium uppercase tracking-[0.24em] text-white/55 sm:text-[0.6rem] sm:tracking-[0.32em]">
+                  Incorporated
+                </span>
               </span>
-              <span className="block whitespace-nowrap text-[0.55rem] font-medium uppercase tracking-[0.24em] text-white/55 sm:text-[0.6rem] sm:tracking-[0.32em]">
-                Incorporated
-              </span>
-            </span>
-          </Link>
+            </Link>
+          )}
 
           <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Primary">
             {NAV.map((item) => {

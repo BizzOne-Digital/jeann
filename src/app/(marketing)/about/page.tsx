@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getAboutSectionImages } from "@/lib/content/about-images";
 import { getHomeSectionImages } from "@/lib/content/home-images";
 import { getSite } from "@/lib/content/catalog";
 import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
@@ -20,15 +21,23 @@ export const metadata: Metadata = {
 
 export default async function AboutPage() {
   const site = getSite();
-  const { home1, home2, home3 } = getHomeSectionImages();
+  const { home3 } = getHomeSectionImages();
+  const { teamStrategy, teamCollaboration } = getAboutSectionImages();
   const cms = await getPublishedPage("about");
 
   return (
     <>
       <AboutHero positioning={site.positioning} cms={getSectionFields(cms, "hero")} />
-      <AboutWhoWeAre home1={home1} home2={home2} cms={getSectionFields(cms, "who-we-are")} />
+      <AboutWhoWeAre
+        teamStrategy={teamStrategy}
+        teamCollaboration={teamCollaboration}
+        cms={getSectionFields(cms, "who-we-are")}
+      />
       <FoodSafetyAgencyMarquee />
-      <AboutCapabilities cms={getSectionFields(cms, "capabilities")} />
+      <AboutCapabilities
+        teamStrategy={teamCollaboration}
+        cms={getSectionFields(cms, "capabilities")}
+      />
       <AboutProcess cms={getSectionFields(cms, "process")} />
       <AboutGlobal home3={home3} cms={getSectionFields(cms, "global")} />
       <AboutCta

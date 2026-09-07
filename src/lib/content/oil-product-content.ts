@@ -74,8 +74,12 @@ const OIL_PRODUCTS: Record<string, OilProductDetail> = {
       "Bulk flexitank and ISO tank options",
       "Independent inspection aligned to contract",
     ],
-    heroImage: "/images/products/oils/refined-sunflower-product.png",
+    heroImage: "/images/products/oils/sunflower-oil-bulk-fill.jpg",
     images: [
+      {
+        src: "/images/products/oils/sunflower-oil-bulk-fill.jpg",
+        alt: "Refined sunflower oil filled into bulk industrial containers",
+      },
       {
         src: "/images/products/oils/crude-sunflower-oil.png",
         alt: "Crude sunflower oil sampled with sunflower seeds and blooms",
@@ -83,14 +87,6 @@ const OIL_PRODUCTS: Record<string, OilProductDetail> = {
       {
         src: "/images/products/oils/refined-sunflower-oil.png",
         alt: "Refined sunflower oil — clear golden product sample",
-      },
-      {
-        src: "/images/products/oils/refined-sunflower-product.png",
-        alt: "Refined sunflower oil product presentation",
-      },
-      {
-        src: "/images/products/product-2.png",
-        alt: "Edible oils commodity trade reference",
       },
     ],
   },
@@ -119,19 +115,15 @@ const OIL_PRODUCTS: Record<string, OilProductDetail> = {
       "Bulk ISO tank and flexitank programmes",
       "Certificate of analysis per shipment",
     ],
-    heroImage: "/images/products/oils/refined-soybean-product.png",
+    heroImage: "/images/products/oils/soybean-oil-flexitank.jpg",
     images: [
       {
-        src: "/images/products/oils/refined-soybean-product.png",
-        alt: "Refined soybean oil — product sample on production line",
+        src: "/images/products/oils/soybean-oil-flexitank.jpg",
+        alt: "Crude soybean oil loaded into a flexitank inside a shipping container",
       },
       {
         src: "/images/products/oils/refined-soybean-carboys.png",
         alt: "Refined soybean oil filled into bulk carboys at production",
-      },
-      {
-        src: "/images/products/oils/refined-vegetable-bottling.png",
-        alt: "Automated bottling line for refined edible oil",
       },
     ],
   },
@@ -160,11 +152,11 @@ const OIL_PRODUCTS: Record<string, OilProductDetail> = {
       "Crude palm oil for refinery buyers",
       "Bulk tank and flexitank logistics",
     ],
-    heroImage: "/images/products/oils/refined-palm-rbd-bottling.png",
+    heroImage: "/images/products/oils/palm-oil-mill.jpg",
     images: [
       {
-        src: "/images/products/oils/refined-palm-rbd-bottling.png",
-        alt: "Automated RBD palm oil bottling line with quality control at production",
+        src: "/images/products/oils/palm-oil-mill.jpg",
+        alt: "Palm oil mill with fresh fruit bunches and crude palm oil extraction",
       },
       {
         src: "/images/products/oils/refined-palm-process.png",
@@ -312,15 +304,11 @@ const OIL_PRODUCTS: Record<string, OilProductDetail> = {
       "Grades confirmed per RFQ",
       "Export documentation coordinated",
     ],
-    heroImage: "/images/products/oils/refined-rapeseed-bottling.png",
+    heroImage: "/images/products/oils/olive-oil.jpg",
     images: [
       {
-        src: "/images/products/oils/refined-rapeseed-bottling.png",
-        alt: "Refined olive oil bottling line reference",
-      },
-      {
-        src: "/images/products/oils/refined-sunflower-oil.png",
-        alt: "Refined edible oil product sample",
+        src: "/images/products/oils/olive-oil.jpg",
+        alt: "Olive oil in a glass — extra virgin and refined grades",
       },
     ],
   },

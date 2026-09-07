@@ -55,12 +55,12 @@ export function AboutHero({
 }
 
 export function AboutWhoWeAre({
-  home1 = "/images/home-1.png",
-  home2 = "/images/home-2.png",
+  teamStrategy = "/images/about/team-strategy-meeting.png",
+  teamCollaboration = "/images/about/team-collaboration.png",
   cms,
 }: {
-  home1?: string;
-  home2?: string;
+  teamStrategy?: string;
+  teamCollaboration?: string;
   cms?: Record<string, string>;
 }) {
   return (
@@ -109,8 +109,8 @@ export function AboutWhoWeAre({
           <Reveal>
             <div className="relative aspect-[3/4] overflow-hidden rounded-sm bg-[#e4e0d8] sm:aspect-[4/5]">
               <Image
-                src={home1}
-                alt="Quality inspection of bulk agricultural grains"
+                src={teamStrategy}
+                alt="Finekarts trade team reviewing commodity programme strategy"
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 50vw, 360px"
@@ -120,8 +120,8 @@ export function AboutWhoWeAre({
           <Reveal delay={0.08}>
             <div className="relative aspect-[3/4] overflow-hidden rounded-sm bg-[#e4e0d8] sm:aspect-[4/5]">
               <Image
-                src={home2}
-                alt="Container ship and port logistics at sunset"
+                src={teamCollaboration}
+                alt="Finekarts team collaborating on buyer and supplier programmes"
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 50vw, 360px"
@@ -134,7 +134,13 @@ export function AboutWhoWeAre({
   );
 }
 
-export function AboutCapabilities({ cms }: { cms?: Record<string, string> }) {
+export function AboutCapabilities({
+  teamStrategy = "/images/about/team-collaboration.png",
+  cms,
+}: {
+  teamStrategy?: string;
+  cms?: Record<string, string>;
+}) {
   const capabilities = [
     "Specification alignment for edible oils, sugar, rice & grains, beans, and related programmes",
     "Third-party inspection coordination when agreed — agency and scope are transaction-specific",
@@ -175,7 +181,17 @@ export function AboutCapabilities({ cms }: { cms?: Record<string, string> }) {
         </div>
 
         <Reveal delay={0.08}>
-          <ul className="space-y-0 border-t border-[#d5d0c8]">
+          <div className="space-y-6">
+            <div className="relative aspect-[16/10] overflow-hidden rounded-sm bg-[#e4e0d8]">
+              <Image
+                src={teamStrategy}
+                alt="Trade desk planning commodity supply programmes"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 480px"
+              />
+            </div>
+            <ul className="space-y-0 border-t border-[#d5d0c8]">
             {capabilities.map((item) => (
               <li
                 key={item}
@@ -186,6 +202,7 @@ export function AboutCapabilities({ cms }: { cms?: Record<string, string> }) {
               </li>
             ))}
           </ul>
+          </div>
         </Reveal>
       </div>
     </section>
