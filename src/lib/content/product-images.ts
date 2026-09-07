@@ -10,8 +10,8 @@ export const CATEGORY_COVERS: Record<string, { image: string; shortName: string;
   },
   sugar: {
     shortName: "Sugar",
-    image: "/images/products/sugar/icumsa-45-white-sugar-3.png",
-    alt: "Refined white sugar",
+    image: "/images/products/sugar/icumsa-45-white-sugar.jpg",
+    alt: "ICUMSA 45 refined white sugar",
   },
   "rice-and-grains": {
     shortName: "Rice & Grains",

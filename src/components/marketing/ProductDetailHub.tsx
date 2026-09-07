@@ -547,10 +547,10 @@ export function ProductDetailHub(props: ProductHubProps) {
 
 export function ProductDetailEnquiryCta({
   productName,
-  quoteHref,
+  orderHref,
 }: {
   productName: string;
-  quoteHref: string;
+  orderHref: string;
 }) {
   return (
     <section className="bg-white py-16 lg:py-20">
@@ -561,19 +561,19 @@ export function ProductDetailEnquiryCta({
               Next step
             </p>
             <h2 className="mt-3 text-2xl font-semibold sm:text-3xl">
-              Request a quotation for {productName}
+              Place a bulk order for {productName}
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-white/70">
-              Include destination, quantity, packaging preference, and target Incoterm. Submission
-              does not guarantee supply or pricing.
+              Sign in to the buyer portal and submit your purchase request with destination,
+              quantity, packaging preference, and target Incoterm.
             </p>
           </div>
           <div className="mt-8 flex flex-wrap gap-3 lg:mt-0 lg:shrink-0">
             <Link
-              href={quoteHref}
+              href={orderHref}
               className="focus-ring inline-flex items-center gap-2 rounded-md bg-[#d4a84b] px-6 py-3.5 text-sm font-semibold text-[#001a3d] transition hover:bg-[#c4983f]"
             >
-              Request Quote <span aria-hidden>→</span>
+              Click here to ORDER <span aria-hidden>→</span>
             </Link>
             <Link
               href="/contact"

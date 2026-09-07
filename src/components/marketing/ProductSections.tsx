@@ -10,18 +10,20 @@ import { PageHero } from "@/components/marketing/PageHero";
 import { searchCatalogProducts, type CatalogProduct } from "@/lib/content/catalog-utils";
 import type { SeedCategory } from "@/lib/content/seed-catalog";
 import { resolveImageSrc } from "@/lib/media/resolve-image-src";
-import { buyerQuoteHref } from "@/lib/marketing/cta-links";
+import { buyerOrderHref } from "@/lib/marketing/cta-links";
 import { getCategoryCover, getProductListingImage } from "@/lib/content/product-images";
+import { BulkOrderBox } from "@/components/marketing/BulkOrderBox";
+import { getBulkMinOrderText } from "@/lib/marketing/bulk-order-minimums";
 
 export function ProductsHero() {
   const hero = getPageHeroImage("products");
   return (
     <PageHero
       title="Commodities we trade"
-      description="Browse edible oils, sugar, rice & grains, beans, and related programmes. Specifications are confirmed with the trade desk — not fixed public prices."
+      description="Bulk supply only — browse edible oils, sugar, rice & grains, beans, coffee, spices, and related programmes. Minimum order volumes apply by category. Specifications are confirmed with the trade desk."
       imageSrc={hero.src}
       imageAlt={hero.alt}
-      primaryCta={{ href: buyerQuoteHref(), label: "Request a Quote →" }}
+      primaryCta={{ href: buyerOrderHref(), label: "Click here to ORDER →" }}
       secondaryCta={{ href: "#catalog", label: "Browse catalog" }}
     />
   );
@@ -92,6 +94,21 @@ export function ProductCatalogSection({
     [products, query, categorySlug],
   );
 
+  const grouped = useMemo(() => {
+    const byCategory = new Map<string, CatalogProduct[]>();
+    for (const product of filtered) {
+      const list = byCategory.get(product.categorySlug) ?? [];
+      list.push(product);
+      byCategory.set(product.categorySlug, list);
+    }
+    return categories
+      .filter((category) => byCategory.has(category.slug))
+      .map((category) => ({
+        category,
+        products: byCategory.get(category.slug) ?? [],
+      }));
+  }, [filtered, categories]);
+
   return (
     <section id="catalog" className="scroll-mt-24 bg-[#f3f1ec] py-16 lg:py-24">
       <div className="container-page">
@@ -104,7 +121,7 @@ export function ProductCatalogSection({
             </Reveal>
             <Reveal delay={0.06}>
               <h2 className="mt-2 text-3xl font-semibold text-[#001a3d] sm:text-4xl">
-                All commodity listings
+                Catalog by category
               </h2>
             </Reveal>
           </div>
@@ -144,40 +161,108 @@ export function ProductCatalogSection({
           </div>
         </Reveal>
 
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((product, i) => {
-            const cover = getCategoryCover(product.categorySlug);
-            const imageSrc = getProductListingImage(product, product.categorySlug);
+        <Reveal delay={0.12}>
+          <div className="mt-8 rounded-lg border border-[#d5d0c8] bg-white p-5 sm:p-6">
+            <p className="text-xs font-semibold tracking-[0.18em] text-[#c88e4a] uppercase">
+              Bulk supply only
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-[#555555]">
+              Finekarts supplies commodities in bulk volumes only. Minimum order quantities vary by
+              category — see each section below.
+            </p>
+            <ul className="mt-4 grid gap-2 text-sm text-[#001a3d] sm:grid-cols-2 lg:grid-cols-3">
+              <li>Spices, nuts &amp; cashews — 300 MT min</li>
+              <li>Beans — 300 MT min</li>
+              <li>Rice — 500 MT min</li>
+              <li>Edible oils — 500 MT min</li>
+              <li>Sugar — 5,000 MT min</li>
+            </ul>
+            <Link
+              href={buyerOrderHref()}
+              className="focus-ring mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#c88e4a] transition hover:text-[#a87338]"
+            >
+              Click here to ORDER <span aria-hidden>→</span>
+            </Link>
+          </div>
+        </Reveal>
+
+        <div className="mt-12 space-y-14">
+          {grouped.map(({ category, products: categoryProducts }, groupIndex) => {
+            const cover = getCategoryCover(category.slug);
             return (
-              <Reveal key={`${product.categorySlug}-${product.slug}`} delay={Math.min(i * 0.03, 0.18)}>
-                <Link
-                  href={`/products/${product.categorySlug}/${product.slug}`}
-                  className="group block"
-                >
-                  <div className="relative aspect-[16/11] overflow-hidden bg-[#e4e0d8]">
-                    <Image
-                      src={resolveImageSrc(imageSrc)}
-                      alt={product.name}
-                      fill
-                      className="object-cover transition duration-500 group-hover:scale-[1.03]"
-                      sizes="(max-width: 1024px) 50vw, 360px"
-                      unoptimized={imageSrc.startsWith("/api/uploads/")}
-                    />
+              <div key={category.slug} id={`catalog-${category.slug}`} className="scroll-mt-28">
+                <Reveal delay={Math.min(groupIndex * 0.04, 0.16)}>
+                  <div className="flex flex-wrap items-end justify-between gap-4 border-b border-[#d5d0c8] pb-4">
+                    <div>
+                      <p className="text-xs font-semibold tracking-[0.18em] text-[#c88e4a] uppercase">
+                        {cover.shortName}
+                      </p>
+                      <h3 className="mt-1 text-2xl font-semibold text-[#001a3d]">{category.name}</h3>
+                      <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[#666666]">
+                        {category.summary}
+                      </p>
+                    </div>
+                    <Link
+                      href={`/products/${category.slug}`}
+                      className="text-sm font-semibold text-[#c88e4a] transition hover:text-[#a87338]"
+                    >
+                      View category <span aria-hidden>→</span>
+                    </Link>
                   </div>
-                  <p className="mt-3 text-xs font-semibold tracking-[0.16em] text-[#c88e4a] uppercase">
-                    {cover.shortName}
-                  </p>
-                  <h3 className="mt-1 text-lg font-semibold text-[#001a3d] transition group-hover:text-[#c88e4a]">
-                    {product.name}
-                  </h3>
-                  <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-[#666666]">
-                    {product.overview}
-                  </p>
-                  <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[#c88e4a]">
-                    View details <span aria-hidden>→</span>
-                  </span>
-                </Link>
-              </Reveal>
+                </Reveal>
+
+                <Reveal delay={Math.min(groupIndex * 0.04 + 0.04, 0.2)}>
+                  <BulkOrderBox categorySlug={category.slug} className="mt-6" compact />
+                </Reveal>
+
+                <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                  {categoryProducts.map((product, i) => {
+                    const imageSrc = getProductListingImage(product, product.categorySlug);
+                    return (
+                      <Reveal
+                        key={`${product.categorySlug}-${product.slug}`}
+                        delay={Math.min(i * 0.03, 0.18)}
+                      >
+                        <article className="flex h-full flex-col rounded-lg border border-[#d5d0c8] bg-white p-4 shadow-sm">
+                          <Link
+                            href={`/products/${product.categorySlug}/${product.slug}`}
+                            className="group block"
+                          >
+                            <div className="relative aspect-[16/11] overflow-hidden bg-[#e4e0d8]">
+                              <Image
+                                src={resolveImageSrc(imageSrc)}
+                                alt={product.name}
+                                fill
+                                className="object-cover transition duration-500 group-hover:scale-[1.03]"
+                                sizes="(max-width: 1024px) 50vw, 360px"
+                                unoptimized={imageSrc.startsWith("/api/uploads/")}
+                              />
+                            </div>
+                            <h4 className="mt-3 text-lg font-semibold text-[#001a3d] transition group-hover:text-[#c88e4a]">
+                              {product.name}
+                            </h4>
+                            <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-[#666666]">
+                              {product.overview}
+                            </p>
+                            <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[#c88e4a]">
+                              View details <span aria-hidden>→</span>
+                            </span>
+                          </Link>
+                          <p className="mt-3 border-t border-[#ebe6de] pt-3 text-xs leading-relaxed text-[#777777]">
+                            {getBulkMinOrderText(product.categorySlug, product.slug)}
+                          </p>
+                          <Link
+                            href={buyerOrderHref(product.slug)}
+                            className="focus-ring mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[#001a3d] transition hover:text-[#c88e4a]"
+                          >
+                            Click here to ORDER <span aria-hidden>→</span>
+                          </Link>
+                        </article>
+                      </Reveal>
+                    );
+                  })}
+                </div>
+              </div>
             );
           })}
         </div>
@@ -205,22 +290,22 @@ export function ProductsCta() {
       <div className="container-page relative text-center">
         <Reveal>
           <h2 className="mx-auto max-w-2xl text-3xl font-semibold leading-tight sm:text-4xl">
-            Need a tailored quotation?
+            Ready to place a bulk order?
           </h2>
         </Reveal>
         <Reveal delay={0.08}>
           <p className="mx-auto mt-4 max-w-lg text-base leading-relaxed text-white/70">
-            Share quantity, destination, and specifications. Submission does not guarantee pricing
-            or supply.
+            Sign in to the buyer portal and submit your purchase request with quantity, destination,
+            and specifications.
           </p>
         </Reveal>
         <Reveal delay={0.14}>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link
-              href={buyerQuoteHref()}
+              href={buyerOrderHref()}
               className="focus-ring inline-flex items-center justify-center gap-2 rounded-md bg-[#d4a84b] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#c4983f]"
             >
-              Request a Quote <span aria-hidden>→</span>
+              Click here to ORDER <span aria-hidden>→</span>
             </Link>
             <Link
               href="/contact"

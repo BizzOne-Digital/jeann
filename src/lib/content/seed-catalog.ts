@@ -317,10 +317,11 @@ export const SEED_CATEGORIES: SeedCategory[] = [
     slug: "spices",
     name: "Spices",
     summary:
-      "Cinnamon sticks, black pepper, turmeric, cloves, cardamom, nutmeg, cashews and related specialty products — grades and origins confirmed per enquiry.",
+      "Cinnamon sticks, cassia cinnamon star, black pepper, turmeric, cloves, cardamom, nutmeg, cashews and related specialty products — grades and origins confirmed per enquiry.",
     products: [
       ["cashews", "Cashews"],
       ["cinnamon-sticks", "Cinnamon sticks"],
+      ["cassia-cinnamon-star", "Cassia cinnamon star"],
       ["black-pepper", "Black pepper"],
       ["turmeric", "Turmeric"],
       ["cloves", "Cloves"],

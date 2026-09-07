@@ -1,5 +1,16 @@
 /** Client-approved verification page content (Global Business Verification & Due Diligence). */
 
+export type VerificationService = {
+  n: number;
+  title: string;
+  summary: string;
+  intro?: string;
+  items?: string[];
+  body?: string;
+  sections?: { title: string; text: string }[];
+  note?: string;
+};
+
 export const VERIFICATION_HERO = {
   eyebrow: "Global Business Verification & Due Diligence",
   title: "Know Who You Are Trading With",
@@ -32,7 +43,7 @@ export const REAL_TIME_INTELLIGENCE = {
     "Verification results should always be understood as a point-in-time assessment, not a permanent guarantee of future performance.",
 };
 
-export const VERIFICATION_SERVICES = [
+export const VERIFICATION_SERVICES: VerificationService[] = [
   {
     n: 1,
     title: "Corporate Registration Verification",

@@ -157,11 +157,11 @@ const SUGAR_GRADES: Record<string, SugarGradeDetail> = {
       "Very low colour value and high purity",
       "Bulk vessel and bagged formats available",
     ],
-    heroImage: "/images/products/sugar/icumsa-45-white-sugar-3.png",
+    heroImage: "/images/products/sugar/icumsa-45-white-sugar.jpg",
     images: [
       {
-        src: "/images/products/sugar/icumsa-45-white-sugar.png",
-        alt: "ICUMSA 45 refined white sugar sampled from a commercial sack",
+        src: "/images/products/sugar/icumsa-45-white-sugar.jpg",
+        alt: "ICUMSA 45 refined white sugar in burlap sack with metal scoop",
       },
       {
         src: "/images/products/sugar/icumsa-45-white-sugar-2.png",
@@ -170,10 +170,6 @@ const SUGAR_GRADES: Record<string, SugarGradeDetail> = {
       {
         src: "/images/products/sugar/icumsa-45-50kg-bags.png",
         alt: "ICUMSA 45 refined white sugar in 50 kg export sacks",
-      },
-      {
-        src: "/images/products/sugar/icumsa-45-white-sugar-3.png",
-        alt: "Palletized ICUMSA 45 sugar bags in an export warehouse",
       },
     ],
   },
@@ -287,10 +283,10 @@ const SUGAR_GRADES: Record<string, SugarGradeDetail> = {
       "Suitable where ultra-low colour is not required",
       "Competitive option for processing and industrial users",
     ],
-    heroImage: "/images/products/sugar/icumsa-600-raw-sugar-cane.png",
+    heroImage: "/images/products/sugar/icumsa-600-raw-sugar-cane.jpg",
     images: [
       {
-        src: "/images/products/sugar/icumsa-600-raw-sugar-cane.png",
+        src: "/images/products/sugar/icumsa-600-raw-sugar-cane.jpg",
         alt: "ICUMSA 600 raw sugar cane crystals in bulk presentation",
       },
     ],
@@ -324,11 +320,11 @@ const SUGAR_GRADES: Record<string, SugarGradeDetail> = {
       "Commercially competitive for selected applications",
       "Bulk and packaged formats depending on origin",
     ],
-    heroImage: "/images/products/sugar/icumsa-1200-cream-sugar-cane.png",
+    heroImage: "/images/products/sugar/icumsa-1200-cream-sugar-cane.jpg",
     images: [
       {
-        src: "/images/products/sugar/icumsa-1200-cream-sugar-cane.png",
-        alt: "ICUMSA 1200 cream sugar cane crystals in a wooden bowl",
+        src: "/images/products/sugar/icumsa-1200-cream-sugar-cane.jpg",
+        alt: "ICUMSA 1200 cream sugar cane crystals",
       },
       {
         src: "/images/products/sugar/icumsa-1200-cream-sugar-cane-2.png",

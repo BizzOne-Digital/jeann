@@ -33,6 +33,7 @@ const categories = {
   spices: [
     "cashews",
     "cinnamon-sticks",
+    "cassia-cinnamon-star",
     "black-pepper",
     "turmeric",
     "cloves",

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageHero } from "@/components/marketing/PageHero";
@@ -10,7 +9,9 @@ import {
 import { getCategories } from "@/lib/content/catalog";
 import { getPublicProduct } from "@/lib/content/catalog-server";
 import { resolveImageSrc } from "@/lib/media/resolve-image-src";
-import { buyerQuoteHref } from "@/lib/marketing/cta-links";
+import { buyerOrderHref } from "@/lib/marketing/cta-links";
+import { getBulkMinOrderText } from "@/lib/marketing/bulk-order-minimums";
+import { BulkOrderBox } from "@/components/marketing/BulkOrderBox";
 import { getCategoryCover } from "@/lib/content/product-images";
 import type { ProductDetailContent } from "@/lib/content/product-detail-shared";
 import {
@@ -65,7 +66,7 @@ export default async function ProductPage({ params }: Props) {
   const { category, product } = result;
   const cover = getCategoryCover(category.slug);
   const related = category.products.filter((p) => p.slug !== product.slug).slice(0, 3);
-  const quoteHref = buyerQuoteHref(product.slug);
+  const orderHref = buyerOrderHref(product.slug);
   const sugarMarketing = getSugarProductMarketing(product.slug);
   const sugarGrade = getSugarGradeDetail(product.slug);
   const oilMarketing = getOilProductMarketing(product.slug);
@@ -142,9 +143,15 @@ export default async function ProductPage({ params }: Props) {
         description={product.overview}
         imageSrc={heroImage}
         imageAlt={heroImageAlt}
-        primaryCta={{ href: quoteHref, label: "Request a Quote →" }}
+        primaryCta={{ href: orderHref, label: "Click here to ORDER →" }}
         secondaryCta={{ href: `/products/${category.slug}`, label: `Back to ${cover.shortName}` }}
       />
+
+      <section className="border-b border-[#d5d0c8] bg-white py-8">
+        <div className="container-page">
+          <BulkOrderBox categorySlug={category.slug} productSlug={product.slug} />
+        </div>
+      </section>
 
       <ProductDetailHub
         productName={product.name}
@@ -159,13 +166,13 @@ export default async function ProductPage({ params }: Props) {
           inspectionOptions: product.inspectionOptions ?? [],
           documentCategories: product.documentCategories ?? [],
           availabilityText: product.availabilityText,
-          minOrderText: product.minOrderText,
+          minOrderText: getBulkMinOrderText(category.slug, product.slug),
           status: product.status,
         }}
         pillars={contentBoxes}
         heroImage={heroImage}
         heroImageAlt={heroImageAlt}
-        quoteHref={quoteHref}
+        quoteHref={orderHref}
         youtubeUrl={youtubeUrl}
         videoTitle={`${product.name} overview`}
       />
@@ -182,23 +189,15 @@ export default async function ProductPage({ params }: Props) {
                 <Link
                   key={p.slug}
                   href={`/products/${category.slug}/${p.slug}`}
-                  className="group block overflow-hidden rounded-lg border border-[#d5d0c8] bg-white shadow-sm transition hover:border-[#c88e4a]"
+                  className="group block rounded-lg border border-[#d5d0c8] bg-white p-5 shadow-sm transition hover:border-[#c88e4a]"
                 >
-                  <div className="relative aspect-[16/11] overflow-hidden bg-[#e4e0d8]">
-                    <Image
-                      src={p.image || cover.image}
-                      alt=""
-                      fill
-                      className="object-cover transition duration-500 group-hover:scale-[1.03]"
-                      sizes="(max-width: 768px) 100vw, 300px"
-                    />
-                  </div>
-                  <div className="p-4">
-                    <h3 className="text-base font-semibold text-[#001a3d] group-hover:text-[#c88e4a]">
-                      {p.name}
-                    </h3>
-                    <p className="mt-2 line-clamp-2 text-sm text-[#666666]">{p.overview}</p>
-                  </div>
+                  <h3 className="text-base font-semibold text-[#001a3d] group-hover:text-[#c88e4a]">
+                    {p.name}
+                  </h3>
+                  <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-[#666666]">{p.overview}</p>
+                  <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#c88e4a]">
+                    View details <span aria-hidden>→</span>
+                  </span>
                 </Link>
               ))}
             </div>
@@ -206,7 +205,7 @@ export default async function ProductPage({ params }: Props) {
         </section>
       ) : null}
 
-      <ProductDetailEnquiryCta productName={product.name} quoteHref={quoteHref} />
+      <ProductDetailEnquiryCta productName={product.name} orderHref={orderHref} />
     </>
   );
 }

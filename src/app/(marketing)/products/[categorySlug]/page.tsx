@@ -6,8 +6,9 @@ import { PageHero } from "@/components/marketing/PageHero";
 import { Reveal } from "@/components/motion/Reveal";
 import { getCategories } from "@/lib/content/catalog";
 import { getPublicCategory } from "@/lib/content/catalog-server";
-import { buyerQuoteHref } from "@/lib/marketing/cta-links";
+import { buyerOrderHref } from "@/lib/marketing/cta-links";
 import { getCategoryCover, getProductListingImage } from "@/lib/content/product-images";
+import { BulkOrderBox } from "@/components/marketing/BulkOrderBox";
 import { CoffeeCategorySections } from "@/components/marketing/CoffeeSections";
 import { SpicesCategorySections } from "@/components/marketing/SpiceSections";
 import { RiceCategorySections } from "@/components/marketing/RiceSections";
@@ -100,7 +101,7 @@ export default async function CategoryPage({ params }: Props) {
         }
         imageSrc={cover.image}
         imageAlt={cover.alt}
-        primaryCta={{ href: buyerQuoteHref(), label: "Request a Quote →" }}
+        primaryCta={{ href: buyerOrderHref(), label: "Click here to ORDER →" }}
         secondaryCta={{ href: "/products", label: "All categories" }}
       />
 
@@ -128,32 +129,42 @@ export default async function CategoryPage({ params }: Props) {
             </p>
           </div>
 
+          <BulkOrderBox categorySlug={category.slug} className="mt-8" />
+
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {category.products.map((product, i) => (
               <Reveal key={product.slug} delay={Math.min(i * 0.04, 0.2)}>
-                <Link
-                  href={`/products/${category.slug}/${product.slug}`}
-                  className="group block"
-                >
-                  <div className="relative aspect-[16/11] overflow-hidden bg-[#e4e0d8]">
-                    <Image
-                      src={getProductListingImage(product, category.slug)}
-                      alt=""
-                      fill
-                      className="object-cover transition duration-500 group-hover:scale-[1.03]"
-                      sizes="(max-width: 1024px) 50vw, 360px"
-                    />
-                  </div>
-                  <h3 className="mt-3 text-lg font-semibold text-[#001a3d] transition group-hover:text-[#c88e4a]">
-                    {product.name}
-                  </h3>
-                  <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-[#666666]">
-                    {product.overview}
-                  </p>
-                  <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[#c88e4a]">
-                    View details <span aria-hidden>→</span>
-                  </span>
-                </Link>
+                <article className="flex h-full flex-col rounded-lg border border-[#d5d0c8] bg-white p-4 shadow-sm">
+                  <Link
+                    href={`/products/${category.slug}/${product.slug}`}
+                    className="group block"
+                  >
+                    <div className="relative aspect-[16/11] overflow-hidden bg-[#e4e0d8]">
+                      <Image
+                        src={getProductListingImage(product, category.slug)}
+                        alt=""
+                        fill
+                        className="object-cover transition duration-500 group-hover:scale-[1.03]"
+                        sizes="(max-width: 1024px) 50vw, 360px"
+                      />
+                    </div>
+                    <h3 className="mt-3 text-lg font-semibold text-[#001a3d] transition group-hover:text-[#c88e4a]">
+                      {product.name}
+                    </h3>
+                    <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-[#666666]">
+                      {product.overview}
+                    </p>
+                    <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[#c88e4a]">
+                      View details <span aria-hidden>→</span>
+                    </span>
+                  </Link>
+                  <Link
+                    href={buyerOrderHref(product.slug)}
+                    className="focus-ring mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[#001a3d] transition hover:text-[#c88e4a]"
+                  >
+                    Click here to ORDER <span aria-hidden>→</span>
+                  </Link>
+                </article>
               </Reveal>
             ))}
           </div>

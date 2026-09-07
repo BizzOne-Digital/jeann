@@ -33,9 +33,10 @@ const PILLARS: MarketingContentBox[] = [
 export const SPICES_CATEGORY = {
   eyebrow: "Spices",
   title: "Cinnamon, pepper, turmeric, cloves, cardamom, nutmeg and cashews",
-  lead: "Finekarts supplies cinnamon sticks, black pepper, turmeric, cloves, cardamom, nutmeg, cashews and related specialty products for qualified wholesalers, distributors, and food manufacturers. Grades, origins, and certifications are confirmed per enquiry and contract.",
+  lead: "Finekarts supplies cinnamon sticks, cassia cinnamon star, black pepper, turmeric, cloves, cardamom, nutmeg, cashews and related specialty products for qualified wholesalers, distributors, and food manufacturers. Grades, origins, and certifications are confirmed per enquiry and contract.",
   products: [
     "Cinnamon sticks",
+    "Cassia cinnamon star",
     "Black pepper",
     "Turmeric",
     "Cloves",
@@ -76,7 +77,7 @@ const SPICE_PRODUCTS: Record<string, SpiceProductDetail> = {
     images: [
       {
         src: "/images/products/spices/cashews.png",
-        alt: "Raw cashew kernels in wooden bowls",
+        alt: "Roasted cashew kernels",
       },
     ],
   },
@@ -109,6 +110,38 @@ const SPICE_PRODUCTS: Record<string, SpiceProductDetail> = {
       {
         src: "/images/products/spices/cinnamon-sticks.png",
         alt: "Whole cinnamon sticks",
+      },
+    ],
+  },
+  "cassia-cinnamon-star": {
+    slug: "cassia-cinnamon-star",
+    grade: "Cassia cinnamon star",
+    subtitle: "Whole cassia cinnamon star pods",
+    description:
+      "Cassia cinnamon star programmes for spice traders, food manufacturers, and distributors. Size, colour, moisture, and foreign matter are confirmed per contract. Export grades are sorted to buyer specification.",
+    applications: [
+      "Spice blending and grinding",
+      "Food manufacturing",
+      "Beverage and flavour industries",
+      "Wholesale spice distribution",
+    ],
+    characteristics: [
+      "Whole star-shaped pods",
+      "Sorted export grades",
+      "Moisture and foreign matter per specification",
+      "Carton and sack export programmes",
+    ],
+    packaging: ["Cartons", "Multi-wall sacks", "Gunny bags"],
+    highlights: [
+      "Cassia cinnamon star for spice trade",
+      "Grade and origin confirmed per RFQ",
+      "Phytosanitary documentation available",
+    ],
+    heroImage: "/images/products/spices/cassia-cinnamon-star.png",
+    images: [
+      {
+        src: "/images/products/spices/cassia-cinnamon-star.png",
+        alt: "Whole cassia cinnamon star pods",
       },
     ],
   },

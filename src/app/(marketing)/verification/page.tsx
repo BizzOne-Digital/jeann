@@ -4,8 +4,8 @@ import Link from "next/link";
 import { PageHero } from "@/components/marketing/PageHero";
 import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 import { MarketingStorySection } from "@/components/marketing/MarketingStorySection";
-import { Reveal } from "@/components/motion/Reveal";
 import { VERIFICATION_STORY } from "@/lib/content/marketing-pages";
+import { VerificationServicesSection } from "@/components/marketing/VerificationServicesSection";
 import {
   GLOBAL_VERIFICATION_NETWORK,
   REAL_TIME_INTELLIGENCE,
@@ -14,7 +14,6 @@ import {
   VERIFICATION_HERO,
   VERIFICATION_NOT_GUARANTEE,
   VERIFICATION_REPORT_SECTIONS,
-  VERIFICATION_SERVICES,
 } from "@/lib/content/verification-content";
 
 export const metadata: Metadata = {
@@ -83,62 +82,7 @@ export default function VerificationPage() {
         </div>
       </section>
 
-      <section id="our-services" className="bg-[#f3f1ec] py-16 lg:py-20">
-        <div className="container-page">
-          <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">Our verification services</h2>
-          <p className="mt-3 max-w-3xl text-base text-[#555555]">
-            We help verify whether a company is legally established, operational, licensed, commercially credible
-            and capable of performing the proposed transaction.
-          </p>
-          <div className="mt-10 space-y-4">
-            {VERIFICATION_SERVICES.map((service, index) => (
-              <Reveal key={service.n} delay={index * 0.02}>
-                <article className="rounded-lg border border-[#d5d0c8] bg-white p-6 sm:p-8">
-                  <p className="text-xs font-semibold tracking-[0.2em] text-[#c88e4a] uppercase">
-                    Service {service.n}
-                  </p>
-                  <h3 className="mt-2 text-xl font-semibold text-[#001a3d]">{service.title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-[#444444]">{service.summary}</p>
-                  {"body" in service && service.body ? (
-                    <p className="mt-4 text-sm leading-relaxed text-[#555555]">{service.body}</p>
-                  ) : null}
-                  {"sections" in service && service.sections ? (
-                    <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                      {service.sections.map((section) => (
-                        <div
-                          key={section.title}
-                          className="rounded-md border border-[#e8e4dc] bg-[#f9f8f5] p-4"
-                        >
-                          <h4 className="font-semibold text-[#001a3d]">{section.title}</h4>
-                          <p className="mt-2 text-sm leading-relaxed text-[#555555]">{section.text}</p>
-                        </div>
-                      ))}
-                    </div>
-                  ) : null}
-                  {"items" in service && service.items && service.items.length > 0 ? (
-                    <>
-                      {service.intro ? (
-                        <p className="mt-4 text-sm font-medium text-[#001a3d]">{service.intro}</p>
-                      ) : null}
-                      <ul className="mt-3 grid gap-2 sm:grid-cols-2">
-                        {service.items.map((item) => (
-                          <li key={item} className="flex gap-2 text-sm text-[#555555]">
-                            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#d4a84b]" />
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
-                    </>
-                  ) : null}
-                  {"note" in service && service.note ? (
-                    <p className="mt-4 text-xs leading-relaxed text-[#777777]">{service.note}</p>
-                  ) : null}
-                </article>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
+      <VerificationServicesSection />
 
       <section className="bg-[#071525] py-16 text-white lg:py-20">
         <div className="container-page">
