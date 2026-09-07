@@ -24,4 +24,8 @@ export const AGRICULTURE_IMAGES = {
     src: "/images/agriculture/combine-harvest.jpg",
     alt: "Combine harvester and tractor working in a grain field",
   },
+  resourcesHero: {
+    src: "/images/agriculture/resources-hero.jpg",
+    alt: "Combine harvester working in a golden wheat field",
+  },
 } as const;

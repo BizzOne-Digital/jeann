@@ -36,10 +36,7 @@ export const PAGE_HERO_IMAGES: Record<PageHeroImageKey, PageHeroImage> = {
   },
   about: AGRICULTURE_IMAGES.riceTerraces,
   products: AGRICULTURE_IMAGES.greenGrainField,
-  resources: {
-    src: "/images/packaging/containerized-cargo-loading.png",
-    alt: "Containerized commodity exports and trade documentation",
-  },
+  resources: AGRICULTURE_IMAGES.resourcesHero,
   contact: {
     src: "/images/inspections/port-sampling.png",
     alt: "Trade desk support at the port",
