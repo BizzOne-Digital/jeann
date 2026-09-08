@@ -1,4 +1,12 @@
-/** Shared marketing hero dimensions — matches the home page band. */
+/** Shared dark-hero overlay — matches the home page gradient stack. */
+export const HERO_DARK_OVERLAY_WASH = "bg-[rgb(var(--navy-rgb)/0.12)]";
+
+export const HERO_DARK_OVERLAY_HORIZONTAL =
+  "linear-gradient(90deg, rgb(var(--navy-rgb) / 0.42) 0%, rgb(var(--navy-rgb) / 0.18) 32%, transparent 58%)";
+
+export const HERO_DARK_OVERLAY_BOTTOM =
+  "bg-gradient-to-t from-[rgb(var(--navy-rgb)/0.45)] via-transparent to-transparent";
+
 export const MARKETING_HEADER_HEIGHT = "4.75rem";
 
 export const MARKETING_HEADER_HEIGHT_CLASS = "h-[4.75rem]";

@@ -50,7 +50,7 @@ export default function PackagingPage() {
         secondaryCta={PACKAGING_HERO.secondaryCta}
       />
 
-      <section className="bg-[#f3f1ec] py-16 lg:py-20">
+      <section className="bg-[#f3f1ec] marketing-section">
         <div className="container-page">
           <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">
             {PACKAGING_PAGE_INTRO.title}
@@ -62,7 +62,7 @@ export default function PackagingPage() {
         </div>
       </section>
 
-      <section id="packaging-types" className="bg-white py-16 lg:py-20">
+      <section id="packaging-types" className="bg-white marketing-section">
         <div className="container-page">
           <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">Detailed specifications</h2>
           <p className="mt-3 max-w-3xl text-base text-[#555555]">
@@ -174,7 +174,7 @@ export default function PackagingPage() {
         </div>
       </section>
 
-      <section className="bg-[#f3f1ec] py-16 lg:py-20">
+      <section className="bg-[#f3f1ec] marketing-section">
         <div className="container-page">
           <h2 className="text-2xl font-semibold text-[#001a3d]">{PACKAGING_SELECTION.title}</h2>
           <p className="mt-3 max-w-3xl text-base text-[#555555]">{PACKAGING_SELECTION.lead}</p>

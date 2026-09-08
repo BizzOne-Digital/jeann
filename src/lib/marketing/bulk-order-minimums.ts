@@ -12,7 +12,6 @@ export const CATEGORY_BULK_MINIMUM_MT: Record<string, number> = {
 export const PRODUCT_BULK_MINIMUM_MT: Record<string, number> = {
   cashews: 300,
   "black-pepper": 300,
-  nutmeg: 300,
 };
 
 export function getBulkMinimumMt(categorySlug: string, productSlug?: string): number | null {

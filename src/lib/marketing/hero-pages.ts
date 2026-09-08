@@ -29,3 +29,12 @@ export function isHeroMarketingPage(pathname: string): boolean {
     (prefix) => prefix !== "/" && (pathname === prefix || pathname.startsWith(`${prefix}/`)),
   );
 }
+
+/** Routes with a light (cream) PageHero — header stays solid, not transparent. */
+export const LIGHT_HERO_PREFIXES = [] as const;
+
+export function isLightHeroPage(pathname: string): boolean {
+  return LIGHT_HERO_PREFIXES.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
+  );
+}

@@ -99,23 +99,33 @@ export const INSPECTION_SERVICES = [
 export const COMMODITY_INSPECTION_CATEGORIES = [
   {
     title: "Sugar",
+    href: "/products/sugar",
     text: "ICUMSA colour, polarization, moisture, ash, granulation, packaging, quantity and loading verification.",
   },
   {
     title: "Rice",
+    href: "/products/rice-and-grains",
     text: "Grain characteristics, broken percentage, moisture, foreign matter, milling quality, packaging and quantity.",
   },
   {
     title: "Edible Oils",
+    href: "/products/edible-oils",
     text: "Crude and refined sunflower, soybean, palm and rapeseed oils — applicable chemical and physical parameters.",
   },
   {
     title: "Grains & Pulses",
+    href: "/products/beans-and-pulses",
     text: "Wheat, corn, soybeans, beans, chickpeas, lentils and other agricultural commodities.",
   },
   {
-    title: "Spices, Coffee & Nuts",
-    text: "Product identity, quality characteristics, moisture, foreign matter, packaging and applicable laboratory testing.",
+    title: "Spices & Nuts",
+    href: "/products/spices",
+    text: "Cashews, cinnamon, pepper, turmeric and related products — identity, quality, moisture, foreign matter and packaging.",
+  },
+  {
+    title: "Coffee",
+    href: "/products/coffee",
+    text: "Green, dry and roasted dry coffee — screen size, moisture, defect count, packaging and loading verification.",
   },
 ];
 

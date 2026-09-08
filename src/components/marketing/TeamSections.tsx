@@ -21,7 +21,7 @@ export function TeamGrid({ members }: { members: PublicTeamMember[] }) {
     <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
       {members.map((member, index) => (
         <Reveal key={member.id} delay={index * 0.06} y={24}>
-          <article className="h-full border border-[#d5d0c8] bg-white p-8 transition-shadow duration-300 hover:shadow-md">
+          <article className="h-full marketing-box p-8 transition-shadow duration-300 hover:shadow-md">
             <h2 className="text-xl font-semibold text-[#001a3d]">{member.name}</h2>
             <p className="mt-1 text-sm font-medium text-[#c88e4a]">{member.roleTitle}</p>
             {member.bio ? (

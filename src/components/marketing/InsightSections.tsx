@@ -257,7 +257,7 @@ export function InsightRelated({
   if (related.length === 0) return null;
 
   return (
-    <section className="bg-white py-14 lg:py-20">
+    <section className="bg-white marketing-section">
       <div className="container-page">
         <h2 className="text-2xl font-semibold text-[#001a3d]">More insights</h2>
         <div className="mt-8 grid gap-6 sm:grid-cols-3">

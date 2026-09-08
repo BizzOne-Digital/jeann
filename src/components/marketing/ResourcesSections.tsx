@@ -172,7 +172,7 @@ export function ResourcesQuickNav() {
 
 export function ResourcesDocumentOverview({ introBody }: { introBody: string }) {
   return (
-    <section id="documents" className="scroll-mt-24 bg-white py-16 lg:py-20">
+    <section id="documents" className="scroll-mt-24 bg-white marketing-section">
       <div className="container-page">
         <div className="max-w-3xl">
           <Reveal>
@@ -203,7 +203,7 @@ export function ResourcesDocumentOverview({ introBody }: { introBody: string }) 
         <div className="mt-12 grid gap-6 lg:grid-cols-2">
           {DOCUMENT_GROUPS.map((group, gi) => (
             <Reveal key={group.title} delay={gi * 0.04}>
-              <article className="flex h-full flex-col rounded-lg border border-[#d5d0c8] bg-[#f9f8f5] p-6 sm:p-7">
+              <article className="flex h-full flex-col marketing-box rounded-lg p-6 sm:p-7">
                 <div className="flex items-start gap-4">
                   <span
                     className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#001a3d] text-xs font-bold text-[#d4a84b]"
@@ -236,7 +236,7 @@ export function ResourcesDocumentOverview({ introBody }: { introBody: string }) 
 
 export function ResourcesDownloads() {
   return (
-    <section id="downloads" className="scroll-mt-24 bg-[#f3f1ec] py-16 lg:py-20">
+    <section id="downloads" className="scroll-mt-24 bg-[#f3f1ec] marketing-section">
       <div className="container-page">
         <Reveal>
           <p className="text-xs font-semibold tracking-[0.22em] text-[#c88e4a] uppercase">
@@ -254,7 +254,7 @@ export function ResourcesDownloads() {
         <div className="mt-10 grid gap-4 sm:grid-cols-2">
           {DOWNLOADS.map((file, i) => (
             <Reveal key={file.href} delay={i * 0.05}>
-              <article className="flex h-full flex-col justify-between rounded-lg border border-[#d5d0c8] bg-white p-6 shadow-sm">
+              <article className="flex h-full flex-col justify-between marketing-box rounded-lg p-6 shadow-sm">
                 <div>
                   <p className="text-lg font-semibold text-[#001a3d]">{file.title}</p>
                   <p className="mt-2 text-sm leading-relaxed text-[#666666]">{file.note}</p>
@@ -277,7 +277,7 @@ export function ResourcesDownloads() {
 
 export function ResourcesEnquiryCta() {
   return (
-    <section className="bg-white py-16 lg:py-20">
+    <section className="bg-white marketing-section">
       <div className="container-page">
         <Reveal>
           <div className="overflow-hidden rounded-lg border border-[#d5d0c8] bg-[#001a3d] text-white">

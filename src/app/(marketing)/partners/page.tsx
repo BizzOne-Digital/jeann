@@ -48,7 +48,7 @@ export default async function PartnersPage() {
         background="cream"
       />
 
-      <section className="bg-white py-16 lg:py-20">
+      <section className="bg-white marketing-section">
         <div className="container-page">
           <Reveal>
             <p className="max-w-3xl text-base leading-relaxed text-[var(--stone)]">

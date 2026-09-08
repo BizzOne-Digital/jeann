@@ -34,7 +34,7 @@ function PackagingIndexGroup({
             <li key={type.slug}>
               <Link
                 href={`#${type.slug}`}
-                className="group flex h-full flex-col overflow-hidden rounded-lg border border-[#d5d0c8] bg-white transition hover:border-[#c88e4a]/50 hover:shadow-sm"
+                className="group flex h-full flex-col overflow-hidden marketing-box marketing-box-interactive rounded-lg transition"
               >
                 <div className="relative aspect-[4/3] bg-[#e4e0d8]">
                   <Image

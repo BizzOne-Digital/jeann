@@ -49,7 +49,7 @@ export default function VerificationPage() {
         videoTitle="Business verification overview"
       />
 
-      <section className="bg-[#f3f1ec] py-16 lg:py-20">
+      <section className="bg-[#f3f1ec] marketing-section">
         <div className="container-page">
           <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">
             {GLOBAL_VERIFICATION_NETWORK.title}
@@ -69,7 +69,7 @@ export default function VerificationPage() {
         </div>
       </section>
 
-      <section className="bg-white py-16 lg:py-20">
+      <section className="bg-white marketing-section">
         <div className="container-page">
           <h2 className="text-2xl font-semibold text-[#001a3d]">{REAL_TIME_INTELLIGENCE.title}</h2>
           <p className="mt-3 max-w-3xl text-base leading-relaxed text-[#555555]">
@@ -104,7 +104,7 @@ export default function VerificationPage() {
         </div>
       </section>
 
-      <section className="bg-white py-16 lg:py-20">
+      <section className="bg-white marketing-section">
         <div className="container-page">
           <h2 className="text-2xl font-semibold text-[#001a3d]">Verification reports</h2>
           <p className="mt-3 max-w-3xl text-base text-[#555555]">
@@ -112,7 +112,7 @@ export default function VerificationPage() {
           </p>
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {VERIFICATION_REPORT_SECTIONS.map((section) => (
-              <article key={section.title} className="rounded-lg border border-[#d5d0c8] bg-[#f9f8f5] p-5">
+              <article key={section.title} className="marketing-box rounded-lg p-5">
                 <h3 className="font-semibold text-[#001a3d]">{section.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-[#555555]">{section.text}</p>
               </article>
@@ -121,7 +121,7 @@ export default function VerificationPage() {
         </div>
       </section>
 
-      <section className="bg-[#f3f1ec] py-16 lg:py-20">
+      <section className="bg-[#f3f1ec] marketing-section">
         <div className="container-page">
           <h2 className="text-2xl font-semibold text-[#001a3d]">{VERIFICATION_NOT_GUARANTEE.title}</h2>
           <p className="mt-3 max-w-3xl text-base text-[#555555]">{VERIFICATION_NOT_GUARANTEE.lead}</p>

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useCallback, useState } from "react";
-import { YouTubeEmbed } from "@/components/marketing/YouTubeEmbed";
+import { MediaFieldPair } from "@/components/marketing/MediaFieldPair";
 import {
   PRODUCT_PANEL_TITLES,
   PRODUCT_PILLARS,
@@ -83,7 +83,7 @@ function DetailList({ title, items }: { title: string; items: string[] }) {
 function SpecList({ title, items }: { title: string; items: string[] }) {
   if (items.length === 0) return null;
   return (
-    <div className="rounded-lg border border-[#d5d0c8] bg-[#f9f8f5] p-5">
+    <div className="marketing-box rounded-lg p-5">
       <h3 className="text-xs font-semibold tracking-[0.16em] text-[#c88e4a] uppercase">{title}</h3>
       <ul className="mt-3 space-y-2 text-sm leading-relaxed text-[#555555]">
         {items.map((item, index) => (
@@ -118,7 +118,7 @@ function OverviewPanel({
         {pillars.map((box) => (
           <article
             key={box.title}
-            className="rounded-lg border border-[#d5d0c8] bg-[#f9f8f5] p-5 shadow-sm"
+            className="marketing-box rounded-lg p-5 shadow-sm"
           >
             <h3 className="text-xs font-semibold tracking-[0.14em] text-[#c88e4a] uppercase">
               {box.title}
@@ -142,7 +142,7 @@ function OverviewPanel({
             {highlights.map((item) => (
               <li
                 key={item}
-                className="flex gap-3 rounded-lg border border-[#d5d0c8] bg-white p-4 text-sm leading-relaxed text-[#444444]"
+                className="marketing-box flex gap-3 rounded-lg p-4 text-sm leading-relaxed text-[#444444]"
               >
                 <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#d4a84b]" />
                 {item}
@@ -152,30 +152,12 @@ function OverviewPanel({
         </div>
       ) : null}
 
-      <div className="grid items-start gap-8 lg:grid-cols-2 lg:gap-12">
-        <div>
-          <p className="mb-3 text-xs font-semibold tracking-[0.16em] text-[#888] uppercase">
-            In the field
-          </p>
-          <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-[#d5d0c8] bg-[#e4e0d8]">
-            <Image
-              src={heroImage}
-              alt={heroImageAlt}
-              fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 520px"
-            />
-          </div>
-        </div>
-        {youtubeUrl ? (
-          <div>
-            <p className="mb-3 text-xs font-semibold tracking-[0.16em] text-[#888] uppercase">
-              Video overview
-            </p>
-            <YouTubeEmbed youtubeInput={youtubeUrl} title={videoTitle ?? "Product overview video"} />
-          </div>
-        ) : null}
-      </div>
+      <MediaFieldPair
+        imageSrc={heroImage}
+        imageAlt={heroImageAlt}
+        youtubeUrl={youtubeUrl}
+        videoTitle={videoTitle}
+      />
     </div>
   );
 }
@@ -259,13 +241,13 @@ function PackagingPanel({
       </p>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <article className="rounded-lg border border-[#d5d0c8] bg-[#f9f8f5] p-6">
+        <article className="marketing-box rounded-lg p-6">
           <p className="text-xs font-semibold tracking-[0.16em] text-[#888] uppercase">
             Availability
           </p>
           <p className="mt-3 text-sm leading-relaxed text-[#444444]">{trade.availabilityText}</p>
         </article>
-        <article className="rounded-lg border border-[#d5d0c8] bg-[#f9f8f5] p-6">
+        <article className="marketing-box rounded-lg p-6">
           <p className="text-xs font-semibold tracking-[0.16em] text-[#888] uppercase">
             Minimum order
           </p>
@@ -515,7 +497,7 @@ export function ProductDetailHub(props: ProductHubProps) {
             </div>
           </div>
 
-          <div className="rounded-xl border border-[#d5d0c8] bg-white p-6 shadow-sm sm:p-8 lg:p-10">
+          <div className="marketing-box rounded-xl p-6 shadow-sm sm:p-8 lg:p-10">
             <p className="text-xs font-semibold tracking-[0.22em] text-[#c88e4a] uppercase">
               {panel.eyebrow}
             </p>
@@ -553,7 +535,7 @@ export function ProductDetailEnquiryCta({
   orderHref: string;
 }) {
   return (
-    <section className="bg-white py-16 lg:py-20">
+    <section className="bg-white marketing-section">
       <div className="container-page">
         <div className="rounded-lg border border-[#d5d0c8] bg-[#001a3d] p-8 text-white sm:p-10 lg:flex lg:items-center lg:justify-between lg:gap-10">
           <div className="max-w-xl">

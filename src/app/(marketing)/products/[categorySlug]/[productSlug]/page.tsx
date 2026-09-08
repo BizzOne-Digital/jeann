@@ -178,7 +178,7 @@ export default async function ProductPage({ params }: Props) {
       />
 
       {related.length > 0 ? (
-        <section className="bg-[#f3f1ec] py-14 lg:py-20">
+        <section className="bg-[#f3f1ec] marketing-section">
           <div className="container-page">
             <p className="text-xs font-semibold tracking-[0.22em] text-[#c88e4a] uppercase">
               Related products
@@ -189,7 +189,7 @@ export default async function ProductPage({ params }: Props) {
                 <Link
                   key={p.slug}
                   href={`/products/${category.slug}/${p.slug}`}
-                  className="group block rounded-lg border border-[#d5d0c8] bg-white p-5 shadow-sm transition hover:border-[#c88e4a]"
+                  className="group marketing-box marketing-box-interactive block rounded-lg p-5 shadow-sm"
                 >
                   <h3 className="text-base font-semibold text-[#001a3d] group-hover:text-[#c88e4a]">
                     {p.name}

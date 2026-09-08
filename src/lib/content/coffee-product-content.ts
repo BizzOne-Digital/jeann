@@ -32,11 +32,19 @@ const PILLARS: MarketingContentBox[] = [
   },
 ];
 
+export const COFFEE_QUALITY_PILLARS = PILLARS;
+
+export const COFFEE_SPOTLIGHT_SLUGS = [
+  "green-coffee-beans",
+  "dry-coffee-beans",
+  "roasted-arabica-coffee-beans",
+] as const;
+
 export const COFFEE_CATEGORY = {
   eyebrow: "Coffee",
-  title: "Green and roasted dry coffee programmes",
+  title: "Green, dry and roasted coffee programmes",
   lead:
-    "Finekarts supplies green coffee and roasted dry coffee for qualified roasters, traders, and distributors. Programmes can be structured across Arabica, Robusta, Liberica, and Excelsa — with origin, screen size, defect count, and cup characteristics confirmed per enquiry and contract.",
+    "Finekarts supplies green coffee, dry coffee, and roasted dry coffee for qualified roasters, traders, and distributors. Programmes can be structured across Arabica, Robusta, Liberica, and Excelsa — with origin, screen size, defect count, and cup characteristics confirmed per enquiry and contract.",
   varieties: [...COFFEE_VARIETIES],
   products: ["Green coffee", "Dry coffee", "Roasted dry coffee"],
   disclaimer:
@@ -88,9 +96,9 @@ const COFFEE_PRODUCTS: Record<string, CoffeeProductDetail> = {
   "dry-coffee-beans": {
     slug: "dry-coffee-beans",
     grade: "Dry coffee",
-    subtitle: "Dried coffee beans for export — Arabica, Robusta, Liberica, and Excelsa",
+    subtitle: "Dark dried coffee beans for export — Arabica, Robusta, Liberica, and Excelsa",
     description:
-      "Dry coffee programmes for traders and roasters sourcing export-ready beans. Arabica, Robusta, Liberica, and Excelsa can be quoted subject to origin. Drying level, moisture, screen size, and defect counts are confirmed per contract and Certificate of Analysis where agreed.",
+      "Dry coffee programmes for traders and roasters sourcing export-ready beans. The dried beans are dark, uniform, and peppercorn-like in appearance — Arabica, Robusta, Liberica, and Excelsa can be quoted subject to origin. Drying level, moisture, screen size, and defect counts are confirmed per contract and Certificate of Analysis where agreed.",
     applications: [
       "Roasting programmes",
       "Green coffee trading",
@@ -109,11 +117,11 @@ const COFFEE_PRODUCTS: Record<string, CoffeeProductDetail> = {
       "Multiple species subject to contract",
       "Container programmes common",
     ],
-    heroImage: "/images/products/coffee/dry-coffee-beans.png",
+    heroImage: "/images/products/coffee/dry-coffee-beans-hero.png",
     images: [
       {
-        src: "/images/products/coffee/dry-coffee-beans.png",
-        alt: "Dry coffee cherries in a woven tray after sun drying",
+        src: "/images/products/coffee/dry-coffee-beans-hero.png",
+        alt: "Dry coffee beans — dark dried export grade, peppercorn-like appearance",
       },
     ],
   },

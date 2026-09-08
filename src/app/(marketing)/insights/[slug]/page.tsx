@@ -56,7 +56,7 @@ export default async function InsightArticlePage({ params }: Props) {
         secondaryCta={{ href: "/insights", label: "All insights" }}
       />
 
-      <article className="bg-[#f3f1ec] py-14 lg:py-20">
+      <article className="bg-[#f3f1ec] marketing-section">
         <div className="container-page grid gap-12 lg:grid-cols-[minmax(0,1fr)_280px] lg:gap-16">
           <div>
             <AnimatedSection y={16}>

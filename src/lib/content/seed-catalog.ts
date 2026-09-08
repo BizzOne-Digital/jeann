@@ -317,7 +317,7 @@ export const SEED_CATEGORIES: SeedCategory[] = [
     slug: "spices",
     name: "Spices",
     summary:
-      "Cinnamon sticks, cassia cinnamon star, black pepper, turmeric, cloves, cardamom, nutmeg, cashews and related specialty products — grades and origins confirmed per enquiry.",
+      "Cinnamon sticks, cassia cinnamon star, black pepper, turmeric, cloves, cashews and related specialty products — grades and origins confirmed per enquiry.",
     products: [
       ["cashews", "Cashews"],
       ["cinnamon-sticks", "Cinnamon sticks"],
@@ -325,8 +325,6 @@ export const SEED_CATEGORIES: SeedCategory[] = [
       ["black-pepper", "Black pepper"],
       ["turmeric", "Turmeric"],
       ["cloves", "Cloves"],
-      ["cardamom", "Cardamom"],
-      ["nutmeg", "Nutmeg"],
     ].map(([slug, name]) => {
       const spice = getSpiceProductDetail(slug);
       const marketing = getSpiceProductMarketing(slug);

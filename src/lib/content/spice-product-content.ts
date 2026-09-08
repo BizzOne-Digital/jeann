@@ -32,16 +32,14 @@ const PILLARS: MarketingContentBox[] = [
 
 export const SPICES_CATEGORY = {
   eyebrow: "Spices",
-  title: "Cinnamon, pepper, turmeric, cloves, cardamom, nutmeg and cashews",
-  lead: "Finekarts supplies cinnamon sticks, cassia cinnamon star, black pepper, turmeric, cloves, cardamom, nutmeg, cashews and related specialty products for qualified wholesalers, distributors, and food manufacturers. Grades, origins, and certifications are confirmed per enquiry and contract.",
+  title: "Cinnamon, pepper, turmeric, cloves and cashews",
+  lead: "Finekarts supplies cinnamon sticks, cassia cinnamon star, black pepper, turmeric, cloves, cashews and related specialty products for qualified wholesalers, distributors, and food manufacturers. Grades, origins, and certifications are confirmed per enquiry and contract.",
   products: [
     "Cinnamon sticks",
     "Cassia cinnamon star",
     "Black pepper",
     "Turmeric",
     "Cloves",
-    "Cardamom",
-    "Nutmeg",
     "Cashews",
   ],
   disclaimer:
@@ -238,70 +236,6 @@ const SPICE_PRODUCTS: Record<string, SpiceProductDetail> = {
       {
         src: "/images/products/spices/cloves.png",
         alt: "Whole dried cloves",
-      },
-    ],
-  },
-  cardamom: {
-    slug: "cardamom",
-    grade: "Cardamom",
-    subtitle: "Green cardamom pods",
-    description:
-      "Green cardamom programmes for spice traders and food manufacturers. Size, colour, moisture, and foreign matter are confirmed per contract.",
-    applications: [
-      "Spice blending and grinding",
-      "Food and beverage flavouring",
-      "Confectionery",
-      "Wholesale spice distribution",
-    ],
-    characteristics: [
-      "Whole green pods",
-      "Bold and extra-bold grades subject to contract",
-      "Low moisture",
-      "Carton export programmes",
-    ],
-    packaging: ["Cartons", "Multi-wall sacks"],
-    highlights: [
-      "Green cardamom for spice channels",
-      "Size grade per contract",
-      "Independent inspection available",
-    ],
-    heroImage: "/images/products/spices/cardamom.png",
-    images: [
-      {
-        src: "/images/products/spices/cardamom.png",
-        alt: "Green cardamom pods",
-      },
-    ],
-  },
-  nutmeg: {
-    slug: "nutmeg",
-    grade: "Nutmeg",
-    subtitle: "Whole nutmeg and mace",
-    description:
-      "Nutmeg and mace programmes for spice traders and food manufacturers. Oil content, moisture, and foreign matter are confirmed per contract.",
-    applications: [
-      "Spice grinding and blending",
-      "Food and beverage flavouring",
-      "Bakery and confectionery",
-      "Wholesale distribution",
-    ],
-    characteristics: [
-      "Whole nutmeg seeds",
-      "Mace blades where contractually agreed",
-      "Sorted export grades",
-      "Carton and sack programmes",
-    ],
-    packaging: ["Cartons", "Multi-wall sacks"],
-    highlights: [
-      "Nutmeg for spice and food channels",
-      "Oil content per specification",
-      "Phytosanitary documentation available",
-    ],
-    heroImage: "/images/products/spices/nutmeg.png",
-    images: [
-      {
-        src: "/images/products/spices/nutmeg.png",
-        alt: "Whole nutmeg and ground nutmeg",
       },
     ],
   },

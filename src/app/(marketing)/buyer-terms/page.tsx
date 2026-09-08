@@ -21,7 +21,7 @@ export default function BuyerTermsPage() {
         imageSrc={hero.src}
         imageAlt={hero.alt}
       />
-      <article className="bg-[#f3f1ec] py-14 lg:py-20">
+      <article className="bg-[#f3f1ec] marketing-section">
         <div className="container-narrow">
           <LegalPageBody
             banner={<LegalReviewBanner version="0.1-draft · 2026-08-09" />}

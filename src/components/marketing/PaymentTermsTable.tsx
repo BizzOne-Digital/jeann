@@ -30,7 +30,7 @@ export function PaymentTermsSection() {
 
   return (
     <>
-      <section id="banking" className="scroll-mt-24 bg-white py-16 lg:py-20">
+      <section id="banking" className="scroll-mt-24 bg-white marketing-section">
         <div className="container-page">
           <div className="max-w-3xl">
             <Reveal>
@@ -55,7 +55,7 @@ export function PaymentTermsSection() {
           <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {BANKING_CLAUSES.map((clause, i) => (
               <Reveal key={clause.title} delay={0.04 + i * 0.03}>
-                <article className="flex h-full flex-col rounded-lg border border-[#d5d0c8] bg-[#f9f8f5] p-5 sm:p-6">
+                <article className="flex h-full flex-col marketing-box rounded-lg p-5 sm:p-6">
                   <h3 className="text-sm font-semibold text-[#001a3d]">{clause.title}</h3>
                   <p className="mt-3 flex-1 text-sm leading-relaxed text-[#555555]">{clause.body}</p>
                 </article>
@@ -65,7 +65,7 @@ export function PaymentTermsSection() {
         </div>
       </section>
 
-      <section id="payment-structures" className="scroll-mt-24 bg-[#f3f1ec] py-16 lg:py-20">
+      <section id="payment-structures" className="scroll-mt-24 bg-[#f3f1ec] marketing-section">
         <div className="container-page">
           <div className="max-w-3xl">
             <Reveal>
@@ -124,7 +124,7 @@ export function PaymentTermsSection() {
               Alternative structures
             </h3>
           </Reveal>
-          <div className="mt-5 overflow-x-auto rounded-lg border border-[#d5d0c8] bg-white shadow-sm">
+          <div className="mt-5 overflow-x-auto marketing-box rounded-lg shadow-sm">
             <table className="min-w-[720px] w-full text-left text-sm">
               <thead className="border-b border-[#d5d0c8] bg-[#f9f8f5] text-xs tracking-wide text-[#888] uppercase">
                 <tr>
@@ -165,7 +165,7 @@ export function PaymentTermsSection() {
               </article>
             </Reveal>
             <Reveal delay={0.14}>
-              <article className="rounded-lg border border-[#d5d0c8] bg-white p-6">
+              <article className="marketing-box rounded-lg p-6">
                 <p className="text-sm font-semibold tracking-[0.12em] text-[#001a3d] uppercase">
                   SWIFT vs banking instruments
                 </p>

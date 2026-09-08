@@ -51,12 +51,22 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/products/other-commodities/cardamom",
-        destination: "/products/spices/cardamom",
+        destination: "/products/spices",
         permanent: true,
       },
       {
         source: "/products/other-commodities/nutmeg",
-        destination: "/products/spices/nutmeg",
+        destination: "/products/spices",
+        permanent: true,
+      },
+      {
+        source: "/products/spices/cardamom",
+        destination: "/products/spices",
+        permanent: true,
+      },
+      {
+        source: "/products/spices/nutmeg",
+        destination: "/products/spices",
         permanent: true,
       },
     ];

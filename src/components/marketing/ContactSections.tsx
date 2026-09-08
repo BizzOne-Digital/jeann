@@ -191,7 +191,7 @@ export function ContactFormSection({
         </div>
 
         <Reveal delay={0.08} y={20}>
-          <div className="rounded-lg border border-[#d5d0c8] bg-white p-6 shadow-sm sm:p-8">
+          <div className="marketing-box rounded-lg p-6 shadow-sm sm:p-8">
             <ContactForm />
           </div>
         </Reveal>

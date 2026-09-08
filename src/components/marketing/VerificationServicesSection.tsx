@@ -12,7 +12,7 @@ function chunkServices<T>(items: T[], size: number): T[][] {
 
 function VerificationServiceCard({ service }: { service: VerificationService }) {
   return (
-    <article className="flex h-full flex-col rounded-lg border border-[#d5d0c8] bg-white p-6 shadow-sm">
+    <article className="flex h-full flex-col marketing-box rounded-lg p-6 shadow-sm">
       <p className="text-xs font-semibold tracking-[0.2em] text-[#c88e4a] uppercase">
         Service {service.n}
       </p>
@@ -63,7 +63,7 @@ export function VerificationServicesSection() {
         const background = groupIndex % 2 === 0 ? "bg-[#f3f1ec]" : "bg-white";
 
         return (
-          <section key={groupIndex} className={`${background} py-16 lg:py-20`}>
+          <section key={groupIndex} className={`${background} marketing-section`}>
             <div className="container-page">
               {groupIndex === 0 ? (
                 <Reveal>

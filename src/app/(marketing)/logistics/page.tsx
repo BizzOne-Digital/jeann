@@ -58,7 +58,7 @@ export default function LogisticsPage() {
         background="cream"
       />
 
-      <section id="incoterms" className="bg-white py-16 lg:py-20">
+      <section id="incoterms" className="bg-white marketing-section">
         <div className="container-page">
           <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">
             {GLOBAL_SHIPPING_COVERAGE.title}
@@ -77,7 +77,7 @@ export default function LogisticsPage() {
           <p className="mt-6 text-sm text-[#555555]">{GLOBAL_SHIPPING_COVERAGE.note}</p>
           <div className="mt-10 grid gap-6 lg:grid-cols-2">
             {FOB_CIF_TERMS.map((term) => (
-              <article key={term.code} className="rounded-lg border border-[#d5d0c8] bg-[#f9f8f5] p-6 sm:p-8">
+              <article key={term.code} className="marketing-box rounded-lg p-6 sm:p-8">
                 <p className="text-xs font-semibold tracking-[0.2em] text-[#c88e4a] uppercase">{term.code}</p>
                 <h3 className="mt-2 text-xl font-semibold text-[#001a3d]">{term.title}</h3>
                 <p className="mt-3 text-sm leading-relaxed text-[#555555]">{term.summary}</p>
@@ -90,7 +90,7 @@ export default function LogisticsPage() {
         </div>
       </section>
 
-      <section className="bg-[#f3f1ec] py-16 lg:py-20">
+      <section className="bg-[#f3f1ec] marketing-section">
         <div className="container-page grid gap-10 lg:grid-cols-2">
           <article>
             <h2 className="text-2xl font-semibold text-[#001a3d]">{REAL_TIME_TRACKING.title}</h2>
@@ -105,7 +105,7 @@ export default function LogisticsPage() {
             </ul>
             <p className="mt-4 text-sm text-[#555555]">{REAL_TIME_TRACKING.note}</p>
           </article>
-          <article className="rounded-lg border border-[#d5d0c8] bg-white p-6 sm:p-8">
+          <article className="marketing-box rounded-lg p-6 sm:p-8">
             <h2 className="text-xl font-semibold text-[#001a3d]">{ETA_MONITORING.title}</h2>
             <p className="mt-3 text-sm text-[#555555]">{ETA_MONITORING.lead}</p>
             <p className="mt-4 rounded-md bg-[#f9f8f5] px-4 py-3 text-xs font-medium leading-relaxed text-[#001a3d]">
@@ -117,7 +117,7 @@ export default function LogisticsPage() {
         </div>
       </section>
 
-      <section className="bg-white py-16 lg:py-20">
+      <section className="bg-white marketing-section">
         <div className="container-page">
           <h2 className="text-2xl font-semibold text-[#001a3d]">{PORT_TO_PORT_CHAIN.title}</h2>
           <p className="mt-3 max-w-3xl text-base text-[#555555]">{PORT_TO_PORT_CHAIN.lead}</p>
@@ -135,7 +135,7 @@ export default function LogisticsPage() {
         </div>
       </section>
 
-      <section className="bg-[#f3f1ec] py-16 lg:py-20">
+      <section className="bg-[#f3f1ec] marketing-section">
         <div className="container-page">
           <h2 className="text-2xl font-semibold text-[#001a3d]">Bulk & container shipping</h2>
           <p className="mt-3 max-w-3xl text-sm text-[#555555]">
@@ -145,7 +145,7 @@ export default function LogisticsPage() {
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {SHIPPING_MODES.map((mode, index) => (
               <Reveal key={mode.title} delay={index * 0.03}>
-                <article className="h-full rounded-lg border border-[#d5d0c8] bg-white p-5">
+                <article className="h-full marketing-box rounded-lg p-5">
                   <h3 className="font-semibold text-[#001a3d]">{mode.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-[#555555]">{mode.text}</p>
                 </article>
@@ -155,7 +155,7 @@ export default function LogisticsPage() {
         </div>
       </section>
 
-      <section className="bg-white py-16 lg:py-20">
+      <section className="bg-white marketing-section">
         <div className="container-page">
           <h2 className="text-2xl font-semibold text-[#001a3d]">{SHIPPING_DOCUMENTATION.title}</h2>
           <p className="mt-3 max-w-3xl text-base text-[#555555]">{SHIPPING_DOCUMENTATION.lead}</p>
@@ -172,9 +172,9 @@ export default function LogisticsPage() {
         </div>
       </section>
 
-      <section className="bg-[#f3f1ec] py-16 lg:py-20">
+      <section className="bg-[#f3f1ec] marketing-section">
         <div className="container-page grid gap-10 lg:grid-cols-2">
-          <article className="rounded-lg border border-[#d5d0c8] bg-white p-6 sm:p-8">
+          <article className="marketing-box rounded-lg p-6 sm:p-8">
             <h2 className="text-xl font-semibold text-[#001a3d]">{SHIPMENT_COORDINATION.title}</h2>
             <p className="mt-3 text-sm text-[#555555]">{SHIPMENT_COORDINATION.lead}</p>
             <p className="mt-4 rounded-md bg-[#f9f8f5] px-4 py-3 text-xs font-medium leading-relaxed text-[#001a3d]">
@@ -222,7 +222,7 @@ export default function LogisticsPage() {
         </div>
       </section>
 
-      <section className="bg-white py-16 lg:py-20">
+      <section className="bg-white marketing-section">
         <div className="container-page">
           <h2 className="text-2xl font-semibold text-[#001a3d]">{LOGISTICS_CLOSING.title}</h2>
           <p className="mt-3 max-w-3xl text-base text-[#555555]">{LOGISTICS_CLOSING.lead}</p>

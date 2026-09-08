@@ -58,7 +58,7 @@ export default function InspectionsPage() {
         videoTitle="Inspection overview"
       />
 
-      <section id="our-services" className="bg-white py-16 lg:py-20">
+      <section id="our-services" className="bg-white marketing-section">
         <div className="container-page">
           <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">Our inspection services</h2>
           <p className="mt-3 max-w-3xl text-base text-[#555555]">
@@ -67,7 +67,7 @@ export default function InspectionsPage() {
           <div className="mt-10 space-y-4">
             {INSPECTION_SERVICES.map((service, index) => (
               <Reveal key={service.n} delay={index * 0.03}>
-                <article className="rounded-lg border border-[#d5d0c8] bg-[#f9f8f5] p-6 sm:p-8">
+                <article className="marketing-box rounded-lg p-6 sm:p-8">
                   <p className="text-xs font-semibold tracking-[0.2em] text-[#c88e4a] uppercase">
                     Service {service.n}
                   </p>
@@ -99,7 +99,7 @@ export default function InspectionsPage() {
         </div>
       </section>
 
-      <section className="bg-[#f3f1ec] py-16 lg:py-20">
+      <section className="bg-[#f3f1ec] marketing-section">
         <div className="container-page">
           <h2 className="text-2xl font-semibold text-[#001a3d]">
             Inspection across major commodity categories
@@ -110,16 +110,25 @@ export default function InspectionsPage() {
           </p>
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {COMMODITY_INSPECTION_CATEGORIES.map((cat) => (
-              <article key={cat.title} className="rounded-lg border border-[#d5d0c8] bg-white p-5 shadow-sm">
-                <h3 className="font-semibold text-[#001a3d]">{cat.title}</h3>
+              <Link
+                key={cat.title}
+                href={cat.href}
+                className="marketing-box marketing-box-interactive group rounded-lg p-5"
+              >
+                <h3 className="font-semibold text-[#001a3d] transition group-hover:text-[#c88e4a]">
+                  {cat.title}
+                </h3>
                 <p className="mt-2 text-sm leading-relaxed text-[#555555]">{cat.text}</p>
-              </article>
+                <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#c88e4a]">
+                  View products <span aria-hidden>→</span>
+                </span>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
-      <section id="inspection-scope" className="bg-white py-16 lg:py-20">
+      <section id="inspection-scope" className="bg-white marketing-section">
         <div className="container-page">
           <h2 className="text-2xl font-semibold text-[#001a3d]">Independent third-party inspection network</h2>
           <p className="mt-3 max-w-3xl text-base text-[#555555]">{INSPECTION_NETWORK.lead}</p>
@@ -143,9 +152,9 @@ export default function InspectionsPage() {
         </div>
       </section>
 
-      <section className="bg-[#f3f1ec] py-16 lg:py-20">
+      <section className="bg-[#f3f1ec] marketing-section">
         <div className="container-page grid gap-10 lg:grid-cols-2">
-          <article className="rounded-lg border border-[#d5d0c8] bg-white p-6 sm:p-8">
+          <article className="marketing-box rounded-lg p-6 sm:p-8">
             <h2 className="text-xl font-semibold text-[#001a3d]">{ORIGIN_DESTINATION.origin.title}</h2>
             <p className="mt-3 text-sm text-[#555555]">{ORIGIN_DESTINATION.origin.intro}</p>
             <ul className="mt-4 space-y-2">
@@ -158,7 +167,7 @@ export default function InspectionsPage() {
             </ul>
             <p className="mt-4 text-sm text-[#555555]">{ORIGIN_DESTINATION.origin.note}</p>
           </article>
-          <article className="rounded-lg border border-[#d5d0c8] bg-white p-6 sm:p-8">
+          <article className="marketing-box rounded-lg p-6 sm:p-8">
             <h2 className="text-xl font-semibold text-[#001a3d]">{ORIGIN_DESTINATION.destination.title}</h2>
             <p className="mt-3 text-sm text-[#555555]">{ORIGIN_DESTINATION.destination.intro}</p>
             <ul className="mt-4 space-y-2">
@@ -174,7 +183,7 @@ export default function InspectionsPage() {
         </div>
       </section>
 
-      <section className="bg-white py-16 lg:py-20">
+      <section className="bg-white marketing-section">
         <div className="container-page">
           <h2 className="text-2xl font-semibold text-[#001a3d]">{DOCUMENTARY_TRADE.title}</h2>
           <p className="mt-3 max-w-3xl text-base text-[#555555]">{DOCUMENTARY_TRADE.lead}</p>
@@ -191,7 +200,7 @@ export default function InspectionsPage() {
         </div>
       </section>
 
-      <section className="bg-[#071525] py-16 text-white lg:py-20">
+      <section className="bg-[#071525] marketing-section text-white">
         <div className="container-page">
           <h2 className="text-2xl font-semibold sm:text-3xl">Our inspection process</h2>
           <ol className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -211,12 +220,12 @@ export default function InspectionsPage() {
         </div>
       </section>
 
-      <section className="bg-[#f3f1ec] py-16 lg:py-20">
+      <section className="bg-[#f3f1ec] marketing-section">
         <div className="container-page">
           <h2 className="text-2xl font-semibold text-[#001a3d]">Why use independent inspection?</h2>
           <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {WHY_INDEPENDENT_INSPECTION.map((item) => (
-              <article key={item.title} className="rounded-lg border border-[#d5d0c8] bg-white p-5">
+              <article key={item.title} className="marketing-box rounded-lg p-5">
                 <h3 className="font-semibold text-[#001a3d]">{item.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-[#555555]">{item.text}</p>
               </article>
@@ -230,7 +239,7 @@ export default function InspectionsPage() {
         </div>
       </section>
 
-      <section className="bg-white py-16 lg:py-20">
+      <section className="bg-white marketing-section">
         <div className="container-page">
           <h2 className="text-2xl font-semibold text-[#001a3d]">Field inspection gallery</h2>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -243,7 +252,7 @@ export default function InspectionsPage() {
         </div>
       </section>
 
-      <section id="request-inspection" className="relative overflow-hidden py-16 text-white lg:py-20">
+      <section id="request-inspection" className="relative overflow-hidden marketing-section text-white">
         <Image src="/images/inspections/sampling-grain.png" alt="" fill className="object-cover" sizes="100vw" aria-hidden />
         <div className="absolute inset-0 bg-[#071525]/88" />
         <div className="container-page relative">

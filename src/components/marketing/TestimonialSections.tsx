@@ -6,7 +6,7 @@ import { Reveal } from "@/components/motion/Reveal";
 
 export function TestimonialCard({ testimonial }: { testimonial: PublicTestimonial }) {
   return (
-    <article className="flex h-full flex-col border border-[#d5d0c8] bg-white p-8 transition-shadow duration-300 hover:shadow-md">
+    <article className="flex h-full flex-col marketing-box p-8 transition-shadow duration-300 hover:shadow-md">
       <p className="font-serif text-5xl leading-none text-[#c88e4a]" aria-hidden>
         “
       </p>

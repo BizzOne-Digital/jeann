@@ -17,7 +17,7 @@ export function LegalDocumentsPanel({
   });
 
   return (
-    <section className="mt-10 rounded-lg border border-[#d5d0c8] bg-white p-6">
+    <section className="mt-10 marketing-box rounded-lg p-6">
       <h2 className="text-lg font-semibold text-[#001a3d]">{title}</h2>
       <p className="mt-2 text-sm text-[#666666]">
         Final counsel-approved PDFs are linked below. Until your legal team uploads them to{" "}

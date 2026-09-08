@@ -162,7 +162,7 @@ export function ProductCatalogSection({
         </Reveal>
 
         <Reveal delay={0.12}>
-          <div className="mt-8 rounded-lg border border-[#d5d0c8] bg-white p-5 sm:p-6">
+          <div className="mt-8 marketing-box rounded-lg p-5 sm:p-6">
             <p className="text-xs font-semibold tracking-[0.18em] text-[#c88e4a] uppercase">
               Bulk supply only
             </p>
@@ -223,7 +223,7 @@ export function ProductCatalogSection({
                         key={`${product.categorySlug}-${product.slug}`}
                         delay={Math.min(i * 0.03, 0.18)}
                       >
-                        <article className="flex h-full flex-col rounded-lg border border-[#d5d0c8] bg-white p-4 shadow-sm">
+                        <article className="marketing-box flex h-full flex-col rounded-lg p-4 shadow-sm">
                           <Link
                             href={`/products/${product.categorySlug}/${product.slug}`}
                             className="group block"

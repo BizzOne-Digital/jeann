@@ -28,7 +28,7 @@ export function PulseProductDetailSections({ product }: { product: PulseProductD
           <DetailList title="Typical applications" items={product.applications} />
           <DetailList title="Product characteristics" items={product.characteristics} />
         </div>
-        <div className="mt-10 rounded-lg border border-[#d5d0c8] bg-[#f9f8f5] p-6">
+        <div className="mt-10 marketing-box rounded-lg p-6">
           <h3 className="text-sm font-semibold text-[#001a3d]">Packaging options</h3>
           <p className="mt-3 text-sm text-[#555555]">{product.packaging.join(" • ")}</p>
           {product.note ? (
@@ -65,7 +65,7 @@ export function BeansCategorySections() {
   const cat = BEANS_CATEGORY;
 
   return (
-    <section className="bg-white py-14 lg:py-20">
+    <section className="bg-white marketing-section">
       <div className="container-page">
         <p className="text-xs font-semibold tracking-[0.2em] text-[#c88e4a] uppercase">{cat.eyebrow}</p>
         <h2 className="mt-2 text-2xl font-semibold text-[#001a3d] sm:text-3xl">{cat.title}</h2>

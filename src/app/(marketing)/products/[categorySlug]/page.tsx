@@ -112,7 +112,7 @@ export default async function CategoryPage({ params }: Props) {
       {isCoffee ? <CoffeeCategorySections /> : null}
       {isSpices ? <SpicesCategorySections /> : null}
 
-      <section className="bg-[#f3f1ec] py-14 lg:py-20">
+      <section className="bg-[#f3f1ec] marketing-section">
         <div className="container-page">
           <nav className="text-sm text-[#666666]" aria-label="Breadcrumb">
             <Link href="/products" className="transition hover:text-[#c88e4a]">
@@ -134,7 +134,7 @@ export default async function CategoryPage({ params }: Props) {
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {category.products.map((product, i) => (
               <Reveal key={product.slug} delay={Math.min(i * 0.04, 0.2)}>
-                <article className="flex h-full flex-col rounded-lg border border-[#d5d0c8] bg-white p-4 shadow-sm">
+                <article className="flex h-full flex-col marketing-box rounded-lg p-4 shadow-sm">
                   <Link
                     href={`/products/${category.slug}/${product.slug}`}
                     className="group block"

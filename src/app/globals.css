@@ -46,6 +46,7 @@ body.intro-active #finekarts-site-root {
   --background: var(--cream);
   --foreground: var(--ink);
   --radius: 0.25rem;
+  --surface-elevated: #faf8f6;
   /* Slight bump for body/paragraph copy site-wide (+1.5%) */
   --copy-scale: 1.015;
 }
@@ -227,6 +228,50 @@ a {
   padding-left: max(1rem, env(safe-area-inset-left, 0px));
   padding-right: max(1rem, env(safe-area-inset-right, 0px));
   box-sizing: border-box;
+}
+
+/* Subtle elevated surface for marketing cards — light cream, not heavy */
+.marketing-box {
+  border: 1px solid var(--line);
+  background-color: var(--surface-elevated);
+  box-shadow: 0 1px 2px rgba(19, 41, 61, 0.04);
+}
+
+.marketing-box-interactive {
+  transition:
+    border-color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.marketing-box-interactive:hover {
+  border-color: rgba(200, 142, 74, 0.45);
+  box-shadow: 0 4px 14px rgba(19, 41, 61, 0.06);
+}
+
+/* Consistent vertical rhythm for marketing page sections */
+.marketing-section {
+  padding-block: clamp(2.75rem, 5vw, 3.5rem);
+}
+
+@keyframes coffee-orb-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.45;
+  }
+  50% {
+    transform: translate(12px, -8px) scale(1.06);
+    opacity: 0.7;
+  }
+}
+
+.coffee-orb {
+  animation: coffee-orb-drift 9s ease-in-out infinite;
+}
+
+.coffee-orb-delayed {
+  animation: coffee-orb-drift 11s ease-in-out infinite;
+  animation-delay: -3s;
 }
 
 .table-scroll {

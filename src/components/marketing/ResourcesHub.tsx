@@ -53,7 +53,7 @@ function ClauseAccordion() {
   const reduce = useReducedMotion();
 
   return (
-    <div className="divide-y divide-[#e4e0d8] rounded-lg border border-[#d5d0c8] bg-white">
+    <div className="divide-y divide-[#e4e0d8] marketing-box rounded-lg">
       {BANKING_CLAUSES.map((clause, i) => {
         const open = openIndex === i;
         return (
@@ -250,7 +250,7 @@ function PaymentsPanel() {
             {alternatives.map((row) => (
               <article
                 key={row.id}
-                className="rounded-lg border border-[#d5d0c8] bg-[#f9f8f5] p-5"
+                className="marketing-box rounded-lg p-5"
               >
                 <h4 className="font-semibold text-[#001a3d]">{row.structure}</h4>
                 <p className="mt-1 text-xs text-[#888]">{row.iccCode}</p>
@@ -265,7 +265,7 @@ function PaymentsPanel() {
         ) : null}
       </div>
 
-      <article className="rounded-lg border border-[#d5d0c8] bg-white p-6">
+      <article className="marketing-box rounded-lg p-6">
         <p className="text-xs font-semibold tracking-[0.16em] text-[#001a3d] uppercase">
           SWIFT vs banking instruments
         </p>
@@ -318,7 +318,7 @@ function DocumentsPanel({ introBody }: { introBody: string }) {
           })}
         </nav>
 
-        <div className="rounded-lg border border-[#d5d0c8] bg-white p-6 sm:p-8">
+        <div className="marketing-box rounded-lg p-6 sm:p-8">
           <h3 className="text-xl font-semibold text-[#001a3d]">{group.title}</h3>
           <ul className="mt-6 grid gap-4 sm:grid-cols-2">
             {group.items.map((item) => (
@@ -349,7 +349,7 @@ function DownloadsPanel() {
         {RESOURCES_DOWNLOADS.map((file) => (
           <article
             key={file.href}
-            className="flex flex-col justify-between rounded-lg border border-[#d5d0c8] bg-white p-6 shadow-sm"
+            className="flex flex-col justify-between marketing-box rounded-lg p-6 shadow-sm"
           >
             <div>
               <span className="inline-flex rounded-full bg-[#f3f1ec] px-3 py-1 text-xs font-semibold text-[#1b3a5c]">
@@ -492,7 +492,7 @@ export function ResourcesHub({ introBody }: { introBody: string }) {
             </div>
           </div>
 
-          <div className="rounded-xl border border-[#d5d0c8] bg-white p-6 shadow-sm sm:p-8 lg:p-10">
+          <div className="marketing-box rounded-xl p-6 shadow-sm sm:p-8 lg:p-10">
             <p className="text-xs font-semibold tracking-[0.22em] text-[#c88e4a] uppercase">
               {panel.eyebrow}
             </p>

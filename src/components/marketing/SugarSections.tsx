@@ -30,7 +30,7 @@ export function SugarGradeDetailSections({ grade }: { grade: SugarGradeDetail })
           <DetailList title="Typical applications" items={grade.applications} />
           <DetailList title="Product characteristics" items={grade.characteristics} />
         </div>
-        <div className="mt-10 rounded-lg border border-[#d5d0c8] bg-[#f9f8f5] p-6">
+        <div className="mt-10 marketing-box rounded-lg p-6">
           <h3 className="text-sm font-semibold text-[#001a3d]">Packaging options</h3>
           <p className="mt-3 text-sm text-[#555555]">{grade.packaging.join(" • ")}</p>
           {grade.note ? (
@@ -68,7 +68,7 @@ export function SugarCategorySections() {
 
   return (
     <>
-      <section className="bg-white py-14 lg:py-20">
+      <section className="bg-white marketing-section">
         <div className="container-page">
           <p className="text-xs font-semibold tracking-[0.2em] text-[#c88e4a] uppercase">{cat.eyebrow}</p>
           <h2 className="mt-2 text-2xl font-semibold text-[#001a3d] sm:text-3xl">{cat.title}</h2>
@@ -88,7 +88,7 @@ export function SugarCategorySections() {
         </div>
       </section>
 
-      <section className="bg-[#f3f1ec] py-14 lg:py-20">
+      <section className="bg-[#f3f1ec] marketing-section">
         <div className="container-page">
           <h2 className="text-2xl font-semibold text-[#001a3d]">{cat.comparison.title}</h2>
           <div className="table-scroll mt-8">
@@ -117,7 +117,7 @@ export function SugarCategorySections() {
         </div>
       </section>
 
-      <section className="bg-white py-14 lg:py-20">
+      <section className="bg-white marketing-section">
         <div className="container-page grid gap-10 lg:grid-cols-2">
           <article>
             <h2 className="text-xl font-semibold text-[#001a3d]">{cat.globalSupply.title}</h2>
@@ -135,7 +135,7 @@ export function SugarCategorySections() {
             </ul>
             <p className="mt-6 text-sm text-[#555555]">{cat.globalSupply.tradeTerms}</p>
           </article>
-          <article className="rounded-lg border border-[#d5d0c8] bg-[#f9f8f5] p-6 sm:p-8">
+          <article className="marketing-box rounded-lg p-6 sm:p-8">
             <h2 className="text-xl font-semibold text-[#001a3d]">{cat.qualityVerification.title}</h2>
             <p className="mt-3 text-sm text-[#555555]">{cat.qualityVerification.lead}</p>
             <ul className="mt-4 grid gap-2 sm:grid-cols-2">
@@ -164,7 +164,7 @@ export function SugarCategorySections() {
         </div>
       </section>
 
-      <section className="relative overflow-hidden py-16 text-white lg:py-20">
+      <section className="relative overflow-hidden marketing-section text-white">
         <Image src="/images/products/sugar/icumsa-45-white-sugar.jpg" alt="" fill className="object-cover" sizes="100vw" aria-hidden />
         <div className="absolute inset-0 bg-[#071525]/88" />
         <div className="container-page relative">

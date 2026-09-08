@@ -5,6 +5,9 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { Reveal } from "@/components/motion/Reveal";
 import {
+  HERO_DARK_OVERLAY_BOTTOM,
+  HERO_DARK_OVERLAY_HORIZONTAL,
+  HERO_DARK_OVERLAY_WASH,
   MARKETING_HERO_INNER_CLASS,
   MARKETING_HERO_SECTION_CLASS,
 } from "@/lib/marketing/hero-layout";
@@ -62,11 +65,12 @@ export function PageHero({
             className={imageClassName}
             aria-hidden={!imageAlt}
           />
+          <div className={`absolute inset-0 ${HERO_DARK_OVERLAY_WASH}`} />
           <div
             className="absolute inset-0"
-            style={{ background: "var(--hero-gradient-full)" }}
+            style={{ background: HERO_DARK_OVERLAY_HORIZONTAL }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[rgb(var(--navy-rgb)/0.5)] via-transparent to-[rgb(var(--navy-rgb)/0.18)]" />
+          <div className={`absolute inset-0 ${HERO_DARK_OVERLAY_BOTTOM}`} />
         </div>
       ) : (
         <div

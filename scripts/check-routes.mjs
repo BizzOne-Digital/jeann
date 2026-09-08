@@ -37,8 +37,6 @@ const categories = {
     "black-pepper",
     "turmeric",
     "cloves",
-    "cardamom",
-    "nutmeg",
   ],
 };
 

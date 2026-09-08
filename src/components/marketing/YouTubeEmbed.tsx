@@ -23,11 +23,14 @@ export function YouTubeEmbed({
   youtubeInput,
   title = "Video overview",
   className = "",
+  frameClassName = "aspect-video",
   autoplay = false,
 }: {
   youtubeInput?: string;
   title?: string;
   className?: string;
+  /** Tailwind aspect class on the player frame — use `aspect-[4/3]` when paired with a photo. */
+  frameClassName?: string;
   autoplay?: boolean;
 }) {
   const videoId = parseYoutubeId(youtubeInput);
@@ -35,7 +38,9 @@ export function YouTubeEmbed({
 
   return (
     <div className={className}>
-      <div className="youtube-embed-frame relative aspect-video w-full overflow-hidden rounded-lg border border-[#d5d0c8] bg-[#071525] shadow-sm">
+      <div
+        className={`youtube-embed-frame relative w-full overflow-hidden rounded-lg border border-[#d5d0c8] bg-[#071525] shadow-sm ${frameClassName}`}
+      >
         <iframe
           title={title}
           className="youtube-embed-iframe"

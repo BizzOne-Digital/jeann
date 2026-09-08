@@ -26,7 +26,7 @@ export default function SupplierOfferPage() {
         }}
       />
 
-      <section className="bg-white py-16 lg:py-20">
+      <section className="bg-white marketing-section">
         <div className="container-page max-w-3xl space-y-8">
           <Reveal>
             <h2 className="text-2xl font-semibold text-[var(--navy)]">Invitation-only suppliers</h2>
