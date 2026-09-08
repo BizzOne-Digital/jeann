@@ -28,7 +28,15 @@ const categories = {
     "pinto-beans",
     "soybeans",
   ],
-  "rice-and-grains": ["basmati-rice", "parboiled-rice", "jasmine-rice"],
+  "rice-and-grains": [
+    "basmati-rice",
+    "1121-basmati-rice",
+    "1121-sella-parboiled-basmati-rice",
+    "long-grain-white-rice",
+    "jasmine-rice",
+    "parboiled-rice",
+    "japonica-rice",
+  ],
   coffee: ["green-coffee-beans", "dry-coffee-beans", "roasted-arabica-coffee-beans"],
   spices: [
     "cashews",

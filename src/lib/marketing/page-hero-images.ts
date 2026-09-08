@@ -54,8 +54,8 @@ export const PAGE_HERO_IMAGES: Record<PageHeroImageKey, PageHeroImage> = {
     alt: "Independent verification partners at origin",
   },
   inspections: {
-    src: "/images/inspections/tank-sampling.png",
-    alt: "Tank and vessel inspection on bulk shipments",
+    src: "/images/inspections/port-cargo-inspection-hero.png",
+    alt: "Independent cargo inspection at port — vessel loading supervision with third-party inspector",
   },
   verification: {
     src: "/images/inspections/cargo-inspector-loading.png",

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ImageTriptych } from "@/components/marketing/ImageTriptych";
 import { YouTubeEmbed } from "@/components/marketing/YouTubeEmbed";
 
 const MEDIA_ASPECT = "aspect-[4/3]";
@@ -9,6 +10,7 @@ type MediaFieldPairProps = {
   youtubeUrl?: string;
   videoTitle?: string;
   reversed?: boolean;
+  imageLayout?: "default" | "triptych";
 };
 
 export function MediaFieldPair({
@@ -17,7 +19,35 @@ export function MediaFieldPair({
   youtubeUrl,
   videoTitle,
   reversed = false,
+  imageLayout = "default",
 }: MediaFieldPairProps) {
+  const triptych = imageLayout === "triptych";
+
+  if (triptych) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <p className="mb-3 text-xs font-semibold tracking-[0.16em] text-[#888888] uppercase">
+            In the field
+          </p>
+          <ImageTriptych src={imageSrc} alt={imageAlt} />
+        </div>
+        {youtubeUrl ? (
+          <div className="max-w-3xl">
+            <p className="mb-3 text-xs font-semibold tracking-[0.16em] text-[#888888] uppercase">
+              Video overview
+            </p>
+            <YouTubeEmbed
+              youtubeInput={youtubeUrl}
+              title={videoTitle ?? "Finekarts overview video"}
+              frameClassName={MEDIA_ASPECT}
+            />
+          </div>
+        ) : null}
+      </div>
+    );
+  }
+
   if (!youtubeUrl) {
     return (
       <div>

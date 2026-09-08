@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { SUGAR_CATEGORY, type SugarGradeDetail } from "@/lib/content/sugar-product-content";
+import { SUGAR_CATEGORY, SUGAR_CATEGORY_COVER_IMAGE, type SugarGradeDetail } from "@/lib/content/sugar-product-content";
 import { buyerQuoteHref } from "@/lib/marketing/cta-links";
 
 function DetailList({ title, items }: { title: string; items: string[] }) {
@@ -165,7 +165,7 @@ export function SugarCategorySections() {
       </section>
 
       <section className="relative overflow-hidden marketing-section text-white">
-        <Image src="/images/products/sugar/icumsa-45-white-sugar.jpg" alt="" fill className="object-cover" sizes="100vw" aria-hidden />
+        <Image src={SUGAR_CATEGORY_COVER_IMAGE} alt="" fill className="object-cover" sizes="100vw" aria-hidden />
         <div className="absolute inset-0 bg-[#071525]/88" />
         <div className="container-page relative">
           <p className="text-sm font-semibold tracking-[0.18em] text-[#d4a84b] uppercase">{cat.cta.tagline}</p>

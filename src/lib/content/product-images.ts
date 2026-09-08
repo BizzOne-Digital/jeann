@@ -1,4 +1,5 @@
 import { resolveImageSrc } from "@/lib/media/resolve-image-src";
+import { SUGAR_CATEGORY_COVER_IMAGE } from "@/lib/content/sugar-product-content";
 
 /** Category and product listing images from client photo folders. */
 
@@ -10,8 +11,8 @@ export const CATEGORY_COVERS: Record<string, { image: string; shortName: string;
   },
   sugar: {
     shortName: "Sugar",
-    image: "/images/products/sugar/icumsa-45-white-sugar.jpg",
-    alt: "ICUMSA 45 refined white sugar",
+    image: SUGAR_CATEGORY_COVER_IMAGE,
+    alt: "ICUMSA 45 refined white sugar crystals",
   },
   "rice-and-grains": {
     shortName: "Rice & Grains",

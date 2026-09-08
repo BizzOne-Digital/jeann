@@ -1,13 +1,14 @@
 "use client";
 
 import Image from "next/image";
+import { ImageTriptych } from "@/components/marketing/ImageTriptych";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { Reveal } from "@/components/motion/Reveal";
 import {
   HERO_DARK_OVERLAY_BOTTOM,
-  HERO_DARK_OVERLAY_HORIZONTAL,
   HERO_DARK_OVERLAY_WASH,
+  HERO_PAGE_OVERLAY_HORIZONTAL,
   MARKETING_HERO_INNER_CLASS,
   MARKETING_HERO_SECTION_CLASS,
 } from "@/lib/marketing/hero-layout";
@@ -27,6 +28,8 @@ type Props = {
   secondaryCta?: PageHeroCta;
   /** dark = navy overlay (default); light = cream/paper band for readability */
   tone?: "dark" | "light";
+  /** Single full-bleed image (default) or one image split into three hero panels */
+  backgroundLayout?: "default" | "triptych";
   imageSrc?: string;
   imageAlt?: string;
   imageClassName?: string;
@@ -43,10 +46,12 @@ export function PageHero({
   imageSrc = AGRICULTURE_IMAGES.combineHarvest.src,
   imageAlt = "",
   imageClassName = "object-cover object-center",
+  backgroundLayout = "default",
   priority = true,
 }: Props) {
   const reduce = useReducedMotion();
   const light = tone === "light";
+  const triptych = backgroundLayout === "triptych" && !light;
 
   return (
     <section
@@ -56,19 +61,29 @@ export function PageHero({
     >
       {!light ? (
         <div className="absolute inset-0">
-          <Image
-            src={imageSrc}
-            alt={imageAlt}
-            fill
-            priority={priority}
-            sizes="100vw"
-            className={imageClassName}
-            aria-hidden={!imageAlt}
-          />
+          {triptych ? (
+            <ImageTriptych
+              src={imageSrc}
+              alt={imageAlt}
+              priority={priority}
+              variant="fill"
+              rounded={false}
+            />
+          ) : (
+            <Image
+              src={imageSrc}
+              alt={imageAlt}
+              fill
+              priority={priority}
+              sizes="100vw"
+              className={imageClassName}
+              aria-hidden={!imageAlt}
+            />
+          )}
           <div className={`absolute inset-0 ${HERO_DARK_OVERLAY_WASH}`} />
           <div
             className="absolute inset-0"
-            style={{ background: HERO_DARK_OVERLAY_HORIZONTAL }}
+            style={{ background: HERO_PAGE_OVERLAY_HORIZONTAL }}
           />
           <div className={`absolute inset-0 ${HERO_DARK_OVERLAY_BOTTOM}`} />
         </div>

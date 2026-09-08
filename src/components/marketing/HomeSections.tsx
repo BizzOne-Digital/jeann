@@ -17,6 +17,9 @@ import { HOMEPAGE_PACKAGING_TEASER, PACKAGING_IMAGES } from "@/lib/content/packa
 import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 import { AGRICULTURE_IMAGES } from "@/lib/content/agriculture-images";
 import {
+  HERO_DARK_OVERLAY_BOTTOM,
+  HERO_DARK_OVERLAY_WASH,
+  HERO_HOME_OVERLAY_HORIZONTAL,
   MARKETING_HERO_INNER_CLASS,
   MARKETING_HERO_SECTION_CLASS,
 } from "@/lib/marketing/hero-layout";
@@ -118,15 +121,12 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
           sizes="100vw"
           className="object-cover object-[center_center] sm:object-[55%_center]"
         />
-        <div className="absolute inset-0 bg-[rgb(var(--navy-rgb)/0.12)]" />
+        <div className={`absolute inset-0 ${HERO_DARK_OVERLAY_WASH}`} />
         <div
           className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(90deg, rgb(var(--navy-rgb) / 0.42) 0%, rgb(var(--navy-rgb) / 0.18) 32%, transparent 58%)",
-          }}
+          style={{ background: HERO_HOME_OVERLAY_HORIZONTAL }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[rgb(var(--navy-rgb)/0.45)] via-transparent to-transparent" />
+        <div className={`absolute inset-0 ${HERO_DARK_OVERLAY_BOTTOM}`} />
       </div>
 
       <div className={MARKETING_HERO_INNER_CLASS}>
@@ -718,7 +718,7 @@ export function InsightsAndNotes({
   const cardImages = [
     "/images/products/rapeseed-oil-reference.png",
     "/images/products/oils/refined-sunflower-oil.png",
-    "/images/products/sugar/icumsa-45-white-sugar.jpg",
+    "/images/products/sugar/icumsa-45-white-sugar-2.png",
   ];
 
   return (

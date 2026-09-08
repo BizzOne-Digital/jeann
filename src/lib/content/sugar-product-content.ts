@@ -15,6 +15,9 @@ export type SugarGradeDetail = {
   images?: { src: string; alt: string }[];
 };
 
+/** Category cards, heroes, and galleries — sugar crystals only, never packaging bags. */
+export const SUGAR_CATEGORY_COVER_IMAGE = "/images/products/sugar/icumsa-45-white-sugar-2.png";
+
 export type ProductMarketingExtras = {
   description: string;
   contentBoxes: MarketingContentBox[];
@@ -157,19 +160,19 @@ const SUGAR_GRADES: Record<string, SugarGradeDetail> = {
       "Very low colour value and high purity",
       "Bulk vessel and bagged formats available",
     ],
-    heroImage: "/images/products/sugar/icumsa-45-white-sugar.jpg",
+    heroImage: "/images/products/sugar/icumsa-45-white-sugar-2.png",
     images: [
-      {
-        src: "/images/products/sugar/icumsa-45-white-sugar.jpg",
-        alt: "ICUMSA 45 refined white sugar in burlap sack with metal scoop",
-      },
       {
         src: "/images/products/sugar/icumsa-45-white-sugar-2.png",
         alt: "Close-up of ICUMSA 45 premium refined white sugar crystals",
       },
       {
-        src: "/images/products/sugar/icumsa-45-50kg-bags.png",
-        alt: "ICUMSA 45 refined white sugar in 50 kg export sacks",
+        src: "/images/products/sugar/icumsa-45-white-sugar-3.png",
+        alt: "ICUMSA 45 refined white sugar granules",
+      },
+      {
+        src: "/images/products/sugar/icumsa-45-white-sugar.png",
+        alt: "ICUMSA 45 refined white sugar product",
       },
     ],
   },
@@ -204,15 +207,15 @@ const SUGAR_GRADES: Record<string, SugarGradeDetail> = {
       "Controlled colour and consistent crystal structure",
       "Domestic and international supply programmes",
     ],
-    heroImage: "/images/products/sugar/icumsa-100-crystal-white-sugar-2.png",
+    heroImage: "/images/products/sugar/icumsa-100-crystal-white-sugar.png",
     images: [
       {
         src: "/images/products/sugar/icumsa-100-crystal-white-sugar.png",
         alt: "ICUMSA 100 lite cream crystal sugar grains",
       },
       {
-        src: "/images/products/sugar/icumsa-100-crystal-white-sugar-2.png",
-        alt: "50 kg bag of ICUMSA 100 lite cream crystal sugar",
+        src: "/images/products/sugar/icumsa-45-white-sugar-2.png",
+        alt: "Refined white sugar crystals — reference for lite cream grades",
       },
     ],
   },
@@ -246,11 +249,15 @@ const SUGAR_GRADES: Record<string, SugarGradeDetail> = {
       "Brown-tone colour with consistent quality",
       "Bulk vessel and bagged cargo formats",
     ],
-    heroImage: "/images/products/sugar/icumsa-150-raw-sugar-cane.png",
+    heroImage: "/images/products/sugar/icumsa-600-brown-sugar.jpg",
     images: [
       {
-        src: "/images/products/sugar/icumsa-150-raw-sugar-cane.png",
-        alt: "ICUMSA 150 light brown sugar in FIBC jumbo bags on pallet",
+        src: "/images/products/sugar/icumsa-600-brown-sugar.jpg",
+        alt: "ICUMSA 150 light brown sugar crystals",
+      },
+      {
+        src: "/images/products/sugar/icumsa-600-raw-sugar-cane.png",
+        alt: "Light brown raw sugar crystals",
       },
     ],
   },
@@ -288,6 +295,14 @@ const SUGAR_GRADES: Record<string, SugarGradeDetail> = {
       {
         src: "/images/products/sugar/icumsa-600-brown-sugar.jpg",
         alt: "ICUMSA 600 brown sugar crystals in bulk presentation",
+      },
+      {
+        src: "/images/products/sugar/icumsa-600-raw-sugar-cane.jpg",
+        alt: "ICUMSA 600 brown sugar product",
+      },
+      {
+        src: "/images/products/sugar/icumsa-600-raw-sugar-cane.png",
+        alt: "Brown sugar crystals close-up",
       },
     ],
   },

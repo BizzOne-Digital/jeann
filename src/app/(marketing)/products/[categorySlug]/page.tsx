@@ -77,7 +77,7 @@ export default async function CategoryPage({ params }: Props) {
               : isBeans
                 ? BEANS_CATEGORY.eyebrow
                 : isRice
-                  ? RICE_CATEGORY.eyebrow
+                  ? RICE_CATEGORY.heroBrand
                   : isCoffee
                     ? COFFEE_CATEGORY.eyebrow
                     : isSpices

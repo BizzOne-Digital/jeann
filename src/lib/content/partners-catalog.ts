@@ -7,6 +7,8 @@ export type PartnerEntry = {
   /** Partner photo — upload to public/images/partners/ e.g. sgs.jpg */
   photoSrc?: string;
   photoAlt?: string;
+  /** Optional YouTube overview when no partner photo is uploaded yet */
+  youtubeVideoId?: string;
   /** Full description — one or more paragraphs (client-editable copy) */
   content: string[];
   website?: string;
@@ -27,6 +29,7 @@ export const PARTNERS: PartnerEntry[] = [
     name: "SGS",
     intro: "Independent inspection, testing, and certification for commodities worldwide.",
     category: "inspection",
+    youtubeVideoId: "gADVpRPdr7E",
     content: [
       "Add your partnership narrative here — how Finekarts and buyers engage SGS for quality, quantity, and compliance verification on agricultural and bulk cargoes.",
       "Describe corridor coverage, certificate types, and how buyers can independently verify scope and accreditation for each programme.",
@@ -38,6 +41,7 @@ export const PARTNERS: PartnerEntry[] = [
     name: "Bureau Veritas",
     intro: "Commodity inspection and laboratory services across agriculture, food, and bulk trade.",
     category: "inspection",
+    youtubeVideoId: "zScbiOe7-oY",
     content: [
       "Add your partnership narrative here — destination-specific inspection scope, laboratory routing, and documentary alignment with LC or contract terms.",
     ],
@@ -48,6 +52,7 @@ export const PARTNERS: PartnerEntry[] = [
     name: "Intertek",
     intro: "Cargo inspection, sampling, and analysis for oils, grains, sugar, and related bulk cargoes.",
     category: "inspection",
+    youtubeVideoId: "lKfVooP59Jk",
     content: [
       "Add your partnership narrative here — loading and discharge supervision, sampling methods, and certificate workflows relevant to Finekarts programmes.",
     ],
@@ -58,6 +63,7 @@ export const PARTNERS: PartnerEntry[] = [
     name: "Control Union",
     intro: "Agricultural commodity certification and inspection programmes.",
     category: "certification",
+    youtubeVideoId: "HcmbcuxTpYA",
     content: [
       "Add partnership details and verification pathways — how buyers can confirm certification scope and chain-of-custody where applicable.",
     ],
@@ -68,19 +74,23 @@ export const PARTNERS: PartnerEntry[] = [
     name: "Cotecna",
     intro: "Inspection and compliance services for international trade corridors.",
     category: "verification",
+    youtubeVideoId: "hr-lVK3rfNo",
     content: [
       "Add partnership details — pre-shipment, destination inspection, and compliance notes for corridors you serve with Cotecna.",
     ],
     website: "https://www.cotecna.com",
   },
   {
-    slug: "more-partners",
-    name: "Additional partners",
-    intro: "Further verification and certification partners will be listed as agreements are confirmed.",
-    category: "other",
+    slug: "cfia-inspection",
+    name: "CFIA Inspection",
+    intro: "Canadian Food Inspection Agency programmes for agricultural commodities, food safety, and import compliance.",
+    category: "inspection",
+    youtubeVideoId: "JI7IaQhlD10",
     content: [
-      "Replace this section with the company name, intro, photo, and descriptive text for each additional partner.",
+      "Finekarts coordinates inspection and documentation pathways where CFIA requirements apply to Canadian import or export corridors — including phytosanitary alignment, product identity, and certificate presentation for qualified buyers.",
+      "Scope, laboratory routing, and certificate wording should be confirmed per contract, destination, and the applicable CFIA programme for your commodity.",
     ],
+    website: "https://inspection.canada.ca",
   },
 ];
 

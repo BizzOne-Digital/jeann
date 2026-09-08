@@ -40,6 +40,9 @@ export const COFFEE_SPOTLIGHT_SLUGS = [
   "roasted-arabica-coffee-beans",
 ] as const;
 
+/** Client-approved overview video for all coffee product pages. */
+export const COFFEE_YOUTUBE_VIDEO_ID = "8loLA70sGGg";
+
 export const COFFEE_CATEGORY = {
   eyebrow: "Coffee",
   title: "Green, dry and roasted coffee programmes",
@@ -117,8 +120,12 @@ const COFFEE_PRODUCTS: Record<string, CoffeeProductDetail> = {
       "Multiple species subject to contract",
       "Container programmes common",
     ],
-    heroImage: "/images/products/coffee/dry-coffee-beans-hero.png",
+    heroImage: "/images/products/coffee/dry-coffee-sun-drying-beds.png",
     images: [
+      {
+        src: "/images/products/coffee/dry-coffee-sun-drying-beds.png",
+        alt: "Coffee cherries and beans sun-drying on raised beds at origin",
+      },
       {
         src: "/images/products/coffee/dry-coffee-beans-hero.png",
         alt: "Dry coffee beans — dark dried export grade, peppercorn-like appearance",
@@ -174,6 +181,7 @@ export function getCoffeeProductMarketing(slug: string): ProductMarketingExtras 
   return {
     description: product.description,
     contentBoxes: PILLARS,
+    youtubeVideoId: COFFEE_YOUTUBE_VIDEO_ID,
     highlights: product.highlights,
   };
 }

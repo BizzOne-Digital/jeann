@@ -7,8 +7,10 @@ import {
   COFFEE_CATEGORY,
   COFFEE_QUALITY_PILLARS,
   COFFEE_SPOTLIGHT_SLUGS,
+  COFFEE_YOUTUBE_VIDEO_ID,
   getCoffeeProductDetail,
 } from "@/lib/content/coffee-product-content";
+import { MediaFieldPair } from "@/components/marketing/MediaFieldPair";
 
 const VARIETY_STYLES: Record<string, string> = {
   Arabica: "border-[#4a7c59]/30 bg-[#e8f2ea] text-[#2d4a36]",
@@ -104,6 +106,15 @@ export function CoffeeCategorySections() {
               );
             })}
           </div>
+
+          <Reveal delay={0.1} className="mt-10">
+            <MediaFieldPair
+              imageSrc="/images/products/coffee/dry-coffee-sun-drying-beds.png"
+              imageAlt="Coffee cherries and beans sun-drying on raised beds at origin"
+              youtubeUrl={`https://www.youtube.com/watch?v=${COFFEE_YOUTUBE_VIDEO_ID}`}
+              videoTitle="Coffee overview"
+            />
+          </Reveal>
 
           <Reveal delay={0.12} className="mt-8">
             <p className="text-xs leading-relaxed text-[#7a6a5a]">{cat.disclaimer}</p>

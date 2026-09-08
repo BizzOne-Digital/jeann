@@ -6,7 +6,7 @@ export const INSPECTIONS_HERO = {
   description:
     "International commodity trading requires more than competitive pricing and reliable logistics. Through our network of independent third-party inspection organizations, Finekarts helps clients arrange professional services at origin, during loading, in transit where applicable, and at destination — for greater transparency, reduced transaction risk, and confidence in every shipment.",
   primaryCta: { href: "#request-inspection", label: "Request an inspection →" },
-  secondaryCta: { href: "#our-services", label: "Our inspection services" },
+  secondaryCta: { href: "#inspection-hub", label: "Browse inspection topics" },
 };
 
 export const INSPECTION_SERVICES = [
@@ -100,31 +100,43 @@ export const COMMODITY_INSPECTION_CATEGORIES = [
   {
     title: "Sugar",
     href: "/products/sugar",
+    image: "/images/inspections/sugar-bags-hold.png",
+    imageAlt: "Quantity verification of bagged sugar in vessel hold",
     text: "ICUMSA colour, polarization, moisture, ash, granulation, packaging, quantity and loading verification.",
   },
   {
     title: "Rice",
     href: "/products/rice-and-grains",
+    image: "/images/inspections/sampling-grain.png",
+    imageAlt: "Inspector sampling bulk grain at port",
     text: "Grain characteristics, broken percentage, moisture, foreign matter, milling quality, packaging and quantity.",
   },
   {
     title: "Edible Oils",
     href: "/products/edible-oils",
+    image: "/images/inspections/tank-sampling.png",
+    imageAlt: "Tank sampling on vessel deck",
     text: "Crude and refined sunflower, soybean, palm and rapeseed oils — applicable chemical and physical parameters.",
   },
   {
     title: "Grains & Pulses",
     href: "/products/beans-and-pulses",
+    image: "/images/inspections/warehouse-bulk-inspection.png",
+    imageAlt: "Bulk commodity warehouse inspection",
     text: "Wheat, corn, soybeans, beans, chickpeas, lentils and other agricultural commodities.",
   },
   {
     title: "Spices & Nuts",
     href: "/products/spices",
+    image: "/images/inspections/warehouse-sack-sampling.png",
+    imageAlt: "Inspector sampling agricultural sacks in warehouse",
     text: "Cashews, cinnamon, pepper, turmeric and related products — identity, quality, moisture, foreign matter and packaging.",
   },
   {
     title: "Coffee",
     href: "/products/coffee",
+    image: "/images/inspections/green-coffee-warehouse-inspection.png",
+    imageAlt: "Green coffee beans in burlap sacks stacked in a warehouse for inspection",
     text: "Green, dry and roasted dry coffee — screen size, moisture, defect count, packaging and loading verification.",
   },
 ];
@@ -215,3 +227,55 @@ export const INSPECTION_CTA = {
   fields: ["Commodity", "Quantity", "Origin", "Destination", "Required inspection", "Delivery terms"],
   tagline: "From origin to destination — verified. Documented. Transparent.",
 };
+
+export const INSPECTION_PILLARS = [
+  {
+    id: "services",
+    title: "Our services",
+    summary: "Supplier verification, quality, quantity, loading supervision, and laboratory testing.",
+    icon: "clipboard",
+    accent: {
+      main: "#1b3a5c",
+      light: "#eef3f8",
+      ring: "#1b3a5c",
+    },
+  },
+  {
+    id: "commodities",
+    title: "Commodities",
+    summary: "Sugar, rice, oils, grains, spices, and coffee — scope aligned to your contract.",
+    icon: "grid",
+    accent: {
+      main: "#1b7a4a",
+      light: "#edf7f1",
+      ring: "#1b7a4a",
+    },
+  },
+  {
+    id: "process",
+    title: "Process & evidence",
+    summary: "Eight-step workflow from transaction review through certification and documentation.",
+    icon: "flow",
+    accent: {
+      main: "#c88e4a",
+      light: "#fff9ef",
+      ring: "#c88e4a",
+    },
+  },
+  {
+    id: "network",
+    title: "Partners & scope",
+    summary: "Origin and destination coverage, independent firms, and documentary trade.",
+    icon: "globe",
+    accent: {
+      main: "#6b4423",
+      light: "#f5ebe0",
+      ring: "#6b4423",
+    },
+  },
+] as const;
+
+export type InspectionTabId = (typeof INSPECTION_PILLARS)[number]["id"];
+
+export const INSPECTION_HUB_INTRO =
+  "Pick a topic below — services, commodities, process, or partners. Full scope details are one click away; the page stays visual first.";

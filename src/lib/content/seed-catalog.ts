@@ -247,11 +247,16 @@ export const SEED_CATEGORIES: SeedCategory[] = [
   {
     slug: "rice-and-grains",
     name: "Rice and grains",
-    summary: "Rice programmes for importers and distributors. Additional grain entries can be added through the CMS.",
+    summary:
+      "Premium Basmati, 1121 Basmati, Sella parboiled Basmati, long-grain white, jasmine, parboiled, and Japonica rice for wholesale, bulk import/export, and international foodservice supply.",
     products: [
       ["basmati-rice", "Basmati rice"],
-      ["parboiled-rice", "Parboiled rice"],
+      ["1121-basmati-rice", "1121 Basmati rice"],
+      ["1121-sella-parboiled-basmati-rice", "1121 Sella / Parboiled Basmati rice"],
+      ["long-grain-white-rice", "Long grain white rice"],
       ["jasmine-rice", "Jasmine rice"],
+      ["parboiled-rice", "Parboiled rice"],
+      ["japonica-rice", "Japonica rice"],
     ].map(([slug, name]) => {
       const rice = getRiceProductDetail(slug);
       const marketing = getRiceProductMarketing(slug);
@@ -309,6 +314,7 @@ export const SEED_CATEGORIES: SeedCategory[] = [
         minOrderText: "Discuss lot size with the trade desk.",
         status: "pending_verification" as const,
         image: coffee?.heroImage,
+        youtubeVideoId: marketing?.youtubeVideoId,
         highlights: marketing?.highlights,
       };
     }),

@@ -1,24 +1,35 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/motion/Reveal";
+import { YouTubeEmbed } from "@/components/marketing/YouTubeEmbed";
 import {
   PARTNER_CATEGORIES,
   type PartnerEntry,
 } from "@/lib/content/partners-catalog";
 
 function PartnerPhoto({ partner }: { partner: PartnerEntry }) {
+  const frameClass = "aspect-[16/9] sm:aspect-[21/9]";
+
   return (
-    <div className="relative aspect-[16/9] overflow-hidden rounded-md bg-[var(--mist)] sm:aspect-[21/9]">
+    <div className="relative overflow-hidden rounded-md bg-[var(--mist)]">
       {partner.photoSrc ? (
-        <Image
-          src={partner.photoSrc}
-          alt={partner.photoAlt ?? `${partner.name} — partnership`}
-          fill
-          className="object-cover"
-          sizes="(max-width: 768px) 100vw, 960px"
+        <div className={`relative ${frameClass}`}>
+          <Image
+            src={partner.photoSrc}
+            alt={partner.photoAlt ?? `${partner.name} — partnership`}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 960px"
+          />
+        </div>
+      ) : partner.youtubeVideoId ? (
+        <YouTubeEmbed
+          youtubeInput={partner.youtubeVideoId}
+          title={`${partner.name} overview`}
+          frameClassName={frameClass}
         />
       ) : (
-        <div className="flex h-full min-h-[200px] flex-col items-center justify-center border border-dashed border-[var(--line-strong)] bg-[var(--cream)] px-6 text-center">
+        <div className="flex min-h-[200px] flex-col items-center justify-center border border-dashed border-[var(--line-strong)] bg-[var(--cream)] px-6 py-12 text-center aspect-[16/9] sm:aspect-[21/9]">
           <p className="text-sm font-semibold text-[var(--navy)]">Partner photo</p>
           <p className="mt-1 text-xs text-[var(--stone)]">
             Upload to <code className="text-[var(--ocean)]">public/images/partners/{partner.slug}.jpg</code>
@@ -74,7 +85,7 @@ export function PartnersHomeTeaser({
 }: {
   partners: PartnerEntry[];
 }) {
-  const featured = partners.filter((p) => p.slug !== "more-partners").slice(0, 4);
+  const featured = partners.slice(0, 4);
 
   return (
     <section className="border-y border-[var(--line)] bg-[#0a1628] py-14 text-white lg:py-16">

@@ -1,4 +1,5 @@
 import { Reveal } from "@/components/motion/Reveal";
+import { ImageTriptych } from "@/components/marketing/ImageTriptych";
 import { MediaFieldPair } from "@/components/marketing/MediaFieldPair";
 
 export type MarketingContentBox = {
@@ -17,6 +18,9 @@ export function MarketingStorySection({
   videoTitle,
   variant = "default",
   background = "white",
+  imageLayout = "default",
+  showcaseImageSrc,
+  showcaseImageAlt,
 }: {
   eyebrow?: string;
   title: string;
@@ -28,6 +32,9 @@ export function MarketingStorySection({
   videoTitle?: string;
   variant?: "default" | "reversed";
   background?: "white" | "cream";
+  imageLayout?: "default" | "triptych";
+  showcaseImageSrc?: string;
+  showcaseImageAlt?: string;
 }) {
   const bg = background === "cream" ? "bg-[#f3f1ec]" : "bg-white";
 
@@ -55,6 +62,12 @@ export function MarketingStorySection({
           ))}
         </div>
 
+        {showcaseImageSrc && showcaseImageAlt ? (
+          <Reveal y={16} className="mt-8">
+            <ImageTriptych src={showcaseImageSrc} alt={showcaseImageAlt} />
+          </Reveal>
+        ) : null}
+
         <Reveal y={16} className="mt-8">
           <MediaFieldPair
             imageSrc={imageSrc}
@@ -62,6 +75,7 @@ export function MarketingStorySection({
             youtubeUrl={youtubeUrl}
             videoTitle={videoTitle}
             reversed={variant === "reversed"}
+            imageLayout={imageLayout}
           />
         </Reveal>
       </div>

@@ -5,8 +5,11 @@ export const INSPECTIONS_STORY = {
   title: "Greater transparency, reduced risk, confidence in every shipment",
   lead: "Finekarts coordinates independent inspection at origin, during loading, in transit where applicable, and at destination — so buyers and sellers share documented evidence on quality, quantity, and compliance without replacing contractual due diligence or bank requirements.",
   youtubeUrl: "https://www.youtube.com/watch?v=gADVpRPdr7E",
-  imageSrc: "/images/inspections/port-sampling.png",
-  imageAlt: "Inspector sampling agricultural commodities at port",
+  showcaseImageSrc: "/images/inspections/warehouse-bulk-inspection.png",
+  showcaseImageAlt:
+    "SGS inspectors walking through a bulk commodity warehouse with stacked agricultural bags",
+  imageSrc: "/images/inspections/sgs-laboratory-grain-sampling.png",
+  imageAlt: "SGS inspector handling a grain sample in a laboratory",
   boxes: [
     {
       title: "Quality",
@@ -27,7 +30,7 @@ export const PARTNERS_STORY = {
   eyebrow: "Verification partners",
   title: "Recognized inspection and certification relationships",
   lead: "We work with internationally known inspection, testing, and certification organizations so qualified buyers can build confidence in cargo, counterparties, and documents — partnership listings support transparency; they do not replace your contract terms.",
-  youtubeUrl: "https://www.youtube.com/watch?v=nFFts9WyUm8",
+  youtubeUrl: "https://www.youtube.com/watch?v=rJPI2UA25HQ",
   imageSrc: "/images/inspections/sampling-grain.png",
   imageAlt: "Grain sampling for independent verification",
   boxes: [
