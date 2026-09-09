@@ -3,15 +3,9 @@ import { getAboutSectionImages } from "@/lib/content/about-images";
 import { getHomeSectionImages } from "@/lib/content/home-images";
 import { getSite } from "@/lib/content/catalog";
 import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
+import { AboutHub } from "@/components/marketing/AboutHub";
 import { FoodSafetyAgencyMarquee } from "@/components/marketing/FoodSafetyAgencyMarquee";
-import {
-  AboutHero,
-  AboutWhoWeAre,
-  AboutCapabilities,
-  AboutProcess,
-  AboutGlobal,
-  AboutCta,
-} from "@/components/marketing/AboutSections";
+import { AboutHero, AboutCta } from "@/components/marketing/AboutSections";
 
 export const metadata: Metadata = {
   title: "About Finekarts",
@@ -28,18 +22,18 @@ export default async function AboutPage() {
   return (
     <>
       <AboutHero positioning={site.positioning} cms={getSectionFields(cms, "hero")} />
-      <AboutWhoWeAre
+      <AboutHub
         teamStrategy={teamStrategy}
         teamCollaboration={teamCollaboration}
-        cms={getSectionFields(cms, "who-we-are")}
+        home3={home3}
+        cms={{
+          whoWeAre: getSectionFields(cms, "who-we-are"),
+          capabilities: getSectionFields(cms, "capabilities"),
+          process: getSectionFields(cms, "process"),
+          global: getSectionFields(cms, "global"),
+        }}
       />
       <FoodSafetyAgencyMarquee />
-      <AboutCapabilities
-        teamStrategy={teamCollaboration}
-        cms={getSectionFields(cms, "capabilities")}
-      />
-      <AboutProcess cms={getSectionFields(cms, "process")} />
-      <AboutGlobal home3={home3} cms={getSectionFields(cms, "global")} />
       <AboutCta
         email={site.email}
         phone={site.phone}

@@ -152,12 +152,14 @@ function OverviewPanel({
         </div>
       ) : null}
 
-      <MediaFieldPair
-        imageSrc={heroImage}
-        imageAlt={heroImageAlt}
-        youtubeUrl={youtubeUrl}
-        videoTitle={videoTitle}
-      />
+      {youtubeUrl ? (
+        <MediaFieldPair
+          imageSrc={heroImage}
+          imageAlt={heroImageAlt}
+          youtubeUrl={youtubeUrl}
+          videoTitle={videoTitle}
+        />
+      ) : null}
     </div>
   );
 }
