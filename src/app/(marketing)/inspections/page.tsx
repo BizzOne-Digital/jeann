@@ -21,7 +21,6 @@ export default function InspectionsPage() {
         description={INSPECTIONS_HERO.description}
         imageSrc={heroImage.src}
         imageAlt={heroImage.alt}
-        backgroundLayout="triptych"
         primaryCta={INSPECTIONS_HERO.primaryCta}
         secondaryCta={INSPECTIONS_HERO.secondaryCta}
       />

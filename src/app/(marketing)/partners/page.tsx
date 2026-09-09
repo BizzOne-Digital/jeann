@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { CmsPageHero } from "@/components/marketing/CmsPageHero";
 import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 import { MarketingStorySection } from "@/components/marketing/MarketingStorySection";
@@ -68,32 +67,6 @@ export default async function PartnersPage() {
               <PartnerProfileCard key={partner.slug} partner={partner} />
             ))}
           </div>
-
-          <Reveal delay={0.1}>
-            <div className="mt-14 rounded-lg border border-[var(--line)] bg-[var(--cream)] p-6 sm:p-8">
-              <h2 className="text-xl font-semibold text-[var(--navy)]">Adding or updating partners</h2>
-              <p className="mt-3 max-w-2xl text-base leading-relaxed text-[var(--stone)]">
-                For each company provide: name, intro line, photo file, and descriptive paragraphs.
-                Place photos in{" "}
-                <code className="rounded bg-white px-1.5 py-0.5 text-sm text-[var(--ocean)]">
-                  public/images/partners/
-                </code>{" "}
-                and update{" "}
-                <code className="rounded bg-white px-1.5 py-0.5 text-sm text-[var(--ocean)]">
-                  src/lib/content/partners-catalog.ts
-                </code>
-                .
-              </p>
-              <div className="mt-5 flex flex-wrap gap-3">
-                <Link href="/contact" className="btn btn-primary">
-                  Contact us
-                </Link>
-                <Link href="/resources" className="btn btn-secondary">
-                  Trade resources
-                </Link>
-              </div>
-            </div>
-          </Reveal>
         </div>
       </section>
     </>

@@ -4,9 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useCallback, useState } from "react";
-import { ImageTriptych } from "@/components/marketing/ImageTriptych";
 import { MediaFieldPair } from "@/components/marketing/MediaFieldPair";
 import { INSPECTIONS_STORY } from "@/lib/content/marketing-pages";
+import { HERO_PAGE_OVERLAY_HORIZONTAL } from "@/lib/marketing/hero-layout";
 import {
   COMMODITY_INSPECTION_CATEGORIES,
   DOCUMENTARY_TRADE,
@@ -232,9 +232,9 @@ function ServicesAccordion() {
 
 function ServicesPanel() {
   return (
-    <div className="grid gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-start lg:gap-12">
-      <div className="space-y-6">
-        <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-[#d5d0c8]">
+    <div className="grid gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-stretch lg:gap-12">
+      <div className="grid h-full min-h-[280px] grid-rows-2 gap-4 sm:min-h-[360px] lg:gap-6">
+        <div className="relative min-h-0 overflow-hidden rounded-lg border border-[#d5d0c8]">
           <Image
             src="/images/inspections/warehouse-sack-sampling.png"
             alt="Inspector sampling agricultural sacks in a warehouse with a probe"
@@ -250,7 +250,7 @@ function ServicesPanel() {
             </p>
           </div>
         </div>
-        <div className="relative aspect-[21/9] overflow-hidden rounded-lg border border-[#d5d0c8]">
+        <div className="relative min-h-0 overflow-hidden rounded-lg border border-[#d5d0c8]">
           <Image
             src="/images/inspections/green-coffee-warehouse-inspection.png"
             alt="Green coffee beans in burlap sacks for origin inspection"
@@ -475,33 +475,38 @@ export function InspectionHub() {
 
   return (
     <>
-      {/* Visual opener — objective + field evidence */}
-      <section className="bg-[#071525] py-12 text-white lg:py-16">
-        <div className="container-page">
+      {/* Visual opener — objective over warehouse field photography */}
+      <section className="relative overflow-hidden py-12 text-white lg:py-16">
+        <Image
+          src={story.showcaseImageSrc!}
+          alt=""
+          fill
+          className="object-cover object-center"
+          sizes="100vw"
+          priority
+          aria-hidden
+        />
+        <div className="absolute inset-0" style={{ background: HERO_PAGE_OVERLAY_HORIZONTAL }} />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#071525]/92 via-[#071525]/72 to-[#071525]/55" />
+        <div className="absolute inset-0 bg-[#071525]/25" />
+
+        <div className="container-page relative">
           <p className="text-xs font-semibold tracking-[0.22em] text-[#d4a84b] uppercase">{story.eyebrow}</p>
           <h2 className="mt-3 max-w-2xl text-2xl font-semibold sm:text-3xl">{story.title}</h2>
-          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/75 sm:text-base">{story.lead}</p>
+          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/80 sm:text-base">{story.lead}</p>
 
           <div className="mt-8 grid gap-4 md:grid-cols-3">
             {story.boxes.map((box) => (
               <article
                 key={box.title}
-                className="rounded-xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm"
+                className="rounded-xl border border-white/15 bg-[#071525]/45 p-5 shadow-lg backdrop-blur-md"
               >
                 <h3 className="text-xs font-semibold tracking-[0.14em] text-[#d4a84b] uppercase">
                   {box.title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-white/75">{box.body}</p>
+                <p className="mt-2 text-sm leading-relaxed text-white/85">{box.body}</p>
               </article>
             ))}
-          </div>
-
-          <div className="mt-8">
-            <ImageTriptych
-              src={story.showcaseImageSrc!}
-              alt={story.showcaseImageAlt!}
-              aspectClassName="aspect-[21/9] sm:aspect-[28/9]"
-            />
           </div>
         </div>
       </section>
