@@ -1,12 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdminApiSession } from "@/lib/admin/require-admin-api";
 import { serializeTestimonial } from "@/lib/admin/testimonial-serializer";
-import {
-  adminTestimonialSchema,
-} from "@/lib/admin/testimonial-validation";
+import { adminTestimonialSchema } from "@/lib/admin/testimonial-validation";
 import { tryConnectMongo } from "@/lib/db/mongoose";
 
 export const runtime = "nodejs";
+
+function buildTestimonialPayload(data: ReturnType<typeof adminTestimonialSchema.parse>) {
+  return {
+    quote: data.quote,
+    name: data.name,
+    position: data.position,
+    company: data.company || undefined,
+    photo: data.photo || undefined,
+    rating: data.rating,
+    reviewedAt: data.reviewedAt ? new Date(data.reviewedAt) : undefined,
+    status: data.status,
+    isPlaceholder: false,
+  };
+}
 
 export async function GET() {
   if (!(await requireAdminApiSession())) {
@@ -18,7 +30,7 @@ export async function GET() {
 
   try {
     const { Testimonial } = await import("@/models");
-    const items = await Testimonial.find().sort({ createdAt: -1 }).lean();
+    const items = await Testimonial.find().sort({ reviewedAt: -1, createdAt: -1 }).lean();
     return NextResponse.json({ items: items.map(serializeTestimonial) });
   } catch (error) {
     console.error("[admin/testimonials GET]", error);
@@ -51,13 +63,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const { Testimonial } = await import("@/models");
-    const doc = await Testimonial.create({
-      quote: parsed.data.quote,
-      attribution: parsed.data.attribution,
-      company: parsed.data.company || undefined,
-      status: parsed.data.status,
-      isPlaceholder: false,
-    });
+    const doc = await Testimonial.create(buildTestimonialPayload(parsed.data));
     return NextResponse.json({ ok: true, item: serializeTestimonial(doc.toObject()) });
   } catch (error) {
     console.error("[admin/testimonials POST]", error);

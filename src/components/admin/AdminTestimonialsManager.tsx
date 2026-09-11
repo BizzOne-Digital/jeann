@@ -2,26 +2,39 @@
 
 import { useState } from "react";
 import type { AdminTestimonialItem } from "@/lib/admin/testimonial-serializer";
+import { UploadedImageField } from "@/components/admin/UploadedImageField";
 
 type FormState = {
   quote: string;
-  attribution: string;
+  name: string;
+  position: string;
   company: string;
+  photo: string;
+  rating: number;
+  reviewedAt: string;
   status: "published" | "unpublished";
 };
 
 const emptyForm = (): FormState => ({
   quote: "",
-  attribution: "",
+  name: "",
+  position: "",
   company: "",
+  photo: "",
+  rating: 5,
+  reviewedAt: "",
   status: "published",
 });
 
 function itemToForm(item: AdminTestimonialItem): FormState {
   return {
     quote: item.quote,
-    attribution: item.attribution,
+    name: item.name,
+    position: item.position,
     company: item.company,
+    photo: item.photo,
+    rating: item.rating,
+    reviewedAt: item.reviewedAt ?? "",
     status: item.status,
   };
 }
@@ -67,8 +80,12 @@ export function AdminTestimonialsManager({
 
     const payload = {
       quote: form.quote.trim(),
-      attribution: form.attribution.trim(),
+      name: form.name.trim(),
+      position: form.position.trim(),
       company: form.company.trim(),
+      photo: form.photo.trim(),
+      rating: form.rating,
+      reviewedAt: form.reviewedAt.trim() || undefined,
       status: form.status,
     };
 
@@ -98,7 +115,7 @@ export function AdminTestimonialsManager({
   }
 
   async function remove(item: AdminTestimonialItem) {
-    if (!window.confirm(`Delete testimonial from ${item.attribution}?`)) return;
+    if (!window.confirm(`Delete testimonial from ${item.name}?`)) return;
     setMessage(null);
     setError(null);
     const res = await fetch(`/api/admin/testimonials/${encodeURIComponent(item._id)}`, {
@@ -132,21 +149,33 @@ export function AdminTestimonialsManager({
         </div>
 
         <label className="label lg:col-span-2">
-          Quote
+          Review / quote
           <textarea
             className="field mt-1 min-h-28"
             value={form.quote}
             onChange={(e) => setForm({ ...form, quote: e.target.value })}
+            placeholder="What did the client say about their experience?"
             required
           />
         </label>
 
         <label className="label">
-          Attribution
+          Person&apos;s name
           <input
             className="field mt-1"
-            value={form.attribution}
-            onChange={(e) => setForm({ ...form, attribution: e.target.value })}
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            placeholder="James Whitfield"
+            required
+          />
+        </label>
+
+        <label className="label">
+          Position / title
+          <input
+            className="field mt-1"
+            value={form.position}
+            onChange={(e) => setForm({ ...form, position: e.target.value })}
             placeholder="Director of Procurement"
             required
           />
@@ -159,6 +188,31 @@ export function AdminTestimonialsManager({
             value={form.company}
             onChange={(e) => setForm({ ...form, company: e.target.value })}
             placeholder="North Atlantic Foods Ltd"
+          />
+        </label>
+
+        <label className="label">
+          Star rating
+          <select
+            className="field mt-1"
+            value={form.rating}
+            onChange={(e) => setForm({ ...form, rating: Number(e.target.value) })}
+          >
+            {[5, 4, 3, 2, 1].map((value) => (
+              <option key={value} value={value}>
+                {value} star{value === 1 ? "" : "s"}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="label">
+          Review date
+          <input
+            type="date"
+            className="field mt-1"
+            value={form.reviewedAt}
+            onChange={(e) => setForm({ ...form, reviewedAt: e.target.value })}
           />
         </label>
 
@@ -176,6 +230,16 @@ export function AdminTestimonialsManager({
           </select>
         </label>
 
+        <div className="lg:col-span-2">
+          <UploadedImageField
+            label="Client photo"
+            folder="gallery"
+            value={form.photo}
+            onChange={(photo) => setForm({ ...form, photo })}
+            helpText="Optional portrait photo. If empty, initials are shown on the public site."
+          />
+        </div>
+
         <div className="lg:col-span-2 flex flex-wrap items-center gap-4">
           <button type="submit" className="btn btn-primary" disabled={saving}>
             {saving ? "Saving…" : editingId ? "Save changes" : "Add testimonial"}
@@ -189,9 +253,9 @@ export function AdminTestimonialsManager({
         <table className="min-w-full text-left text-sm">
           <thead className="border-b border-[var(--line)] bg-[var(--cream)]/60 text-xs uppercase tracking-wide text-[var(--stone)]">
             <tr>
+              <th className="px-4 py-3 font-semibold">Client</th>
               <th className="px-4 py-3 font-semibold">Quote</th>
-              <th className="px-4 py-3 font-semibold">Attribution</th>
-              <th className="px-4 py-3 font-semibold">Company</th>
+              <th className="px-4 py-3 font-semibold">Rating</th>
               <th className="px-4 py-3 font-semibold">Status</th>
               <th className="px-4 py-3 font-semibold" />
             </tr>
@@ -200,10 +264,16 @@ export function AdminTestimonialsManager({
             {items.map((item) => (
               <tr key={item._id} className="border-b border-[var(--line)] last:border-0">
                 <td className="px-4 py-3">
+                  <p className="font-semibold text-[var(--navy)]">{item.name}</p>
+                  <p className="text-xs text-[var(--stone)]">
+                    {item.position}
+                    {item.company ? ` · ${item.company}` : ""}
+                  </p>
+                </td>
+                <td className="px-4 py-3">
                   <p className="line-clamp-3 text-[var(--navy)]">{item.quote}</p>
                 </td>
-                <td className="px-4 py-3">{item.attribution}</td>
-                <td className="px-4 py-3">{item.company || "—"}</td>
+                <td className="px-4 py-3">{item.rating}/5</td>
                 <td className="px-4 py-3 capitalize">{item.status}</td>
                 <td className="px-4 py-3 text-right whitespace-nowrap">
                   <button

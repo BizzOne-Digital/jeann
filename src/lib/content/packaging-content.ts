@@ -30,14 +30,42 @@ export const PACKAGING_HERO = {
   title: "Packaging & transport modes for global commodity trade",
   description:
     "The homepage highlights core transport modes — flexitank, bulk railcar, tanker vessel, bulk vessel and bulk truck. This page explains every packaging and logistics option Finekarts structures for international commodity trade, including containerized cargo, ISO tanks, IBC totes, drums, FIBCs, bulk liners, woven bags and more. Not every option is available for every commodity or corridor.",
-  primaryCta: { href: "#packaging-index", label: "Browse all packaging types →" },
+  primaryCta: { href: "#packaging-types", label: "View detailed specifications →" },
   secondaryCta: { href: "/logistics", label: "Logistics overview" },
 };
 
 export const PACKAGING_PAGE_INTRO = {
   title: "Full packaging catalogue",
   description:
-    "Below is the complete list of transport modes and product packaging formats. Each section includes applications, advantages, suitable commodities and client-approved photography where available.",
+    "This page covers every transport mode and product packaging format Finekarts structures for international commodity trade — from flexitank and bulk vessel programmes to FIBCs, drums, ISO tanks and woven bags.",
+};
+
+export const PACKAGING_TRANSPORT_ROLE = {
+  title: "Our role in transport and packaging",
+  lead:
+    "Finekarts does not simply list packaging options — we structure how cargo moves from origin to destination using the right mode, unit and handling method for each commodity programme. Packaging is matched to product, corridor, Incoterms and inspection scope before loading begins.",
+  boxes: [
+    {
+      title: "Assess the programme",
+      body:
+        "We review commodity type, parcel size, origin infrastructure and destination handling to recommend workable modes — bulk vessel, container, flexitank, rail, road or packaged units.",
+    },
+    {
+      title: "Align with contract",
+      body:
+        "Packaging and transport terms are tied to signed Incoterms, inspection scope, banking documents and sales contract wording — not informal assumptions at load port.",
+    },
+    {
+      title: "Coordinate at origin",
+      body:
+        "Supplier, warehouse, terminal, surveyor and carrier stay aligned on loading method, seals, stowage and equipment so cargo leaves origin in the agreed format.",
+    },
+    {
+      title: "Support through discharge",
+      body:
+        "Documentation, quantity evidence and discharge requirements are tracked against the chosen mode so buyers receive cargo that matches what was contracted and inspected.",
+    },
+  ],
 };
 
 export const PACKAGING_TYPES: PackagingTypeContent[] = [
@@ -186,70 +214,48 @@ export const PACKAGING_TYPES: PackagingTypeContent[] = [
   },
   {
     order: 7,
-    slug: "iso-tank-containers-2",
-    name: "ISO tank containers (2)",
+    slug: "iso-tank-containers",
+    name: "ISO tank containers",
     mode: "liquid",
     category: "product",
     summary: "Dedicated intermodal tank for food-grade and suitable liquid cargoes.",
     description:
-      "ISO tank containers are stainless or lined cylindrical tanks mounted in a standard container frame for intermodal transport by vessel, truck and rail. They suit edible oils and other liquids where a dedicated, reusable tank compartment is preferred over flexitank programmes.",
+      "ISO tank containers are stainless or lined cylindrical tanks mounted in a standard container frame for intermodal transport by vessel, truck and rail. Capacity, pressure rating and lining are matched to the product — suited to edible oils and other liquids where a dedicated, reusable tank compartment is preferred over flexitank programmes.",
     applications: [
       "Edible oils and refined vegetable oils",
-      "Food-grade liquids on established container corridors",
-      "Programmes requiring dedicated tank equipment rather than single-use bladders",
+      "International food-grade liquid container programmes",
+      "Corridors with ISO tank depot and cleaning facilities",
     ],
     advantages: [
       "Intermodal transfer by ship, truck and rail without transloading",
-      "Dedicated tank reduces cross-contamination versus multi-cargo dry containers",
+      "Documented cleaning and inspection history for food-grade cargoes",
       "Reusable asset subject to cleaning, inspection and prior-cargo approval",
     ],
     commodities: ["Sunflower oil", "Soybean oil", "Palm oil", "Rapeseed oil", "Other suitable liquids"],
-    images: [{ ...PACKAGING_IMAGES.isoTank2 }],
+    images: [{ ...PACKAGING_IMAGES.isoTank2 }, { ...PACKAGING_IMAGES.isoTank1 }],
     note: "Tank condition, heating, prior-cargo history and terminal acceptance must be confirmed before booking.",
   },
   {
     order: 8,
-    slug: "ibc-containers-2",
-    name: "IBC containers (2)",
+    slug: "ibc-containers",
+    name: "IBC containers",
     mode: "liquid",
     category: "product",
     summary: "Intermediate bulk container for liquids and flowable products.",
     description:
-      "IBC (intermediate bulk container) totes combine a plastic inner bottle with a protective metal cage and pallet base — typically around 1,000 litres. They suit medium-volume liquid programmes, blending, and distribution to industrial buyers.",
+      "IBC (intermediate bulk container) totes combine a plastic inner bottle with a protective metal cage and pallet base — typically around 1,000 litres. Reusable units allow efficient stacking, storage and discharge; valve and cap specifications vary by product and food-grade requirements.",
     applications: [
       "Edible oils and liquid food ingredients",
-      "Smaller liquid lots for regional distributors",
+      "Refined oils and oleochemical distribution",
       "Multi-drop delivery where drum quantities are too small",
     ],
     advantages: [
       "Standard pallet footprint for warehouse and forklift handling",
-      "Lower handling cost than drums for medium volumes",
+      "Discharge valve for controlled pumping or gravity flow",
       "Single-trip or returnable programmes depending on corridor",
     ],
-    commodities: ["Edible oils", "Liquid food ingredients", "Non-hazardous industrial liquids where agreed"],
-    images: [{ ...PACKAGING_IMAGES.ibcToteWarehouse }],
-  },
-  {
-    order: 9,
-    slug: "ibc-containers-1",
-    name: "IBC containers (1)",
-    mode: "liquid",
-    category: "product",
-    summary: "Schütz-style IBC for efficient liquid bulk handling.",
-    description:
-      "Reusable IBC totes on integrated pallet bases allow efficient stacking, storage and discharge of liquid commodities. Valve and cap specifications vary by product and food-grade requirements.",
-    applications: [
-      "Refined oils and oleochemical distribution",
-      "Industrial food manufacturing supply",
-      "Containerised or domestic truck programmes",
-    ],
-    advantages: [
-      "Compact 1,000-litre unit for inventory control",
-      "Discharge valve for controlled pumping or gravity flow",
-      "Widely accepted in warehouses and customs corridors",
-    ],
-    commodities: ["Edible oils", "Syrups and liquid food products", "Suitable non-hazardous liquids"],
-    images: [{ ...PACKAGING_IMAGES.ibcTote }],
+    commodities: ["Edible oils", "Liquid food ingredients", "Suitable non-hazardous liquids"],
+    images: [{ ...PACKAGING_IMAGES.ibcToteWarehouse }, { ...PACKAGING_IMAGES.ibcTote }],
   },
   {
     order: 10,
@@ -342,28 +348,6 @@ export const PACKAGING_TYPES: PackagingTypeContent[] = [
     commodities: ["Sugar", "Grains", "Plastic pellets", "Other free-flowing dry bulk"],
     images: [{ ...PACKAGING_IMAGES.bulkLiner }],
     note: "Container reinforcement, loading method and discharge equipment must be agreed before shipment.",
-  },
-  {
-    order: 14,
-    slug: "iso-tank-containers-1",
-    name: "ISO tank containers (1)",
-    mode: "liquid",
-    category: "product",
-    summary: "Standard ISO tank frame for intermodal liquid programmes.",
-    description:
-      "ISO tank containers in standard frames allow liquid commodities to move seamlessly between vessel, truck and rail. Capacity, pressure rating and lining are matched to the product and regulatory requirements.",
-    applications: [
-      "International edible oil container programmes",
-      "Chemical-grade or food-grade liquids where tank dedication is required",
-      "Corridors with ISO tank depot and cleaning facilities",
-    ],
-    advantages: [
-      "Full intermodal compatibility with global container networks",
-      "Documented cleaning and inspection history for food-grade cargoes",
-      "Efficient versus drums for medium-to-large liquid volumes",
-    ],
-    commodities: ["Edible oils", "Food-grade liquids", "Suitable industrial liquids"],
-    images: [{ ...PACKAGING_IMAGES.isoTank1 }],
   },
   {
     order: 15,

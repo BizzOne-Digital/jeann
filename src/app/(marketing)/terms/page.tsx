@@ -1,12 +1,5 @@
-import type { Metadata } from "next";
-import { TestimonialsPageContent } from "@/components/marketing/TestimonialsPageContent";
+import { redirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "Testimonials",
-  description:
-    "Client testimonials from verified counterparties working with Finekarts on global commodity trade.",
-};
-
-export default function TestimonialsAtTermsPage() {
-  return <TestimonialsPageContent />;
+export default function TermsRedirectPage() {
+  redirect("/testimonials");
 }

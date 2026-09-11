@@ -21,7 +21,7 @@ export default async function AdminTestimonialsPage() {
   return (
     <PortalPage
       title="Testimonials"
-      description="Manage client testimonials shown on the public site. Only published entries appear publicly."
+      description="Add client reviews with name, position, company, photo, star rating and quote. Only published entries appear on /testimonials."
     >
       <div className="space-y-4">
         <p className="text-sm text-[var(--stone)]">

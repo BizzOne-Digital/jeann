@@ -44,8 +44,12 @@ export async function PUT(request: NextRequest, context: RouteContext) {
       {
         $set: {
           quote: parsed.data.quote,
-          attribution: parsed.data.attribution,
+          name: parsed.data.name,
+          position: parsed.data.position,
           company: parsed.data.company || undefined,
+          photo: parsed.data.photo || undefined,
+          rating: parsed.data.rating,
+          reviewedAt: parsed.data.reviewedAt ? new Date(parsed.data.reviewedAt) : undefined,
           status: parsed.data.status,
           isPlaceholder: false,
         },

@@ -41,7 +41,7 @@ const LINKS = [
     items: [
       { href: "/login", label: "Buyer portal" },
       { href: "/privacy", label: "Careers" },
-      { href: "/terms", label: "Testimonials" },
+      { href: "/testimonials", label: "Testimonials" },
       { href: "/accessibility", label: "Accessibility" },
     ],
   },
@@ -146,7 +146,7 @@ export async function SiteFooter() {
             <Link href="/privacy" className="hover:text-white">
               Careers
             </Link>
-            <Link href="/terms" className="hover:text-white">
+            <Link href="/testimonials" className="hover:text-white">
               Testimonials
             </Link>
             <Link href="/cookies" className="hover:text-white">

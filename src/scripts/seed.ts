@@ -150,8 +150,12 @@ async function main() {
       { quote: testimonial.quote },
       {
         quote: testimonial.quote,
-        attribution: testimonial.attribution,
+        name: testimonial.name,
+        position: testimonial.position,
         company: testimonial.company,
+        photo: testimonial.photo,
+        rating: testimonial.rating,
+        reviewedAt: testimonial.reviewedAt ? new Date(testimonial.reviewedAt) : undefined,
         status: testimonial.status,
         isPlaceholder: false,
       },

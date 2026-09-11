@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FeaturedTestimonialAside } from "@/components/marketing/TestimonialSections";
+import type { PublicTestimonial } from "@/lib/content/testimonials-catalog";
 import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { cmsField } from "@/lib/content/cms-field";
@@ -709,11 +710,7 @@ export function InsightsAndNotes({
   featuredTestimonial,
 }: {
   posts: Array<{ slug: string; title: string; excerpt: string; category: string }>;
-  featuredTestimonial?: {
-    quote: string;
-    attribution: string;
-    company: string;
-  } | null;
+  featuredTestimonial?: PublicTestimonial | null;
 }) {
   const cardImages = [
     "/images/products/rapeseed-oil-reference.png",
@@ -772,18 +769,7 @@ export function InsightsAndNotes({
           </div>
 
           <Reveal delay={0.1}>
-            <FeaturedTestimonialAside
-              testimonial={
-                featuredTestimonial
-                  ? {
-                      id: "featured",
-                      quote: featuredTestimonial.quote,
-                      attribution: featuredTestimonial.attribution,
-                      company: featuredTestimonial.company,
-                    }
-                  : null
-              }
-            />
+            <FeaturedTestimonialAside testimonial={featuredTestimonial ?? null} />
           </Reveal>
         </div>
       </div>

@@ -1,9 +1,16 @@
 import Link from "next/link";
 import { PageHero } from "@/components/marketing/PageHero";
-import { TestimonialsGrid } from "@/components/marketing/TestimonialSections";
+import {
+  TestimonialsGrid,
+  TestimonialsSummaryBar,
+  TrustpilotPlaceholder,
+} from "@/components/marketing/TestimonialSections";
 import { AnimatedSection } from "@/components/motion/AnimatedSection";
 import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
-import { getPublishedTestimonials } from "@/lib/content/testimonials-catalog";
+import {
+  getPublishedTestimonials,
+  getTestimonialSummary,
+} from "@/lib/content/testimonials-catalog";
 import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
 
 export async function TestimonialsPageContent() {
@@ -13,6 +20,7 @@ export async function TestimonialsPageContent() {
   ]);
   const heroFields = getSectionFields(cms, "hero");
   const heroImage = getPageHeroImage("testimonials");
+  const summary = getTestimonialSummary(testimonials);
 
   return (
     <>
@@ -20,7 +28,7 @@ export async function TestimonialsPageContent() {
         title={heroFields.title || "What counterparties say"}
         description={
           heroFields.description ||
-          "Verified buyers and trade partners share their experience working with Finekarts."
+          "Verified buyers and trade partners share their experience working with Finekarts — company, role, photo and review in one place."
         }
         imageSrc={heroImage.src}
         imageAlt={heroImage.alt}
@@ -30,14 +38,21 @@ export async function TestimonialsPageContent() {
 
       <section className="bg-[#f3f1ec] py-16 lg:py-24">
         <div className="container-page">
+          <TestimonialsSummaryBar
+            count={summary.count}
+            averageRating={summary.averageRating}
+          />
           <TestimonialsGrid testimonials={testimonials} />
           {testimonials.length > 0 ? (
-            <AnimatedSection className="mt-10 text-center text-sm text-[#666666]" delay={0.12}>
-              Interested in working with Finekarts?{" "}
-              <Link href="/contact" className="font-semibold text-[#c88e4a] underline">
-                Contact the trade desk
-              </Link>
-            </AnimatedSection>
+            <>
+              <TrustpilotPlaceholder />
+              <AnimatedSection className="mt-10 text-center text-sm text-[#666666]" delay={0.12}>
+                Interested in working with Finekarts?{" "}
+                <Link href="/contact" className="font-semibold text-[#c88e4a] underline">
+                  Contact the trade desk
+                </Link>
+              </AnimatedSection>
+            </>
           ) : null}
         </div>
       </section>

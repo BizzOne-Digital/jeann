@@ -374,13 +374,14 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
   {
     slug: "testimonials",
     title: "Testimonials",
-    path: "/terms",
+    path: "/testimonials",
     seoTitle: "Testimonials",
-    seoDescription: "Approved client testimonials.",
+    seoDescription: "Approved client testimonials with name, role, company and photo.",
     sections: [
       section("hero", "Hero", {
-        title: "Testimonials",
-        description: "Only CMS-approved testimonials appear on the public site.",
+        title: "What counterparties say",
+        description:
+          "Verified buyers and trade partners share their experience working with Finekarts.",
       }),
     ],
   },
@@ -415,14 +416,14 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
   },
   {
     slug: "terms",
-    title: "Testimonials",
+    title: "Terms redirect",
     path: "/terms",
-    seoTitle: "Testimonials",
-    seoDescription: "Approved client testimonials from Finekarts trade counterparties.",
+    seoTitle: "Terms",
+    seoDescription: "Redirects to testimonials.",
     sections: [
       section("hero", "Hero", {
         title: "Testimonials",
-        description: "Verified buyers and trade partners share their experience working with Finekarts.",
+        description: "This route redirects to the testimonials page.",
       }),
     ],
   },

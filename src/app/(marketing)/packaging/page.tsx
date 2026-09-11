@@ -10,9 +10,9 @@ import {
   PACKAGING_CTA,
   PACKAGING_HERO,
   PACKAGING_PAGE_INTRO,
+  PACKAGING_TRANSPORT_ROLE,
   PACKAGING_SELECTION,
 } from "@/lib/content/packaging-content";
-import { PackagingTypeIndex } from "@/components/marketing/PackagingTypeIndex";
 import { PACKAGING_IMAGES } from "@/lib/content/packaging-images";
 import { buyerPortalHref } from "@/lib/marketing/cta-links";
 
@@ -58,7 +58,27 @@ export default function PackagingPage() {
           <p className="mt-3 max-w-3xl text-base text-[#555555]">
             {PACKAGING_PAGE_INTRO.description}
           </p>
-          <PackagingTypeIndex />
+
+          <Reveal className="mt-12">
+            <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">
+              {PACKAGING_TRANSPORT_ROLE.title}
+            </h2>
+            <p className="mt-4 max-w-3xl text-base leading-relaxed text-[#555555]">
+              {PACKAGING_TRANSPORT_ROLE.lead}
+            </p>
+          </Reveal>
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {PACKAGING_TRANSPORT_ROLE.boxes.map((box, index) => (
+              <Reveal key={box.title} delay={index * 0.05}>
+                <article className="h-full marketing-box rounded-lg p-6 shadow-sm">
+                  <h3 className="text-sm font-semibold tracking-[0.14em] text-[#c88e4a] uppercase">
+                    {box.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-[#444444]">{box.body}</p>
+                </article>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 
