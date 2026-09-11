@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils/cn";
 import { MARKETING_HEADER_HEIGHT_CLASS } from "@/lib/marketing/hero-layout";
@@ -24,25 +24,29 @@ type Props = {
   embedded?: boolean;
 };
 
+const SCROLL_THRESHOLD = 16;
+
+function subscribeToScroll(onStoreChange: () => void) {
+  window.addEventListener("scroll", onStoreChange, { passive: true });
+  return () => window.removeEventListener("scroll", onStoreChange);
+}
+
+function getScrollSnapshot() {
+  return window.scrollY > SCROLL_THRESHOLD;
+}
+
+function getScrollServerSnapshot() {
+  return false;
+}
+
 export function SiteHeader({ embedded = false }: Props) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const scrolled = useSyncExternalStore(subscribeToScroll, getScrollSnapshot, getScrollServerSnapshot);
   const reduce = useReducedMotion();
   const isHero = isHeroMarketingPage(pathname);
   const isLight = isLightHeroPage(pathname);
   const transparent = isHero && !isLight && !scrolled && !open;
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 16);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    setScrolled(window.scrollY > 16);
-  }, [pathname]);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";

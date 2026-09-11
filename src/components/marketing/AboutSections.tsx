@@ -41,7 +41,6 @@ export function AboutHero({
       description={cmsField(cms, "description", positioning)}
       imageSrc={aboutHero.src}
       imageAlt={aboutHero.alt}
-      backgroundLayout="triptych"
       imageClassName="object-cover object-[72%_center] sm:object-[78%_center]"
       primaryCta={{
         href: cmsField(cms, "primaryCtaHref", buyerQuoteHref()),

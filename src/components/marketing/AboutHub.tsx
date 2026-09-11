@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useCallback, useState } from "react";
-import { ImageTriptych } from "@/components/marketing/ImageTriptych";
 import { cmsField } from "@/lib/content/cms-field";
 import {
   ABOUT_CAPABILITY_CARDS,
@@ -390,14 +389,6 @@ export function AboutHub({
                 <p className="mt-2 text-sm leading-relaxed text-white/75">{box.body}</p>
               </article>
             ))}
-          </div>
-
-          <div className="mt-8">
-            <ImageTriptych
-              src={story.showcaseImageSrc}
-              alt={story.showcaseImageAlt}
-              aspectClassName="aspect-[21/9] sm:aspect-[28/9]"
-            />
           </div>
         </div>
       </section>

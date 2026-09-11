@@ -19,8 +19,6 @@ export const ABOUT_STORY = {
       body: "Contracts, banking wording, and shipment milestones follow agreed PSA/SPA — not informal promises.",
     },
   ],
-  showcaseImageSrc: AGRICULTURE_IMAGES.grainSilos.src,
-  showcaseImageAlt: "Grain storage silos at an agricultural export facility",
 } as const;
 
 export const ABOUT_STATS = [
