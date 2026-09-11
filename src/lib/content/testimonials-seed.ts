@@ -72,4 +72,64 @@ export const SEED_TESTIMONIALS: SeedTestimonial[] = [
     reviewedAt: "2025-06-14",
     status: "published",
   },
+  {
+    quote:
+      "Our canola oil programme required tight coordination between inspection, load port and banking presentation. Finekarts kept each party aligned without overpromising on timelines.",
+    name: "Priya Sharma",
+    position: "Trading Manager",
+    company: "Indo-Pacific Oils Pvt Ltd",
+    rating: 5,
+    reviewedAt: "2025-05-28",
+    status: "published",
+  },
+  {
+    quote:
+      "We appreciated honest feedback when a corridor was not workable for our parcel size. That saved us weeks compared with brokers who only push volume.",
+    name: "Michael Torres",
+    position: "Procurement Director",
+    company: "Andean Food Ingredients SA",
+    rating: 5,
+    reviewedAt: "2025-04-15",
+    status: "published",
+  },
+  {
+    quote:
+      "Flexitank and documentation for a soybean oil shipment were explained clearly before we signed. The team understood both supplier constraints and our buyer requirements.",
+    name: "Yuki Tanaka",
+    position: "Import Operations Lead",
+    company: "Tokyo Grain & Oil Trading",
+    rating: 5,
+    reviewedAt: "2025-03-22",
+    status: "published",
+  },
+  {
+    quote:
+      "Finekarts supported our first ICUMSA sugar enquiry with realistic packaging options and inspection scope. We knew what was confirmed versus what still needed supplier verification.",
+    name: "Claire Dubois",
+    position: "Commodity Analyst",
+    company: "Société Sucrière Atlantique",
+    rating: 4,
+    reviewedAt: "2025-02-10",
+    status: "published",
+  },
+  {
+    quote:
+      "Shipment updates and document checklists were shared proactively during a delayed vessel window. Communication stayed professional when schedules slipped.",
+    name: "David Osei",
+    position: "Logistics Coordinator",
+    company: "Accra Commodities Hub",
+    rating: 5,
+    reviewedAt: "2025-01-19",
+    status: "published",
+  },
+  {
+    quote:
+      "We use Finekarts for due diligence on new counterparties before larger contracts. Reports are detailed enough for our compliance team without unnecessary jargon.",
+    name: "Anna Bergström",
+    position: "Risk & Compliance Officer",
+    company: "Baltic Bulk Trading AB",
+    rating: 5,
+    reviewedAt: "2024-12-08",
+    status: "published",
+  },
 ];

@@ -1,3 +1,4 @@
+import { PortalAppShell } from "@/components/portal/PortalAppShell";
 import { Sidebar } from "@/components/portal/Sidebar";
 import Link from "next/link";
 import { getSession } from "@/lib/auth/session";
@@ -44,27 +45,31 @@ export default async function BuyerLayout({ children }: { children: React.ReactN
 
   if (!verified) {
     return (
-      <div className="portal-shell md:flex">
-        <Sidebar title="Buyer onboarding" links={onboardingLinks} />
-        <main className="min-w-0 w-full max-w-full flex-1 overflow-x-clip p-4 sm:p-6 md:p-10">
-          <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-            Complete onboarding and await admin approval before trading functions unlock.{" "}
-            <Link href="/portal/buyer/onboarding" className="font-medium underline">
-              View checklist
-            </Link>
-          </div>
-          {children}
-        </main>
-      </div>
+      <PortalAppShell>
+        <div className="portal-shell md:flex">
+          <Sidebar title="Buyer onboarding" links={onboardingLinks} />
+          <main className="min-w-0 w-full max-w-full flex-1 overflow-x-clip p-4 sm:p-6 md:p-10">
+            <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+              Complete onboarding and await admin approval before trading functions unlock.{" "}
+              <Link href="/portal/buyer/onboarding" className="font-medium underline">
+                View checklist
+              </Link>
+            </div>
+            {children}
+          </main>
+        </div>
+      </PortalAppShell>
     );
   }
 
   return (
-    <div className="portal-shell md:flex">
-      <Sidebar title="Buyer portal" links={fullLinks} />
-      <main className="min-w-0 w-full max-w-full flex-1 overflow-x-clip p-4 sm:p-6 md:p-10">
-        {children}
-      </main>
-    </div>
+    <PortalAppShell>
+      <div className="portal-shell md:flex">
+        <Sidebar title="Buyer portal" links={fullLinks} />
+        <main className="min-w-0 w-full max-w-full flex-1 overflow-x-clip p-4 sm:p-6 md:p-10">
+          {children}
+        </main>
+      </div>
+    </PortalAppShell>
   );
 }

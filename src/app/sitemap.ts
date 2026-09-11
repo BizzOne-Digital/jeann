@@ -23,6 +23,8 @@ const STATIC_PATHS = [
   "/register/buyer",
   "/login",
   "/privacy",
+  "/privacy-policy",
+  "/terms-and-conditions",
   "/terms",
   "/cookies",
   "/buyer-terms",

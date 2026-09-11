@@ -95,9 +95,9 @@ export function AiAssistant() {
         type="button"
         onClick={() => setOpen(true)}
         suppressHydrationWarning
-        className="focus-ring fixed bottom-4 right-4 z-40 max-w-[calc(100%-2rem)] rounded-full bg-navy px-4 py-2.5 text-sm font-semibold text-white shadow-[var(--shadow-soft)] sm:bottom-5 sm:right-5 sm:px-5 sm:py-3"
+        className="focus-ring fixed bottom-4 right-4 z-40 max-w-[calc(100%-2rem)] rounded-full bg-[#e89a2d] px-4 py-2.5 text-sm font-semibold text-[#071525] shadow-[var(--shadow-soft)] transition hover:bg-[#f0a93c] sm:bottom-5 sm:right-5 sm:px-5 sm:py-3"
       >
-        Ask Finekarts
+        Live chat
       </button>
 
       <AnimatePresence>
@@ -111,7 +111,7 @@ export function AiAssistant() {
           >
             <motion.div
               role="dialog"
-              aria-label="Finekarts product assistant"
+              aria-label="Finekarts live chat"
               className="flex h-[min(640px,90vh)] w-full max-w-md flex-col overflow-hidden rounded-2xl bg-paper shadow-[var(--shadow-soft)]"
               initial={reduce ? false : { opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}

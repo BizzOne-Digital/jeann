@@ -684,12 +684,9 @@ export function ReadyCtaBanner() {
                 type="button"
                 onClick={() => setChatFocus((n) => n + 1)}
                 suppressHydrationWarning
-                className="focus-ring inline-flex items-center gap-2 rounded-md border border-white/70 bg-transparent px-6 py-3.5 text-base font-semibold text-white transition hover:bg-white/10"
+                className="focus-ring inline-flex items-center gap-2 rounded-md bg-[#e89a2d] px-6 py-3.5 text-base font-semibold text-[#071525] transition hover:bg-[#f0a93c]"
               >
-                <span aria-hidden className="text-[#d4a84b]">
-                  ✧
-                </span>
-                Ask Finekarts AI
+                Live chat
               </button>
             </div>
           </Reveal>

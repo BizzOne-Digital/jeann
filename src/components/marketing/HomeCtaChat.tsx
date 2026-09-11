@@ -5,7 +5,7 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 
 type Msg = { role: "user" | "assistant"; text: string };
 
-const GREETING = "Hello! I'm Finekarts AI. How can I help you today?";
+const GREETING = "Hello! Welcome to Finekarts live chat. How can we help you today?";
 
 export function HomeCtaChat({ focusToken = 0 }: { focusToken?: number }) {
   const [input, setInput] = useState("");
@@ -79,7 +79,7 @@ export function HomeCtaChat({ focusToken = 0 }: { focusToken?: number }) {
       <div className="flex items-center gap-3 bg-[#0b1f33] px-4 py-3 text-white">
         <BrandLogo size="sm" alt="" />
         <div>
-          <p className="text-sm font-semibold">Finekarts AI</p>
+          <p className="text-sm font-semibold">Live chat</p>
           <p className="flex items-center gap-1.5 text-xs text-white/70">
             <span className="inline-block h-2 w-2 rounded-full bg-emerald-400" aria-hidden />
             Online
@@ -102,7 +102,7 @@ export function HomeCtaChat({ focusToken = 0 }: { focusToken?: number }) {
         ))}
         {busy ? (
           <p className="text-xs text-[#888]" aria-live="polite">
-            Finekarts AI is typing…
+            Live chat is typing…
           </p>
         ) : null}
       </div>
