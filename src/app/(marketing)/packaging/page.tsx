@@ -94,7 +94,7 @@ export default function PackagingPage() {
                   }`}
                 >
                   <div
-                    className={`grid items-start gap-10 lg:grid-cols-2 ${
+                    className={`grid items-stretch gap-10 lg:grid-cols-2 ${
                       index % 2 === 1 ? "lg:[&>*:first-child]:order-2" : ""
                     }`}
                   >
@@ -149,21 +149,41 @@ export default function PackagingPage() {
                       ) : null}
                     </div>
 
-                    <div className={`grid gap-4 ${type.images.length > 1 ? "sm:grid-cols-2" : ""}`}>
-                      {type.images.map((image) => (
-                        <div
-                          key={image.src}
-                          className="relative aspect-[4/3] overflow-hidden rounded-lg border border-[#d5d0c8] bg-[#e4e0d8]"
-                        >
+                    <div
+                      className={
+                        type.images.length > 1
+                          ? "relative min-h-[240px] self-stretch lg:min-h-0"
+                          : "self-stretch"
+                      }
+                    >
+                      {type.images.length > 1 ? (
+                        <div className="flex h-full gap-4 lg:absolute lg:inset-0">
+                          {type.images.map((image) => (
+                            <div
+                              key={image.src}
+                              className="relative min-h-[220px] min-w-0 flex-1 overflow-hidden rounded-lg border border-[#d5d0c8] bg-[#e4e0d8]"
+                            >
+                              <Image
+                                src={image.src}
+                                alt={image.alt}
+                                fill
+                                className="object-cover"
+                                sizes="(max-width: 1024px) 50vw, 480px"
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg border border-[#d5d0c8] bg-[#e4e0d8]">
                           <Image
-                            src={image.src}
-                            alt={image.alt}
+                            src={type.images[0].src}
+                            alt={type.images[0].alt}
                             fill
                             className="object-cover"
                             sizes="(max-width: 1024px) 100vw, 480px"
                           />
                         </div>
-                      ))}
+                      )}
                     </div>
                   </div>
                 </article>

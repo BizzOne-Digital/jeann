@@ -25,7 +25,7 @@ function PackagingIndexGroup({
       <h3 className="text-sm font-semibold tracking-[0.12em] text-[#001a3d] uppercase">
         {title}
       </h3>
-      <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {types.map((type) => {
           const featured = isHomepageFeaturedPackaging(type.slug);
           const image = type.images[0];

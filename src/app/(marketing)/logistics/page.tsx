@@ -50,7 +50,6 @@ export default function LogisticsPage() {
         imageAlt={heroImage.alt}
         primaryCta={LOGISTICS_HERO.primaryCta}
         secondaryCta={LOGISTICS_HERO.secondaryCta}
-        backgroundLayout="triptych"
       />
 
       <MarketingStorySection
@@ -58,8 +57,6 @@ export default function LogisticsPage() {
         title={story.title}
         lead={story.lead}
         boxes={story.boxes}
-        showcaseImageSrc={story.showcaseImageSrc}
-        showcaseImageAlt={story.showcaseImageAlt}
         imageSrc={story.imageSrc}
         imageAlt={story.imageAlt}
         youtubeUrl={story.youtubeUrl}
