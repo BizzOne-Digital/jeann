@@ -107,7 +107,7 @@ export async function evaluateMarketAlerts(actorUserId?: string) {
       type: "market.alert_triggered",
       title: "Market alert triggered",
       body: `${alert.commodity} ${alert.condition} threshold on ${todayKey} — informational only, not trading advice.`,
-      href: "/workspace/market-data",
+      href: "/workspace",
     });
 
     await MarketAlert.findByIdAndUpdate(alert._id, { lastTriggeredAt: new Date() });

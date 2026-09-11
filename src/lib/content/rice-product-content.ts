@@ -49,12 +49,23 @@ function riceImages(hero: string, alt: string): { src: string; alt: string }[] {
   ];
 }
 
+/** Set when the client-approved rice overview video is published on YouTube. */
+export const RICE_YOUTUBE_VIDEO_ID: string | undefined = undefined;
+
+export const RICE_VIDEO_INTRO =
+  "In this video, we showcase our range of premium rice products available for wholesale, bulk, import, export, foodservice, distributors, wholesalers, and commercial buyers worldwide.";
+
+export const RICE_OVERVIEW_IMAGE = {
+  src: `${RICE_BASE}/jasmine-rice.jpg`,
+  alt: "Premium long-grain jasmine rice — reference for international wholesale supply",
+};
+
 export const RICE_CATEGORY = {
   eyebrow: "Rice & grains",
   heroBrand: "Finekarts Incorporated",
   title: "Premium rice products",
   lead:
-    "Welcome to Finekarts Incorporated, your trusted partner for sourcing and international supply of quality rice and agricultural commodities. Our premium rice range is available for wholesale, bulk import and export, foodservice, distributors, wholesalers, and commercial buyers worldwide.",
+    "Welcome to Finekarts Incorporated, your trusted partner for sourcing and international supply of quality rice and agricultural commodities.",
   products: [
     "Basmati rice",
     "1121 Basmati rice",
@@ -332,6 +343,7 @@ export function getRiceProductMarketing(slug: string): ProductMarketingExtras | 
     description: product.description,
     contentBoxes: PILLARS,
     highlights: product.highlights,
+    youtubeVideoId: RICE_YOUTUBE_VIDEO_ID,
   };
 }
 

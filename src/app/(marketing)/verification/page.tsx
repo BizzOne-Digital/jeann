@@ -3,17 +3,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { PageHero } from "@/components/marketing/PageHero";
 import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
-import { MarketingStorySection } from "@/components/marketing/MarketingStorySection";
-import { VERIFICATION_STORY } from "@/lib/content/marketing-pages";
-import { VerificationServicesSection } from "@/components/marketing/VerificationServicesSection";
+import { VerificationHub } from "@/components/marketing/VerificationHub";
+import { VerificationIntro } from "@/components/marketing/VerificationIntro";
 import {
-  GLOBAL_VERIFICATION_NETWORK,
-  REAL_TIME_INTELLIGENCE,
   VERIFICATION_CTA,
-  VERIFICATION_FRAMEWORK_STEPS,
   VERIFICATION_HERO,
   VERIFICATION_NOT_GUARANTEE,
-  VERIFICATION_REPORT_SECTIONS,
 } from "@/lib/content/verification-content";
 
 export const metadata: Metadata = {
@@ -23,7 +18,6 @@ export const metadata: Metadata = {
 };
 
 export default function VerificationPage() {
-  const story = VERIFICATION_STORY;
   const heroImage = getPageHeroImage("verification");
 
   return (
@@ -35,91 +29,12 @@ export default function VerificationPage() {
         imageSrc={heroImage.src}
         imageAlt={heroImage.alt}
         primaryCta={VERIFICATION_HERO.primaryCta}
-        secondaryCta={VERIFICATION_HERO.secondaryCta}
+        secondaryCta={{ href: "#verification-hub", label: "Browse diligence topics" }}
       />
 
-      <MarketingStorySection
-        eyebrow={story.eyebrow}
-        title={story.title}
-        lead={story.lead}
-        boxes={story.boxes}
-        imageSrc="/images/inspections/sampling-grain.png"
-        imageAlt="Sampling for independent commodity verification"
-        youtubeUrl={story.youtubeUrl}
-        videoTitle="Business verification overview"
-      />
+      <VerificationIntro />
 
-      <section className="bg-[#f3f1ec] marketing-section">
-        <div className="container-page">
-          <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">
-            {GLOBAL_VERIFICATION_NETWORK.title}
-          </h2>
-          <p className="mt-3 max-w-3xl text-base text-[#555555]">{GLOBAL_VERIFICATION_NETWORK.lead}</p>
-          <div className="mt-6 flex flex-wrap gap-2">
-            {GLOBAL_VERIFICATION_NETWORK.regions.map((region) => (
-              <span
-                key={region}
-                className="rounded-full border border-[#d5d0c8] bg-white px-4 py-2 text-sm font-medium text-[#001a3d]"
-              >
-                {region}
-              </span>
-            ))}
-          </div>
-          <p className="mt-6 text-sm text-[#555555]">{GLOBAL_VERIFICATION_NETWORK.note}</p>
-        </div>
-      </section>
-
-      <section className="bg-white marketing-section">
-        <div className="container-page">
-          <h2 className="text-2xl font-semibold text-[#001a3d]">{REAL_TIME_INTELLIGENCE.title}</h2>
-          <p className="mt-3 max-w-3xl text-base leading-relaxed text-[#555555]">
-            {REAL_TIME_INTELLIGENCE.lead}
-          </p>
-          <p className="mt-4 max-w-3xl text-sm leading-relaxed text-[#555555]">{REAL_TIME_INTELLIGENCE.note}</p>
-          <p className="mt-4 rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-relaxed text-amber-950">
-            {REAL_TIME_INTELLIGENCE.disclaimer}
-          </p>
-        </div>
-      </section>
-
-      <VerificationServicesSection />
-
-      <section className="bg-[#071525] py-16 text-white lg:py-20">
-        <div className="container-page">
-          <h2 className="text-2xl font-semibold sm:text-3xl">Our verification framework</h2>
-          <ol className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {VERIFICATION_FRAMEWORK_STEPS.map((step) => (
-              <li
-                key={step.step}
-                className="rounded-lg border border-white/15 bg-white/5 p-5 backdrop-blur-sm"
-              >
-                <p className="text-xs font-semibold tracking-[0.2em] text-[#d4a84b] uppercase">
-                  Step {step.step}
-                </p>
-                <h3 className="mt-2 font-semibold">{step.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-white/75">{step.text}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-
-      <section className="bg-white marketing-section">
-        <div className="container-page">
-          <h2 className="text-2xl font-semibold text-[#001a3d]">Verification reports</h2>
-          <p className="mt-3 max-w-3xl text-base text-[#555555]">
-            A Finekarts verification report can be structured around the following sections:
-          </p>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {VERIFICATION_REPORT_SECTIONS.map((section) => (
-              <article key={section.title} className="marketing-box rounded-lg p-5">
-                <h3 className="font-semibold text-[#001a3d]">{section.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-[#555555]">{section.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+      <VerificationHub />
 
       <section className="bg-[#f3f1ec] marketing-section">
         <div className="container-page">

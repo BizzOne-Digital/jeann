@@ -107,7 +107,7 @@ export function ContactForm({
         <span>
           I consent to Finekarts processing this enquiry per the{" "}
           <Link
-            href="/privacy"
+            href="/cookies"
             className="font-semibold text-[#001a3d] underline decoration-[#c88e4a]/40 underline-offset-2"
           >
             privacy policy

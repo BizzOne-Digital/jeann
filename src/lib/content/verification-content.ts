@@ -239,6 +239,54 @@ export const VERIFICATION_SERVICES: VerificationService[] = [
   },
 ];
 
+export const VERIFICATION_HUB_INTRO =
+  "Pick a pillar to explore — registration, counterparties, risk, or compliance. Each topic includes scoped verification services you can expand in place.";
+
+export const VERIFICATION_PILLARS = [
+  {
+    id: "registration",
+    title: "Registration & licensing",
+    summary: "Corporate identity, government records, and import/export permissions.",
+    icon: "document",
+    image: "/images/about/team-strategy-meeting.png",
+    imageAlt: "Trade desk team reviewing corporate registration and licensing records",
+    accent: { main: "#1b7a4a", light: "#edf7f1", ring: "#1b7a4a" },
+    serviceNumbers: [1, 2, 3],
+  },
+  {
+    id: "counterparties",
+    title: "Trading counterparties",
+    summary: "Suppliers, manufacturers, distributors, and buyer due diligence.",
+    icon: "users",
+    image: "/images/about/team-collaboration.png",
+    imageAlt: "Trade desk collaborating on supplier and buyer verification",
+    accent: { main: "#1e4d8f", light: "#eef3fa", ring: "#1e4d8f" },
+    serviceNumbers: [4, 5, 6, 7],
+  },
+  {
+    id: "risk",
+    title: "Risk & operations",
+    summary: "Credit, supply chain, facilities, certifications, and our six-step framework.",
+    icon: "shield",
+    image: "/images/inspections/warehouse-bulk-inspection.png",
+    imageAlt: "Warehouse bulk inspection for operational verification",
+    accent: { main: "#c88e4a", light: "#fff9ef", ring: "#c88e4a" },
+    serviceNumbers: [8, 9, 10, 11],
+  },
+  {
+    id: "compliance",
+    title: "Compliance & reports",
+    summary: "Sanctions screening, commodity proof, inspection partners, and report structure.",
+    icon: "check",
+    image: "/images/inspections/cargo-inspector-loading.png",
+    imageAlt: "Cargo loading supervision and commodity verification",
+    accent: { main: "#c41e3a", light: "#fdf0f2", ring: "#c41e3a" },
+    serviceNumbers: [12, 13, 14],
+  },
+] as const;
+
+export type VerificationPillarId = (typeof VERIFICATION_PILLARS)[number]["id"];
+
 export const VERIFICATION_FRAMEWORK_STEPS = [
   { step: 1, title: "Identify", text: "Confirm the legal identity of the counterparty." },
   { step: 2, title: "Validate", text: "Check available government, regulatory and commercial records." },

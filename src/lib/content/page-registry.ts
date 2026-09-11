@@ -374,7 +374,7 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
   {
     slug: "testimonials",
     title: "Testimonials",
-    path: "/testimonials",
+    path: "/terms",
     seoTitle: "Testimonials",
     seoDescription: "Approved client testimonials.",
     sections: [
@@ -402,27 +402,27 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
   },
   {
     slug: "privacy",
-    title: "Privacy",
+    title: "Careers",
     path: "/privacy",
-    seoTitle: "Privacy notice",
-    seoDescription: "Finekarts privacy notice.",
+    seoTitle: "Careers",
+    seoDescription: "Career opportunities and applications at Finekarts Incorporated.",
     sections: [
       section("hero", "Hero", {
-        title: "Privacy notice",
-        description: "How Finekarts collects, uses, and protects personal information.",
+        title: "Careers at Finekarts",
+        description: "Submit your application and resume for trade, logistics, and operations roles.",
       }),
     ],
   },
   {
     slug: "terms",
-    title: "Terms",
+    title: "Testimonials",
     path: "/terms",
-    seoTitle: "Website terms",
-    seoDescription: "Finekarts website terms of use.",
+    seoTitle: "Testimonials",
+    seoDescription: "Approved client testimonials from Finekarts trade counterparties.",
     sections: [
       section("hero", "Hero", {
-        title: "Website terms of use",
-        description: "Terms governing use of this website and marketing content.",
+        title: "Testimonials",
+        description: "Verified buyers and trade partners share their experience working with Finekarts.",
       }),
     ],
   },

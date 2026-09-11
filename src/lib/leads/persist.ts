@@ -221,6 +221,37 @@ export async function persistLeadToMongo(
       });
       return reference;
     }
+    case "career": {
+      const reference = generateLeadReference("CAR");
+      await models.CareerApplication.create({
+        reference,
+        fullName: String(data.fullName ?? ""),
+        email: String(data.email ?? "").toLowerCase(),
+        phone: String(data.phone ?? ""),
+        position: String(data.position ?? ""),
+        linkedIn: data.linkedIn ? String(data.linkedIn) : undefined,
+        location: data.location ? String(data.location) : undefined,
+        coverLetter: data.coverLetter ? String(data.coverLetter) : undefined,
+        resumeUrl: String(data.resumeUrl ?? ""),
+        resumeFilename: String(data.resumeFilename ?? ""),
+        resumeMimeType: String(data.resumeMimeType ?? ""),
+        resumeSize: Number(data.resumeSize ?? 0),
+        status: "new",
+        ipHash,
+      });
+      await models.Lead.create({
+        source: "career",
+        stage: "new",
+        contact: {
+          name: String(data.fullName ?? ""),
+          email: String(data.email ?? "").toLowerCase(),
+          phone: String(data.phone ?? ""),
+        },
+        consent: { marketing: false, termsAccepted: true, consentedAt: new Date() },
+        notes: `Career application ${reference}: ${String(data.position ?? "")}`,
+      });
+      return reference;
+    }
     case "newsletter": {
       const token = generateLeadReference("UNSUB");
       await models.NewsletterSubscriber.findOneAndUpdate(

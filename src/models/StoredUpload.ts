@@ -1,7 +1,7 @@
 import { Schema, model, models } from "mongoose";
 import type { LeanDoc } from "./shared";
 
-export const UPLOAD_FOLDERS = ["products", "gallery", "pages", "misc"] as const;
+export const UPLOAD_FOLDERS = ["products", "gallery", "pages", "misc", "careers"] as const;
 export type UploadFolder = (typeof UPLOAD_FOLDERS)[number];
 
 export interface IStoredUpload {

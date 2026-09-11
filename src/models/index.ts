@@ -92,6 +92,7 @@ export * from "./TaxConfiguration";
 export * from "./BookingRequest";
 export * from "./Lead";
 export * from "./ContactSubmission";
+export * from "./CareerApplication";
 export * from "./NewsletterSubscriber";
 export * from "./Page";
 export * from "./BlogPost";

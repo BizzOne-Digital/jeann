@@ -4,16 +4,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/motion/Reveal";
 import { buyerOrderHref } from "@/lib/marketing/cta-links";
+import { MediaFieldPair } from "@/components/marketing/MediaFieldPair";
 import {
   RICE_BULK_SUPPLY,
   RICE_BUYER_NOTE,
   RICE_CATEGORY,
   RICE_CONTACT,
   RICE_MARKETS,
+  RICE_OVERVIEW_IMAGE,
   RICE_PACKAGING,
   RICE_QUALITY_PILLARS,
   RICE_SPECIFICATIONS,
   RICE_SPOTLIGHT_SLUGS,
+  RICE_VIDEO_INTRO,
+  RICE_YOUTUBE_VIDEO_ID,
   getRiceProductDetail,
   type RiceProductDetail,
 } from "@/lib/content/rice-product-content";
@@ -95,6 +99,7 @@ export function RiceCategorySections() {
             <h2 className="mt-2 max-w-3xl text-2xl font-semibold text-[#1a2e1a] sm:text-3xl">{cat.title}</h2>
             <div className="gold-rule mt-4" />
             <p className="mt-4 max-w-3xl text-base leading-relaxed text-[#5a5348]">{cat.lead}</p>
+            <p className="mt-4 max-w-3xl text-base leading-relaxed text-[#5a5348]">{RICE_VIDEO_INTRO}</p>
           </Reveal>
 
           <Reveal delay={0.06} className="mt-10">
@@ -135,6 +140,17 @@ export function RiceCategorySections() {
               );
             })}
           </div>
+
+          {RICE_YOUTUBE_VIDEO_ID ? (
+            <Reveal delay={0.1} className="mt-10">
+              <MediaFieldPair
+                imageSrc={RICE_OVERVIEW_IMAGE.src}
+                imageAlt={RICE_OVERVIEW_IMAGE.alt}
+                youtubeUrl={`https://www.youtube.com/watch?v=${RICE_YOUTUBE_VIDEO_ID}`}
+                videoTitle="Premium rice products overview"
+              />
+            </Reveal>
+          ) : null}
 
           <Reveal delay={0.1} className="mt-8">
             <p className="text-xs leading-relaxed text-[#7a7268]">{cat.disclaimer}</p>

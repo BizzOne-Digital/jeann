@@ -148,7 +148,7 @@ export function BookingForm({
         <span>
           I understand this form requests a consultation only — not a confirmed appointment — and I
           agree to the{" "}
-          <Link href="/privacy" className="text-navy underline">
+          <Link href="/cookies" className="text-navy underline">
             privacy policy
           </Link>
           .

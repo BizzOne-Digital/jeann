@@ -80,7 +80,7 @@ export function FeaturedTestimonialAside({
           <p className="text-sm text-[#001a3d]/80">{testimonial.company}</p>
         ) : null}
         <Link
-          href="/testimonials"
+          href="/terms"
           className="mt-6 text-sm font-medium text-[#c88e4a] transition-colors hover:text-[#b57d3c]"
         >
           Read more testimonials →

@@ -156,6 +156,6 @@ export const RESOURCES_DOCUMENT_GROUPS = [
 export const RESOURCES_RELATED_LINKS = [
   { href: "/logistics", label: "Logistics" },
   { href: "/inspections", label: "Inspections" },
-  { href: "/shipping-documents", label: "Shipping documents" },
+  { href: "/logistics", label: "Shipping & logistics" },
   { href: "/insights", label: "Insights" },
 ];

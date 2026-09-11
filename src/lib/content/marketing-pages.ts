@@ -1,4 +1,5 @@
 import type { MarketingContentBox } from "@/components/marketing/MarketingStorySection";
+import { LOGISTICS_IMAGES } from "@/lib/content/logistics-images";
 
 export const INSPECTIONS_STORY = {
   eyebrow: "Our objective",
@@ -76,9 +77,11 @@ export const LOGISTICS_STORY = {
   eyebrow: "Logistics",
   title: "Disciplined movement from load port to discharge",
   lead: "Whether you trade FOB or CIF, success depends on clear allocation of costs, risks, and documents. Finekarts structures shipment programmes so cargo, surveys, and transport papers stay aligned with your contract and banking instrument.",
-  youtubeUrl: "https://www.youtube.com/watch?v=nFFts9WyUm8",
-  imageSrc: "/images/packaging/containerized-cargo-port.png",
-  imageAlt: "Containerized cargo at port for export",
+  youtubeUrl: "https://www.youtube.com/watch?v=azLlZZ0t2CE",
+  showcaseImageSrc: LOGISTICS_IMAGES.hero.src,
+  showcaseImageAlt: LOGISTICS_IMAGES.hero.alt,
+  imageSrc: LOGISTICS_IMAGES.field.src,
+  imageAlt: LOGISTICS_IMAGES.field.alt,
   boxes: [
     {
       title: "Visibility",

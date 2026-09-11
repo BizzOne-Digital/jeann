@@ -115,11 +115,11 @@ export function TradeOfferForm({ className }: { className?: string }) {
         <span>
           I understand submission does not guarantee portal access, publication, or a closed deal. I
           agree to applicable{" "}
-          <Link href="/terms" className="text-navy underline">
+          <Link href="/buyer-terms" className="text-navy underline">
             terms
           </Link>{" "}
           and{" "}
-          <Link href="/privacy" className="text-navy underline">
+          <Link href="/cookies" className="text-navy underline">
             privacy policy
           </Link>
           .

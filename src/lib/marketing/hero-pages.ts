@@ -16,6 +16,8 @@ export const HERO_PAGE_PREFIXES = [
   "/faq",
   "/team",
   "/testimonials",
+  "/terms",
+  "/privacy",
   "/cookies",
   "/buyer-terms",
   "/accessibility",

@@ -5,7 +5,7 @@ import { getSite } from "@/lib/content/catalog";
 import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
 import { AboutHub } from "@/components/marketing/AboutHub";
 import { FoodSafetyAgencyMarquee } from "@/components/marketing/FoodSafetyAgencyMarquee";
-import { AboutHero, AboutCta } from "@/components/marketing/AboutSections";
+import { AboutHero } from "@/components/marketing/AboutSections";
 
 export const metadata: Metadata = {
   title: "About Finekarts",
@@ -34,12 +34,6 @@ export default async function AboutPage() {
         }}
       />
       <FoodSafetyAgencyMarquee />
-      <AboutCta
-        email={site.email}
-        phone={site.phone}
-        phoneDisplay={site.phoneDisplay}
-        cms={getSectionFields(cms, "cta")}
-      />
     </>
   );
 }

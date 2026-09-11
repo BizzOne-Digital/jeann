@@ -277,6 +277,7 @@ export const SEED_CATEGORIES: SeedCategory[] = [
         minOrderText: "Typically container-based; larger lots by agreement.",
         status: "pending_verification" as const,
         image: rice?.heroImage,
+        youtubeVideoId: marketing?.youtubeVideoId,
         highlights: marketing?.highlights,
       };
     }),

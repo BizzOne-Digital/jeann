@@ -1,3 +1,4 @@
+import { MarketingEnquiryCta } from "@/components/marketing/MarketingEnquiryCta";
 import { SiteFooter } from "@/components/marketing/SiteFooter";
 import { SiteJsonLd } from "@/components/marketing/SiteJsonLd";
 import { MarketingShell } from "@/components/marketing/MarketingShell";
@@ -15,6 +16,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
         <MarketingShell>
           <PageTransition>{children}</PageTransition>
         </MarketingShell>
+        <MarketingEnquiryCta />
         <SiteFooter />
         <ClientOnly>
           <AiAssistant />

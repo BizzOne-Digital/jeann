@@ -16,7 +16,7 @@ const STATIC_PATHS = [
   "/supplier-offer",
   "/insights",
   "/faq",
-  "/testimonials",
+  "/terms",
   "/team",
   "/booking",
   "/register/buyer",

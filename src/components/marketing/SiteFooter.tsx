@@ -40,8 +40,8 @@ const LINKS = [
     title: "Support",
     items: [
       { href: "/login", label: "Buyer portal" },
-      { href: "/privacy", label: "Privacy Policy" },
-      { href: "/terms", label: "Terms & Conditions" },
+      { href: "/privacy", label: "Careers" },
+      { href: "/terms", label: "Testimonials" },
       { href: "/accessibility", label: "Accessibility" },
     ],
   },
@@ -144,10 +144,19 @@ export async function SiteFooter() {
           <p>© {new Date().getFullYear()} Finekarts Incorporated. All rights reserved.</p>
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
             <Link href="/privacy" className="hover:text-white">
-              Privacy Policy
+              Careers
             </Link>
             <Link href="/terms" className="hover:text-white">
-              Terms &amp; Conditions
+              Testimonials
+            </Link>
+            <Link href="/cookies" className="hover:text-white">
+              Cookies
+            </Link>
+            <Link href="/buyer-terms" className="hover:text-white">
+              Buyer terms
+            </Link>
+            <Link href="/accessibility" className="hover:text-white">
+              Accessibility
             </Link>
             <span className="hidden text-white/25 sm:inline" aria-hidden>|</span>
             <p>Enquiry submission does not guarantee acceptance, pricing, or shipment.</p>

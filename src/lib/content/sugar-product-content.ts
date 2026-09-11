@@ -207,11 +207,11 @@ const SUGAR_GRADES: Record<string, SugarGradeDetail> = {
       "Controlled colour and consistent crystal structure",
       "Domestic and international supply programmes",
     ],
-    heroImage: "/images/products/sugar/icumsa-100-crystal-white-sugar.png",
+    heroImage: "/images/products/sugar/icumsa-100-crystal-white-sugar.jpg",
     images: [
       {
-        src: "/images/products/sugar/icumsa-100-crystal-white-sugar.png",
-        alt: "ICUMSA 100 lite cream crystal sugar grains",
+        src: "/images/products/sugar/icumsa-100-crystal-white-sugar.jpg",
+        alt: "ICUMSA 100 lite cream crystal sugar grains on a dark surface",
       },
       {
         src: "/images/products/sugar/icumsa-45-white-sugar-2.png",
@@ -249,11 +249,11 @@ const SUGAR_GRADES: Record<string, SugarGradeDetail> = {
       "Brown-tone colour with consistent quality",
       "Bulk vessel and bagged cargo formats",
     ],
-    heroImage: "/images/products/sugar/icumsa-600-brown-sugar.jpg",
+    heroImage: "/images/products/sugar/icumsa-150-crystal-sugar.png",
     images: [
       {
-        src: "/images/products/sugar/icumsa-600-brown-sugar.jpg",
-        alt: "ICUMSA 150 light brown sugar crystals",
+        src: "/images/products/sugar/icumsa-150-crystal-sugar.png",
+        alt: "ICUMSA 150 sugar crystals in a wooden spoon",
       },
       {
         src: "/images/products/sugar/icumsa-600-raw-sugar-cane.png",

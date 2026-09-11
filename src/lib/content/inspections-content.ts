@@ -5,7 +5,7 @@ export const INSPECTIONS_HERO = {
   title: "Confidence in Every Shipment",
   description:
     "International commodity trading requires more than competitive pricing and reliable logistics. Through our network of independent third-party inspection organizations, Finekarts helps clients arrange professional services at origin, during loading, in transit where applicable, and at destination — for greater transparency, reduced transaction risk, and confidence in every shipment.",
-  primaryCta: { href: "#request-inspection", label: "Request an inspection →" },
+  primaryCta: { href: "#site-enquiry-cta", label: "Request an inspection →" },
   secondaryCta: { href: "#inspection-hub", label: "Browse inspection topics" },
 };
 

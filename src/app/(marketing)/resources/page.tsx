@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/marketing/PageHero";
 import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 import { ResourcesHub } from "@/components/marketing/ResourcesHub";
-import { ResourcesEnquiryCta } from "@/components/marketing/ResourcesSections";
 import { cmsField } from "@/lib/content/cms-field";
 import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
 
@@ -48,7 +47,6 @@ export default async function ResourcesPage() {
       />
 
       <ResourcesHub introBody={introBody} />
-      <ResourcesEnquiryCta />
     </>
   );
 }

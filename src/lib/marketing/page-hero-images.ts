@@ -1,4 +1,5 @@
 import { AGRICULTURE_IMAGES } from "@/lib/content/agriculture-images";
+import { LOGISTICS_IMAGES } from "@/lib/content/logistics-images";
 import { PACKAGING_IMAGES } from "@/lib/content/packaging-images";
 
 export type PageHeroImageKey =
@@ -41,7 +42,10 @@ export const PAGE_HERO_IMAGES: Record<PageHeroImageKey, PageHeroImage> = {
     src: "/images/inspections/port-sampling.png",
     alt: "Trade desk support at the port",
   },
-  insights: AGRICULTURE_IMAGES.teaPlantation,
+  insights: {
+    src: "/images/insights/market-insights-hero.jpg",
+    alt: "Trade professionals reviewing global market data and commodity insights in a boardroom",
+  },
   faq: AGRICULTURE_IMAGES.combineHarvest,
   team: AGRICULTURE_IMAGES.grainSilos,
   testimonials: AGRICULTURE_IMAGES.tractorPlowing,
@@ -61,7 +65,7 @@ export const PAGE_HERO_IMAGES: Record<PageHeroImageKey, PageHeroImage> = {
     src: "/images/inspections/cargo-inspector-loading.png",
     alt: "Cargo loading supervision and due diligence",
   },
-  logistics: PACKAGING_IMAGES.bulkVessel,
+  logistics: LOGISTICS_IMAGES.hero,
   packaging: PACKAGING_IMAGES.tankerVessel,
   buyerTerms: PACKAGING_IMAGES.containerizedCargoPort,
   cookies: PACKAGING_IMAGES.palletizedBags,

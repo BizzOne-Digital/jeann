@@ -352,7 +352,7 @@ export function EdibleOilOrderForm({
             buyer terms
           </Link>{" "}
           and{" "}
-          <Link href="/privacy" className="text-navy underline">
+          <Link href="/cookies" className="text-navy underline">
             privacy policy
           </Link>
           .

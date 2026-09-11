@@ -7,7 +7,8 @@ export type LeadKind =
   | "trade-offer"
   | "contact"
   | "booking"
-  | "newsletter";
+  | "newsletter"
+  | "career";
 
 export interface StoredLead {
   id: string;

@@ -7,10 +7,21 @@ export const UPLOAD_MIME_TYPES: Record<string, string> = {
   "image/png": "png",
   "image/webp": "webp",
   "image/gif": "gif",
+  "application/pdf": "pdf",
+  "application/msword": "doc",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "docx",
 };
 
+export const CAREER_RESUME_MAX_BYTES = 5 * 1024 * 1024;
+
 export function isUploadFolder(value: string): value is UploadFolder {
-  return value === "products" || value === "gallery" || value === "pages" || value === "misc";
+  return (
+    value === "products" ||
+    value === "gallery" ||
+    value === "pages" ||
+    value === "misc" ||
+    value === "careers"
+  );
 }
 
 export function buildUploadPublicUrl(folder: UploadFolder, filename: string): string {
