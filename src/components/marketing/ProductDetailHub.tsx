@@ -455,7 +455,7 @@ export function ProductDetailHub(props: ProductHubProps) {
                     className={cn(
                       "flex h-11 w-11 items-center justify-center rounded-full transition",
                       active
-                        ? "bg-[#d4a84b] text-[#001a3d]"
+                        ? "bg-[var(--brand-cta)] text-[var(--brand-cta-foreground)]"
                         : "bg-white text-[#1b3a5c] group-hover:text-[#c88e4a]",
                     )}
                   >
@@ -555,7 +555,7 @@ export function ProductDetailEnquiryCta({
           <div className="mt-8 flex flex-wrap gap-3 lg:mt-0 lg:shrink-0">
             <Link
               href={orderHref}
-              className="focus-ring inline-flex items-center gap-2 rounded-md bg-[#d4a84b] px-6 py-3.5 text-sm font-semibold text-[#001a3d] transition hover:bg-[#c4983f]"
+              className="focus-ring inline-flex items-center gap-2 marketing-btn-primary px-6 py-3.5 text-sm font-semibold"
             >
               Click here to ORDER <span aria-hidden>→</span>
             </Link>

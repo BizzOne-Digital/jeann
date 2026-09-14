@@ -179,7 +179,7 @@ export function CareerApplicationForm({
       <button
         type="submit"
         disabled={submitting}
-        className="focus-ring inline-flex items-center justify-center rounded-md bg-[#d4a84b] px-6 py-3.5 text-sm font-semibold text-[#001a3d] transition hover:bg-[#c4983f] disabled:opacity-60"
+        className="focus-ring marketing-btn-primary inline-flex items-center justify-center px-6 py-3.5 text-sm disabled:opacity-60"
       >
         {submitting ? "Submitting…" : "Submit application"}
       </button>

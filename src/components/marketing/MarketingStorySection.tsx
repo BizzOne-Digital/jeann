@@ -41,7 +41,7 @@ export function MarketingStorySection({
   return (
     <section className={`${bg} marketing-section`}>
       <div className="container-page">
-        <Reveal>
+        <Reveal variant="blur-up">
           {eyebrow ? (
             <p className="text-xs font-semibold tracking-[0.2em] text-[#c88e4a] uppercase">{eyebrow}</p>
           ) : null}
@@ -51,8 +51,13 @@ export function MarketingStorySection({
 
         <div className="mt-8 grid gap-5 md:grid-cols-3">
           {boxes.map((box, index) => (
-            <Reveal key={box.title} delay={index * 0.05}>
-              <article className="h-full marketing-box rounded-lg p-6 shadow-sm">
+            <Reveal
+              key={box.title}
+              delay={index * 0.07}
+              variant={index % 3 === 0 ? "up" : index % 3 === 1 ? "left" : "right"}
+              bounce
+            >
+              <article className="h-full marketing-box marketing-box-motion rounded-lg p-6 shadow-sm">
                 <h3 className="text-sm font-semibold tracking-[0.14em] text-[#c88e4a] uppercase">
                   {box.title}
                 </h3>
@@ -68,7 +73,7 @@ export function MarketingStorySection({
           </Reveal>
         ) : null}
 
-        <Reveal y={16} className="mt-8">
+        <Reveal y={24} variant="zoom" className="mt-8">
           <MediaFieldPair
             imageSrc={imageSrc}
             imageAlt={imageAlt}

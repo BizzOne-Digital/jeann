@@ -23,7 +23,7 @@ export function MarketingEnquiryCta() {
               <div className="flex flex-wrap gap-3 lg:justify-end">
                 <Link
                   href="/login"
-                  className="focus-ring inline-flex items-center rounded-md bg-[#d4a84b] px-6 py-3 text-sm font-semibold text-[#001a3d] transition hover:bg-[#e8c06a]"
+                  className="focus-ring inline-flex items-center marketing-btn-primary px-6 py-3 text-sm font-semibold"
                 >
                   Buyer sign in
                 </Link>

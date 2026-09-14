@@ -3,8 +3,7 @@
 import Image from "next/image";
 import { ImageTriptych } from "@/components/marketing/ImageTriptych";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
-import { Reveal } from "@/components/motion/Reveal";
+import { MaskedHeadline, Reveal } from "@/components/motion/Reveal";
 import {
   HERO_DARK_OVERLAY_BOTTOM,
   HERO_DARK_OVERLAY_WASH,
@@ -49,7 +48,6 @@ export function PageHero({
   backgroundLayout = "default",
   priority = true,
 }: Props) {
-  const reduce = useReducedMotion();
   const light = tone === "light";
   const triptych = backgroundLayout === "triptych" && !light;
 
@@ -110,16 +108,14 @@ export function PageHero({
             </p>
           </Reveal>
 
-          <motion.h1
+          <MaskedHeadline
+            text={title}
+            as="h1"
+            immediate
             className={`mt-4 break-words font-semibold leading-tight tracking-tight ${
               light ? "text-[var(--navy)]" : ""
             } text-[1.75rem] sm:text-4xl lg:text-[2.85rem]`}
-            initial={reduce ? false : { opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.06 }}
-          >
-            {title}
-          </motion.h1>
+          />
 
           <Reveal delay={0.12}>
             <p
@@ -137,7 +133,7 @@ export function PageHero({
                 {primaryCta ? (
                   <Link
                     href={primaryCta.href}
-                    className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-md bg-[#d4a84b] px-6 py-3.5 text-base font-semibold text-white transition hover:bg-[#c4983f] sm:w-auto"
+                    className="focus-ring inline-flex w-full items-center justify-center gap-2 marketing-btn-primary px-6 py-3.5 text-base font-semibold sm:w-auto"
                   >
                     {primaryCta.label}
                   </Link>

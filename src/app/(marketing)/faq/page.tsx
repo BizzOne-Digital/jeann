@@ -34,7 +34,7 @@ export default async function FaqPage() {
           <AnimatedSection className="mt-12 flex flex-wrap gap-3" delay={0.1}>
             <Link
               href={buyerQuoteHref()}
-              className="focus-ring inline-flex items-center gap-2 rounded-md bg-[#d4a84b] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#c4983f]"
+              className="focus-ring inline-flex items-center gap-2 marketing-btn-primary px-6 py-3.5 text-sm font-semibold"
             >
               Request a Quote <span aria-hidden>→</span>
             </Link>

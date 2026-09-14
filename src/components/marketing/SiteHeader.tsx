@@ -112,14 +112,14 @@ export function SiteHeader({ embedded = false }: Props) {
                     "focus-ring relative px-3 py-2 text-[0.95rem] font-medium tracking-wide transition-colors duration-200",
                     transparent
                       ? active
-                        ? "text-[#d4a84b]"
+                        ? "text-[var(--brand-cta)]"
                         : "text-white/75 hover:text-white"
                       : isLight
                         ? active
                           ? "text-[var(--navy)]"
                           : "text-[var(--stone)] hover:text-[var(--navy)]"
                         : active
-                          ? "text-[#d4a84b]"
+                          ? "text-[var(--brand-cta)]"
                           : "text-white/70 hover:text-white",
                   )}
                 >
@@ -128,7 +128,7 @@ export function SiteHeader({ embedded = false }: Props) {
                     <span
                       className={cn(
                         "absolute inset-x-3.5 -bottom-0.5 h-[2px]",
-                        isLight && !transparent ? "bg-[var(--ocean)]" : "bg-[#d4a84b]",
+                        isLight && !transparent ? "bg-[var(--ocean)]" : "bg-[var(--brand-cta)]",
                       )}
                     />
                   ) : null}
@@ -142,12 +142,8 @@ export function SiteHeader({ embedded = false }: Props) {
             <Link
               href="/login"
               className={cn(
-                "focus-ring inline-flex items-center gap-2 whitespace-nowrap rounded-sm border px-4 py-2 text-sm font-semibold transition lg:px-5 lg:py-2.5",
-                transparent
-                  ? "border-[#d4a84b] text-white hover:bg-[#d4a84b] hover:text-[#071525]"
-                  : isLight
-                    ? "border-[var(--navy)] text-[var(--navy)] hover:bg-[var(--navy)] hover:text-white"
-                    : "border-[#d4a84b] bg-[#d4a84b]/10 text-[#f5e6c8] hover:bg-[#d4a84b] hover:text-[#071525]",
+                "focus-ring marketing-btn-primary inline-flex items-center gap-2 whitespace-nowrap px-4 py-2 text-sm lg:px-5 lg:py-2.5",
+                isLight && !transparent && "shadow-none",
               )}
             >
               Buyer Portal
@@ -223,7 +219,7 @@ export function SiteHeader({ embedded = false }: Props) {
               transition={{ type: "tween", duration: 0.25 }}
             >
               <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
-                <p className="text-sm font-semibold tracking-wide text-[#d4a84b]">Menu</p>
+                <p className="text-sm font-semibold tracking-wide text-[var(--brand-cta)]">Menu</p>
                 <button
                   type="button"
                   className="rounded-md border border-white/20 px-3 py-1.5 text-sm text-white"
@@ -245,7 +241,7 @@ export function SiteHeader({ embedded = false }: Props) {
                       onClick={closeMenu}
                       className={cn(
                         "block border-b border-white/10 py-4 text-lg font-semibold transition-colors duration-200",
-                        active ? "text-[#d4a84b]" : "text-white/75 hover:text-white",
+                        active ? "text-[var(--brand-cta)]" : "text-white/75 hover:text-white",
                       )}
                     >
                       {item.label}
@@ -258,14 +254,14 @@ export function SiteHeader({ embedded = false }: Props) {
                 <Link
                   href="/login"
                   onClick={closeMenu}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-sm border border-[#d4a84b] px-5 py-3 font-semibold text-white"
+                  className="marketing-btn-primary inline-flex w-full items-center justify-center gap-2 px-5 py-3 font-semibold"
                 >
                   Buyer Portal →
                 </Link>
                 <Link
                   href="/register/buyer"
                   onClick={closeMenu}
-                  className="inline-flex w-full items-center justify-center rounded-sm bg-[#d4a84b] px-5 py-3 font-semibold text-[#071525]"
+                  className="marketing-btn-primary inline-flex w-full items-center justify-center px-5 py-3 font-semibold"
                 >
                   Register as buyer
                 </Link>

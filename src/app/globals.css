@@ -24,6 +24,10 @@ body.intro-active #finekarts-site-root {
   --gold: #c4a35a;
   --gold-bright: #d4b56a;
   --accent-orange: #e89a2d;
+  /* Logo / buyer sign-in CTA — use for primary action buttons */
+  --brand-cta: #e89a2d;
+  --brand-cta-hover: #f0a93c;
+  --brand-cta-foreground: #071525;
   --hero-ink: #1b3a5c;
   --navy-rgb: 27 58 92;
   --hero-gradient-standard: linear-gradient(
@@ -237,6 +241,21 @@ a {
   box-shadow: 0 1px 2px rgba(19, 41, 61, 0.04);
 }
 
+.marketing-box,
+.marketing-box-motion {
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.35s ease;
+}
+
+.marketing-box:hover,
+.marketing-box-motion:hover {
+  transform: translateY(-6px) scale(1.015);
+  border-color: rgba(200, 142, 74, 0.4);
+  box-shadow: 0 16px 40px rgba(19, 41, 61, 0.1);
+}
+
 .marketing-box-interactive {
   transition:
     border-color 200ms ease,
@@ -251,6 +270,27 @@ a {
 /* Consistent vertical rhythm for marketing page sections */
 .marketing-section {
   padding-block: clamp(2.75rem, 5vw, 3.5rem);
+}
+
+@supports (animation-timeline: view()) {
+  .marketing-section {
+    animation: marketing-section-enter 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 32%;
+  }
+}
+
+@keyframes marketing-section-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 48px, 0) scale(0.985);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
 }
 
 @keyframes coffee-orb-drift {
@@ -330,13 +370,14 @@ a {
 }
 
 .btn-primary {
-  background: var(--navy);
-  color: white;
-  box-shadow: 0 10px 24px rgba(27, 58, 92, 0.18);
+  background: var(--brand-cta);
+  color: var(--brand-cta-foreground);
+  box-shadow: 0 10px 24px rgba(232, 154, 45, 0.28);
 }
 
 .btn-primary:hover {
-  background: var(--ink);
+  background: var(--brand-cta-hover);
+  color: var(--brand-cta-foreground);
 }
 
 .btn-secondary {
@@ -351,8 +392,42 @@ a {
 }
 
 .btn-gold {
-  background: linear-gradient(135deg, var(--gold), var(--gold-bright));
-  color: var(--ink);
+  background: var(--brand-cta);
+  color: var(--brand-cta-foreground);
+}
+
+.btn-gold:hover {
+  background: var(--brand-cta-hover);
+}
+
+.marketing-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0.375rem;
+  background-color: var(--brand-cta);
+  color: var(--brand-cta-foreground);
+  font-weight: 600;
+  transition:
+    background-color 200ms ease,
+    transform 0.25s cubic-bezier(0.34, 1.45, 0.64, 1),
+    box-shadow 0.25s ease;
+}
+
+.marketing-btn-primary:hover {
+  background-color: var(--brand-cta-hover);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 12px 28px rgba(232, 154, 45, 0.35);
+}
+
+.marketing-btn-primary:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.marketing-btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .field {

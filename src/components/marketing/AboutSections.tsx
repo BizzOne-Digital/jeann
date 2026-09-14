@@ -20,7 +20,7 @@ function GoldButton({
   return (
     <Link
       href={href}
-      className={`focus-ring inline-flex items-center justify-center gap-2 rounded-md bg-[#d4a84b] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#c4983f] ${className}`}
+      className={`focus-ring inline-flex items-center justify-center gap-2 marketing-btn-primary px-6 py-3.5 text-sm font-semibold ${className}`}
     >
       {children}
     </Link>

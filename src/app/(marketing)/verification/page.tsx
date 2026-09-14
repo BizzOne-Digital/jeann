@@ -71,7 +71,7 @@ export default function VerificationPage() {
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/login"
-              className="focus-ring inline-flex items-center gap-2 rounded-md bg-[#d4a84b] px-6 py-3.5 text-sm font-semibold text-[#071525] transition hover:bg-[#c4983f]"
+              className="focus-ring inline-flex items-center gap-2 marketing-btn-primary px-6 py-3.5 text-sm font-semibold"
             >
               Buyer portal — submit request <span aria-hidden>→</span>
             </Link>

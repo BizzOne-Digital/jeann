@@ -49,7 +49,7 @@ function GoldButton({
   return (
     <Link
       href={href}
-      className={`focus-ring inline-flex items-center justify-center gap-2 rounded-md bg-[#e89a2d] px-6 py-3.5 text-sm font-semibold text-[#071525] transition hover:bg-[#f0a93c] ${className}`}
+      className={`focus-ring inline-flex items-center justify-center gap-2 rounded-md marketing-btn-primary px-6 py-3.5 text-sm font-semibold ${className}`}
     >
       {children}
     </Link>
@@ -165,7 +165,7 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
             <div className="mt-9 flex w-full max-w-full flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Link
                 href={cmsField(cms, "primaryCtaHref", "/login")}
-                className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-sm bg-[#d4a84b] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#c4983f] sm:w-auto"
+                className="focus-ring inline-flex w-full items-center justify-center gap-2 marketing-btn-primary px-6 py-3.5 text-sm font-semibold sm:w-auto"
               >
                 {cmsField(cms, "primaryCtaLabel", "Buyer portal")} <span aria-hidden>→</span>
               </Link>
@@ -486,7 +486,7 @@ export function SourcedResponsibly({ home3 = "/images/home-3.png" }: { home3?: s
           <Reveal delay={0.28}>
             <Link
               href="/resources"
-              className="focus-ring mt-10 inline-flex items-center gap-2 rounded-md bg-[#d4a84b] px-6 py-3.5 text-base font-semibold text-white transition hover:bg-[#c4983f]"
+              className="focus-ring mt-10 inline-flex items-center gap-2 marketing-btn-primary px-6 py-3.5 text-base font-semibold"
             >
               Resources & documents <span aria-hidden>→</span>
             </Link>
@@ -676,7 +676,7 @@ export function ReadyCtaBanner() {
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href="/login"
-                className="focus-ring inline-flex items-center gap-2 rounded-md bg-[#d4a84b] px-6 py-3.5 text-base font-semibold text-white transition hover:bg-[#c4983f]"
+                className="focus-ring inline-flex items-center gap-2 marketing-btn-primary px-6 py-3.5 text-base font-semibold"
               >
                 Buyer portal sign in <span aria-hidden>→</span>
               </Link>
@@ -684,7 +684,7 @@ export function ReadyCtaBanner() {
                 type="button"
                 onClick={() => setChatFocus((n) => n + 1)}
                 suppressHydrationWarning
-                className="focus-ring inline-flex items-center gap-2 rounded-md bg-[#e89a2d] px-6 py-3.5 text-base font-semibold text-[#071525] transition hover:bg-[#f0a93c]"
+                className="focus-ring inline-flex items-center gap-2 rounded-md marketing-btn-primary px-6 py-3.5 text-base font-semibold"
               >
                 Live chat
               </button>

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { PageHero } from "@/components/marketing/PageHero";
 import {
@@ -11,7 +10,10 @@ import {
 import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 import { MarketingStorySection } from "@/components/marketing/MarketingStorySection";
 import { Reveal } from "@/components/motion/Reveal";
-import { LOGISTICS_IMAGES } from "@/lib/content/logistics-images";
+import {
+  LOGISTICS_PAGE_SECTION_IMAGES,
+  LOGISTICS_SHIP_TRUCK_BAND,
+} from "@/lib/content/logistics-images";
 import { LOGISTICS_STORY } from "@/lib/content/marketing-pages";
 import {
   CONTRACT_TO_CARGO_STEPS,
@@ -65,21 +67,23 @@ export default function LogisticsPage() {
         background="cream"
       />
 
-      <section className="bg-white py-8 lg:py-10">
+      <section className="bg-white py-8 lg:py-10 marketing-section">
         <div className="container-page">
-          <p className="text-xs font-semibold tracking-[0.2em] text-[#c88e4a] uppercase">
-            Global reach
-          </p>
-          <h2 className="mt-2 text-xl font-semibold text-[#001a3d] sm:text-2xl">
-            Air, sea, rail, and road — one coordinated network
-          </h2>
+          <Reveal variant="blur-up">
+            <p className="text-xs font-semibold tracking-[0.2em] text-[#c88e4a] uppercase">
+              Global reach
+            </p>
+            <h2 className="mt-2 text-xl font-semibold text-[#001a3d] sm:text-2xl">
+              Air, sea, rail, and road — one coordinated network
+            </h2>
+          </Reveal>
           <LogisticsPhotoGallery className="mt-6" />
         </div>
       </section>
 
       <section id="incoterms" className="bg-[#f3f1ec] marketing-section">
         <div className="container-page">
-          <LogisticsSplitPanel image={LOGISTICS_IMAGES.cta} reversed>
+          <LogisticsSplitPanel image={LOGISTICS_PAGE_SECTION_IMAGES.globalCoverage} reversed>
             <div>
               <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">
                 {GLOBAL_SHIPPING_COVERAGE.title}
@@ -116,11 +120,11 @@ export default function LogisticsPage() {
         </div>
       </section>
 
-      <LogisticsFullBleedBand image={LOGISTICS_IMAGES.hero} />
+      <LogisticsFullBleedBand image={LOGISTICS_SHIP_TRUCK_BAND} />
 
       <section className="bg-white marketing-section">
         <div className="container-page">
-          <LogisticsSplitPanel image={LOGISTICS_IMAGES.field}>
+          <LogisticsSplitPanel image={LOGISTICS_PAGE_SECTION_IMAGES.realTimeTracking}>
             <div className="space-y-8">
               <article>
                 <h2 className="text-2xl font-semibold text-[#001a3d]">{REAL_TIME_TRACKING.title}</h2>
@@ -151,7 +155,7 @@ export default function LogisticsPage() {
 
       <section className="bg-[#f3f1ec] marketing-section">
         <div className="container-page">
-          <LogisticsSplitPanel image={LOGISTICS_IMAGES.cta} reversed>
+          <LogisticsSplitPanel image={LOGISTICS_PAGE_SECTION_IMAGES.portToPort} reversed>
             <div>
               <h2 className="text-2xl font-semibold text-[#001a3d]">{PORT_TO_PORT_CHAIN.title}</h2>
               <p className="mt-3 text-base text-[#555555]">{PORT_TO_PORT_CHAIN.lead}</p>
@@ -171,7 +175,7 @@ export default function LogisticsPage() {
         </div>
       </section>
 
-      <LogisticsFullBleedBand image={LOGISTICS_IMAGES.field} heightClass="h-40 sm:h-48 lg:h-56" />
+      <LogisticsFullBleedBand heightClass="h-40 sm:h-48 lg:h-56" />
 
       <section className="bg-white marketing-section">
         <div className="container-page">
@@ -194,31 +198,28 @@ export default function LogisticsPage() {
       </section>
 
       <section className="bg-[#f3f1ec] marketing-section">
-        <div className="container-page">
-          <LogisticsSplitPanel image={LOGISTICS_IMAGES.hero}>
-            <div>
-              <h2 className="text-2xl font-semibold text-[#001a3d]">{SHIPPING_DOCUMENTATION.title}</h2>
-              <p className="mt-3 text-base text-[#555555]">{SHIPPING_DOCUMENTATION.lead}</p>
-              <p className="mt-4 text-sm font-medium text-[#001a3d]">{SHIPPING_DOCUMENTATION.intro}</p>
-              <ul className="mt-4 grid gap-2 sm:grid-cols-2">
-                {SHIPPING_DOCUMENTATION.items.map((item) => (
-                  <li key={item} className="flex gap-2 text-sm text-[#555555]">
-                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#d4a84b]" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-6 text-sm text-[#555555]">{SHIPPING_DOCUMENTATION.note}</p>
-            </div>
-          </LogisticsSplitPanel>
+        <div className="container-page max-w-3xl">
+          <Reveal variant="blur-up">
+            <h2 className="text-2xl font-semibold text-[#001a3d]">{SHIPPING_DOCUMENTATION.title}</h2>
+            <p className="mt-3 text-base text-[#555555]">{SHIPPING_DOCUMENTATION.lead}</p>
+            <p className="mt-4 text-sm font-medium text-[#001a3d]">{SHIPPING_DOCUMENTATION.intro}</p>
+            <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+              {SHIPPING_DOCUMENTATION.items.map((item) => (
+                <li key={item} className="flex gap-2 text-sm text-[#555555]">
+                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#d4a84b]" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <p className="mt-6 text-sm text-[#555555]">{SHIPPING_DOCUMENTATION.note}</p>
+          </Reveal>
         </div>
       </section>
 
       <section className="bg-white marketing-section">
         <div className="container-page">
-          <LogisticsSplitPanel image={LOGISTICS_IMAGES.field} reversed>
-            <div className="grid gap-8">
-              <article className="marketing-box rounded-lg p-6 sm:p-8">
+          <div className="grid gap-8 lg:grid-cols-2">
+            <article className="marketing-box rounded-lg p-6 sm:p-8">
                 <h2 className="text-xl font-semibold text-[#001a3d]">{SHIPMENT_COORDINATION.title}</h2>
                 <p className="mt-3 text-sm text-[#555555]">{SHIPMENT_COORDINATION.lead}</p>
                 <p className="mt-4 rounded-md bg-[#f9f8f5] px-4 py-3 text-xs font-medium leading-relaxed text-[#001a3d]">
@@ -243,13 +244,12 @@ export default function LogisticsPage() {
                 <p className="mt-4 text-xs leading-relaxed text-[#777777]">
                   {DELIVERY_RELIABILITY.disclaimer}
                 </p>
-              </article>
-            </div>
-          </LogisticsSplitPanel>
+            </article>
+          </div>
         </div>
       </section>
 
-      <LogisticsPhotoBackdropSection>
+      <LogisticsPhotoBackdropSection image={LOGISTICS_PAGE_SECTION_IMAGES.contractToCargo}>
         <h2 className="text-2xl font-semibold sm:text-3xl">From contract to cargo</h2>
         <p className="mt-3 max-w-3xl text-sm text-white/75">
           Finekarts integrates commodity sourcing, inspection, documentation and international shipping
@@ -271,39 +271,31 @@ export default function LogisticsPage() {
       </LogisticsPhotoBackdropSection>
 
       <section className="bg-white marketing-section">
-        <div className="container-page">
-          <LogisticsSplitPanel image={LOGISTICS_IMAGES.cta} reversed aspectClassName="aspect-[16/10]">
-            <div>
-              <h2 className="text-2xl font-semibold text-[#001a3d]">{LOGISTICS_CLOSING.title}</h2>
-              <p className="mt-3 text-base text-[#555555]">{LOGISTICS_CLOSING.lead}</p>
-              <p className="mt-4 text-sm leading-relaxed text-[#555555]">{LOGISTICS_CLOSING.body}</p>
-              <p className="mt-6 text-lg font-semibold text-[#001a3d]">{LOGISTICS_CLOSING.tagline}</p>
-              <div className="mt-6 flex flex-wrap gap-2">
-                {LOGISTICS_CLOSING.badges.map((badge) => (
-                  <span
-                    key={badge}
-                    className="rounded-full border border-[#d5d0c8] bg-[#f9f8f5] px-4 py-2 text-sm font-medium text-[#001a3d]"
-                  >
-                    {badge}
-                  </span>
-                ))}
-              </div>
-              <p className="mt-8 text-xs leading-relaxed text-[#777777]">{INCOTERMS_DISCLAIMER}</p>
+        <div className="container-page max-w-3xl">
+          <Reveal variant="blur-up">
+            <h2 className="text-2xl font-semibold text-[#001a3d]">{LOGISTICS_CLOSING.title}</h2>
+            <p className="mt-3 text-base text-[#555555]">{LOGISTICS_CLOSING.lead}</p>
+            <p className="mt-4 text-sm leading-relaxed text-[#555555]">{LOGISTICS_CLOSING.body}</p>
+            <p className="mt-6 text-lg font-semibold text-[#001a3d]">{LOGISTICS_CLOSING.tagline}</p>
+            <div className="mt-6 flex flex-wrap gap-2">
+              {LOGISTICS_CLOSING.badges.map((badge) => (
+                <span
+                  key={badge}
+                  className="rounded-full border border-[#d5d0c8] bg-[#f9f8f5] px-4 py-2 text-sm font-medium text-[#001a3d]"
+                >
+                  {badge}
+                </span>
+              ))}
             </div>
-          </LogisticsSplitPanel>
+            <p className="mt-8 text-xs leading-relaxed text-[#777777]">{INCOTERMS_DISCLAIMER}</p>
+          </Reveal>
         </div>
       </section>
 
-      <section id="request-quote" className="relative overflow-hidden py-16 text-white lg:py-20">
-        <Image
-          src={LOGISTICS_IMAGES.hero.src}
-          alt=""
-          fill
-          className="object-cover"
-          sizes="100vw"
-          aria-hidden
-        />
-        <div className="absolute inset-0 bg-[#071525]/85" />
+      <section
+        id="request-quote"
+        className="relative overflow-hidden bg-[#071525] py-16 text-white lg:py-20"
+      >
         <div className="container-page relative">
           <h2 className="text-2xl font-semibold sm:text-3xl">{LOGISTICS_CTA.title}</h2>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/80">{LOGISTICS_CTA.lead}</p>
@@ -311,7 +303,7 @@ export default function LogisticsPage() {
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/login"
-              className="focus-ring inline-flex items-center gap-2 rounded-md bg-[#d4a84b] px-6 py-3.5 text-sm font-semibold text-[#071525] transition hover:bg-[#c4983f]"
+              className="focus-ring inline-flex items-center gap-2 marketing-btn-primary px-6 py-3.5 text-sm font-semibold"
             >
               Buyer portal — submit request <span aria-hidden>→</span>
             </Link>

@@ -160,7 +160,7 @@ function StoryPanel({
           </p>
           <Link
             href="/contact"
-            className="mt-5 inline-flex w-fit items-center gap-2 rounded-md bg-[#d4a84b] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#c4983f]"
+            className="mt-5 inline-flex w-fit items-center gap-2 marketing-btn-primary px-5 py-2.5 text-sm font-semibold"
           >
             Contact the desk <span aria-hidden>→</span>
           </Link>
@@ -237,7 +237,7 @@ function ProcessPanel({ cms }: { cms?: Record<string, string> }) {
       <div className="flex flex-wrap gap-3">
         <Link
           href={buyerQuoteHref()}
-          className="inline-flex items-center gap-2 rounded-md bg-[#d4a84b] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#c4983f]"
+          className="inline-flex items-center gap-2 marketing-btn-primary px-5 py-2.5 text-sm font-semibold"
         >
           Submit an RFQ <span aria-hidden>→</span>
         </Link>

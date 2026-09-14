@@ -128,7 +128,7 @@ export async function SiteFooter() {
                 </Link>
                 <Link
                   href="/login"
-                  className="rounded-md bg-[#e89a2d] px-4 py-2.5 text-sm font-semibold text-[#071525] transition hover:bg-[#f0a93c]"
+                  className="marketing-btn-primary px-4 py-2.5 text-sm"
                 >
                   Sign in
                 </Link>

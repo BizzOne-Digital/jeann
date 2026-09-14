@@ -78,8 +78,8 @@ export const LOGISTICS_STORY = {
   title: "Disciplined movement from load port to discharge",
   lead: "Whether you trade FOB or CIF, success depends on clear allocation of costs, risks, and documents. Finekarts structures shipment programmes so cargo, surveys, and transport papers stay aligned with your contract and banking instrument.",
   youtubeUrl: "https://www.youtube.com/watch?v=azLlZZ0t2CE",
-  imageSrc: LOGISTICS_IMAGES.field.src,
-  imageAlt: LOGISTICS_IMAGES.field.alt,
+  imageSrc: LOGISTICS_IMAGES.portTrucks.src,
+  imageAlt: LOGISTICS_IMAGES.portTrucks.alt,
   boxes: [
     {
       title: "Visibility",

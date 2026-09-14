@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
+import { pageEnterTransition } from "@/components/motion/motionPresets";
 
 export function PageTransition({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -13,9 +14,10 @@ export function PageTransition({ children }: { children: ReactNode }) {
   return (
     <motion.div
       key={pathname}
-      initial={{ opacity: 0, y: 14 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      className="relative z-[1] min-w-0 w-full"
+      initial={{ opacity: 0, y: 28, scale: 0.98, filter: "blur(10px)" }}
+      animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+      transition={pageEnterTransition}
     >
       {children}
     </motion.div>

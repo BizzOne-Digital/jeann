@@ -95,7 +95,7 @@ export function AiAssistant() {
         type="button"
         onClick={() => setOpen(true)}
         suppressHydrationWarning
-        className="focus-ring fixed bottom-4 right-4 z-40 max-w-[calc(100%-2rem)] rounded-full bg-[#e89a2d] px-4 py-2.5 text-sm font-semibold text-[#071525] shadow-[var(--shadow-soft)] transition hover:bg-[#f0a93c] sm:bottom-5 sm:right-5 sm:px-5 sm:py-3"
+        className="focus-ring fixed bottom-4 right-4 z-40 max-w-[calc(100%-2rem)] rounded-full marketing-btn-primary px-4 py-2.5 text-sm shadow-[var(--shadow-soft)] sm:bottom-5 sm:right-5 sm:px-5 sm:py-3"
       >
         Live chat
       </button>
