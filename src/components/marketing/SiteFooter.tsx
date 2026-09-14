@@ -10,6 +10,8 @@ const LINKS = [
     items: [
       { href: "/about", label: "About" },
       { href: "/team", label: "Team" },
+      { href: "/testimonials", label: "Testimonials" },
+      { href: "/privacy", label: "Careers" },
       { href: "/faq", label: "FAQ" },
       { href: "/contact", label: "Contact" },
     ],
@@ -40,6 +42,8 @@ const LINKS = [
     title: "Support",
     items: [
       { href: "/login", label: "Buyer portal" },
+      { href: "/testimonials", label: "Testimonials" },
+      { href: "/privacy", label: "Careers" },
       { href: "/privacy-policy", label: "Privacy Policy" },
       { href: "/terms-and-conditions", label: "Terms & Conditions" },
       { href: "/accessibility", label: "Accessibility" },
@@ -170,6 +174,14 @@ export async function SiteFooter() {
               <span className="text-white/25" aria-hidden>|</span>
               <Link href="/terms-and-conditions" className="hover:text-white">
                 Terms &amp; Conditions
+              </Link>
+              <span className="text-white/25" aria-hidden>|</span>
+              <Link href="/testimonials" className="hover:text-white">
+                Testimonials
+              </Link>
+              <span className="text-white/25" aria-hidden>|</span>
+              <Link href="/privacy" className="hover:text-white">
+                Careers
               </Link>
             </nav>
             <p className="max-w-sm text-white/35 lg:text-right">

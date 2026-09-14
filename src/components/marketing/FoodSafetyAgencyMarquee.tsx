@@ -1,20 +1,13 @@
-import { LogisticsFullBleedBand } from "@/components/marketing/LogisticsVisuals";
 import { FOOD_SAFETY_MARKETS } from "@/lib/content/food-safety-agencies";
-import { LOGISTICS_SHIP_TRUCK_BAND } from "@/lib/content/logistics-images";
 
 export function FoodSafetyAgencyMarquee() {
   const track = [...FOOD_SAFETY_MARKETS, ...FOOD_SAFETY_MARKETS];
 
   return (
     <section
-      className="border-y border-[#d5d0c8] bg-[#f9f8f5]"
+      className="border-y border-[#d5d0c8] bg-[#f9f8f5] py-5"
       aria-label="Food safety standards in key trade markets"
     >
-      <LogisticsFullBleedBand
-        image={LOGISTICS_SHIP_TRUCK_BAND}
-        heightClass="h-40 sm:h-48 lg:h-56"
-      />
-      <div className="py-5">
       <div className="container-page mb-4">
         <p className="text-sm font-semibold tracking-[0.18em] text-[#c88e4a] uppercase sm:text-base">
           Food safety & standards
@@ -39,7 +32,6 @@ export function FoodSafetyAgencyMarquee() {
             </div>
           ))}
         </div>
-      </div>
       </div>
     </section>
   );

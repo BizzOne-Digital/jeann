@@ -49,23 +49,26 @@ export const LOGISTICS_IMAGES = {
   },
 } as const;
 
-/** Full-width ship + truck band (logistics page bleed + home food-safety band). */
+/** Full-width band between FOB/CIF and tracking (logistics page only). */
 export const LOGISTICS_SHIP_TRUCK_BAND = LOGISTICS_IMAGES.terminalOperations;
 
-/** Split panels & backdrop — each `src` used once on `/logistics` (except shared band above). */
+/** Each `src` appears once on `/logistics` below the hero. */
 export const LOGISTICS_PAGE_SECTION_IMAGES = {
   globalCoverage: LOGISTICS_IMAGES.seaAirRoutes,
   realTimeTracking: LOGISTICS_IMAGES.terminalHub,
   portToPort: LOGISTICS_IMAGES.railInternationalContainers,
+  documentation: LOGISTICS_IMAGES.gantryCraneRailLoading,
+  coordination: LOGISTICS_IMAGES.bulkGrainRail,
+  closing: LOGISTICS_IMAGES.roadFreightHighway,
+  bleedSecondary: LOGISTICS_IMAGES.railIntermodalYard,
   contractToCargo: LOGISTICS_IMAGES.supplyChainNight,
 } as const;
 
-/** “Global reach” — five rail / road aspects (not reused in split panels above). */
 export const LOGISTICS_GALLERY_IMAGES: readonly LogisticsImage[] = [
-  LOGISTICS_IMAGES.railIntermodalYard,
+  LOGISTICS_IMAGES.portTrucks,
+  LOGISTICS_IMAGES.terminalHub,
   LOGISTICS_IMAGES.gantryCraneRailLoading,
   LOGISTICS_IMAGES.bulkGrainRail,
   LOGISTICS_IMAGES.roadFreightHighway,
-  LOGISTICS_IMAGES.portTrucks,
 ];
 
