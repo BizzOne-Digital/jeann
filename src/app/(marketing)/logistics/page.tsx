@@ -18,8 +18,10 @@ import {
   CONTRACT_TO_CARGO_STEPS,
   DELIVERY_RELIABILITY,
   ETA_MONITORING,
+  COMMERCIAL_INCOTERMS_PRIMARY_NOTE,
   FOB_CIF_TERMS,
   GLOBAL_SHIPPING_COVERAGE,
+  ICC_INCOTERMS_2020_URL,
   INCOTERMS_DISCLAIMER,
   LOGISTICS_CLOSING,
   LOGISTICS_CTA,
@@ -88,19 +90,31 @@ export default function LogisticsPage() {
             </div>
           </LogisticsSplitPanel>
 
-          <div className="mt-10 grid gap-6 lg:grid-cols-2">
-            {FOB_CIF_TERMS.map((term) => (
-              <article key={term.code} className="marketing-box rounded-lg p-6 sm:p-8">
-                <p className="text-xs font-semibold tracking-[0.2em] text-[#c88e4a] uppercase">
-                  {term.code}
-                </p>
-                <h3 className="mt-2 text-xl font-semibold text-[#001a3d]">{term.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-[#555555]">{term.summary}</p>
-              </article>
-            ))}
+          <div className="mt-10">
+            <p className="text-sm font-semibold text-[#001a3d]">
+              <Link
+                href={ICC_INCOTERMS_2020_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#c88e4a] underline decoration-[#c88e4a]/40 underline-offset-4 hover:text-[#a86f2e]"
+              >
+                FOB, CIF &amp; DDP — ICC Incoterms® 2020
+              </Link>
+            </p>
+            <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {FOB_CIF_TERMS.map((term) => (
+                <article key={term.code} className="marketing-box h-full rounded-lg p-6 sm:p-8">
+                  <p className="text-xs font-semibold tracking-[0.2em] text-[#c88e4a] uppercase">
+                    {term.code}
+                  </p>
+                  <h3 className="mt-2 text-xl font-semibold text-[#001a3d]">{term.title}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-[#555555]">{term.summary}</p>
+                </article>
+              ))}
+            </div>
           </div>
           <p className="mt-6 text-sm font-medium text-[#001a3d]">
-            FOB and CIF are currently our primary commercial shipping terms.
+            {COMMERCIAL_INCOTERMS_PRIMARY_NOTE}
           </p>
         </div>
       </section>

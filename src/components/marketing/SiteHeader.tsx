@@ -75,26 +75,13 @@ export function SiteHeader({ embedded = false }: Props) {
           {hideLogo ? (
             <div className="hidden shrink-0 lg:block lg:w-0" aria-hidden />
           ) : (
-            <Link href="/" className="focus-ring flex shrink-0 items-center gap-3 rounded-sm">
-              <BrandLogo size="md" priority />
-              <span className="hidden leading-tight md:block">
-                <span
-                  className={cn(
-                    "block whitespace-nowrap text-[0.85rem] font-bold tracking-[0.16em] uppercase sm:text-[0.95rem] sm:tracking-[0.2em]",
-                    transparent || !isLight ? "text-white" : "text-[var(--navy)]",
-                  )}
-                >
-                  Finekarts
-                </span>
-                <span
-                  className={cn(
-                    "block whitespace-nowrap text-[0.55rem] font-medium uppercase tracking-[0.24em] sm:text-[0.6rem] sm:tracking-[0.32em]",
-                    transparent ? "text-white/55" : isLight ? "text-[var(--stone)]" : "text-white/55",
-                  )}
-                >
-                  Incorporated
-                </span>
-              </span>
+            <Link
+              href="/"
+              className="focus-ring flex shrink-0 items-center rounded-sm"
+              aria-label="Finekarts Incorporated home"
+              data-no-translate
+            >
+              <BrandLogo size="md" priority alt="Finekarts Incorporated" />
             </Link>
           )}
 

@@ -1,21 +1,26 @@
 /** Client-approved logistics page content (Global Shipping & Logistics). */
 
+export const ICC_INCOTERMS_2020_URL =
+  "https://iccwbo.org/business-solutions/incoterms-rules/incoterms-2020/";
+
 export const LOGISTICS_HERO = {
   eyebrow: "Global Shipping & Logistics",
   title: "Moving Commodities From Origin to Destination",
   description:
     "At Finekarts Inc., we connect global commodity supply with reliable international shipping solutions. From the point of origin to the final destination, we coordinate the commercial and logistics requirements necessary to move cargo efficiently across international markets — supporting agricultural commodities, food products, edible oils, sugar, rice, grains, pulses and other bulk and packaged commodities.",
   primaryCta: { href: "#request-quote", label: "Request a shipping quote →" },
-  secondaryCta: { href: "#incoterms", label: "FOB & CIF terms" },
+  secondaryCta: { href: "#incoterms", label: "FOB, CIF & DDP terms" },
 };
 
 export const GLOBAL_SHIPPING_COVERAGE = {
   title: "Global shipping coverage",
   lead: "Finekarts supports international trade using recognized Incoterms® rules, including:",
   incoterms: ["EXW", "FCA", "FAS", "FOB", "CFR", "CIF", "CPT", "CIP", "DAP", "DPU", "DDP"],
-  note: "While Finekarts can structure transactions around various Incoterms® depending on commercial requirements, our current standard trading terms are FOB and CIF.",
+  note:
+    "While Finekarts can structure transactions around various Incoterms® depending on commercial requirements, our standard international terms are FOB and CIF. DDP may be available when the supplier and buyer are in the same country.",
 };
 
+/** FOB, CIF, and conditional DDP — see ICC Incoterms® 2020. */
 export const FOB_CIF_TERMS = [
   {
     code: "FOB",
@@ -29,7 +34,16 @@ export const FOB_CIF_TERMS = [
     summary:
       "Under CIF transactions, Finekarts can coordinate the cargo, ocean freight and marine insurance to the agreed destination port, subject to the specific contract and applicable Incoterms® rules.",
   },
+  {
+    code: "DDP",
+    title: "Delivered Duty Paid",
+    summary:
+      "DDP may be offered only when the supplier and the buyer are in the same country. The buyer does not need to attend the port to clear the shipment through customs — goods can be delivered to the buyer’s business address, subject to contract and local rules.",
+  },
 ];
+
+export const COMMERCIAL_INCOTERMS_PRIMARY_NOTE =
+  "FOB and CIF are our primary international commercial shipping terms. DDP is available only when the goods are located in the same country as the buyer.";
 
 export const REAL_TIME_TRACKING = {
   title: "Real-time shipment tracking",
@@ -160,4 +174,4 @@ export const LOGISTICS_CTA = {
 };
 
 export const INCOTERMS_DISCLAIMER =
-  "Incoterms® is a registered trademark of the International Chamber of Commerce (ICC). The applicable Incoterms® rule should always be specified in the sales contract together with the named place or port and the relevant edition.";
+  "Incoterms® is a registered trademark of the International Chamber of Commerce (ICC). The applicable Incoterms® rule should always be specified in the sales contract together with the named place or port and the relevant edition (see ICC Incoterms® 2020).";

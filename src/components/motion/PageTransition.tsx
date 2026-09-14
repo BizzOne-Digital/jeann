@@ -15,8 +15,8 @@ export function PageTransition({ children }: { children: ReactNode }) {
     <motion.div
       key={pathname}
       className="relative z-[1] min-w-0 w-full"
-      initial={{ opacity: 0, y: 28, scale: 0.98, filter: "blur(10px)" }}
-      animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+      initial={{ opacity: 1, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={pageEnterTransition}
     >
       {children}
