@@ -393,14 +393,9 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
         secondaryCtaHref: "/about",
       }),
       section("board-intro", "Board of directors", {
-        title: "Board of directors",
+        title: "Board members",
         body:
-          "Governance and strategic oversight for Finekarts trade programmes. Profiles list name, position, and department.",
-      }),
-      section("operations-intro", "Operations team", {
-        title: "Trade desk & operations",
-        body:
-          "Day-to-day coordination across sourcing, documentation, logistics, and buyer support.",
+          "Each board member is listed with their name, position, and the department they lead.",
       }),
     ],
   },

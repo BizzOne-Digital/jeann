@@ -1,7 +1,7 @@
 export type SeedTeamMember = {
   name: string;
   roleTitle: string;
-  department?: string;
+  department: string;
   tier: "board" | "staff";
   bio: string;
   photo?: string;
@@ -9,29 +9,41 @@ export type SeedTeamMember = {
   status: "published" | "unpublished";
 };
 
+/** Board rows use name, position (roleTitle), and department — staff are managed separately and are not listed on /team. */
 export const SEED_TEAM: SeedTeamMember[] = [
+  {
+    name: "Jean Joseph",
+    roleTitle: "Chief Executive Officer",
+    department: "Executive Office",
+    tier: "board",
+    bio: "",
+    displayOrder: 0,
+    status: "published",
+  },
   {
     name: "Alexandra Chen",
     roleTitle: "Director of Trade Operations",
     department: "Trade Operations",
     tier: "board",
-    bio: "Board oversight of buyer programmes and supplier onboarding across edible oils, sugar, and grains.",
+    bio: "",
     displayOrder: 1,
     status: "published",
   },
   {
     name: "Marcus Okonkwo",
-    roleTitle: "Head of Logistics & Inspections",
-    tier: "staff",
-    bio: "Structures inspection routing, loading milestones, and Incoterm hand-offs for bulk and containerised programmes.",
+    roleTitle: "Director of Logistics",
+    department: "Logistics & Inspections",
+    tier: "board",
+    bio: "",
     displayOrder: 2,
     status: "published",
   },
   {
     name: "Elena Vasquez",
-    roleTitle: "Compliance & Documentation Lead",
-    tier: "staff",
-    bio: "Oversees contract templates, verification workflows, and counterpart document packages through closing.",
+    roleTitle: "Director of Compliance",
+    department: "Compliance & Documentation",
+    tier: "board",
+    bio: "",
     displayOrder: 3,
     status: "published",
   },

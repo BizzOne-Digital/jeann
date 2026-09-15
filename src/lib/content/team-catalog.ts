@@ -35,13 +35,25 @@ export async function getPublishedTeamMembers(): Promise<PublicTeamMember[]> {
 
   if (docs.length === 0) return fromSeed();
 
-  return docs.map((doc) => ({
+  const mapped = docs.map((doc) => ({
     id: String(doc._id),
     name: doc.name,
     roleTitle: doc.roleTitle,
     department: doc.department ?? "",
-    tier: doc.tier === "board" ? "board" : "staff",
+    tier:
+      doc.tier === "board" || doc.tier === "staff"
+        ? doc.tier
+        : doc.department?.trim()
+          ? "board"
+          : "staff",
     bio: doc.bio ?? "",
     photo: doc.photo,
   }));
+
+  const board = mapped.filter((m) => m.tier === "board");
+  if (board.length === 0) {
+    return fromSeed();
+  }
+
+  return mapped;
 }
