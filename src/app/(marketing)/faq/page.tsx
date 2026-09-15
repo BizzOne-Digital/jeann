@@ -2,10 +2,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { FaqAccordion } from "@/components/marketing/FaqAccordion";
 import { PageHero } from "@/components/marketing/PageHero";
-import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 import { AnimatedSection } from "@/components/motion/AnimatedSection";
 import { buyerQuoteHref } from "@/lib/marketing/cta-links";
+import { cmsField } from "@/lib/content/cms-field";
 import { getPublishedFaqs } from "@/lib/content/faqs-catalog";
+import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
+import {
+  resolveMarketingHeroImage,
+  resolveMarketingHeroYoutube,
+} from "@/lib/marketing/cms-hero";
 
 export const metadata: Metadata = {
   title: "FAQ",
@@ -13,19 +18,30 @@ export const metadata: Metadata = {
 };
 
 export default async function FaqPage() {
-  const faqs = await getPublishedFaqs();
-
-  const hero = getPageHeroImage("faq");
+  const [faqs, cms] = await Promise.all([getPublishedFaqs(), getPublishedPage("faq")]);
+  const heroFields = getSectionFields(cms, "hero");
+  const hero = resolveMarketingHeroImage(heroFields, "faq");
 
   return (
     <>
       <PageHero
-        title="Common questions"
-        description="Straight answers about how we trade. For deal-specific advice, contact the trade desk."
+        title={cmsField(heroFields, "title", "Common questions")}
+        description={cmsField(
+          heroFields,
+          "description",
+          "Straight answers about how we trade. For deal-specific advice, contact the trade desk.",
+        )}
         imageSrc={hero.src}
         imageAlt={hero.alt}
-        primaryCta={{ href: buyerQuoteHref(), label: "Request a Quote →" }}
-        secondaryCta={{ href: "/contact", label: "Contact us" }}
+        youtubeVideoId={resolveMarketingHeroYoutube(heroFields)}
+        primaryCta={{
+          href: cmsField(heroFields, "primaryCtaHref", buyerQuoteHref()),
+          label: cmsField(heroFields, "primaryCtaLabel", "Request a Quote →"),
+        }}
+        secondaryCta={{
+          href: cmsField(heroFields, "secondaryCtaHref", "/contact"),
+          label: cmsField(heroFields, "secondaryCtaLabel", "Contact us"),
+        }}
       />
 
       <section className="bg-[#f3f1ec] py-16 lg:py-24">

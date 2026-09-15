@@ -5,6 +5,8 @@ export type PublicTeamMember = {
   id: string;
   name: string;
   roleTitle: string;
+  department: string;
+  tier: "board" | "staff";
   bio: string;
   photo?: string;
 };
@@ -14,6 +16,8 @@ function fromSeed(): PublicTeamMember[] {
     id: `seed-${index}`,
     name: member.name,
     roleTitle: member.roleTitle,
+    department: member.department ?? "",
+    tier: member.tier,
     bio: member.bio,
     photo: member.photo,
   }));
@@ -35,6 +39,8 @@ export async function getPublishedTeamMembers(): Promise<PublicTeamMember[]> {
     id: String(doc._id),
     name: doc.name,
     roleTitle: doc.roleTitle,
+    department: doc.department ?? "",
+    tier: doc.tier === "board" ? "board" : "staff",
     bio: doc.bio ?? "",
     photo: doc.photo,
   }));

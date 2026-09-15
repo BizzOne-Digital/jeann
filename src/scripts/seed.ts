@@ -169,6 +169,8 @@ async function main() {
       {
         name: member.name,
         roleTitle: member.roleTitle,
+        department: member.department,
+        tier: member.tier,
         bio: member.bio,
         photo: member.photo,
         displayOrder: member.displayOrder,

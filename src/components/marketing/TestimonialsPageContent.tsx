@@ -6,7 +6,11 @@ import {
   TrustpilotPlaceholder,
 } from "@/components/marketing/TestimonialSections";
 import { AnimatedSection } from "@/components/motion/AnimatedSection";
-import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
+import {
+  resolveMarketingHeroImage,
+  resolveMarketingHeroYoutube,
+} from "@/lib/marketing/cms-hero";
+import { cmsField } from "@/lib/content/cms-field";
 import {
   getPublishedTestimonials,
   getTestimonialSummary,
@@ -19,21 +23,29 @@ export async function TestimonialsPageContent() {
     getPublishedPage("testimonials"),
   ]);
   const heroFields = getSectionFields(cms, "hero");
-  const heroImage = getPageHeroImage("testimonials");
+  const heroImage = resolveMarketingHeroImage(heroFields, "testimonials");
   const summary = getTestimonialSummary(testimonials);
 
   return (
     <>
       <PageHero
-        title={heroFields.title || "What counterparties say"}
-        description={
-          heroFields.description ||
-          "Verified buyers and trade partners share their experience working with Finekarts — company, role, photo and review in one place."
-        }
+        title={cmsField(heroFields, "title", "What counterparties say")}
+        description={cmsField(
+          heroFields,
+          "description",
+          "Verified buyers and trade partners share their experience working with Finekarts — company, role, photo and review in one place.",
+        )}
         imageSrc={heroImage.src}
         imageAlt={heroImage.alt}
-        primaryCta={{ href: "/contact", label: "Start a conversation →" }}
-        secondaryCta={{ href: "/resources", label: "Trade resources" }}
+        youtubeVideoId={resolveMarketingHeroYoutube(heroFields)}
+        primaryCta={{
+          href: cmsField(heroFields, "primaryCtaHref", "/contact"),
+          label: cmsField(heroFields, "primaryCtaLabel", "Start a conversation →"),
+        }}
+        secondaryCta={{
+          href: cmsField(heroFields, "secondaryCtaHref", "/resources"),
+          label: cmsField(heroFields, "secondaryCtaLabel", "Trade resources"),
+        }}
       />
 
       <section className="bg-[#f3f1ec] py-16 lg:py-24">

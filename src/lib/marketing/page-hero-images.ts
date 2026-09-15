@@ -1,5 +1,6 @@
 import { AGRICULTURE_IMAGES } from "@/lib/content/agriculture-images";
 import { LOGISTICS_IMAGES } from "@/lib/content/logistics-images";
+import { OFFICE_HERO_IMAGES } from "@/lib/content/office-hero-images";
 import { PACKAGING_IMAGES } from "@/lib/content/packaging-images";
 
 export type PageHeroImageKey =
@@ -11,6 +12,7 @@ export type PageHeroImageKey =
   | "insights"
   | "faq"
   | "team"
+  | "careers"
   | "testimonials"
   | "booking"
   | "partners"
@@ -35,7 +37,7 @@ export const PAGE_HERO_IMAGES: Record<PageHeroImageKey, PageHeroImage> = {
     src: "/images/hero-home.jpg",
     alt: "Agricultural commodities, port logistics, and refining infrastructure",
   },
-  about: AGRICULTURE_IMAGES.riceTerraces,
+  about: OFFICE_HERO_IMAGES.about,
   products: AGRICULTURE_IMAGES.greenGrainField,
   resources: AGRICULTURE_IMAGES.resourcesHero,
   contact: {
@@ -46,9 +48,10 @@ export const PAGE_HERO_IMAGES: Record<PageHeroImageKey, PageHeroImage> = {
     src: "/images/insights/market-insights-hero.jpg",
     alt: "Trade professionals reviewing global market data and commodity insights in a boardroom",
   },
-  faq: AGRICULTURE_IMAGES.combineHarvest,
-  team: AGRICULTURE_IMAGES.grainSilos,
-  testimonials: AGRICULTURE_IMAGES.tractorPlowing,
+  faq: OFFICE_HERO_IMAGES.faq,
+  team: OFFICE_HERO_IMAGES.team,
+  careers: OFFICE_HERO_IMAGES.careers,
+  testimonials: OFFICE_HERO_IMAGES.testimonials,
   booking: {
     src: "/images/inspections/liquid-sampling.png",
     alt: "Quality consultation and commodity sampling",

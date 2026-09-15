@@ -133,6 +133,12 @@ export function AdminPageEditor({ initialPage }: { initialPage: EditablePage }) 
             <p className="mt-1 text-xs uppercase tracking-wide text-[var(--stone)]">
               Section ID: {section.id}
             </p>
+            {section.id === "hero" ? (
+              <p className="mt-2 text-sm text-[var(--stone)]">
+                Hero background image, YouTube link, titles, body text, and CTA links for this page.
+                Leave hero image empty to use the default photograph.
+              </p>
+            ) : null}
             <div className="mt-4 grid gap-4">
               {section.fields.map((field) =>
                 field.type === "image" ? (

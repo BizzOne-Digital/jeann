@@ -4,7 +4,12 @@ import { PageHero } from "@/components/marketing/PageHero";
 import { Reveal } from "@/components/motion/Reveal";
 import { getCareerFormPrefill } from "@/lib/auth/career-prefill";
 import { getSession } from "@/lib/auth/session";
-import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
+import { cmsField } from "@/lib/content/cms-field";
+import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
+import {
+  resolveMarketingHeroImage,
+  resolveMarketingHeroYoutube,
+} from "@/lib/marketing/cms-hero";
 
 export const metadata: Metadata = {
   title: "Careers",
@@ -15,18 +20,31 @@ export const metadata: Metadata = {
 export default async function CareersPage() {
   const session = await getSession();
   const prefill = session ? await getCareerFormPrefill(session) : undefined;
-  const hero = getPageHeroImage("team");
+  const cms = await getPublishedPage("privacy");
+  const heroFields = getSectionFields(cms, "hero");
+  const hero = resolveMarketingHeroImage(heroFields, "careers");
 
   return (
     <>
       <PageHero
-        title="Careers at Finekarts"
+        title={cmsField(heroFields, "title", "Careers at Finekarts")}
         brand="Join our team"
-        description="We are building disciplined global commodity trade programmes. Share your background and upload your resume — signed-in visitors can submit with pre-filled contact details."
+        description={cmsField(
+          heroFields,
+          "description",
+          "We are building disciplined global commodity trade programmes. Share your background and upload your resume — signed-in visitors can submit with pre-filled contact details.",
+        )}
         imageSrc={hero.src}
         imageAlt={hero.alt}
-        primaryCta={{ href: "#career-application", label: "Apply now →" }}
-        secondaryCta={{ href: "/contact", label: "General enquiry" }}
+        youtubeVideoId={resolveMarketingHeroYoutube(heroFields)}
+        primaryCta={{
+          href: cmsField(heroFields, "primaryCtaHref", "#career-application"),
+          label: cmsField(heroFields, "primaryCtaLabel", "Apply now →"),
+        }}
+        secondaryCta={{
+          href: cmsField(heroFields, "secondaryCtaHref", "/contact"),
+          label: cmsField(heroFields, "secondaryCtaLabel", "General enquiry"),
+        }}
       />
 
       <section id="career-application" className="scroll-mt-24 bg-[#f3f1ec] py-16 lg:py-24">

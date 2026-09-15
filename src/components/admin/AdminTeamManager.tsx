@@ -7,6 +7,8 @@ import { UploadedImageField } from "@/components/admin/UploadedImageField";
 type FormState = {
   name: string;
   roleTitle: string;
+  department: string;
+  tier: "board" | "staff";
   bio: string;
   photo: string;
   displayOrder: number;
@@ -16,6 +18,8 @@ type FormState = {
 const emptyForm = (displayOrder: number): FormState => ({
   name: "",
   roleTitle: "",
+  department: "",
+  tier: "staff",
   bio: "",
   photo: "",
   displayOrder,
@@ -26,6 +30,8 @@ function itemToForm(item: AdminTeamItem): FormState {
   return {
     name: item.name,
     roleTitle: item.roleTitle,
+    department: item.department,
+    tier: item.tier,
     bio: item.bio,
     photo: item.photo,
     displayOrder: item.displayOrder,
@@ -132,12 +138,37 @@ export function AdminTeamManager({ initialItems }: { initialItems: AdminTeamItem
         </label>
 
         <label className="label">
-          Role title
+          Position / role title
           <input
             className="field mt-1"
             value={form.roleTitle}
             onChange={(e) => setForm({ ...form, roleTitle: e.target.value })}
             required
+          />
+        </label>
+
+        <label className="label">
+          Profile type
+          <select
+            className="field mt-1"
+            value={form.tier}
+            onChange={(e) =>
+              setForm({ ...form, tier: e.target.value as FormState["tier"] })
+            }
+          >
+            <option value="board">Board member (shows name, position, department)</option>
+            <option value="staff">Operations / staff</option>
+          </select>
+        </label>
+
+        <label className="label">
+          Department
+          <input
+            className="field mt-1"
+            value={form.department}
+            onChange={(e) => setForm({ ...form, department: e.target.value })}
+            placeholder={form.tier === "board" ? "Required for board" : "Optional"}
+            required={form.tier === "board"}
           />
         </label>
 
@@ -198,7 +229,9 @@ export function AdminTeamManager({ initialItems }: { initialItems: AdminTeamItem
           <thead className="border-b border-[var(--line)] bg-[var(--cream)]/60 text-xs uppercase tracking-wide text-[var(--stone)]">
             <tr>
               <th className="px-4 py-3 font-semibold">Name</th>
+              <th className="px-4 py-3 font-semibold">Type</th>
               <th className="px-4 py-3 font-semibold">Role</th>
+              <th className="px-4 py-3 font-semibold">Department</th>
               <th className="px-4 py-3 font-semibold">Order</th>
               <th className="px-4 py-3 font-semibold">Status</th>
               <th className="px-4 py-3 font-semibold" />
@@ -213,7 +246,9 @@ export function AdminTeamManager({ initialItems }: { initialItems: AdminTeamItem
                     <p className="mt-0.5 line-clamp-2 text-xs text-[var(--stone)]">{item.bio}</p>
                   ) : null}
                 </td>
+                <td className="px-4 py-3 capitalize">{item.tier}</td>
                 <td className="px-4 py-3">{item.roleTitle}</td>
+                <td className="px-4 py-3">{item.department || "—"}</td>
                 <td className="px-4 py-3">{item.displayOrder}</td>
                 <td className="px-4 py-3 capitalize">{item.status}</td>
                 <td className="px-4 py-3 text-right whitespace-nowrap">

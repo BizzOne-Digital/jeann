@@ -42,8 +42,6 @@ const LINKS = [
     title: "Support",
     items: [
       { href: "/login", label: "Buyer portal" },
-      { href: "/testimonials", label: "Testimonials" },
-      { href: "/privacy", label: "Careers" },
       { href: "/privacy-policy", label: "Privacy Policy" },
       { href: "/terms-and-conditions", label: "Terms & Conditions" },
       { href: "/accessibility", label: "Accessibility" },

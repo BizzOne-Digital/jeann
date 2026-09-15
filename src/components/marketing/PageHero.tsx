@@ -11,6 +11,7 @@ import {
   MARKETING_HERO_INNER_CLASS,
   MARKETING_HERO_SECTION_CLASS,
 } from "@/lib/marketing/hero-layout";
+import { HeroVideoBackground } from "@/components/marketing/HeroVideoBackground";
 import { AGRICULTURE_IMAGES } from "@/lib/content/agriculture-images";
 
 export type PageHeroCta = {
@@ -33,6 +34,8 @@ type Props = {
   imageAlt?: string;
   imageClassName?: string;
   priority?: boolean;
+  /** YouTube URL or video ID — optional background video over the hero image. */
+  youtubeVideoId?: string;
 };
 
 export function PageHero({
@@ -47,6 +50,7 @@ export function PageHero({
   imageClassName = "object-cover object-center",
   backgroundLayout = "default",
   priority = true,
+  youtubeVideoId,
 }: Props) {
   const light = tone === "light";
   const triptych = backgroundLayout === "triptych" && !light;
@@ -66,6 +70,12 @@ export function PageHero({
               priority={priority}
               variant="fill"
               rounded={false}
+            />
+          ) : youtubeVideoId ? (
+            <HeroVideoBackground
+              youtubeInput={youtubeVideoId}
+              posterSrc={imageSrc}
+              posterAlt={imageAlt}
             />
           ) : (
             <Image

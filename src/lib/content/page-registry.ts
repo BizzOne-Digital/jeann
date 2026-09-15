@@ -35,28 +35,41 @@ export type EditablePage = {
 function section(
   id: string,
   label: string,
-  defaults: Record<string, string>,
+  defaultsIn: Record<string, string>,
 ): PageSectionDef {
+  const defaults =
+    id === "hero"
+      ? {
+          heroImage: "",
+          youtubeVideoId: "",
+          ...defaultsIn,
+        }
+      : defaultsIn;
+
   const fields: PageFieldDef[] = Object.keys(defaults).map((key) => ({
     key,
     label: key
       .replace(/([A-Z])/g, " $1")
       .replace(/^./, (c) => c.toUpperCase())
       .replace(/Cta/g, "CTA")
+      .replace(/Hero image/i, "Hero background image")
+      .replace(/Youtube video id/i, "YouTube video link or ID")
       .replace(/([0-9]+)/g, " $1")
       .trim(),
     type:
       /image|photo|heroImage|thumbnail|cover/i.test(key)
         ? "image"
-        : key.includes("description") ||
-            key.includes("body") ||
-            key.includes("note") ||
-            key.includes("lead") ||
-            key.includes("content")
-          ? "textarea"
-          : key.includes("Href") || key === "path"
-            ? "url"
-            : "text",
+        : /youtube/i.test(key)
+          ? "url"
+          : key.includes("description") ||
+              key.includes("body") ||
+              key.includes("note") ||
+              key.includes("lead") ||
+              key.includes("content")
+            ? "textarea"
+            : key.includes("Href") || key === "path"
+              ? "url"
+              : "text",
   }));
   return { id, label, fields, defaults };
 }
@@ -339,8 +352,13 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
     seoDescription: "Answers to common questions about Finekarts and bulk commodity trade.",
     sections: [
       section("hero", "Hero", {
-        title: "Frequently asked questions",
-        description: "Plain-language answers about our process, buyer portal, and bulk trade programmes.",
+        title: "Common questions",
+        description:
+          "Straight answers about how we trade. For deal-specific advice, contact the trade desk.",
+        primaryCtaLabel: "Request a Quote →",
+        primaryCtaHref: "/login",
+        secondaryCtaLabel: "Contact us",
+        secondaryCtaHref: "/contact",
       }),
     ],
   },
@@ -366,8 +384,23 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
     seoDescription: "Finekarts trade desk and leadership profiles.",
     sections: [
       section("hero", "Hero", {
-        title: "Our team",
-        description: "Experienced trade, logistics, and compliance professionals supporting qualified buyers.",
+        title: "People behind the trade desk",
+        description:
+          "Our operations, logistics, and compliance leads support qualified buyer and supplier programmes.",
+        primaryCtaLabel: "Contact the trade desk →",
+        primaryCtaHref: "/contact",
+        secondaryCtaLabel: "About Finekarts",
+        secondaryCtaHref: "/about",
+      }),
+      section("board-intro", "Board of directors", {
+        title: "Board of directors",
+        body:
+          "Governance and strategic oversight for Finekarts trade programmes. Profiles list name, position, and department.",
+      }),
+      section("operations-intro", "Operations team", {
+        title: "Trade desk & operations",
+        body:
+          "Day-to-day coordination across sourcing, documentation, logistics, and buyer support.",
       }),
     ],
   },
@@ -382,6 +415,10 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
         title: "What counterparties say",
         description:
           "Verified buyers and trade partners share their experience working with Finekarts.",
+        primaryCtaLabel: "Start a conversation →",
+        primaryCtaHref: "/contact",
+        secondaryCtaLabel: "Trade resources",
+        secondaryCtaHref: "/resources",
       }),
     ],
   },
@@ -411,6 +448,10 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       section("hero", "Hero", {
         title: "Careers at Finekarts",
         description: "Submit your application and resume for trade, logistics, and operations roles.",
+        primaryCtaLabel: "Apply now →",
+        primaryCtaHref: "#career-application",
+        secondaryCtaLabel: "General enquiry",
+        secondaryCtaHref: "/contact",
       }),
     ],
   },
@@ -419,11 +460,11 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
     title: "Terms redirect",
     path: "/terms",
     seoTitle: "Terms",
-    seoDescription: "Redirects to testimonials.",
+    seoDescription: "Redirects to Terms & Conditions.",
     sections: [
       section("hero", "Hero", {
-        title: "Testimonials",
-        description: "This route redirects to the testimonials page.",
+        title: "Terms & Conditions",
+        description: "This route redirects to the full terms and conditions page.",
       }),
     ],
   },
