@@ -71,7 +71,12 @@ export const SEED_FAQS = [
   {
     question: "What payment terms are sometimes discussed?",
     answer:
-      "For large commodity SPAs, parties often discuss an irrevocable documentary LC at sight (UCP 600), with SBLC backup for long-term contracts (ISP98), and alternatives such as bank guarantees (URDG 758), D/P or D/A collection (URC 522), or T/T per the commercial schedule. For 12-month programmes, Irrevocable LC at Sight + SBLC is commonly positioned as the preferred structure. See the banking clause and comparison table on Resources — all instruments remain subject to contract, bank approval, compliance, and agreed wording.",
+      "For large commodity SPAs, parties often discuss an Irrevocable Documentary LC at sight (UCP 600), with Irrevocable SBLC backup for long-term or larger contracts (ISP98), and Transferable Revolving LC at sight for multi-shipment programmes. Alternatives such as bank guarantees (URDG 758), D/P or D/A collection (URC 522), or T/T may apply only when specifically negotiated. See the banking clause and comparison table on Resources — all instruments remain subject to contract, bank approval, compliance, and agreed wording.",
+  },
+  {
+    question: "Is trade insurance part of your programmes?",
+    answer:
+      "Marine cargo and related trade insurance can be arranged or coordinated where contracts require it (for example under CIF or as otherwise stated in the SPA). Insurance supports risk management alongside inspection and bankable payment structures — coverage scope and claims handling are always confirmed in contract.",
   },
 ];
 

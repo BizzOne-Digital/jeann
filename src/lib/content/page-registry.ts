@@ -81,13 +81,13 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
     path: "/",
     seoTitle: "Finekarts — Global agricultural commodity distribution",
     seoDescription:
-      "Finekarts Incorporated buys bulk agricultural commodities from farmers and manufacturers and distributes them to qualified international bulk buyers.",
+      "Finekarts Incorporated supplies bulk agricultural commodities for sale to qualified international buyers — verification, inspection, logistics, trade insurance, and bankable ICC-aligned payment structures.",
     sections: [
       section("hero", "Hero", {
-        eyebrow: "Global sourcing • Bulk commodities • Worldwide delivery",
-        title: "Global Agricultural Commodity Distribution",
+        eyebrow: "Bulk commodities for sale • Verified programmes • Worldwide delivery",
+        title: "Bulk Agricultural Commodities for Qualified Buyers",
         description:
-          "We buy high-quality agricultural commodities from farmers and manufacturers and sell bulk cargoes to qualified buyers across global markets.",
+          "Finekarts supplies edible oils, sugar, rice, beans, and related bulk cargoes for sale to qualified international buyers — backed by inspection, logistics, trade insurance where agreed, and bankable structures such as Irrevocable LC at sight and SBLC for longer contracts.",
         primaryCtaLabel: "Buyer portal",
         primaryCtaHref: "/login",
         secondaryCtaLabel: "Explore Products",
@@ -96,11 +96,11 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       }),
       section("connection", "Connection", {
         eyebrow: "Who we are",
-        title: "A global distributor for bulk agricultural commodities",
+        title: "Selling bulk commodities with trust at the centre",
         body:
-          "Finekarts Incorporated purchases from farmers, manufacturers, and established origin programmes — then distributes to qualified bulk buyers. We are not a marketplace and we do not connect third-party buyers with third-party sellers.",
+          "Finekarts Incorporated is a distributor: every product listed on this site is offered for sale to qualified bulk buyers. We are not a marketplace and we do not connect unrelated buyers with unrelated sellers.",
         body2:
-          "Our team coordinates procurement, quality, documentation, and logistics with transparency at every step — from origin through delivery.",
+          "Origin relationships and supplier identities remain private. What we publish is how we deliver — independent verification and inspection, disciplined logistics, trade insurance where contracts require it, and ICC-aligned bankable payment structures.",
         image1: "/images/home-1.png",
         image2: "/images/home-2.png",
       }),
@@ -112,18 +112,18 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       section("sourced", "Sourced responsibly", {
         eyebrow: "Sourced responsibly",
         title: "Quality coordination across origins and corridors",
-        body: "We procure through verified origin programmes and independent inspection partners where contracts require them.",
+        body: "Supply is supported through private origin programmes and independent inspection partners where contracts require them — building buyer confidence without advertising supplier identities on this site.",
         image: "/images/home-3.png",
       }),
       section("process", "Process timeline", {
         eyebrow: "How we work",
         title: "From enquiry to structured trade execution",
-        body: "Purchase requests, sourcing, documentation, inspection, and shipment milestones — subject to contract and corridor.",
+        body: "Enquiry, qualification, contract, Irrevocable LC / SBLC where agreed, inspection, insurance, and shipment milestones — subject to contract, corridor, and bank approval.",
       }),
       section("shipping", "Shipping terms", {
         eyebrow: "Shipping & Incoterms",
         title: "FOB, CIF, and corridor-specific logistics",
-        body: "Incoterms allocate cost and risk between parties. Final terms are confirmed in contract documentation.",
+        body: "FOB and CIF structures follow ICC Incoterms® rules. Marine cargo insurance, freight coordination, and documentary discipline are aligned with the signed SPA and banking instrument.",
       }),
       section("partners-teaser", "Partners teaser", {
         eyebrow: "Verification partners",
@@ -154,12 +154,12 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
     path: "/about",
     seoTitle: "About Finekarts",
     seoDescription:
-      "Finekarts Incorporated distributes bulk agricultural commodities — purchasing from farmers and manufacturers and supplying qualified bulk buyers worldwide.",
+      "Finekarts Incorporated supplies bulk agricultural commodities for sale to qualified buyers worldwide — verification, inspection, logistics, and bankable transactions.",
     sections: [
       section("hero", "Hero", {
-        title: "Global distribution for bulk agricultural commodities",
+        title: "Supplying bulk commodities buyers can trust",
         description:
-          "We buy from farmers and manufacturers worldwide and distribute bulk cargoes to qualified buyers — through structured, documentation-led programmes.",
+          "We sell bulk agricultural cargoes to qualified international buyers through structured programmes — verification, inspection, logistics, trade insurance, and ICC-aligned payment instruments.",
         primaryCtaLabel: "Request a Quote →",
         primaryCtaHref: "/login",
         secondaryCtaLabel: "Contact the desk",
@@ -167,16 +167,16 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       }),
       section("who-we-are", "Who we are", {
         eyebrow: "Who We Are",
-        title: "We buy. We distribute. We do not broker buyers and sellers.",
+        title: "We sell commodities — we do not broker buyers and sellers.",
         body:
-          "Finekarts Incorporated is a distributor: we purchase bulk agricultural commodities from farmers, manufacturers, and origin programmes and sell to qualified bulk buyers. We do not operate a platform that connects unrelated buyers with unrelated sellers.",
+          "Finekarts Incorporated is a distributor offering bulk agricultural commodities for sale. Supplier relationships are private; this site focuses on what qualified buyers receive — specification discipline, inspection, logistics, insurance, and bankable documentation.",
         body2:
           "From origin to destination, our team ensures reliable execution, transparent communication, and consistent value at every step.",
       }),
       section("capabilities", "Capabilities", {
         eyebrow: "What we do",
         title: "Structured programmes for bulk trade",
-        body: "Procurement, specification alignment, inspection coordination, and export documentation for qualified bulk buyers purchasing from Finekarts.",
+        body: "Specification alignment, independent inspection, logistics coordination, trade insurance where agreed, and export documentation — plus Irrevocable LC at sight, SBLC backup, and transferable revolving LC structures for longer programmes when banks approve.",
       }),
       section("process", "Process", {
         eyebrow: "Our process",
@@ -185,7 +185,7 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       }),
       section("global", "Global network", {
         title: "Sourced responsibly.\nDelivered globally.",
-        body: "Our procurement network and logistics partners help us deliver quality commodities reliably — with transparent communication and documentation discipline at every corridor.",
+        body: "Private supply channels and logistics partners help us deliver quality commodities reliably — with transparent communication and documentation discipline at every corridor.",
       }),
       section("cta", "CTA", {
         title: "Discuss your next bulk commodity requirement",

@@ -2,9 +2,9 @@ import { AGRICULTURE_IMAGES } from "@/lib/content/agriculture-images";
 
 export const ABOUT_STORY = {
   eyebrow: "Finekarts Incorporated",
-  title: "Global distribution for bulk agricultural commodities",
+  title: "Supplying bulk commodities buyers can trust",
   lead:
-    "We purchase from farmers, manufacturers, and verified origin programmes — then distribute bulk cargoes to qualified buyers with specification, inspection, logistics, and documentation discipline.",
+    "We sell bulk agricultural cargoes to qualified international buyers — with independent verification, inspection, logistics, trade insurance where contracts require it, and ICC-aligned bankable payment structures.",
   boxes: [
     {
       title: "Quality",
@@ -86,7 +86,7 @@ export const ABOUT_PANEL_TITLES: Record<
 > = {
   story: {
     eyebrow: "Who we are",
-    title: "We buy from origin. We sell to bulk buyers.",
+    title: "We sell commodities — suppliers remain private.",
   },
   capabilities: {
     eyebrow: "What we coordinate",

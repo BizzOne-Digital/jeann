@@ -77,7 +77,7 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
       ),
     },
     {
-      label: "Secure Trade Workflow",
+      label: "Irrevocable LC · SBLC",
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
           <path
@@ -139,7 +139,7 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
               {cmsField(
                 cms,
                 "eyebrow",
-                "Global sourcing • Bulk commodities • Worldwide delivery",
+                "Bulk commodities for sale • Verified programmes • Worldwide delivery",
               )}
             </p>
           </Reveal>
@@ -150,7 +150,7 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
           >
-            {cmsField(cms, "title", "Global Agricultural Commodity Distribution")}
+            {cmsField(cms, "title", "Bulk Agricultural Commodities for Qualified Buyers")}
           </motion.h1>
 
           <Reveal delay={0.1}>
@@ -158,7 +158,7 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
               {cmsField(
                 cms,
                 "description",
-                "We source and supply high-quality agricultural commodities to qualified buyers across global markets.",
+                "Finekarts supplies edible oils, sugar, rice, beans, and related bulk cargoes for sale to qualified international buyers — backed by inspection, logistics, trade insurance where agreed, and bankable structures such as Irrevocable LC at sight and SBLC for longer contracts.",
               )}
             </p>
           </Reveal>
@@ -253,7 +253,7 @@ export function ConnectionSection({
             </Reveal>
             <Reveal delay={0.06}>
               <h2 className="mt-3 text-3xl font-semibold leading-tight text-[#001a3d] sm:text-4xl lg:text-[2.65rem]">
-                {cmsField(cms, "title", "A global distributor for bulk agricultural commodities")}
+                {cmsField(cms, "title", "Selling bulk commodities with trust at the centre")}
               </h2>
             </Reveal>
             <Reveal delay={0.1}>
@@ -261,7 +261,7 @@ export function ConnectionSection({
                 {cmsField(
                   cms,
                   "body",
-                  "Finekarts Incorporated purchases from farmers, manufacturers, and established origin programmes — then distributes to qualified bulk buyers. We are not a marketplace and we do not connect third-party buyers with third-party sellers.",
+                  "Finekarts Incorporated is a distributor: every product on this site is offered for sale to qualified bulk buyers. We are not a marketplace and we do not connect unrelated buyers with unrelated sellers.",
                 )}
               </p>
             </Reveal>
@@ -270,7 +270,7 @@ export function ConnectionSection({
                 {cmsField(
                   cms,
                   "body2",
-                  "Our team coordinates procurement, quality, documentation, and logistics with transparency at every step — from origin through delivery.",
+                  "Supplier relationships stay private. We highlight verification, inspection, logistics, trade insurance where agreed, and ICC-aligned bankable payment structures.",
                 )}
               </p>
             </Reveal>

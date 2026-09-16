@@ -69,7 +69,7 @@ export async function SiteFooter() {
                 </div>
               </Link>
               <p className="mt-5 max-w-xs text-base leading-relaxed text-white/65">
-                Global agricultural commodity distribution for qualified international bulk buyers.
+                Bulk agricultural commodities for sale to qualified international buyers — verification, inspection, and bankable trade structures.
               </p>
               <div className="mt-5 space-y-1 text-sm text-white/75">
                 <p>

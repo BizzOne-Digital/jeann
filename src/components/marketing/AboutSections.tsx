@@ -41,7 +41,7 @@ export function AboutHero({
   const youtubeVideoId = resolveMarketingHeroYoutube(cms);
   return (
     <PageHero
-      title={cmsField(cms, "title", "Global distribution for bulk agricultural commodities")}
+      title={cmsField(cms, "title", "Supplying bulk commodities buyers can trust")}
       description={cmsField(cms, "description", positioning)}
       imageSrc={aboutHero.src}
       imageAlt={aboutHero.alt}

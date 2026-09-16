@@ -20,7 +20,7 @@ export type BankingClause = {
 export const PAYMENT_TERM_STRUCTURES: PaymentTermStructure[] = [
   {
     id: "lc-at-sight",
-    structure: "LC at Sight",
+    structure: "Irrevocable LC at Sight",
     primaryFunction: "Payment",
     iccCode: "UCP 600",
     buyerProtection: 5,
@@ -30,9 +30,19 @@ export const PAYMENT_TERM_STRUCTURES: PaymentTermStructure[] = [
   },
   {
     id: "lc-at-sight-sblc",
-    structure: "LC at Sight + SBLC",
+    structure: "Irrevocable LC at Sight + SBLC",
     primaryFunction: "Payment + backup security",
     iccCode: "UCP 600 / ISP98",
+    buyerProtection: 5,
+    sellerProtection: 5,
+    recommended: true,
+    enabledByDefault: true,
+  },
+  {
+    id: "transferable-revolving-lc",
+    structure: "Transferable Revolving LC at Sight",
+    primaryFunction: "Long-term programme payment",
+    iccCode: "UCP 600",
     buyerProtection: 5,
     sellerProtection: 5,
     recommended: true,
@@ -130,7 +140,15 @@ export const BANKING_CLAUSES: BankingClause[] = [
   },
   {
     title: "Contract security",
-    body: "For long-term contracts, the Buyer may additionally provide an Irrevocable Standby Letter of Credit (SBLC) in favor of the Seller as contractual security, subject to ISP98, unless otherwise agreed in writing.",
+    body: "For long-term contracts and larger transactions, the Buyer may additionally provide an Irrevocable Standby Letter of Credit (SBLC) in favor of the Seller as contractual security, subject to ISP98, unless otherwise agreed in writing.",
+  },
+  {
+    title: "Long-term programmes",
+    body: "Where agreed for multi-shipment or 12-month style programmes, payment may be structured through a Transferable Revolving Letter of Credit at Sight, subject to UCP 600 and the commercial schedule.",
+  },
+  {
+    title: "Trade insurance",
+    body: "Marine cargo and related trade insurance may be arranged or coordinated as part of the shipment programme (for example under CIF or where otherwise specified in the SPA), with coverage scope, deductibles, and claims handling stated in contract — insurance supports buyer confidence but does not replace inspection, documentation, or payment instrument discipline.",
   },
   {
     title: "Alternative bank guarantee",
@@ -158,7 +176,7 @@ export const PAYMENT_TERMS_INTRO =
   "For the type of transactions commonly discussed in bulk commodity trade, structures are often ranked by how they balance payment certainty with performance risk. Ratings below are indicative — final suitability depends on contract wording, bank approval, corridor, and counterparty diligence.";
 
 export const PREFERRED_PAYMENT_STRUCTURE =
-  "For Finekarts-style 12-month commodity programmes, Irrevocable LC at Sight with SBLC backup is often positioned as the preferred structure, while BG, D/P, D/A, and T/T remain alternative structures only when specifically negotiated.";
+  "For Finekarts-style 12-month commodity programmes, Irrevocable LC at Sight — often with SBLC backup for larger or longer contracts — and Transferable Revolving LC at Sight for multi-shipment programmes are commonly discussed. Instruments are framed under ICC rules (UCP 600, ISP98, URDG 758, URC 522 as applicable). Other documentary arrangements are optional and used only when specifically negotiated; BG, D/P, D/A, and T/T remain alternatives subject to bank and compliance approval.";
 
 export const SWIFT_INSTRUMENT_NOTE =
   "MT700, MT760, MT103, and similar references are SWIFT message types — not separate banking instruments. The underlying instrument (LC, SBLC, guarantee, or payment) creates the relevant legal and banking undertaking. SWIFT describes FIN as a service for exchanging MT-format financial messages.";
