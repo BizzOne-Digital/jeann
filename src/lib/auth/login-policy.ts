@@ -3,18 +3,11 @@ import type { RoleKey } from "@/lib/authorization/permissions";
 export const MAX_FAILED_LOGINS = 5;
 export const LOCKOUT_MINUTES = 15;
 
-export const MFA_REQUIRED_ROLES: RoleKey[] = [
-  "ceo_super_admin",
-  "general_manager",
-  "trade_manager",
-  "compliance_reviewer",
-  "finance",
-  "employee_operations",
-  "banking_advisor",
-];
+/** MFA disabled — login proceeds without email OTP for all roles. */
+export const MFA_REQUIRED_ROLES: RoleKey[] = [];
 
-export function rolesRequireMfa(roles: RoleKey[]): boolean {
-  return roles.some((role) => MFA_REQUIRED_ROLES.includes(role));
+export function rolesRequireMfa(_roles: RoleKey[]): boolean {
+  return false;
 }
 
 export function lockoutUntilFromAttempts(failedCount: number): Date | null {

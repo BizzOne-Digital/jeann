@@ -27,8 +27,8 @@ describe("Login policy", () => {
     expect(isAccountLocked(until)).toBe(true);
   });
 
-  it("requires MFA for sensitive roles", () => {
-    expect(rolesRequireMfa(["ceo_super_admin"])).toBe(true);
+  it("does not require MFA for any role", () => {
+    expect(rolesRequireMfa(["ceo_super_admin"])).toBe(false);
     expect(rolesRequireMfa(["buyer_member"])).toBe(false);
   });
 });

@@ -11,17 +11,12 @@ import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
 import {
   isAccountLocked,
   lockoutUntilFromAttempts,
-  rolesRequireMfa,
   MAX_FAILED_LOGINS,
 } from "@/lib/auth/login-policy";
-import { sendVerificationCode } from "@/lib/auth/verification-service";
-import { createMfaToken } from "@/lib/auth/mfa";
 import { writeAuditEvent } from "@/lib/audit/log";
 import { auditRequestMeta } from "@/lib/api/request-meta";
 import { getClientIp } from "@/lib/api/request-meta";
-import { isProductionEnvironment } from "@/lib/security/production-guards";
 import { logSecurityEvent } from "@/lib/security/security-service";
-import type { RoleKey } from "@/lib/authorization/permissions";
 
 export const runtime = "nodejs";
 
@@ -135,23 +130,6 @@ export async function POST(request: NextRequest) {
           { error: "Your account has no portal access yet. Please contact support." },
           { status: 403 },
         );
-      }
-
-      if (rolesRequireMfa(roles as RoleKey[])) {
-        const sent = await sendVerificationCode({
-          userId: user._id,
-          channel: "email",
-          purpose: "mfa_login",
-          destination: user.email,
-          name: user.name,
-        });
-        const mfaToken = await createMfaToken(String(user._id));
-        return NextResponse.json({
-          ok: true,
-          requiresMfa: true,
-          mfaToken,
-          ...(isProductionEnvironment() ? {} : { devCode: sent.devCode }),
-        });
       }
 
       const sessionIssue = getSessionConfigError();
