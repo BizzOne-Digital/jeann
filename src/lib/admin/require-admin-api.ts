@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { getSession } from "@/lib/auth/session";
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
 
@@ -15,8 +16,11 @@ export async function requireAdminApiSession() {
   if (!isMongoConfigured()) return null;
   if (!(await tryConnectMongo())) return null;
   const { OrganizationMembership } = await import("@/models");
+  const userId = Types.ObjectId.isValid(session.userId)
+    ? new Types.ObjectId(session.userId)
+    : session.userId;
   const membership = await OrganizationMembership.findOne({
-    userId: session.userId,
+    userId,
     status: "active",
     deletedAt: null,
     roles: { $in: ["ceo_super_admin", "general_manager"] },

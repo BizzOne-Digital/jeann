@@ -34,6 +34,7 @@ export function UploadedImageField({
     try {
       await fetch("/api/upload", {
         method: "DELETE",
+        credentials: "same-origin",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url }),
       });
@@ -53,7 +54,11 @@ export function UploadedImageField({
     formData.append("folder", folder);
 
     try {
-      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        credentials: "same-origin",
+        body: formData,
+      });
       const data = (await res.json()) as { url?: string; error?: string };
 
       if (!res.ok || !data.url) {
@@ -152,3 +157,6 @@ export function UploadedImageField({
     </div>
   );
 }
+
+/** Alias for older admin forms. */
+export const LocalImageField = UploadedImageField;

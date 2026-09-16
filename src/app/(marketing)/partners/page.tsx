@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { CmsPageHero } from "@/components/marketing/CmsPageHero";
-import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 import { MarketingStorySection } from "@/components/marketing/MarketingStorySection";
 import { PartnerProfileCard } from "@/components/marketing/PartnerSections";
 import { Reveal } from "@/components/motion/Reveal";
@@ -25,7 +24,6 @@ export default async function PartnersPage() {
       <CmsPageHero
         pageSlug="partners"
         tone="dark"
-        image={getPageHeroImage("partners")}
         defaults={{
           title: PARTNERS_PAGE_INTRO.title,
           description: PARTNERS_PAGE_INTRO.lead,

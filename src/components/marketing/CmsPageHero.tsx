@@ -1,13 +1,17 @@
 import { PageHero, type PageHeroCta } from "@/components/marketing/PageHero";
 import { cmsField } from "@/lib/content/cms-field";
 import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
-import type { PageHeroImage } from "@/lib/marketing/page-hero-images";
+import {
+  pageSlugToHeroImageKey,
+  resolveMarketingHeroImage,
+  resolveMarketingHeroYoutube,
+} from "@/lib/marketing/cms-hero";
+import { resolveImageSrc } from "@/lib/media/resolve-image-src";
 
 type Props = {
   pageSlug: string;
   sectionId?: string;
   tone?: "dark" | "light";
-  image?: PageHeroImage;
   defaults: {
     title: string;
     description: string;
@@ -20,7 +24,6 @@ export async function CmsPageHero({
   pageSlug,
   sectionId = "hero",
   tone = "dark",
-  image,
   defaults,
 }: Props) {
   const page = await getPublishedPage(pageSlug);
@@ -40,13 +43,18 @@ export async function CmsPageHero({
       }
     : undefined;
 
+  const heroKey = pageSlugToHeroImageKey(pageSlug);
+  const heroImage = resolveMarketingHeroImage(fields, heroKey);
+  const imageSrc = resolveImageSrc(heroImage.src);
+
   return (
     <PageHero
       tone={tone}
       title={cmsField(fields, "title", defaults.title)}
       description={cmsField(fields, "description", defaults.description)}
-      imageSrc={image?.src}
-      imageAlt={image?.alt ?? ""}
+      imageSrc={imageSrc}
+      imageAlt={heroImage.alt}
+      youtubeVideoId={resolveMarketingHeroYoutube(fields)}
       primaryCta={primaryCta}
       secondaryCta={secondaryCta}
     />

@@ -13,6 +13,7 @@ import {
 } from "@/lib/marketing/hero-layout";
 import { HeroVideoBackground } from "@/components/marketing/HeroVideoBackground";
 import { AGRICULTURE_IMAGES } from "@/lib/content/agriculture-images";
+import { isStoredUploadUrl, resolveImageSrc } from "@/lib/media/resolve-image-src";
 
 export type PageHeroCta = {
   href: string;
@@ -52,6 +53,8 @@ export function PageHero({
   priority = true,
   youtubeVideoId,
 }: Props) {
+  const resolvedImageSrc = resolveImageSrc(imageSrc);
+  const uploadImage = isStoredUploadUrl(resolvedImageSrc);
   const light = tone === "light";
   const triptych = backgroundLayout === "triptych" && !light;
 
@@ -65,7 +68,7 @@ export function PageHero({
         <div className="absolute inset-0">
           {triptych ? (
             <ImageTriptych
-              src={imageSrc}
+              src={resolvedImageSrc}
               alt={imageAlt}
               priority={priority}
               variant="fill"
@@ -74,16 +77,17 @@ export function PageHero({
           ) : youtubeVideoId ? (
             <HeroVideoBackground
               youtubeInput={youtubeVideoId}
-              posterSrc={imageSrc}
+              posterSrc={resolvedImageSrc}
               posterAlt={imageAlt}
             />
           ) : (
             <Image
-              src={imageSrc}
+              src={resolvedImageSrc}
               alt={imageAlt}
               fill
               priority={priority}
               sizes="100vw"
+              unoptimized={uploadImage}
               className={imageClassName}
               aria-hidden={!imageAlt}
             />

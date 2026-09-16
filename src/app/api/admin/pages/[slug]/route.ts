@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdminApiSession } from "@/lib/admin/require-admin-api";
 import { getEditablePage, saveEditablePage } from "@/lib/content/page-content";
+import { revalidateMarketingPage } from "@/lib/content/revalidate-marketing";
 
 export const runtime = "nodejs";
 
@@ -63,6 +64,9 @@ export async function PUT(
   try {
     const page = await saveEditablePage({ slug, ...parsed.data });
     if (!page) return NextResponse.json({ error: "Page not found." }, { status: 404 });
+    if (page.status === "published") {
+      revalidateMarketingPage(slug);
+    }
     return NextResponse.json({ ok: true, page });
   } catch (error) {
     console.error("[admin/pages/:slug PUT]", error);

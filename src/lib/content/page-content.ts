@@ -17,23 +17,33 @@ type StoredSectionPayload = {
 };
 
 function encodeSections(sections: PageSectionDef[]): PageSection[] {
-  return sections.map((section) => ({
-    type: "richText" as const,
-    content: JSON.stringify({
-      id: section.id,
-      label: section.label,
-      fields: section.defaults,
-    } satisfies StoredSectionPayload),
+  const payload: StoredSectionPayload[] = sections.map((section) => ({
+    id: section.id,
+    label: section.label,
+    fields: section.defaults,
   }));
+  return [
+    {
+      type: "richText" as const,
+      content: JSON.stringify(payload),
+    },
+  ];
 }
 
 function decodeSections(blocks: PageSection[], registry: PageRegistryEntry): PageSectionDef[] {
   const parsed = new Map<string, Record<string, string>>();
 
   for (const block of blocks) {
-    if (block.type !== "richText" || !block.content) continue;
+    const content = "content" in block ? block.content : undefined;
+    if (!content) continue;
     try {
-      const data = JSON.parse(block.content) as StoredSectionPayload;
+      const data = JSON.parse(content) as StoredSectionPayload | StoredSectionPayload[];
+      if (Array.isArray(data)) {
+        for (const item of data) {
+          if (item?.id && item.fields) parsed.set(item.id, item.fields);
+        }
+        continue;
+      }
       if (data.id && data.fields) parsed.set(data.id, data.fields);
     } catch {
       // ignore invalid blocks

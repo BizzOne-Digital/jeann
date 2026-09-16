@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/marketing/PageHero";
-import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
+import { resolveMarketingHeroImage } from "@/lib/marketing/cms-hero";
+import { resolveImageSrc } from "@/lib/media/resolve-image-src";
 import { ResourcesHub } from "@/components/marketing/ResourcesHub";
 import { cmsField } from "@/lib/content/cms-field";
 import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
@@ -22,7 +23,7 @@ export default async function ResourcesPage() {
     "Document sets vary by product, corridor, bank, and contract. Lists below are starting points for discussion — not guarantees that every document will be issued or accepted without amendment.",
   )}`;
 
-  const heroImage = getPageHeroImage("resources");
+  const heroImage = resolveMarketingHeroImage(hero, "resources");
 
   return (
     <>
@@ -34,7 +35,7 @@ export default async function ResourcesPage() {
           "description",
           "Educational reference for trade documents, banking terminology, and payment structures. Browse by topic below — purchase requests are submitted through the buyer portal.",
         )}
-        imageSrc={heroImage.src}
+        imageSrc={resolveImageSrc(heroImage.src)}
         imageAlt={heroImage.alt}
         primaryCta={{
           href: "#resources-hub",

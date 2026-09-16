@@ -32,6 +32,7 @@ export function AdminPageEditor({ initialPage }: { initialPage: EditablePage }) 
     try {
       const res = await fetch(`/api/admin/pages/${page.slug}`, {
         method: "PUT",
+        credentials: "same-origin",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title: page.title,
@@ -50,7 +51,11 @@ export function AdminPageEditor({ initialPage }: { initialPage: EditablePage }) 
         return;
       }
       if (data.page) setPage(data.page);
-      setMessage("Page saved.");
+      setMessage(
+        data.page?.status === "published"
+          ? "Page saved. Live site will show updates after refresh."
+          : "Page saved as draft — set status to Published for the live site.",
+      );
     } catch {
       setError("Unable to save page.");
     } finally {

@@ -7,6 +7,8 @@ import { ClientOnly } from "@/components/ui/ClientOnly";
 import { AutoPageTranslator } from "@/components/i18n/AutoPageTranslator";
 import { TranslationProvider } from "@/components/i18n/TranslationProvider";
 
+export const dynamic = "force-dynamic";
+
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
   return (
     <TranslationProvider>

@@ -15,7 +15,8 @@ import { resolveHeroYoutubeInput } from "@/lib/content/hero-video";
 import type { SeedCategory } from "@/lib/content/catalog";
 import { getCategoryCover } from "@/lib/content/product-images";
 import { HOMEPAGE_PACKAGING_TEASER, PACKAGING_IMAGES } from "@/lib/content/packaging-images";
-import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
+import { resolveMarketingHeroImage } from "@/lib/marketing/cms-hero";
+import { isStoredUploadUrl } from "@/lib/media/resolve-image-src";
 import { AGRICULTURE_IMAGES } from "@/lib/content/agriculture-images";
 import {
   HERO_DARK_OVERLAY_BOTTOM,
@@ -58,7 +59,7 @@ function GoldButton({
 
 export function HomeHero({ cms }: { cms?: Record<string, string> }) {
   const reduce = useReducedMotion();
-  const hero = getPageHeroImage("home");
+  const hero = resolveMarketingHeroImage(cms, "home");
 
   const trust = [
     {
@@ -120,6 +121,7 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
           fill
           priority
           sizes="100vw"
+          unoptimized={isStoredUploadUrl(hero.src)}
           className="object-cover object-[center_center] sm:object-[55%_center]"
         />
         <div className={`absolute inset-0 ${HERO_DARK_OVERLAY_WASH}`} />

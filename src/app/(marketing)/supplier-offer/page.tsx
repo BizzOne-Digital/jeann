@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { CmsPageHero } from "@/components/marketing/CmsPageHero";
-import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 import { Reveal } from "@/components/motion/Reveal";
 import { TradeOfferForm } from "@/components/marketing/TradeOfferForm";
 
@@ -16,7 +15,6 @@ export default function SupplierOfferPage() {
       <CmsPageHero
         pageSlug="supplier-offer"
         tone="dark"
-        image={getPageHeroImage("supplierOffer")}
         defaults={{
           title: "Supplier trade offer",
           description:
