@@ -6,20 +6,23 @@ import {
   PARTNER_CATEGORIES,
   type PartnerEntry,
 } from "@/lib/content/partners-catalog";
+import { marketingImageProps } from "@/lib/media/resolve-image-src";
 
 function PartnerPhoto({ partner }: { partner: PartnerEntry }) {
   const frameClass = "aspect-[16/9] sm:aspect-[21/9]";
+  const photo = partner.photoSrc ? marketingImageProps(partner.photoSrc) : null;
 
   return (
     <div className="relative overflow-hidden rounded-md bg-[var(--mist)]">
-      {partner.photoSrc ? (
+      {photo ? (
         <div className={`relative ${frameClass}`}>
           <Image
-            src={partner.photoSrc}
+            src={photo.src}
             alt={partner.photoAlt ?? `${partner.name} — partnership`}
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, 960px"
+            unoptimized={photo.unoptimized}
           />
         </div>
       ) : partner.youtubeVideoId ? (

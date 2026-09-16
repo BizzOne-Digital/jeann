@@ -15,3 +15,12 @@ export function resolveImageSrc(src?: string | null): string {
 export function isStoredUploadUrl(src?: string | null): boolean {
   return Boolean(src?.trim().startsWith("/api/uploads/"));
 }
+
+/** Next/Image props for marketing assets (skip optimizer for Mongo-backed uploads). */
+export function marketingImageProps(src?: string | null): {
+  src: string;
+  unoptimized: boolean;
+} {
+  const resolved = resolveImageSrc(src);
+  return { src: resolved, unoptimized: isStoredUploadUrl(resolved) };
+}

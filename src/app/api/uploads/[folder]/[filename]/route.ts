@@ -3,6 +3,7 @@ import { isUploadFolder } from "@/lib/uploads/constants";
 import { getStoredUploadBinary } from "@/lib/uploads/stored-upload-service";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 type RouteContext = { params: Promise<{ folder: string; filename: string }> };
 

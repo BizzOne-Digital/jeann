@@ -35,7 +35,8 @@ function mongoProductToSeed(
 ): SeedProduct | null {
   if (!isPublicProductStatus(product.status)) return null;
 
-  const image = seedFallback?.image || product.gallery?.[0]?.storageKey;
+  const uploaded = product.gallery?.[0]?.storageKey?.trim();
+  const image = uploaded || seedFallback?.image;
 
   return {
     slug: product.slug,

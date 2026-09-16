@@ -5,6 +5,7 @@ import {
   buildUploadPublicUrl,
   parseUploadPublicUrl,
 } from "@/lib/uploads/constants";
+import { toUploadBuffer } from "@/lib/media/stored-upload-buffer";
 import { tryConnectMongo } from "@/lib/db/mongoose";
 
 export function extensionForMime(mimeType: string): string | null {
@@ -58,13 +59,16 @@ export async function getStoredUploadBinary(
   if (!conn) return null;
 
   const { StoredUpload } = await import("@/models");
-  const doc = await StoredUpload.findOne({ folder, filename }).select("+data").lean();
-  if (!doc?.data) return null;
+  const doc = await StoredUpload.findOne({ folder, filename });
+  if (!doc) return null;
+
+  const data = toUploadBuffer(doc.data);
+  if (!data?.length) return null;
 
   return {
     mimeType: doc.mimeType,
-    size: doc.size,
-    data: Buffer.from(doc.data),
+    size: data.length,
+    data,
   };
 }
 

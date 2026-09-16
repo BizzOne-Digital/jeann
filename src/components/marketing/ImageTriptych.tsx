@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { marketingImageProps } from "@/lib/media/resolve-image-src";
 
 const PANELS = [
   { position: "object-left", aria: true },
@@ -25,6 +26,7 @@ export function ImageTriptych({
   rounded = true,
   variant = "aspect",
 }: ImageTriptychProps) {
+  const image = marketingImageProps(src);
   const gridClass =
     variant === "fill"
       ? "absolute inset-0 grid grid-cols-3 gap-1 sm:gap-1.5"
@@ -35,11 +37,12 @@ export function ImageTriptych({
       {PANELS.map((panel, index) => (
         <div key={index} className="relative min-h-0 overflow-hidden bg-[#e4e0d8]">
           <Image
-            src={src}
+            src={image.src}
             alt={panel.aria ? alt : ""}
             fill
             priority={priority && (variant === "fill" || index === 1)}
             sizes="34vw"
+            unoptimized={image.unoptimized}
             className={`object-cover ${panel.position}`}
           />
         </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { marketingImageProps } from "@/lib/media/resolve-image-src";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useCallback, useState } from "react";
@@ -312,6 +313,7 @@ function GalleryPanel({
 }: Pick<ProductHubProps, "content" | "heroImage" | "heroImageAlt">) {
   const gallery = (content.images ?? []).filter((image) => image.src !== heroImage);
   const hasGallery = gallery.length > 0;
+  const mainImage = marketingImageProps(hasGallery ? gallery[0].src : heroImage);
 
   return (
     <div className="space-y-8">
@@ -322,12 +324,13 @@ function GalleryPanel({
 
       <div className="relative aspect-[16/9] overflow-hidden rounded-lg border border-[#d5d0c8] bg-[#e4e0d8]">
         <Image
-          src={hasGallery ? gallery[0].src : heroImage}
+          src={mainImage.src}
           alt={hasGallery ? gallery[0].alt : heroImageAlt}
           fill
           className="object-cover"
           sizes="(max-width: 1024px) 100vw, 900px"
           priority
+          unoptimized={mainImage.unoptimized}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#001a3d]/70 via-transparent to-transparent" />
         <div className="absolute right-0 bottom-0 left-0 p-6 text-white">
@@ -342,20 +345,24 @@ function GalleryPanel({
 
       {gallery.length > 1 ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {gallery.slice(1).map((image) => (
+          {gallery.slice(1).map((image) => {
+            const thumb = marketingImageProps(image.src);
+            return (
             <div
               key={image.src}
               className="relative aspect-[4/3] overflow-hidden rounded-lg border border-[#d5d0c8] bg-[#e4e0d8]"
             >
               <Image
-                src={image.src}
+                src={thumb.src}
                 alt={image.alt}
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 320px"
+                unoptimized={thumb.unoptimized}
               />
             </div>
-          ))}
+          );
+          })}
         </div>
       ) : null}
     </div>
