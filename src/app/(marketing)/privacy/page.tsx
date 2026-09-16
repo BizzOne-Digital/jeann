@@ -5,7 +5,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { getCareerFormPrefill } from "@/lib/auth/career-prefill";
 import { getSession } from "@/lib/auth/session";
 import { cmsField } from "@/lib/content/cms-field";
-import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
+import { getEffectiveSectionFields, getPublishedPage } from "@/lib/content/page-content";
 import {
   resolveMarketingHeroImage,
   resolveMarketingHeroYoutube,
@@ -21,7 +21,7 @@ export default async function CareersPage() {
   const session = await getSession();
   const prefill = session ? await getCareerFormPrefill(session) : undefined;
   const cms = await getPublishedPage("privacy");
-  const heroFields = getSectionFields(cms, "hero");
+  const heroFields = getEffectiveSectionFields(cms, "hero");
   const hero = resolveMarketingHeroImage(heroFields, "careers");
 
   return (

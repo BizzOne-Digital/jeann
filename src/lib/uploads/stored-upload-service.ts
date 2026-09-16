@@ -29,13 +29,18 @@ export async function saveStoredUpload(input: {
   if (!filename) return null;
 
   const { StoredUpload } = await import("@/models");
-  await StoredUpload.create({
-    folder: input.folder,
-    filename,
-    mimeType: input.mimeType,
-    size: input.buffer.length,
-    data: input.buffer,
-  });
+  try {
+    await StoredUpload.create({
+      folder: input.folder,
+      filename,
+      mimeType: input.mimeType,
+      size: input.buffer.length,
+      data: input.buffer,
+    });
+  } catch (error) {
+    console.error("[saveStoredUpload]", error);
+    return null;
+  }
 
   return {
     folder: input.folder,

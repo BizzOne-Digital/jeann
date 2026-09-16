@@ -65,9 +65,14 @@ export function AdminPageEditor({ initialPage }: { initialPage: EditablePage }) 
 
   return (
     <div className="space-y-6">
+      <p className="rounded-md border border-[var(--line)] bg-[var(--cream)] px-4 py-3 text-sm text-[var(--ink)]">
+        Section text matches what visitors see on the live site. After edits, set status to{" "}
+        <strong>Published</strong> and save.
+      </p>
       {page.status !== "published" ? (
         <p className="rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-          Set status to <strong>Published</strong> and save — draft pages are not shown on the live site.
+          This page is <strong>{page.status}</strong> — the live site still shows the last published
+          (or default) content until you publish.
         </p>
       ) : null}
       <div className="flex flex-wrap items-center gap-3">

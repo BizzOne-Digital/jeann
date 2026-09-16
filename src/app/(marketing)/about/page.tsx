@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getAboutSectionImages } from "@/lib/content/about-images";
 import { getHomeSectionImages } from "@/lib/content/home-images";
 import { getSite } from "@/lib/content/catalog";
-import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
+import { getEffectiveSectionFields, getPublishedPage } from "@/lib/content/page-content";
 import { AboutHub } from "@/components/marketing/AboutHub";
 import { FoodSafetyAgencyMarquee } from "@/components/marketing/FoodSafetyAgencyMarquee";
 import { AboutHero } from "@/components/marketing/AboutSections";
@@ -21,16 +21,16 @@ export default async function AboutPage() {
 
   return (
     <>
-      <AboutHero positioning={site.positioning} cms={getSectionFields(cms, "hero")} />
+      <AboutHero positioning={site.positioning} cms={getEffectiveSectionFields(cms, "hero")} />
       <AboutHub
         teamStrategy={teamStrategy}
         teamCollaboration={teamCollaboration}
         home3={home3}
         cms={{
-          whoWeAre: getSectionFields(cms, "who-we-are"),
-          capabilities: getSectionFields(cms, "capabilities"),
-          process: getSectionFields(cms, "process"),
-          global: getSectionFields(cms, "global"),
+          whoWeAre: getEffectiveSectionFields(cms, "who-we-are"),
+          capabilities: getEffectiveSectionFields(cms, "capabilities"),
+          process: getEffectiveSectionFields(cms, "process"),
+          global: getEffectiveSectionFields(cms, "global"),
         }}
       />
       <FoodSafetyAgencyMarquee />

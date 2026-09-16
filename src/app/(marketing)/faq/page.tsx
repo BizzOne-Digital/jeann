@@ -6,7 +6,7 @@ import { AnimatedSection } from "@/components/motion/AnimatedSection";
 import { buyerQuoteHref } from "@/lib/marketing/cta-links";
 import { cmsField } from "@/lib/content/cms-field";
 import { getPublishedFaqs } from "@/lib/content/faqs-catalog";
-import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
+import { getEffectiveSectionFields, getPublishedPage } from "@/lib/content/page-content";
 import {
   resolveMarketingHeroImage,
   resolveMarketingHeroYoutube,
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 
 export default async function FaqPage() {
   const [faqs, cms] = await Promise.all([getPublishedFaqs(), getPublishedPage("faq")]);
-  const heroFields = getSectionFields(cms, "hero");
+  const heroFields = getEffectiveSectionFields(cms, "hero");
   const hero = resolveMarketingHeroImage(heroFields, "faq");
 
   return (

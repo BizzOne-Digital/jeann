@@ -1,4 +1,5 @@
 import type { PageSection } from "@/models/Page";
+import { cmsField } from "@/lib/content/cms-field";
 import {
   getRegistryPage,
   listRegistryPages,
@@ -52,11 +53,39 @@ function decodeSections(blocks: PageSection[], registry: PageRegistryEntry): Pag
 
   return registry.sections.map((section) => ({
     ...section,
-    defaults: {
-      ...section.defaults,
-      ...(parsed.get(section.id) ?? {}),
-    },
+    defaults: mergeStoredSectionFields(section.defaults, parsed.get(section.id)),
   }));
+}
+
+/** Ignore blank stored values so registry defaults stay what the live site shows. */
+function mergeStoredSectionFields(
+  registryDefaults: Record<string, string>,
+  stored?: Record<string, string>,
+): Record<string, string> {
+  const merged = { ...registryDefaults };
+  if (!stored) return merged;
+  for (const [key, value] of Object.entries(stored)) {
+    const trimmed = value?.trim();
+    if (trimmed) merged[key] = trimmed;
+  }
+  return merged;
+}
+
+/** Values as rendered on the public site (same rules as `cmsField` + registry fallbacks). */
+function displaySectionDefaults(
+  registrySection: PageSectionDef,
+  mergedFields: Record<string, string>,
+): Record<string, string> {
+  const keys = new Set([
+    ...Object.keys(registrySection.defaults),
+    ...Object.keys(mergedFields),
+  ]);
+  const out: Record<string, string> = {};
+  for (const key of keys) {
+    const fallback = registrySection.defaults[key] ?? "";
+    out[key] = cmsField(mergedFields, key, fallback);
+  }
+  return out;
 }
 
 function mergePage(registry: PageRegistryEntry, stored?: {
@@ -114,11 +143,55 @@ export async function getPublishedPage(slug: string): Promise<EditablePage | nul
   return page;
 }
 
+/**
+ * Admin editor: section fields match what visitors see on the live site; status/SEO/title
+ * still reflect the saved document so you can publish or revise.
+ */
+export async function getAdminPageForEditor(slug: string): Promise<EditablePage | null> {
+  const registry = getRegistryPage(slug);
+  if (!registry) return null;
+
+  const live = await getPublishedPage(slug);
+  const stored = await getEditablePage(slug);
+  const base = live ?? (stored ?? mergePage(registry));
+
+  const registryBySection = new Map(registry.sections.map((s) => [s.id, s]));
+
+  return {
+    ...base,
+    title: stored?.title ?? base.title,
+    seoTitle: stored?.seoTitle ?? base.seoTitle,
+    seoDescription: stored?.seoDescription ?? base.seoDescription,
+    status: stored?.status ?? base.status,
+    sections: base.sections.map((section) => {
+      const reg = registryBySection.get(section.id) ?? section;
+      return {
+        ...section,
+        defaults: displaySectionDefaults(reg, section.defaults),
+      };
+    }),
+  };
+}
+
 export function getSectionFields(
   page: EditablePage | null | undefined,
   sectionId: string,
 ): Record<string, string> {
   return page?.sections.find((s) => s.id === sectionId)?.defaults ?? {};
+}
+
+/** Section fields as shown on the live site (registry fallbacks when CMS value is blank). */
+export function getEffectiveSectionFields(
+  page: EditablePage | null | undefined,
+  sectionId: string,
+): Record<string, string> {
+  const slug = page?.slug;
+  const registrySection = slug
+    ? getRegistryPage(slug)?.sections.find((s) => s.id === sectionId)
+    : undefined;
+  const merged = getSectionFields(page, sectionId);
+  if (!registrySection) return merged;
+  return displaySectionDefaults(registrySection, merged);
 }
 
 export { cmsField } from "@/lib/content/cms-field";
@@ -163,7 +236,7 @@ export async function saveEditablePage(input: {
     { upsert: true, new: true },
   );
 
-  return getEditablePage(input.slug);
+  return getAdminPageForEditor(input.slug);
 }
 
 export async function seedPagesFromRegistry(): Promise<number> {

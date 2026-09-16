@@ -5,7 +5,7 @@ import { BoardDirectorsSection } from "@/components/marketing/TeamSections";
 import { AnimatedSection } from "@/components/motion/AnimatedSection";
 import { Reveal } from "@/components/motion/Reveal";
 import { cmsField } from "@/lib/content/cms-field";
-import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
+import { getEffectiveSectionFields, getPublishedPage } from "@/lib/content/page-content";
 import { getPublishedTeamMembers } from "@/lib/content/team-catalog";
 import {
   resolveMarketingHeroImage,
@@ -22,8 +22,8 @@ export default async function TeamPage() {
     getPublishedTeamMembers(),
     getPublishedPage("team"),
   ]);
-  const heroFields = getSectionFields(cms, "hero");
-  const boardIntro = getSectionFields(cms, "board-intro");
+  const heroFields = getEffectiveSectionFields(cms, "hero");
+  const boardIntro = getEffectiveSectionFields(cms, "board-intro");
   const hero = resolveMarketingHeroImage(heroFields, "team");
   const youtubeVideoId = resolveMarketingHeroYoutube(heroFields);
   const boardMembers = members.filter((m) => m.tier === "board");

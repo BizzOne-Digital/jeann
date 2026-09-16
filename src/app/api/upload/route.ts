@@ -1,10 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdminApiSession } from "@/lib/admin/require-admin-api";
-import {
-  UPLOAD_MAX_BYTES,
-  UPLOAD_MIME_TYPES,
-  isUploadFolder,
-} from "@/lib/uploads/constants";
+import { UPLOAD_MAX_BYTES, isUploadFolder } from "@/lib/uploads/constants";
+import { resolveImageUploadMime } from "@/lib/uploads/resolve-image-mime";
 import {
   deleteStoredUploadByUrl,
   saveStoredUpload,
@@ -35,22 +32,31 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid folder." }, { status: 400 });
   }
 
-  const mimeType = file.type || "application/octet-stream";
-  if (!UPLOAD_MIME_TYPES[mimeType]) {
-    return NextResponse.json(
-      { error: "Unsupported file type. Use JPEG, PNG, WebP, or GIF." },
-      { status: 422 },
-    );
-  }
-
   if (file.size > UPLOAD_MAX_BYTES) {
     return NextResponse.json({ error: "File exceeds 8MB limit." }, { status: 422 });
   }
 
   const buffer = Buffer.from(await file.arrayBuffer());
+  const mimeType = resolveImageUploadMime(file, buffer);
+  if (!mimeType) {
+    return NextResponse.json(
+      {
+        error:
+          "Unsupported image type. Use JPEG, PNG, WebP, or GIF (not HEIC). On iPhone: Settings → Camera → Formats → Most Compatible.",
+      },
+      { status: 422 },
+    );
+  }
+
   const saved = await saveStoredUpload({ folder: folderRaw, mimeType, buffer });
   if (!saved) {
-    return NextResponse.json({ error: "Unable to store upload." }, { status: 503 });
+    return NextResponse.json(
+      {
+        error:
+          "Unable to store upload. Check that MONGODB_URI is set on the server and the database is reachable.",
+      },
+      { status: 503 },
+    );
   }
 
   return NextResponse.json({

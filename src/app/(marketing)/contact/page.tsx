@@ -6,7 +6,7 @@ import {
   ContactCta,
 } from "@/components/marketing/ContactSections";
 import { getSite } from "@/lib/content/catalog";
-import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
+import { getEffectiveSectionFields, getPublishedPage } from "@/lib/content/page-content";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -19,7 +19,7 @@ export default async function ContactPage() {
 
   return (
     <>
-      <ContactHero cms={getSectionFields(cms, "hero")} />
+      <ContactHero cms={getEffectiveSectionFields(cms, "hero")} />
       <ContactChannels
         email={site.email}
         phone={site.phone}

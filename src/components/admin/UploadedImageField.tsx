@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 import type { UploadFolder } from "@/models/StoredUpload";
 import { resolveImageSrc } from "@/lib/media/resolve-image-src";
+import { UPLOAD_MAX_BYTES } from "@/lib/uploads/constants";
 
 type Toast = { type: "success" | "error"; message: string } | null;
 
@@ -43,8 +44,31 @@ export function UploadedImageField({
     }
   }
 
+  async function parseUploadResponse(res: Response): Promise<{ url?: string; error?: string }> {
+    const text = await res.text();
+    if (!text.trim()) {
+      return {
+        error: res.status === 403
+          ? "Forbidden — sign in as CEO/GM admin."
+          : res.status === 413
+            ? "File too large for the server (try under 4MB)."
+            : `Upload failed (${res.status}).`,
+      };
+    }
+    try {
+      return JSON.parse(text) as { url?: string; error?: string };
+    } catch {
+      return { error: `Upload failed (${res.status}).` };
+    }
+  }
+
   async function handleFileChange(file: File | null) {
     if (!file) return;
+
+    if (file.size > UPLOAD_MAX_BYTES) {
+      showToast("error", "File exceeds 8MB limit.");
+      return;
+    }
 
     setUploading(true);
     setToast(null);
@@ -59,7 +83,7 @@ export function UploadedImageField({
         credentials: "same-origin",
         body: formData,
       });
-      const data = (await res.json()) as { url?: string; error?: string };
+      const data = await parseUploadResponse(res);
 
       if (!res.ok || !data.url) {
         showToast("error", data.error || "Upload failed.");

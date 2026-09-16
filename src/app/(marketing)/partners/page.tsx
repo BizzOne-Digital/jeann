@@ -4,7 +4,7 @@ import { MarketingStorySection } from "@/components/marketing/MarketingStorySect
 import { PartnerProfileCard } from "@/components/marketing/PartnerSections";
 import { Reveal } from "@/components/motion/Reveal";
 import { cmsField } from "@/lib/content/cms-field";
-import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
+import { getEffectiveSectionFields, getPublishedPage } from "@/lib/content/page-content";
 import { getPartners, PARTNERS_PAGE_INTRO } from "@/lib/content/partners-catalog";
 import { PARTNERS_STORY } from "@/lib/content/marketing-pages";
 
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export default async function PartnersPage() {
   const partners = getPartners();
   const cms = await getPublishedPage("partners");
-  const intro = getSectionFields(cms, "intro");
+  const intro = getEffectiveSectionFields(cms, "intro");
 
   return (
     <>

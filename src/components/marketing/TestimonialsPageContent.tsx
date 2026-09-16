@@ -15,14 +15,14 @@ import {
   getPublishedTestimonials,
   getTestimonialSummary,
 } from "@/lib/content/testimonials-catalog";
-import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
+import { getEffectiveSectionFields, getPublishedPage } from "@/lib/content/page-content";
 
 export async function TestimonialsPageContent() {
   const [testimonials, cms] = await Promise.all([
     getPublishedTestimonials(),
     getPublishedPage("testimonials"),
   ]);
-  const heroFields = getSectionFields(cms, "hero");
+  const heroFields = getEffectiveSectionFields(cms, "hero");
   const heroImage = resolveMarketingHeroImage(heroFields, "testimonials");
   const summary = getTestimonialSummary(testimonials);
 

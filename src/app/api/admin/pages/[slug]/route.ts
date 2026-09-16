@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdminApiSession } from "@/lib/admin/require-admin-api";
-import { getEditablePage, saveEditablePage } from "@/lib/content/page-content";
+import {
+  getAdminPageForEditor,
+  saveEditablePage,
+} from "@/lib/content/page-content";
 import { revalidateMarketingPage } from "@/lib/content/revalidate-marketing";
 
 export const runtime = "nodejs";
@@ -28,7 +31,7 @@ export async function GET(
   }
   const { slug } = await context.params;
   try {
-    const page = await getEditablePage(slug);
+    const page = await getAdminPageForEditor(slug);
     if (!page) return NextResponse.json({ error: "Page not found." }, { status: 404 });
     return NextResponse.json({ page });
   } catch (error) {

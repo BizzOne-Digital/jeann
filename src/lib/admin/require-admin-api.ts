@@ -1,29 +1,33 @@
 import { Types } from "mongoose";
-import { getSession } from "@/lib/auth/session";
+import { getSession, type ActiveSession } from "@/lib/auth/session";
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
 
-export async function requireAdminApiSession() {
+/** Same roles as `requirePortalAccess("admin")`. */
+export const ADMIN_API_ROLES = ["ceo_super_admin", "general_manager"] as const;
+
+async function hasAdminMembership(userId: string): Promise<boolean> {
+  const { OrganizationMembership } = await import("@/models");
+  const oid = Types.ObjectId.isValid(userId) ? new Types.ObjectId(userId) : userId;
+  const membership = await OrganizationMembership.findOne({
+    userId: oid,
+    status: "active",
+    deletedAt: null,
+    roles: { $in: [...ADMIN_API_ROLES] },
+  }).lean();
+  return Boolean(membership);
+}
+
+export async function requireAdminApiSession(): Promise<ActiveSession | null> {
   const session = await getSession();
   if (!session) return null;
 
   const devRole = (session.user as unknown as { role?: string }).role;
-  if (devRole === "admin") {
-    if (!isMongoConfigured()) return null;
-    if (!(await tryConnectMongo())) return null;
+  if (devRole) {
+    if (devRole !== "admin") return null;
+    if (!isMongoConfigured() || !(await tryConnectMongo())) return null;
     return session;
   }
 
-  if (!isMongoConfigured()) return null;
-  if (!(await tryConnectMongo())) return null;
-  const { OrganizationMembership } = await import("@/models");
-  const userId = Types.ObjectId.isValid(session.userId)
-    ? new Types.ObjectId(session.userId)
-    : session.userId;
-  const membership = await OrganizationMembership.findOne({
-    userId,
-    status: "active",
-    deletedAt: null,
-    roles: { $in: ["ceo_super_admin", "general_manager"] },
-  }).lean();
-  return membership ? session : null;
+  if (!isMongoConfigured() || !(await tryConnectMongo())) return null;
+  return (await hasAdminMembership(session.userId)) ? session : null;
 }

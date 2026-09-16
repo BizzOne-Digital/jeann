@@ -1,6 +1,6 @@
 import { PageHero, type PageHeroCta } from "@/components/marketing/PageHero";
 import { cmsField } from "@/lib/content/cms-field";
-import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
+import { getEffectiveSectionFields, getPublishedPage } from "@/lib/content/page-content";
 import {
   pageSlugToHeroImageKey,
   resolveMarketingHeroImage,
@@ -27,7 +27,7 @@ export async function CmsPageHero({
   defaults,
 }: Props) {
   const page = await getPublishedPage(pageSlug);
-  const fields = getSectionFields(page, sectionId);
+  const fields = getEffectiveSectionFields(page, sectionId);
 
   const primaryCta = defaults.primaryCta
     ? {

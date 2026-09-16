@@ -4,7 +4,7 @@ import { resolveMarketingHeroImage } from "@/lib/marketing/cms-hero";
 import { resolveImageSrc } from "@/lib/media/resolve-image-src";
 import { ResourcesHub } from "@/components/marketing/ResourcesHub";
 import { cmsField } from "@/lib/content/cms-field";
-import { getPublishedPage, getSectionFields } from "@/lib/content/page-content";
+import { getEffectiveSectionFields, getPublishedPage } from "@/lib/content/page-content";
 
 export const metadata: Metadata = {
   title: "Resources",
@@ -14,8 +14,8 @@ export const metadata: Metadata = {
 
 export default async function ResourcesPage() {
   const cms = await getPublishedPage("resources");
-  const hero = getSectionFields(cms, "hero");
-  const intro = getSectionFields(cms, "intro");
+  const hero = getEffectiveSectionFields(cms, "hero");
+  const intro = getEffectiveSectionFields(cms, "intro");
 
   const introBody = `${cmsField(
     intro,
