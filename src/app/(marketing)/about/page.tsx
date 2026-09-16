@@ -10,7 +10,7 @@ import { AboutHero } from "@/components/marketing/AboutSections";
 export const metadata: Metadata = {
   title: "About Finekarts",
   description:
-    "Finekarts Incorporated connects qualified buyers and suppliers in bulk agricultural commodity trade through a risk-aware, documentation-led process.",
+    "Finekarts Incorporated distributes bulk agricultural commodities — purchasing from farmers and manufacturers and supplying qualified bulk buyers through a documentation-led process.",
 };
 
 export default async function AboutPage() {

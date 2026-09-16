@@ -79,15 +79,15 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
     slug: "home",
     title: "Homepage",
     path: "/",
-    seoTitle: "Finekarts — Global agricultural commodity trading",
+    seoTitle: "Finekarts — Global agricultural commodity distribution",
     seoDescription:
-      "Finekarts Incorporated sources and supplies bulk agricultural commodities for qualified international buyers.",
+      "Finekarts Incorporated buys bulk agricultural commodities from farmers and manufacturers and distributes them to qualified international bulk buyers.",
     sections: [
       section("hero", "Hero", {
         eyebrow: "Global sourcing • Bulk commodities • Worldwide delivery",
-        title: "Global Agricultural Commodity Trading",
+        title: "Global Agricultural Commodity Distribution",
         description:
-          "We source and supply high-quality agricultural commodities to qualified buyers across global markets.",
+          "We buy high-quality agricultural commodities from farmers and manufacturers and sell bulk cargoes to qualified buyers across global markets.",
         primaryCtaLabel: "Buyer portal",
         primaryCtaHref: "/login",
         secondaryCtaLabel: "Explore Products",
@@ -95,9 +95,12 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
         youtubeVideoId: "gADVpRPdr7E",
       }),
       section("connection", "Connection", {
-        eyebrow: "Your global connection",
-        title: "Connecting suppliers and qualified buyers worldwide",
-        body: "Finekarts coordinates sourcing, documentation, and logistics for bulk agricultural commodities — with transparency at every step.",
+        eyebrow: "Who we are",
+        title: "A global distributor for bulk agricultural commodities",
+        body:
+          "Finekarts Incorporated purchases from farmers, manufacturers, and established origin programmes — then distributes to qualified bulk buyers. We are not a marketplace and we do not connect third-party buyers with third-party sellers.",
+        body2:
+          "Our team coordinates procurement, quality, documentation, and logistics with transparency at every step — from origin through delivery.",
         image1: "/images/home-1.png",
         image2: "/images/home-2.png",
       }),
@@ -109,13 +112,13 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       section("sourced", "Sourced responsibly", {
         eyebrow: "Sourced responsibly",
         title: "Quality coordination across origins and corridors",
-        body: "We work with verified supplier programmes and independent inspection partners where contracts require them.",
+        body: "We procure through verified origin programmes and independent inspection partners where contracts require them.",
         image: "/images/home-3.png",
       }),
       section("process", "Process timeline", {
         eyebrow: "How we work",
         title: "From enquiry to structured trade execution",
-        body: "Purchase requests, matching, documentation, inspection, and shipment milestones — subject to contract and corridor.",
+        body: "Purchase requests, sourcing, documentation, inspection, and shipment milestones — subject to contract and corridor.",
       }),
       section("shipping", "Shipping terms", {
         eyebrow: "Shipping & Incoterms",
@@ -125,7 +128,7 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       section("partners-teaser", "Partners teaser", {
         eyebrow: "Verification partners",
         title: "Recognized inspection & certification partners",
-        body: "Finekarts aligns with independent verification organizations so international buyers can confirm counterparties and cargo with confidence.",
+        body: "Finekarts aligns with independent verification organizations so bulk buyers can confirm cargo, documentation, and supply-chain claims with confidence.",
       }),
       section("packaging", "Packaging", {
         eyebrow: "Packaging options",
@@ -151,12 +154,12 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
     path: "/about",
     seoTitle: "About Finekarts",
     seoDescription:
-      "Finekarts Incorporated connects qualified buyers and suppliers in bulk agricultural commodity trade.",
+      "Finekarts Incorporated distributes bulk agricultural commodities — purchasing from farmers and manufacturers and supplying qualified bulk buyers worldwide.",
     sections: [
       section("hero", "Hero", {
-        title: "Your connection to global commodity markets",
+        title: "Global distribution for bulk agricultural commodities",
         description:
-          "Sourcing quality agricultural commodities globally and delivering to qualified buyers worldwide through structured trade programmes.",
+          "We buy from farmers and manufacturers worldwide and distribute bulk cargoes to qualified buyers — through structured, documentation-led programmes.",
         primaryCtaLabel: "Request a Quote →",
         primaryCtaHref: "/login",
         secondaryCtaLabel: "Contact the desk",
@@ -164,15 +167,16 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       }),
       section("who-we-are", "Who we are", {
         eyebrow: "Who We Are",
-        title: "An extension of manufacturers and suppliers",
-        body: "Finekarts Incorporated connects trusted suppliers with qualified buyers worldwide. We specialize in the sourcing, quality coordination, and logistics of bulk agricultural commodities with integrity and professionalism.",
+        title: "We buy. We distribute. We do not broker buyers and sellers.",
+        body:
+          "Finekarts Incorporated is a distributor: we purchase bulk agricultural commodities from farmers, manufacturers, and origin programmes and sell to qualified bulk buyers. We do not operate a platform that connects unrelated buyers with unrelated sellers.",
         body2:
           "From origin to destination, our team ensures reliable execution, transparent communication, and consistent value at every step.",
       }),
       section("capabilities", "Capabilities", {
         eyebrow: "What we do",
         title: "Structured programmes for bulk trade",
-        body: "Product sourcing, specification alignment, inspection coordination, and export documentation support for qualified buyers.",
+        body: "Procurement, specification alignment, inspection coordination, and export documentation for qualified bulk buyers purchasing from Finekarts.",
       }),
       section("process", "Process", {
         eyebrow: "Our process",
@@ -181,7 +185,7 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       }),
       section("global", "Global network", {
         title: "Sourced responsibly.\nDelivered globally.",
-        body: "Our network of suppliers and logistics partners helps us deliver quality commodities reliably — with transparent communication and documentation discipline at every corridor.",
+        body: "Our procurement network and logistics partners help us deliver quality commodities reliably — with transparent communication and documentation discipline at every corridor.",
       }),
       section("cta", "CTA", {
         title: "Discuss your next bulk commodity requirement",
@@ -335,7 +339,7 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
     path: "/verification",
     seoTitle: "Global business verification & due diligence",
     seoDescription:
-      "Finekarts Verification Services — corporate registration, supplier and buyer due diligence, credit assessment, supply-chain mapping and compliance screening.",
+      "Finekarts Verification Services — corporate registration, supply-chain due diligence, credit assessment, compliance screening, and documented evidence for bulk buyers.",
     sections: [
       section("hero", "Hero", {
         title: "Know who you are trading with",

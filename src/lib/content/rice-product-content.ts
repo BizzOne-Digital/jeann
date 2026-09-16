@@ -82,7 +82,7 @@ export const RICE_CATEGORY = {
 export const RICE_BULK_SUPPLY = {
   title: "Bulk & international supply",
   lead:
-    "Finekarts Incorporated works with suppliers and commercial partners to provide rice for bulk and wholesale requirements, with supply options tailored to destination, quantity, packaging, specifications, and delivery terms.",
+    "Finekarts Incorporated procures rice from farmers, mills, and commercial partners and distributes bulk and wholesale volumes to qualified buyers — with programmes tailored to destination, quantity, packaging, specifications, and delivery terms.",
   incoterms:
     "Available commercial terms may include FOB, CFR, CIF, DAP, and other mutually agreed Incoterms® 2020 terms.",
 };

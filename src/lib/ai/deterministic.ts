@@ -21,7 +21,7 @@ const APPROVED_FAQ: KnowledgeSnippet[] = [
   {
     title: "About Finekarts",
     content:
-      "Finekarts Incorporated is a global agricultural commodity trader sourcing bulk commodities from verified suppliers for qualified buyers.",
+      "Finekarts Incorporated is a global agricultural commodity distributor. We purchase bulk commodities from farmers and manufacturers and sell to qualified bulk buyers. We do not connect unrelated buyers with unrelated sellers.",
     tags: ["about", "company"],
   },
   {

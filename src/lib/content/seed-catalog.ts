@@ -374,12 +374,12 @@ export const SEED_PACKAGING = PACKAGING_TYPES.map((p) => ({
 
 export const SITE = {
   name: "Finekarts Incorporated",
-  headline: "Global Agricultural Commodity Trading",
+  headline: "Global Agricultural Commodity Distribution",
   email: "Info@finekarts.com",
   phone: "4169858772",
   phoneDisplay: "+1 (416) 985-8772",
   addressLine1: "4275 Village Center Court",
   addressLine2: "Mississauga, Ontario L4Z 1V3, Canada",
   positioning:
-    "Sourcing quality agricultural commodities globally and delivering to qualified buyers worldwide through structured trade programmes.",
+    "We purchase bulk agricultural commodities from farmers, manufacturers, and origin programmes — and distribute them to qualified bulk buyers worldwide through structured programmes.",
 };

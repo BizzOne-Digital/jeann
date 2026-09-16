@@ -11,6 +11,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "seed": "tsx src/scripts/seed.ts",
+    "refresh:marketing-pages": "tsx src/scripts/refresh-marketing-pages.ts",
     "seed:phase2": "tsx src/scripts/seed-phase2.ts",
     "seed:phase3": "tsx src/scripts/seed-phase3.ts",
     "seed:phase4": "tsx src/scripts/seed-phase4.ts",

@@ -26,27 +26,27 @@ const mono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.APP_URL || "http://localhost:3000"),
   title: {
-    default: "Finekarts Incorporated | Global Agricultural Commodity Trading",
+    default: "Finekarts Incorporated | Global Agricultural Commodity Distribution",
     template: "%s | Finekarts Incorporated",
   },
   description:
-    "Finekarts Incorporated sources and supplies bulk agricultural commodities for qualified international buyers. Sign in to submit RFQs — no public fixed pricing.",
+    "Finekarts Incorporated buys bulk agricultural commodities from farmers and manufacturers and distributes them to qualified international bulk buyers. Sign in to submit RFQs — no public fixed pricing.",
   icons: {
     icon: [{ url: "/favicon.png", type: "image/png" }, { url: "/favicon.svg" }],
   },
   openGraph: {
     type: "website",
     siteName: "Finekarts Incorporated",
-    title: "Finekarts Incorporated | Global Agricultural Commodity Trading",
+    title: "Finekarts Incorporated | Global Agricultural Commodity Distribution",
     description:
-      "Bulk edible oils, sugar, beans, rice, and more. RFQ-driven commodity trading for qualified counterparties.",
+      "Bulk edible oils, sugar, beans, rice, and more. RFQ-driven distribution for qualified bulk buyers.",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Finekarts Incorporated | Global Agricultural Commodity Trading",
+    title: "Finekarts Incorporated | Global Agricultural Commodity Distribution",
     description:
-      "Bulk edible oils, sugar, beans, rice, and more. RFQ-driven commodity trading for qualified counterparties.",
+      "Bulk edible oils, sugar, beans, rice, and more. RFQ-driven distribution for qualified bulk buyers.",
   },
   alternates: {
     canonical: "/",

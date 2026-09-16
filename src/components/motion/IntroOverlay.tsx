@@ -110,7 +110,7 @@ export function IntroOverlay() {
               </svg>
             ) : null}
             <p className="max-w-xs text-sm text-white/65">
-              Global agricultural commodity trading
+              Global agricultural commodity distribution
             </p>
           </div>
         </motion.div>

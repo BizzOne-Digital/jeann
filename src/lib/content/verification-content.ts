@@ -15,7 +15,7 @@ export const VERIFICATION_HERO = {
   eyebrow: "Global Business Verification & Due Diligence",
   title: "Know Who You Are Trading With",
   description:
-    "In international commodity trading, knowing your counterparty is essential. Finekarts Verification Services helps buyers, sellers, distributors, manufacturers, suppliers and trading companies obtain independent business intelligence before entering into significant commercial relationships — combining government records, corporate registries, regulatory databases, trade information, commercial data and independent verification to provide a clearer picture of the business behind the transaction.",
+    "In international commodity distribution, knowing your supply chain is essential. Finekarts Verification Services helps bulk buyers and Finekarts procurement teams obtain independent business intelligence before committing to significant volumes — combining government records, corporate registries, regulatory databases, trade information, commercial data and independent verification to provide a clearer picture of origin and counterparties.",
   primaryCta: { href: "#request-verification", label: "Request a verification report →" },
   secondaryCta: { href: "#our-services", label: "Our verification services" },
 };
@@ -256,10 +256,10 @@ export const VERIFICATION_PILLARS = [
   {
     id: "counterparties",
     title: "Trading counterparties",
-    summary: "Suppliers, manufacturers, distributors, and buyer due diligence.",
+    summary: "Origin, manufacturer, and supply-chain due diligence for bulk programmes.",
     icon: "users",
     image: "/images/about/team-collaboration.png",
-    imageAlt: "Trade desk collaborating on supplier and buyer verification",
+    imageAlt: "Trade desk reviewing supply-chain verification documentation",
     accent: { main: "#1e4d8f", light: "#eef3fa", ring: "#1e4d8f" },
     serviceNumbers: [4, 5, 6, 7],
   },

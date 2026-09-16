@@ -8,7 +8,7 @@ export function SiteJsonLd() {
     url: base,
     logo: `${base}/favicon.png`,
     description:
-      "Global agricultural commodity trading — bulk edible oils, sugar, beans, rice, and related cargoes for qualified international buyers.",
+      "Global agricultural commodity distribution — bulk edible oils, sugar, beans, rice, and related cargoes sold to qualified international bulk buyers.",
     email: "trade@finekarts.com",
     sameAs: [] as string[],
   };

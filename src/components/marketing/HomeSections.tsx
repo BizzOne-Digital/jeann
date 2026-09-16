@@ -150,7 +150,7 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
           >
-            {cmsField(cms, "title", "Global Agricultural Commodity Trading")}
+            {cmsField(cms, "title", "Global Agricultural Commodity Distribution")}
           </motion.h1>
 
           <Reveal delay={0.1}>
@@ -248,25 +248,30 @@ export function ConnectionSection({
           <div className="max-w-xl">
             <Reveal>
               <p className="text-sm font-semibold tracking-[0.22em] text-[#c88e4a] uppercase sm:text-base">
-                Who We Are
+                {cmsField(cms, "eyebrow", "Who we are")}
               </p>
             </Reveal>
             <Reveal delay={0.06}>
               <h2 className="mt-3 text-3xl font-semibold leading-tight text-[#001a3d] sm:text-4xl lg:text-[2.65rem]">
-                Your Connection to Global Commodity Distributions
+                {cmsField(cms, "title", "A global distributor for bulk agricultural commodities")}
               </h2>
             </Reveal>
             <Reveal delay={0.1}>
               <p className="mt-5 text-base leading-relaxed text-[#555555]">
-                Finekarts Incorporated connects qualified buyers with established origin programmes worldwide. We
-                specialize in the sourcing, quality coordination, and logistics of bulk agricultural
-                commodities with integrity and professionalism.
+                {cmsField(
+                  cms,
+                  "body",
+                  "Finekarts Incorporated purchases from farmers, manufacturers, and established origin programmes — then distributes to qualified bulk buyers. We are not a marketplace and we do not connect third-party buyers with third-party sellers.",
+                )}
               </p>
             </Reveal>
             <Reveal delay={0.14}>
               <p className="mt-4 text-base leading-relaxed text-[#555555]">
-                From origin to destination, our team ensures reliable execution, transparent
-                communication, and consistent value at every step.
+                {cmsField(
+                  cms,
+                  "body2",
+                  "Our team coordinates procurement, quality, documentation, and logistics with transparency at every step — from origin through delivery.",
+                )}
               </p>
             </Reveal>
             <Reveal delay={0.18}>

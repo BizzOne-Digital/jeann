@@ -14,7 +14,7 @@ import {
 export const metadata: Metadata = {
   title: "Global Business Verification & Due Diligence",
   description:
-    "Finekarts Verification Services helps buyers and sellers obtain independent business intelligence — corporate registration, licenses, supplier and buyer due diligence, credit assessment, supply-chain mapping and compliance screening.",
+    "Finekarts Verification Services helps bulk buyers obtain independent business intelligence — corporate registration, licenses, supply-chain due diligence, credit assessment, compliance screening, and documented evidence.",
 };
 
 export default function VerificationPage() {

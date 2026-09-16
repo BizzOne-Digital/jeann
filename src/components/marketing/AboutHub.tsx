@@ -107,7 +107,7 @@ function StoryPanel({
             {cmsField(
               cms,
               "body",
-              "Finekarts Incorporated connects trusted suppliers with qualified buyers worldwide. We specialize in the sourcing, quality coordination, and logistics of bulk agricultural commodities with integrity and professionalism.",
+              "Finekarts Incorporated is a distributor: we purchase bulk agricultural commodities from farmers, manufacturers, and origin programmes and sell to qualified bulk buyers. We do not connect unrelated buyers with unrelated sellers.",
             )}
           </p>
           <p className="mt-4 text-sm leading-relaxed text-[#555555]">
@@ -145,7 +145,7 @@ function StoryPanel({
         <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-[#e4e0d8]">
           <Image
             src={teamCollaboration}
-            alt="Finekarts team collaborating on buyer and supplier programmes"
+            alt="Finekarts team coordinating procurement and distribution programmes"
             fill
             className="object-cover"
             sizes="(max-width: 640px) 100vw, 400px"
@@ -153,7 +153,7 @@ function StoryPanel({
         </div>
         <div className="flex flex-col justify-center rounded-xl border border-[#d5d0c8] bg-[#001a3d] p-6 text-white sm:p-8">
           <p className="text-xs font-semibold tracking-[0.18em] text-[#d4a84b] uppercase">
-            Buyer & supplier programmes
+            Bulk buyer programmes
           </p>
           <p className="mt-3 text-lg font-semibold leading-snug">
             Relationships begin with enquiry and diligence — no deal exists until contractual documents are agreed.
@@ -276,7 +276,7 @@ function GlobalPanel({
           {cmsField(
             cms,
             "body",
-            "Our network of suppliers and logistics partners helps us deliver quality commodities reliably — with transparent communication and documentation discipline at every corridor.",
+            "Our procurement network and logistics partners help us deliver quality commodities reliably — with transparent communication and documentation discipline at every corridor.",
           )}
         </p>
 

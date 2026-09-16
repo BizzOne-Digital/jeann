@@ -259,3 +259,27 @@ export async function seedPagesFromRegistry(): Promise<number> {
   }
   return count;
 }
+
+/** Overwrite CMS page copy from the in-repo registry (run after messaging updates). */
+export async function refreshMarketingPagesFromRegistry(): Promise<number> {
+  if (!isMongoConfigured() || !(await tryConnectMongo())) return 0;
+
+  const { Page } = await import("@/models");
+  let count = 0;
+  for (const entry of listRegistryPages()) {
+    await Page.findOneAndUpdate(
+      { slug: entry.slug, locale: "en" },
+      {
+        slug: entry.slug,
+        locale: "en",
+        title: entry.title,
+        status: "published",
+        seo: { title: entry.seoTitle, description: entry.seoDescription },
+        sections: encodeSections(entry.sections),
+      },
+      { upsert: true },
+    );
+    count += 1;
+  }
+  return count;
+}

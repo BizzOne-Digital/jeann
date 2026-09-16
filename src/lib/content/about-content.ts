@@ -2,9 +2,9 @@ import { AGRICULTURE_IMAGES } from "@/lib/content/agriculture-images";
 
 export const ABOUT_STORY = {
   eyebrow: "Finekarts Incorporated",
-  title: "Your connection to global commodity markets",
+  title: "Global distribution for bulk agricultural commodities",
   lead:
-    "We align qualified buyers with verified supplier programmes — specification, inspection, logistics, and documentation — without overstating volumes, certifications, or guarantees.",
+    "We purchase from farmers, manufacturers, and verified origin programmes — then distribute bulk cargoes to qualified buyers with specification, inspection, logistics, and documentation discipline.",
   boxes: [
     {
       title: "Quality",
@@ -48,7 +48,7 @@ export const ABOUT_PILLARS = [
   {
     id: "story",
     title: "Who we are",
-    summary: "Manufacturer extension, team discipline, and buyer–supplier alignment.",
+    summary: "Distributor model, procurement discipline, and bulk buyer programmes.",
     icon: "team",
     accent: { main: "#1b3a5c", light: "#eef2f7", ring: "#1b3a5c" },
   },
@@ -86,11 +86,11 @@ export const ABOUT_PANEL_TITLES: Record<
 > = {
   story: {
     eyebrow: "Who we are",
-    title: "An extension of manufacturers and suppliers",
+    title: "We buy from origin. We sell to bulk buyers.",
   },
   capabilities: {
     eyebrow: "What we coordinate",
-    title: "Global programmes, qualified channels",
+    title: "Procurement and distribution programmes",
   },
   process: {
     eyebrow: "How we work",
@@ -138,7 +138,7 @@ export const ABOUT_PROCESS_STEPS = [
   {
     n: "02",
     title: "Review & quote",
-    text: "Trade desk reviews fit against supplier programmes and workable logistics structures.",
+    text: "Trade desk reviews fit against available inventory, procurement programmes, and workable logistics structures.",
   },
   {
     n: "03",

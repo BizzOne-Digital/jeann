@@ -39,7 +39,7 @@ export function TradeHero() {
   return (
     <PageHero
       title="How we trade"
-      description="Finekarts coordinates enquiries, diligence, and documentation for qualified buyers and suppliers. Website submissions are starting points — not confirmed deals."
+      description="Finekarts distributes bulk commodities to qualified buyers — coordinating enquiries, diligence, and documentation. Website submissions are starting points — not confirmed deals."
       primaryCta={{ href: "#purchase-request", label: "Post a Purchase Request →" }}
       secondaryCta={{ href: "#trade-offer", label: "Supplier trade offer" }}
     />

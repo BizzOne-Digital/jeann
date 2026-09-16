@@ -4,7 +4,7 @@ import { LOGISTICS_IMAGES } from "@/lib/content/logistics-images";
 export const INSPECTIONS_STORY = {
   eyebrow: "Our objective",
   title: "Greater transparency, reduced risk, confidence in every shipment",
-  lead: "Finekarts coordinates independent inspection at origin, during loading, in transit where applicable, and at destination — so buyers and sellers share documented evidence on quality, quantity, and compliance without replacing contractual due diligence or bank requirements.",
+  lead: "Finekarts coordinates independent inspection at origin, during loading, in transit where applicable, and at destination — so bulk buyers receive documented evidence on quality, quantity, and compliance without replacing contractual due diligence or bank requirements.",
   youtubeUrl: "https://www.youtube.com/watch?v=gADVpRPdr7E",
   showcaseImageSrc: "/images/inspections/warehouse-bulk-inspection.png",
   showcaseImageAlt:
@@ -53,7 +53,7 @@ export const PARTNERS_STORY = {
 export const VERIFICATION_STORY = {
   eyebrow: "Due diligence",
   title: "Evidence-backed confidence before you commit",
-  lead: "Finekarts Verification Services combines corporate registries, regulatory databases, commercial intelligence and independent inspection — so buyers and sellers can assess counterparties, supply chains and commodity claims with documented evidence rather than representations alone.",
+  lead: "Finekarts Verification Services combines corporate registries, regulatory databases, commercial intelligence and independent inspection — so bulk buyers can assess supply chains, origin claims, and commodity evidence with documented support rather than representations alone.",
   youtubeUrl: "https://www.youtube.com/watch?v=nFFts9WyUm8",
   imageSrc: "/images/inspections/cargo-inspector-loading.png",
   imageAlt: "Independent verification at commodity loading",
@@ -64,7 +64,7 @@ export const VERIFICATION_STORY = {
     },
     {
       title: "Capability",
-      body: "Supplier, manufacturer, distributor and buyer verification assess production capacity, facilities, certifications and trade references — distinguishing established operators from limited intermediaries.",
+      body: "Origin, manufacturer, and distributor verification assess production capacity, facilities, certifications and trade references — distinguishing established operators from limited intermediaries.",
     },
     {
       title: "Commodity",

@@ -108,7 +108,7 @@ export const SEED_INSIGHTS: SeedInsight[] = [
     publishedAt: "2026-06-12",
     body: [
       "A purchase request (RFQ) gives the trade desk enough context to assess fit: product, quantity, destination, packaging preference, Incoterm direction, and realistic timing. Incomplete enquiries may still be reviewed, but response times improve when specifications are clear.",
-      "Finekarts may match enquiries against supplier programmes, logistics corridors, and compliance requirements. Matching does not create a binding contract. Any offer, counter-offer, or acceptance happens only through agreed documentation — often after further diligence.",
+      "Finekarts may review enquiries against available inventory, procurement programmes, logistics corridors, and compliance requirements. Review does not create a binding contract. Any offer, counter-offer, or acceptance happens only through agreed documentation — often after further diligence.",
       "Submitting a form on this website does not guarantee supply, pricing, financing, or shipment. Staff may request additional information, decline unsuitable enquiries, or propose alternative structures. Buyers should treat every stage as subject to verification.",
     ],
   },
