@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { PasswordField } from "@/components/ui/PasswordField";
 
 type InviteInfo = {
   valid: boolean;
@@ -68,14 +69,14 @@ export function InviteAcceptForm({ token, invite }: { token: string; invite: Inv
         value={lastName}
         onChange={(e) => setLastName(e.target.value)}
       />
-      <input
+      <PasswordField
         className="input w-full"
-        type="password"
         placeholder="Password (min 12 chars)"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         minLength={12}
         required
+        autoComplete="new-password"
       />
       {error && <p className="text-sm text-red-600">{error}</p>}
       <button type="submit" className="btn btn-primary" disabled={loading}>

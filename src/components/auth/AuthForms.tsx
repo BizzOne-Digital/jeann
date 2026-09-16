@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { FormEvent, useState } from "react";
+import { PasswordField } from "@/components/ui/PasswordField";
 
 type ApiBody = {
   error?: string;
@@ -166,10 +167,10 @@ export function LoginForm() {
       </label>
       <label className="label">
         Password
-        <input
-          className="field mt-1"
+        <PasswordField
+          className="field mt-1 w-full"
+          wrapperClassName="mt-0"
           name="password"
-          type="password"
           autoComplete="current-password"
           required
           suppressHydrationWarning
@@ -297,14 +298,13 @@ export function BuyerRegistrationForm() {
       </label>
       <label className="label">
         Password (min. 12 characters, upper, lower, number)
-        <input className="field mt-1" name="password" type="password" minLength={12} required />
+        <PasswordField className="field mt-1 w-full" name="password" minLength={12} required />
       </label>
       <label className="label">
         Confirm password
-        <input
-          className="field mt-1"
+        <PasswordField
+          className="field mt-1 w-full"
           name="confirmPassword"
-          type="password"
           minLength={12}
           required
         />
