@@ -97,7 +97,7 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
       ),
     },
     {
-      label: "Worldwide Delivery",
+      label: "CIF & trade insurance",
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
           <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="1.6" />
@@ -585,9 +585,15 @@ export function ShippingTerms() {
             ))}
           </div>
           <Reveal delay={0.16}>
-            <GoldButton href="/logistics" className="mt-8">
-              Explore logistics →
-            </GoldButton>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <GoldButton href="/logistics">CIF & logistics →</GoldButton>
+              <Link
+                href="/dispute-resolution"
+                className="focus-ring inline-flex items-center justify-center gap-2 rounded-md border border-white/40 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10"
+              >
+                Trade assurance →
+              </Link>
+            </div>
           </Reveal>
         </div>
         <div className="relative min-h-[320px] lg:min-h-full">

@@ -84,14 +84,14 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       "Finekarts Incorporated supplies bulk agricultural commodities for sale to qualified international buyers — verification, inspection, logistics, trade insurance, and bankable ICC-aligned payment structures.",
     sections: [
       section("hero", "Hero", {
-        eyebrow: "Bulk commodities for sale • Verified programmes • Worldwide delivery",
+        eyebrow: "Products for sale • On-demand orders • CIF & trade insurance",
         title: "Bulk Agricultural Commodities for Qualified Buyers",
         description:
-          "Finekarts supplies edible oils, sugar, rice, beans, and related bulk cargoes for sale to qualified international buyers — backed by inspection, logistics, trade insurance where agreed, and bankable structures such as Irrevocable LC at sight and SBLC for longer contracts.",
-        primaryCtaLabel: "Buyer portal",
-        primaryCtaHref: "/login",
-        secondaryCtaLabel: "Explore Products",
-        secondaryCtaHref: "/products",
+          "Browse listed bulk products or request on-demand programmes — edible oils, sugar, rice, beans, and related cargoes sold to qualified international buyers, with inspection, CIF logistics, trade insurance where agreed, and Irrevocable LC from leading global banks.",
+        primaryCtaLabel: "Browse products",
+        primaryCtaHref: "/products",
+        secondaryCtaLabel: "Buyer portal",
+        secondaryCtaHref: "/login",
         youtubeVideoId: "gADVpRPdr7E",
       }),
       section("connection", "Connection", {
@@ -105,9 +105,9 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
         image2: "/images/home-2.png",
       }),
       section("commodities", "Commodities we trade", {
-        eyebrow: "Commodities we trade",
-        title: "Bulk agricultural products for international programmes",
-        body: "Edible oils, sugar, rice and grains, beans, and related bulk cargoes — specifications confirmed per enquiry.",
+        eyebrow: "Products we sell",
+        title: "Listed grades and on-demand purchase programmes",
+        body: "Every category on this site is offered for sale. Standard listings show typical specifications; on-demand orders are structured when volume, corridor, and banking support a dedicated programme.",
       }),
       section("sourced", "Sourced responsibly", {
         eyebrow: "Sourced responsibly",
@@ -121,9 +121,9 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
         body: "Enquiry, qualification, contract, Irrevocable LC / SBLC where agreed, inspection, insurance, and shipment milestones — subject to contract, corridor, and bank approval.",
       }),
       section("shipping", "Shipping terms", {
-        eyebrow: "Shipping & Incoterms",
-        title: "FOB, CIF, and corridor-specific logistics",
-        body: "FOB and CIF structures follow ICC Incoterms® rules. Marine cargo insurance, freight coordination, and documentary discipline are aligned with the signed SPA and banking instrument.",
+        eyebrow: "CIF & trade insurance",
+        title: "FOB or CIF — insurance and freight aligned to contract",
+        body: "CIF programmes include coordinated marine cargo insurance and main carriage to the named port. FOB places main carriage with the buyer from the loading port. See dispute resolution for responsibilities and PSA documentation duties.",
       }),
       section("partners-teaser", "Partners teaser", {
         eyebrow: "Verification partners",
@@ -246,7 +246,26 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
         secondaryCtaHref: "/register/buyer",
       }),
       section("intro", "Introduction", {
-        body: "Document sets vary by product, corridor, bank, and contract. Lists below are starting points for discussion — not guarantees that every document will be issued or accepted without amendment.",
+        body: "Prioritize CIF trade insurance, PSA banking clauses, and payment structures before downloads. Document sets vary by product, corridor, bank, and contract — lists below are starting points, not guarantees.",
+      }),
+    ],
+  },
+  {
+    slug: "dispute-resolution",
+    title: "Dispute resolution",
+    path: "/dispute-resolution",
+    seoTitle: "Dispute resolution & trade assurance",
+    seoDescription:
+      "ICC-aligned dispute resolution, seller and buyer responsibilities, quality and safety, PSA documentation, and payment flexibility for Finekarts bulk commodity buyers.",
+    sections: [
+      section("hero", "Hero", {
+        title: "Dispute resolution & where we stand",
+        description:
+          "Fairness, transparency, and ICC rules — how we resolve disagreements, allocate responsibilities under FOB and CIF, and support buyers through documentation and payment discipline.",
+        primaryCtaLabel: "Contact trade desk",
+        primaryCtaHref: "/contact",
+        secondaryCtaLabel: "Payment reference",
+        secondaryCtaHref: "/resources#resources-hub",
       }),
     ],
   },
@@ -281,11 +300,13 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
     seoDescription: "Bulk agricultural commodity categories and example specifications.",
     sections: [
       section("hero", "Hero", {
-        title: "Products we trade",
+        title: "Products we sell",
         description:
-          "Browse commodity categories and example specifications. Confirmed grades, origins, and packaging are agreed per enquiry.",
-        primaryCtaLabel: "Buyer sign in →",
+          "Bulk agricultural commodities listed for sale — plus on-demand programmes when your volume and corridor fit our supply calendar. Confirmed grades, origins, and packaging are agreed per enquiry.",
+        primaryCtaLabel: "Submit purchase request →",
         primaryCtaHref: "/login",
+        secondaryCtaLabel: "Trade assurance",
+        secondaryCtaHref: "/dispute-resolution",
       }),
     ],
   },

@@ -78,6 +78,16 @@ export const SEED_FAQS = [
     answer:
       "Marine cargo and related trade insurance can be arranged or coordinated where contracts require it (for example under CIF or as otherwise stated in the SPA). Insurance supports risk management alongside inspection and bankable payment structures — coverage scope and claims handling are always confirmed in contract.",
   },
+  {
+    question: "How are disputes handled?",
+    answer:
+      "We aim for amicable resolution with fairness and transparency. If parties cannot agree, the PSA/SPA governs escalation — often including ICC arbitration or courts as specified. Seller and buyer duties, risk transfer under FOB/CIF, and documentation for clearance are explained on the Dispute resolution page.",
+  },
+  {
+    question: "Do you accept letters of credit from any bank?",
+    answer:
+      "We accept Irrevocable documentary credits from banks on our approved list, including issuers among the world’s top fifty international banks, subject to compliance and deal-specific approval. Other payment options require explicit agreement. See Resources for structures and the dispute resolution page for payment limits and flexibility.",
+  },
 ];
 
 export type SeedInsight = {

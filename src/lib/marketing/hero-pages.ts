@@ -23,6 +23,7 @@ export const HERO_PAGE_PREFIXES = [
   "/accessibility",
   "/buyer-request",
   "/supplier-offer",
+  "/dispute-resolution",
 ] as const;
 
 export function isHeroMarketingPage(pathname: string): boolean {

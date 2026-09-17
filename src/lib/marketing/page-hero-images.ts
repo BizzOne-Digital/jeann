@@ -24,7 +24,8 @@ export type PageHeroImageKey =
   | "cookies"
   | "accessibility"
   | "buyerRequest"
-  | "supplierOffer";
+  | "supplierOffer"
+  | "disputeResolution";
 
 export type PageHeroImage = {
   src: string;
@@ -78,6 +79,10 @@ export const PAGE_HERO_IMAGES: Record<PageHeroImageKey, PageHeroImage> = {
     alt: "Bagged sugar quantity verification in a vessel hold",
   },
   supplierOffer: PACKAGING_IMAGES.bulkTruck,
+  disputeResolution: {
+    src: "/images/inspections/port-cargo-inspection-hero.png",
+    alt: "International commodity trade documentation and port supervision",
+  },
 };
 
 export function getPageHeroImage(key: PageHeroImageKey): PageHeroImage {

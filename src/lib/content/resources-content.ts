@@ -2,7 +2,7 @@ export const RESOURCES_PILLARS = [
   {
     id: "banking",
     title: "Banking & SPA",
-    summary: "Illustrative PSA clauses for LC, SBLC, guarantees, and collections.",
+    summary: "PSA clauses for LC, SBLC, CIF trade insurance, guarantees, and collections.",
     icon: "bank",
     accent: {
       main: "#1b7a4a",
@@ -153,9 +153,26 @@ export const RESOURCES_DOCUMENT_GROUPS = [
   },
 ];
 
+export const RESOURCES_TRADE_PRIORITY_LINKS = [
+  {
+    href: "/dispute-resolution",
+    label: "Dispute resolution",
+    note: "ICC-aligned process, responsibilities, and PSA documentation duties",
+  },
+  {
+    href: "/logistics",
+    label: "CIF & logistics",
+    note: "FOB/CIF, marine insurance, and port-to-port coordination",
+  },
+  {
+    href: "/inspections",
+    label: "Inspections",
+    note: "Quality and quantity confirmation before shipment",
+  },
+] as const;
+
 export const RESOURCES_RELATED_LINKS = [
-  { href: "/logistics", label: "Logistics" },
+  { href: "/dispute-resolution", label: "Dispute resolution" },
+  { href: "/logistics", label: "CIF & logistics" },
   { href: "/inspections", label: "Inspections" },
-  { href: "/logistics", label: "Shipping & logistics" },
-  { href: "/insights", label: "Insights" },
 ];

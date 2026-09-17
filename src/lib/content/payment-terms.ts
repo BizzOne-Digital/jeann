@@ -178,5 +178,8 @@ export const PAYMENT_TERMS_INTRO =
 export const PREFERRED_PAYMENT_STRUCTURE =
   "For Finekarts-style 12-month commodity programmes, Irrevocable LC at Sight — often with SBLC backup for larger or longer contracts — and Transferable Revolving LC at Sight for multi-shipment programmes are commonly discussed. Instruments are framed under ICC rules (UCP 600, ISP98, URDG 758, URC 522 as applicable). Other documentary arrangements are optional and used only when specifically negotiated; BG, D/P, D/A, and T/T remain alternatives subject to bank and compliance approval.";
 
+export const LC_ACCEPTED_BANKS_NOTE =
+  "Documentary credits are accepted from institutions on Finekarts’ approved bank list, including issuers among the world’s top fifty international banks, subject to compliance screening and transaction-specific approval. Payment terms have commercial limits, but alternative structures may be agreed in writing when risk and corridor support them. Additional payment channels will be added over time to facilitate trade.";
+
 export const SWIFT_INSTRUMENT_NOTE =
   "MT700, MT760, MT103, and similar references are SWIFT message types — not separate banking instruments. The underlying instrument (LC, SBLC, guarantee, or payment) creates the relevant legal and banking undertaking. SWIFT describes FIN as a service for exchanging MT-format financial messages.";

@@ -33,7 +33,7 @@ export default async function ResourcesPage() {
         description={cmsField(
           hero,
           "description",
-          "Educational reference for trade documents, banking terminology, and payment structures. Browse by topic below — purchase requests are submitted through the buyer portal.",
+          "CIF trade insurance, PSA banking clauses, and payment structures come first — then document checklists. Purchase requests are submitted through the buyer portal.",
         )}
         imageSrc={resolveImageSrc(heroImage.src)}
         imageAlt={heroImage.alt}

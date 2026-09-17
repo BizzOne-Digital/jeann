@@ -11,6 +11,7 @@ const PAGE_SLUG_TO_HERO_KEY: Record<string, PageHeroImageKey> = {
   "buyer-request": "buyerRequest",
   "supplier-offer": "supplierOffer",
   "buyer-terms": "buyerTerms",
+  "dispute-resolution": "disputeResolution",
   privacy: "careers",
   terms: "careers",
 };

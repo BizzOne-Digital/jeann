@@ -68,8 +68,8 @@ export const ABOUT_PILLARS = [
   },
   {
     id: "global",
-    title: "Global reach",
-    summary: "Supplier network, logistics partners, and destination corridors.",
+    title: "Corridors",
+    summary: "Destination logistics — see CIF, insurance, and dispute resolution for responsibilities.",
     icon: "globe",
     accent: { main: "#1e4d8f", light: "#eef3fa", ring: "#1e4d8f" },
   },
@@ -166,8 +166,8 @@ export const ABOUT_CORRIDORS = [
 ] as const;
 
 export const ABOUT_QUICK_LINKS = [
-  { href: "/products", label: "Product catalogue" },
-  { href: "/inspections", label: "Inspection coordination" },
-  { href: "/resources", label: "How we trade" },
-  { href: "/partners", label: "Partner network" },
+  { href: "/products", label: "Products for sale" },
+  { href: "/dispute-resolution", label: "Dispute resolution" },
+  { href: "/logistics", label: "CIF & logistics" },
+  { href: "/resources", label: "Payments & PSA" },
 ] as const;

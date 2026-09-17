@@ -10,6 +10,7 @@ import {
   BANKING_CLAUSE_INTRO,
   BANKING_CLAUSE_SECTION_TITLE,
   PAYMENT_TERM_STRUCTURES,
+  LC_ACCEPTED_BANKS_NOTE,
   PAYMENT_TERMS_INTRO,
   PREFERRED_PAYMENT_STRUCTURE,
   SWIFT_INSTRUMENT_NOTE,
@@ -19,6 +20,7 @@ import {
   RESOURCES_DOWNLOADS,
   RESOURCES_PILLARS,
   RESOURCES_RELATED_LINKS,
+  RESOURCES_TRADE_PRIORITY_LINKS,
   type ResourcesTabId,
 } from "@/lib/content/resources-content";
 import { cn } from "@/lib/utils/cn";
@@ -214,6 +216,7 @@ function PaymentsPanel() {
       <p className="max-w-3xl text-sm leading-relaxed text-[#555555]">
         {PAYMENT_TERMS_INTRO} Not legal or banking advice.
       </p>
+      <p className="max-w-3xl text-sm leading-relaxed text-[#555555]">{LC_ACCEPTED_BANKS_NOTE}</p>
 
       <div className="grid gap-4 md:grid-cols-2">
         {recommended.map((row) => (
@@ -393,6 +396,35 @@ const PANEL_TITLES: Record<ResourcesTabId, { eyebrow: string; title: string }> =
   },
 };
 
+function TradePriorityStrip() {
+  return (
+    <section className="border-b border-[#d5d0c8] bg-[#001a3d] py-10 text-white lg:py-12">
+      <div className="container-page">
+        <p className="text-xs font-semibold tracking-[0.22em] text-[#d4a84b] uppercase">
+          Start here
+        </p>
+        <h2 className="mt-2 max-w-2xl text-xl font-semibold sm:text-2xl">
+          CIF, trade insurance, payments, and dispute resolution
+        </h2>
+        <div className="mt-6 grid gap-4 sm:grid-cols-3">
+          {RESOURCES_TRADE_PRIORITY_LINKS.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="focus-ring group flex h-full flex-col rounded-lg border border-white/15 bg-white/5 p-5 transition hover:border-[#c88e4a]/60 hover:bg-white/10"
+            >
+              <span className="text-sm font-semibold text-white group-hover:text-[#e89a2d]">
+                {item.label} →
+              </span>
+              <span className="mt-2 flex-1 text-sm leading-relaxed text-white/70">{item.note}</span>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function ResourcesHub({ introBody }: { introBody: string }) {
   const [activeTab, setActiveTab] = useState<ResourcesTabId>("banking");
   const reduce = useReducedMotion();
@@ -407,13 +439,14 @@ export function ResourcesHub({ introBody }: { introBody: string }) {
 
   return (
     <>
+      <TradePriorityStrip />
       <section className="border-b border-[#d5d0c8] bg-white py-12 lg:py-16">
         <div className="container-page">
           <p className="text-xs font-semibold tracking-[0.22em] text-[#c88e4a] uppercase">
             Resource library
           </p>
           <h2 className="mt-3 max-w-2xl text-2xl font-semibold text-[#001a3d] sm:text-3xl">
-            Pick a topic to explore — banking, payments, documents, or downloads
+            Banking, payments, and trade documents — downloads are supplementary
           </h2>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {RESOURCES_PILLARS.map((pillar) => {

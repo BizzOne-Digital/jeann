@@ -7,7 +7,7 @@ export const LOGISTICS_HERO = {
   eyebrow: "Global Shipping & Logistics",
   title: "Moving Commodities From Origin to Destination",
   description:
-    "At Finekarts Inc., we connect global commodity supply with reliable international shipping solutions. From the point of origin to the final destination, we coordinate the commercial and logistics requirements necessary to move cargo efficiently across international markets — supporting agricultural commodities, food products, edible oils, sugar, rice, grains, pulses and other bulk and packaged commodities.",
+    "Finekarts sells bulk commodities to qualified buyers and coordinates international shipping from origin to destination — with FOB and CIF as primary terms, marine cargo insurance under CIF, and documentation aligned to the signed PSA and banking instrument.",
   primaryCta: { href: "#request-quote", label: "Request a shipping quote →" },
   secondaryCta: { href: "#incoterms", label: "FOB, CIF & DDP terms" },
 };
