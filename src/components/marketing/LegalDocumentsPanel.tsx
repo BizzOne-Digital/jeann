@@ -20,8 +20,8 @@ export function LegalDocumentsPanel({
     <section className="mt-10 marketing-box rounded-lg p-6">
       <h2 className="text-lg font-semibold text-[#001a3d]">{title}</h2>
       <p className="mt-2 text-sm text-[#666666]">
-        Web summaries are always available on site. PDF downloads appear when counsel-approved files
-        are uploaded to <code className="text-xs">public/docs/legal/</code>.
+        Read the full text on site at any time. PDF copies are provided where available for your
+        records.
       </p>
       <ul className="mt-5 space-y-3">
         {docs.map((doc) => (

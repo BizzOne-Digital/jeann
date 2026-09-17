@@ -16,7 +16,7 @@ export function BoardDirectorsSection({ members }: { members: PublicTeamMember[]
       <Reveal>
         <div className="border border-[#d5d0c8] bg-[#f9f8f5] px-6 py-14 text-center sm:px-10">
           <p className="mx-auto max-w-lg text-sm font-semibold leading-relaxed text-[#666666]">
-            Board profiles will appear here once published in admin. Each board member needs{" "}
+            Board profiles are updated as appointments are announced. Each listing includes{" "}
             <strong>name</strong>, <strong>position</strong>, and <strong>department</strong>.
           </p>
         </div>

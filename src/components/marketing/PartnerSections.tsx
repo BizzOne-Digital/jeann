@@ -33,10 +33,8 @@ function PartnerPhoto({ partner }: { partner: PartnerEntry }) {
         />
       ) : (
         <div className="flex min-h-[200px] flex-col items-center justify-center border border-dashed border-[var(--line-strong)] bg-[var(--cream)] px-6 py-12 text-center aspect-[16/9] sm:aspect-[21/9]">
-          <p className="text-sm font-semibold text-[var(--navy)]">Partner photo</p>
-          <p className="mt-1 text-xs text-[var(--stone)]">
-            Upload to <code className="text-[var(--ocean)]">public/images/partners/{partner.slug}.jpg</code>
-          </p>
+          <p className="text-sm font-semibold text-[var(--navy)]">{partner.name}</p>
+          <p className="mt-1 text-xs text-[var(--stone)]">Partner profile image</p>
         </div>
       )}
     </div>

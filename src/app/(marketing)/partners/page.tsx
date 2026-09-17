@@ -55,7 +55,7 @@ export default async function PartnersPage() {
               {cmsField(
                 intro,
                 "body",
-                "Each profile below uses the partner name, a short intro, a photo, and descriptive text content. Send updated copy and images to your administrator when ready.",
+                "Profiles highlight inspection, testing, and certification relationships we coordinate on bulk commodity programmes — supporting buyer confidence alongside your contractual inspection scope.",
               )}
             </p>
           </Reveal>

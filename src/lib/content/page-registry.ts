@@ -87,7 +87,7 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
         eyebrow: "Products for sale • On-demand orders • CIF & trade insurance",
         title: "Bulk Agricultural Commodities for Qualified Buyers",
         description:
-          "Browse listed bulk products or request on-demand programmes — edible oils, sugar, rice, beans, and related cargoes sold to qualified international buyers, with inspection, CIF logistics, trade insurance where agreed, and Irrevocable LC from leading global banks.",
+          "Bulk commodities for qualified buyers — trial orders, 12- and 24-delivery programmes, Irrevocable LC at Sight, Irrevocable Transferable Revolving LC, SBLC for large transactions, and escrow where your location and banks support it. Your data is handled securely; shipment documents flow through your bank as agreed.",
         primaryCtaLabel: "Browse products",
         primaryCtaHref: "/products",
         secondaryCtaLabel: "Buyer portal",
@@ -100,7 +100,7 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
         body:
           "Finekarts Incorporated is a distributor: every product listed on this site is offered for sale to qualified bulk buyers. We are not a marketplace and we do not connect unrelated buyers with unrelated sellers.",
         body2:
-          "Origin relationships and supplier identities remain private. What we publish is how we deliver — independent verification and inspection, disciplined logistics, trade insurance where contracts require it, and ICC-aligned bankable payment structures.",
+          "Origin relationships stay private. We deliver through inspection, CIF trade insurance where agreed, and bankable ICC structures — Irrevocable LC, Transferable Revolving LC for 12/24-delivery contracts, SBLC backup, and escrow where appropriate. Buyer information is protected; payments follow your bank’s examination of compliant documents.",
         image1: "/images/home-1.png",
         image2: "/images/home-2.png",
       }),
@@ -154,7 +154,7 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
     path: "/about",
     seoTitle: "About Finekarts",
     seoDescription:
-      "Finekarts Incorporated supplies bulk agricultural commodities for sale to qualified buyers worldwide — verification, inspection, logistics, and bankable transactions.",
+      "Finekarts sells bulk agricultural commodities to qualified buyers — CIF trade insurance, inspection, ICC-aligned payments, and transparent dispute resolution.",
     sections: [
       section("hero", "Hero", {
         title: "Supplying bulk commodities buyers can trust",
@@ -184,8 +184,8 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
         body: "Enquiry → qualification → offer → contract → inspection → shipment → delivery documentation.",
       }),
       section("global", "Global network", {
-        title: "Sourced responsibly.\nDelivered globally.",
-        body: "Private supply channels and logistics partners help us deliver quality commodities reliably — with transparent communication and documentation discipline at every corridor.",
+        title: "Corridors we serve",
+        body: "We sell bulk commodities into major import markets — coordinating CIF marine insurance, freight, and export documentation while buyers confirm destination clearance requirements before contract. See Dispute resolution for responsibilities under FOB and CIF.",
       }),
       section("cta", "CTA", {
         title: "Discuss your next bulk commodity requirement",
@@ -205,7 +205,7 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       section("hero", "Hero", {
         title: "Speak with our team",
         description:
-          "Reach the Finekarts trade desk for qualified buyer enquiries. Signed-in buyers can send messages, book consultations, and submit purchase requests from the buyer portal.",
+          "Qualified buyers reach the trade desk for bulk programmes — listed products and on-demand orders. Sign in to submit purchase requests, book consultations, and track enquiries.",
         primaryCtaLabel: "Buyer sign in →",
         primaryCtaHref: "/login",
         secondaryCtaLabel: "Register",
@@ -214,7 +214,7 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       section("channels", "Contact channels", {
         eyebrow: "How to reach us",
         title: "Choose the right path for your enquiry",
-        body: "Purchase requests, consultations, and general enquiries are handled through the buyer portal after sign-in.",
+        body: "Purchase requests and consultations use the buyer portal. General enquiries and careers use the form or email — we respond with next steps, not binding offers.",
       }),
       section("message", "Message form", {
         eyebrow: "Message",
@@ -239,7 +239,7 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       section("hero", "Hero", {
         title: "Resources",
         description:
-          "Educational reference for trade documents, terminology, and process notes. Purchase requests and consultations are submitted through the buyer portal after sign-in.",
+          "CIF trade insurance, PSA banking clauses, ICC payment structures, and trade documents — plus dispute resolution and responsibilities. Purchase requests go through the buyer portal.",
         primaryCtaLabel: "Buyer portal sign-in →",
         primaryCtaHref: "/login",
         secondaryCtaLabel: "Register as buyer",
@@ -288,7 +288,7 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       }),
       section("intro", "Introduction", {
         note: "Partnership listings support transparency — they do not replace contractual inspection terms, bank requirements, or independent due diligence.",
-        body: "Each profile uses the partner name, a short intro, a photo, and descriptive text content. Send updated copy and images to your administrator when ready.",
+        body: "Independent inspection, testing, and certification firms we coordinate with on commodity programmes. Listings support buyer confidence — contractual inspection scope and bank requirements still apply.",
       }),
     ],
   },
@@ -321,7 +321,7 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       section("hero", "Hero", {
         title: "Packaging & transport modes",
         description:
-          "Finekarts structures programmes across flexitank, tanker vessel, containerized cargo, bulk truck, bulk vessel and bulk railcar — subject to product, volume and corridor.",
+          "Packaging and transport modes for bulk cargoes we sell — matched to product, FOB or CIF structure, inspection scope, and destination handling before loading.",
       }),
     ],
   },
@@ -336,7 +336,7 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       section("hero", "Hero", {
         title: "Moving commodities from origin to destination",
         description:
-          "Global shipping coverage using recognized Incoterms® rules — with FOB and CIF as our primary commercial terms. Final requirements are confirmed contractually.",
+          "FOB and CIF are our primary Incoterms® — CIF includes coordinated marine cargo insurance and main carriage to the named port. Documentation aligns with the signed PSA and LC where applicable.",
       }),
     ],
   },
@@ -350,7 +350,7 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       section("hero", "Hero", {
         title: "Inspection & verification",
         description:
-          "Independent inspection supports quality, quantity, and compliance confirmation — scope is defined per contract and corridor.",
+          "Buyers confirm quality and quantity against contract before shipment when that milestone is agreed — through independent inspection at origin, loading supervision, and laboratory testing.",
       }),
     ],
   },
@@ -365,7 +365,7 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       section("hero", "Hero", {
         title: "Know who you are trading with",
         description:
-          "Independent business intelligence before significant commercial relationships — verification is a point-in-time assessment, not a guarantee of future performance.",
+          "Due diligence before large programmes — corporate registration, licences, supply-chain checks, and commodity evidence. Verification is point-in-time; it supports — but does not replace — contract and inspection discipline.",
       }),
     ],
   },
@@ -379,7 +379,7 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       section("hero", "Hero", {
         title: "Common questions",
         description:
-          "Straight answers about how we trade. For deal-specific advice, contact the trade desk.",
+          "How we sell bulk commodities, structure CIF and trade insurance, handle payments and disputes, and work with qualified buyers. Deal-specific terms are always in the signed PSA.",
         primaryCtaLabel: "Request a Quote →",
         primaryCtaHref: "/login",
         secondaryCtaLabel: "Contact us",
@@ -397,7 +397,7 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       section("hero", "Hero", {
         title: "Insights & notes",
         description:
-          "Educational articles on bulk agricultural trade — not legal, tax, or shipping advice.",
+          "Plain-language notes on Incoterms, documentation, CIF insurance, and buyer programmes — educational only, not legal or shipping advice.",
       }),
     ],
   },
@@ -411,7 +411,7 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       section("hero", "Hero", {
         title: "People behind the trade desk",
         description:
-          "Our operations, logistics, and compliance leads support qualified buyer and supplier programmes.",
+          "Leadership and trade desk contacts supporting qualified buyer programmes — bulk sales, logistics, compliance, and ICC-aligned banking structures.",
         primaryCtaLabel: "Contact the trade desk →",
         primaryCtaHref: "/contact",
         secondaryCtaLabel: "About Finekarts",
@@ -434,7 +434,7 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       section("hero", "Hero", {
         title: "What counterparties say",
         description:
-          "Verified buyers and trade partners share their experience working with Finekarts.",
+          "Buyers and long-term programme partners on structured execution, inspection discipline, and reliable documentation.",
         primaryCtaLabel: "Start a conversation →",
         primaryCtaHref: "/contact",
         secondaryCtaLabel: "Trade resources",
@@ -452,7 +452,7 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       section("hero", "Hero", {
         title: "Book a consultation",
         description:
-          "Signed-in buyers can request a trade desk conversation. Preferred times are confirmed by staff only.",
+          "Signed-in buyers request a trade desk call to discuss volume, CIF or FOB, payment instruments, and on-demand programmes. Times are confirmed by the desk.",
         primaryCtaLabel: "Buyer sign in →",
         primaryCtaHref: "/login",
       }),
@@ -467,7 +467,7 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
     sections: [
       section("hero", "Hero", {
         title: "Careers at Finekarts",
-        description: "Submit your application and resume for trade, logistics, and operations roles.",
+        description: "Join trade, logistics, and operations teams supporting bulk commodity sales to qualified international buyers.",
         primaryCtaLabel: "Apply now →",
         primaryCtaHref: "#career-application",
         secondaryCtaLabel: "General enquiry",
@@ -524,6 +524,44 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       section("hero", "Hero", {
         title: "Accessibility statement",
         description: "Our commitment to accessible digital experiences and how to request assistance.",
+      }),
+    ],
+  },
+  {
+    slug: "buyer-request",
+    title: "Buyer purchase request",
+    path: "/buyer-request",
+    seoTitle: "Buyer purchase request",
+    seoDescription:
+      "How qualified buyers submit bulk commodity purchase requests and on-demand programmes through the Finekarts buyer portal.",
+    sections: [
+      section("hero", "Hero", {
+        title: "Buyer purchase request",
+        description:
+          "Submit RFQs for listed commodities or on-demand volumes after registration. Include destination, FOB or CIF preference, and agreed payment structure.",
+        primaryCtaLabel: "Register as buyer",
+        primaryCtaHref: "/register/buyer",
+        secondaryCtaLabel: "Buyer sign in",
+        secondaryCtaHref: "/login",
+      }),
+    ],
+  },
+  {
+    slug: "supplier-offer",
+    title: "Supplier enquiry",
+    path: "/supplier-offer",
+    seoTitle: "Supplier enquiry",
+    seoDescription:
+      "Finekarts sources through private programmes. Supplier portal access is by invitation after diligence.",
+    sections: [
+      section("hero", "Hero", {
+        title: "Supplier relationships",
+        description:
+          "Finekarts is a distributor selling to qualified buyers. Origin supply is managed privately — supplier access is invitation-only after verification.",
+        primaryCtaLabel: "Contact trade desk",
+        primaryCtaHref: "/contact",
+        secondaryCtaLabel: "Buyer programmes",
+        secondaryCtaHref: "/products",
       }),
     ],
   },

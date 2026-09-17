@@ -21,7 +21,7 @@ const QUICK_LINKS = [
   {
     id: "downloads",
     label: "Downloads",
-    description: "Checklists and counsel-approved PDF references.",
+    description: "Reference checklists and PDFs for trade discussions.",
   },
 ] as const;
 
@@ -246,7 +246,7 @@ export function ResourcesDownloads() {
             Printable references
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-[#555555]">
-            Starter checklists and PDFs for internal review. Contract teams should always confirm
+            Starter checklists and PDFs for discussion. Parties should always confirm
             final document sets with counsel and the issuing bank.
           </p>
         </Reveal>

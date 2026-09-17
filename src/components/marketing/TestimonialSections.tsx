@@ -164,7 +164,7 @@ export function TestimonialsGrid({ testimonials }: { testimonials: PublicTestimo
             Testimonials coming soon
           </h2>
           <p className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-[#666666]">
-            Verified counterparties may share approved statements here once published through admin.
+            Verified buyers and programme partners may share statements here as they are approved for publication.
           </p>
           <Link
             href="/contact"
@@ -200,8 +200,8 @@ export function TrustpilotPlaceholder() {
       </p>
       <h3 className="mt-2 text-xl font-semibold text-[#001a3d]">Live Trustpilot feed coming soon</h3>
       <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-[#666666]">
-        This block is reserved for the official Trustpilot widget. Until then, reviews on this page
-        are published and managed through the Finekarts admin panel.
+        This block is reserved for the official Trustpilot widget. Until then, featured reviews appear
+        on this page as counterparties approve them for publication.
       </p>
     </section>
   );

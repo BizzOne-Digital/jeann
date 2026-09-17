@@ -32,7 +32,7 @@ export default async function CareersPage() {
         description={cmsField(
           heroFields,
           "description",
-          "We are building disciplined global commodity trade programmes. Share your background and upload your resume — signed-in visitors can submit with pre-filled contact details.",
+          "We are building disciplined global commodity sales programmes. Share your background and attach your resume — signed-in visitors can submit with pre-filled contact details.",
         )}
         imageSrc={hero.src}
         imageAlt={hero.alt}

@@ -10,10 +10,15 @@ import {
   BANKING_CLAUSE_INTRO,
   BANKING_CLAUSE_SECTION_TITLE,
   PAYMENT_TERM_STRUCTURES,
+  BUYER_DATA_SECURITY_NOTE,
+  ESCROW_LOCATION_NOTE,
   LC_ACCEPTED_BANKS_NOTE,
+  LC_INSTRUMENTS_HIGHLIGHT,
   PAYMENT_TERMS_INTRO,
   PREFERRED_PAYMENT_STRUCTURE,
+  REVOLVING_LC_PROGRAMME_NOTE,
   SWIFT_INSTRUMENT_NOTE,
+  TRANSACTION_PROGRAMME_TYPES,
 } from "@/lib/content/payment-terms";
 import {
   RESOURCES_DOCUMENT_GROUPS,
@@ -217,6 +222,44 @@ function PaymentsPanel() {
         {PAYMENT_TERMS_INTRO} Not legal or banking advice.
       </p>
       <p className="max-w-3xl text-sm leading-relaxed text-[#555555]">{LC_ACCEPTED_BANKS_NOTE}</p>
+      <p className="max-w-3xl text-sm font-medium leading-relaxed text-[#001a3d]">
+        {LC_INSTRUMENTS_HIGHLIGHT}
+      </p>
+
+      <div>
+        <p className="text-xs font-semibold tracking-[0.16em] text-[#c88e4a] uppercase">
+          Programme types
+        </p>
+        <div className="mt-4 grid gap-4 md:grid-cols-3">
+          {TRANSACTION_PROGRAMME_TYPES.map((programme) => (
+            <article
+              key={programme.id}
+              className="marketing-box h-full rounded-lg p-5 shadow-sm"
+            >
+              <p className="text-xs font-bold tracking-wide text-[#888] uppercase">
+                {programme.deliveries}
+              </p>
+              <h3 className="mt-1 text-lg font-semibold text-[#001a3d]">{programme.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-[#555555]">{programme.summary}</p>
+              <p className="mt-3 text-xs leading-relaxed text-[#666666]">
+                <span className="font-semibold text-[#001a3d]">Typical payment: </span>
+                {programme.typicalPayment}
+              </p>
+            </article>
+          ))}
+        </div>
+        <p className="mt-5 max-w-3xl text-sm leading-relaxed text-[#555555]">
+          {REVOLVING_LC_PROGRAMME_NOTE}
+        </p>
+        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-[#555555]">{ESCROW_LOCATION_NOTE}</p>
+      </div>
+
+      <article className="rounded-lg border border-[#1b3a5c]/20 bg-[#eef2f7] p-5 sm:p-6">
+        <p className="text-xs font-semibold tracking-[0.16em] text-[#1b3a5c] uppercase">
+          Data security
+        </p>
+        <p className="mt-2 text-sm leading-relaxed text-[#555555]">{BUYER_DATA_SECURITY_NOTE}</p>
+      </article>
 
       <div className="grid gap-4 md:grid-cols-2">
         {recommended.map((row) => (
@@ -344,7 +387,7 @@ function DownloadsPanel() {
   return (
     <div className="space-y-8">
       <p className="max-w-2xl text-sm leading-relaxed text-[#555555]">
-        Starter checklists and PDFs for internal review. Contract teams should confirm final document
+        Starter checklists and reference PDFs. Confirm final document
         sets with counsel and the issuing bank.
       </p>
 

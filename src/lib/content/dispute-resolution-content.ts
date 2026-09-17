@@ -95,9 +95,11 @@ export const DISPUTE_PAYMENTS = {
   lead:
     "Payment terms are not one-size-fits-all. We operate within commercial and compliance limits, yet we offer flexibility when risk, corridor, and bank diligence support it.",
   bullets: [
-    "Primary structures include Irrevocable Documentary LC at sight (UCP 600), SBLC backup for longer programmes (ISP98), and Transferable Revolving LC at sight for multi-shipment contracts.",
-    "We accept documentary credits issued by banks on our approved list — including institutions among the world’s top fifty banks by international standing, subject to compliance review and transaction-specific approval.",
-    "Additional payment options will be introduced over time to facilitate trade; until then, structures outside the approved list require explicit written agreement.",
+    "Programme types: trial (single shipment), 1-year (12 deliveries), and 2-year (24 deliveries) — each documented in the PSA with matching banking structure.",
+    "Irrevocable LC at Sight, Irrevocable Transferable Revolving LC at Sight for multi-delivery contracts, and Irrevocable SBLC backup for larger transactions — under ICC rules (UCP 600 / ISP98).",
+    "Revolving facilities are often one LC account for the whole programme; Buyers may cap month-to-month drawings. Compliant shipment documents are examined by the Buyer’s bank, which pays in full at sight when the credit requires it.",
+    "Escrow may be discussed for selected buyer locations when banks and compliance support it.",
+    "Documentary credits from banks on our approved list — including top-tier international issuers — subject to compliance review.",
   ],
   resourcesHref: "/resources#resources-hub",
 };

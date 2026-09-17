@@ -6,7 +6,7 @@ import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 
 export const metadata: Metadata = {
   title: "Cookie policy",
-  description: "Draft cookie policy for the Finekarts website — pending legal review.",
+  description: "How Finekarts uses cookies and similar technologies on the website and buyer portal.",
 };
 
 export default function CookiesPage() {
@@ -16,15 +16,15 @@ export default function CookiesPage() {
     <>
       <PageHero
         title="Cookie policy"
-        description="Draft explanation of how Finekarts may use cookies and similar technologies — pending legal review."
+        description="How Finekarts may use cookies and similar technologies on the marketing site and authenticated portals."
         imageSrc={hero.src}
         imageAlt={hero.alt}
       />
       <article className="bg-[#f3f1ec] marketing-section">
         <div className="container-narrow">
-          <LegalPageBody banner={<LegalReviewBanner version="0.1-draft · 2026-08-09" />}>
+          <LegalPageBody banner={<LegalReviewBanner version="2026" />}>
             <p>
-              This draft explains how Finekarts may use cookies and similar technologies on the
+              This notice explains how Finekarts may use cookies and similar technologies on the
               marketing site and authenticated portals.
             </p>
             <div>

@@ -97,8 +97,8 @@ export const ABOUT_PANEL_TITLES: Record<
     title: "A clear path from request to delivery",
   },
   global: {
-    eyebrow: "Global reach",
-    title: "Sourced responsibly. Delivered globally.",
+    eyebrow: "Corridors",
+    title: "Delivery markets and logistics partners",
   },
 };
 
@@ -133,7 +133,7 @@ export const ABOUT_PROCESS_STEPS = [
   {
     n: "01",
     title: "Submit request",
-    text: "Share product, quantity, destination, and preferred Incoterms through the RFQ form.",
+    text: "Share product, quantity, destination, and FOB or CIF preference — listed grade or on-demand programme.",
   },
   {
     n: "02",
@@ -143,12 +143,12 @@ export const ABOUT_PROCESS_STEPS = [
   {
     n: "03",
     title: "Contract & docs",
-    text: "Agreed PSA/SPA and banking wording proceed only after mutual confirmation.",
+    text: "Trial, 12-delivery, or 24-delivery PSA with Irrevocable LC / Transferable Revolving LC and SBLC where agreed.",
   },
   {
     n: "04",
     title: "Inspection & delivery",
-    text: "Inspection, packaging, and shipment milestones follow the signed contract.",
+    text: "Inspection confirms quality and quantity before shipment when agreed; CIF insurance and documents align to the PSA.",
   },
 ] as const;
 

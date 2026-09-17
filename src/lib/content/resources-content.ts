@@ -2,7 +2,7 @@ export const RESOURCES_PILLARS = [
   {
     id: "banking",
     title: "Banking & SPA",
-    summary: "PSA clauses for LC, SBLC, CIF trade insurance, guarantees, and collections.",
+    summary: "Trial, 12- and 24-delivery programmes — Irrevocable LC, Transferable Revolving LC, SBLC, escrow.",
     icon: "bank",
     accent: {
       main: "#1b7a4a",
@@ -35,7 +35,7 @@ export const RESOURCES_PILLARS = [
   {
     id: "downloads",
     title: "Downloads",
-    summary: "Checklists and counsel-approved PDF references for internal review.",
+    summary: "Optional checklists and reference PDFs — confirm final document sets in your PSA.",
     icon: "download",
     accent: {
       main: "#d4a017",

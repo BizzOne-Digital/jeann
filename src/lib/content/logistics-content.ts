@@ -32,7 +32,7 @@ export const FOB_CIF_TERMS = [
     code: "CIF",
     title: "Cost, Insurance & Freight",
     summary:
-      "Under CIF transactions, Finekarts can coordinate the cargo, ocean freight and marine insurance to the agreed destination port, subject to the specific contract and applicable Incoterms® rules.",
+      "Under CIF, Finekarts coordinates cargo, ocean freight, and marine cargo (trade) insurance to the named destination port — coverage scope and claims handling are stated in the PSA, subject to Incoterms® rules.",
   },
   {
     code: "DDP",
@@ -160,11 +160,11 @@ export const CONTRACT_TO_CARGO_STEPS = [
 ];
 
 export const LOGISTICS_CLOSING = {
-  title: "Global reach. Reliable logistics.",
-  lead: "Finekarts Inc. brings together commodity sourcing, supplier verification, independent inspection, trade documentation and international shipping coordination to create a more transparent global trading experience.",
-  body: "Whether you are purchasing rice from Asia, sugar from international origins, edible oils, grains, pulses or other commodities, our objective is to provide a coordinated supply chain from origin to destination.",
-  tagline: "Trade globally. Ship confidently.",
-  badges: ["FOB & CIF", "Global shipping", "Shipment visibility", "Reliable trade execution"],
+  title: "CIF, insurance, and reliable logistics.",
+  lead: "Finekarts sells bulk commodities to qualified buyers and coordinates independent inspection, trade documentation, marine insurance under CIF, and international shipping — with responsibilities defined in the signed PSA.",
+  body: "We work with buyers before contract to clarify unloading and clearance requirements at destination, reducing detention risk. Disagreements are handled fairly — see our dispute resolution page for ICC-aligned escalation.",
+  tagline: "Sell with discipline. Ship with confidence.",
+  badges: ["FOB & CIF", "Trade insurance", "Shipment visibility", "PSA documentation"],
 };
 
 export const LOGISTICS_CTA = {

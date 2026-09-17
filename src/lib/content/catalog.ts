@@ -88,6 +88,26 @@ export const SEED_FAQS = [
     answer:
       "We accept Irrevocable documentary credits from banks on our approved list, including issuers among the world’s top fifty international banks, subject to compliance and deal-specific approval. Other payment options require explicit agreement. See Resources for structures and the dispute resolution page for payment limits and flexibility.",
   },
+  {
+    question: "What transaction programme lengths do you offer?",
+    answer:
+      "Three structures are commonly discussed: a trial order (single shipment), a 1-year contract (12 deliveries), and a 2-year contract (24 deliveries). Longer programmes typically use an Irrevocable Transferable Revolving LC at Sight for one facility across the contract, with month-to-month drawing limits when the Buyer requests them.",
+  },
+  {
+    question: "How are shipment documents and payment linked?",
+    answer:
+      "Shipment documents are presented under the agreed LC. The Buyer’s bank verifies them against the credit; when compliant, the bank pays in full at sight (or as stated in the instrument). SBLC may back larger or longer programmes as contractual security.",
+  },
+  {
+    question: "Is escrow available?",
+    answer:
+      "Escrow may be an option depending on buyer location, bank appetite, and compliance — it is negotiated case by case and is not assumed on every corridor.",
+  },
+  {
+    question: "How is buyer data protected?",
+    answer:
+      "Portal and enquiry data is protected with access controls and encrypted connections. We use information only to operate programmes and meet legal obligations — see the Privacy Policy for full detail.",
+  },
 ];
 
 export type SeedInsight = {

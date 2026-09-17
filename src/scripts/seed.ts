@@ -92,7 +92,7 @@ async function main() {
 
     for (const [pi, product] of cat.products.entries()) {
       await Product.findOneAndUpdate(
-        { slug: product.slug, categoryId: category._id },
+        { slug: product.slug },
         {
           categoryId: category._id,
           slug: product.slug,

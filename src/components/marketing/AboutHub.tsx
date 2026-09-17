@@ -242,10 +242,10 @@ function ProcessPanel({ cms }: { cms?: Record<string, string> }) {
           Submit an RFQ <span aria-hidden>→</span>
         </Link>
         <Link
-          href="/resources"
+          href="/dispute-resolution"
           className="inline-flex items-center gap-2 rounded-md border border-[#d5d0c8] px-5 py-2.5 text-sm font-semibold text-[#001a3d] transition hover:bg-[#f3f1ec]"
         >
-          Trade resources
+          Trade assurance
         </Link>
       </div>
     </div>
@@ -264,7 +264,7 @@ function GlobalPanel({
       <div className="relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-xl border border-[#d5d0c8] bg-white p-4 shadow-sm lg:max-w-none">
         <Image
           src={home3}
-          alt="Global commodity sourcing and logistics network"
+          alt="International commodity logistics and delivery corridors"
           fill
           className="object-contain object-center p-2"
           sizes="(max-width: 1024px) 90vw, 420px"

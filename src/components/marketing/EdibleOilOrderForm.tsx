@@ -192,8 +192,8 @@ export function EdibleOilOrderForm({
       <div className="rounded-md border border-[var(--line)] bg-[var(--cream)]/40 p-4 text-sm text-[var(--stone)]">
         <p className="font-semibold text-[var(--navy)]">Edible oils programme enquiry</p>
         <p className="mt-1">
-          Specify product grade, monthly volume (MT), contract duration, and admin-enabled payment
-          terms. Totals are calculated automatically.
+          Specify product grade, monthly volume (MT), contract duration, and agreed payment terms.
+          Totals are calculated automatically.
         </p>
       </div>
 
@@ -324,7 +324,7 @@ export function EdibleOilOrderForm({
           >
             {termsLoading ? <option value="">Loading payment terms…</option> : null}
             {!termsLoading && paymentTerms.length === 0 ? (
-              <option value="">No payment terms enabled — contact admin</option>
+              <option value="">Contact the trade desk for payment options</option>
             ) : null}
             {paymentTerms.map((term) => (
               <option key={term.id} value={term.id}>

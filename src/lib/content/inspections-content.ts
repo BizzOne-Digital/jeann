@@ -4,7 +4,7 @@ export const INSPECTIONS_HERO = {
   eyebrow: "Independent Commodity Inspection Services",
   title: "Confidence in Every Shipment",
   description:
-    "International commodity trading requires more than competitive pricing and reliable logistics. Through our network of independent third-party inspection organizations, Finekarts helps clients arrange professional services at origin, during loading, in transit where applicable, and at destination — for greater transparency, reduced transaction risk, and confidence in every shipment.",
+    "We sell bulk commodities with proactive safety and quality discipline from origin through the loading dock. Independent inspectors help buyers confirm quality and quantity against the PSA before shipment when that milestone is agreed — reducing disputes and surprises at destination.",
   primaryCta: { href: "#site-enquiry-cta", label: "Request an inspection →" },
   secondaryCta: { href: "#inspection-hub", label: "Browse inspection topics" },
 };
@@ -223,7 +223,7 @@ export const WHY_INDEPENDENT_INSPECTION = [
 
 export const INSPECTION_CTA = {
   title: "Request an inspection",
-  lead: "Tell us your commodity, quantity, origin, destination, required inspection scope and delivery terms. Our team can help determine appropriate independent inspection and testing requirements.",
+  lead: "Tell us your commodity, quantity, origin, destination, and when you need quality and quantity confirmed against the PSA — typically before shipment. We coordinate independent inspection scope with recognized firms.",
   fields: ["Commodity", "Quantity", "Origin", "Destination", "Required inspection", "Delivery terms"],
   tagline: "From origin to destination — verified. Documented. Transparent.",
 };

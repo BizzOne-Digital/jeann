@@ -18,7 +18,7 @@ export default function BuyerRequestPage() {
         defaults={{
           title: "Buyer purchase request",
           description:
-            "Qualified buyers submit RFQs and edible-oil programme enquiries through the secure buyer portal. Registration and admin approval are required before trading.",
+            "Qualified buyers submit RFQs for listed commodities and on-demand volumes through the secure buyer portal. Registration and trade-desk qualification are required before programmes proceed.",
           primaryCta: { href: "/register/buyer", label: "Register your company →" },
           secondaryCta: { href: "/login", label: "Buyer sign in" },
         }}
@@ -34,7 +34,7 @@ export default function BuyerRequestPage() {
               <li>After approval, sign in to the buyer portal.</li>
               <li>
                 Submit a purchase request with product, grade, quantity (MT), destination port,
-                Incoterms, contract duration, and admin-enabled payment terms.
+                FOB or CIF, contract duration, and ICC-aligned payment terms (for example Irrevocable LC at sight).
               </li>
               <li>The trade desk qualifies your enquiry — submission is not a binding contract.</li>
             </ol>
@@ -44,9 +44,8 @@ export default function BuyerRequestPage() {
             <div className="rounded-lg border border-[var(--line)] bg-[var(--cream)]/50 p-6">
               <h3 className="font-semibold text-[var(--navy)]">Edible oils programme form</h3>
               <p className="mt-2 text-sm leading-relaxed text-[var(--stone)]">
-                Approved buyers can specify refined, crude, or extra grades, monthly MT volume, price
-                per MT, 12- or 24-month contracts, and ICC-linked payment structures enabled by
-                admin.
+                Approved buyers can specify grade, monthly MT volume, destination, 12- or 24-month
+                contracts, and agreed payment structures from our published programme options.
               </p>
               <div className="mt-4 flex flex-wrap gap-3">
                 <Link href="/portal/buyer/new-request" className="btn btn-primary">
@@ -62,7 +61,8 @@ export default function BuyerRequestPage() {
           <Reveal delay={0.1}>
             <p className="text-sm text-[var(--stone)]">
               Finekarts does not guarantee availability, pricing, financing, or shipment based on a
-              website submission alone. Use fake test data on staging environments only.
+              website submission alone. Binding terms appear only in signed PSA/SPA and banking
+              instruments.
             </p>
           </Reveal>
         </div>

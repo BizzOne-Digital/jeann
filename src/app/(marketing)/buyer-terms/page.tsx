@@ -7,7 +7,7 @@ import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 
 export const metadata: Metadata = {
   title: "Buyer terms",
-  description: "Draft buyer submission terms for RFQs and portal use — pending legal review.",
+  description: "Terms for purchase requests and buyer portal use on the Finekarts website.",
 };
 
 export default function BuyerTermsPage() {
@@ -17,20 +17,20 @@ export default function BuyerTermsPage() {
     <>
       <PageHero
         title="Buyer terms"
-        description="Draft terms for purchase requests and buyer portal use — pending legal review and admin versioning."
+        description="Terms that apply when qualified buyers submit purchase requests or use buyer portal features."
         imageSrc={hero.src}
         imageAlt={hero.alt}
       />
       <article className="bg-[#f3f1ec] marketing-section">
         <div className="container-narrow">
           <LegalPageBody
-            banner={<LegalReviewBanner version="0.1-draft · 2026-08-09" />}
+            banner={<LegalReviewBanner version="2026" />}
             footer={<LegalDocumentsPanel category="buyer" title="Download buyer terms (PDF)" />}
           >
             <p>
-              These draft terms apply when buyers submit purchase requests or use buyer portal
-              features when available. Final terms require legal review and may be versioned in
-              admin.
+              These terms apply when buyers submit purchase requests or use buyer portal features.
+              Binding trade terms appear in the signed PSA/SPA and banking instruments — not in this
+              summary alone.
             </p>
             <div>
               <h2 className="display text-xl text-navy">Non-binding enquiries</h2>

@@ -56,10 +56,10 @@ export function ContactChannels({
       linkLabel: "Book via buyer portal",
     },
     {
-      title: "General enquiries",
-      text: "Company information, compliance, and careers — email us or use the form below.",
-      href: "#contact-form",
-      linkLabel: "Contact form",
+      title: "Trade assurance",
+      text: "Dispute resolution, CIF responsibilities, and PSA documentation — read before you contract.",
+      href: "/dispute-resolution",
+      linkLabel: "Dispute resolution",
     },
   ];
 

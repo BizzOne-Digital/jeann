@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { CmsPageHero } from "@/components/marketing/CmsPageHero";
 import { Reveal } from "@/components/motion/Reveal";
 import { TradeOfferForm } from "@/components/marketing/TradeOfferForm";
@@ -18,7 +19,7 @@ export default function SupplierOfferPage() {
         defaults={{
           title: "Supplier trade offer",
           description:
-            "Finekarts supplier onboarding is invitation-only. Verified suppliers manage procurement transactions through the supplier portal after admin approval.",
+            "Finekarts is a distributor selling to qualified buyers. Origin supply is private — supplier portal access is invitation-only after diligence.",
           primaryCta: { href: "/contact", label: "Contact trade desk →" },
           secondaryCta: { href: "/login", label: "Sign in" },
         }}
@@ -29,9 +30,9 @@ export default function SupplierOfferPage() {
           <Reveal>
             <h2 className="text-2xl font-semibold text-[var(--navy)]">Invitation-only suppliers</h2>
             <p className="mt-3 text-base leading-relaxed text-[var(--stone)]">
-              Suppliers cannot self-register for full portal access. Finekarts issues a secure,
-              expiring invitation after initial diligence. If you received an invitation, open the
-              link in the email to complete verification and CIS/KYB.
+              We do not advertise open supplier registration on this site. Established origin
+              relationships are managed privately. If Finekarts invites your organization to a
+              programme, you will receive secure onboarding instructions by email.
             </p>
           </Reveal>
 
@@ -39,8 +40,8 @@ export default function SupplierOfferPage() {
             <div className="rounded-lg border border-[var(--line)] bg-white p-6">
               <h3 className="font-semibold text-[var(--navy)]">Submit initial enquiry</h3>
               <p className="mt-2 text-sm text-[var(--stone)]">
-                Public submissions create a lead for staff review. They do not grant portal access or
-                approve your organization.
+                Optional initial messages are reviewed by the trade desk. They do not grant portal
+                access or confirm a supply relationship.
               </p>
               <div className="mt-6">
                 <TradeOfferForm />
@@ -50,8 +51,15 @@ export default function SupplierOfferPage() {
 
           <Reveal delay={0.1}>
             <p className="text-sm text-[var(--stone)]">
-              Do not upload real banking instruments or signed contracts to staging unless using
-              clearly marked test documents.
+              For bulk buyer programmes, see{" "}
+              <Link href="/products" className="font-semibold text-[var(--navy)] underline">
+                products we sell
+              </Link>{" "}
+              or{" "}
+              <Link href="/dispute-resolution" className="font-semibold text-[var(--navy)] underline">
+                trade assurance
+              </Link>
+              .
             </p>
           </Reveal>
         </div>

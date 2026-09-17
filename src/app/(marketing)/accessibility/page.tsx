@@ -6,7 +6,7 @@ import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 
 export const metadata: Metadata = {
   title: "Accessibility",
-  description: "Finekarts accessibility statement — draft pending legal and compliance review.",
+  description: "Finekarts accessibility statement and how to request assistance.",
 };
 
 export default function AccessibilityPage() {
@@ -16,7 +16,7 @@ export default function AccessibilityPage() {
     <>
       <PageHero
         title="Accessibility statement"
-        description="Draft commitment to making Finekarts marketing pages and portals usable for people with diverse abilities."
+        description="Our commitment to making Finekarts marketing pages and portals usable for people with diverse abilities."
         imageSrc={hero.src}
         imageAlt={hero.alt}
         primaryCta={{ href: "mailto:Info@finekarts.com?subject=Accessibility", label: "Report an issue →" }}
@@ -24,10 +24,11 @@ export default function AccessibilityPage() {
       />
       <article className="bg-[#f3f1ec] marketing-section">
         <div className="container-narrow">
-          <LegalPageBody banner={<LegalReviewBanner version="0.1-draft · 2026-08-09" />}>
+          <LegalPageBody banner={<LegalReviewBanner version="2026" />}>
             <p>
               Finekarts aims to make its marketing website and portals usable for people with diverse
-              abilities. This statement is a draft and will be updated following accessibility review.
+              abilities. We review this statement periodically and welcome feedback on barriers you
+              encounter.
             </p>
             <div>
               <h2 className="display text-xl text-navy">Measures</h2>

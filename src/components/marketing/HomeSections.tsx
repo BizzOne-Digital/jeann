@@ -77,7 +77,7 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
       ),
     },
     {
-      label: "Irrevocable LC · SBLC",
+      label: "Irrevocable LC · Revolving",
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
           <path
@@ -158,7 +158,7 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
               {cmsField(
                 cms,
                 "description",
-                "Finekarts supplies edible oils, sugar, rice, beans, and related bulk cargoes for sale to qualified international buyers — backed by inspection, logistics, trade insurance where agreed, and bankable structures such as Irrevocable LC at sight and SBLC for longer contracts.",
+                "Trial orders or 12- and 24-delivery programmes — Irrevocable LC at Sight, Irrevocable Transferable Revolving LC, SBLC for large transactions, escrow where your corridor allows. Inspection, CIF insurance, secure buyer data, and payment through your bank on compliant documents.",
               )}
             </p>
           </Reveal>
@@ -270,7 +270,7 @@ export function ConnectionSection({
                 {cmsField(
                   cms,
                   "body2",
-                  "Supplier relationships stay private. We highlight verification, inspection, logistics, trade insurance where agreed, and ICC-aligned bankable payment structures.",
+                  "Supplier relationships stay private. We structure Irrevocable LC, Transferable Revolving LC for multi-delivery contracts, SBLC backup, and optional escrow — with buyer data protected and banks paying in full on compliant shipment documents.",
                 )}
               </p>
             </Reveal>
@@ -344,7 +344,7 @@ export function CommoditiesWeTrade({ categories }: { categories: SeedCategory[] 
       <div className="container-page">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <h2 className="text-2xl font-medium tracking-tight sm:text-[1.75rem]">
-            Commodities We Trade
+            Products we sell
           </h2>
           <Link
             href="/products"
@@ -514,7 +514,7 @@ export function ProcessTimeline() {
     {
       n: "02",
       title: "Review & Quote",
-      text: "Trade desk reviews fit against origin programmes and workable logistics structures.",
+      text: "Trade desk reviews fit, CIF or FOB structure, and bankable payment options.",
     },
     {
       n: "03",
@@ -524,7 +524,7 @@ export function ProcessTimeline() {
     {
       n: "04",
       title: "Inspection & Delivery",
-      text: "Inspection, packaging, and shipment milestones follow the signed contract.",
+      text: "Quality and quantity confirmed before shipment when agreed; CIF insurance and documents align to the PSA.",
     },
   ];
 

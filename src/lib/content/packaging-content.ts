@@ -29,7 +29,7 @@ export const PACKAGING_HERO = {
   eyebrow: "Packaging types",
   title: "Packaging & transport modes for global commodity trade",
   description:
-    "The homepage highlights core transport modes — flexitank, bulk railcar, tanker vessel, bulk vessel and bulk truck. This page explains every packaging and logistics option Finekarts structures for international commodity trade, including containerized cargo, ISO tanks, IBC totes, drums, FIBCs, bulk liners, woven bags and more. Not every option is available for every commodity or corridor.",
+    "Packaging and transport modes for bulk cargoes we sell — flexitank, vessel, container, rail, and road programmes plus FIBCs, drums, and totes. Options are matched to product, FOB or CIF terms, inspection scope, and destination handling.",
   primaryCta: { href: "#packaging-types", label: "View detailed specifications →" },
   secondaryCta: { href: "/logistics", label: "Logistics overview" },
 };

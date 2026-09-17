@@ -15,7 +15,7 @@ export const VERIFICATION_HERO = {
   eyebrow: "Global Business Verification & Due Diligence",
   title: "Know Who You Are Trading With",
   description:
-    "In international commodity distribution, knowing your supply chain is essential. Finekarts Verification Services helps bulk buyers and Finekarts procurement teams obtain independent business intelligence before committing to significant volumes — combining government records, corporate registries, regulatory databases, trade information, commercial data and independent verification to provide a clearer picture of origin and counterparties.",
+    "Before large programmes, qualified buyers need evidence — not marketing claims. Finekarts Verification Services combines government records, corporate registries, regulatory data, and independent checks so counterparties, licences, and commodity claims are documented before contract.",
   primaryCta: { href: "#request-verification", label: "Request a verification report →" },
   secondaryCta: { href: "#our-services", label: "Our verification services" },
 };
