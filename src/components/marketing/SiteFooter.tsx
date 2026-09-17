@@ -27,15 +27,15 @@ const LINKS = [
     ],
   },
   {
-    title: "Trade assurance",
+    title: "Resources",
     items: [
-      { href: "/dispute-resolution", label: "Dispute resolution" },
-      { href: "/logistics", label: "CIF, logistics & insurance" },
-      { href: "/inspections", label: "Inspections" },
-      { href: "/verification", label: "Due diligence" },
-      { href: "/partners", label: "Verification partners" },
-      { href: "/resources", label: "Payments & PSA reference" },
+      { href: "/resources", label: "Documents & terminology" },
       { href: "/packaging", label: "Packaging" },
+      { href: "/logistics", label: "Logistics" },
+      { href: "/partners", label: "Verification partners" },
+      { href: "/verification", label: "Due diligence" },
+      { href: "/inspections", label: "Inspections" },
+      { href: "/insights", label: "Insights" },
     ],
   },
   {
