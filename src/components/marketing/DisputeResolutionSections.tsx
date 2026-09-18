@@ -180,16 +180,13 @@ export function DisputeResolutionSections() {
             title={DISPUTE_PAYMENTS.title}
             lead={DISPUTE_PAYMENTS.lead}
           />
-          <ul className="mt-8 space-y-3 text-base leading-relaxed text-[#555555]">
-            {DISPUTE_PAYMENTS.bullets.map((item, i) => (
+          <div className="mt-8 space-y-4 text-base leading-relaxed text-[#555555]">
+            {DISPUTE_PAYMENTS.paragraphs.map((item, i) => (
               <Reveal key={item.slice(0, 40)} delay={i * 0.05}>
-                <li className="flex gap-3">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#1b3a5c]" aria-hidden />
-                  <span>{item}</span>
-                </li>
+                <p>{item}</p>
               </Reveal>
             ))}
-          </ul>
+          </div>
           <Reveal delay={0.12}>
             <Link
               href={DISPUTE_PAYMENTS.resourcesHref}

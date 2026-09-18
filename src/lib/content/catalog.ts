@@ -81,32 +81,32 @@ export const SEED_FAQS = [
   {
     question: "How are disputes handled?",
     answer:
-      "We aim for amicable resolution with fairness and transparency. If parties cannot agree, the PSA/SPA governs escalation — often including ICC arbitration or courts as specified. Seller and buyer duties, risk transfer under FOB/CIF, and documentation for clearance are explained on the Dispute resolution page.",
+      "We resolve differences commercially first, using contract terms and shipment records. If parties cannot align, the PSA/SPA and any ICC arbitration or court clause apply. An overview is on the trade assurance page.",
   },
   {
     question: "Do you accept letters of credit from any bank?",
     answer:
-      "We accept Irrevocable documentary credits from banks on our approved list, including issuers among the world’s top fifty international banks, subject to compliance and deal-specific approval. Other payment options require explicit agreement. See Resources for structures and the dispute resolution page for payment limits and flexibility.",
+      "Credits must be issued by a bank on our approved list after compliance review. Programme details and instrument comparisons are on Resources.",
   },
   {
-    question: "What transaction programme lengths do you offer?",
+    question: "What programme lengths do you structure?",
     answer:
-      "Three structures are commonly discussed: a trial order (single shipment), a 1-year contract (12 deliveries), and a 2-year contract (24 deliveries). Longer programmes typically use an Irrevocable Transferable Revolving LC at Sight for one facility across the contract, with month-to-month drawing limits when the Buyer requests them.",
+      "Many buyers start with a trial shipment, then move to annual or multi-year schedules when the corridor and banking support it. The payment instrument follows the commercial schedule agreed in the PSA.",
   },
   {
-    question: "How are shipment documents and payment linked?",
+    question: "How do banks pay against shipment documents?",
     answer:
-      "Shipment documents are presented under the agreed LC. The Buyer’s bank verifies them against the credit; when compliant, the bank pays in full at sight (or as stated in the instrument). SBLC may back larger or longer programmes as contractual security.",
+      "Under a documentary credit, the buyer’s bank examines presentation against the LC text. Payment timing follows the credit — commonly at sight when documents comply.",
   },
   {
     question: "Is escrow available?",
     answer:
-      "Escrow may be an option depending on buyer location, bank appetite, and compliance — it is negotiated case by case and is not assumed on every corridor.",
+      "Only where jurisdiction, banks, and compliance support a written escrow arrangement. It is not standard on every route.",
   },
   {
     question: "How is buyer data protected?",
     answer:
-      "Portal and enquiry data is protected with access controls and encrypted connections. We use information only to operate programmes and meet legal obligations — see the Privacy Policy for full detail.",
+      "We use access controls and encrypted connections for portal and commercial data, as described in our Privacy Policy. We do not sell counterparty information.",
   },
 ];
 

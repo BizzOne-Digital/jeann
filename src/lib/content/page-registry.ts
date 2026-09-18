@@ -84,10 +84,10 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       "Finekarts Incorporated supplies bulk agricultural commodities for sale to qualified international buyers — verification, inspection, logistics, trade insurance, and bankable ICC-aligned payment structures.",
     sections: [
       section("hero", "Hero", {
-        eyebrow: "Products for sale • On-demand orders • CIF & trade insurance",
+        eyebrow: "Bulk commodities • Verified programmes • Worldwide delivery",
         title: "Bulk Agricultural Commodities for Qualified Buyers",
         description:
-          "Bulk commodities for qualified buyers — trial orders, 12- and 24-delivery programmes, Irrevocable LC at Sight, Irrevocable Transferable Revolving LC, SBLC for large transactions, and escrow where your location and banks support it. Your data is handled securely; shipment documents flow through your bank as agreed.",
+          "Finekarts supplies edible oils, sugar, rice, beans, and related cargoes to qualified international buyers — with inspection, CIF logistics where agreed, trade insurance, and bankable ICC-aligned payment structures.",
         primaryCtaLabel: "Browse products",
         primaryCtaHref: "/products",
         secondaryCtaLabel: "Buyer portal",
@@ -100,7 +100,7 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
         body:
           "Finekarts Incorporated is a distributor: every product listed on this site is offered for sale to qualified bulk buyers. We are not a marketplace and we do not connect unrelated buyers with unrelated sellers.",
         body2:
-          "Origin relationships stay private. We deliver through inspection, CIF trade insurance where agreed, and bankable ICC structures — Irrevocable LC, Transferable Revolving LC for 12/24-delivery contracts, SBLC backup, and escrow where appropriate. Buyer information is protected; payments follow your bank’s examination of compliant documents.",
+          "Origin relationships stay private. What we publish is how we deliver — independent verification and inspection, disciplined logistics, trade insurance where contracts require it, and payment structures agreed with your bank.",
         image1: "/images/home-1.png",
         image2: "/images/home-2.png",
       }),
@@ -123,7 +123,7 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       section("shipping", "Shipping terms", {
         eyebrow: "CIF & trade insurance",
         title: "FOB or CIF — insurance and freight aligned to contract",
-        body: "CIF programmes include coordinated marine cargo insurance and main carriage to the named port. FOB places main carriage with the buyer from the loading port. See dispute resolution for responsibilities and PSA documentation duties.",
+        body: "CIF programmes include coordinated marine cargo insurance and main carriage to the named port. FOB places main carriage with the buyer from the loading port. Responsibilities and documentation are defined in the signed PSA and Incoterms.",
       }),
       section("partners-teaser", "Partners teaser", {
         eyebrow: "Verification partners",
@@ -259,9 +259,9 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       "ICC-aligned dispute resolution, seller and buyer responsibilities, quality and safety, PSA documentation, and payment flexibility for Finekarts bulk commodity buyers.",
     sections: [
       section("hero", "Hero", {
-        title: "Dispute resolution & where we stand",
+        title: "Trade assurance & dispute handling",
         description:
-          "Fairness, transparency, and ICC rules — how we resolve disagreements, allocate responsibilities under FOB and CIF, and support buyers through documentation and payment discipline.",
+          "How Finekarts approaches commercial disagreements, contractual responsibilities under FOB and CIF, and alignment with ICC frameworks where the PSA provides.",
         primaryCtaLabel: "Contact trade desk",
         primaryCtaHref: "/contact",
         secondaryCtaLabel: "Payment reference",

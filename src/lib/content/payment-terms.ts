@@ -188,7 +188,7 @@ export const PAYMENT_TERMS_INTRO =
   "For the type of transactions commonly discussed in bulk commodity trade, structures are often ranked by how they balance payment certainty with performance risk. Ratings below are indicative — final suitability depends on contract wording, bank approval, corridor, and counterparty diligence.";
 
 export const PREFERRED_PAYMENT_STRUCTURE =
-  "Finekarts structures bankable programmes around Irrevocable Documentary LC at Sight (UCP 600), Irrevocable Transferable Revolving LC at Sight for 12- or 24-delivery contracts, and Irrevocable SBLC backup for larger transactions (ISP98). Escrow may be available depending on buyer location and bank support. All instruments follow ICC rules; alternatives such as BG, D/P, D/A, or T/T apply only when expressly negotiated.";
+  "Programmes are built around documentary credits and, where appropriate, standby support — always under ICC banking rules and subject to bank approval. Trial shipments, annual schedules, and multi-year contracts each receive a structure matched to volume, corridor, and counterparty diligence.";
 
 export const TRANSACTION_PROGRAMME_TYPES = [
   {
@@ -196,38 +196,38 @@ export const TRANSACTION_PROGRAMME_TYPES = [
     title: "Trial order",
     deliveries: "1 shipment",
     summary:
-      "A one-time order to validate specification, inspection results, logistics, and banking workflow before committing to a 12- or 24-delivery programme.",
-    typicalPayment: "Irrevocable LC at Sight (and SBLC where volume warrants backup security).",
+      "A single shipment to prove specification, logistics, and banking workflow before a longer schedule.",
+    typicalPayment: "Documentary LC at sight; standby support when exposure warrants it.",
   },
   {
     id: "12-month",
     title: "1-year contract",
     deliveries: "12 deliveries",
     summary:
-      "Monthly or agreed cadence over twelve shipments under one PSA/SPA — suited to refiners and distributors with steady demand.",
-    typicalPayment: "Irrevocable Transferable Revolving LC at Sight covering the programme.",
+      "Twelve scheduled liftings under one commercial agreement — common for steady industrial demand.",
+    typicalPayment: "Revolving documentary LC at sight, facility sized to the programme.",
   },
   {
     id: "24-month",
     title: "2-year contract",
     deliveries: "24 deliveries",
     summary:
-      "Twenty-four scheduled shipments under one commercial framework — often paired with SBLC backup and strict documentary discipline.",
-    typicalPayment: "Irrevocable Transferable Revolving LC at Sight with programme-wide facility.",
+      "Twenty-four liftings with documentary discipline across the full term.",
+    typicalPayment: "Programme revolving LC; standby instrument when agreed for added security.",
   },
 ] as const;
 
 export const REVOLVING_LC_PROGRAMME_NOTE =
-  "Multi-delivery contracts typically use one Irrevocable Transferable Revolving LC at Sight for the entire transaction. The Buyer can limit how much of the facility the Seller may draw each month, aligning LC availability with agreed shipment schedules. Each presentation is supported by shipment documents examined by the Buyer’s bank; compliant presentations are paid in full at sight unless the credit states otherwise.";
+  "Multi-shipment contracts are often backed by one revolving documentary credit. Drawing limits can follow the shipment calendar so availability tracks agreed liftings. Each presentation is checked by the issuing or confirming bank against the credit text; honour follows UCP 600 and the agreed terms.";
 
 export const ESCROW_LOCATION_NOTE =
   "Escrow is not offered on every corridor. Where buyer jurisdiction, banks, and compliance allow, an escrow structure may be agreed as an alternative to documentary credit — terms are deal-specific.";
 
 export const BUYER_DATA_SECURITY_NOTE =
-  "Buyer and counterparty data shared with Finekarts — company profiles, banking messages, and portal submissions — is handled with access controls, encrypted transport, and least-privilege staff access. We do not sell customer data. Details appear in our Privacy Policy.";
+  "Commercial and portal data is protected with role-based access, encrypted connections, and policies aligned to our Privacy Policy. We do not sell counterparty information.";
 
 export const LC_INSTRUMENTS_HIGHLIGHT =
-  "Irrevocable LC at Sight · Irrevocable Transferable Revolving LC at Sight · SBLC backup for large programmes · Escrow where location and banks support it.";
+  "Documentary credits at sight, revolving facilities for scheduled programmes, standby support for larger exposures, and escrow only where banks and jurisdiction allow.";
 
 export const LC_ACCEPTED_BANKS_NOTE =
   "Documentary credits are accepted from institutions on Finekarts’ approved bank list, including issuers among the world’s top fifty international banks, subject to compliance screening and transaction-specific approval. Payment terms have commercial limits, but alternative structures may be agreed in writing when risk and corridor support them. Additional payment channels will be added over time to facilitate trade.";

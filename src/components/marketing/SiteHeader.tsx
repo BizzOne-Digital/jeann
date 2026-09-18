@@ -56,7 +56,6 @@ export function SiteHeader({ embedded = false }: Props) {
   }, [open]);
 
   const closeMenu = () => setOpen(false);
-  const hideLogo = pathname === "/about";
 
   return (
     <>
@@ -72,18 +71,14 @@ export function SiteHeader({ embedded = false }: Props) {
         )}
       >
         <div className={`container-page flex ${MARKETING_HEADER_HEIGHT_CLASS} min-w-0 items-center justify-between gap-2 lg:gap-3`}>
-          {hideLogo ? (
-            <div className="hidden shrink-0 lg:block lg:w-0" aria-hidden />
-          ) : (
-            <Link
-              href="/"
-              className="focus-ring flex shrink-0 items-center rounded-sm"
-              aria-label="Finekarts Incorporated home"
-              data-no-translate
-            >
-              <BrandLogo size="md" priority alt="Finekarts Incorporated" />
-            </Link>
-          )}
+          <Link
+            href="/"
+            className="focus-ring flex shrink-0 items-center rounded-sm"
+            aria-label="Finekarts Incorporated home"
+            data-no-translate
+          >
+            <BrandLogo size="md" priority alt="Finekarts Incorporated" />
+          </Link>
 
           <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Primary">
             {NAV.map((item) => {

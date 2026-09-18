@@ -158,7 +158,7 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
               {cmsField(
                 cms,
                 "description",
-                "Trial orders or 12- and 24-delivery programmes — Irrevocable LC at Sight, Irrevocable Transferable Revolving LC, SBLC for large transactions, escrow where your corridor allows. Inspection, CIF insurance, secure buyer data, and payment through your bank on compliant documents.",
+                "Finekarts supplies edible oils, sugar, rice, beans, and related bulk cargoes for sale to qualified international buyers — backed by inspection, logistics, trade insurance where agreed, and bankable structures such as documentary LC and standby support for longer programmes.",
               )}
             </p>
           </Reveal>
@@ -270,7 +270,7 @@ export function ConnectionSection({
                 {cmsField(
                   cms,
                   "body2",
-                  "Supplier relationships stay private. We structure Irrevocable LC, Transferable Revolving LC for multi-delivery contracts, SBLC backup, and optional escrow — with buyer data protected and banks paying in full on compliant shipment documents.",
+                  "Supplier relationships stay private. We highlight verification, inspection, logistics, trade insurance where agreed, and ICC-aligned bankable payment structures.",
                 )}
               </p>
             </Reveal>

@@ -2,7 +2,7 @@ export const RESOURCES_PILLARS = [
   {
     id: "banking",
     title: "Banking & SPA",
-    summary: "Trial, 12- and 24-delivery programmes — Irrevocable LC, Transferable Revolving LC, SBLC, escrow.",
+    summary: "PSA banking clauses, programme schedules, documentary credits, and trade insurance.",
     icon: "bank",
     accent: {
       main: "#1b7a4a",
@@ -157,7 +157,7 @@ export const RESOURCES_TRADE_PRIORITY_LINKS = [
   {
     href: "/dispute-resolution",
     label: "Dispute resolution",
-    note: "ICC-aligned process, responsibilities, and PSA documentation duties",
+    note: "Commercial resolution, contract roles, and documentation expectations",
   },
   {
     href: "/logistics",
