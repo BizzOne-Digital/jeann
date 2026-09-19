@@ -151,19 +151,24 @@ export async function getAdminPageForEditor(slug: string): Promise<EditablePage 
   const registry = getRegistryPage(slug);
   if (!registry) return null;
 
-  const live = await getPublishedPage(slug);
   const stored = await getEditablePage(slug);
-  const base = live ?? (stored ?? mergePage(registry));
+  const live = await getPublishedPage(slug);
+  // Draft/archived copy lives in Mongo only — do not show registry defaults in the editor.
+  const contentBase =
+    stored && stored.status !== "published"
+      ? stored
+      : (live ?? stored ?? mergePage(registry));
 
   const registryBySection = new Map(registry.sections.map((s) => [s.id, s]));
 
   return {
-    ...base,
-    title: stored?.title ?? base.title,
-    seoTitle: stored?.seoTitle ?? base.seoTitle,
-    seoDescription: stored?.seoDescription ?? base.seoDescription,
-    status: stored?.status ?? base.status,
-    sections: base.sections.map((section) => {
+    slug: registry.slug,
+    title: stored?.title ?? contentBase.title,
+    path: registry.path,
+    seoTitle: stored?.seoTitle ?? contentBase.seoTitle,
+    seoDescription: stored?.seoDescription ?? contentBase.seoDescription,
+    status: stored?.status ?? contentBase.status ?? "published",
+    sections: contentBase.sections.map((section) => {
       const reg = registryBySection.get(section.id) ?? section;
       return {
         ...section,

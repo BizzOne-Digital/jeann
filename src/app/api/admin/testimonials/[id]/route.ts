@@ -4,6 +4,7 @@ import { requireAdminApiSession } from "@/lib/admin/require-admin-api";
 import { serializeTestimonial } from "@/lib/admin/testimonial-serializer";
 import { adminTestimonialSchema } from "@/lib/admin/testimonial-validation";
 import { tryConnectMongo } from "@/lib/db/mongoose";
+import { revalidateTestimonialsPublic } from "@/lib/content/revalidate-marketing";
 
 export const runtime = "nodejs";
 
@@ -61,6 +62,7 @@ export async function PUT(request: NextRequest, context: RouteContext) {
       return NextResponse.json({ error: "Testimonial not found." }, { status: 404 });
     }
 
+    revalidateTestimonialsPublic();
     return NextResponse.json({ ok: true, item: serializeTestimonial(doc) });
   } catch (error) {
     console.error("[admin/testimonials/:id PUT]", error);
@@ -87,6 +89,7 @@ export async function DELETE(_request: NextRequest, context: RouteContext) {
     if (result.deletedCount === 0) {
       return NextResponse.json({ error: "Testimonial not found." }, { status: 404 });
     }
+    revalidateTestimonialsPublic();
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("[admin/testimonials/:id DELETE]", error);

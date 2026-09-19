@@ -3,6 +3,7 @@ import { requireAdminApiSession } from "@/lib/admin/require-admin-api";
 import { serializeTeamFieldDefinition, serializeTeamMember } from "@/lib/admin/team-serializer";
 import { adminTeamSchema } from "@/lib/admin/team-validation";
 import { tryConnectMongo } from "@/lib/db/mongoose";
+import { revalidateMarketingPath } from "@/lib/content/revalidate-marketing";
 
 export const runtime = "nodejs";
 
@@ -61,6 +62,7 @@ export async function POST(request: NextRequest) {
       photo: parsed.data.photo || undefined,
       customFields: parsed.data.customFields,
     });
+    revalidateMarketingPath("/team");
     return NextResponse.json({ ok: true, item: serializeTeamMember(doc.toObject()) });
   } catch (error) {
     console.error("[admin/team POST]", error);

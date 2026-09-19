@@ -4,6 +4,7 @@ import { teamFieldKeyFromLabel } from "@/lib/admin/team-field-key";
 import { serializeTeamFieldDefinition } from "@/lib/admin/team-serializer";
 import { adminTeamFieldSchema } from "@/lib/admin/team-validation";
 import { tryConnectMongo } from "@/lib/db/mongoose";
+import { revalidateMarketingPath } from "@/lib/content/revalidate-marketing";
 
 export const runtime = "nodejs";
 
@@ -58,6 +59,7 @@ export async function POST(request: NextRequest) {
       label: parsed.data.label.trim(),
       displayOrder: count,
     });
+    revalidateMarketingPath("/team");
     return NextResponse.json({ ok: true, field: serializeTeamFieldDefinition(doc.toObject()) });
   } catch (error) {
     const code = (error as { code?: number }).code;
@@ -89,6 +91,7 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "Field not found." }, { status: 404 });
     }
     await TeamMember.updateMany({}, { $unset: { [`customFields.${key}`]: "" } });
+    revalidateMarketingPath("/team");
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("[admin/team/fields DELETE]", error);

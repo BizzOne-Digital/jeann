@@ -10,6 +10,7 @@ import {
 } from "@/lib/admin/site-settings-validation";
 import { tryConnectMongo } from "@/lib/db/mongoose";
 import { SITE_SETTINGS_KEY } from "@/models/SiteSettings";
+import { revalidateMarketingSite } from "@/lib/content/revalidate-marketing";
 
 export const runtime = "nodejs";
 
@@ -64,6 +65,7 @@ export async function PUT(request: NextRequest) {
       { $set: siteSettingsInputToMongo(parsed.data) },
       { upsert: true, new: true },
     ).lean();
+    revalidateMarketingSite();
     return NextResponse.json({ ok: true, settings: serializeSiteSettings(doc) });
   } catch (error) {
     console.error("[admin/settings PUT]", error);

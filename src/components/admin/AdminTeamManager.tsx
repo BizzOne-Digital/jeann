@@ -109,7 +109,13 @@ export function AdminTeamManager({
       return;
     }
 
-    setMessage(editingId ? "Team member updated." : "Team member added.");
+    setMessage(
+      form.status === "published"
+        ? editingId
+          ? "Team member updated — visible on /team after refresh."
+          : "Team member added — visible on /team after refresh."
+        : "Saved as unpublished — set status to Published for the public team page.",
+    );
     setEditingId(null);
     setForm(emptyForm(items.length + 1, fieldDefs));
     await reload();

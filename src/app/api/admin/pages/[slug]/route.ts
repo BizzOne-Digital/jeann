@@ -67,9 +67,7 @@ export async function PUT(
   try {
     const page = await saveEditablePage({ slug, ...parsed.data });
     if (!page) return NextResponse.json({ error: "Page not found." }, { status: 404 });
-    if (page.status === "published") {
-      revalidateMarketingPage(slug);
-    }
+    revalidateMarketingPage(slug);
     return NextResponse.json({ ok: true, page });
   } catch (error) {
     console.error("[admin/pages/:slug PUT]", error);

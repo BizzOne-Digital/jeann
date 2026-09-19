@@ -7,6 +7,10 @@ import {
 } from "@/lib/admin/product-validation";
 import { serializeProduct } from "@/lib/admin/product-serializer";
 import { tryConnectMongo } from "@/lib/db/mongoose";
+import {
+  revalidateMarketingPath,
+  revalidateProductCatalog,
+} from "@/lib/content/revalidate-marketing";
 
 export const runtime = "nodejs";
 
@@ -89,6 +93,7 @@ export async function PUT(request: NextRequest, context: RouteContext) {
       return NextResponse.json({ error: "Product not found." }, { status: 404 });
     }
 
+    revalidateProductCatalog(category.slug, product.slug);
     return NextResponse.json({ ok: true, product: serializeProduct(product, category) });
   } catch (error) {
     console.error("[admin/products/:slug PUT]", error);
@@ -107,13 +112,21 @@ export async function DELETE(_request: NextRequest, context: RouteContext) {
   const { slug } = await context.params;
 
   try {
-    const { Product } = await import("@/models");
-    const result = await Product.updateOne(
+    const { Product, ProductCategory } = await import("@/models");
+    const existing = await Product.findOne({ slug, deletedAt: null }).lean();
+    if (!existing) {
+      return NextResponse.json({ error: "Product not found." }, { status: 404 });
+    }
+    const category = await ProductCategory.findById(existing.categoryId).lean();
+    await Product.updateOne(
       { slug, deletedAt: null },
       { $set: { status: "archived", deletedAt: new Date() } },
     );
-    if (result.matchedCount === 0) {
-      return NextResponse.json({ error: "Product not found." }, { status: 404 });
+    if (category) {
+      revalidateProductCatalog(category.slug, slug);
+    } else {
+      revalidateMarketingPath("/products");
+      revalidateMarketingPath("/");
     }
     return NextResponse.json({ ok: true });
   } catch (error) {

@@ -3,6 +3,7 @@ import { requireAdminApiSession } from "@/lib/admin/require-admin-api";
 import { serializeFaq } from "@/lib/admin/faq-serializer";
 import { adminFaqSchema } from "@/lib/admin/faq-validation";
 import { tryConnectMongo } from "@/lib/db/mongoose";
+import { revalidateFaqPublic } from "@/lib/content/revalidate-marketing";
 
 export const runtime = "nodejs";
 
@@ -50,6 +51,7 @@ export async function POST(request: NextRequest) {
   try {
     const { Faq } = await import("@/models");
     const doc = await Faq.create(parsed.data);
+    revalidateFaqPublic();
     return NextResponse.json({ ok: true, item: serializeFaq(doc.toObject()) });
   } catch (error) {
     console.error("[admin/faqs POST]", error);

@@ -6,12 +6,15 @@ import { getEffectiveSectionFields, getPublishedPage } from "@/lib/content/page-
 import { AboutHub } from "@/components/marketing/AboutHub";
 import { FoodSafetyAgencyMarquee } from "@/components/marketing/FoodSafetyAgencyMarquee";
 import { AboutHero } from "@/components/marketing/AboutSections";
+import { cmsPageMetadata } from "@/lib/content/cms-page-metadata";
 
-export const metadata: Metadata = {
-  title: "About Finekarts",
-  description:
-    "Finekarts Incorporated supplies bulk agricultural commodities for sale to qualified buyers — verification, inspection, logistics, trade insurance, and bankable ICC-aligned transactions.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsPageMetadata("about", {
+    title: "About Finekarts",
+    description:
+      "Finekarts Incorporated supplies bulk agricultural commodities for sale to qualified buyers — verification, inspection, logistics, trade insurance, and bankable ICC-aligned transactions.",
+  });
+}
 
 export default async function AboutPage() {
   const site = getSite();

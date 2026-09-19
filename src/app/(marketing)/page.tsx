@@ -6,6 +6,8 @@ import { getPublishedTestimonials } from "@/lib/content/testimonials-catalog";
 import { FoodSafetyAgencyMarquee } from "@/components/marketing/FoodSafetyAgencyMarquee";
 import { HomeLogisticsImageBand } from "@/components/marketing/HomeLogisticsImageBand";
 import { PartnersHomeTeaser } from "@/components/marketing/PartnerSections";
+import type { Metadata } from "next";
+import { cmsPageMetadata } from "@/lib/content/cms-page-metadata";
 import {
   HomeHero,
   ConnectionSection,
@@ -17,6 +19,14 @@ import {
   ReadyCtaBanner,
   InsightsAndNotes,
 } from "@/components/marketing/HomeSections";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsPageMetadata("home", {
+    title: "Finekarts — Bulk agricultural commodities",
+    description:
+      "Finekarts supplies bulk agricultural commodities to qualified buyers with verification, logistics, and bankable trade terms.",
+  });
+}
 
 export default async function HomePage() {
   const categories = await getPublicCategories();

@@ -3,6 +3,7 @@ import { requireAdminApiSession } from "@/lib/admin/require-admin-api";
 import { serializeTestimonial } from "@/lib/admin/testimonial-serializer";
 import { adminTestimonialSchema } from "@/lib/admin/testimonial-validation";
 import { tryConnectMongo } from "@/lib/db/mongoose";
+import { revalidateTestimonialsPublic } from "@/lib/content/revalidate-marketing";
 
 export const runtime = "nodejs";
 
@@ -64,6 +65,7 @@ export async function POST(request: NextRequest) {
   try {
     const { Testimonial } = await import("@/models");
     const doc = await Testimonial.create(buildTestimonialPayload(parsed.data));
+    revalidateTestimonialsPublic();
     return NextResponse.json({ ok: true, item: serializeTestimonial(doc.toObject()) });
   } catch (error) {
     console.error("[admin/testimonials POST]", error);

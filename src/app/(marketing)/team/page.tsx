@@ -14,11 +14,14 @@ import {
   resolveMarketingHeroImage,
   resolveMarketingHeroYoutube,
 } from "@/lib/marketing/cms-hero";
+import { cmsPageMetadata } from "@/lib/content/cms-page-metadata";
 
-export const metadata: Metadata = {
-  title: "Team",
-  description: "Finekarts leadership and trade desk — photo, name, title, and department.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsPageMetadata("team", {
+    title: "Team",
+    description: "Finekarts leadership and trade desk — photo, name, title, and department.",
+  });
+}
 
 export default async function TeamPage() {
   const [members, fieldDefinitions, cms] = await Promise.all([
