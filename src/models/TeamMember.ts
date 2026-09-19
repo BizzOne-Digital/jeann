@@ -12,6 +12,8 @@ export interface ITeamMember {
   tier: TeamMemberTier;
   bio?: string;
   photo?: string;
+  /** Values for admin-defined fields beyond photo, name, title, department */
+  customFields?: Map<string, string> | Record<string, string>;
   displayOrder: number;
   status: TeamMemberStatus;
 }
@@ -30,6 +32,11 @@ const teamMemberSchema = new Schema<ITeamMember>(
     },
     bio: { type: String },
     photo: { type: String },
+    customFields: {
+      type: Map,
+      of: String,
+      default: undefined,
+    },
     displayOrder: { type: Number, default: 0 },
     status: {
       type: String,

@@ -165,7 +165,7 @@ async function main() {
 
   for (const member of SEED_TEAM) {
     await TeamMember.findOneAndUpdate(
-      { name: member.name, roleTitle: member.roleTitle },
+      { name: member.name },
       {
         name: member.name,
         roleTitle: member.roleTitle,
@@ -173,6 +173,7 @@ async function main() {
         tier: member.tier,
         bio: member.bio,
         photo: member.photo,
+        customFields: member.customFields ?? {},
         displayOrder: member.displayOrder,
         status: member.status,
       },

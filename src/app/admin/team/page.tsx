@@ -1,5 +1,5 @@
 import { requirePortalAccess } from "@/lib/auth/portal-access";
-import { serializeTeamMember } from "@/lib/admin/team-serializer";
+import { serializeTeamFieldDefinition, serializeTeamMember } from "@/lib/admin/team-serializer";
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
 import { PortalPage } from "@/components/portal/PortalPage";
 import { AdminTeamManager } from "@/components/admin/AdminTeamManager";
@@ -12,10 +12,15 @@ export default async function AdminTeamPage() {
   const conn = mongoConfigured ? await tryConnectMongo() : null;
 
   let initialItems: ReturnType<typeof serializeTeamMember>[] = [];
+  let initialFields: ReturnType<typeof serializeTeamFieldDefinition>[] = [];
   if (conn) {
-    const { TeamMember } = await import("@/models");
-    const docs = await TeamMember.find().sort({ displayOrder: 1, name: 1 }).lean();
+    const { TeamMember, TeamMemberFieldDefinition } = await import("@/models");
+    const [docs, fields] = await Promise.all([
+      TeamMember.find().sort({ displayOrder: 1, name: 1 }).lean(),
+      TeamMemberFieldDefinition.find().sort({ displayOrder: 1, label: 1 }).lean(),
+    ]);
     initialItems = docs.map(serializeTeamMember);
+    initialFields = fields.map(serializeTeamFieldDefinition);
   }
 
   return (
@@ -37,7 +42,7 @@ export default async function AdminTeamPage() {
             Team management requires a working MongoDB connection.
           </p>
         ) : (
-          <AdminTeamManager initialItems={initialItems} />
+          <AdminTeamManager initialItems={initialItems} initialFields={initialFields} />
         )}
       </div>
     </PortalPage>

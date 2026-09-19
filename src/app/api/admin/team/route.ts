@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdminApiSession } from "@/lib/admin/require-admin-api";
-import { serializeTeamMember } from "@/lib/admin/team-serializer";
+import { serializeTeamFieldDefinition, serializeTeamMember } from "@/lib/admin/team-serializer";
 import { adminTeamSchema } from "@/lib/admin/team-validation";
 import { tryConnectMongo } from "@/lib/db/mongoose";
 
@@ -15,9 +15,15 @@ export async function GET() {
   }
 
   try {
-    const { TeamMember } = await import("@/models");
-    const items = await TeamMember.find().sort({ displayOrder: 1, name: 1 }).lean();
-    return NextResponse.json({ items: items.map(serializeTeamMember) });
+    const { TeamMember, TeamMemberFieldDefinition } = await import("@/models");
+    const [items, fields] = await Promise.all([
+      TeamMember.find().sort({ displayOrder: 1, name: 1 }).lean(),
+      TeamMemberFieldDefinition.find().sort({ displayOrder: 1, label: 1 }).lean(),
+    ]);
+    return NextResponse.json({
+      items: items.map(serializeTeamMember),
+      fields: fields.map(serializeTeamFieldDefinition),
+    });
   } catch (error) {
     console.error("[admin/team GET]", error);
     return NextResponse.json({ error: "Unable to load team members." }, { status: 500 });
@@ -53,6 +59,7 @@ export async function POST(request: NextRequest) {
       ...parsed.data,
       bio: parsed.data.bio || undefined,
       photo: parsed.data.photo || undefined,
+      customFields: parsed.data.customFields,
     });
     return NextResponse.json({ ok: true, item: serializeTeamMember(doc.toObject()) });
   } catch (error) {

@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHero } from "@/components/marketing/PageHero";
-import { BoardDirectorsSection } from "@/components/marketing/TeamSections";
+import { TeamRosterSection } from "@/components/marketing/TeamSections";
 import { AnimatedSection } from "@/components/motion/AnimatedSection";
 import { Reveal } from "@/components/motion/Reveal";
 import { cmsField } from "@/lib/content/cms-field";
 import { getEffectiveSectionFields, getPublishedPage } from "@/lib/content/page-content";
-import { getPublishedTeamMembers } from "@/lib/content/team-catalog";
+import {
+  getPublishedTeamFieldDefinitions,
+  getPublishedTeamMembers,
+} from "@/lib/content/team-catalog";
 import {
   resolveMarketingHeroImage,
   resolveMarketingHeroYoutube,
@@ -14,28 +17,28 @@ import {
 
 export const metadata: Metadata = {
   title: "Team",
-  description: "Finekarts board of directors — leadership name, position, and department.",
+  description: "Finekarts leadership and trade desk — photo, name, title, and department.",
 };
 
 export default async function TeamPage() {
-  const [members, cms] = await Promise.all([
+  const [members, fieldDefinitions, cms] = await Promise.all([
     getPublishedTeamMembers(),
+    getPublishedTeamFieldDefinitions(),
     getPublishedPage("team"),
   ]);
   const heroFields = getEffectiveSectionFields(cms, "hero");
   const boardIntro = getEffectiveSectionFields(cms, "board-intro");
   const hero = resolveMarketingHeroImage(heroFields, "team");
   const youtubeVideoId = resolveMarketingHeroYoutube(heroFields);
-  const boardMembers = members.filter((m) => m.tier === "board");
 
   return (
     <>
       <PageHero
-        title={cmsField(heroFields, "title", "Our leadership team")}
+        title={cmsField(heroFields, "title", "Our team")}
         description={cmsField(
           heroFields,
           "description",
-          "Board members who oversee Finekarts trade programmes, governance, and strategic direction.",
+          "The people who lead trade programmes, logistics, compliance, and buyer relationships at Finekarts.",
         )}
         imageSrc={hero.src}
         imageAlt={hero.alt}
@@ -53,23 +56,21 @@ export default async function TeamPage() {
       <section className="bg-[#f3f1ec] py-16 lg:py-24">
         <div className="container-page">
           <Reveal>
-            <p className="text-xs font-bold tracking-[0.2em] text-[#c88e4a] uppercase">
-              Board of directors
-            </p>
+            <p className="text-xs font-bold tracking-[0.2em] text-[#c88e4a] uppercase">Our team</p>
             <h2 className="mt-3 text-2xl font-bold text-[#001a3d] sm:text-3xl">
-              {cmsField(boardIntro, "title", "Board members")}
+              {cmsField(boardIntro, "title", "Team members")}
             </h2>
             <p className="mt-4 max-w-3xl text-base font-semibold leading-relaxed text-[#555555]">
               {cmsField(
                 boardIntro,
                 "body",
-                "Each board member is listed with their name, position, and the department they lead.",
+                "Each profile shows photo, name, title, and department. Additional columns can be added from the admin team settings.",
               )}
             </p>
           </Reveal>
 
           <div className="mt-10">
-            <BoardDirectorsSection members={members} />
+            <TeamRosterSection members={members} fieldDefinitions={fieldDefinitions} />
           </div>
 
           <AnimatedSection
@@ -77,7 +78,7 @@ export default async function TeamPage() {
             delay={0.1}
           >
             <p>
-              {boardMembers.length} board member{boardMembers.length === 1 ? "" : "s"} listed
+              {members.length} team member{members.length === 1 ? "" : "s"} listed
             </p>
             <p>
               <Link href="/privacy" className="font-bold text-[#c88e4a] underline">

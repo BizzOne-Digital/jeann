@@ -46,6 +46,7 @@ export async function PUT(request: NextRequest, context: RouteContext) {
           ...parsed.data,
           bio: parsed.data.bio || undefined,
           photo: parsed.data.photo || undefined,
+          customFields: parsed.data.customFields,
         },
       },
       { new: true },

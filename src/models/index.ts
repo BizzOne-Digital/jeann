@@ -97,6 +97,7 @@ export * from "./NewsletterSubscriber";
 export * from "./Page";
 export * from "./BlogPost";
 export * from "./TeamMember";
+export * from "./TeamMemberFieldDefinition";
 export * from "./Testimonial";
 export * from "./Faq";
 export * from "./SiteSettings";
