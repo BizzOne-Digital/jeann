@@ -3,23 +3,26 @@
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { useCallback, useState } from "react";
+import { createContext, useCallback, useContext, useMemo, useState } from "react";
+import type { CmsSectionMap } from "@/lib/content/cms-field";
+import { buildInspectionHubContent } from "@/lib/marketing/inspection-cms";
 import { MediaFieldPair } from "@/components/marketing/MediaFieldPair";
 import { INSPECTIONS_STORY } from "@/lib/content/marketing-pages";
 import { HERO_PAGE_OVERLAY_HORIZONTAL } from "@/lib/marketing/hero-layout";
 import {
-  COMMODITY_INSPECTION_CATEGORIES,
-  DOCUMENTARY_TRADE,
   INSPECTION_HUB_INTRO,
   INSPECTION_PILLARS,
-  INSPECTION_NETWORK,
-  INSPECTION_PROCESS_STEPS,
-  INSPECTION_SERVICES,
-  ORIGIN_DESTINATION,
-  WHY_INDEPENDENT_INSPECTION,
   type InspectionTabId,
 } from "@/lib/content/inspections-content";
 import { cn } from "@/lib/utils/cn";
+
+type InspectionHubContent = ReturnType<typeof buildInspectionHubContent>;
+const InspectionHubContentContext = createContext<InspectionHubContent | null>(null);
+
+function useInspectionHubContent() {
+  const ctx = useContext(InspectionHubContentContext);
+  return ctx ?? buildInspectionHubContent(undefined);
+}
 
 const GALLERY_MOSAIC = [
   {
@@ -130,10 +133,11 @@ function PillarIcon({ type }: { type: string }) {
 function ServicesAccordion() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const reduce = useReducedMotion();
+  const { services } = useInspectionHubContent();
 
   return (
     <div className="divide-y divide-[#e4e0d8] marketing-box rounded-lg">
-      {INSPECTION_SERVICES.map((service, i) => {
+      {services.map((service, i) => {
         const open = openIndex === i;
         return (
           <div key={service.n}>
@@ -275,6 +279,8 @@ function ServicesPanel() {
 }
 
 function CommoditiesPanel() {
+  const { commodities } = useInspectionHubContent();
+
   return (
     <div className="space-y-8">
       <p className="max-w-3xl text-sm leading-relaxed text-[#555555]">
@@ -282,7 +288,7 @@ function CommoditiesPanel() {
         regulatory requirements. Select a category to view products.
       </p>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {COMMODITY_INSPECTION_CATEGORIES.map((cat) => (
+        {commodities.map((cat) => (
           <Link
             key={cat.title}
             href={cat.href}
@@ -313,10 +319,12 @@ function CommoditiesPanel() {
 }
 
 function ProcessPanel() {
+  const { processSteps, whyIndependent } = useInspectionHubContent();
+
   return (
     <div className="space-y-10">
       <ol className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {INSPECTION_PROCESS_STEPS.map((step) => (
+        {processSteps.map((step) => (
           <li
             key={step.step}
             className="rounded-lg border border-[#e4e0d8] bg-[#f9f8f5] p-4"
@@ -333,7 +341,7 @@ function ProcessPanel() {
       <div>
         <p className="text-xs font-semibold tracking-[0.16em] text-[#888] uppercase">Why independent?</p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-          {WHY_INDEPENDENT_INSPECTION.map((item) => (
+          {whyIndependent.map((item) => (
             <article key={item.title} className="marketing-box rounded-lg p-4">
               <h3 className="text-sm font-semibold text-[#001a3d]">{item.title}</h3>
               <p className="mt-1.5 text-xs leading-relaxed text-[#555555]">{item.text}</p>
@@ -366,6 +374,8 @@ function ProcessPanel() {
 }
 
 function NetworkPanel() {
+  const { network, originDestination, documentaryTrade } = useInspectionHubContent();
+
   return (
     <div className="space-y-8">
       <div className="grid gap-4 lg:grid-cols-2">
@@ -380,10 +390,10 @@ function NetworkPanel() {
           />
           <div className="absolute inset-0 bg-[#071525]/78" />
           <div className="relative flex h-full flex-col justify-end p-6">
-            <h3 className="text-lg font-semibold text-white">{ORIGIN_DESTINATION.origin.title}</h3>
-            <p className="mt-2 text-sm text-white/80">{ORIGIN_DESTINATION.origin.intro}</p>
+            <h3 className="text-lg font-semibold text-white">{originDestination.origin.title}</h3>
+            <p className="mt-2 text-sm text-white/80">{originDestination.origin.intro}</p>
             <ul className="mt-4 flex flex-wrap gap-2">
-              {ORIGIN_DESTINATION.origin.places.map((place) => (
+              {originDestination.origin.places.map((place) => (
                 <li
                   key={place}
                   className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs text-white/90"
@@ -406,10 +416,10 @@ function NetworkPanel() {
           />
           <div className="absolute inset-0 bg-[#071525]/78" />
           <div className="relative flex h-full flex-col justify-end p-6">
-            <h3 className="text-lg font-semibold text-white">{ORIGIN_DESTINATION.destination.title}</h3>
-            <p className="mt-2 text-sm text-white/80">{ORIGIN_DESTINATION.destination.intro}</p>
+            <h3 className="text-lg font-semibold text-white">{originDestination.destination.title}</h3>
+            <p className="mt-2 text-sm text-white/80">{originDestination.destination.intro}</p>
             <ul className="mt-4 flex flex-wrap gap-2">
-              {ORIGIN_DESTINATION.destination.places.map((place) => (
+              {originDestination.destination.places.map((place) => (
                 <li
                   key={place}
                   className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs text-white/90"
@@ -424,9 +434,9 @@ function NetworkPanel() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <div>
-          <p className="text-sm text-[#555555]">{INSPECTION_NETWORK.lead}</p>
+          <p className="text-sm text-[#555555]">{network.lead}</p>
           <div className="mt-5 flex flex-wrap gap-2">
-            {INSPECTION_NETWORK.organizations.map((org) => (
+            {network.organizations.map((org) => (
               <span
                 key={org}
                 className="rounded-full border border-[#d5d0c8] bg-white px-4 py-2 text-sm font-semibold text-[#001a3d] shadow-sm"
@@ -435,32 +445,33 @@ function NetworkPanel() {
               </span>
             ))}
           </div>
-          <p className="mt-4 text-xs text-[#777777]">{INSPECTION_NETWORK.selectionNote}</p>
+          <p className="mt-4 text-xs text-[#777777]">{network.selectionNote}</p>
         </div>
 
         <article className="marketing-box rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-[#001a3d]">{DOCUMENTARY_TRADE.title}</h3>
-          <p className="mt-2 text-sm text-[#555555]">{DOCUMENTARY_TRADE.lead}</p>
+          <h3 className="text-lg font-semibold text-[#001a3d]">{documentaryTrade.title}</h3>
+          <p className="mt-2 text-sm text-[#555555]">{documentaryTrade.lead}</p>
           <ul className="mt-4 space-y-2">
-            {DOCUMENTARY_TRADE.contractItems.map((item) => (
+            {documentaryTrade.contractItems.map((item) => (
               <li key={item} className="flex gap-2 text-xs text-[#555555]">
                 <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-[#d4a84b]" />
                 {item}
               </li>
             ))}
           </ul>
-          <p className="mt-4 text-xs text-[#777777]">{DOCUMENTARY_TRADE.note}</p>
+          <p className="mt-4 text-xs text-[#777777]">{documentaryTrade.note}</p>
         </article>
       </div>
 
       <p className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-relaxed text-amber-950">
-        <strong>Important:</strong> {INSPECTION_NETWORK.disclaimer}
+        <strong>Important:</strong> {network.disclaimer}
       </p>
     </div>
   );
 }
 
-export function InspectionHub() {
+export function InspectionHub({ cms }: { cms?: CmsSectionMap }) {
+  const hubContent = useMemo(() => buildInspectionHubContent(cms), [cms]);
   const [activeTab, setActiveTab] = useState<InspectionTabId>("services");
   const reduce = useReducedMotion();
   const story = INSPECTIONS_STORY;
@@ -474,7 +485,7 @@ export function InspectionHub() {
   const panel = PANEL_TITLES[activeTab];
 
   return (
-    <>
+    <InspectionHubContentContext.Provider value={hubContent}>
       {/* Visual opener — objective over warehouse field photography */}
       <section className="relative overflow-hidden py-12 text-white lg:py-16">
         <Image
@@ -633,6 +644,6 @@ export function InspectionHub() {
           </div>
         </div>
       </section>
-    </>
+    </InspectionHubContentContext.Provider>
   );
 }

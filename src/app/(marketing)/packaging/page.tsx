@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { PageHero } from "@/components/marketing/PageHero";
-import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
+import { CmsPageHero } from "@/components/marketing/CmsPageHero";
 import { Reveal } from "@/components/motion/Reveal";
+import { cmsField, cmsLines, cmsSection } from "@/lib/content/cms-field";
+import { collectCmsSections } from "@/lib/content/cms-collect";
+import { cmsPageMetadata } from "@/lib/content/cms-page-metadata";
 import {
   getOrderedPackagingTypes,
   isHomepageFeaturedPackaging,
@@ -14,13 +16,16 @@ import {
   PACKAGING_SELECTION,
 } from "@/lib/content/packaging-content";
 import { PACKAGING_IMAGES } from "@/lib/content/packaging-images";
+import { getPublishedPage } from "@/lib/content/page-content";
 import { buyerPortalHref } from "@/lib/marketing/cta-links";
 
-export const metadata: Metadata = {
-  title: "Packaging types",
-  description:
-    "Packaging and transport modes for international commodity trade — flexitank, tanker vessel, containerized cargo, bulk truck, bulk vessel, bulk railcar, ISO tanks, IBC totes, drums, FIBCs, bulk liners and woven bags.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsPageMetadata("packaging", {
+    title: "Packaging types",
+    description:
+      "Packaging and transport modes for international commodity trade — flexitank, tanker vessel, containerized cargo, bulk truck, bulk vessel, bulk railcar, ISO tanks, IBC totes, drums, FIBCs, bulk liners and woven bags.",
+  });
+}
 
 const CATEGORY_LABELS = {
   transport: "Transport & logistics modes",
@@ -33,42 +38,74 @@ const MODE_LABELS = {
   unpackaged: "Unpackaged / vessel",
 } as const;
 
-export default function PackagingPage() {
+export default async function PackagingPage() {
   const packagingTypes = getOrderedPackagingTypes();
+  const cmsPage = await getPublishedPage("packaging");
+  const cms = collectCmsSections(cmsPage, [
+    "page-intro",
+    "transport-role",
+    "specs-intro",
+    "selection",
+    "cta",
+  ]);
+  const intro = cmsSection(cms, "page-intro");
+  const transport = cmsSection(cms, "transport-role");
+  const specsIntro = cmsSection(cms, "specs-intro");
+  const selection = cmsSection(cms, "selection");
+  const cta = cmsSection(cms, "cta");
 
-  const heroImage = getPageHeroImage("packaging");
+  const transportBoxes = [
+    {
+      title: cmsField(transport, "box1Title", PACKAGING_TRANSPORT_ROLE.boxes[0].title),
+      body: cmsField(transport, "box1Body", PACKAGING_TRANSPORT_ROLE.boxes[0].body),
+    },
+    {
+      title: cmsField(transport, "box2Title", PACKAGING_TRANSPORT_ROLE.boxes[1].title),
+      body: cmsField(transport, "box2Body", PACKAGING_TRANSPORT_ROLE.boxes[1].body),
+    },
+    {
+      title: cmsField(transport, "box3Title", PACKAGING_TRANSPORT_ROLE.boxes[2].title),
+      body: cmsField(transport, "box3Body", PACKAGING_TRANSPORT_ROLE.boxes[2].body),
+    },
+    {
+      title: cmsField(transport, "box4Title", PACKAGING_TRANSPORT_ROLE.boxes[3].title),
+      body: cmsField(transport, "box4Body", PACKAGING_TRANSPORT_ROLE.boxes[3].body),
+    },
+  ];
+
+  const selectionFactors = cmsLines(selection, "factors", PACKAGING_SELECTION.factors);
 
   return (
     <>
-      <PageHero
-        title={PACKAGING_HERO.title}
-        brand={PACKAGING_HERO.eyebrow}
-        description={PACKAGING_HERO.description}
-        imageSrc={heroImage.src}
-        imageAlt={heroImage.alt}
-        primaryCta={PACKAGING_HERO.primaryCta}
-        secondaryCta={PACKAGING_HERO.secondaryCta}
+      <CmsPageHero
+        pageSlug="packaging"
+        defaults={{
+          title: PACKAGING_HERO.title,
+          description: PACKAGING_HERO.description,
+          primaryCta: PACKAGING_HERO.primaryCta,
+          secondaryCta: PACKAGING_HERO.secondaryCta,
+        }}
       />
 
       <section className="bg-[#f3f1ec] marketing-section">
         <div className="container-page">
           <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">
-            {PACKAGING_PAGE_INTRO.title}
+            {cmsField(intro, "title", PACKAGING_PAGE_INTRO.title)}
           </h2>
           <p className="mt-3 max-w-3xl text-base text-[#555555]">
-            {PACKAGING_PAGE_INTRO.description}
+            {cmsField(intro, "description", PACKAGING_PAGE_INTRO.description)}
           </p>
 
           <Reveal className="mt-12">
             <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">
-              {PACKAGING_TRANSPORT_ROLE.title}
+              {cmsField(transport, "title", PACKAGING_TRANSPORT_ROLE.title)}
             </h2>
             <p className="mt-4 max-w-3xl text-base leading-relaxed text-[#555555]">
-              {PACKAGING_TRANSPORT_ROLE.lead}
+              {cmsField(transport, "lead", PACKAGING_TRANSPORT_ROLE.lead)}
             </p>
           </Reveal>
           <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {PACKAGING_TRANSPORT_ROLE.boxes.map((box, index) => (
+            {transportBoxes.map((box, index) => (
               <Reveal key={box.title} delay={index * 0.05}>
                 <article className="h-full marketing-box rounded-lg p-6 shadow-sm">
                   <h3 className="text-sm font-semibold tracking-[0.14em] text-[#c88e4a] uppercase">
@@ -84,10 +121,15 @@ export default function PackagingPage() {
 
       <section id="packaging-types" className="bg-white marketing-section">
         <div className="container-page">
-          <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">Detailed specifications</h2>
+          <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">
+            {cmsField(specsIntro, "title", "Detailed specifications")}
+          </h2>
           <p className="mt-3 max-w-3xl text-base text-[#555555]">
-            Each packaging type below includes typical applications, advantages, suitable commodities
-            and notes where corridor or product confirmation is required.
+            {cmsField(
+              specsIntro,
+              "description",
+              "Each packaging type below includes typical applications, advantages, suitable commodities and notes where corridor or product confirmation is required.",
+            )}
           </p>
 
           <div className="mt-12 space-y-16">
@@ -216,10 +258,14 @@ export default function PackagingPage() {
 
       <section className="bg-[#f3f1ec] marketing-section">
         <div className="container-page">
-          <h2 className="text-2xl font-semibold text-[#001a3d]">{PACKAGING_SELECTION.title}</h2>
-          <p className="mt-3 max-w-3xl text-base text-[#555555]">{PACKAGING_SELECTION.lead}</p>
+          <h2 className="text-2xl font-semibold text-[#001a3d]">
+            {cmsField(selection, "title", PACKAGING_SELECTION.title)}
+          </h2>
+          <p className="mt-3 max-w-3xl text-base text-[#555555]">
+            {cmsField(selection, "lead", PACKAGING_SELECTION.lead)}
+          </p>
           <ul className="mt-6 grid gap-2 sm:grid-cols-2">
-            {PACKAGING_SELECTION.factors.map((factor) => (
+            {selectionFactors.map((factor) => (
               <li key={factor} className="flex gap-2 text-sm text-[#555555]">
                 <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#d4a84b]" />
                 {factor}
@@ -254,10 +300,14 @@ export default function PackagingPage() {
         <div className="absolute inset-0 bg-[#071525]/88" />
         <div className="container-page relative">
           <p className="text-sm font-semibold tracking-[0.18em] text-[#d4a84b] uppercase">
-            {PACKAGING_CTA.tagline}
+            {cmsField(cta, "tagline", PACKAGING_CTA.tagline)}
           </p>
-          <h2 className="mt-3 text-2xl font-semibold sm:text-3xl">{PACKAGING_CTA.title}</h2>
-          <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/80">{PACKAGING_CTA.lead}</p>
+          <h2 className="mt-3 text-2xl font-semibold sm:text-3xl">
+            {cmsField(cta, "title", PACKAGING_CTA.title)}
+          </h2>
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/80">
+            {cmsField(cta, "lead", PACKAGING_CTA.lead)}
+          </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href={buyerPortalHref("/portal/buyer/new-request")}

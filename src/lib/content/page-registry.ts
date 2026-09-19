@@ -1,80 +1,17 @@
-export type PageFieldType = "text" | "textarea" | "url" | "image";
+export type {
+  PageFieldType,
+  PageFieldDef,
+  PageSectionDef,
+  PageRegistryEntry,
+  EditablePage,
+} from "@/lib/content/page-registry-section";
+import { buildPageSection } from "@/lib/content/page-registry-section";
+import type { PageRegistryEntry } from "@/lib/content/page-registry-section";
+import { mergeMarketingPageBodies } from "@/lib/content/page-registry-bodies";
 
-export type PageFieldDef = {
-  key: string;
-  label: string;
-  type: PageFieldType;
-};
+const section = buildPageSection;
 
-export type PageSectionDef = {
-  id: string;
-  label: string;
-  fields: PageFieldDef[];
-  defaults: Record<string, string>;
-};
-
-export type PageRegistryEntry = {
-  slug: string;
-  title: string;
-  path: string;
-  seoTitle: string;
-  seoDescription: string;
-  sections: PageSectionDef[];
-};
-
-export type EditablePage = {
-  slug: string;
-  title: string;
-  path: string;
-  seoTitle: string;
-  seoDescription: string;
-  status: "draft" | "published" | "archived";
-  sections: PageSectionDef[];
-};
-
-function section(
-  id: string,
-  label: string,
-  defaultsIn: Record<string, string>,
-): PageSectionDef {
-  const defaults =
-    id === "hero"
-      ? {
-          heroImage: "",
-          youtubeVideoId: "",
-          ...defaultsIn,
-        }
-      : defaultsIn;
-
-  const fields: PageFieldDef[] = Object.keys(defaults).map((key) => ({
-    key,
-    label: key
-      .replace(/([A-Z])/g, " $1")
-      .replace(/^./, (c) => c.toUpperCase())
-      .replace(/Cta/g, "CTA")
-      .replace(/Hero image/i, "Hero background image")
-      .replace(/Youtube video id/i, "YouTube video link or ID")
-      .replace(/([0-9]+)/g, " $1")
-      .trim(),
-    type:
-      /image|photo|heroImage|thumbnail|cover/i.test(key)
-        ? "image"
-        : /youtube/i.test(key)
-          ? "url"
-          : key.includes("description") ||
-              key.includes("body") ||
-              key.includes("note") ||
-              key.includes("lead") ||
-              key.includes("content")
-            ? "textarea"
-            : key.includes("Href") || key === "path"
-              ? "url"
-              : "text",
-  }));
-  return { id, label, fields, defaults };
-}
-
-export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
+const BASE_MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
   {
     slug: "home",
     title: "Homepage",
@@ -300,13 +237,13 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
     seoDescription: "Bulk agricultural commodity categories and example specifications.",
     sections: [
       section("hero", "Hero", {
-        title: "Products we sell",
+        title: "Commodities we trade",
         description:
-          "Bulk agricultural commodities listed for sale — plus on-demand programmes when your volume and corridor fit our supply calendar. Confirmed grades, origins, and packaging are agreed per enquiry.",
-        primaryCtaLabel: "Submit purchase request →",
+          "Bulk supply only — browse edible oils, sugar, rice & grains, beans, coffee, spices, and related programmes. Minimum order volumes apply by category. Specifications are confirmed with the trade desk.",
+        primaryCtaLabel: "Click here to ORDER →",
         primaryCtaHref: "/login",
-        secondaryCtaLabel: "Trade assurance",
-        secondaryCtaHref: "/dispute-resolution",
+        secondaryCtaLabel: "Browse catalog",
+        secondaryCtaHref: "#catalog",
       }),
     ],
   },
@@ -566,6 +503,8 @@ export const MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
     ],
   },
 ];
+
+export const MARKETING_PAGE_REGISTRY = mergeMarketingPageBodies(BASE_MARKETING_PAGE_REGISTRY);
 
 export function getRegistryPage(slug: string): PageRegistryEntry | undefined {
   return MARKETING_PAGE_REGISTRY.find((p) => p.slug === slug);

@@ -1,58 +1,47 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { PageHero } from "@/components/marketing/PageHero";
+import { CmsPageHero } from "@/components/marketing/CmsPageHero";
 import {
   LogisticsFullBleedBand,
   LogisticsPhotoBackdropSection,
   LogisticsSplitPanel,
 } from "@/components/marketing/LogisticsVisuals";
-import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
 import { MarketingStorySection } from "@/components/marketing/MarketingStorySection";
 import { Reveal } from "@/components/motion/Reveal";
+import { collectCmsSections } from "@/lib/content/cms-collect";
+import { cmsPageMetadata } from "@/lib/content/cms-page-metadata";
 import {
   LOGISTICS_PAGE_SECTION_IMAGES,
   LOGISTICS_SHIP_TRUCK_BAND,
 } from "@/lib/content/logistics-images";
-import { LOGISTICS_STORY } from "@/lib/content/marketing-pages";
-import {
-  CONTRACT_TO_CARGO_STEPS,
-  DELIVERY_RELIABILITY,
-  ETA_MONITORING,
-  COMMERCIAL_INCOTERMS_PRIMARY_NOTE,
-  FOB_CIF_TERMS,
-  GLOBAL_SHIPPING_COVERAGE,
-  ICC_INCOTERMS_2020_URL,
-  INCOTERMS_DISCLAIMER,
-  LOGISTICS_CLOSING,
-  LOGISTICS_CTA,
-  LOGISTICS_HERO,
-  PORT_TO_PORT_CHAIN,
-  REAL_TIME_TRACKING,
-  SHIPMENT_COORDINATION,
-  SHIPPING_DOCUMENTATION,
-  SHIPPING_MODES,
-} from "@/lib/content/logistics-content";
+import { LOGISTICS_HERO } from "@/lib/content/logistics-content";
+import { getPublishedPage } from "@/lib/content/page-content";
+import { buildLogisticsContent, LOGISTICS_CMS_SECTION_IDS } from "@/lib/marketing/logistics-cms";
 
-export const metadata: Metadata = {
-  title: "Global Shipping & Logistics",
-  description:
-    "Finekarts coordinates international commodity shipping from origin to destination — FOB and CIF terms, bulk and container programmes, shipment tracking, documentation and port-to-port logistics.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsPageMetadata("logistics", {
+    title: "Global Shipping & Logistics",
+    description:
+      "Finekarts coordinates international commodity shipping from origin to destination — FOB and CIF terms, bulk and container programmes, shipment tracking, documentation and port-to-port logistics.",
+  });
+}
 
-export default function LogisticsPage() {
-  const story = LOGISTICS_STORY;
-  const heroImage = getPageHeroImage("logistics");
+export default async function LogisticsPage() {
+  const cmsPage = await getPublishedPage("logistics");
+  const cms = collectCmsSections(cmsPage, [...LOGISTICS_CMS_SECTION_IDS]);
+  const content = buildLogisticsContent(cms);
+  const story = content.story;
 
   return (
     <>
-      <PageHero
-        title={LOGISTICS_HERO.title}
-        brand={LOGISTICS_HERO.eyebrow}
-        description={LOGISTICS_HERO.description}
-        imageSrc={heroImage.src}
-        imageAlt={heroImage.alt}
-        primaryCta={LOGISTICS_HERO.primaryCta}
-        secondaryCta={LOGISTICS_HERO.secondaryCta}
+      <CmsPageHero
+        pageSlug="logistics"
+        defaults={{
+          title: LOGISTICS_HERO.title,
+          description: LOGISTICS_HERO.description,
+          primaryCta: LOGISTICS_HERO.primaryCta,
+          secondaryCta: LOGISTICS_HERO.secondaryCta,
+        }}
       />
 
       <MarketingStorySection
@@ -73,11 +62,11 @@ export default function LogisticsPage() {
           <LogisticsSplitPanel image={LOGISTICS_PAGE_SECTION_IMAGES.globalCoverage} reversed>
             <div>
               <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">
-                {GLOBAL_SHIPPING_COVERAGE.title}
+                {content.globalCoverage.title}
               </h2>
-              <p className="mt-3 text-base text-[#555555]">{GLOBAL_SHIPPING_COVERAGE.lead}</p>
+              <p className="mt-3 text-base text-[#555555]">{content.globalCoverage.lead}</p>
               <div className="mt-6 flex flex-wrap gap-2">
-                {GLOBAL_SHIPPING_COVERAGE.incoterms.map((term) => (
+                {content.globalCoverage.incoterms.map((term) => (
                   <span
                     key={term}
                     className="rounded-full border border-[#d5d0c8] bg-white px-4 py-2 text-sm font-medium text-[#001a3d]"
@@ -86,14 +75,14 @@ export default function LogisticsPage() {
                   </span>
                 ))}
               </div>
-              <p className="mt-6 text-sm text-[#555555]">{GLOBAL_SHIPPING_COVERAGE.note}</p>
+              <p className="mt-6 text-sm text-[#555555]">{content.globalCoverage.note}</p>
             </div>
           </LogisticsSplitPanel>
 
           <div className="mt-10">
             <p className="text-sm font-semibold text-[#001a3d]">
               <Link
-                href={ICC_INCOTERMS_2020_URL}
+                href={content.incotermsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[#c88e4a] underline decoration-[#c88e4a]/40 underline-offset-4 hover:text-[#a86f2e]"
@@ -102,7 +91,7 @@ export default function LogisticsPage() {
               </Link>
             </p>
             <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {FOB_CIF_TERMS.map((term) => (
+              {content.fobCifTerms.map((term) => (
                 <article key={term.code} className="marketing-box h-full rounded-lg p-6 sm:p-8">
                   <p className="text-xs font-semibold tracking-[0.2em] text-[#c88e4a] uppercase">
                     {term.code}
@@ -114,7 +103,7 @@ export default function LogisticsPage() {
             </div>
           </div>
           <p className="mt-6 text-sm font-medium text-[#001a3d]">
-            {COMMERCIAL_INCOTERMS_PRIMARY_NOTE}
+            {content.incotermsPrimaryNote}
           </p>
         </div>
       </section>
@@ -126,26 +115,26 @@ export default function LogisticsPage() {
           <LogisticsSplitPanel image={LOGISTICS_PAGE_SECTION_IMAGES.realTimeTracking}>
             <div className="space-y-8">
               <article>
-                <h2 className="text-2xl font-semibold text-[#001a3d]">{REAL_TIME_TRACKING.title}</h2>
-                <p className="mt-3 text-sm text-[#555555]">{REAL_TIME_TRACKING.lead}</p>
+                <h2 className="text-2xl font-semibold text-[#001a3d]">{content.tracking.title}</h2>
+                <p className="mt-3 text-sm text-[#555555]">{content.tracking.lead}</p>
                 <ul className="mt-4 space-y-2">
-                  {REAL_TIME_TRACKING.items.map((item) => (
+                  {content.tracking.items.map((item) => (
                     <li key={item} className="flex gap-2 text-sm text-[#555555]">
                       <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#d4a84b]" />
                       {item}
                     </li>
                   ))}
                 </ul>
-                <p className="mt-4 text-sm text-[#555555]">{REAL_TIME_TRACKING.note}</p>
+                <p className="mt-4 text-sm text-[#555555]">{content.tracking.note}</p>
               </article>
               <article className="marketing-box rounded-lg p-6 sm:p-8">
-                <h2 className="text-xl font-semibold text-[#001a3d]">{ETA_MONITORING.title}</h2>
-                <p className="mt-3 text-sm text-[#555555]">{ETA_MONITORING.lead}</p>
+                <h2 className="text-xl font-semibold text-[#001a3d]">{content.eta.title}</h2>
+                <p className="mt-3 text-sm text-[#555555]">{content.eta.lead}</p>
                 <p className="mt-4 rounded-md bg-[#f9f8f5] px-4 py-3 text-xs font-medium leading-relaxed text-[#001a3d]">
-                  {ETA_MONITORING.flow}
+                  {content.eta.flow}
                 </p>
-                <p className="mt-4 text-sm text-[#555555]">{ETA_MONITORING.note}</p>
-                <p className="mt-6 text-sm font-semibold text-[#c88e4a]">{ETA_MONITORING.goal}</p>
+                <p className="mt-4 text-sm text-[#555555]">{content.eta.note}</p>
+                <p className="mt-6 text-sm font-semibold text-[#c88e4a]">{content.eta.goal}</p>
               </article>
             </div>
           </LogisticsSplitPanel>
@@ -156,10 +145,10 @@ export default function LogisticsPage() {
         <div className="container-page">
           <LogisticsSplitPanel image={LOGISTICS_PAGE_SECTION_IMAGES.portToPort} reversed>
             <div>
-              <h2 className="text-2xl font-semibold text-[#001a3d]">{PORT_TO_PORT_CHAIN.title}</h2>
-              <p className="mt-3 text-base text-[#555555]">{PORT_TO_PORT_CHAIN.lead}</p>
+              <h2 className="text-2xl font-semibold text-[#001a3d]">{content.portChain.title}</h2>
+              <p className="mt-3 text-base text-[#555555]">{content.portChain.lead}</p>
               <ol className="mt-8 space-y-3">
-                {PORT_TO_PORT_CHAIN.steps.map((step, index) => (
+                {content.portChain.steps.map((step, index) => (
                   <li key={step} className="flex items-start gap-4">
                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#071525] text-xs font-semibold text-[#d4a84b]">
                       {index + 1}
@@ -168,7 +157,7 @@ export default function LogisticsPage() {
                   </li>
                 ))}
               </ol>
-              <p className="mt-6 text-sm text-[#555555]">{PORT_TO_PORT_CHAIN.note}</p>
+              <p className="mt-6 text-sm text-[#555555]">{content.portChain.note}</p>
             </div>
           </LogisticsSplitPanel>
         </div>
@@ -181,13 +170,12 @@ export default function LogisticsPage() {
 
       <section className="bg-white marketing-section">
         <div className="container-page">
-          <h2 className="text-2xl font-semibold text-[#001a3d]">Bulk & container shipping</h2>
+          <h2 className="text-2xl font-semibold text-[#001a3d]">{content.shippingModesIntro.title}</h2>
           <p className="mt-3 max-w-3xl text-sm text-[#555555]">
-            Depending on the commodity and order requirements, Finekarts can coordinate appropriate
-            shipping solutions including:
+            {content.shippingModesIntro.description}
           </p>
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {SHIPPING_MODES.map((mode, index) => (
+            {content.shippingModes.map((mode, index) => (
               <Reveal key={mode.title} delay={index * 0.03}>
                 <article className="h-full marketing-box rounded-lg p-5">
                   <h3 className="font-semibold text-[#001a3d]">{mode.title}</h3>
@@ -203,18 +191,18 @@ export default function LogisticsPage() {
         <div className="container-page">
           <LogisticsSplitPanel image={LOGISTICS_PAGE_SECTION_IMAGES.documentation}>
             <div>
-              <h2 className="text-2xl font-semibold text-[#001a3d]">{SHIPPING_DOCUMENTATION.title}</h2>
-              <p className="mt-3 text-base text-[#555555]">{SHIPPING_DOCUMENTATION.lead}</p>
-              <p className="mt-4 text-sm font-medium text-[#001a3d]">{SHIPPING_DOCUMENTATION.intro}</p>
+              <h2 className="text-2xl font-semibold text-[#001a3d]">{content.documentation.title}</h2>
+              <p className="mt-3 text-base text-[#555555]">{content.documentation.lead}</p>
+              <p className="mt-4 text-sm font-medium text-[#001a3d]">{content.documentation.intro}</p>
               <ul className="mt-4 grid gap-2 sm:grid-cols-2">
-                {SHIPPING_DOCUMENTATION.items.map((item) => (
+                {content.documentation.items.map((item) => (
                   <li key={item} className="flex gap-2 text-sm text-[#555555]">
                     <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#d4a84b]" />
                     {item}
                   </li>
                 ))}
               </ul>
-              <p className="mt-6 text-sm text-[#555555]">{SHIPPING_DOCUMENTATION.note}</p>
+              <p className="mt-6 text-sm text-[#555555]">{content.documentation.note}</p>
             </div>
           </LogisticsSplitPanel>
         </div>
@@ -225,18 +213,18 @@ export default function LogisticsPage() {
           <LogisticsSplitPanel image={LOGISTICS_PAGE_SECTION_IMAGES.coordination} reversed>
             <div className="grid gap-8">
               <article className="marketing-box rounded-lg p-6 sm:p-8">
-                <h2 className="text-xl font-semibold text-[#001a3d]">{SHIPMENT_COORDINATION.title}</h2>
-                <p className="mt-3 text-sm text-[#555555]">{SHIPMENT_COORDINATION.lead}</p>
+                <h2 className="text-xl font-semibold text-[#001a3d]">{content.coordination.title}</h2>
+                <p className="mt-3 text-sm text-[#555555]">{content.coordination.lead}</p>
                 <p className="mt-4 rounded-md bg-[#f9f8f5] px-4 py-3 text-xs font-medium leading-relaxed text-[#001a3d]">
-                  {SHIPMENT_COORDINATION.parties}
+                  {content.coordination.parties}
                 </p>
-                <p className="mt-4 text-sm text-[#555555]">{SHIPMENT_COORDINATION.note}</p>
+                <p className="mt-4 text-sm text-[#555555]">{content.coordination.note}</p>
               </article>
               <article>
-                <h2 className="text-xl font-semibold text-[#001a3d]">{DELIVERY_RELIABILITY.title}</h2>
-                <p className="mt-3 text-sm text-[#555555]">{DELIVERY_RELIABILITY.lead}</p>
+                <h2 className="text-xl font-semibold text-[#001a3d]">{content.reliability.title}</h2>
+                <p className="mt-3 text-sm text-[#555555]">{content.reliability.lead}</p>
                 <ul className="mt-4 space-y-2">
-                  {DELIVERY_RELIABILITY.items.map((item) => (
+                  {content.reliability.items.map((item) => (
                     <li key={item} className="flex gap-2 text-sm text-[#555555]">
                       <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#d4a84b]" />
                       {item}
@@ -244,10 +232,10 @@ export default function LogisticsPage() {
                   ))}
                 </ul>
                 <p className="mt-4 text-sm font-semibold text-[#001a3d]">
-                  {DELIVERY_RELIABILITY.commitment}
+                  {content.reliability.commitment}
                 </p>
                 <p className="mt-4 text-xs leading-relaxed text-[#777777]">
-                  {DELIVERY_RELIABILITY.disclaimer}
+                  {content.reliability.disclaimer}
                 </p>
               </article>
             </div>
@@ -256,13 +244,12 @@ export default function LogisticsPage() {
       </section>
 
       <LogisticsPhotoBackdropSection image={LOGISTICS_PAGE_SECTION_IMAGES.contractToCargo}>
-        <h2 className="text-2xl font-semibold sm:text-3xl">From contract to cargo</h2>
+        <h2 className="text-2xl font-semibold sm:text-3xl">{content.contractBand.title}</h2>
         <p className="mt-3 max-w-3xl text-sm text-white/75">
-          Finekarts integrates commodity sourcing, inspection, documentation and international shipping
-          into one coordinated trading process.
+          {content.contractBand.lead}
         </p>
         <ol className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {CONTRACT_TO_CARGO_STEPS.map((step) => (
+          {content.contractCargoSteps.map((step) => (
             <li
               key={step.step}
               className="rounded-lg border border-white/15 bg-[#071525]/45 p-5 shadow-lg backdrop-blur-md"
@@ -284,12 +271,12 @@ export default function LogisticsPage() {
             aspectClassName="aspect-[16/10]"
           >
             <div>
-              <h2 className="text-2xl font-semibold text-[#001a3d]">{LOGISTICS_CLOSING.title}</h2>
-              <p className="mt-3 text-base text-[#555555]">{LOGISTICS_CLOSING.lead}</p>
-              <p className="mt-4 text-sm leading-relaxed text-[#555555]">{LOGISTICS_CLOSING.body}</p>
-              <p className="mt-6 text-lg font-semibold text-[#001a3d]">{LOGISTICS_CLOSING.tagline}</p>
+              <h2 className="text-2xl font-semibold text-[#001a3d]">{content.closing.title}</h2>
+              <p className="mt-3 text-base text-[#555555]">{content.closing.lead}</p>
+              <p className="mt-4 text-sm leading-relaxed text-[#555555]">{content.closing.body}</p>
+              <p className="mt-6 text-lg font-semibold text-[#001a3d]">{content.closing.tagline}</p>
               <div className="mt-6 flex flex-wrap gap-2">
-                {LOGISTICS_CLOSING.badges.map((badge) => (
+                {content.closing.badges.map((badge) => (
                   <span
                     key={badge}
                     className="rounded-full border border-[#d5d0c8] bg-[#f9f8f5] px-4 py-2 text-sm font-medium text-[#001a3d]"
@@ -298,7 +285,7 @@ export default function LogisticsPage() {
                   </span>
                 ))}
               </div>
-              <p className="mt-8 text-xs leading-relaxed text-[#777777]">{INCOTERMS_DISCLAIMER}</p>
+              <p className="mt-8 text-xs leading-relaxed text-[#777777]">{content.incotermsDisclaimer}</p>
             </div>
           </LogisticsSplitPanel>
         </div>
@@ -309,9 +296,9 @@ export default function LogisticsPage() {
         className="relative overflow-hidden bg-[#071525] py-16 text-white lg:py-20"
       >
         <div className="container-page relative">
-          <h2 className="text-2xl font-semibold sm:text-3xl">{LOGISTICS_CTA.title}</h2>
-          <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/80">{LOGISTICS_CTA.lead}</p>
-          <p className="mt-4 text-sm text-white/70">Include: {LOGISTICS_CTA.fields.join(" · ")}</p>
+          <h2 className="text-2xl font-semibold sm:text-3xl">{content.cta.title}</h2>
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/80">{content.cta.lead}</p>
+          <p className="mt-4 text-sm text-white/70">Include: {content.cta.fields.join(" · ")}</p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/login"

@@ -15,7 +15,7 @@ export default async function AdminWebsitePagesPage() {
   return (
     <PortalPage
       title="Website Pages"
-      description="Edit public page heroes, sections, CTAs, and SEO. Changes apply to the live site when status is Published."
+      description="Edit marketing page copy section by section (heroes, body text, CTAs, SEO). Status must be Published. Product rows: Admin → Products. Packaging types: Admin → Packaging. Payment tables: Admin → Payment Terms. Legal PDFs: Admin → Terms & Policies."
     >
       <div className="space-y-4">
         <p className="text-sm text-[var(--stone)]">
@@ -43,7 +43,9 @@ export default async function AdminWebsitePagesPage() {
           }))}
         />
         <p className="text-sm text-[var(--stone)]">
-          Tip: open a page, edit each section, set status to <strong>Published</strong>, then save.
+          Tip: open a page, edit each section, set status to <strong>Published</strong>, then save. Long
+          lists use one line per bullet in the textarea. Dispute, logistics, inspections, verification,
+          packaging, and resources now include full section lists — scroll the editor for every block.
         </p>
       </div>
     </PortalPage>

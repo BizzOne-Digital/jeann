@@ -2,15 +2,12 @@
 
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { useCallback, useState } from "react";
+import { createContext, useCallback, useContext, useMemo, useState } from "react";
+import type { CmsSectionMap } from "@/lib/content/cms-field";
+import { buildVerificationHubContent } from "@/lib/marketing/verification-cms";
 import {
-  GLOBAL_VERIFICATION_NETWORK,
-  REAL_TIME_INTELLIGENCE,
-  VERIFICATION_FRAMEWORK_STEPS,
   VERIFICATION_HUB_INTRO,
   VERIFICATION_PILLARS,
-  VERIFICATION_REPORT_SECTIONS,
-  VERIFICATION_SERVICES,
   type VerificationPillarId,
   type VerificationService,
 } from "@/lib/content/verification-content";
@@ -35,7 +32,23 @@ const PANEL_TITLES: Record<VerificationPillarId, { eyebrow: string; title: strin
   },
 };
 
-const SERVICE_BY_NUMBER = new Map(VERIFICATION_SERVICES.map((service) => [service.n, service]));
+type VerificationHubCtx = ReturnType<typeof buildVerificationHubContent> & {
+  serviceByNumber: Map<number, VerificationService>;
+};
+
+const VerificationHubContext = createContext<VerificationHubCtx | null>(null);
+
+function useVerificationHub() {
+  const ctx = useContext(VerificationHubContext);
+  if (!ctx) {
+    const hub = buildVerificationHubContent(undefined);
+    return {
+      ...hub,
+      serviceByNumber: new Map(hub.services.map((service) => [service.n, service])),
+    };
+  }
+  return ctx;
+}
 
 function PillarIcon({ type }: { type: string }) {
   const cls = "h-6 w-6";
@@ -209,14 +222,18 @@ function ServiceBody({ service }: { service: VerificationService }) {
   );
 }
 
-function servicesForPillar(pillarId: VerificationPillarId) {
+function servicesForPillar(
+  pillarId: VerificationPillarId,
+  serviceByNumber: Map<number, VerificationService>,
+) {
   const pillar = VERIFICATION_PILLARS.find((item) => item.id === pillarId)!;
   return pillar.serviceNumbers
-    .map((n) => SERVICE_BY_NUMBER.get(n))
+    .map((n) => serviceByNumber.get(n))
     .filter((service): service is VerificationService => Boolean(service));
 }
 
 function RegistrationPanel() {
+  const { globalNetwork, serviceByNumber } = useVerificationHub();
   const pillar = VERIFICATION_PILLARS[0];
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-start lg:gap-12">
@@ -225,10 +242,10 @@ function RegistrationPanel() {
           src={pillar.image}
           alt={pillar.imageAlt}
           eyebrow="Global coverage"
-          caption={GLOBAL_VERIFICATION_NETWORK.lead}
+          caption={globalNetwork.lead}
         />
         <div className="flex flex-wrap gap-2">
-          {GLOBAL_VERIFICATION_NETWORK.regions.map((region) => (
+          {globalNetwork.regions.map((region) => (
             <span
               key={region}
               className="rounded-full border border-[#d5d0c8] bg-white px-3 py-1.5 text-xs font-medium text-[#001a3d]"
@@ -237,7 +254,7 @@ function RegistrationPanel() {
             </span>
           ))}
         </div>
-        <p className="text-xs leading-relaxed text-[#777777]">{GLOBAL_VERIFICATION_NETWORK.note}</p>
+        <p className="text-xs leading-relaxed text-[#777777]">{globalNetwork.note}</p>
       </div>
       <div>
         <p className="text-xs font-semibold tracking-[0.16em] text-[#888] uppercase">Scope by service</p>
@@ -245,7 +262,7 @@ function RegistrationPanel() {
           Expand each service for registration, government records, and import/export licensing scope.
         </p>
         <div className="mt-6">
-          <ServiceAccordion services={servicesForPillar("registration")} />
+          <ServiceAccordion services={servicesForPillar("registration", serviceByNumber)} />
         </div>
       </div>
     </div>
@@ -253,6 +270,7 @@ function RegistrationPanel() {
 }
 
 function CounterpartiesPanel() {
+  const { realTimeIntel, serviceByNumber } = useVerificationHub();
   const pillar = VERIFICATION_PILLARS[1];
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-start lg:gap-12">
@@ -265,15 +283,15 @@ function CounterpartiesPanel() {
         />
         <aside className="rounded-lg border border-amber-200 bg-amber-50 p-5">
           <p className="text-xs font-semibold tracking-[0.16em] text-amber-900 uppercase">Intelligence note</p>
-          <p className="mt-3 text-sm leading-relaxed text-amber-950">{REAL_TIME_INTELLIGENCE.lead}</p>
-          <p className="mt-3 text-xs leading-relaxed text-amber-900">{REAL_TIME_INTELLIGENCE.disclaimer}</p>
+          <p className="mt-3 text-sm leading-relaxed text-amber-950">{realTimeIntel.lead}</p>
+          <p className="mt-3 text-xs leading-relaxed text-amber-900">{realTimeIntel.disclaimer}</p>
         </aside>
       </div>
       <div>
         <p className="text-xs font-semibold tracking-[0.16em] text-[#888] uppercase">Scope by service</p>
-        <p className="mt-3 text-sm leading-relaxed text-[#555555]">{REAL_TIME_INTELLIGENCE.note}</p>
+        <p className="mt-3 text-sm leading-relaxed text-[#555555]">{realTimeIntel.note}</p>
         <div className="mt-6">
-          <ServiceAccordion services={servicesForPillar("counterparties")} />
+          <ServiceAccordion services={servicesForPillar("counterparties", serviceByNumber)} />
         </div>
       </div>
     </div>
@@ -281,6 +299,7 @@ function CounterpartiesPanel() {
 }
 
 function RiskPanel() {
+  const { frameworkSteps, serviceByNumber } = useVerificationHub();
   const pillar = VERIFICATION_PILLARS[2];
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-start lg:gap-12">
@@ -296,7 +315,7 @@ function RiskPanel() {
             Six-step framework
           </p>
           <ol className="mt-4 space-y-3">
-            {VERIFICATION_FRAMEWORK_STEPS.map((step) => (
+            {frameworkSteps.map((step) => (
               <li key={step.step} className="flex gap-3 text-sm">
                 <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#071525] text-[10px] font-bold text-[#d4a84b]">
                   {step.step}
@@ -316,7 +335,7 @@ function RiskPanel() {
           Credit, supply chain, physical presence, and certification verification services.
         </p>
         <div className="mt-6">
-          <ServiceAccordion services={servicesForPillar("risk")} />
+          <ServiceAccordion services={servicesForPillar("risk", serviceByNumber)} />
         </div>
       </div>
     </div>
@@ -324,6 +343,7 @@ function RiskPanel() {
 }
 
 function CompliancePanel() {
+  const { reportSections, serviceByNumber } = useVerificationHub();
   const pillar = VERIFICATION_PILLARS[3];
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-start lg:gap-12">
@@ -337,7 +357,7 @@ function CompliancePanel() {
         <div className="rounded-lg border border-[#d5d0c8] bg-white p-5">
           <p className="text-xs font-semibold tracking-[0.16em] text-[#c88e4a] uppercase">Report sections</p>
           <ol className="mt-4 max-h-64 space-y-2 overflow-y-auto pr-1">
-            {VERIFICATION_REPORT_SECTIONS.map((section, index) => (
+            {reportSections.map((section, index) => (
               <li key={section.title} className="flex gap-3 text-sm">
                 <span className="shrink-0 font-bold tabular-nums text-[#c88e4a]">
                   {String(index + 1).padStart(2, "0")}
@@ -357,14 +377,21 @@ function CompliancePanel() {
           Sanctions screening, commodity availability, and independent inspection coordination.
         </p>
         <div className="mt-6">
-          <ServiceAccordion services={servicesForPillar("compliance")} />
+          <ServiceAccordion services={servicesForPillar("compliance", serviceByNumber)} />
         </div>
       </div>
     </div>
   );
 }
 
-export function VerificationHub() {
+export function VerificationHub({ cms }: { cms?: CmsSectionMap }) {
+  const hubContent = useMemo(() => {
+    const hub = buildVerificationHubContent(cms);
+    return {
+      ...hub,
+      serviceByNumber: new Map(hub.services.map((service) => [service.n, service])),
+    };
+  }, [cms]);
   const [activeTab, setActiveTab] = useState<VerificationPillarId>("registration");
   const reduce = useReducedMotion();
   const panel = PANEL_TITLES[activeTab];
@@ -375,7 +402,7 @@ export function VerificationHub() {
   }, []);
 
   return (
-    <>
+    <VerificationHubContext.Provider value={hubContent}>
       <section id="our-services" className="scroll-mt-24 border-b border-[#d5d0c8] bg-white py-12 lg:py-16">
         <div className="container-page">
           <p className="text-xs font-semibold tracking-[0.22em] text-[#c88e4a] uppercase">
@@ -487,6 +514,6 @@ export function VerificationHub() {
           </div>
         </div>
       </section>
-    </>
+    </VerificationHubContext.Provider>
   );
 }

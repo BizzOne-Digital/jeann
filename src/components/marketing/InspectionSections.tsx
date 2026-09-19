@@ -1,9 +1,12 @@
 import Link from "next/link";
+import type { CmsSectionMap } from "@/lib/content/cms-field";
 import { Reveal } from "@/components/motion/Reveal";
 import { InspectionHub } from "@/components/marketing/InspectionHub";
-import { INSPECTION_CTA } from "@/lib/content/inspections-content";
+import { buildInspectionCtaFields } from "@/lib/marketing/inspection-cms";
 
-export function InspectionEnquiryCta() {
+export function InspectionEnquiryCta({ cms }: { cms?: CmsSectionMap }) {
+  const cta = buildInspectionCtaFields(cms);
+
   return (
     <section id="request-inspection" className="scroll-mt-24 bg-white marketing-section">
       <div className="container-page">
@@ -12,12 +15,12 @@ export function InspectionEnquiryCta() {
             <div className="grid gap-8 p-8 sm:p-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-12">
               <div>
                 <p className="text-xs font-semibold tracking-[0.22em] text-[#d4a84b] uppercase">
-                  {INSPECTION_CTA.tagline}
+                  {cta.tagline}
                 </p>
-                <h2 className="mt-3 text-2xl font-semibold sm:text-3xl">{INSPECTION_CTA.title}</h2>
-                <p className="mt-4 max-w-xl text-base leading-relaxed text-white/80">{INSPECTION_CTA.lead}</p>
+                <h2 className="mt-3 text-2xl font-semibold sm:text-3xl">{cta.title}</h2>
+                <p className="mt-4 max-w-xl text-base leading-relaxed text-white/80">{cta.lead}</p>
                 <div className="mt-5 flex flex-wrap gap-2">
-                  {INSPECTION_CTA.fields.map((field) => (
+                  {cta.fields.map((field) => (
                     <span
                       key={field}
                       className="rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs text-white/90"
@@ -49,6 +52,11 @@ export function InspectionEnquiryCta() {
   );
 }
 
-export function InspectionPageSections() {
-  return <InspectionHub />;
+export function InspectionPageSections({ cms }: { cms?: CmsSectionMap }) {
+  return (
+    <>
+      <InspectionHub cms={cms} />
+      <InspectionEnquiryCta cms={cms} />
+    </>
+  );
 }

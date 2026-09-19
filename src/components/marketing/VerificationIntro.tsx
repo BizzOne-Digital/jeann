@@ -1,10 +1,11 @@
 import Image from "next/image";
 import { MediaFieldPair } from "@/components/marketing/MediaFieldPair";
-import { VERIFICATION_STORY } from "@/lib/content/marketing-pages";
 import { HERO_PAGE_OVERLAY_HORIZONTAL } from "@/lib/marketing/hero-layout";
+import { buildVerificationStory } from "@/lib/marketing/verification-cms";
+import type { CmsSectionMap } from "@/lib/content/cms-field";
 
-export function VerificationIntro() {
-  const story = VERIFICATION_STORY;
+export function VerificationIntro({ cms }: { cms?: CmsSectionMap }) {
+  const story = buildVerificationStory(cms);
 
   return (
     <>

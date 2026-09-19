@@ -1,6 +1,13 @@
 import Link from "next/link";
 import { Reveal } from "@/components/motion/Reveal";
 import {
+  type CmsSectionMap,
+  cmsField,
+  cmsLines,
+  cmsParagraphs,
+  cmsSection,
+} from "@/lib/content/cms-field";
+import {
   DISPUTE_CTA,
   DISPUTE_DISCLAIMER,
   DISPUTE_DOCUMENTATION,
@@ -30,25 +37,49 @@ function SectionHeader({
   );
 }
 
-export function DisputeResolutionSections() {
+export function DisputeResolutionSections({ cms }: { cms?: CmsSectionMap }) {
+  const fairness = cmsSection(cms, "fairness");
+  const responsibilities = cmsSection(cms, "responsibilities");
+  const quality = cmsSection(cms, "quality-safety");
+  const documentation = cmsSection(cms, "documentation");
+  const partners = cmsSection(cms, "partners");
+  const payments = cmsSection(cms, "payments");
+  const cta = cmsSection(cms, "cta");
+  const disclaimer = cmsSection(cms, "disclaimer");
+
+  const processSteps = [1, 2, 3].map((n) => {
+    const f = cmsSection(cms, `process-step-${n}`);
+    const fallback = DISPUTE_PROCESS_STEPS[n - 1];
+    return {
+      title: cmsField(f, "title", fallback.title),
+      body: cmsField(f, "body", fallback.body),
+    };
+  });
+
+  const fairnessParagraphs = cmsParagraphs(fairness, "paragraphs", DISPUTE_FAIRNESS.paragraphs);
+  const sellerPoints = cmsLines(responsibilities, "sellerPoints", DISPUTE_RESPONSIBILITIES.sellerPoints);
+  const buyerPoints = cmsLines(responsibilities, "buyerPoints", DISPUTE_RESPONSIBILITIES.buyerPoints);
+  const qualityBullets = cmsLines(quality, "bullets", DISPUTE_QUALITY_SAFETY.bullets);
+  const paymentParagraphs = cmsParagraphs(payments, "paragraphs", DISPUTE_PAYMENTS.paragraphs);
+
   return (
     <>
       <section className="bg-white marketing-section">
         <div className="container-page">
           <SectionHeader
-            eyebrow={DISPUTE_FAIRNESS.eyebrow}
-            title={DISPUTE_FAIRNESS.title}
-            lead={DISPUTE_FAIRNESS.lead}
+            eyebrow={cmsField(fairness, "eyebrow", DISPUTE_FAIRNESS.eyebrow)}
+            title={cmsField(fairness, "title", DISPUTE_FAIRNESS.title)}
+            lead={cmsField(fairness, "lead", DISPUTE_FAIRNESS.lead)}
           />
           <div className="mt-8 space-y-4 text-base leading-relaxed text-[#555555]">
-            {DISPUTE_FAIRNESS.paragraphs.map((p) => (
+            {fairnessParagraphs.map((p) => (
               <Reveal key={p.slice(0, 40)}>
                 <p>{p}</p>
               </Reveal>
             ))}
           </div>
           <div className="mt-10 grid gap-4 md:grid-cols-3">
-            {DISPUTE_PROCESS_STEPS.map((step, i) => (
+            {processSteps.map((step, i) => (
               <Reveal key={step.title} delay={i * 0.06} bounce>
                 <article className="h-full marketing-box rounded-lg p-6 shadow-sm">
                   <p className="text-sm font-semibold text-[#1b3a5c]">{step.title}</p>
@@ -63,16 +94,16 @@ export function DisputeResolutionSections() {
       <section className="bg-[#f3f1ec] marketing-section">
         <div className="container-page">
           <SectionHeader
-            eyebrow={DISPUTE_RESPONSIBILITIES.eyebrow}
-            title={DISPUTE_RESPONSIBILITIES.title}
-            lead={DISPUTE_RESPONSIBILITIES.lead}
+            eyebrow={cmsField(responsibilities, "eyebrow", DISPUTE_RESPONSIBILITIES.eyebrow)}
+            title={cmsField(responsibilities, "title", DISPUTE_RESPONSIBILITIES.title)}
+            lead={cmsField(responsibilities, "lead", DISPUTE_RESPONSIBILITIES.lead)}
           />
           <div className="mt-10 grid gap-8 lg:grid-cols-2">
             <Reveal>
               <div className="marketing-box h-full rounded-lg p-6 shadow-sm">
                 <h3 className="text-lg font-semibold text-[#001a3d]">Seller (Finekarts) — typical duties</h3>
                 <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-relaxed text-[#555555]">
-                  {DISPUTE_RESPONSIBILITIES.sellerPoints.map((item) => (
+                  {sellerPoints.map((item) => (
                     <li key={item.slice(0, 48)}>{item}</li>
                   ))}
                 </ul>
@@ -82,7 +113,7 @@ export function DisputeResolutionSections() {
               <div className="marketing-box h-full rounded-lg p-6 shadow-sm">
                 <h3 className="text-lg font-semibold text-[#001a3d]">Buyer — typical duties</h3>
                 <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-relaxed text-[#555555]">
-                  {DISPUTE_RESPONSIBILITIES.buyerPoints.map((item) => (
+                  {buyerPoints.map((item) => (
                     <li key={item.slice(0, 48)}>{item}</li>
                   ))}
                 </ul>
@@ -91,7 +122,11 @@ export function DisputeResolutionSections() {
           </div>
           <Reveal delay={0.12}>
             <p className="mt-8 rounded-lg border border-[#d5d0c8] bg-white/80 p-5 text-sm leading-relaxed text-[#555555]">
-              {DISPUTE_RESPONSIBILITIES.riskTransferNote}
+              {cmsField(
+                responsibilities,
+                "riskTransferNote",
+                DISPUTE_RESPONSIBILITIES.riskTransferNote,
+              )}
             </p>
           </Reveal>
         </div>
@@ -100,12 +135,12 @@ export function DisputeResolutionSections() {
       <section className="bg-white marketing-section">
         <div className="container-page">
           <SectionHeader
-            eyebrow={DISPUTE_QUALITY_SAFETY.eyebrow}
-            title={DISPUTE_QUALITY_SAFETY.title}
-            lead={DISPUTE_QUALITY_SAFETY.lead}
+            eyebrow={cmsField(quality, "eyebrow", DISPUTE_QUALITY_SAFETY.eyebrow)}
+            title={cmsField(quality, "title", DISPUTE_QUALITY_SAFETY.title)}
+            lead={cmsField(quality, "lead", DISPUTE_QUALITY_SAFETY.lead)}
           />
           <ul className="mt-8 space-y-3 text-base leading-relaxed text-[#555555]">
-            {DISPUTE_QUALITY_SAFETY.bullets.map((item, i) => (
+            {qualityBullets.map((item, i) => (
               <Reveal key={item.slice(0, 40)} delay={i * 0.05}>
                 <li className="flex gap-3">
                   <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#c88e4a]" aria-hidden />
@@ -121,15 +156,19 @@ export function DisputeResolutionSections() {
         <div className="container-page">
           <Reveal variant="blur-up">
             <p className="text-xs font-semibold tracking-[0.22em] text-[#d4a84b] uppercase">
-              {DISPUTE_DOCUMENTATION.eyebrow}
+              {cmsField(documentation, "eyebrow", DISPUTE_DOCUMENTATION.eyebrow)}
             </p>
             <h2 className="mt-2 max-w-3xl text-2xl font-semibold text-white sm:text-3xl">
-              {DISPUTE_DOCUMENTATION.title}
+              {cmsField(documentation, "title", DISPUTE_DOCUMENTATION.title)}
             </h2>
-            <p className="mt-4 max-w-3xl text-base leading-relaxed text-white/80">{DISPUTE_DOCUMENTATION.lead}</p>
+            <p className="mt-4 max-w-3xl text-base leading-relaxed text-white/80">
+              {cmsField(documentation, "lead", DISPUTE_DOCUMENTATION.lead)}
+            </p>
           </Reveal>
           <Reveal delay={0.08}>
-            <p className="mt-6 max-w-3xl text-base leading-relaxed text-white/80">{DISPUTE_DOCUMENTATION.body}</p>
+            <p className="mt-6 max-w-3xl text-base leading-relaxed text-white/80">
+              {cmsField(documentation, "body", DISPUTE_DOCUMENTATION.body)}
+            </p>
           </Reveal>
           <Reveal delay={0.12}>
             <div className="mt-8 flex flex-wrap gap-3">
@@ -153,12 +192,14 @@ export function DisputeResolutionSections() {
       <section className="bg-[#f3f1ec] marketing-section">
         <div className="container-page">
           <SectionHeader
-            eyebrow={DISPUTE_PARTNERS.eyebrow}
-            title={DISPUTE_PARTNERS.title}
-            lead={DISPUTE_PARTNERS.lead}
+            eyebrow={cmsField(partners, "eyebrow", DISPUTE_PARTNERS.eyebrow)}
+            title={cmsField(partners, "title", DISPUTE_PARTNERS.title)}
+            lead={cmsField(partners, "lead", DISPUTE_PARTNERS.lead)}
           />
           <Reveal>
-            <p className="mt-6 max-w-3xl text-base leading-relaxed text-[#555555]">{DISPUTE_PARTNERS.body}</p>
+            <p className="mt-6 max-w-3xl text-base leading-relaxed text-[#555555]">
+              {cmsField(partners, "body", DISPUTE_PARTNERS.body)}
+            </p>
           </Reveal>
           <Reveal delay={0.08}>
             <div className="mt-8 flex flex-wrap gap-3">
@@ -176,12 +217,12 @@ export function DisputeResolutionSections() {
       <section className="bg-white marketing-section">
         <div className="container-page">
           <SectionHeader
-            eyebrow={DISPUTE_PAYMENTS.eyebrow}
-            title={DISPUTE_PAYMENTS.title}
-            lead={DISPUTE_PAYMENTS.lead}
+            eyebrow={cmsField(payments, "eyebrow", DISPUTE_PAYMENTS.eyebrow)}
+            title={cmsField(payments, "title", DISPUTE_PAYMENTS.title)}
+            lead={cmsField(payments, "lead", DISPUTE_PAYMENTS.lead)}
           />
           <div className="mt-8 space-y-4 text-base leading-relaxed text-[#555555]">
-            {DISPUTE_PAYMENTS.paragraphs.map((item, i) => (
+            {paymentParagraphs.map((item, i) => (
               <Reveal key={item.slice(0, 40)} delay={i * 0.05}>
                 <p>{item}</p>
               </Reveal>
@@ -189,7 +230,7 @@ export function DisputeResolutionSections() {
           </div>
           <Reveal delay={0.12}>
             <Link
-              href={DISPUTE_PAYMENTS.resourcesHref}
+              href={cmsField(payments, "resourcesHref", DISPUTE_PAYMENTS.resourcesHref)}
               className="mt-8 inline-flex text-sm font-semibold text-[#1b3a5c] hover:text-[#c88e4a]"
             >
               Compare payment structures on Resources →
@@ -202,24 +243,28 @@ export function DisputeResolutionSections() {
         <div className="container-page">
           <Reveal>
             <div className="overflow-hidden rounded-lg border border-[#d5d0c8] bg-white p-8 shadow-sm sm:p-10">
-              <h2 className="text-2xl font-semibold text-[#001a3d]">{DISPUTE_CTA.title}</h2>
-              <p className="mt-4 max-w-2xl text-base leading-relaxed text-[#555555]">{DISPUTE_CTA.lead}</p>
+              <h2 className="text-2xl font-semibold text-[#001a3d]">
+                {cmsField(cta, "title", DISPUTE_CTA.title)}
+              </h2>
+              <p className="mt-4 max-w-2xl text-base leading-relaxed text-[#555555]">
+                {cmsField(cta, "lead", DISPUTE_CTA.lead)}
+              </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <Link
-                  href={DISPUTE_CTA.primary.href}
+                  href={cmsField(cta, "primaryCtaHref", DISPUTE_CTA.primary.href)}
                   className="focus-ring inline-flex items-center marketing-btn-primary px-6 py-3 text-sm font-semibold"
                 >
-                  {DISPUTE_CTA.primary.label}
+                  {cmsField(cta, "primaryCtaLabel", DISPUTE_CTA.primary.label)}
                 </Link>
                 <Link
-                  href={DISPUTE_CTA.secondary.href}
+                  href={cmsField(cta, "secondaryCtaHref", DISPUTE_CTA.secondary.href)}
                   className="focus-ring inline-flex items-center rounded-md border border-[#d5d0c8] px-6 py-3 text-sm font-semibold text-[#001a3d] transition hover:border-[#1b3a5c]"
                 >
-                  {DISPUTE_CTA.secondary.label}
+                  {cmsField(cta, "secondaryCtaLabel", DISPUTE_CTA.secondary.label)}
                 </Link>
               </div>
               <p className="mt-8 border-t border-[#ebe7e0] pt-6 text-xs leading-relaxed text-[#888]">
-                {DISPUTE_DISCLAIMER}
+                {cmsField(disclaimer, "body", DISPUTE_DISCLAIMER)}
               </p>
             </div>
           </Reveal>

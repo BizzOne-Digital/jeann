@@ -14,34 +14,55 @@ import { buyerOrderHref } from "@/lib/marketing/cta-links";
 import { getCategoryCover, getProductListingImage } from "@/lib/content/product-images";
 import { BulkOrderBox } from "@/components/marketing/BulkOrderBox";
 import { getBulkMinOrderText } from "@/lib/marketing/bulk-order-minimums";
+import { cmsField } from "@/lib/content/cms-field";
 
-export function ProductsHero() {
+export function ProductsHero({ cms }: { cms?: Record<string, string> }) {
   const hero = getPageHeroImage("products");
   return (
     <PageHero
-      title="Commodities we trade"
-      description="Bulk supply only — browse edible oils, sugar, rice & grains, beans, coffee, spices, and related programmes. Minimum order volumes apply by category. Specifications are confirmed with the trade desk."
+      title={cmsField(cms, "title", "Commodities we trade")}
+      description={cmsField(
+        cms,
+        "description",
+        "Bulk supply only — browse edible oils, sugar, rice & grains, beans, coffee, spices, and related programmes. Minimum order volumes apply by category. Specifications are confirmed with the trade desk.",
+      )}
       imageSrc={hero.src}
       imageAlt={hero.alt}
-      primaryCta={{ href: buyerOrderHref(), label: "Click here to ORDER →" }}
-      secondaryCta={{ href: "#catalog", label: "Browse catalog" }}
+      primaryCta={{
+        href: cmsField(cms, "primaryCtaHref", buyerOrderHref()),
+        label: cmsField(cms, "primaryCtaLabel", "Click here to ORDER →"),
+      }}
+      secondaryCta={{
+        href: cmsField(cms, "secondaryCtaHref", "#catalog"),
+        label: cmsField(cms, "secondaryCtaLabel", "Browse catalog"),
+      }}
     />
   );
 }
 
-export function CategoryShowcase({ categories }: { categories: SeedCategory[] }) {
+export function CategoryShowcase({
+  categories,
+  cms,
+}: {
+  categories: SeedCategory[];
+  cms?: Record<string, string>;
+}) {
   return (
     <section className="bg-[#0a1628] py-12 text-white lg:py-16">
       <div className="container-page">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <Reveal>
             <h2 className="text-2xl font-medium tracking-tight sm:text-[1.75rem]">
-              Categories
+              {cmsField(cms, "title", "Categories")}
             </h2>
           </Reveal>
           <Reveal delay={0.06}>
             <p className="max-w-md text-sm text-white/55">
-              Select a category to view product overviews available for qualified buyers.
+              {cmsField(
+                cms,
+                "description",
+                "Select a category to view product overviews available for qualified buyers.",
+              )}
             </p>
           </Reveal>
         </div>
@@ -81,10 +102,12 @@ export function ProductCatalogSection({
   categories,
   products,
   totalCount,
+  cms,
 }: {
   categories: SeedCategory[];
   products: CatalogProduct[];
   totalCount: number;
+  cms?: Record<string, string>;
 }) {
   const [query, setQuery] = useState("");
   const [categorySlug, setCategorySlug] = useState("");
@@ -116,12 +139,12 @@ export function ProductCatalogSection({
           <div>
             <Reveal>
               <p className="text-xs font-semibold tracking-[0.22em] text-[#c88e4a] uppercase">
-                Catalog
+                {cmsField(cms, "eyebrow", "Catalog")}
               </p>
             </Reveal>
             <Reveal delay={0.06}>
               <h2 className="mt-2 text-3xl font-semibold text-[#001a3d] sm:text-4xl">
-                Catalog by category
+                {cmsField(cms, "title", "Catalog by category")}
               </h2>
             </Reveal>
           </div>
@@ -275,7 +298,7 @@ export function ProductCatalogSection({
   );
 }
 
-export function ProductsCta() {
+export function ProductsCta({ cms }: { cms?: Record<string, string> }) {
   return (
     <section className="relative overflow-hidden py-16 text-white lg:py-20">
       <Image
@@ -290,28 +313,32 @@ export function ProductsCta() {
       <div className="container-page relative text-center">
         <Reveal>
           <h2 className="mx-auto max-w-2xl text-3xl font-semibold leading-tight sm:text-4xl">
-            Ready to place a bulk order?
+            {cmsField(cms, "title", "Ready to place a bulk order?")}
           </h2>
         </Reveal>
         <Reveal delay={0.08}>
           <p className="mx-auto mt-4 max-w-lg text-base leading-relaxed text-white/70">
-            Sign in to the buyer portal and submit your purchase request with quantity, destination,
-            and specifications.
+            {cmsField(
+              cms,
+              "body",
+              "Sign in to the buyer portal and submit your purchase request with quantity, destination, and specifications.",
+            )}
           </p>
         </Reveal>
         <Reveal delay={0.14}>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link
-              href={buyerOrderHref()}
+              href={cmsField(cms, "primaryCtaHref", buyerOrderHref())}
               className="focus-ring inline-flex items-center justify-center gap-2 marketing-btn-primary px-6 py-3.5 text-sm font-semibold"
             >
-              Click here to ORDER <span aria-hidden>→</span>
+              {cmsField(cms, "primaryCtaLabel", "Click here to ORDER")}{" "}
+              <span aria-hidden>→</span>
             </Link>
             <Link
-              href="/contact"
+              href={cmsField(cms, "secondaryCtaHref", "/contact")}
               className="focus-ring inline-flex items-center justify-center gap-2 rounded-md border border-white/70 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10"
             >
-              Contact the desk
+              {cmsField(cms, "secondaryCtaLabel", "Contact the desk")}
             </Link>
           </div>
         </Reveal>
