@@ -100,7 +100,7 @@ export const SUGAR_CATEGORY = {
   },
   qualityVerification: {
     title: "Quality & verification",
-    lead: "For large international transactions, Finekarts can coordinate independent third-party services for:",
+    lead: "For large international transactions, the PSA may require independent third-party coordination for:",
     items: [
       "Supplier verification",
       "Product sampling",
@@ -121,8 +121,8 @@ export const SUGAR_CATEGORY = {
     badges: [
       "Global supply",
       "Independent inspection",
-      "International shipping",
-      "Reliable trade execution",
+      "Coordinated CIF carriage",
+      "Documented trade execution",
     ],
   },
 };

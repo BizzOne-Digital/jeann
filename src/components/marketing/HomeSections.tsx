@@ -158,7 +158,7 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
               {cmsField(
                 cms,
                 "description",
-                "Finekarts supplies edible oils, sugar, rice, beans, and related bulk cargoes for sale to qualified international buyers — backed by inspection, logistics, trade insurance where agreed, and bankable structures such as documentary LC and standby support for longer programmes.",
+                "Finekarts supplies edible oils, sugar, rice, beans, and related bulk cargoes for sale to qualified international buyers — with independent inspection, coordinated CIF carriage, and marine insurance where the PSA requires them, plus bankable structures such as documentary LC and standby support for longer programmes.",
               )}
             </p>
           </Reveal>
@@ -270,7 +270,7 @@ export function ConnectionSection({
                 {cmsField(
                   cms,
                   "body2",
-                  "Supplier relationships stay private. We highlight verification, inspection, logistics, trade insurance where agreed, and ICC-aligned bankable payment structures.",
+                  "Supplier relationships stay private. We explain how we use verification, inspection, carriers, and trade insurance on programmes we sell — coordinated through independent partners, not offered as standalone Finekarts services.",
                 )}
               </p>
             </Reveal>
@@ -439,7 +439,7 @@ export function SourcedResponsibly({ home3 = "/images/home-3.png" }: { home3?: s
     },
     {
       title: "Global Logistics",
-      text: "End-to-end logistics solutions that ensure on-time delivery worldwide.",
+      text: "Coordinated freight and documentation with established logistics partners on programmes we sell.",
       icon: "globe" as const,
     },
   ];
@@ -471,8 +471,9 @@ export function SourcedResponsibly({ home3 = "/images/home-3.png" }: { home3?: s
           </Reveal>
           <Reveal delay={0.08}>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-[#555555]">
-              Our global network of logistics partners enables us to deliver quality
-              commodities reliably and responsibly.
+              As a bulk commodity trader, we work with established producers and logistics
+              partners to fulfil PSAs reliably — inspection and insurance are coordinated where
+              contracts require them.
             </p>
           </Reveal>
 
@@ -586,7 +587,7 @@ export function ShippingTerms() {
           </div>
           <Reveal delay={0.16}>
             <div className="mt-8 flex flex-wrap gap-3">
-              <GoldButton href="/logistics">CIF & logistics →</GoldButton>
+              <GoldButton href="/logistics">CIF coordination →</GoldButton>
               <Link
                 href="/dispute-resolution"
                 className="focus-ring inline-flex items-center justify-center gap-2 rounded-md border border-white/40 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10"

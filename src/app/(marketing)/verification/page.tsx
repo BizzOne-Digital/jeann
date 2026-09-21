@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { CmsPageHero } from "@/components/marketing/CmsPageHero";
 import { VerificationHub } from "@/components/marketing/VerificationHub";
+import { TraderRoleNotice } from "@/components/marketing/TraderRoleNotice";
 import { VerificationIntro } from "@/components/marketing/VerificationIntro";
 import { collectCmsSections } from "@/lib/content/cms-collect";
 import { cmsPageMetadata } from "@/lib/content/cms-page-metadata";
@@ -15,9 +16,9 @@ import {
 
 export async function generateMetadata(): Promise<Metadata> {
   return cmsPageMetadata("verification", {
-    title: "Global Business Verification & Due Diligence",
+    title: "Due diligence in bulk commodity trade",
     description:
-      "Finekarts Verification Services helps bulk buyers obtain independent business intelligence — corporate registration, licenses, supply-chain due diligence, credit assessment, compliance screening, and documented evidence.",
+      "Finekarts is a bulk commodity trader that coordinates independent verification, validation, and inspection where appropriate — before committing to significant transactions.",
   });
 }
 
@@ -37,6 +38,12 @@ export default async function VerificationPage() {
           secondaryCta: { href: "#verification-hub", label: "Browse diligence topics" },
         }}
       />
+
+      <section className="bg-white marketing-section pt-0">
+        <div className="container-page -mt-4">
+          <TraderRoleNotice variant="full" />
+        </div>
+      </section>
 
       <VerificationIntro cms={cms} />
 
@@ -86,7 +93,7 @@ export default async function VerificationPage() {
               href="/inspections"
               className="focus-ring inline-flex items-center gap-2 rounded-md border border-white/40 px-6 py-3.5 text-sm font-semibold text-white/90 transition hover:bg-white/10"
             >
-              Inspection services
+              How we use inspection
             </Link>
           </div>
         </div>

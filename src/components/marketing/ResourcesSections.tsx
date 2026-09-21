@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CommodityTradeDocumentChecklist } from "@/components/marketing/CommodityTradeDocumentChecklist";
 import { LegalDocumentsPanel } from "@/components/marketing/LegalDocumentsPanel";
 import { Reveal } from "@/components/motion/Reveal";
 
@@ -24,14 +25,6 @@ const QUICK_LINKS = [
     description: "Reference checklists and PDFs for trade discussions.",
   },
 ] as const;
-
-const DOWNLOADS = [
-  {
-    title: "Commercial document checklist",
-    href: "/docs/commercial-document-checklist.txt",
-    note: "Plain-text starter list for buyer–seller document discussions.",
-  },
-];
 
 const DOCUMENT_GROUPS = [
   {
@@ -131,9 +124,9 @@ const DOCUMENT_GROUPS = [
 ];
 
 const RELATED_LINKS = [
-  { href: "/logistics", label: "Logistics" },
-  { href: "/inspections", label: "Inspections" },
-  { href: "/logistics", label: "Shipping & logistics" },
+  { href: "/logistics", label: "Trade logistics" },
+  { href: "/inspections", label: "Inspection in trade" },
+  { href: "/verification", label: "Due diligence tools" },
   { href: "/insights", label: "Insights" },
 ];
 
@@ -243,33 +236,17 @@ export function ResourcesDownloads() {
             Downloads
           </p>
           <h2 className="mt-3 text-3xl font-semibold text-[#001a3d] sm:text-4xl">
-            Printable references
+            Commodity trade document checklist
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-[#555555]">
-            Starter checklists and PDFs for discussion. Parties should always confirm
-            final document sets with counsel and the issuing bank.
+            Structured reference for buyer, banking, compliance, quality, shipping, and completion
+            documents. Finekarts confirms the applicable set for each transaction before execution.
           </p>
         </Reveal>
 
-        <div className="mt-10 grid gap-4 sm:grid-cols-2">
-          {DOWNLOADS.map((file, i) => (
-            <Reveal key={file.href} delay={i * 0.05}>
-              <article className="flex h-full flex-col justify-between marketing-box rounded-lg p-6 shadow-sm">
-                <div>
-                  <p className="text-lg font-semibold text-[#001a3d]">{file.title}</p>
-                  <p className="mt-2 text-sm leading-relaxed text-[#666666]">{file.note}</p>
-                </div>
-                <a
-                  href={file.href}
-                  download
-                  className="focus-ring mt-6 inline-flex w-fit items-center rounded-md bg-[#1b3a5c] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#13293d]"
-                >
-                  Download file
-                </a>
-              </article>
-            </Reveal>
-          ))}
-        </div>
+        <Reveal delay={0.05}>
+          <CommodityTradeDocumentChecklist />
+        </Reveal>
       </div>
     </section>
   );

@@ -8,6 +8,7 @@ import { HomeLogisticsImageBand } from "@/components/marketing/HomeLogisticsImag
 import { PartnersHomeTeaser } from "@/components/marketing/PartnerSections";
 import type { Metadata } from "next";
 import { cmsPageMetadata } from "@/lib/content/cms-page-metadata";
+import { TraderRoleNotice } from "@/components/marketing/TraderRoleNotice";
 import {
   HomeHero,
   ConnectionSection,
@@ -24,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return cmsPageMetadata("home", {
     title: "Finekarts — Bulk agricultural commodities",
     description:
-      "Finekarts supplies bulk agricultural commodities to qualified buyers with verification, logistics, and bankable trade terms.",
+      "Finekarts is a bulk agricultural commodity distributor and trader — coordinating inspection, diligence, and carriage where contracts require them to safeguard buyer interests.",
   });
 }
 
@@ -43,6 +44,11 @@ export default async function HomePage() {
   return (
     <>
       <HomeHero cms={getEffectiveSectionFields(cms, "hero")} />
+      <section className="bg-white marketing-section pt-0">
+        <div className="container-page -mt-4">
+          <TraderRoleNotice variant="full" />
+        </div>
+      </section>
       <ConnectionSection
         home1={home1}
         home2={home2}

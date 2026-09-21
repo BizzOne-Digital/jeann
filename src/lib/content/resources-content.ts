@@ -47,15 +47,6 @@ export const RESOURCES_PILLARS = [
 
 export type ResourcesTabId = (typeof RESOURCES_PILLARS)[number]["id"];
 
-export const RESOURCES_DOWNLOADS = [
-  {
-    title: "Commercial document checklist",
-    href: "/docs/commercial-document-checklist.txt",
-    note: "Plain-text starter list for buyer–seller document discussions.",
-    type: "Checklist",
-  },
-];
-
 export const RESOURCES_DOCUMENT_GROUPS = [
   {
     id: "commercial",

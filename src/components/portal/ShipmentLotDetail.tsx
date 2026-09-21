@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { ShipmentTrackingPanel } from "@/components/portal/ShipmentTrackingPanel";
 
 type WorkspaceSlice = {
   lot: {
@@ -66,20 +67,7 @@ export function ShipmentLotDetail({ lotId }: { lotId: string }) {
       </div>
 
       <section>
-        <h3 className="text-sm font-semibold text-[var(--navy)] mb-2">Tracking timeline</h3>
-        {data.trackingEvents.length === 0 ? (
-          <p className="text-sm text-[var(--stone)]">No approved tracking events yet.</p>
-        ) : (
-          <ul className="space-y-2">
-            {data.trackingEvents.map((e) => (
-              <li key={e.id} className="rounded border border-[var(--line)] bg-white p-3 text-sm">
-                <span className="font-medium">{e.eventType}</span>
-                <span className="text-[var(--stone)]"> · {new Date(e.eventTimestamp).toLocaleString()} · {e.confidence}</span>
-                <div>{e.description}</div>
-              </li>
-            ))}
-          </ul>
-        )}
+        <ShipmentTrackingPanel lotId={lotId} />
       </section>
 
       <section>

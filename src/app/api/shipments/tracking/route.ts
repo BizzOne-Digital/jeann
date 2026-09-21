@@ -16,6 +16,7 @@ const refSchema = z.object({
   referenceType: z.string(),
   trackingNumber: z.string(),
   carrier: z.string().optional(),
+  scac: z.string().optional(),
 });
 
 const eventSchema = z.object({

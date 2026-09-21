@@ -9,6 +9,7 @@ import {
   type LogisticsImage,
 } from "@/lib/content/logistics-images";
 import { HERO_PAGE_OVERLAY_HORIZONTAL } from "@/lib/marketing/hero-layout";
+import { cn } from "@/lib/utils/cn";
 
 export function LogisticsPhotoGallery({ className = "" }: { className?: string }) {
   return (
@@ -60,25 +61,30 @@ export function LogisticsFullBleedBand({
   );
 }
 
-export function LogisticsSplitPanel({
+/** One content block beside a matching-width photo (same row height on desktop). */
+export function LogisticsPairedRow({
   image,
   reversed = false,
+  boxed = false,
   children,
-  aspectClassName = "aspect-[4/3] lg:aspect-[5/4]",
+  className = "",
 }: {
   image: LogisticsImage;
   reversed?: boolean;
+  boxed?: boolean;
   children: ReactNode;
-  aspectClassName?: string;
+  className?: string;
 }) {
   return (
     <div
-      className={`grid gap-8 lg:grid-cols-2 lg:items-center ${
-        reversed ? "lg:[&>*:first-child]:order-2" : ""
-      }`}
+      className={cn(
+        "grid items-stretch gap-6 lg:grid-cols-2 lg:gap-8",
+        reversed ? "lg:[&>*:first-child]:order-2" : "",
+        className,
+      )}
     >
       <MotionImageFrame
-        className={`relative ${aspectClassName} overflow-hidden rounded-xl border border-[#d5d0c8] bg-[#e4e0d8] shadow-md`}
+        className="relative min-h-[200px] overflow-hidden rounded-xl border border-[#d5d0c8] bg-[#e4e0d8] shadow-md sm:min-h-[220px] lg:min-h-[240px] lg:h-full"
       >
         <Image
           src={image.src}
@@ -88,8 +94,78 @@ export function LogisticsSplitPanel({
           sizes="(max-width: 1024px) 100vw, 50vw"
         />
       </MotionImageFrame>
-      <Reveal variant={reversed ? "left" : "right"} delay={0.08} bounce>
-        <div>{children}</div>
+      <Reveal variant={reversed ? "left" : "right"} delay={0.06} bounce className="flex min-h-0">
+        <div
+          className={cn(
+            "flex h-full w-full flex-col justify-center",
+            boxed && "marketing-box rounded-lg p-6 sm:p-8",
+          )}
+        >
+          {children}
+        </div>
+      </Reveal>
+    </div>
+  );
+}
+
+export function LogisticsPairedStack({
+  rows,
+  className = "",
+}: {
+  rows: Array<{
+    image: LogisticsImage;
+    reversed?: boolean;
+    boxed?: boolean;
+    content: ReactNode;
+  }>;
+  className?: string;
+}) {
+  return (
+    <div className={cn("space-y-8 lg:space-y-10", className)}>
+      {rows.map((row, index) => (
+        <LogisticsPairedRow
+          key={`${row.image.src}-${index}`}
+          image={row.image}
+          reversed={row.reversed}
+          boxed={row.boxed}
+        >
+          {row.content}
+        </LogisticsPairedRow>
+      ))}
+    </div>
+  );
+}
+
+export function LogisticsSplitPanel({
+  image,
+  reversed = false,
+  children,
+  aspectClassName = "aspect-[16/11] lg:aspect-[16/10]",
+}: {
+  image: LogisticsImage;
+  reversed?: boolean;
+  children: ReactNode;
+  aspectClassName?: string;
+}) {
+  return (
+    <div
+      className={`grid gap-8 lg:grid-cols-2 lg:items-stretch ${
+        reversed ? "lg:[&>*:first-child]:order-2" : ""
+      }`}
+    >
+      <MotionImageFrame
+        className={`relative ${aspectClassName} min-h-[200px] overflow-hidden rounded-xl border border-[#d5d0c8] bg-[#e4e0d8] shadow-md lg:min-h-0 lg:h-full`}
+      >
+        <Image
+          src={image.src}
+          alt={image.alt}
+          fill
+          className="object-cover"
+          sizes="(max-width: 1024px) 100vw, 50vw"
+        />
+      </MotionImageFrame>
+      <Reveal variant={reversed ? "left" : "right"} delay={0.08} bounce className="flex">
+        <div className="flex w-full flex-col justify-center">{children}</div>
       </Reveal>
     </div>
   );

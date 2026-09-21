@@ -381,5 +381,5 @@ export const SITE = {
   addressLine1: "4275 Village Center Court",
   addressLine2: "Mississauga, Ontario L4Z 1V3, Canada",
   positioning:
-    "We supply bulk agricultural commodities for sale to qualified international buyers — with verification, inspection, logistics, trade insurance where agreed, and bankable ICC-aligned payment structures.",
+    "We supply bulk agricultural commodities for sale to qualified international buyers — coordinating independent verification, inspection, carriers, and marine insurance where contracts require them, not as standalone Finekarts-branded services.",
 };

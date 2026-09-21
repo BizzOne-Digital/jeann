@@ -15,11 +15,11 @@ export type PartnerEntry = {
 };
 
 export const PARTNERS_PAGE_INTRO = {
-  title: "Verification partners",
+  title: "Independent firms we may appoint",
   lead:
-    "Finekarts works with internationally recognized inspection, certification, and verification organizations. Qualified buyers can use these relationships to build confidence in counterparties, cargo, and documentation.",
+    "Finekarts is the commodity seller — not SGS, Intertek, or any firm listed here. These are recognized inspection, testing, and certification organizations we may coordinate on trades when the PSA and corridor require documented quality, quantity, or compliance evidence.",
   note:
-    "Partnership listings support transparency — they do not replace contractual inspection terms, bank requirements, or independent due diligence.",
+    "Listings show who buyers may see appointed on a programme. They do not replace your contract, bank requirements, or your own due diligence.",
 };
 
 /** Edit names, intros, photos, and content[] as partnerships are confirmed. */

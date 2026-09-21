@@ -18,7 +18,10 @@ export type NormalizedTrackingEvent = {
 
 export interface ShippingTrackingProvider {
   readonly name: string;
-  createWatch(reference: string, metadata?: Record<string, string>): Promise<void>;
+  createWatch(
+    reference: string,
+    metadata?: Record<string, string>,
+  ): Promise<{ trackingRequestId?: string } | void>;
   getCurrentStatus(reference: string): Promise<NormalizedTrackingEvent | null>;
   getEventHistory(reference: string): Promise<NormalizedTrackingEvent[]>;
   processWebhook(payload: unknown, signature?: string): Promise<NormalizedTrackingEvent[]>;

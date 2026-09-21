@@ -80,8 +80,8 @@ export const PAGE_HERO_IMAGES: Record<PageHeroImageKey, PageHeroImage> = {
   },
   supplierOffer: PACKAGING_IMAGES.bulkTruck,
   disputeResolution: {
-    src: "/images/inspections/port-cargo-inspection-hero.png",
-    alt: "International commodity trade documentation and port supervision",
+    src: "/images/inspections/warehouse-bulk-inspection.png",
+    alt: "Bulk commodity warehouse review for trade dispute documentation",
   },
 };
 

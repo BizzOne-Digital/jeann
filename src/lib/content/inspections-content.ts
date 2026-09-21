@@ -1,11 +1,12 @@
-/** Client-approved inspection page content (Independent Commodity Inspection Services). */
+/** How Finekarts uses independent inspection in bulk commodity trade — we coordinate firms; we are not an inspection company. */
+
+import { FINEKARTS_COORDINATE_INSPECTION, FINEKARTS_TRADER_ROLE } from "@/lib/content/trader-positioning";
 
 export const INSPECTIONS_HERO = {
-  eyebrow: "Independent Commodity Inspection Services",
-  title: "Confidence in Every Shipment",
-  description:
-    "We sell bulk commodities with proactive safety and quality discipline from origin through the loading dock. Independent inspectors help buyers confirm quality and quantity against the PSA before shipment when that milestone is agreed — reducing disputes and surprises at destination.",
-  primaryCta: { href: "#site-enquiry-cta", label: "Request an inspection →" },
+  eyebrow: "Inspection in commodity trade",
+  title: "Independent inspection when the contract requires it",
+  description: `${FINEKARTS_TRADER_ROLE} When the PSA requires it, we coordinate recognized independent inspectors so quality and quantity can be confirmed against contract before shipment — reducing disputes at destination.`,
+  primaryCta: { href: "#site-enquiry-cta", label: "Discuss inspection scope →" },
   secondaryCta: { href: "#inspection-hub", label: "Browse inspection topics" },
 };
 
@@ -222,10 +223,10 @@ export const WHY_INDEPENDENT_INSPECTION = [
 ];
 
 export const INSPECTION_CTA = {
-  title: "Request an inspection",
-  lead: "Tell us your commodity, quantity, origin, destination, and when you need quality and quantity confirmed against the PSA — typically before shipment. We coordinate independent inspection scope with recognized firms.",
+  title: "Discuss inspection for your trade",
+  lead: `${FINEKARTS_COORDINATE_INSPECTION} Tell us your commodity, quantity, origin, destination, and PSA milestones — we will align scope with the appointed firm, not act as the inspector.`,
   fields: ["Commodity", "Quantity", "Origin", "Destination", "Required inspection", "Delivery terms"],
-  tagline: "From origin to destination — verified. Documented. Transparent.",
+  tagline: "Trader on the sale. Independent firms on the evidence.",
 };
 
 export const INSPECTION_PILLARS = [
@@ -278,4 +279,4 @@ export const INSPECTION_PILLARS = [
 export type InspectionTabId = (typeof INSPECTION_PILLARS)[number]["id"];
 
 export const INSPECTION_HUB_INTRO =
-  "Pick a topic below — services, commodities, process, or partners. Full scope details are one click away; the page stays visual first.";
+  "Finekarts is the commodity seller — not SGS, Intertek, or any inspection brand listed here. This hub explains how independent inspection fits our trades and which topics buyers typically see in a PSA.";

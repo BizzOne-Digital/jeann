@@ -8,7 +8,7 @@ export const SPA_INSPECTION_CLAUSES = [
   },
   {
     n: 2,
-    title: "Scope of inspection services",
+    title: "Scope of independent inspection",
     text: "The contract shall specify whether inspection covers quantity, quality, sampling, loading supervision, vessel/hold cleanliness, laboratory analysis, or a combination — referencing applicable GAFTA, FOSFA, or bespoke methods.",
   },
   {

@@ -3,10 +3,13 @@ import Link from "next/link";
 import { CmsPageHero } from "@/components/marketing/CmsPageHero";
 import {
   LogisticsFullBleedBand,
+  LogisticsPairedStack,
   LogisticsPhotoBackdropSection,
+  LogisticsPairedRow,
   LogisticsSplitPanel,
 } from "@/components/marketing/LogisticsVisuals";
 import { MarketingStorySection } from "@/components/marketing/MarketingStorySection";
+import { TraderRoleNotice } from "@/components/marketing/TraderRoleNotice";
 import { Reveal } from "@/components/motion/Reveal";
 import { collectCmsSections } from "@/lib/content/cms-collect";
 import { cmsPageMetadata } from "@/lib/content/cms-page-metadata";
@@ -20,9 +23,9 @@ import { buildLogisticsContent, LOGISTICS_CMS_SECTION_IDS } from "@/lib/marketin
 
 export async function generateMetadata(): Promise<Metadata> {
   return cmsPageMetadata("logistics", {
-    title: "Global Shipping & Logistics",
+    title: "Trade logistics coordination",
     description:
-      "Finekarts coordinates international commodity shipping from origin to destination — FOB and CIF terms, bulk and container programmes, shipment tracking, documentation and port-to-port logistics.",
+      "Finekarts is a bulk commodity trader that coordinates FOB and CIF shipping, documentation, and tracking with carriers and forwarders — not a freight operator.",
   });
 }
 
@@ -43,6 +46,12 @@ export default async function LogisticsPage() {
           secondaryCta: LOGISTICS_HERO.secondaryCta,
         }}
       />
+
+      <section className="bg-white marketing-section pt-0">
+        <div className="container-page -mt-4">
+          <TraderRoleNotice />
+        </div>
+      </section>
 
       <MarketingStorySection
         eyebrow={story.eyebrow}
@@ -112,32 +121,43 @@ export default async function LogisticsPage() {
 
       <section className="bg-white marketing-section">
         <div className="container-page">
-          <LogisticsSplitPanel image={LOGISTICS_PAGE_SECTION_IMAGES.realTimeTracking}>
-            <div className="space-y-8">
-              <article>
-                <h2 className="text-2xl font-semibold text-[#001a3d]">{content.tracking.title}</h2>
-                <p className="mt-3 text-sm text-[#555555]">{content.tracking.lead}</p>
-                <ul className="mt-4 space-y-2">
-                  {content.tracking.items.map((item) => (
-                    <li key={item} className="flex gap-2 text-sm text-[#555555]">
-                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#d4a84b]" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-                <p className="mt-4 text-sm text-[#555555]">{content.tracking.note}</p>
-              </article>
-              <article className="marketing-box rounded-lg p-6 sm:p-8">
-                <h2 className="text-xl font-semibold text-[#001a3d]">{content.eta.title}</h2>
-                <p className="mt-3 text-sm text-[#555555]">{content.eta.lead}</p>
-                <p className="mt-4 rounded-md bg-[#f9f8f5] px-4 py-3 text-xs font-medium leading-relaxed text-[#001a3d]">
-                  {content.eta.flow}
-                </p>
-                <p className="mt-4 text-sm text-[#555555]">{content.eta.note}</p>
-                <p className="mt-6 text-sm font-semibold text-[#c88e4a]">{content.eta.goal}</p>
-              </article>
-            </div>
-          </LogisticsSplitPanel>
+          <LogisticsPairedStack
+            rows={[
+              {
+                image: LOGISTICS_PAGE_SECTION_IMAGES.realTimeTrackingPrimary,
+                content: (
+                  <article>
+                    <h2 className="text-2xl font-semibold text-[#001a3d]">{content.tracking.title}</h2>
+                    <p className="mt-3 text-sm text-[#555555]">{content.tracking.lead}</p>
+                    <ul className="mt-4 space-y-2">
+                      {content.tracking.items.map((item) => (
+                        <li key={item} className="flex gap-2 text-sm text-[#555555]">
+                          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#d4a84b]" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                    <p className="mt-4 text-sm text-[#555555]">{content.tracking.note}</p>
+                  </article>
+                ),
+              },
+              {
+                image: LOGISTICS_PAGE_SECTION_IMAGES.realTimeTrackingSecondary,
+                boxed: true,
+                content: (
+                  <article>
+                    <h2 className="text-xl font-semibold text-[#001a3d]">{content.eta.title}</h2>
+                    <p className="mt-3 text-sm text-[#555555]">{content.eta.lead}</p>
+                    <p className="mt-4 rounded-md bg-[#f9f8f5] px-4 py-3 text-xs font-medium leading-relaxed text-[#001a3d]">
+                      {content.eta.flow}
+                    </p>
+                    <p className="mt-4 text-sm text-[#555555]">{content.eta.note}</p>
+                    <p className="mt-6 text-sm font-semibold text-[#c88e4a]">{content.eta.goal}</p>
+                  </article>
+                ),
+              },
+            ]}
+          />
         </div>
       </section>
 
@@ -174,22 +194,51 @@ export default async function LogisticsPage() {
           <p className="mt-3 max-w-3xl text-sm text-[#555555]">
             {content.shippingModesIntro.description}
           </p>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {content.shippingModes.map((mode, index) => (
-              <Reveal key={mode.title} delay={index * 0.03}>
-                <article className="h-full marketing-box rounded-lg p-5">
-                  <h3 className="font-semibold text-[#001a3d]">{mode.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[#555555]">{mode.text}</p>
-                </article>
-              </Reveal>
-            ))}
-          </div>
+          {(() => {
+            const [bulkVessel, ...otherModes] = content.shippingModes;
+            const surfaces = [
+              "bg-white",
+              "bg-[#f9f8f5]",
+              "bg-[#eef3f7]",
+              "bg-[#faf6f0]",
+              "bg-[#f5f0e8]",
+              "bg-[#f0f4f8]",
+            ];
+            return (
+              <>
+                {bulkVessel ? (
+                  <div className="mt-10">
+                    <LogisticsPairedRow
+                      image={LOGISTICS_PAGE_SECTION_IMAGES.bulkVesselMode}
+                      reversed
+                      boxed
+                    >
+                      <h3 className="font-semibold text-[#001a3d]">{bulkVessel.title}</h3>
+                      <p className="mt-2 text-sm leading-relaxed text-[#555555]">{bulkVessel.text}</p>
+                    </LogisticsPairedRow>
+                  </div>
+                ) : null}
+                <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {otherModes.map((mode, index) => (
+                    <Reveal key={mode.title} delay={index * 0.03}>
+                      <article
+                        className={`h-full rounded-lg border border-[#e8e4dc] p-5 sm:p-6 shadow-sm ${surfaces[(index + 1) % surfaces.length]}`}
+                      >
+                        <h3 className="font-semibold text-[#001a3d]">{mode.title}</h3>
+                        <p className="mt-2 text-sm leading-relaxed text-[#555555]">{mode.text}</p>
+                      </article>
+                    </Reveal>
+                  ))}
+                </div>
+              </>
+            );
+          })()}
         </div>
       </section>
 
       <section className="bg-[#f3f1ec] marketing-section">
         <div className="container-page">
-          <LogisticsSplitPanel image={LOGISTICS_PAGE_SECTION_IMAGES.documentation}>
+          <LogisticsPairedRow image={LOGISTICS_PAGE_SECTION_IMAGES.documentation}>
             <div>
               <h2 className="text-2xl font-semibold text-[#001a3d]">{content.documentation.title}</h2>
               <p className="mt-3 text-base text-[#555555]">{content.documentation.lead}</p>
@@ -204,42 +253,55 @@ export default async function LogisticsPage() {
               </ul>
               <p className="mt-6 text-sm text-[#555555]">{content.documentation.note}</p>
             </div>
-          </LogisticsSplitPanel>
+          </LogisticsPairedRow>
         </div>
       </section>
 
       <section className="bg-white marketing-section">
         <div className="container-page">
-          <LogisticsSplitPanel image={LOGISTICS_PAGE_SECTION_IMAGES.coordination} reversed>
-            <div className="grid gap-8">
-              <article className="marketing-box rounded-lg p-6 sm:p-8">
-                <h2 className="text-xl font-semibold text-[#001a3d]">{content.coordination.title}</h2>
-                <p className="mt-3 text-sm text-[#555555]">{content.coordination.lead}</p>
-                <p className="mt-4 rounded-md bg-[#f9f8f5] px-4 py-3 text-xs font-medium leading-relaxed text-[#001a3d]">
-                  {content.coordination.parties}
-                </p>
-                <p className="mt-4 text-sm text-[#555555]">{content.coordination.note}</p>
-              </article>
-              <article>
-                <h2 className="text-xl font-semibold text-[#001a3d]">{content.reliability.title}</h2>
-                <p className="mt-3 text-sm text-[#555555]">{content.reliability.lead}</p>
-                <ul className="mt-4 space-y-2">
-                  {content.reliability.items.map((item) => (
-                    <li key={item} className="flex gap-2 text-sm text-[#555555]">
-                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#d4a84b]" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-                <p className="mt-4 text-sm font-semibold text-[#001a3d]">
-                  {content.reliability.commitment}
-                </p>
-                <p className="mt-4 text-xs leading-relaxed text-[#777777]">
-                  {content.reliability.disclaimer}
-                </p>
-              </article>
-            </div>
-          </LogisticsSplitPanel>
+          <LogisticsPairedStack
+            rows={[
+              {
+                image: LOGISTICS_PAGE_SECTION_IMAGES.coordinationPrimary,
+                reversed: true,
+                boxed: true,
+                content: (
+                  <article>
+                    <h2 className="text-xl font-semibold text-[#001a3d]">{content.coordination.title}</h2>
+                    <p className="mt-3 text-sm text-[#555555]">{content.coordination.lead}</p>
+                    <p className="mt-4 rounded-md bg-[#f9f8f5] px-4 py-3 text-xs font-medium leading-relaxed text-[#001a3d]">
+                      {content.coordination.parties}
+                    </p>
+                    <p className="mt-4 text-sm text-[#555555]">{content.coordination.note}</p>
+                  </article>
+                ),
+              },
+              {
+                image: LOGISTICS_PAGE_SECTION_IMAGES.coordinationSecondary,
+                reversed: true,
+                content: (
+                  <article>
+                    <h2 className="text-xl font-semibold text-[#001a3d]">{content.reliability.title}</h2>
+                    <p className="mt-3 text-sm text-[#555555]">{content.reliability.lead}</p>
+                    <ul className="mt-4 space-y-2">
+                      {content.reliability.items.map((item) => (
+                        <li key={item} className="flex gap-2 text-sm text-[#555555]">
+                          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#d4a84b]" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                    <p className="mt-4 text-sm font-semibold text-[#001a3d]">
+                      {content.reliability.commitment}
+                    </p>
+                    <p className="mt-4 text-xs leading-relaxed text-[#777777]">
+                      {content.reliability.disclaimer}
+                    </p>
+                  </article>
+                ),
+              },
+            ]}
+          />
         </div>
       </section>
 
@@ -265,11 +327,7 @@ export default async function LogisticsPage() {
 
       <section className="bg-white marketing-section">
         <div className="container-page">
-          <LogisticsSplitPanel
-            image={LOGISTICS_PAGE_SECTION_IMAGES.closing}
-            reversed
-            aspectClassName="aspect-[16/10]"
-          >
+          <LogisticsSplitPanel image={LOGISTICS_PAGE_SECTION_IMAGES.closing} reversed>
             <div>
               <h2 className="text-2xl font-semibold text-[#001a3d]">{content.closing.title}</h2>
               <p className="mt-3 text-base text-[#555555]">{content.closing.lead}</p>

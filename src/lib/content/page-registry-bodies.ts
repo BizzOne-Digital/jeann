@@ -186,12 +186,12 @@ function logisticsBodySections(): PageSectionDef[] {
     section("shipping-modes-intro", "Shipping modes intro", {
       title: "Bulk & container shipping",
       description:
-        "Depending on the commodity and order requirements, Finekarts can coordinate appropriate shipping solutions including:",
+        "On programmes we sell, carriage may use the following modes — coordinated with carriers and forwarders, not sold as standalone Finekarts logistics products:",
     }),
     section("contract-band", "Contract to cargo band", {
       title: "From contract to cargo",
       lead:
-        "Finekarts integrates commodity sourcing, inspection, documentation and international shipping into one coordinated trading process.",
+        "From signed PSA through inspection milestones, export documentation, and carrier booking — Finekarts sells the commodity and coordinates independent specialists at each step.",
     }),
     section("global-coverage", "Global coverage", {
       title: GLOBAL_SHIPPING_COVERAGE.title,

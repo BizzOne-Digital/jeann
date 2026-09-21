@@ -156,7 +156,7 @@ export function buildLogisticsContent(cms: CmsSectionMap) {
       description: cmsField(
         modesIntroF,
         "description",
-        "Depending on the commodity and order requirements, Finekarts can coordinate appropriate shipping solutions including:",
+        "On programmes we sell, carriage may use the following modes — coordinated with carriers and forwarders, not sold as standalone Finekarts logistics products:",
       ),
     },
     shippingModes: parseShippingModes(

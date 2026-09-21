@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { BrandLogo } from "@/components/marketing/BrandLogo";
 import { getPublicSiteSettings } from "@/lib/content/site-settings-public";
+import { FINEKARTS_FOOTER_TAGLINE } from "@/lib/content/trader-positioning";
 import { SocialLinks } from "@/components/marketing/SocialLinks";
 import { FooterReveal } from "@/components/motion/FooterReveal";
 
@@ -31,10 +32,10 @@ const LINKS = [
     items: [
       { href: "/resources", label: "Documents & terminology" },
       { href: "/packaging", label: "Packaging" },
-      { href: "/logistics", label: "Logistics" },
-      { href: "/partners", label: "Verification partners" },
-      { href: "/verification", label: "Due diligence" },
-      { href: "/inspections", label: "Inspections" },
+      { href: "/logistics", label: "Trade logistics" },
+      { href: "/partners", label: "Partner firms" },
+      { href: "/verification", label: "Due diligence tools" },
+      { href: "/inspections", label: "Inspection in trade" },
       { href: "/insights", label: "Insights" },
     ],
   },
@@ -68,8 +69,8 @@ export async function SiteFooter() {
                   </p>
                 </div>
               </Link>
-              <p className="mt-5 max-w-xs text-base leading-relaxed text-white/65">
-                Bulk agricultural commodities for sale to qualified international buyers — verification, inspection, and bankable trade structures.
+              <p className="mt-5 max-w-sm text-base leading-relaxed text-white/65">
+                {FINEKARTS_FOOTER_TAGLINE}
               </p>
               <div className="mt-5 space-y-1 text-sm text-white/75">
                 <p>

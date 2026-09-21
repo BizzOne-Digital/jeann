@@ -8,6 +8,7 @@ export type {
 import { buildPageSection } from "@/lib/content/page-registry-section";
 import type { PageRegistryEntry } from "@/lib/content/page-registry-section";
 import { mergeMarketingPageBodies } from "@/lib/content/page-registry-bodies";
+import { FINEKARTS_TRADE_SAFEGUARDS } from "@/lib/content/trader-positioning";
 
 const section = buildPageSection;
 
@@ -18,13 +19,14 @@ const BASE_MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
     path: "/",
     seoTitle: "Finekarts — Global agricultural commodity distribution",
     seoDescription:
-      "Finekarts Incorporated supplies bulk agricultural commodities for sale to qualified international buyers — verification, inspection, logistics, trade insurance, and bankable ICC-aligned payment structures.",
+      "Finekarts Incorporated is a bulk agricultural commodity distributor and trader selling to qualified international buyers — with coordinated due diligence, inspection, CIF carriage, and bankable ICC-aligned payment structures.",
     sections: [
       section("hero", "Hero", {
-        eyebrow: "Bulk commodities • Verified programmes • Worldwide delivery",
+        eyebrow: "Bulk commodities • Documented programmes • Worldwide delivery",
         title: "Bulk Agricultural Commodities for Qualified Buyers",
         description:
-          "Finekarts supplies edible oils, sugar, rice, beans, and related cargoes to qualified international buyers — with inspection, CIF logistics where agreed, trade insurance, and bankable ICC-aligned payment structures.",
+          "Finekarts supplies edible oils, sugar, rice, beans, and related cargoes for sale to qualified international buyers. " +
+          FINEKARTS_TRADE_SAFEGUARDS,
         primaryCtaLabel: "Browse products",
         primaryCtaHref: "/products",
         secondaryCtaLabel: "Buyer portal",
@@ -37,7 +39,7 @@ const BASE_MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
         body:
           "Finekarts Incorporated is a distributor: every product listed on this site is offered for sale to qualified bulk buyers. We are not a marketplace and we do not connect unrelated buyers with unrelated sellers.",
         body2:
-          "Origin relationships stay private. What we publish is how we deliver — independent verification and inspection, disciplined logistics, trade insurance where contracts require it, and payment structures agreed with your bank.",
+          "Origin relationships stay private. What we publish is how we trade — using independent verification, inspection, carriers, and marine insurance where contracts require them, not selling those capabilities as Finekarts-branded services.",
         image1: "/images/home-1.png",
         image2: "/images/home-2.png",
       }),
@@ -65,7 +67,7 @@ const BASE_MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       section("partners-teaser", "Partners teaser", {
         eyebrow: "Verification partners",
         title: "Recognized inspection & certification partners",
-        body: "Finekarts aligns with independent verification organizations so bulk buyers can confirm cargo, documentation, and supply-chain claims with confidence.",
+        body: "Finekarts coordinates with independent inspection and certification firms on programmes we sell — buyers confirm scope in the PSA; we are the trader, not the inspection company.",
       }),
       section("packaging", "Packaging", {
         eyebrow: "Packaging options",
@@ -91,12 +93,12 @@ const BASE_MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
     path: "/about",
     seoTitle: "About Finekarts",
     seoDescription:
-      "Finekarts sells bulk agricultural commodities to qualified buyers — CIF trade insurance, inspection, ICC-aligned payments, and transparent dispute resolution.",
+      "Finekarts sells bulk agricultural commodities to qualified buyers — with coordinated CIF insurance, independent inspection, and ICC-aligned payments.",
     sections: [
       section("hero", "Hero", {
         title: "Supplying bulk commodities buyers can trust",
         description:
-          "We sell bulk agricultural cargoes to qualified international buyers through structured programmes — verification, inspection, logistics, trade insurance, and ICC-aligned payment instruments.",
+          "We sell bulk agricultural cargoes to qualified international buyers. " + FINEKARTS_TRADE_SAFEGUARDS,
         primaryCtaLabel: "Request a Quote →",
         primaryCtaHref: "/login",
         secondaryCtaLabel: "Contact the desk",
@@ -106,9 +108,9 @@ const BASE_MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
         eyebrow: "Who We Are",
         title: "We sell commodities — we do not broker buyers and sellers.",
         body:
-          "Finekarts Incorporated is a distributor offering bulk agricultural commodities for sale. Supplier relationships are private; this site focuses on what qualified buyers receive — specification discipline, inspection, logistics, insurance, and bankable documentation.",
+          "Finekarts Incorporated is a distributor offering bulk agricultural commodities for sale. Supplier relationships are private; qualified buyers receive specification discipline, coordinated inspection and logistics, marine insurance where CIF applies, and bankable documentation — delivered through independent partners, not as standalone Finekarts-branded services.",
         body2:
-          "From origin to destination, our team ensures reliable execution, transparent communication, and consistent value at every step.",
+          "From enquiry through contract, inspection milestones, and shipment documentation, our trade desk focuses on disciplined execution and clear communication — while specialists appointed under the PSA perform inspection, carriage, and insurance work.",
       }),
       section("capabilities", "Capabilities", {
         eyebrow: "What we do",
@@ -212,12 +214,12 @@ const BASE_MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
     path: "/partners",
     seoTitle: "Verification partners",
     seoDescription:
-      "Independent inspection, certification, and verification partners supporting transparent international commodity trade.",
+      "Independent inspection and certification firms Finekarts may appoint on commodity programmes — Finekarts is the trader, not the inspection company.",
     sections: [
       section("hero", "Hero", {
         title: "Verification partners",
         description:
-          "Finekarts works with internationally recognized inspection, certification, and verification organizations. Qualified buyers can use these relationships to build confidence in counterparties, cargo, and documentation.",
+          "Finekarts coordinates with internationally recognized inspection and certification organizations on trades we sell. Listings help buyers see which independent firms may be appointed — they are tools for safer transactions, not services Finekarts operates.",
         primaryCtaLabel: "Browse partners →",
         primaryCtaHref: "#partners-list",
         secondaryCtaLabel: "Inspection overview",
@@ -266,14 +268,14 @@ const BASE_MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
     slug: "logistics",
     title: "Logistics",
     path: "/logistics",
-    seoTitle: "Global shipping & logistics",
+    seoTitle: "Trade logistics coordination",
     seoDescription:
-      "Finekarts coordinates international commodity shipping — FOB and CIF terms, bulk and container programmes, shipment tracking and port-to-port logistics.",
+      "Finekarts is a bulk commodity trader that coordinates FOB and CIF shipping, documentation, and tracking with carriers and forwarders — not a freight operator.",
     sections: [
       section("hero", "Hero", {
         title: "Moving commodities from origin to destination",
         description:
-          "FOB and CIF are our primary Incoterms® — CIF includes coordinated marine cargo insurance and main carriage to the named port. Documentation aligns with the signed PSA and LC where applicable.",
+          "FOB and CIF are our primary Incoterms® on programmes we sell — we coordinate marine cargo insurance and main carriage with insurers and carriers to the named port. Documentation aligns with the signed PSA and LC where applicable.",
       }),
     ],
   },
@@ -282,12 +284,13 @@ const BASE_MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
     title: "Inspections",
     path: "/inspections",
     seoTitle: "Inspections overview",
-    seoDescription: "Inspection and verification programmes for bulk commodity trade.",
+    seoDescription:
+      "How independent inspection fits bulk commodity trades Finekarts sells — we coordinate recognized firms; we are not an inspection company.",
     sections: [
       section("hero", "Hero", {
-        title: "Inspection & verification",
+        title: "Independent inspection in commodity trade",
         description:
-          "Buyers confirm quality and quantity against contract before shipment when that milestone is agreed — through independent inspection at origin, loading supervision, and laboratory testing.",
+          "When the PSA requires it, we appoint recognized independent firms for quality and quantity evidence at origin, loading supervision, and laboratory testing — Finekarts is the trader, not the inspector.",
       }),
     ],
   },
@@ -297,7 +300,7 @@ const BASE_MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
     path: "/verification",
     seoTitle: "Global business verification & due diligence",
     seoDescription:
-      "Finekarts Verification Services — corporate registration, supply-chain due diligence, credit assessment, compliance screening, and documented evidence for bulk buyers.",
+      "How Finekarts coordinates independent due diligence as a bulk commodity trader — not a verification agency.",
     sections: [
       section("hero", "Hero", {
         title: "Know who you are trading with",

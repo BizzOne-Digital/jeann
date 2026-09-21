@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useCallback, useState } from "react";
+import { CommodityTradeDocumentChecklist } from "@/components/marketing/CommodityTradeDocumentChecklist";
 import { LegalDocumentsPanel } from "@/components/marketing/LegalDocumentsPanel";
 import {
   BANKING_CLAUSES,
@@ -22,7 +23,6 @@ import {
 } from "@/lib/content/payment-terms";
 import {
   RESOURCES_DOCUMENT_GROUPS,
-  RESOURCES_DOWNLOADS,
   RESOURCES_PILLARS,
   RESOURCES_RELATED_LINKS,
   RESOURCES_TRADE_PRIORITY_LINKS,
@@ -387,33 +387,11 @@ function DownloadsPanel() {
   return (
     <div className="space-y-8">
       <p className="max-w-2xl text-sm leading-relaxed text-[#555555]">
-        Starter checklists and reference PDFs. Confirm final document
-        sets with counsel and the issuing bank.
+        Use the commodity trade document checklist below as a structured reference. Confirm final
+        document sets with counsel, your bank, and the agreed purchase and sale agreement.
       </p>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        {RESOURCES_DOWNLOADS.map((file) => (
-          <article
-            key={file.href}
-            className="flex flex-col justify-between marketing-box rounded-lg p-6 shadow-sm"
-          >
-            <div>
-              <span className="inline-flex rounded-full bg-[#f3f1ec] px-3 py-1 text-xs font-semibold text-[#1b3a5c]">
-                {file.type}
-              </span>
-              <p className="mt-4 text-lg font-semibold text-[#001a3d]">{file.title}</p>
-              <p className="mt-2 text-sm leading-relaxed text-[#666666]">{file.note}</p>
-            </div>
-            <a
-              href={file.href}
-              download
-              className="focus-ring mt-6 inline-flex w-fit items-center rounded-md bg-[#1b3a5c] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#13293d]"
-            >
-              Download file
-            </a>
-          </article>
-        ))}
-      </div>
+      <CommodityTradeDocumentChecklist />
 
       <LegalDocumentsPanel category="trade" title="Legal & trade documents (PDF)" />
     </div>
@@ -435,7 +413,7 @@ const PANEL_TITLES: Record<ResourcesTabId, { eyebrow: string; title: string }> =
   },
   downloads: {
     eyebrow: "Downloads",
-    title: "Printable references",
+    title: "Commodity trade document checklist",
   },
 };
 

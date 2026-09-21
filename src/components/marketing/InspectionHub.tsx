@@ -60,7 +60,7 @@ const GALLERY_MOSAIC = [
 const PANEL_TITLES: Record<InspectionTabId, { eyebrow: string; title: string }> = {
   services: {
     eyebrow: "Transaction lifecycle",
-    title: "Six professional inspection services",
+    title: "Six inspection topics we coordinate",
   },
   commodities: {
     eyebrow: "By product",

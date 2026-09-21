@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { CmsPageHero } from "@/components/marketing/CmsPageHero";
 import { InspectionPageSections } from "@/components/marketing/InspectionSections";
+import { TraderRoleNotice } from "@/components/marketing/TraderRoleNotice";
 import { collectCmsSections } from "@/lib/content/cms-collect";
 import { cmsPageMetadata } from "@/lib/content/cms-page-metadata";
 import { INSPECTIONS_HERO } from "@/lib/content/inspections-content";
@@ -9,9 +10,9 @@ import { INSPECTION_CMS_SECTION_IDS } from "@/lib/marketing/inspection-cms";
 
 export async function generateMetadata(): Promise<Metadata> {
   return cmsPageMetadata("inspections", {
-    title: "Independent Commodity Inspection Services",
+    title: "Inspection in bulk commodity trade",
     description:
-      "Finekarts coordinates independent inspection, testing, and verification at origin and destination — supplier verification, quality, quantity, loading supervision, and laboratory analysis.",
+      "Finekarts sells bulk commodities and coordinates independent inspection firms when the PSA requires — quality, quantity, loading supervision, and laboratory analysis at origin or destination.",
   });
 }
 
@@ -30,6 +31,11 @@ export default async function InspectionsPage() {
           secondaryCta: INSPECTIONS_HERO.secondaryCta,
         }}
       />
+      <section className="bg-white marketing-section pt-0">
+        <div className="container-page -mt-4">
+          <TraderRoleNotice />
+        </div>
+      </section>
       <InspectionPageSections cms={cms} />
     </>
   );

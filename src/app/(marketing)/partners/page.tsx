@@ -7,11 +7,12 @@ import { cmsField } from "@/lib/content/cms-field";
 import { getEffectiveSectionFields, getPublishedPage } from "@/lib/content/page-content";
 import { getPartners, PARTNERS_PAGE_INTRO } from "@/lib/content/partners-catalog";
 import { PARTNERS_STORY } from "@/lib/content/marketing-pages";
+import { TraderRoleNotice } from "@/components/marketing/TraderRoleNotice";
 
 export const metadata: Metadata = {
-  title: "Verification partners",
+  title: "Independent inspection & certification firms",
   description:
-    "Independent inspection, certification, and verification partners supporting transparent international commodity trade.",
+    "Firms Finekarts may appoint on bulk commodity programmes — Finekarts is the trader, not the inspection company.",
 };
 
 export default async function PartnersPage() {
@@ -31,6 +32,12 @@ export default async function PartnersPage() {
           secondaryCta: { href: "/verification", label: "Due diligence overview" },
         }}
       />
+
+      <section className="bg-white marketing-section pt-0">
+        <div className="container-page -mt-4">
+          <TraderRoleNotice />
+        </div>
+      </section>
 
       <MarketingStorySection
         eyebrow={PARTNERS_STORY.eyebrow}

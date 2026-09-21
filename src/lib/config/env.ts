@@ -37,8 +37,28 @@ const envSchema = z.object({
     .transform((v) => v === "true"),
   CRM_PROVIDER: z.enum(["none", "internal"]).default("internal"),
   NEWSLETTER_PROVIDER: z.enum(["none", "internal"]).default("internal"),
-  SHIPMENT_TRACKING_PROVIDER: z.enum(["none", "manual"]).default("manual"),
+  SHIPMENT_TRACKING_PROVIDER: z
+    .enum(["none", "manual", "terminal49", "easypost", "multi"])
+    .default("manual"),
   SHIPMENT_WEBHOOK_SECRET: z.string().optional(),
+  TERMINAL49_API_KEY: z.string().optional(),
+  TERMINAL49_API_BASE_URL: z.string().url().default("https://api.terminal49.com/v2"),
+  TERMINAL49_WEBHOOK_SECRET: z.string().optional(),
+  EASYPOST_API_KEY: z.string().optional(),
+  EASYPOST_API_BASE_URL: z.string().url().default("https://api.easypost.com/v2"),
+  EASYPOST_WEBHOOK_SECRET: z.string().optional(),
+  /** Finekarts-internal KYB verification partner (server-side only). */
+  KYB_VERIFICATION_API_KEY: z.string().optional(),
+  KYB_VERIFICATION_API_BASE_URL: z.preprocess(
+    (v) => (typeof v === "string" && v.trim() === "" ? undefined : v),
+    z.string().url().optional(),
+  ),
+  /** Finekarts-internal TIC / trade inspection verification partner (server-side only). */
+  TIC_VERIFICATION_API_KEY: z.string().optional(),
+  TIC_VERIFICATION_API_BASE_URL: z.preprocess(
+    (v) => (typeof v === "string" && v.trim() === "" ? undefined : v),
+    z.string().url().optional(),
+  ),
   FEATURE_SUPPLIER_PORTAL: z
     .string()
     .optional()
@@ -125,5 +145,9 @@ export function integrationStatus() {
     crm: env.CRM_PROVIDER,
     newsletter: env.NEWSLETTER_PROVIDER,
     shipmentTracking: env.SHIPMENT_TRACKING_PROVIDER,
+    terminal49: Boolean(env.TERMINAL49_API_KEY?.trim()),
+    easypost: Boolean(env.EASYPOST_API_KEY?.trim()),
+    kybVerification: Boolean(env.KYB_VERIFICATION_API_KEY?.trim()),
+    ticVerification: Boolean(env.TIC_VERIFICATION_API_KEY?.trim()),
   };
 }

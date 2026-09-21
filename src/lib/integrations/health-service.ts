@@ -4,6 +4,8 @@ import { getAIProviderHealth } from "@/lib/integrations/providers/ai-registry";
 import { getMarketDataHealth } from "@/lib/integrations/providers/market-data-registry";
 import { getESignatureHealth } from "@/lib/integrations/providers/esignature-registry";
 import { getScreeningHealth } from "@/lib/integrations/providers/screening-registry";
+import { getShippingTrackingHealth } from "@/lib/integrations/providers/shipping-tracking-registry";
+import { getFinekartsVerificationStatus } from "@/lib/integrations/verification-service";
 import { getAccountingProvider } from "@/lib/finance/accounting-provider";
 import { integrationStatus } from "@/lib/config/env";
 import { listFeatureFlags } from "@/lib/integrations/feature-flags";
@@ -13,11 +15,13 @@ export async function getIntegrationHealthDashboard() {
   const accounting = getAccountingProvider();
   const accountingHealth = await accounting.testConnection();
 
-  const [ai, market, esign, screening, flags] = await Promise.all([
+  const [ai, market, esign, screening, shipmentTracking, verification, flags] = await Promise.all([
     getAIProviderHealth(),
     getMarketDataHealth(),
     getESignatureHealth(),
     getScreeningHealth(),
+    getShippingTrackingHealth(),
+    getFinekartsVerificationStatus(),
     listFeatureFlags(),
   ]);
 
@@ -56,7 +60,11 @@ export async function getIntegrationHealthDashboard() {
       },
       email: { provider: env.EMAIL_PROVIDER },
       sms: { provider: env.SMS_PROVIDER },
-      shipmentTracking: { provider: env.SHIPMENT_TRACKING_PROVIDER },
+      shipmentTracking: {
+        provider: env.SHIPMENT_TRACKING_PROVIDER,
+        ...shipmentTracking,
+      },
+      verification,
     },
     jobs: jobStats,
     webhooks: webhookStats,

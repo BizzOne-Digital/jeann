@@ -107,7 +107,7 @@ function StoryPanel({
             {cmsField(
               cms,
               "body",
-              "Finekarts Incorporated is a distributor offering bulk commodities for sale to qualified buyers. Supplier identities are private; we build trust through verification, inspection, logistics, trade insurance, and bankable ICC-aligned payment structures — not by connecting third-party buyers and sellers.",
+              "Finekarts Incorporated is a distributor offering bulk commodities for sale to qualified buyers. Supplier identities are private; we build trust through disciplined trade structure — coordinating verification, inspection, carriage, and marine insurance where contracts require them — not by acting as a marketplace or as a provider of those specialist services.",
             )}
           </p>
           <p className="mt-4 text-sm leading-relaxed text-[#555555]">
@@ -276,7 +276,7 @@ function GlobalPanel({
           {cmsField(
             cms,
             "body",
-            "Private supply channels and logistics partners help us deliver quality commodities reliably — with transparent communication and documentation discipline at every corridor.",
+            "Private supply channels and appointed carriers and forwarders help us fulfil PSAs reliably — with transparent communication and documentation discipline at every corridor.",
           )}
         </p>
 

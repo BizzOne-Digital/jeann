@@ -332,7 +332,7 @@ function RiskPanel() {
       <div>
         <p className="text-xs font-semibold tracking-[0.16em] text-[#888] uppercase">Scope by service</p>
         <p className="mt-3 text-sm leading-relaxed text-[#555555]">
-          Credit, supply chain, physical presence, and certification verification services.
+          Credit, supply chain, physical presence, and certification checks coordinated through independent providers.
         </p>
         <div className="mt-6">
           <ServiceAccordion services={servicesForPillar("risk", serviceByNumber)} />
@@ -403,7 +403,7 @@ export function VerificationHub({ cms }: { cms?: CmsSectionMap }) {
 
   return (
     <VerificationHubContext.Provider value={hubContent}>
-      <section id="our-services" className="scroll-mt-24 border-b border-[#d5d0c8] bg-white py-12 lg:py-16">
+      <section id="diligence-topics" className="scroll-mt-24 border-b border-[#d5d0c8] bg-white py-12 lg:py-16">
         <div className="container-page">
           <p className="text-xs font-semibold tracking-[0.22em] text-[#c88e4a] uppercase">
             Due diligence library

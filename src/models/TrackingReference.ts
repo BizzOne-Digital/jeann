@@ -10,6 +10,12 @@ export interface ITrackingReference {
   dataSource: string;
   active: boolean;
   lastSynchronizedAt?: Date;
+  providerResourceIds?: {
+    trackingRequestId?: string;
+    shipmentId?: string;
+    containerId?: string;
+    trackerId?: string;
+  };
   createdByUserId: Types.ObjectId;
 }
 
@@ -25,6 +31,12 @@ const trackingReferenceSchema = new Schema<ITrackingReference>(
     dataSource: { type: String, default: "manual" },
     active: { type: Boolean, default: true },
     lastSynchronizedAt: { type: Date },
+    providerResourceIds: {
+      trackingRequestId: { type: String },
+      shipmentId: { type: String },
+      containerId: { type: String },
+      trackerId: { type: String },
+    },
     createdByUserId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   },
   { timestamps: true },

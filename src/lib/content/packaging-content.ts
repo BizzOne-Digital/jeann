@@ -31,7 +31,7 @@ export const PACKAGING_HERO = {
   description:
     "Packaging and transport modes for bulk cargoes we sell — flexitank, vessel, container, rail, and road programmes plus FIBCs, drums, and totes. Options are matched to product, FOB or CIF terms, inspection scope, and destination handling.",
   primaryCta: { href: "#packaging-types", label: "View detailed specifications →" },
-  secondaryCta: { href: "/logistics", label: "Logistics overview" },
+  secondaryCta: { href: "/logistics", label: "Trade logistics coordination" },
 };
 
 export const PACKAGING_PAGE_INTRO = {
@@ -41,9 +41,9 @@ export const PACKAGING_PAGE_INTRO = {
 };
 
 export const PACKAGING_TRANSPORT_ROLE = {
-  title: "Our role in transport and packaging",
+  title: "Trader role in transport and packaging",
   lead:
-    "Finekarts does not simply list packaging options — we structure how cargo moves from origin to destination using the right mode, unit and handling method for each commodity programme. Packaging is matched to product, corridor, Incoterms and inspection scope before loading begins.",
+    "Finekarts sells bulk commodities — we do not operate trucks, vessels, or rail lines. We structure each PSA around workable packaging and transport modes (with carriers, terminals, and inspectors appointed where required) so cargo matches contract, corridor, and banking documents before loading.",
   boxes: [
     {
       title: "Assess the programme",
@@ -163,6 +163,8 @@ export const PACKAGING_TYPES: PackagingTypeContent[] = [
     images: [
       { ...PACKAGING_IMAGES.bulkVessel },
       { ...PACKAGING_IMAGES.bulkVesselLoading },
+      { ...PACKAGING_IMAGES.bulkVesselHold },
+      { ...PACKAGING_IMAGES.bulkVesselPort },
     ],
     note: "Hold cleanliness, fumigation, moisture and draft survey methods are defined in the sales contract.",
   },
@@ -209,7 +211,12 @@ export const PACKAGING_TYPES: PackagingTypeContent[] = [
       "Cost-effective over long inland distances versus road only",
     ],
     commodities: ["Grains", "Oilseeds", "Sugar (bulk where rail programme exists)", "Pulses"],
-    images: [{ ...PACKAGING_IMAGES.bulkRailcar }],
+    images: [
+      { ...PACKAGING_IMAGES.bulkRailcarHopperTrain },
+      { ...PACKAGING_IMAGES.bulkRailcar },
+      { ...PACKAGING_IMAGES.bulkRailcarGrainTerminal },
+      { ...PACKAGING_IMAGES.bulkRailcarIntermodal },
+    ],
     note: "Rail routing, car type, demurrage and destination unloading capability must be confirmed per corridor.",
   },
   {

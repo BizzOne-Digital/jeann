@@ -2,9 +2,10 @@ import type { MarketingContentBox } from "@/components/marketing/MarketingStoryS
 import { LOGISTICS_IMAGES } from "@/lib/content/logistics-images";
 
 export const INSPECTIONS_STORY = {
-  eyebrow: "Our objective",
-  title: "Greater transparency, reduced risk, confidence in every shipment",
-  lead: "Finekarts coordinates independent inspection at origin, during loading, in transit where applicable, and at destination — so bulk buyers receive documented evidence on quality, quantity, and compliance without replacing contractual due diligence or bank requirements.",
+  eyebrow: "How we trade",
+  title: "Bulk commodities with independent inspection where the contract requires it",
+  lead:
+    "Finekarts sells agricultural and edible-oil cargoes to qualified buyers. Inspection is a tool — we appoint recognized independent firms at origin, loading, or destination when the PSA and bank call for documented quality and quantity evidence.",
   youtubeUrl: "https://www.youtube.com/watch?v=gADVpRPdr7E",
   showcaseImageSrc: "/images/inspections/warehouse-bulk-inspection.png",
   showcaseImageAlt:
@@ -28,9 +29,9 @@ export const INSPECTIONS_STORY = {
 };
 
 export const PARTNERS_STORY = {
-  eyebrow: "Verification partners",
+  eyebrow: "Independent partners",
   title: "Recognized inspection and certification relationships",
-  lead: "We work with internationally known inspection, testing, and certification organizations so qualified buyers can build confidence in cargo, counterparties, and documents — partnership listings support transparency; they do not replace your contract terms.",
+  lead: "On commodity programmes we sell, Finekarts may appoint internationally known inspection, testing, and certification firms when contracts call for independent evidence — we coordinate them; we do not operate as those brands.",
   youtubeUrl: "https://www.youtube.com/watch?v=rJPI2UA25HQ",
   imageSrc: "/images/inspections/sampling-grain.png",
   imageAlt: "Grain sampling for independent verification",
@@ -41,7 +42,7 @@ export const PARTNERS_STORY = {
     },
     {
       title: "Safety",
-      body: "Verification programmes support sanitary handling, packaging integrity, and documentary traceability from load port through discharge.",
+      body: "Independent inspection scope can cover sanitary handling, packaging integrity, and documentary traceability from load port through discharge when agreed in the PSA.",
     },
     {
       title: "Punctuality",
@@ -52,8 +53,9 @@ export const PARTNERS_STORY = {
 
 export const VERIFICATION_STORY = {
   eyebrow: "Due diligence",
-  title: "Evidence-backed confidence before you commit",
-  lead: "Finekarts Verification Services combines corporate registries, regulatory databases, commercial intelligence and independent inspection — so bulk buyers can assess supply chains, origin claims, and commodity evidence with documented support rather than representations alone.",
+  title: "Evidence before we commit to a trade",
+  lead:
+    "Finekarts conducts bulk commodity trades through structured due diligence. We use trusted verification providers, commercial intelligence, validation, and inspection where appropriate — to assess parties, product, and supply chain before signing a PSA. We coordinate these tools; we are not the verification provider.",
   youtubeUrl: "https://www.youtube.com/watch?v=nFFts9WyUm8",
   imageSrc: "/images/inspections/cargo-inspector-loading.png",
   imageAlt: "Independent verification at commodity loading",
@@ -74,9 +76,10 @@ export const VERIFICATION_STORY = {
 };
 
 export const LOGISTICS_STORY = {
-  eyebrow: "Logistics",
+  eyebrow: "Logistics coordination",
   title: "Disciplined movement from load port to discharge",
-  lead: "Whether you trade FOB or CIF, success depends on clear allocation of costs, risks, and documents. Finekarts structures shipment programmes so cargo, surveys, and transport papers stay aligned with your contract and banking instrument.",
+  lead:
+    "Finekarts is the seller on the commodity contract — not a freight forwarder or carrier. Whether you trade FOB or CIF, we coordinate shipment programmes with logistics partners so cargo, surveys, and transport documents stay aligned with your PSA and LC.",
   youtubeUrl: "https://www.youtube.com/watch?v=azLlZZ0t2CE",
   imageSrc: LOGISTICS_IMAGES.portTrucks.src,
   imageAlt: LOGISTICS_IMAGES.portTrucks.alt,

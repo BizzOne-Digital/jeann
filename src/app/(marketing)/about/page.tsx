@@ -6,13 +6,14 @@ import { getEffectiveSectionFields, getPublishedPage } from "@/lib/content/page-
 import { AboutHub } from "@/components/marketing/AboutHub";
 import { FoodSafetyAgencyMarquee } from "@/components/marketing/FoodSafetyAgencyMarquee";
 import { AboutHero } from "@/components/marketing/AboutSections";
+import { TraderRoleNotice } from "@/components/marketing/TraderRoleNotice";
 import { cmsPageMetadata } from "@/lib/content/cms-page-metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
   return cmsPageMetadata("about", {
     title: "About Finekarts",
     description:
-      "Finekarts Incorporated supplies bulk agricultural commodities for sale to qualified buyers — verification, inspection, logistics, trade insurance, and bankable ICC-aligned transactions.",
+      "Finekarts Incorporated is a bulk agricultural commodity distributor and trader for qualified international buyers — coordinating inspection, logistics, and insurance on trades we sell.",
   });
 }
 
@@ -25,6 +26,11 @@ export default async function AboutPage() {
   return (
     <>
       <AboutHero positioning={site.positioning} cms={getEffectiveSectionFields(cms, "hero")} />
+      <section className="bg-white marketing-section pt-0">
+        <div className="container-page -mt-4">
+          <TraderRoleNotice variant="full" />
+        </div>
+      </section>
       <AboutHub
         teamStrategy={teamStrategy}
         teamCollaboration={teamCollaboration}

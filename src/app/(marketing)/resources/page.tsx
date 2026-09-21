@@ -3,6 +3,7 @@ import { PageHero } from "@/components/marketing/PageHero";
 import { resolveMarketingHeroImage } from "@/lib/marketing/cms-hero";
 import { resolveImageSrc } from "@/lib/media/resolve-image-src";
 import { ResourcesHub } from "@/components/marketing/ResourcesHub";
+import { TraderRoleNotice } from "@/components/marketing/TraderRoleNotice";
 import { cmsField } from "@/lib/content/cms-field";
 import { getEffectiveSectionFields, getPublishedPage } from "@/lib/content/page-content";
 
@@ -46,6 +47,12 @@ export default async function ResourcesPage() {
           label: cmsField(hero, "secondaryCtaLabel", "Register as buyer"),
         }}
       />
+
+      <section className="bg-white marketing-section pt-0">
+        <div className="container-page -mt-4">
+          <TraderRoleNotice />
+        </div>
+      </section>
 
       <ResourcesHub introBody={introBody} />
     </>

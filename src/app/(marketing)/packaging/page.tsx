@@ -18,6 +18,7 @@ import {
 import { PACKAGING_IMAGES } from "@/lib/content/packaging-images";
 import { getPublishedPage } from "@/lib/content/page-content";
 import { buyerPortalHref } from "@/lib/marketing/cta-links";
+import { TraderRoleNotice } from "@/components/marketing/TraderRoleNotice";
 
 export async function generateMetadata(): Promise<Metadata> {
   return cmsPageMetadata("packaging", {
@@ -37,6 +38,29 @@ const MODE_LABELS = {
   liquid: "Liquid bulk",
   unpackaged: "Unpackaged / vessel",
 } as const;
+
+const TRANSPORT_BOX_SURFACE = [
+  "bg-white",
+  "bg-[#f9f8f5]",
+  "bg-[#eef3f7]",
+  "bg-[#faf6f0]",
+] as const;
+
+function packagingSectionGridClass(imageCount: number, index: number) {
+  if (imageCount === 1) {
+    return `grid items-start gap-10 lg:grid-cols-[minmax(0,1.45fr)_minmax(0,0.55fr)] ${
+      index % 2 === 1 ? "lg:[&>*:first-child]:order-2" : ""
+    }`;
+  }
+  if (imageCount >= 4) {
+    return `grid items-stretch gap-10 lg:grid-cols-2 ${
+      index % 2 === 1 ? "lg:[&>*:first-child]:order-2" : ""
+    }`;
+  }
+  return `grid items-stretch gap-10 lg:grid-cols-2 ${
+    index % 2 === 1 ? "lg:[&>*:first-child]:order-2" : ""
+  }`;
+}
 
 export default async function PackagingPage() {
   const packagingTypes = getOrderedPackagingTypes();
@@ -87,6 +111,12 @@ export default async function PackagingPage() {
         }}
       />
 
+      <section className="bg-white marketing-section pt-0">
+        <div className="container-page -mt-4">
+          <TraderRoleNotice />
+        </div>
+      </section>
+
       <section className="bg-[#f3f1ec] marketing-section">
         <div className="container-page">
           <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">
@@ -107,7 +137,9 @@ export default async function PackagingPage() {
           <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {transportBoxes.map((box, index) => (
               <Reveal key={box.title} delay={index * 0.05}>
-                <article className="h-full marketing-box rounded-lg p-6 shadow-sm">
+                <article
+                  className={`h-full marketing-box rounded-lg p-6 shadow-sm ${TRANSPORT_BOX_SURFACE[index % TRANSPORT_BOX_SURFACE.length]}`}
+                >
                   <h3 className="text-sm font-semibold tracking-[0.14em] text-[#c88e4a] uppercase">
                     {box.title}
                   </h3>
@@ -155,11 +187,7 @@ export default async function PackagingPage() {
                     showCategoryHeader && index > 0 ? "mt-8" : index === 0 ? "" : ""
                   }`}
                 >
-                  <div
-                    className={`grid items-stretch gap-10 lg:grid-cols-2 ${
-                      index % 2 === 1 ? "lg:[&>*:first-child]:order-2" : ""
-                    }`}
-                  >
+                  <div className={packagingSectionGridClass(type.images.length, index)}>
                     <div>
                       <p className="text-xs font-semibold tracking-[0.2em] text-[#c88e4a] uppercase">
                         {String(type.order).padStart(2, "0")} · {MODE_LABELS[type.mode]}
@@ -213,12 +241,31 @@ export default async function PackagingPage() {
 
                     <div
                       className={
-                        type.images.length > 1
-                          ? "relative min-h-[240px] self-stretch lg:min-h-0"
-                          : "self-stretch"
+                        type.images.length >= 4
+                          ? "self-stretch"
+                          : type.images.length > 1
+                            ? "relative min-h-[240px] self-stretch lg:min-h-0"
+                            : "self-stretch lg:max-w-md lg:justify-self-end"
                       }
                     >
-                      {type.images.length > 1 ? (
+                      {type.images.length >= 4 ? (
+                        <div className="grid grid-cols-2 gap-3">
+                          {type.images.map((image) => (
+                            <div
+                              key={image.src}
+                              className="relative aspect-[4/3] overflow-hidden rounded-lg border border-[#d5d0c8] bg-[#e4e0d8]"
+                            >
+                              <Image
+                                src={image.src}
+                                alt={image.alt}
+                                fill
+                                className="object-cover"
+                                sizes="(max-width: 1024px) 45vw, 280px"
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      ) : type.images.length > 1 ? (
                         <div className="flex h-full gap-4 lg:absolute lg:inset-0">
                           {type.images.map((image) => (
                             <div
@@ -242,7 +289,7 @@ export default async function PackagingPage() {
                             alt={type.images[0].alt}
                             fill
                             className="object-cover"
-                            sizes="(max-width: 1024px) 100vw, 480px"
+                            sizes="(max-width: 1024px) 100vw, 360px"
                           />
                         </div>
                       )}

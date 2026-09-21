@@ -57,7 +57,11 @@ export function MarketingStorySection({
               variant={index % 3 === 0 ? "up" : index % 3 === 1 ? "left" : "right"}
               bounce
             >
-              <article className="h-full marketing-box marketing-box-motion rounded-lg p-6 shadow-sm">
+              <article
+                className={`h-full marketing-box marketing-box-motion rounded-lg p-6 shadow-sm ${
+                  index === 0 ? "bg-white" : index === 1 ? "bg-[#f9f8f5]" : "bg-[#eef3f7]"
+                }`}
+              >
                 <h3 className="text-sm font-semibold tracking-[0.14em] text-[#c88e4a] uppercase">
                   {box.title}
                 </h3>

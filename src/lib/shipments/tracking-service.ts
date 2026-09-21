@@ -5,6 +5,7 @@ import {
   normalizeProviderEventType,
   type NormalizedTrackingEvent,
 } from "@/lib/shipments/tracking-provider";
+import { registerCarrierWatch } from "@/lib/integrations/shipping-tracking-service";
 
 export async function addTrackingReference(input: {
   shipmentLotId: string;
@@ -12,6 +13,7 @@ export async function addTrackingReference(input: {
   referenceType: string;
   trackingNumber: string;
   carrier?: string;
+  scac?: string;
   dataSource?: string;
   actorUserId: string;
 }) {
@@ -36,6 +38,22 @@ export async function addTrackingReference(input: {
     actorUserId: input.actorUserId,
     result: "success",
   });
+
+  if (input.provider === "terminal49" || input.provider === "easypost") {
+    try {
+      await registerCarrierWatch({
+        shipmentLotId: input.shipmentLotId,
+        provider: input.provider,
+        referenceType: input.referenceType,
+        trackingNumber: input.trackingNumber,
+        carrier: input.carrier,
+        scac: input.scac,
+        trackingReferenceId: String(ref._id),
+      });
+    } catch {
+      /* tracking request may still be created asynchronously; ops can retry */
+    }
+  }
 
   return ref;
 }

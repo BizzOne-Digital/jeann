@@ -47,7 +47,7 @@ export const PRODUCT_PILLARS: {
   {
     id: "packaging",
     title: "Packaging & logistics",
-    summary: "Packaging formats, MOQ, availability, and related trade services.",
+    summary: "Packaging formats, MOQ, availability, and coordination on programmes we sell.",
     icon: "box",
   },
   {
@@ -60,9 +60,9 @@ export const PRODUCT_PILLARS: {
 
 export const PRODUCT_RELATED_LINKS = [
   { href: "/packaging", label: "Packaging options" },
-  { href: "/logistics", label: "Logistics & freight" },
-  { href: "/inspections", label: "Inspection services" },
-  { href: "/verification", label: "Quality verification" },
+  { href: "/logistics", label: "Trade logistics coordination" },
+  { href: "/inspections", label: "Inspection in trade" },
+  { href: "/verification", label: "Due diligence in trade" },
   { href: "/resources", label: "Trade resources" },
 ] as const;
 

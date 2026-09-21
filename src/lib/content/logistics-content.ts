@@ -4,17 +4,17 @@ export const ICC_INCOTERMS_2020_URL =
   "https://iccwbo.org/business-solutions/incoterms-rules/incoterms-2020/";
 
 export const LOGISTICS_HERO = {
-  eyebrow: "Global Shipping & Logistics",
-  title: "Moving Commodities From Origin to Destination",
+  eyebrow: "Trade logistics coordination",
+  title: "Moving commodities from origin to destination",
   description:
-    "Finekarts sells bulk commodities to qualified buyers and coordinates international shipping from origin to destination — with FOB and CIF as primary terms, marine cargo insurance under CIF, and documentation aligned to the signed PSA and banking instrument.",
-  primaryCta: { href: "#request-quote", label: "Request a shipping quote →" },
+    "Finekarts is the seller on the commodity contract — not a freight forwarder or carrier. On FOB and CIF programmes we coordinate carriers, forwarders, marine cargo insurance under CIF, and PSA-aligned documentation with independent partners.",
+  primaryCta: { href: "#request-quote", label: "Discuss shipping on your trade →" },
   secondaryCta: { href: "#incoterms", label: "FOB, CIF & DDP terms" },
 };
 
 export const GLOBAL_SHIPPING_COVERAGE = {
   title: "Global shipping coverage",
-  lead: "Finekarts supports international trade using recognized Incoterms® rules, including:",
+  lead: "Programmes we sell are structured using recognized Incoterms® rules, including:",
   incoterms: ["EXW", "FCA", "FAS", "FOB", "CFR", "CIF", "CPT", "CIP", "DAP", "DPU", "DDP"],
   note:
     "While Finekarts can structure transactions around various Incoterms® depending on commercial requirements, our standard international terms are FOB and CIF. DDP may be available when the supplier and buyer are in the same country.",
@@ -47,7 +47,7 @@ export const COMMERCIAL_INCOTERMS_PRIMARY_NOTE =
 
 export const REAL_TIME_TRACKING = {
   title: "Real-time shipment tracking",
-  lead: "Visibility matters when you're moving high-value commodities across international borders. Where carrier and logistics-system data is available, Finekarts can provide shipment tracking information including:",
+  lead: "Visibility matters when you're moving high-value commodities across international borders. Where carrier and logistics-system data is available on programmes we sell, we share shipment tracking updates with buyers, including:",
   items: [
     "Vessel identification and container number",
     "Booking information, port of loading and port of discharge",
@@ -55,7 +55,8 @@ export const REAL_TIME_TRACKING = {
     "Current shipment status and estimated time of arrival (ETA)",
     "Port arrival and delivery milestones",
   ],
-  note: "Our objective is to provide customers with greater visibility throughout the shipping process.",
+  note:
+    "Where carrier data is available, we share tracking updates with buyers on programmes we sell — Finekarts is the trader, not the freight operator.",
 };
 
 export const ETA_MONITORING = {
@@ -68,7 +69,8 @@ export const ETA_MONITORING = {
 
 export const PORT_TO_PORT_CHAIN = {
   title: "Global port-to-port logistics",
-  lead: "Finekarts can coordinate international commodity shipments between major producing and consuming markets. Our logistics process may involve:",
+  lead:
+    "Finekarts sells bulk commodities and coordinates international shipments between major producing and consuming markets. Shipment programmes we structure may involve:",
   steps: [
     "Supplier / Factory",
     "Origin warehouse / terminal",
@@ -127,7 +129,7 @@ export const SHIPPING_DOCUMENTATION = {
 
 export const SHIPMENT_COORDINATION = {
   title: "Shipment coordination",
-  lead: "Our logistics team coordinates with relevant parties throughout the shipping process:",
+  lead: "Finekarts trade operations coordinate with carriers, forwarders, terminals, and other parties throughout the shipping process — as seller on the commodity contract:",
   parties: "Supplier → Inspector → Warehouse → Terminal → Carrier → Freight forwarder → Customs → Buyer",
   note: "This coordination helps reduce communication gaps and keeps stakeholders informed about important shipment milestones.",
 };
@@ -160,16 +162,16 @@ export const CONTRACT_TO_CARGO_STEPS = [
 ];
 
 export const LOGISTICS_CLOSING = {
-  title: "CIF, insurance, and reliable logistics.",
-  lead: "Finekarts sells bulk commodities to qualified buyers and coordinates independent inspection, trade documentation, marine insurance under CIF, and international shipping — with responsibilities defined in the signed PSA.",
+  title: "CIF, insurance, and coordinated movement.",
+  lead: "Finekarts sells bulk commodities to qualified buyers and coordinates independent inspection, trade documentation, marine insurance under CIF, and carriage with carriers and forwarders — responsibilities are defined in the signed PSA, not by Finekarts acting as a logistics operator.",
   body: "We align export documentation and insurance with the PSA before cargo sails, and work with buyers on destination requirements during structuring to reduce clearance delays.",
-  tagline: "Sell with discipline. Ship with confidence.",
-  badges: ["FOB & CIF", "Trade insurance", "Shipment visibility", "PSA documentation"],
+  tagline: "Commodity sale first. Carriage coordinated to contract.",
+  badges: ["FOB & CIF", "Coordinated marine insurance", "Carrier visibility", "PSA documentation"],
 };
 
 export const LOGISTICS_CTA = {
-  title: "Request a shipping quote",
-  lead: "Tell us your commodity, quantity, origin, destination, preferred Incoterms and delivery requirements. Our team can help structure the appropriate shipping and documentation programme for your transaction.",
+  title: "Discuss shipping on your trade",
+  lead: "Tell us your commodity, quantity, origin, destination, preferred Incoterms, and delivery requirements. The trade desk will explain how freight and documentation fit your PSA — through carriers and forwarders, not as a standalone Finekarts logistics product.",
   fields: ["Commodity", "Quantity", "Origin", "Destination", "Incoterms", "Delivery terms"],
 };
 

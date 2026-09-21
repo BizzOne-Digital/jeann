@@ -1,0 +1,86 @@
+COMMODITY TRADE DOCUMENT CHECKLIST
+==================================
+
+1. Buyer & Corporate Information
+
+☐ Company Profile
+☐ Certificate of Incorporation / Business Registration
+☐ Corporate KYC Information
+☐ Buyer Corporate Information Sheet (CIS)
+☐ Authorized Signatory Identification
+☐ Business Address and Contact Information
+☐ Importer / Import License, where applicable
+☐ Tax or VAT Registration, where applicable
+
+2. Purchase & Transaction Documents
+
+☐ Letter of Intent (LOI), where applicable
+☐ Irrevocable Corporate Purchase Order (ICPO), where applicable
+☐ Purchase Order (PO)
+☐ Product Specification
+☐ Required Quantity and Delivery Schedule
+☐ Destination Port or Final Delivery Location
+☐ Agreed Incoterm
+☐ Quotation / Commercial Offer
+☐ Proforma Invoice
+☐ Purchase and Sale Agreement (PSA)
+
+3. Banking & Payment Documents
+
+☐ Proof of Funds (POF), where required
+☐ Bank Comfort Letter (BCL), where applicable
+☐ Readiness to Proceed / RWA, where applicable
+☐ Letter of Credit (LC) Requirements
+☐ Documentary Credit / LC Wording
+☐ SBLC or Bank Guarantee, where specifically agreed
+☐ Agreed Payment Terms and Banking Instructions
+☐ SWIFT Banking Documentation, where applicable
+
+4. Compliance & Verification
+
+☐ Buyer KYC / AML Documentation
+☐ Sanctions and Restricted-Party Screening
+☐ Beneficial Ownership Information, where required
+☐ Import and Regulatory Documentation
+☐ End-Use or End-Buyer Information, where applicable
+☐ Required Certificates or Government Approvals
+
+5. Product & Quality Documentation
+
+☐ Product Specification Sheet
+☐ Certificate of Analysis (COA), where applicable
+☐ Certificate of Origin
+☐ Health / Sanitary / Phytosanitary Certificate, where applicable
+☐ Quality Certificate
+☐ Inspection Certificate
+☐ Weight / Quantity Certificate
+☐ Fumigation Certificate, where applicable
+☐ Other Commodity-Specific Certificates
+
+6. Shipping & Export Documentation
+
+☐ Commercial Invoice
+☐ Packing List, where applicable
+☐ Bill of Lading / Transport Document
+☐ Certificate of Origin
+☐ Export Declaration, where applicable
+☐ Insurance Certificate for CIF transactions
+☐ Inspection Documentation
+☐ Shipping Instructions
+☐ Customs Documentation
+☐ Other Destination-Country Import Documents
+
+7. Transaction Completion
+
+☐ Final Shipping Documents Reviewed
+☐ Documentary Compliance Confirmed
+☐ Payment / Banking Conditions Satisfied
+☐ Cargo Released for Shipment
+☐ Shipment Tracking Information Provided
+☐ Arrival / Delivery Documentation
+☐ Final Transaction Records
+
+IMPORTANT NOTE
+--------------
+
+Not every document listed above is required for every commodity transaction. The applicable documentation is determined by the product, origin and destination countries, transaction structure, Incoterm, payment method, inspection requirements, banking requirements, and applicable laws and regulations. Finekarts confirms the specific document requirements for each transaction before execution.

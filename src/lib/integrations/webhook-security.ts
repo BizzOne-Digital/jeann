@@ -1,9 +1,28 @@
-import { createHash, timingSafeEqual } from "crypto";
+import { createHash, createHmac, timingSafeEqual } from "crypto";
 import { tryConnectMongo } from "@/lib/db/mongoose";
 import type { WebhookProcessingStatus } from "@/models/WebhookEvent";
 
 export function hashPayload(payload: string): string {
   return createHash("sha256").update(payload).digest("hex");
+}
+
+/** Terminal49 signs the raw POST body with HMAC-SHA256 (hex) in `X-T49-Webhook-Signature`. */
+export function verifyTerminal49WebhookSignature(
+  rawBody: string | Buffer,
+  signature: string,
+  secret: string,
+): boolean {
+  if (!secret || !signature) return false;
+  const body = typeof rawBody === "string" ? rawBody : rawBody;
+  const digest = createHmac("sha256", secret).update(body).digest("hex");
+  try {
+    const received = Buffer.from(signature, "hex");
+    const expected = Buffer.from(digest, "hex");
+    if (received.length !== expected.length) return false;
+    return timingSafeEqual(received, expected);
+  } catch {
+    return false;
+  }
 }
 
 export function verifyHmacSignature(

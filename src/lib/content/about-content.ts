@@ -4,7 +4,7 @@ export const ABOUT_STORY = {
   eyebrow: "Finekarts Incorporated",
   title: "Supplying bulk commodities buyers can trust",
   lead:
-    "We sell bulk agricultural cargoes to qualified international buyers — with independent verification, inspection, logistics, trade insurance where contracts require it, and ICC-aligned bankable payment structures.",
+    "We sell bulk agricultural cargoes to qualified international buyers — coordinating independent verification, inspection, carriers, and marine insurance where contracts require them, plus ICC-aligned bankable payment structures. Finekarts is the distributor on the sale, not the provider of those specialist services.",
   boxes: [
     {
       title: "Quality",
@@ -34,8 +34,8 @@ export const ABOUT_STATS = [
   },
   {
     value: "3rd party",
-    label: "Inspection ready",
-    detail: "Agency and scope are deal-specific",
+    label: "Independent inspection",
+    detail: "Appointed firms — scope is PSA-specific",
   },
   {
     value: "Global",
@@ -98,7 +98,7 @@ export const ABOUT_PANEL_TITLES: Record<
   },
   global: {
     eyebrow: "Corridors",
-    title: "Delivery markets and logistics partners",
+    title: "Corridors and appointed carriers",
   },
 };
 

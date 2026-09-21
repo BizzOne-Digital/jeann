@@ -36,6 +36,14 @@ export const PACKAGING_IMAGES = {
     src: "/images/packaging/bulk-vessel-loading.png",
     alt: "Bulk vessel being loaded with dry bulk cargo at a marine terminal",
   },
+  bulkVesselHold: {
+    src: "/images/packaging/bulk-vessel-hold.png",
+    alt: "Dry bulk commodity in a ship hold during loading operations",
+  },
+  bulkVesselPort: {
+    src: "/images/packaging/containerized-cargo-port.png",
+    alt: "Export port with vessel at berth — bulk and container export corridor",
+  },
   containerizedCargoPort: {
     src: "/images/packaging/containerized-cargo-port.png",
     alt: "Container ship at port with gantry cranes",
@@ -50,11 +58,23 @@ export const PACKAGING_IMAGES = {
   },
   bulkTruck: {
     src: "/images/packaging/bulk-truck.png",
-    alt: "Hopper bulk truck and trailer at a grain elevator with storage silos",
+    alt: "White hopper trailer truck with bulk commodity silos at an elevator terminal",
   },
   bulkRailcar: {
-    src: "/images/packaging/bulk-railcar.png",
-    alt: "Bulk hopper railcars at a grain terminal",
+    src: "/images/packaging/bulk-railcar.jpg",
+    alt: "White covered hopper railcars on curved track for dry bulk export",
+  },
+  bulkRailcarHopperTrain: {
+    src: "/images/packaging/bulk-railcar-hopper-train.jpg",
+    alt: "Covered hopper railcar train on multi-track corridor for agricultural bulk",
+  },
+  bulkRailcarGrainTerminal: {
+    src: "/images/packaging/bulk-railcar-grain-terminal.jpg",
+    alt: "Bulk grain hopper train beside export silos and rail loading infrastructure",
+  },
+  bulkRailcarIntermodal: {
+    src: "/images/packaging/bulk-railcar-intermodal.png",
+    alt: "Intermodal rail corridor connecting inland elevators to port bulk terminals",
   },
   isoTank1: {
     src: "/images/packaging/iso-tank-1.png",

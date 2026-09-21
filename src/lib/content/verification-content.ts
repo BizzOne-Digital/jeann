@@ -1,4 +1,6 @@
-/** Client-approved verification page content (Global Business Verification & Due Diligence). */
+/** Due diligence topics for bulk commodity trade — Finekarts coordinates third-party checks; we are not a verification bureau. */
+
+import { FINEKARTS_DUE_DILIGENCE_LEAD, FINEKARTS_TOOLS_DISCLAIMER } from "@/lib/content/trader-positioning";
 
 export type VerificationService = {
   n: number;
@@ -12,17 +14,17 @@ export type VerificationService = {
 };
 
 export const VERIFICATION_HERO = {
-  eyebrow: "Global Business Verification & Due Diligence",
-  title: "Know Who You Are Trading With",
-  description:
-    "Before large programmes, qualified buyers need evidence — not marketing claims. Finekarts Verification Services combines government records, corporate registries, regulatory data, and independent checks so counterparties, licences, and commodity claims are documented before contract.",
-  primaryCta: { href: "#request-verification", label: "Request a verification report →" },
-  secondaryCta: { href: "#our-services", label: "Our verification services" },
+  eyebrow: "Due diligence in bulk commodity trade",
+  title: "Know who you are trading with",
+  description: FINEKARTS_DUE_DILIGENCE_LEAD,
+  primaryCta: { href: "#request-verification", label: "Contact trade desk →" },
+  secondaryCta: { href: "#diligence-topics", label: "Browse diligence topics" },
 };
 
 export const GLOBAL_VERIFICATION_NETWORK = {
-  title: "Global verification network",
-  lead: "Finekarts supports verification across international markets, helping clients evaluate businesses operating across:",
+  title: "International diligence coverage",
+  lead:
+    "Finekarts is a commodity trader, not a verification agency. Where a programme requires it, we coordinate trusted third-party providers and commercial intelligence to evaluate counterparties operating across:",
   regions: [
     "North America",
     "South America",
@@ -38,7 +40,8 @@ export const GLOBAL_VERIFICATION_NETWORK = {
 export const REAL_TIME_INTELLIGENCE = {
   title: "Real-time business intelligence",
   lead: "Business information can change quickly. Companies may change ownership, directors, registered addresses, legal status, licenses, import/export permissions, operating status, financial condition, credit profile, manufacturing capacity, distribution networks and banking relationships.",
-  note: "Where supported by the relevant data source, Finekarts verification processes can incorporate current or recently updated information to help clients make better-informed commercial decisions.",
+  note:
+    "Where supported by the relevant data source, registry and intelligence feeds we rely on can incorporate current or recently updated information to support trade decisions.",
   disclaimer:
     "Verification results should always be understood as a point-in-time assessment, not a permanent guarantee of future performance.",
 };
@@ -49,7 +52,7 @@ export const VERIFICATION_SERVICES: VerificationService[] = [
     title: "Corporate Registration Verification",
     summary:
       "Verify available government and corporate-registration information to establish whether the entity presented during negotiations corresponds with a legally registered business.",
-    intro: "We can verify information including:",
+    intro: "Coordinated third-party diligence may confirm information including:",
     items: [
       "Legal company name, registration number and date of incorporation",
       "Company status, registered jurisdiction and registered address",
@@ -103,7 +106,7 @@ export const VERIFICATION_SERVICES: VerificationService[] = [
     title: "Manufacturer Verification",
     summary:
       "A supplier claiming to be a manufacturer should be evaluated differently from a trading intermediary.",
-    intro: "Our verification process can help establish:",
+    intro: "Independent checks coordinated for the transaction may help establish:",
     items: [
       "Manufacturing location, factory existence and production activities",
       "Production capacity, processing equipment and storage facilities",
@@ -115,7 +118,7 @@ export const VERIFICATION_SERVICES: VerificationService[] = [
     n: 6,
     title: "Distributor & Trading Company Verification",
     summary:
-      "Finekarts can help clients assess distributors, wholesalers, brokers and trading companies.",
+      "Third-party diligence may be coordinated to assess distributors, wholesalers, brokers, and trading companies involved in a programme.",
     intro: "Verification may include:",
     items: [
       "Legal existence, business activities and distribution capabilities",
@@ -143,7 +146,7 @@ export const VERIFICATION_SERVICES: VerificationService[] = [
     n: 8,
     title: "Creditworthiness & Financial Due Diligence",
     summary:
-      "Where legally available and permitted, Finekarts can help clients obtain or coordinate commercial credit information relating to counterparties.",
+      "Where legally available and permitted, commercial credit information relating to counterparties may be obtained through licensed intelligence providers.",
     intro: "Depending on the market and available data, reports may include:",
     items: [
       "Credit rating and credit limit recommendations",
@@ -159,7 +162,7 @@ export const VERIFICATION_SERVICES: VerificationService[] = [
     summary:
       "A commodity transaction can involve multiple parties from producer through logistics provider.",
     body:
-      "Producer → Manufacturer/Processor → Supplier → Trader → Distributor → Buyer → Logistics Provider. Finekarts can help clients map and verify relevant participants in the supply chain.",
+      "Producer → Manufacturer/Processor → Supplier → Trader → Distributor → Buyer → Logistics Provider. Relevant participants may be mapped and checked through independent sources where scope allows.",
     intro: "The objective is to identify:",
     items: [
       "Who owns the product and who produces it",
@@ -188,7 +191,7 @@ export const VERIFICATION_SERVICES: VerificationService[] = [
     title: "Certification & License Verification",
     summary:
       "Companies frequently provide certificates during international transactions.",
-    intro: "Depending on product and jurisdiction, Finekarts can help verify available documentation such as:",
+    intro: "Depending on product and jurisdiction, documentary review coordinated with specialists may cover:",
     items: [
       "ISO, HACCP, GMP and food-safety certifications",
       "Organic and Halal certifications",
@@ -232,7 +235,7 @@ export const VERIFICATION_SERVICES: VerificationService[] = [
     n: 14,
     title: "Independent Inspection Partners",
     summary:
-      "Where appropriate, Finekarts can coordinate independent inspection and verification services through recognized third-party organizations.",
+      "Where appropriate, Finekarts appoints recognized independent inspection and diligence firms — we are the trader coordinating them, not the inspection or verification company.",
     intro: "Potential inspection organizations may include:",
     items: ["SGS", "Intertek", "Bureau Veritas", "Cotecna", "Control Union", "CCIC"],
     note: "The inspection organization is selected according to commodity, country, location, inspection scope and contractual requirements. Use of an organization's name or logo does not imply endorsement, affiliation or partnership unless formally authorized.",
@@ -240,7 +243,7 @@ export const VERIFICATION_SERVICES: VerificationService[] = [
 ];
 
 export const VERIFICATION_HUB_INTRO =
-  "Pick a pillar to explore — registration, counterparties, risk, or compliance. Each topic includes scoped verification services you can expand in place.";
+  "Finekarts sells bulk commodities — these topics explain the independent checks and intelligence we may coordinate before or during a trade. We are not a verification or credit-rating agency; scope is agreed per transaction.";
 
 export const VERIFICATION_PILLARS = [
   {
@@ -293,7 +296,7 @@ export const VERIFICATION_FRAMEWORK_STEPS = [
   { step: 3, title: "Verify", text: "Compare company claims against independent information." },
   { step: 4, title: "Assess", text: "Review operational capability, licenses, credit information and relevant risk indicators." },
   { step: 5, title: "Inspect", text: "Where required, arrange independent on-site or commodity inspection." },
-  { step: 6, title: "Report", text: "Provide a structured verification report identifying verified information, supporting sources, discrepancies and areas requiring additional due diligence." },
+  { step: 6, title: "Report", text: "Independent providers issue structured diligence reports identifying verified information, supporting sources, discrepancies, and areas requiring additional review." },
 ];
 
 export const VERIFICATION_REPORT_SECTIONS = [
@@ -310,8 +313,8 @@ export const VERIFICATION_REPORT_SECTIONS = [
 ];
 
 export const VERIFICATION_NOT_GUARANTEE = {
-  title: "Verification is not a guarantee",
-  lead: "Finekarts Verification Services are designed to provide commercial intelligence and risk information to support informed business decisions. Verification does not guarantee:",
+  title: "Due diligence is not a guarantee",
+  lead: `${FINEKARTS_TOOLS_DISCLAIMER} Coordinated checks and reports do not guarantee:`,
   items: [
     "Future financial performance or payment",
     "Delivery, product availability or product ownership",
@@ -322,8 +325,9 @@ export const VERIFICATION_NOT_GUARANTEE = {
 };
 
 export const VERIFICATION_CTA = {
-  title: "Request a business verification report",
-  lead: "Finekarts helps businesses move beyond documents and representations by combining corporate verification, regulatory information, commercial intelligence, credit assessment, supply-chain analysis and independent inspection where appropriate.",
-  tagline: "Verify the business. Assess the risk. Trade with confidence.",
+  title: "Discuss due diligence for your programme",
+  lead:
+    "Tell us about your commodity, counterparty, and corridor. Finekarts will explain which independent verification, inspection, and documentation steps apply to a potential trade — before contract.",
+  tagline: "Trader first. Evidence-backed programmes.",
   fields: ["Company name", "Country", "Counterparty role", "Commodity", "Verification scope", "Urgency"],
 };

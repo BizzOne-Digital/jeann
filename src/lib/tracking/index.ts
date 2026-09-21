@@ -1,5 +1,7 @@
 import { getEnv } from "@/lib/config/env";
 import { ManualTrackingProvider } from "@/lib/tracking/manual";
+import { Terminal49TrackingProvider } from "@/lib/tracking/terminal49";
+import { isTerminal49Configured } from "@/lib/integrations/providers/terminal49/client";
 import type { ShipmentSnapshot, TrackingProvider } from "@/lib/tracking/types";
 
 let cached: TrackingProvider | null = null;
@@ -8,6 +10,13 @@ export function getTrackingProvider(): TrackingProvider {
   if (cached) return cached;
   const env = getEnv();
   switch (env.SHIPMENT_TRACKING_PROVIDER) {
+    case "terminal49":
+      if (isTerminal49Configured()) {
+        cached = new Terminal49TrackingProvider();
+        return cached;
+      }
+      cached = new ManualTrackingProvider();
+      return cached;
     case "manual":
     case "none":
       cached = new ManualTrackingProvider();
