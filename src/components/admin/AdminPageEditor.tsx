@@ -133,16 +133,46 @@ export function AdminPageEditor({ initialPage }: { initialPage: EditablePage }) 
         </label>
       </div>
 
+      {page.sections.length > 6 ? (
+        <nav className="rounded-lg border border-[var(--line)] bg-[var(--cream)] p-4">
+          <p className="text-sm font-semibold text-[var(--navy)]">
+            Jump to section ({page.sections.length} blocks)
+          </p>
+          <ul className="mt-2 flex max-h-40 flex-wrap gap-2 overflow-y-auto text-xs">
+            {page.sections.map((section) => (
+              <li key={section.id}>
+                <a
+                  href={`#cms-section-${section.id}`}
+                  className="rounded border border-[var(--line)] bg-white px-2 py-1 text-[var(--ocean)] underline"
+                >
+                  {section.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 text-xs text-[var(--stone)]">
+            Hero image fields use <strong>UploadedImageField</strong> — upload replaces the default
+            photo on the live page. Hub tabs (verification services, inspection gallery, etc.) may
+            also have one section per block below after a registry refresh.
+          </p>
+        </nav>
+      ) : null}
+
       <div className="space-y-4">
-        {page.sections.map((section) => (
-          <section
+        {page.sections.map((section, index) => (
+          <details
             key={section.id}
-            className="rounded-lg border border-[var(--line)] bg-white p-5"
+            id={`cms-section-${section.id}`}
+            className="group rounded-lg border border-[var(--line)] bg-white"
+            open={index < 2 || page.sections.length <= 8}
           >
-            <h2 className="text-lg font-semibold text-[var(--navy)]">{section.label}</h2>
-            <p className="mt-1 text-xs uppercase tracking-wide text-[var(--stone)]">
-              Section ID: {section.id}
-            </p>
+            <summary className="cursor-pointer list-none px-5 py-4 marker:content-none [&::-webkit-details-marker]:hidden">
+              <h2 className="inline text-lg font-semibold text-[var(--navy)]">{section.label}</h2>
+              <span className="ml-2 text-xs uppercase tracking-wide text-[var(--stone)]">
+                ({section.id})
+              </span>
+            </summary>
+            <div className="border-t border-[var(--line)] px-5 pb-5 pt-4">
             {section.id === "hero" ? (
               <p className="mt-2 text-sm text-[var(--stone)]">
                 Hero background image, YouTube link, titles, body text, and CTA links for this page.
@@ -180,7 +210,8 @@ export function AdminPageEditor({ initialPage }: { initialPage: EditablePage }) 
                 ),
               )}
             </div>
-          </section>
+            </div>
+          </details>
         ))}
       </div>
 

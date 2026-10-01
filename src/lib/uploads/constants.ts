@@ -14,7 +14,7 @@ export const UPLOAD_MIME_TYPES: Record<string, string> = {
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "docx",
 };
 
-export const CAREER_RESUME_MAX_BYTES = 5 * 1024 * 1024;
+export const CAREER_RESUME_MAX_BYTES = 15 * 1024 * 1024;
 
 export function isUploadFolder(value: string): value is UploadFolder {
   return (

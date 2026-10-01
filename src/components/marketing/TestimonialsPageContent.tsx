@@ -3,7 +3,6 @@ import { PageHero } from "@/components/marketing/PageHero";
 import {
   TestimonialsGrid,
   TestimonialsSummaryBar,
-  TrustpilotPlaceholder,
 } from "@/components/marketing/TestimonialSections";
 import { AnimatedSection } from "@/components/motion/AnimatedSection";
 import {
@@ -56,15 +55,12 @@ export async function TestimonialsPageContent() {
           />
           <TestimonialsGrid testimonials={testimonials} />
           {testimonials.length > 0 ? (
-            <>
-              <TrustpilotPlaceholder />
-              <AnimatedSection className="mt-10 text-center text-sm text-[#666666]" delay={0.12}>
-                Interested in working with Finekarts?{" "}
-                <Link href="/contact" className="font-semibold text-[#c88e4a] underline">
-                  Contact the trade desk
-                </Link>
-              </AnimatedSection>
-            </>
+            <AnimatedSection className="mt-10 text-center text-sm text-[#666666]" delay={0.12}>
+              Interested in working with Finekarts?{" "}
+              <Link href="/contact" className="font-semibold text-[#c88e4a] underline">
+                Contact the trade desk
+              </Link>
+            </AnimatedSection>
           ) : null}
         </div>
       </section>

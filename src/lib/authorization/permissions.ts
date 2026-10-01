@@ -70,7 +70,8 @@ export type RoleKey =
   | "supplier_org_admin"
   | "supplier_member"
   | "banking_advisor"
-  | "readonly_auditor";
+  | "readonly_auditor"
+  | "career_applicant";
 
 export const ROLE_PERMISSIONS: Record<RoleKey, Permission[]> = {
   ceo_super_admin: [...PERMISSIONS],
@@ -256,6 +257,7 @@ export const ROLE_PERMISSIONS: Record<RoleKey, Permission[]> = {
     "orgs:read",
     "workspace:access",
   ],
+  career_applicant: [],
 };
 
 export function hasPermission(

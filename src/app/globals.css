@@ -13,6 +13,7 @@ body.intro-active #finekarts-site-root {
 :root {
   --ink: #13293d;
   --navy: #1b3a5c;
+  --footer-bg: #002d62;
   --ocean: #3a6b8c;
   --ocean-soft: #6b92a8;
   --mist: #e8eef2;
@@ -270,6 +271,9 @@ a {
 /* Consistent vertical rhythm for marketing page sections */
 .marketing-section {
   padding-block: clamp(2.75rem, 5vw, 3.5rem);
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: clip;
 }
 
 @supports (animation-timeline: view()) {
@@ -283,13 +287,11 @@ a {
 @keyframes marketing-section-enter {
   from {
     opacity: 0;
-    transform: translate3d(0, 48px, 0) scale(0.985);
-    filter: blur(6px);
+    transform: translate3d(0, 24px, 0);
   }
   to {
     opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
-    filter: blur(0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -316,8 +318,51 @@ a {
 
 .table-scroll {
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
   overflow-x: auto;
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+/* Keep marketing tables readable (animated <tr> can break table layout). */
+.table-scroll > table.marketing-data-table {
+  width: 100%;
+  min-width: 72rem;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.table-scroll > table.marketing-data-table thead {
+  display: table-header-group;
+}
+
+.table-scroll > table.marketing-data-table tbody {
+  display: table-row-group;
+}
+
+.table-scroll > table.marketing-data-table tr {
+  display: table-row;
+}
+
+.table-scroll > table.marketing-data-table th,
+.table-scroll > table.marketing-data-table td {
+  display: table-cell;
+  vertical-align: top;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.table-scroll > table.marketing-data-table.marketing-data-table--fit {
+  min-width: 0;
+  width: 100%;
+}
+
+.table-scroll > table.marketing-data-table.marketing-data-table--fit th,
+.table-scroll > table.marketing-data-table.marketing-data-table--fit td {
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .section-pad {

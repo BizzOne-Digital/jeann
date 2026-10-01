@@ -40,6 +40,9 @@ function portalRedirectForRoles(roles: string[]): string | null {
   if (roles.some((r) => r === "buyer_org_admin" || r === "buyer_member")) {
     return "/portal/buyer";
   }
+  if (roles.includes("career_applicant")) {
+    return "/privacy#career-application";
+  }
   return null;
 }
 

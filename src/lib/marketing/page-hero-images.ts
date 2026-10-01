@@ -22,7 +22,6 @@ export type PageHeroImageKey =
   | "packaging"
   | "buyerTerms"
   | "cookies"
-  | "accessibility"
   | "buyerRequest"
   | "supplierOffer"
   | "disputeResolution";
@@ -73,7 +72,6 @@ export const PAGE_HERO_IMAGES: Record<PageHeroImageKey, PageHeroImage> = {
   packaging: PACKAGING_IMAGES.tankerVessel,
   buyerTerms: PACKAGING_IMAGES.containerizedCargoPort,
   cookies: PACKAGING_IMAGES.palletizedBags,
-  accessibility: PACKAGING_IMAGES.bulkRailcar,
   buyerRequest: {
     src: "/images/inspections/sugar-bags-hold.png",
     alt: "Bagged sugar quantity verification in a vessel hold",

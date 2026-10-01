@@ -11,6 +11,11 @@ export function LanguageSwitcher({ className }: { className?: string }) {
   const isTranslating = useSyncExternalStore(subscribeTranslating, getTranslating, () => false);
   const [open, setOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   const current =
     locale === SOURCE_LOCALE
@@ -27,15 +32,40 @@ export function LanguageSwitcher({ className }: { className?: string }) {
     return () => document.removeEventListener("mousedown", onDocClick);
   }, []);
 
+  const triggerClass =
+    "focus-ring flex items-center gap-1.5 rounded-md border border-white/15 bg-white/5 px-2.5 py-1.5 text-xs font-medium text-white transition hover:bg-white/10";
+
+  if (!mounted) {
+    return (
+      <div className={cn("relative", className)} data-no-translate>
+        <div className={triggerClass} aria-hidden>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+            <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.6" />
+            <path
+              d="M3 12h18M12 3c2.5 2.8 2.5 14.2 0 17M12 3c-2.5 2.8-2.5 14.2 0 17"
+              stroke="currentColor"
+              strokeWidth="1.4"
+            />
+          </svg>
+          <span className="whitespace-nowrap">English</span>
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none" aria-hidden className="opacity-70">
+            <path d="M3 4.5 6 7.5 9 4.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+          </svg>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div ref={panelRef} className={cn("relative", className)} data-no-translate>
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="focus-ring flex items-center gap-1.5 rounded-md border border-white/15 bg-white/5 px-2.5 py-1.5 text-xs font-medium text-white transition hover:bg-white/10"
+        className={triggerClass}
         aria-expanded={open}
         aria-haspopup="listbox"
         aria-label="Select language"
+        suppressHydrationWarning
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
           <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.6" />

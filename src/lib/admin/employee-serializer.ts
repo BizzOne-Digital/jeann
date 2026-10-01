@@ -27,6 +27,7 @@ const ROLE_LABELS: Record<RoleKey, string> = {
   supplier_member: "Supplier Member",
   banking_advisor: "Banking Advisor",
   readonly_auditor: "Read-only Auditor",
+  career_applicant: "Career applicant",
 };
 
 export function formatRoleLabels(roles: RoleKey[]) {

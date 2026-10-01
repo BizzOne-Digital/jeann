@@ -225,13 +225,18 @@ export async function persistLeadToMongo(
       const reference = generateLeadReference("CAR");
       await models.CareerApplication.create({
         reference,
+        applicantUserId:
+          data.applicantUserId && Types.ObjectId.isValid(String(data.applicantUserId))
+            ? new Types.ObjectId(String(data.applicantUserId))
+            : undefined,
         fullName: String(data.fullName ?? ""),
         email: String(data.email ?? "").toLowerCase(),
         phone: String(data.phone ?? ""),
-        position: String(data.position ?? ""),
+        position: String(data.position ?? "Career portal application"),
         linkedIn: data.linkedIn ? String(data.linkedIn) : undefined,
         location: data.location ? String(data.location) : undefined,
         coverLetter: data.coverLetter ? String(data.coverLetter) : undefined,
+        questionnaire: data.questionnaire,
         resumeUrl: String(data.resumeUrl ?? ""),
         resumeFilename: String(data.resumeFilename ?? ""),
         resumeMimeType: String(data.resumeMimeType ?? ""),

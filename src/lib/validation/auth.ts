@@ -31,5 +31,26 @@ export const registerBuyerSchema = z
     path: ["confirmPassword"],
   });
 
+export const registerCareerApplicantSchema = z
+  .object({
+    fullName: z.string().trim().min(2).max(120),
+    email: z.string().trim().email().max(254),
+    phone: z.string().trim().min(7).max(40),
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .max(128)
+      .regex(/[A-Z]/, "Password must include an uppercase letter")
+      .regex(/[a-z]/, "Password must include a lowercase letter")
+      .regex(/[0-9]/, "Password must include a number"),
+    confirmPassword: z.string().min(8).max(128),
+    acceptPrivacy: z.literal(true, { message: "Privacy policy must be accepted." }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
 export type LoginInput = z.infer<typeof loginSchema>;
 export type RegisterBuyerInput = z.infer<typeof registerBuyerSchema>;
+export type RegisterCareerApplicantInput = z.infer<typeof registerCareerApplicantSchema>;

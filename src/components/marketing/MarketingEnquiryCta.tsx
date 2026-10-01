@@ -8,8 +8,8 @@ export function MarketingEnquiryCta() {
       <div className="container-page">
         <Reveal>
           <div className="overflow-hidden rounded-lg border border-[#d5d0c8] bg-[#001a3d] text-white">
-            <div className="grid gap-8 p-8 sm:p-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-12">
-              <div>
+            <div className="grid min-w-0 gap-8 p-8 sm:p-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-12">
+              <div className="min-w-0">
                 <p className="text-xs font-semibold tracking-[0.22em] text-[#d4a84b] uppercase">
                   Next step
                 </p>
@@ -20,7 +20,7 @@ export function MarketingEnquiryCta() {
                   contact form.
                 </p>
               </div>
-              <div className="flex flex-wrap gap-3 lg:justify-end">
+              <div className="flex min-w-0 flex-wrap gap-3 lg:justify-end">
                 <Link
                   href="/login"
                   className="focus-ring inline-flex items-center marketing-btn-primary px-6 py-3 text-sm font-semibold"

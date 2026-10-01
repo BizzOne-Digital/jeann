@@ -31,8 +31,8 @@ export const PARTNERS: PartnerEntry[] = [
     category: "inspection",
     youtubeVideoId: "gADVpRPdr7E",
     content: [
-      "Add your partnership narrative here — how Finekarts and buyers engage SGS for quality, quantity, and compliance verification on agricultural and bulk cargoes.",
-      "Describe corridor coverage, certificate types, and how buyers can independently verify scope and accreditation for each programme.",
+      "On programmes where the PSA names SGS (or equivalent scope), Finekarts coordinates field attendance, sampling, and certificate presentation so quality, quantity, and loading evidence aligns with contract and LC wording.",
+      "Buyers should confirm the applicable SGS office, service line, and accreditation for each port and commodity — certificates are issued by SGS under its own mandate, not by Finekarts.",
     ],
     website: "https://www.sgs.com",
   },
@@ -43,7 +43,8 @@ export const PARTNERS: PartnerEntry[] = [
     category: "inspection",
     youtubeVideoId: "zScbiOe7-oY",
     content: [
-      "Add your partnership narrative here — destination-specific inspection scope, laboratory routing, and documentary alignment with LC or contract terms.",
+      "Bureau Veritas may be appointed for commodity inspection, hold or tank surveys, and laboratory analysis when destination or issuing bank requirements call for an independent third party.",
+      "Documentary sets should reference the correct BV certificate type and place of issue; buyers can verify scope and authenticity directly with Bureau Veritas.",
     ],
     website: "https://www.bureauveritas.com",
   },
@@ -54,7 +55,8 @@ export const PARTNERS: PartnerEntry[] = [
     category: "inspection",
     youtubeVideoId: "lKfVooP59Jk",
     content: [
-      "Add your partnership narrative here — loading and discharge supervision, sampling methods, and certificate workflows relevant to Finekarts programmes.",
+      "Intertek supports loading and discharge supervision, representative sampling, and testing for oils, grains, sugar, and related bulk cargoes when agreed in the transaction.",
+      "Finekarts aligns inspector mobilization with laycan and banking timelines; final certificate content remains Intertek’s responsibility under the appointed scope.",
     ],
     website: "https://www.intertek.com",
   },
@@ -65,7 +67,8 @@ export const PARTNERS: PartnerEntry[] = [
     category: "certification",
     youtubeVideoId: "HcmbcuxTpYA",
     content: [
-      "Add partnership details and verification pathways — how buyers can confirm certification scope and chain-of-custody where applicable.",
+      "Control Union programmes may apply where agricultural certification, identity preservation, or chain-of-custody evidence is required alongside commercial inspection.",
+      "Confirm which Control Union scheme applies to your corridor and commodity before relying on certificate wording in an LC or customs filing.",
     ],
     website: "https://www.controlunion.com",
   },
@@ -76,7 +79,8 @@ export const PARTNERS: PartnerEntry[] = [
     category: "verification",
     youtubeVideoId: "hr-lVK3rfNo",
     content: [
-      "Add partnership details — pre-shipment, destination inspection, and compliance notes for corridors you serve with Cotecna.",
+      "Cotecna may support pre-shipment verification, destination conformity checks, and compliance documentation on corridors where buyers or regulators expect Cotecna-recognized evidence.",
+      "Appointment letters and scope should match the commodity, HS classification, and import rules for the discharge market.",
     ],
     website: "https://www.cotecna.com",
   },

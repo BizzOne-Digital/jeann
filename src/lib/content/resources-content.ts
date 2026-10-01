@@ -152,13 +152,13 @@ export const RESOURCES_TRADE_PRIORITY_LINKS = [
   },
   {
     href: "/logistics",
-    label: "CIF & logistics",
-    note: "FOB/CIF, marine insurance, and port-to-port coordination",
+    label: "Trade logistics",
+    note: "FOB/CIF coordination with carriers — Finekarts is the trader, not the freight operator",
   },
   {
     href: "/inspections",
-    label: "Inspections",
-    note: "Quality and quantity confirmation before shipment",
+    label: "Inspection in trade",
+    note: "Independent inspection firms we may appoint when the PSA requires it",
   },
 ] as const;
 

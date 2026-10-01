@@ -51,7 +51,6 @@ const categories = {
 const staticPages = [
   "/",
   "/about",
-  "/accessibility",
   "/booking",
   "/buyer-request",
   "/buyer-terms",

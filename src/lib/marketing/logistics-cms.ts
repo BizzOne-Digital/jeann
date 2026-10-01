@@ -57,6 +57,8 @@ function parseContractSteps(lines: string[]) {
   });
 }
 
+export type BuiltLogisticsContent = ReturnType<typeof buildLogisticsContent>;
+
 export function buildLogisticsContent(cms: CmsSectionMap) {
   const storyF = cmsSection(cms, "story");
   const story = LOGISTICS_STORY;

@@ -1,13 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import type { PublicTestimonial } from "@/lib/content/testimonials-catalog";
-import {
-  formatTestimonialDate,
-  testimonialInitials,
-} from "@/lib/content/testimonials-shared";
-import { resolveImageSrc } from "@/lib/media/resolve-image-src";
+import { formatTestimonialDate } from "@/lib/content/testimonials-shared";
 import { Reveal } from "@/components/motion/Reveal";
 
 const TRUSTPILOT_GREEN = "#00b67a";
@@ -45,34 +40,6 @@ export function TestimonialStars({
   );
 }
 
-function TestimonialAvatar({ testimonial }: { testimonial: PublicTestimonial }) {
-  const initials = testimonialInitials(testimonial.name);
-  const photoSrc = resolveImageSrc(testimonial.photo);
-
-  if (photoSrc) {
-    return (
-      <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full border border-[#e8e4dc] bg-[#f3f1ec]">
-        <Image
-          src={photoSrc}
-          alt={testimonial.name}
-          fill
-          className="object-cover"
-          sizes="48px"
-        />
-      </div>
-    );
-  }
-
-  return (
-    <div
-      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#001a3d] text-sm font-semibold text-white"
-      aria-hidden
-    >
-      {initials}
-    </div>
-  );
-}
-
 export function TestimonialCard({ testimonial }: { testimonial: PublicTestimonial }) {
   const reviewedLabel = formatTestimonialDate(testimonial.reviewedAt);
 
@@ -96,8 +63,7 @@ export function TestimonialCard({ testimonial }: { testimonial: PublicTestimonia
         {testimonial.quote}
       </blockquote>
 
-      <footer className="mt-6 flex items-center gap-3 border-t border-[#f0ece4] pt-5">
-        <TestimonialAvatar testimonial={testimonial} />
+      <footer className="mt-6 border-t border-[#f0ece4] pt-5">
         <div className="min-w-0">
           <p className="truncate text-sm font-semibold text-[#001a3d]" itemProp="author">
             {testimonial.name}
@@ -188,25 +154,6 @@ export function TestimonialsGrid({ testimonials }: { testimonials: PublicTestimo
   );
 }
 
-export function TrustpilotPlaceholder() {
-  return (
-    <section
-      id="trustpilot-widget"
-      className="mt-12 rounded-lg border border-[#e8e4dc] bg-white px-6 py-8 text-center sm:px-10"
-      aria-label="Trustpilot integration placeholder"
-    >
-      <p className="text-xs font-semibold tracking-[0.18em] text-[#00b67a] uppercase">
-        Trustpilot
-      </p>
-      <h3 className="mt-2 text-xl font-semibold text-[#001a3d]">Live Trustpilot feed coming soon</h3>
-      <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-[#666666]">
-        This block is reserved for the official Trustpilot widget. Until then, featured reviews appear
-        on this page as counterparties approve them for publication.
-      </p>
-    </section>
-  );
-}
-
 export function FeaturedTestimonialAside({
   testimonial,
 }: {
@@ -228,18 +175,15 @@ export function FeaturedTestimonialAside({
         <blockquote className="mt-3 text-base leading-relaxed text-[#555555]">
           {testimonial.quote}
         </blockquote>
-        <div className="mt-6 flex items-center gap-3">
-          <TestimonialAvatar testimonial={testimonial} />
-          <div>
-            <p className="text-sm font-semibold text-[#001a3d]">{testimonial.name}</p>
-            <p className="text-sm text-[#001a3d]/80">
-              {testimonial.position}
-              {testimonial.company ? ` · ${testimonial.company}` : ""}
-            </p>
-            {reviewedLabel ? (
-              <p className="mt-1 text-xs text-[#888888]">{reviewedLabel}</p>
-            ) : null}
-          </div>
+        <div className="mt-6">
+          <p className="text-sm font-semibold text-[#001a3d]">{testimonial.name}</p>
+          <p className="text-sm text-[#001a3d]/80">
+            {testimonial.position}
+            {testimonial.company ? ` · ${testimonial.company}` : ""}
+          </p>
+          {reviewedLabel ? (
+            <p className="mt-1 text-xs text-[#888888]">{reviewedLabel}</p>
+          ) : null}
         </div>
         <Link
           href="/testimonials"

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Reveal } from "@/components/motion/Reveal";
 import { buyerQuoteHref } from "@/lib/marketing/cta-links";
 import { cmsField } from "@/lib/content/cms-field";
+import { ABOUT_HERO } from "@/lib/content/about-content";
 import { PageHero } from "@/components/marketing/PageHero";
 import {
   resolveMarketingHeroImage,
@@ -31,29 +32,28 @@ function GoldButton({
 }
 
 export function AboutHero({
-  positioning,
   cms,
 }: {
-  positioning: string;
   cms?: Record<string, string>;
 }) {
   const aboutHero = resolveMarketingHeroImage(cms, "about");
   const youtubeVideoId = resolveMarketingHeroYoutube(cms);
   return (
     <PageHero
-      title={cmsField(cms, "title", "Supplying bulk commodities buyers can trust")}
-      description={cmsField(cms, "description", positioning)}
+      brand={cmsField(cms, "eyebrow", ABOUT_HERO.eyebrow)}
+      title={cmsField(cms, "title", ABOUT_HERO.title)}
+      description={cmsField(cms, "description", ABOUT_HERO.description)}
       imageSrc={aboutHero.src}
       imageAlt={aboutHero.alt}
       youtubeVideoId={youtubeVideoId}
       imageClassName="object-cover object-[72%_center] sm:object-[78%_center]"
       primaryCta={{
-        href: cmsField(cms, "primaryCtaHref", buyerQuoteHref()),
-        label: cmsField(cms, "primaryCtaLabel", "Request a Quote →"),
+        href: cmsField(cms, "primaryCtaHref", ABOUT_HERO.primaryCtaHref),
+        label: cmsField(cms, "primaryCtaLabel", ABOUT_HERO.primaryCtaLabel),
       }}
       secondaryCta={{
-        href: cmsField(cms, "secondaryCtaHref", "/contact"),
-        label: cmsField(cms, "secondaryCtaLabel", "Contact the desk"),
+        href: cmsField(cms, "secondaryCtaHref", ABOUT_HERO.secondaryCtaHref),
+        label: cmsField(cms, "secondaryCtaLabel", ABOUT_HERO.secondaryCtaLabel),
       }}
     />
   );

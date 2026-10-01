@@ -3,6 +3,7 @@ import {
   COMMODITY_TRADE_DOCUMENT_CHECKLIST_SECTIONS,
   COMMODITY_TRADE_DOCUMENT_CHECKLIST_TITLE,
 } from "@/lib/content/commodity-trade-document-checklist";
+import { BUYER_CIS_PDF } from "@/lib/content/buyer-cis-download";
 
 const CHECKLIST_DOWNLOAD_HREF = "/docs/commodity-trade-document-checklist.txt";
 
@@ -17,13 +18,22 @@ export function CommodityTradeDocumentChecklist({ showDownload = true }: { showD
           {COMMODITY_TRADE_DOCUMENT_CHECKLIST_TITLE}
         </h3>
         {showDownload ? (
-          <a
-            href={CHECKLIST_DOWNLOAD_HREF}
-            download
-            className="focus-ring mt-4 inline-flex items-center rounded-md bg-[#1b3a5c] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#13293d]"
-          >
-            Download plain-text copy
-          </a>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <a
+              href={CHECKLIST_DOWNLOAD_HREF}
+              download
+              className="focus-ring inline-flex items-center rounded-md bg-[#1b3a5c] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#13293d]"
+            >
+              Download checklist (text)
+            </a>
+            <a
+              href={BUYER_CIS_PDF.href}
+              download={BUYER_CIS_PDF.fileName}
+              className="focus-ring inline-flex items-center rounded-md border border-[#1b3a5c] bg-white px-5 py-2.5 text-sm font-semibold text-[#1b3a5c] transition hover:bg-[#eef2f7]"
+            >
+              Download {BUYER_CIS_PDF.title} (PDF)
+            </a>
+          </div>
         ) : null}
       </header>
 

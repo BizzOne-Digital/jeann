@@ -33,8 +33,8 @@ export const PARTNERS_STORY = {
   title: "Recognized inspection and certification relationships",
   lead: "On commodity programmes we sell, Finekarts may appoint internationally known inspection, testing, and certification firms when contracts call for independent evidence — we coordinate them; we do not operate as those brands.",
   youtubeUrl: "https://www.youtube.com/watch?v=rJPI2UA25HQ",
-  imageSrc: "/images/inspections/sampling-grain.png",
-  imageAlt: "Grain sampling for independent verification",
+  imageSrc: "/images/inspections/tank-sampling.png",
+  imageAlt: "Independent tank sampling for liquid bulk verification",
   boxes: [
     {
       title: "Quality",
@@ -81,8 +81,8 @@ export const LOGISTICS_STORY = {
   lead:
     "Finekarts is the seller on the commodity contract — not a freight forwarder or carrier. Whether you trade FOB or CIF, we coordinate shipment programmes with logistics partners so cargo, surveys, and transport documents stay aligned with your PSA and LC.",
   youtubeUrl: "https://www.youtube.com/watch?v=azLlZZ0t2CE",
-  imageSrc: LOGISTICS_IMAGES.portTrucks.src,
-  imageAlt: LOGISTICS_IMAGES.portTrucks.alt,
+  imageSrc: LOGISTICS_IMAGES.roadFreightHighway.src,
+  imageAlt: LOGISTICS_IMAGES.roadFreightHighway.alt,
   boxes: [
     {
       title: "Visibility",

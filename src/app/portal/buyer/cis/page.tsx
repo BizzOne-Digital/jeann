@@ -1,6 +1,7 @@
 import { requirePortalAccess } from "@/lib/auth/portal-access";
 import { getBuyerOrganizationId } from "@/lib/auth/buyer-org";
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
+import { BuyerCisPdfDownload } from "@/components/portal/BuyerCisPdfDownload";
 import { CisDraftForm } from "@/components/portal/CisDraftForm";
 import { PortalPage } from "@/components/portal/PortalPage";
 
@@ -38,8 +39,9 @@ export default async function CisPage() {
   return (
     <PortalPage
       title="Corporate information sheet"
-      description="Provide your company details for qualification. Drafts are saved to your organization profile."
+      description="Provide your company details for qualification — use the PDF or the online draft below."
     >
+      <BuyerCisPdfDownload />
       <CisDraftForm initial={initial} />
     </PortalPage>
   );

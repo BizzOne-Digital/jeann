@@ -1,173 +1,150 @@
-import { AGRICULTURE_IMAGES } from "@/lib/content/agriculture-images";
+/** Canonical About page copy (marketing redesign). */
 
-export const ABOUT_STORY = {
-  eyebrow: "Finekarts Incorporated",
-  title: "Supplying bulk commodities buyers can trust",
+export const ABOUT_HERO = {
+  eyebrow: "About Finekarts Incorporated",
+  title: "Built for Structured International Commodity Trade",
+  description:
+    "Founded in March 2024, Finekarts Incorporated is headquartered in Mississauga, Ontario, Canada — specializing in global sourcing, trade execution, and supply chain management of high-grade agricultural commodities, refined products, and industrial materials.",
+  primaryCtaLabel: "Explore our products",
+  primaryCtaHref: "/products",
+  secondaryCtaLabel: "Contact the trade desk",
+  secondaryCtaHref: "/contact",
+} as const;
+
+export const ABOUT_INTRO = {
+  eyebrow: "Who we are",
+  title: "Connecting producers with qualified global demand",
+  paragraphs: [
+    "Finekarts Incorporated is an international trading and commodity distribution company. We bridge primary producers and refineries in key producing regions with industrial buyers, distributors, and food manufacturers across global markets.",
+    "Finekarts delivers consistent quality, transparent execution, and end-to-end supply chain reliability on programmes we manage.",
+  ],
+} as const;
+
+export const ABOUT_HIGHLIGHTS = [
+  {
+    title: "Global trade corridors",
+    detail: "Sourcing and delivery across major export origins and destination markets.",
+    icon: "globe",
+  },
+  {
+    title: "Bulk commodity programmes",
+    detail: "Refined sugars, edible oils, pulses, grains, and specialty cargoes.",
+    icon: "layers",
+  },
+  {
+    title: "FOB & CIF structures",
+    detail: "Commercial terms aligned to ICC practice and signed Incoterms.",
+    icon: "document",
+  },
+  {
+    title: "Contract-led execution",
+    detail: "Documentation, inspection scope, and logistics tied to agreed contracts.",
+    icon: "handshake",
+  },
+] as const;
+
+export const ABOUT_WHAT_WE_DO = {
+  eyebrow: "What we do",
+  title: "Three primary commodity divisions",
   lead:
-    "We sell bulk agricultural cargoes to qualified international buyers — coordinating independent verification, inspection, carriers, and marine insurance where contracts require them, plus ICC-aligned bankable payment structures. Finekarts is the distributor on the sale, not the provider of those specialist services.",
-  boxes: [
+    "Finekarts operates across three divisions, with strict adherence to international commercial specifications and industry standards:",
+  divisions: [
     {
-      title: "Quality",
-      body: "Grades and claims stated only when verified against supplier documentation and agreed inspection scope.",
+      n: "1",
+      title: "Refined sugars",
+      intro:
+        "We manage bulk and containerized distribution of refined cane sugar across standard ICUMSA color grades:",
+      bullets: [
+        "ICUMSA 45: High-purity, white refined sugar for commercial food and beverage manufacturing.",
+        "ICUMSA 100 & 150: Standard white refined sugar for food processing and wholesale packaging.",
+        "ICUMSA 600 & 1200: Very High Polarization (VHP) raw and brown sugars for industrial processing and refining.",
+      ],
+      href: "/products/sugar",
     },
     {
-      title: "Transparency",
-      body: "Clear communication on workable structures, corridors, and documentation from enquiry through contract.",
+      n: "2",
+      title: "Bulk edible oils",
+      intro:
+        "We supply crude and refined food-grade vegetable oils in bulk tanker volumes, ISO tanks, and flexitanks:",
+      bullets: [
+        "Refined sunflower oil & soybean oil",
+        "Canola & rapeseed oil",
+        "Palm oil, olive oil & corn oil",
+      ],
+      href: "/products/edible-oils",
     },
     {
-      title: "Discipline",
-      body: "Contracts, banking wording, and shipment milestones follow agreed PSA/SPA — not informal promises.",
+      n: "3",
+      title: "Agricultural pulses, grains & specialty trade",
+      intro:
+        "Our agricultural network handles the bulk movement of dry food commodities and industrial metals:",
+      bullets: [
+        "Pulses & beans: Red, black, white, pinto, and yellow beans.",
+        "Grains & coffee: Milled rice and high-grade Arabica coffee beans.",
+        "Industrial metals: Copper cathodes for international commercial trade.",
+      ],
+      href: "/products",
     },
   ],
 } as const;
 
-export const ABOUT_STATS = [
-  {
-    value: "6+",
-    label: "Commodity families",
-    detail: "Oils, sugar, rice, beans & related programmes",
-  },
-  {
-    value: "FOB · CIF",
-    label: "Trade structures",
-    detail: "Risk transfer per signed Incoterms",
-  },
-  {
-    value: "3rd party",
-    label: "Independent inspection",
-    detail: "Appointed firms — scope is PSA-specific",
-  },
-  {
-    value: "Global",
-    label: "Trade corridors",
-    detail: "Origin-to-destination coordination",
-  },
-] as const;
+export const ABOUT_SUPPLY_CHAIN = {
+  eyebrow: "Supply chain & quality",
+  title: "Our supply chain & quality assurance",
+  lead:
+    "At Finekarts, trade execution is built on rigorous quality control and modern supply chain infrastructure. Every trade we manage follows a strict operational framework designed to mitigate commercial risk and guarantee cargo integrity:",
+  bullets: [
+    {
+      title: "Third-party inspection",
+      body:
+        "Every shipment is independently sampled, tested, and certified by accredited international superintendents (such as SGS, Bureau Veritas, or Intertek) prior to loading.",
+    },
+    {
+      title: "Custom containment solutions",
+      body:
+        "From food-grade multi-layer flexitanks for bulk liquids to PE-lined FIBC jumbo bags (1,000 kg) and 50 kg multi-wall sacks for dry softs, our packaging selection is tailored to cargo chemistry and transit conditions.",
+    },
+    {
+      title: "Documentary & regulatory compliance",
+      body:
+        "We maintain end-to-end alignment with International Chamber of Commerce (ICC) trade rules, documentary credit standards (UCP 600), phytosanitary mandates, and origin traceability standards.",
+    },
+  ],
+} as const;
 
-export const ABOUT_PILLARS = [
-  {
-    id: "story",
-    title: "Who we are",
-    summary: "Distributor model, procurement discipline, and bulk buyer programmes.",
-    icon: "team",
-    accent: { main: "#1b3a5c", light: "#eef2f7", ring: "#1b3a5c" },
-  },
-  {
-    id: "capabilities",
-    title: "Capabilities",
-    summary: "Specification, inspection coordination, Incoterms, and documentation.",
-    icon: "layers",
-    accent: { main: "#1b7a4a", light: "#edf7f1", ring: "#1b7a4a" },
-  },
-  {
-    id: "process",
-    title: "How we work",
-    summary: "Enquiry, quote, contract, and delivery milestones in sequence.",
-    icon: "route",
-    accent: { main: "#c88e4a", light: "#fdf6ec", ring: "#c88e4a" },
-  },
-  {
-    id: "global",
-    title: "Corridors",
-    summary: "Destination logistics — see CIF, insurance, and dispute resolution for responsibilities.",
-    icon: "globe",
-    accent: { main: "#1e4d8f", light: "#eef3fa", ring: "#1e4d8f" },
-  },
-] as const;
+export const ABOUT_WHY_PARTNER = {
+  eyebrow: "Why Finekarts",
+  title: "Why partner with Finekarts?",
+  items: [
+    {
+      title: "Reliable sourcing network",
+      body:
+        "Direct relationships with vetted producers, mills, and refineries across major export origins.",
+      icon: "network",
+    },
+    {
+      title: "End-to-end logistics",
+      body:
+        "Integrated management of port loading, maritime freight, customs compliance, and multi-modal transit.",
+      icon: "logistics",
+    },
+    {
+      title: "Commitment to integrity",
+      body:
+        "Transparent trade structures, rigorous counterparty verification (KYC/KYB), and reliable contract fulfillment.",
+      icon: "shield",
+    },
+  ],
+} as const;
 
-export type AboutTabId = (typeof ABOUT_PILLARS)[number]["id"];
-
-export const ABOUT_HUB_INTRO =
-  "Explore who we are, what we coordinate, and how programmes move from enquiry to delivery.";
-
-export const ABOUT_PANEL_TITLES: Record<
-  AboutTabId,
-  { eyebrow: string; title: string }
-> = {
-  story: {
-    eyebrow: "Who we are",
-    title: "We sell commodities — suppliers remain private.",
-  },
-  capabilities: {
-    eyebrow: "What we coordinate",
-    title: "Procurement and distribution programmes",
-  },
-  process: {
-    eyebrow: "How we work",
-    title: "A clear path from request to delivery",
-  },
-  global: {
-    eyebrow: "Corridors",
-    title: "Corridors and appointed carriers",
-  },
-};
-
-export const ABOUT_CAPABILITY_CARDS = [
-  {
-    title: "Specification alignment",
-    body:
-      "Edible oils, sugar, rice & grains, beans, coffee, and related programmes — grades and packaging matched to corridor and buyer requirements.",
-    image: AGRICULTURE_IMAGES.greenGrainField,
-  },
-  {
-    title: "Inspection coordination",
-    body:
-      "Third-party inspection when agreed in contract. Agency, scope, and sampling points are transaction-specific — never assumed.",
-    image: AGRICULTURE_IMAGES.combineHarvest,
-  },
-  {
-    title: "FOB & CIF structures",
-    body:
-      "Structures commonly discussed with industrial buyers and refiners. Risk transfer follows the signed Incoterms and contract wording.",
-    image: AGRICULTURE_IMAGES.grainSilos,
-  },
-  {
-    title: "Documentation discipline",
-    body:
-      "Contracts, shipping papers, and bank-facing checklists aligned before negotiation instruments are presented.",
-    image: AGRICULTURE_IMAGES.tractorPlowing,
-  },
-] as const;
-
-export const ABOUT_PROCESS_STEPS = [
-  {
-    n: "01",
-    title: "Submit request",
-    text: "Share product, quantity, destination, and FOB or CIF preference — listed grade or on-demand programme.",
-  },
-  {
-    n: "02",
-    title: "Review & quote",
-    text: "Trade desk reviews fit against available inventory, procurement programmes, and workable logistics structures.",
-  },
-  {
-    n: "03",
-    title: "Contract & docs",
-    text: "Trial, 12-delivery, or 24-delivery PSA with Irrevocable LC / Transferable Revolving LC and SBLC where agreed.",
-  },
-  {
-    n: "04",
-    title: "Inspection & delivery",
-    text: "Inspection confirms quality and quantity before shipment when agreed; CIF insurance and documents align to the PSA.",
-  },
-] as const;
-
-export const ABOUT_CORRIDORS = [
-  "Brazil",
-  "India",
-  "Vietnam",
-  "Thailand",
-  "Indonesia",
-  "UAE",
-  "Turkey",
-  "EU",
-  "West Africa",
-  "East Africa",
-] as const;
-
-export const ABOUT_QUICK_LINKS = [
-  { href: "/products", label: "Products for sale" },
-  { href: "/dispute-resolution", label: "Dispute resolution" },
-  { href: "/logistics", label: "CIF & logistics" },
-  { href: "/resources", label: "Payments & PSA" },
-] as const;
+export const ABOUT_CONTACT = {
+  eyebrow: "Contact",
+  title: "Finekarts Incorporated",
+  lines: [
+    "Mississauga, Ontario, Canada",
+    "Global trading & agricultural commodity distribution",
+  ],
+  ctaTitle: "Ready to discuss a bulk commodity requirement?",
+  ctaBody:
+    "Share specifications, destination, and Incoterms preference. Submission does not guarantee acceptance, pricing, or shipment.",
+} as const;

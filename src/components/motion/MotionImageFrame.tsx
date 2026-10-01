@@ -21,7 +21,7 @@ export function MotionImageFrame({ children, className, delay = 0 }: Props) {
 
   return (
     <motion.div
-      className={cn("will-change-transform", className)}
+      className={cn("will-change-transform overflow-hidden", className)}
       initial={{ opacity: 0, scale: 1.07, filter: "blur(10px)" }}
       whileInView={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
       viewport={{ once: true, amount: 0.2, margin: "-8% 0px" }}

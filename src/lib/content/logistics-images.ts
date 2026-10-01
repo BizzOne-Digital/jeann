@@ -56,18 +56,16 @@ export const LOGISTICS_IMAGES = {
 /** Full-width band between FOB/CIF and tracking (logistics page only). */
 export const LOGISTICS_SHIP_TRUCK_BAND = LOGISTICS_IMAGES.terminalOperations;
 
-/** Each `src` appears once on `/logistics` below the hero. */
+/** Each `src` appears once on `/logistics` below the hero (story image is separate in LOGISTICS_STORY). */
 export const LOGISTICS_PAGE_SECTION_IMAGES = {
   globalCoverage: LOGISTICS_IMAGES.seaAirRoutes,
   realTimeTrackingPrimary: LOGISTICS_IMAGES.portTrucks,
-  realTimeTrackingSecondary: LOGISTICS_IMAGES.terminalOperations,
+  realTimeTrackingSecondary: LOGISTICS_IMAGES.railIntermodalYard,
   portToPort: LOGISTICS_IMAGES.railInternationalContainers,
   documentation: LOGISTICS_IMAGES.gantryCraneRailLoading,
   bulkVesselMode: LOGISTICS_IMAGES.integratedTerminalMultimodal,
   coordinationPrimary: LOGISTICS_IMAGES.bulkGrainRail,
-  coordinationSecondary: LOGISTICS_IMAGES.railIntermodalYard,
-  closing: LOGISTICS_IMAGES.roadFreightHighway,
-  bleedSecondary: LOGISTICS_IMAGES.railIntermodalYard,
+  coordinationSecondary: LOGISTICS_IMAGES.terminalHub,
   contractToCargo: LOGISTICS_IMAGES.supplyChainNight,
 } as const;
 

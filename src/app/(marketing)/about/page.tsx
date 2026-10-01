@@ -1,48 +1,30 @@
 import type { Metadata } from "next";
-import { getAboutSectionImages } from "@/lib/content/about-images";
-import { getHomeSectionImages } from "@/lib/content/home-images";
-import { getSite } from "@/lib/content/catalog";
-import { getEffectiveSectionFields, getPublishedPage } from "@/lib/content/page-content";
-import { AboutHub } from "@/components/marketing/AboutHub";
-import { FoodSafetyAgencyMarquee } from "@/components/marketing/FoodSafetyAgencyMarquee";
+import { AboutPageSections } from "@/components/marketing/AboutPageSections";
 import { AboutHero } from "@/components/marketing/AboutSections";
-import { TraderRoleNotice } from "@/components/marketing/TraderRoleNotice";
+import { ABOUT_HERO } from "@/lib/content/about-content";
+import { getPublicSiteSettings } from "@/lib/content/site-settings-public";
+import { getEffectiveSectionFields, getPublishedPage } from "@/lib/content/page-content";
 import { cmsPageMetadata } from "@/lib/content/cms-page-metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
   return cmsPageMetadata("about", {
-    title: "About Finekarts",
-    description:
-      "Finekarts Incorporated is a bulk agricultural commodity distributor and trader for qualified international buyers — coordinating inspection, logistics, and insurance on trades we sell.",
+    title: "About Finekarts Incorporated",
+    description: ABOUT_HERO.description,
   });
 }
 
 export default async function AboutPage() {
-  const site = getSite();
-  const { home3 } = getHomeSectionImages();
-  const { teamStrategy, teamCollaboration } = getAboutSectionImages();
+  const site = await getPublicSiteSettings();
   const cms = await getPublishedPage("about");
 
   return (
     <>
-      <AboutHero positioning={site.positioning} cms={getEffectiveSectionFields(cms, "hero")} />
-      <section className="bg-white marketing-section pt-0">
-        <div className="container-page -mt-4">
-          <TraderRoleNotice variant="full" />
-        </div>
-      </section>
-      <AboutHub
-        teamStrategy={teamStrategy}
-        teamCollaboration={teamCollaboration}
-        home3={home3}
-        cms={{
-          whoWeAre: getEffectiveSectionFields(cms, "who-we-are"),
-          capabilities: getEffectiveSectionFields(cms, "capabilities"),
-          process: getEffectiveSectionFields(cms, "process"),
-          global: getEffectiveSectionFields(cms, "global"),
-        }}
+      <AboutHero cms={getEffectiveSectionFields(cms, "hero")} />
+      <AboutPageSections
+        email={site.email}
+        phone={site.phone}
+        phoneDisplay={site.phoneDisplay}
       />
-      <FoodSafetyAgencyMarquee />
     </>
   );
 }

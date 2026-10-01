@@ -75,7 +75,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
         <IntroGate />
-        <div id="finekarts-site-root">{children}</div>
+        <div id="finekarts-site-root" className="w-full max-w-full overflow-x-clip">
+          {children}
+        </div>
       </body>
     </html>
   );

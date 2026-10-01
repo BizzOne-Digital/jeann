@@ -8,6 +8,7 @@ export type {
 import { buildPageSection } from "@/lib/content/page-registry-section";
 import type { PageRegistryEntry } from "@/lib/content/page-registry-section";
 import { mergeMarketingPageBodies } from "@/lib/content/page-registry-bodies";
+import { ABOUT_HERO } from "@/lib/content/about-content";
 import { FINEKARTS_TRADE_SAFEGUARDS } from "@/lib/content/trader-positioning";
 
 const section = buildPageSection;
@@ -91,18 +92,17 @@ const BASE_MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
     slug: "about",
     title: "About",
     path: "/about",
-    seoTitle: "About Finekarts",
-    seoDescription:
-      "Finekarts sells bulk agricultural commodities to qualified buyers — with coordinated CIF insurance, independent inspection, and ICC-aligned payments.",
+    seoTitle: "About Finekarts Incorporated",
+    seoDescription: ABOUT_HERO.description,
     sections: [
       section("hero", "Hero", {
-        title: "Supplying bulk commodities buyers can trust",
-        description:
-          "We sell bulk agricultural cargoes to qualified international buyers. " + FINEKARTS_TRADE_SAFEGUARDS,
-        primaryCtaLabel: "Request a Quote →",
-        primaryCtaHref: "/login",
-        secondaryCtaLabel: "Contact the desk",
-        secondaryCtaHref: "/contact",
+        eyebrow: ABOUT_HERO.eyebrow,
+        title: ABOUT_HERO.title,
+        description: ABOUT_HERO.description,
+        primaryCtaLabel: ABOUT_HERO.primaryCtaLabel,
+        primaryCtaHref: ABOUT_HERO.primaryCtaHref,
+        secondaryCtaLabel: ABOUT_HERO.secondaryCtaLabel,
+        secondaryCtaHref: ABOUT_HERO.secondaryCtaHref,
       }),
       section("who-we-are", "Who we are", {
         eyebrow: "Who We Are",
@@ -253,14 +253,19 @@ const BASE_MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
     slug: "packaging",
     title: "Packaging",
     path: "/packaging",
-    seoTitle: "Packaging types",
+    seoTitle: "Bulk packaging & containment",
     seoDescription:
-      "Flexitank, tanker vessel, containerized cargo, bulk truck, bulk vessel and bulk railcar for international commodity trade.",
+      "Dry soft, liquid, and hard commodity packaging — FIBCs, flexitanks, ISO tanks, IBC totes, drums, vessel holds, and breakbulk containment for international trade.",
     sections: [
       section("hero", "Hero", {
-        title: "Packaging & transport modes",
+        eyebrow: "Bulk packaging & containment",
+        title: "Packaging formats for international commodity trade",
         description:
-          "Packaging and transport modes for bulk cargoes we sell — matched to product, FOB or CIF structure, inspection scope, and destination handling before loading.",
+          "Correct packaging preserves cargo quality, prevents contamination, optimizes FCL/flat rack/bulk freight, and supports IMO, SOLAS, and ISO compliance.",
+        primaryCtaLabel: "Explore packaging types →",
+        primaryCtaHref: "#packaging-overview",
+        secondaryCtaLabel: "Logistics",
+        secondaryCtaHref: "/logistics",
       }),
     ],
   },
@@ -285,12 +290,17 @@ const BASE_MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
     path: "/inspections",
     seoTitle: "Inspections overview",
     seoDescription:
-      "How independent inspection fits bulk commodity trades Finekarts sells — we coordinate recognized firms; we are not an inspection company.",
+      "Inspection types by timing, methodology, and scope — plus commodity verification and validation in international trade.",
     sections: [
       section("hero", "Hero", {
-        title: "Independent inspection in commodity trade",
+        eyebrow: "Inspections",
+        title: "Structured examination for standards & requirements",
         description:
-          "When the PSA requires it, we appoint recognized independent firms for quality and quantity evidence at origin, loading supervision, and laboratory testing — Finekarts is the trader, not the inspector.",
+          "A structured physical examination or critical review to determine if a system, product, or process meets specific standards and requirements.",
+        primaryCtaLabel: "Explore inspection types →",
+        primaryCtaHref: "#inspection-types",
+        secondaryCtaLabel: "Operational insights guide",
+        secondaryCtaHref: "/insights",
       }),
     ],
   },
@@ -298,14 +308,19 @@ const BASE_MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
     slug: "verification",
     title: "Verification",
     path: "/verification",
-    seoTitle: "Global business verification & due diligence",
+    seoTitle: "Due diligence profile & verification",
     seoDescription:
-      "How Finekarts coordinates independent due diligence as a bulk commodity trader — not a verification agency.",
+      "Corporate identity, supply chain risk, documentation requirements, and SWIFT trade finance message types for Finekarts Incorporated commodity programmes.",
     sections: [
       section("hero", "Hero", {
-        title: "Know who you are trading with",
+        eyebrow: "Due diligence profile & verification",
+        title: "Structured counterparty and trade verification",
         description:
-          "Due diligence before large programmes — corporate registration, licences, supply-chain checks, and commodity evidence. Verification is point-in-time; it supports — but does not replace — contract and inspection discipline.",
+          "Evaluation scope: corporate governance, financial health, supply chain integrity, and sanctions/compliance screening for global commodity trade.",
+        primaryCtaLabel: "Explore diligence framework →",
+        primaryCtaHref: "#due-diligence-overview",
+        secondaryCtaLabel: "Contact trade desk",
+        secondaryCtaHref: "/contact",
       }),
     ],
   },
@@ -331,13 +346,19 @@ const BASE_MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
     slug: "insights",
     title: "Insights",
     path: "/insights",
-    seoTitle: "Insights & notes",
-    seoDescription: "Trade education articles on Incoterms, documentation, and bulk logistics.",
+    seoTitle: "Global commodity trade & quality assurance",
+    seoDescription:
+      "Deep technical and operational insights on verification, validation, inspection protocols, containment logistics, and trade execution SOPs.",
     sections: [
       section("hero", "Hero", {
-        title: "Insights & notes",
+        eyebrow: "Deep technical & operational insights",
+        title: "Global commodity trade & quality assurance",
         description:
-          "Plain-language notes on Incoterms, documentation, CIF insurance, and buyer programmes — educational only, not legal or shipping advice.",
+          "Quality verification, process validation, and bulk containment logistics — an actionable framework for trade execution, risk mitigation, and operational governance.",
+        primaryCtaLabel: "Explore the framework →",
+        primaryCtaHref: "#insights-framework",
+        secondaryCtaLabel: "SOP checklist",
+        secondaryCtaHref: "#insights-sop-checklist",
       }),
     ],
   },
@@ -406,12 +427,14 @@ const BASE_MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
     seoDescription: "Career opportunities and applications at Finekarts Incorporated.",
     sections: [
       section("hero", "Hero", {
-        title: "Careers at Finekarts",
-        description: "Join trade, logistics, and operations teams supporting bulk commodity sales to qualified international buyers.",
-        primaryCtaLabel: "Apply now →",
+        eyebrow: "Career portal",
+        title: "Build your career in global commodity trade",
+        description:
+          "Create a career portal account, then complete the Finekarts job application, HR questionnaire, and dossier upload.",
+        primaryCtaLabel: "Start application →",
         primaryCtaHref: "#career-application",
-        secondaryCtaLabel: "General enquiry",
-        secondaryCtaHref: "/contact",
+        secondaryCtaLabel: "Meet the team",
+        secondaryCtaHref: "/team",
       }),
     ],
   },
@@ -451,19 +474,6 @@ const BASE_MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
       section("hero", "Hero", {
         title: "Buyer terms",
         description: "Terms governing buyer portal registration, submissions, and enquiries.",
-      }),
-    ],
-  },
-  {
-    slug: "accessibility",
-    title: "Accessibility",
-    path: "/accessibility",
-    seoTitle: "Accessibility",
-    seoDescription: "Finekarts accessibility statement.",
-    sections: [
-      section("hero", "Hero", {
-        title: "Accessibility statement",
-        description: "Our commitment to accessible digital experiences and how to request assistance.",
       }),
     ],
   },

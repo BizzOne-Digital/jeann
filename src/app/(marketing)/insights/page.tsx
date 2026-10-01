@@ -1,31 +1,30 @@
 import type { Metadata } from "next";
-import {
-  InsightsHero,
-  InsightsFeatured,
-  InsightsCatalog,
-  InsightsCta,
-} from "@/components/marketing/InsightSections";
-import { getPublishedInsights } from "@/lib/content/insights-catalog";
+import { CmsPageHero } from "@/components/marketing/CmsPageHero";
+import { InsightsOperationalPage } from "@/components/marketing/InsightsOperationalPage";
+import { cmsPageMetadata } from "@/lib/content/cms-page-metadata";
+import { INSIGHTS_HERO } from "@/lib/content/operational-insights-content";
 
-export const metadata: Metadata = {
-  title: "Insights",
-  description:
-    "Educational articles on Incoterms, purchase requests, packaging, and shipping documents — not legal advice.",
-};
-
-export const dynamic = "force-dynamic";
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsPageMetadata("insights", {
+    title: "Global commodity trade & quality assurance",
+    description: INSIGHTS_HERO.description,
+  });
+}
 
 export default async function InsightsPage() {
-  const posts = await getPublishedInsights();
-  const [featured, ...rest] = posts;
-  const catalog = rest.length > 0 ? rest : posts;
-
   return (
     <>
-      <InsightsHero />
-      {featured ? <InsightsFeatured post={featured} /> : null}
-      <InsightsCatalog posts={catalog.length === posts.length ? posts : catalog} />
-      <InsightsCta />
+      <CmsPageHero
+        pageSlug="insights"
+        defaults={{
+          brand: INSIGHTS_HERO.eyebrow,
+          title: INSIGHTS_HERO.title,
+          description: INSIGHTS_HERO.description,
+          primaryCta: INSIGHTS_HERO.primaryCta,
+          secondaryCta: INSIGHTS_HERO.secondaryCta,
+        }}
+      />
+      <InsightsOperationalPage />
     </>
   );
 }

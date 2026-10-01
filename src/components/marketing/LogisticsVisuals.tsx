@@ -78,7 +78,7 @@ export function LogisticsPairedRow({
   return (
     <div
       className={cn(
-        "grid items-stretch gap-6 lg:grid-cols-2 lg:gap-8",
+        "grid w-full min-w-0 max-w-full items-stretch gap-6 lg:grid-cols-2 lg:gap-8",
         reversed ? "lg:[&>*:first-child]:order-2" : "",
         className,
       )}
@@ -149,7 +149,7 @@ export function LogisticsSplitPanel({
 }) {
   return (
     <div
-      className={`grid gap-8 lg:grid-cols-2 lg:items-stretch ${
+      className={`grid w-full min-w-0 max-w-full gap-8 lg:grid-cols-2 lg:items-stretch ${
         reversed ? "lg:[&>*:first-child]:order-2" : ""
       }`}
     >

@@ -13,6 +13,7 @@ type Props = {
   sectionId?: string;
   tone?: "dark" | "light";
   defaults: {
+    brand?: string;
     title: string;
     description: string;
     primaryCta?: PageHeroCta;
@@ -50,6 +51,7 @@ export async function CmsPageHero({
   return (
     <PageHero
       tone={tone}
+      brand={cmsField(fields, "eyebrow", defaults.brand ?? "Finekarts Incorporated")}
       title={cmsField(fields, "title", defaults.title)}
       description={cmsField(fields, "description", defaults.description)}
       imageSrc={imageSrc}

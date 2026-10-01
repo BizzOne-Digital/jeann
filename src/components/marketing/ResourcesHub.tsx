@@ -28,6 +28,8 @@ import {
   RESOURCES_TRADE_PRIORITY_LINKS,
   type ResourcesTabId,
 } from "@/lib/content/resources-content";
+import { RESOURCES_PAGE_IMAGES } from "@/lib/content/resources-page-images";
+import { Reveal } from "@/components/motion/Reveal";
 import { cn } from "@/lib/utils/cn";
 
 function ProtectionBar({ value, label }: { value: number; label: string }) {
@@ -171,8 +173,8 @@ function BankingPanel() {
       <div className="space-y-6">
         <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-[#d5d0c8]">
           <Image
-            src="/images/packaging/iso-tank-1.png"
-            alt="International trade and commodity documentation"
+            src={RESOURCES_PAGE_IMAGES.banking.src}
+            alt={RESOURCES_PAGE_IMAGES.banking.alt}
             fill
             className="object-cover"
             sizes="(max-width: 1024px) 100vw, 420px"
@@ -215,9 +217,17 @@ function PaymentsPanel() {
   const [showAll, setShowAll] = useState(false);
   const recommended = PAYMENT_TERM_STRUCTURES.filter((row) => row.recommended);
   const alternatives = PAYMENT_TERM_STRUCTURES.filter((row) => !row.recommended);
+  const img = RESOURCES_PAGE_IMAGES.payments;
 
   return (
     <div className="space-y-10">
+      <div className="relative aspect-[21/9] max-h-56 overflow-hidden rounded-lg border border-[#d5d0c8] sm:max-h-none sm:aspect-[3/1]">
+        <Image src={img.src} alt={img.alt} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 960px" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#001a3d]/75 via-[#001a3d]/35 to-transparent" />
+        <p className="absolute bottom-0 left-0 max-w-md p-6 text-sm leading-relaxed text-white/90">
+          Programme payment design should match delivery cadence, inspection timing, and how your bank ranks instruments.
+        </p>
+      </div>
       <p className="max-w-3xl text-sm leading-relaxed text-[#555555]">
         {PAYMENT_TERMS_INTRO} Not legal or banking advice.
       </p>
@@ -325,10 +335,16 @@ function DocumentsPanel({ introBody }: { introBody: string }) {
   const [activeGroup, setActiveGroup] = useState(RESOURCES_DOCUMENT_GROUPS[0].id);
   const group =
     RESOURCES_DOCUMENT_GROUPS.find((g) => g.id === activeGroup) ?? RESOURCES_DOCUMENT_GROUPS[0];
+  const img = RESOURCES_PAGE_IMAGES.documents;
 
   return (
     <div className="space-y-8">
-      <p className="max-w-3xl text-sm leading-relaxed text-[#555555]">{introBody}</p>
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] lg:items-center">
+        <p className="max-w-3xl text-sm leading-relaxed text-[#555555]">{introBody}</p>
+        <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-[#d5d0c8]">
+          <Image src={img.src} alt={img.alt} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 420px" />
+        </div>
+      </div>
 
       <div className="flex flex-wrap gap-2">
         {RESOURCES_RELATED_LINKS.map((item) => (
@@ -384,12 +400,29 @@ function DocumentsPanel({ introBody }: { introBody: string }) {
 }
 
 function DownloadsPanel() {
+  const img = RESOURCES_PAGE_IMAGES.downloads;
   return (
     <div className="space-y-8">
-      <p className="max-w-2xl text-sm leading-relaxed text-[#555555]">
-        Use the commodity trade document checklist below as a structured reference. Confirm final
-        document sets with counsel, your bank, and the agreed purchase and sale agreement.
-      </p>
+      <div className="relative aspect-[21/9] max-h-48 overflow-hidden rounded-lg border border-[#d5d0c8] sm:max-h-none">
+        <Image src={img.src} alt={img.alt} fill className="object-cover" sizes="100vw" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#001a3d]/80 to-transparent" />
+        <p className="absolute right-0 bottom-0 left-0 p-5 text-sm text-white/90">
+          Use downloads as a study aid — the buyer CIS and signed PSA remain authoritative.
+        </p>
+      </div>
+      <div className="max-w-3xl space-y-3 text-sm leading-relaxed text-[#555555]">
+        <p>
+          <strong className="text-[#001a3d]">Official buyer form:</strong> download the{" "}
+          <strong>Buyer Corporate Information Sheet (CIS)</strong> PDF — that is the real
+          qualification form Finekarts uses.
+        </p>
+        <p>
+          <strong className="text-[#001a3d]">Educational checklist below:</strong> a plain-language
+          index of documents that often appear in bulk commodity trade. It is a{" "}
+          <em>dummy / reference</em> only — not a complete or binding list for any specific deal.
+        </p>
+        <p>Confirm final document sets with counsel, your bank, and the signed PSA.</p>
+      </div>
 
       <CommodityTradeDocumentChecklist />
 
@@ -470,10 +503,11 @@ export function ResourcesHub({ introBody }: { introBody: string }) {
             Banking, payments, and trade documents — downloads are supplementary
           </h2>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {RESOURCES_PILLARS.map((pillar) => {
+            {RESOURCES_PILLARS.map((pillar, index) => {
               const active = activeTab === pillar.id;
               const accent = pillar.accent;
               return (
+                <Reveal key={pillar.id} delay={index * 0.05} variant="up">
                 <button
                   key={pillar.id}
                   type="button"
@@ -513,6 +547,7 @@ export function ResourcesHub({ introBody }: { introBody: string }) {
                     {pillar.summary}
                   </span>
                 </button>
+                </Reveal>
               );
             })}
           </div>
@@ -521,7 +556,7 @@ export function ResourcesHub({ introBody }: { introBody: string }) {
 
       <section id="resources-hub" className="scroll-mt-24 bg-[#f3f1ec] py-12 lg:py-16">
         <div className="container-page">
-          <div className="sticky top-[4.5rem] z-10 -mx-1 mb-8 overflow-x-auto border-b border-[#d5d0c8] bg-[#f3f1ec]/95 px-1 pb-px backdrop-blur-sm">
+          <div className="sticky top-[4.5rem] z-10 mb-8 max-w-full overflow-x-auto overscroll-x-contain border-b border-[#d5d0c8] bg-[#f3f1ec]/95 pb-px backdrop-blur-sm">
             <div className="flex min-w-max gap-1">
               {RESOURCES_PILLARS.map((tab) => (
                 <button

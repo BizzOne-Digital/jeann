@@ -1,4 +1,6 @@
-export const COMMODITY_TRADE_DOCUMENT_CHECKLIST_TITLE = "Commodity trade document checklist";
+/** Educational index only — not a binding document list. Official buyer CIS: BUYER_CIS_PDF. */
+export const COMMODITY_TRADE_DOCUMENT_CHECKLIST_TITLE =
+  "Commodity trade document checklist (educational reference)";
 
 export const COMMODITY_TRADE_DOCUMENT_CHECKLIST_SECTIONS = [
   {
@@ -97,4 +99,4 @@ export const COMMODITY_TRADE_DOCUMENT_CHECKLIST_SECTIONS = [
 ] as const;
 
 export const COMMODITY_TRADE_DOCUMENT_CHECKLIST_NOTE =
-  "Not every document listed above is required for every commodity transaction. The applicable documentation is determined by the product, origin and destination countries, transaction structure, incoterm, payment method, inspection requirements, banking requirements, and applicable laws and regulations. Finekarts confirms the specific document requirements for each transaction before execution.";
+  "This checklist is an educational reference for discussions — it is not a contract, not a complete document set, and not a substitute for the official Buyer Corporate Information Sheet (CIS) PDF or transaction-specific requirements. Not every item applies to every trade. Finekarts confirms the documents required for each programme in the signed PSA and with your bank.";

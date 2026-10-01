@@ -20,7 +20,6 @@ export const HERO_PAGE_PREFIXES = [
   "/privacy",
   "/cookies",
   "/buyer-terms",
-  "/accessibility",
   "/buyer-request",
   "/supplier-offer",
   "/dispute-resolution",

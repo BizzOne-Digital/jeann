@@ -1,19 +1,18 @@
 import type { Metadata } from "next";
 import { CmsPageHero } from "@/components/marketing/CmsPageHero";
-import { MarketingStorySection } from "@/components/marketing/MarketingStorySection";
-import { PartnerProfileCard } from "@/components/marketing/PartnerSections";
-import { Reveal } from "@/components/motion/Reveal";
+import { PartnersPageSections } from "@/components/marketing/PartnersPageSections";
 import { cmsField } from "@/lib/content/cms-field";
+import { cmsPageMetadata } from "@/lib/content/cms-page-metadata";
 import { getEffectiveSectionFields, getPublishedPage } from "@/lib/content/page-content";
 import { getPartners, PARTNERS_PAGE_INTRO } from "@/lib/content/partners-catalog";
-import { PARTNERS_STORY } from "@/lib/content/marketing-pages";
-import { TraderRoleNotice } from "@/components/marketing/TraderRoleNotice";
 
-export const metadata: Metadata = {
-  title: "Independent inspection & certification firms",
-  description:
-    "Firms Finekarts may appoint on bulk commodity programmes — Finekarts is the trader, not the inspection company.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsPageMetadata("partners", {
+    title: "Independent inspection & certification firms",
+    description:
+      "Firms Finekarts may appoint on bulk commodity programmes — Finekarts is the trader, not the inspection company.",
+  });
+}
 
 export default async function PartnersPage() {
   const partners = getPartners();
@@ -32,48 +31,15 @@ export default async function PartnersPage() {
           secondaryCta: { href: "/verification", label: "Due diligence overview" },
         }}
       />
-
-      <section className="bg-white marketing-section pt-0">
-        <div className="container-page -mt-4">
-          <TraderRoleNotice />
-        </div>
-      </section>
-
-      <MarketingStorySection
-        eyebrow={PARTNERS_STORY.eyebrow}
-        title={PARTNERS_STORY.title}
-        lead={PARTNERS_STORY.lead}
-        boxes={PARTNERS_STORY.boxes}
-        imageSrc={PARTNERS_STORY.imageSrc}
-        imageAlt={PARTNERS_STORY.imageAlt}
-        youtubeUrl={PARTNERS_STORY.youtubeUrl}
-        videoTitle="Verification partners overview"
-        variant="reversed"
-        background="cream"
+      <PartnersPageSections
+        partners={partners}
+        introNote={cmsField(intro, "note", PARTNERS_PAGE_INTRO.note)}
+        introBody={cmsField(
+          intro,
+          "body",
+          "Profiles highlight inspection, testing, and certification relationships we coordinate on bulk commodity programmes — supporting buyer confidence alongside your contractual inspection scope.",
+        )}
       />
-
-      <section className="bg-white marketing-section">
-        <div className="container-page">
-          <Reveal>
-            <p className="max-w-3xl text-base leading-relaxed text-[var(--stone)]">
-              {cmsField(intro, "note", PARTNERS_PAGE_INTRO.note)}
-            </p>
-            <p className="mt-4 max-w-3xl text-base leading-relaxed text-[var(--stone)]">
-              {cmsField(
-                intro,
-                "body",
-                "Profiles highlight inspection, testing, and certification relationships we coordinate on bulk commodity programmes — supporting buyer confidence alongside your contractual inspection scope.",
-              )}
-            </p>
-          </Reveal>
-
-          <div id="partners-list" className="mt-12 space-y-10 scroll-mt-28">
-            {partners.map((partner) => (
-              <PartnerProfileCard key={partner.slug} partner={partner} />
-            ))}
-          </div>
-        </div>
-      </section>
     </>
   );
 }

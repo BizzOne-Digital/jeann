@@ -27,7 +27,6 @@ const STATIC_PATHS = [
   "/terms-and-conditions",
   "/cookies",
   "/buyer-terms",
-  "/accessibility",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

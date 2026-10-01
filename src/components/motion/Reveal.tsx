@@ -70,7 +70,7 @@ export function Reveal({
 
   return (
     <motion.div
-      className={className}
+      className={cn("max-w-full min-w-0", className)}
       initial={variantInitial(variant, y)}
       whileInView={variantAnimate(variant)}
       viewport={{ once, margin: "-10% 0px", amount: 0.18 }}

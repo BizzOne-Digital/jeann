@@ -14,6 +14,7 @@ export const ROLE_KEYS: RoleKey[] = [
   "supplier_member",
   "banking_advisor",
   "readonly_auditor",
+  "career_applicant",
 ];
 
 export interface SeoFields {

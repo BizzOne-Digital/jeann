@@ -11,16 +11,20 @@ import {
   DISPUTE_RESPONSIBILITIES,
 } from "@/lib/content/dispute-resolution-content";
 import {
-  INSPECTION_CTA,
-  INSPECTION_NETWORK,
-  INSPECTION_PROCESS_STEPS,
-  INSPECTION_SERVICES,
+  INSPECTIONS_COMMODITY_VALIDATION,
+  INSPECTIONS_CTA,
   INSPECTIONS_HERO,
-  COMMODITY_INSPECTION_CATEGORIES,
-  DOCUMENTARY_TRADE,
-  ORIGIN_DESTINATION,
-  WHY_INDEPENDENT_INSPECTION,
-} from "@/lib/content/inspections-content";
+  INSPECTIONS_TIMING_TYPES,
+} from "@/lib/content/inspections-operational-content";
+import {
+  INSIGHTS_CONTAINMENT_MATRIX,
+  INSIGHTS_CTA,
+  INSIGHTS_HERO,
+  INSIGHTS_SOP,
+  INSIGHTS_ARCHITECTURE,
+  INSIGHTS_PROTOCOL,
+  INSIGHTS_VALIDATION,
+} from "@/lib/content/operational-insights-content";
 import { LOGISTICS_STORY, VERIFICATION_STORY } from "@/lib/content/marketing-pages";
 import {
   COMMERCIAL_INCOTERMS_PRIMARY_NOTE,
@@ -40,12 +44,10 @@ import {
   SHIPPING_MODES,
 } from "@/lib/content/logistics-content";
 import {
-  PACKAGING_CTA,
-  PACKAGING_HERO,
-  PACKAGING_PAGE_INTRO,
-  PACKAGING_SELECTION,
-  PACKAGING_TRANSPORT_ROLE,
-} from "@/lib/content/packaging-content";
+  PACKAGING_PAGE_CTA,
+  PACKAGING_PAGE_HERO,
+  PACKAGING_SUMMARY_MATRIX,
+} from "@/lib/content/packaging-page-content";
 import { RESOURCES_PILLARS } from "@/lib/content/resources-content";
 import {
   VERIFICATION_CTA,
@@ -130,38 +132,17 @@ function disputeBodySections(): PageSectionDef[] {
 }
 
 function packagingBodySections(): PageSectionDef[] {
-  const boxes = PACKAGING_TRANSPORT_ROLE.boxes;
   return [
-    section("specs-intro", "Detailed specifications intro", {
-      title: "Detailed specifications",
-      description:
-        "Each packaging type below includes typical applications, advantages, suitable commodities and notes where corridor or product confirmation is required.",
+    section("overview", "Overview", {
+      description: PACKAGING_PAGE_HERO.description,
+      categoriesLead: PACKAGING_PAGE_HERO.categoriesLead,
     }),
-    section("page-intro", "Catalogue intro", {
-      title: PACKAGING_PAGE_INTRO.title,
-      description: PACKAGING_PAGE_INTRO.description,
-    }),
-    section("transport-role", "Transport role", {
-      title: PACKAGING_TRANSPORT_ROLE.title,
-      lead: PACKAGING_TRANSPORT_ROLE.lead,
-      box1Title: boxes[0].title,
-      box1Body: boxes[0].body,
-      box2Title: boxes[1].title,
-      box2Body: boxes[1].body,
-      box3Title: boxes[2].title,
-      box3Body: boxes[2].body,
-      box4Title: boxes[3].title,
-      box4Body: boxes[3].body,
-    }),
-    section("selection", "Selection guidance", {
-      title: PACKAGING_SELECTION.title,
-      lead: PACKAGING_SELECTION.lead,
-      factors: joinLines(PACKAGING_SELECTION.factors),
+    section("summary-matrix", PACKAGING_SUMMARY_MATRIX.title, {
+      title: PACKAGING_SUMMARY_MATRIX.title,
     }),
     section("cta", "Packaging CTA", {
-      title: PACKAGING_CTA.title,
-      lead: PACKAGING_CTA.lead,
-      tagline: PACKAGING_CTA.tagline,
+      title: PACKAGING_PAGE_CTA.title,
+      lead: PACKAGING_PAGE_CTA.lead,
     }),
   ];
 }
@@ -272,65 +253,54 @@ function logisticsBodySections(): PageSectionDef[] {
 }
 
 function inspectionBodySections(): PageSectionDef[] {
-  const serviceSections = INSPECTION_SERVICES.map((svc) =>
-    section(`service-${svc.n}`, `Service ${svc.n}: ${svc.title}`, {
-      title: svc.title,
-      summary: svc.summary,
-      intro: svc.intro ?? "",
-      items: joinLines(svc.items ?? []),
-      body: svc.body ?? "",
-      note: svc.note ?? "",
-    }),
-  );
-
-  const commoditySections = COMMODITY_INSPECTION_CATEGORIES.map((cat, i) =>
-    section(`commodity-${i + 1}`, `Commodity: ${cat.title}`, {
-      title: cat.title,
-      href: cat.href,
-      text: cat.text,
-      image: cat.image,
-      imageAlt: cat.imageAlt,
-    }),
-  );
-
   return [
-    ...serviceSections,
-    ...commoditySections,
-    section("network", "Inspection network", {
-      lead: INSPECTION_NETWORK.lead,
-      organizations: joinLines(INSPECTION_NETWORK.organizations),
-      selectionNote: INSPECTION_NETWORK.selectionNote,
-      disclaimer: INSPECTION_NETWORK.disclaimer,
+    section("timing", INSPECTIONS_TIMING_TYPES.title, {
+      title: INSPECTIONS_TIMING_TYPES.title,
     }),
-    section("origin-destination", "Origin & destination", {
-      originTitle: ORIGIN_DESTINATION.origin.title,
-      originIntro: ORIGIN_DESTINATION.origin.intro,
-      originPlaces: joinLines(ORIGIN_DESTINATION.origin.places),
-      originNote: ORIGIN_DESTINATION.origin.note,
-      destinationTitle: ORIGIN_DESTINATION.destination.title,
-      destinationIntro: ORIGIN_DESTINATION.destination.intro,
-      destinationPlaces: joinLines(ORIGIN_DESTINATION.destination.places),
-      destinationNote: ORIGIN_DESTINATION.destination.note,
-    }),
-    section("documentary-trade", "Documentary trade", {
-      title: DOCUMENTARY_TRADE.title,
-      lead: DOCUMENTARY_TRADE.lead,
-      contractItems: joinLines(DOCUMENTARY_TRADE.contractItems),
-      note: DOCUMENTARY_TRADE.note,
-    }),
-    section("process", "Inspection process", {
-      steps: joinLines(
-        INSPECTION_PROCESS_STEPS.map((s) => `${s.step}. ${s.title} — ${s.text}`),
-      ),
-    }),
-    section("why-independent", "Why independent inspection", {
-      cards: joinLines(WHY_INDEPENDENT_INSPECTION.map((c) => `${c.title}: ${c.text}`)),
+    section("commodity-validation", INSPECTIONS_COMMODITY_VALIDATION.title, {
+      title: INSPECTIONS_COMMODITY_VALIDATION.title,
+      lead: INSPECTIONS_COMMODITY_VALIDATION.lead,
     }),
     section("cta", "Inspection CTA", {
-      title: INSPECTION_CTA.title,
-      lead: INSPECTION_CTA.lead,
-      fields: joinLines(INSPECTION_CTA.fields),
-      tagline: INSPECTION_CTA.tagline,
+      title: INSPECTIONS_CTA.title,
+      lead: INSPECTIONS_CTA.lead,
+      primaryHref: INSPECTIONS_CTA.primaryHref,
+      secondaryHref: INSPECTIONS_CTA.secondaryHref,
+    }),
+  ];
+}
+
+function insightsBodySections(): PageSectionDef[] {
+  return [
+    section("intro", "Framework intro", {
+      lead: INSIGHTS_HERO.guideLead,
+    }),
+    section("architecture", INSIGHTS_ARCHITECTURE.title, {
+      title: INSIGHTS_ARCHITECTURE.title,
+      lead: INSIGHTS_ARCHITECTURE.lead,
+    }),
+    section("protocol", INSIGHTS_PROTOCOL.title, {
+      title: INSIGHTS_PROTOCOL.title,
+      lead: INSIGHTS_PROTOCOL.lead,
+    }),
+    section("validation", INSIGHTS_VALIDATION.title, {
+      title: INSIGHTS_VALIDATION.title,
+      lead: INSIGHTS_VALIDATION.lead,
+      pillars: joinLines([...INSIGHTS_VALIDATION.pillars]),
+    }),
+    section("matrix", INSIGHTS_CONTAINMENT_MATRIX.title, {
+      title: INSIGHTS_CONTAINMENT_MATRIX.title,
+      lead: INSIGHTS_CONTAINMENT_MATRIX.lead,
+    }),
+    section("sop", INSIGHTS_SOP.title, {
+      title: INSIGHTS_SOP.title,
+      lead: INSIGHTS_SOP.lead,
+    }),
+    section("cta", "Insights CTA", {
+      title: INSIGHTS_CTA.title,
+      lead: INSIGHTS_CTA.lead,
+      primaryHref: INSIGHTS_CTA.primaryHref,
+      secondaryHref: INSIGHTS_CTA.secondaryHref,
     }),
   ];
 }
@@ -446,6 +416,7 @@ const BODY_BY_SLUG: Record<string, () => PageSectionDef[]> = {
   packaging: packagingBodySections,
   logistics: logisticsBodySections,
   inspections: inspectionBodySections,
+  insights: insightsBodySections,
   verification: verificationBodySections,
   resources: resourcesBodySections,
   products: productsBodySections,
@@ -464,13 +435,13 @@ const HERO_OVERRIDES: Partial<
     secondaryCtaHref: DISPUTE_HERO.secondaryCta.href,
   },
   packaging: {
-    eyebrow: PACKAGING_HERO.eyebrow,
-    title: PACKAGING_HERO.title,
-    description: PACKAGING_HERO.description,
-    primaryCtaLabel: PACKAGING_HERO.primaryCta.label,
-    primaryCtaHref: PACKAGING_HERO.primaryCta.href,
-    secondaryCtaLabel: PACKAGING_HERO.secondaryCta.label,
-    secondaryCtaHref: PACKAGING_HERO.secondaryCta.href,
+    eyebrow: PACKAGING_PAGE_HERO.eyebrow,
+    title: PACKAGING_PAGE_HERO.title,
+    description: PACKAGING_PAGE_HERO.description,
+    primaryCtaLabel: PACKAGING_PAGE_HERO.primaryCta.label,
+    primaryCtaHref: PACKAGING_PAGE_HERO.primaryCta.href,
+    secondaryCtaLabel: PACKAGING_PAGE_HERO.secondaryCta.label,
+    secondaryCtaHref: PACKAGING_PAGE_HERO.secondaryCta.href,
   },
   logistics: {
     eyebrow: LOGISTICS_HERO.eyebrow,
@@ -489,6 +460,15 @@ const HERO_OVERRIDES: Partial<
     primaryCtaHref: INSPECTIONS_HERO.primaryCta.href,
     secondaryCtaLabel: INSPECTIONS_HERO.secondaryCta.label,
     secondaryCtaHref: INSPECTIONS_HERO.secondaryCta.href,
+  },
+  insights: {
+    eyebrow: INSIGHTS_HERO.eyebrow,
+    title: INSIGHTS_HERO.title,
+    description: INSIGHTS_HERO.description,
+    primaryCtaLabel: INSIGHTS_HERO.primaryCta.label,
+    primaryCtaHref: INSIGHTS_HERO.primaryCta.href,
+    secondaryCtaLabel: INSIGHTS_HERO.secondaryCta.label,
+    secondaryCtaHref: INSIGHTS_HERO.secondaryCta.href,
   },
   verification: {
     eyebrow: VERIFICATION_HERO.eyebrow,

@@ -30,12 +30,12 @@ const LINKS = [
   {
     title: "Resources",
     items: [
-      { href: "/resources", label: "Documents & terminology" },
+      { href: "/resources", label: "Resources" },
       { href: "/packaging", label: "Packaging" },
-      { href: "/logistics", label: "Trade logistics" },
-      { href: "/partners", label: "Partner firms" },
-      { href: "/verification", label: "Due diligence tools" },
-      { href: "/inspections", label: "Inspection in trade" },
+      { href: "/logistics", label: "Logistics" },
+      { href: "/partners", label: "Partners" },
+      { href: "/verification", label: "Due diligence" },
+      { href: "/inspections", label: "Inspections" },
       { href: "/insights", label: "Insights" },
     ],
   },
@@ -45,7 +45,6 @@ const LINKS = [
       { href: "/login", label: "Buyer portal" },
       { href: "/privacy-policy", label: "Privacy Policy" },
       { href: "/terms-and-conditions", label: "Terms & Conditions" },
-      { href: "/accessibility", label: "Accessibility" },
     ],
   },
 ];
@@ -55,11 +54,11 @@ export async function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="mt-auto w-full max-w-full overflow-x-clip bg-[var(--navy)] text-white">
-      <div className="container-page section-pad !py-16">
-        <div className="grid min-w-0 gap-10 sm:gap-12 lg:grid-cols-[1.1fr_1.6fr_1fr]">
+    <footer className="mt-auto w-full max-w-full overflow-x-clip bg-[var(--footer-bg)] text-white">
+      <div className="container-page pt-14 pb-[max(1.25rem,env(safe-area-inset-bottom,0px))] sm:pt-16">
+        <div className="grid min-w-0 items-start gap-10 sm:gap-12 lg:grid-cols-[1.1fr_1.6fr_1fr]">
           <FooterReveal>
-            <div className="min-w-0">
+            <div className="min-w-0 self-start">
               <Link href="/" className="focus-ring inline-flex shrink-0 items-center gap-3">
                 <BrandLogo size="lg" />
                 <div className="shrink-0">
@@ -72,29 +71,12 @@ export async function SiteFooter() {
               <p className="mt-5 max-w-sm text-base leading-relaxed text-white/65">
                 {FINEKARTS_FOOTER_TAGLINE}
               </p>
-              <div className="mt-5 space-y-1 text-sm text-white/75">
-                <p>
-                  <a className="hover:text-[#e89a2d]" href={`mailto:${site.email}`}>
-                    {site.email}
-                  </a>
-                </p>
-                <p>
-                  <a className="hover:text-[#e89a2d]" href={`tel:${site.phone}`}>
-                    {site.phoneDisplay}
-                  </a>
-                </p>
-                <p className="pt-1 text-white/60">
-                  {site.addressLine1}
-                  <br />
-                  {site.addressLine2}
-                </p>
-              </div>
               <SocialLinks links={site.socialLinks} className="mt-6" />
             </div>
           </FooterReveal>
 
           <FooterReveal delay={0.08}>
-            <div className="grid min-w-0 grid-cols-2 gap-6 sm:grid-cols-4 sm:gap-8">
+            <div className="grid min-w-0 self-start grid-cols-2 gap-6 sm:grid-cols-4 sm:gap-8">
               {LINKS.map((group) => (
                 <div key={group.title} className="min-w-0">
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#e89a2d]">
@@ -115,34 +97,53 @@ export async function SiteFooter() {
           </FooterReveal>
 
           <FooterReveal delay={0.14}>
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#e89a2d]">
-                Buyer portal
-              </p>
-              <p className="mt-3 text-sm text-white/65">
-                RFQs, consultations, and trade desk messages are submitted after buyer sign-in.
-              </p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                <Link
-                  href="/buyer-request"
-                  className="rounded-md border border-white/25 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
-                >
-                  Purchase request
-                </Link>
-                <Link
-                  href="/login"
-                  className="marketing-btn-primary px-4 py-2.5 text-sm"
-                >
-                  Sign in
-                </Link>
-                <Link
-                  href="/register/buyer"
-                  className="rounded-md border border-white/25 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
-                >
-                  Register
-                </Link>
+            <div className="flex min-w-0 flex-col gap-6 self-start lg:ml-auto lg:max-w-[17rem] lg:items-end lg:text-right">
+              <div className="w-full lg:w-auto">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#e89a2d]">
+                  Buyer portal
+                </p>
+                <p className="mt-3 text-sm text-white/65">
+                  RFQs, consultations, and trade desk messages are submitted after buyer sign-in.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2 lg:justify-end">
+                  <Link
+                    href="/buyer-request"
+                    className="rounded-md border border-white/25 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
+                  >
+                    Purchase request
+                  </Link>
+                  <Link
+                    href="/login"
+                    className="marketing-btn-primary px-4 py-2.5 text-sm"
+                  >
+                    Sign in
+                  </Link>
+                  <Link
+                    href="/register/buyer"
+                    className="rounded-md border border-white/25 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
+                  >
+                    Register
+                  </Link>
+                </div>
               </div>
-              <p className="mt-4 text-xs text-white/50">
+              <div className="space-y-1 text-sm leading-snug text-white/75">
+                <p>
+                  <a className="hover:text-[#e89a2d]" href={`mailto:${site.email}`}>
+                    {site.email}
+                  </a>
+                </p>
+                <p>
+                  <a className="hover:text-[#e89a2d]" href={`tel:${site.phone}`}>
+                    {site.phoneDisplay}
+                  </a>
+                </p>
+                <p className="pt-0.5 text-white/60">
+                  {site.addressLine1}
+                  <br />
+                  {site.addressLine2}
+                </p>
+              </div>
+              <p className="text-xs text-white/50">
                 Suppliers:{" "}
                 <Link href="/supplier-offer" className="underline hover:text-white">
                   invitation-only trade offers
@@ -154,7 +155,7 @@ export async function SiteFooter() {
 
         <FooterReveal delay={0.18}>
           <div
-            className="mt-14 flex flex-col gap-4 border-t border-white/10 pt-6 text-xs text-white/40 lg:flex-row lg:items-center lg:justify-between"
+            className="mt-10 flex flex-col gap-4 border-t border-white/10 pt-5 pb-0 text-xs text-white/40 lg:flex-row lg:items-center lg:justify-between"
           >
             <div className="space-y-1.5">
               <p>© {year} Finekarts Incorporated. All rights reserved.</p>
