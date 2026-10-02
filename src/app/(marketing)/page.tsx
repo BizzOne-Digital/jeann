@@ -1,4 +1,3 @@
-import { getPublishedInsights } from "@/lib/content/insights-catalog";
 import { getPublicCategories } from "@/lib/content/catalog-server";
 import { getPartners } from "@/lib/content/partners-catalog";
 import { getEffectiveSectionFields, getPublishedPage } from "@/lib/content/page-content";
@@ -31,7 +30,6 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function HomePage() {
   const categories = await getPublicCategories();
-  const posts = (await getPublishedInsights()).slice(0, 3);
   const cms = await getPublishedPage("home");
   const connection = getEffectiveSectionFields(cms, "connection");
   const sourced = getEffectiveSectionFields(cms, "sourced");
@@ -63,7 +61,7 @@ export default async function HomePage() {
       <PartnersHomeTeaser partners={getPartners()} />
       <PackagingSection />
       <ReadyCtaBanner />
-      <InsightsAndNotes posts={posts} featuredTestimonial={featuredTestimonial} />
+      <InsightsAndNotes featuredTestimonial={featuredTestimonial} />
     </>
   );
 }

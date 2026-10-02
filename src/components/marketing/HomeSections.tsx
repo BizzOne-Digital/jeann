@@ -18,6 +18,8 @@ import { HOMEPAGE_PACKAGING_TEASER, PACKAGING_IMAGES } from "@/lib/content/packa
 import { resolveMarketingHeroImage } from "@/lib/marketing/cms-hero";
 import { isStoredUploadUrl } from "@/lib/media/resolve-image-src";
 import { AGRICULTURE_IMAGES } from "@/lib/content/agriculture-images";
+import { HOME_INSIGHTS_TEASER } from "@/lib/content/operational-insights-content";
+import { INSIGHTS_SECTION_IMAGES } from "@/lib/content/insights-operational-images";
 import {
   HERO_DARK_OVERLAY_BOTTOM,
   HERO_DARK_OVERLAY_WASH,
@@ -716,19 +718,17 @@ export function ReadyCtaBanner() {
   );
 }
 
+const HOME_INSIGHTS_TEASER_IMAGES = [
+  INSIGHTS_SECTION_IMAGES.architecture,
+  INSIGHTS_SECTION_IMAGES.protocolLoading,
+  INSIGHTS_SECTION_IMAGES.validationOverview,
+] as const;
+
 export function InsightsAndNotes({
-  posts,
   featuredTestimonial,
 }: {
-  posts: Array<{ slug: string; title: string; excerpt: string; category: string }>;
   featuredTestimonial?: PublicTestimonial | null;
 }) {
-  const cardImages = [
-    "/images/products/rapeseed-oil-reference.png",
-    "/images/products/oils/refined-sunflower-oil.png",
-    "/images/products/sugar/icumsa-45-white-sugar-2.png",
-  ];
-
   return (
     <section className="relative w-full overflow-hidden bg-[#f4f6f8] py-16 lg:py-24">
       <div className="container-page relative z-10 w-full">
@@ -736,46 +736,54 @@ export function InsightsAndNotes({
           {/* Insights Cards Column */}
           <div className="w-full">
             <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-              <h2 className="text-3xl font-semibold text-[#001a3d] lg:text-4xl">
-                Market Insights
-              </h2>
+              <div>
+                <p className="text-xs font-semibold tracking-[0.2em] text-[#c88e4a] uppercase">
+                  {HOME_INSIGHTS_TEASER.eyebrow}
+                </p>
+                <h2 className="mt-1 text-3xl font-semibold text-[#001a3d] lg:text-4xl">
+                  {HOME_INSIGHTS_TEASER.title}
+                </h2>
+              </div>
               <Link
-                href="/insights"
+                href={HOME_INSIGHTS_TEASER.viewAllHref}
                 className="text-base font-medium text-[#c88e4a] transition-colors hover:text-[#b57d3c]"
               >
-                View All Insights →
+                {HOME_INSIGHTS_TEASER.viewAllLabel}
               </Link>
             </div>
 
             <div className="grid w-full gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
-              {posts.slice(0, 3).map((post, i) => (
-                <Reveal key={post.slug} delay={i * 0.06}>
-                  <article className="group w-full">
-                    <Link href={`/insights/${post.slug}`} className="block w-full">
-                      <div className="relative aspect-[16/11] w-full overflow-hidden rounded-lg bg-[#e4e0d8]">
-                        <Image
-                          src={cardImages[i] ?? cardImages[0]}
-                          alt={`Illustration for ${post.title}`}
-                          fill
-                          className="object-cover transition-transform duration-500 group-hover:scale-105"
-                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 300px"
-                        />
-                      </div>
-                      <div className="w-full pt-4">
-                        <h3 className="text-base font-semibold leading-snug text-[#001a3d] transition-colors group-hover:text-[#c88e4a]">
-                          {post.title}
-                        </h3>
-                        <p className="mt-2 line-clamp-3 text-base leading-relaxed text-[#666666]">
-                          {post.excerpt}
-                        </p>
-                        <span className="mt-3 inline-flex items-center gap-1 text-base font-medium text-[#c88e4a]">
-                          Read More <span aria-hidden="true">→</span>
-                        </span>
-                      </div>
-                    </Link>
-                  </article>
-                </Reveal>
-              ))}
+              {HOME_INSIGHTS_TEASER.cards.map((card, i) => {
+                const image = HOME_INSIGHTS_TEASER_IMAGES[i] ?? HOME_INSIGHTS_TEASER_IMAGES[0];
+                return (
+                  <Reveal key={card.title} delay={i * 0.06}>
+                    <article className="group w-full">
+                      <Link href={card.href} className="block w-full">
+                        <div className="relative aspect-[16/11] w-full overflow-hidden rounded-lg bg-[#e4e0d8]">
+                          <Image
+                            src={image.src}
+                            alt={image.alt}
+                            fill
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 300px"
+                          />
+                        </div>
+                        <div className="w-full pt-4">
+                          <h3 className="text-base font-semibold leading-snug text-[#001a3d] transition-colors group-hover:text-[#c88e4a]">
+                            {card.title}
+                          </h3>
+                          <p className="mt-2 line-clamp-3 text-base leading-relaxed text-[#666666]">
+                            {card.excerpt}
+                          </p>
+                          <span className="mt-3 inline-flex items-center gap-1 text-base font-medium text-[#c88e4a]">
+                            Read guide <span aria-hidden="true">→</span>
+                          </span>
+                        </div>
+                      </Link>
+                    </article>
+                  </Reveal>
+                );
+              })}
             </div>
           </div>
 
@@ -813,12 +821,8 @@ export function WorkflowOverview() {
   return null;
 }
 
-export function InsightsTeaser({
-  posts,
-}: {
-  posts: Array<{ slug: string; title: string; excerpt: string; category: string }>;
-}) {
-  return <InsightsAndNotes posts={posts} />;
+export function InsightsTeaser() {
+  return <InsightsAndNotes />;
 }
 
 export function BookingCta() {

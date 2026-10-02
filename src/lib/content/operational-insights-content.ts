@@ -284,3 +284,28 @@ export const INSIGHTS_CTA = {
   secondaryLabel: "Trade resources",
   secondaryHref: "/resources",
 } as const;
+
+/** Home page teaser — mirrors the operational /insights guide (not legacy blog articles). */
+export const HOME_INSIGHTS_TEASER = {
+  eyebrow: INSIGHTS_HERO.eyebrow,
+  title: INSIGHTS_HERO.title,
+  viewAllHref: "/insights",
+  viewAllLabel: "Explore the insights guide →",
+  cards: [
+    {
+      title: INSIGHTS_ARCHITECTURE.title,
+      excerpt: INSIGHTS_ARCHITECTURE.lead,
+      href: "/insights#insights-framework",
+    },
+    {
+      title: INSIGHTS_PROTOCOL.title,
+      excerpt: INSIGHTS_PROTOCOL.lead,
+      href: "/insights#insights-framework",
+    },
+    {
+      title: INSIGHTS_SOP.title,
+      excerpt: INSIGHTS_SOP.lead,
+      href: "/insights#insights-sop-checklist",
+    },
+  ],
+} as const;
