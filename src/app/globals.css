@@ -52,8 +52,8 @@ body.intro-active #finekarts-site-root {
   --foreground: var(--ink);
   --radius: 0.25rem;
   --surface-elevated: #faf8f6;
-  /* Slight bump for body/paragraph copy site-wide (+1.5%) */
-  --copy-scale: 1.015;
+  /* Body/paragraph copy site-wide (+2% over prior tuning; headings use separate scale) */
+  --copy-scale: 1.0353;
 }
 
 @theme inline {
@@ -74,12 +74,14 @@ body.intro-active #finekarts-site-root {
   --font-sans: var(--font-sans);
   --font-display: var(--font-display);
   --font-mono: var(--font-mono);
-  --text-sm: 0.888125rem;
-  --text-sm--line-height: 1.26875rem;
-  --text-base: 1.015rem;
-  --text-base--line-height: 1.5225rem;
-  --text-lg: 1.141875rem;
-  --text-lg--line-height: 1.77625rem;
+  --text-xs: 0.765rem;
+  --text-xs--line-height: 1.1475rem;
+  --text-sm: 0.9059rem;
+  --text-sm--line-height: 1.2941rem;
+  --text-base: 1.0353rem;
+  --text-base--line-height: 1.553rem;
+  --text-lg: 1.1647rem;
+  --text-lg--line-height: 1.8118rem;
 }
 
 *,
@@ -399,7 +401,7 @@ a {
   gap: 0.5rem;
   border-radius: 999px;
   padding: 0.85rem 1.35rem;
-  font-size: 0.92rem;
+  font-size: 0.9384rem;
   font-weight: 600;
   letter-spacing: 0.01em;
   transition:
@@ -496,7 +498,7 @@ a {
 .label {
   display: block;
   margin-bottom: 0.4rem;
-  font-size: 0.875rem;
+  font-size: 0.8925rem;
   font-weight: 600;
   color: var(--stone);
   letter-spacing: 0.04em;
