@@ -15,7 +15,6 @@ import { resolveHeroYoutubeInput } from "@/lib/content/hero-video";
 import type { SeedCategory } from "@/lib/content/catalog";
 import { getCategoryCover } from "@/lib/content/product-images";
 import { HOMEPAGE_PACKAGING_TEASER, PACKAGING_IMAGES } from "@/lib/content/packaging-images";
-import { LOGISTICS_IMAGES } from "@/lib/content/logistics-images";
 import { resolveMarketingHeroImage } from "@/lib/marketing/cms-hero";
 import { isStoredUploadUrl } from "@/lib/media/resolve-image-src";
 import { AGRICULTURE_IMAGES } from "@/lib/content/agriculture-images";
@@ -61,6 +60,57 @@ function GoldButton({
 export function HomeHero({ cms }: { cms?: Record<string, string> }) {
   const reduce = useReducedMotion();
   const hero = resolveMarketingHeroImage(cms, "home");
+
+  const trust = [
+    {
+      label: "FOB & CIF",
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <path
+            d="M3 17h18M5 17l2-8h10l2 8M8 9V6h8v3"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      ),
+    },
+    {
+      label: "Irrevocable LC · Revolving",
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <path
+            d="M12 3l8 3.5v5.5c0 4.8-3.2 8.2-8 9.5-4.8-1.3-8-4.7-8-9.5V6.5L12 3z"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M9.5 12l1.8 1.8L15 10"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      ),
+    },
+    {
+      label: "CIF & trade insurance",
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="1.6" />
+          <path
+            d="M4 12h16M12 4c2.8 2.4 2.8 13.6 0 16M12 4c-2.8 2.4-2.8 13.6 0 16"
+            stroke="currentColor"
+            strokeWidth="1.4"
+            strokeLinecap="round"
+          />
+        </svg>
+      ),
+    },
+  ];
 
   return (
     <section className={`${MARKETING_HERO_SECTION_CLASS} bg-[var(--navy)] text-white`}>
@@ -129,6 +179,22 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
               </Link>
             </div>
           </Reveal>
+
+          <Reveal delay={0.22}>
+            <ul className="mt-10 flex flex-col gap-3 text-[0.88rem] text-[#d4a84b] sm:mt-12 sm:flex-row sm:flex-wrap sm:items-center sm:gap-y-4 sm:text-[0.92rem]">
+              {trust.map((item, i) => (
+                <li key={item.label} className="flex items-center">
+                  {i > 0 ? (
+                    <span className="mx-5 hidden h-5 w-px bg-white/35 sm:block" aria-hidden />
+                  ) : null}
+                  <span className="flex items-center gap-2.5">
+                    <span className="shrink-0 text-[#d4a84b]">{item.icon}</span>
+                    <span className="font-medium tracking-wide">{item.label}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
         </div>
 
         {!reduce ? (
@@ -177,9 +243,9 @@ export function ConnectionSection({
 
   return (
     <>
-      <section className="overflow-x-clip bg-[#f4f6f8] py-16 lg:py-24">
-        <div className="container-page grid min-w-0 items-center gap-10 lg:grid-cols-[0.95fr_1.15fr] lg:gap-14">
-          <div className="min-w-0 max-w-xl">
+      <section className="bg-[#f4f6f8] py-16 lg:py-24">
+        <div className="container-page grid items-center gap-10 lg:grid-cols-[0.95fr_1.15fr] lg:gap-14">
+          <div className="max-w-xl">
             <Reveal>
               <p className="text-sm font-semibold tracking-[0.22em] text-[#c88e4a] uppercase sm:text-base">
                 {cmsField(cms, "eyebrow", "Who we are")}
@@ -249,13 +315,13 @@ export function ConnectionSection({
 
       {youtubeInput ? (
         <section
-          className="relative min-h-[min(72svh,680px)] w-full max-w-full overflow-hidden bg-[#071525]"
+          className="relative min-h-[min(72svh,680px)] w-full overflow-hidden bg-[#071525]"
           aria-label="Company overview video"
         >
           <HeroVideoBackground
             youtubeInput={youtubeInput}
-            posterSrc={LOGISTICS_IMAGES.seaAirRoutes.src}
-            posterAlt={LOGISTICS_IMAGES.seaAirRoutes.alt}
+            posterSrc={resolveImageSrc(home2)}
+            posterAlt="Container ship and port logistics at sunset"
           />
           <div
             className="absolute inset-0"
@@ -274,8 +340,8 @@ export function ConnectionSection({
 export function CommoditiesWeTrade({ categories }: { categories: SeedCategory[] }) {
   void categories;
   return (
-    <section className="overflow-x-clip bg-[#0a1628] py-12 text-white lg:py-16">
-      <div className="container-page min-w-0">
+    <section className="bg-[#0a1628] py-12 text-white lg:py-16">
+      <div className="container-page">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <h2 className="text-2xl font-medium tracking-tight sm:text-[1.75rem]">
             Products we sell
@@ -288,17 +354,17 @@ export function CommoditiesWeTrade({ categories }: { categories: SeedCategory[] 
           </Link>
         </div>
 
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6 lg:gap-5">
           {COMMODITY_CARDS.map((card, i) => (
             <Reveal key={card.slug} delay={i * 0.05}>
-              <Link href={`/products/${card.slug}`} className="group block">
+              <Link href={`/products/${card.slug}`} className="group block min-w-0">
                 <div className="relative aspect-[4/5] overflow-hidden rounded-[2px] border border-white/25 bg-[#122033]">
                   <Image
                     src={card.image}
                     alt={card.alt}
                     fill
                     className="object-cover transition duration-500 group-hover:scale-[1.03]"
-                    sizes="(max-width: 1024px) 50vw, 220px"
+                    sizes="(max-width: 1024px) 33vw, 16vw"
                   />
                 </div>
                 <p className="mt-3 text-left text-base font-medium tracking-wide text-white">
@@ -608,8 +674,8 @@ export function ReadyCtaBanner() {
       />
       <div className="absolute inset-0 bg-[#071525]/80" />
 
-      <div className="container-page relative grid min-w-0 items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14">
-        <div className="min-w-0">
+      <div className="container-page relative grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14">
+        <div>
           <Reveal>
             <h2 className="max-w-xl text-3xl font-semibold leading-tight sm:text-4xl lg:text-[2.75rem]">
               Ready to Source Your Next Commodity?
@@ -670,17 +736,14 @@ export function InsightsAndNotes({
           {/* Insights Cards Column */}
           <div className="w-full">
             <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-              <div>
-                <p className="text-xs font-semibold tracking-[0.2em] text-[#c88e4a] uppercase">Insights</p>
-                <h2 className="mt-1 text-3xl font-semibold text-[#001a3d] lg:text-4xl">
-                  Operational guides & market notes
-                </h2>
-              </div>
+              <h2 className="text-3xl font-semibold text-[#001a3d] lg:text-4xl">
+                Market Insights
+              </h2>
               <Link
                 href="/insights"
                 className="text-base font-medium text-[#c88e4a] transition-colors hover:text-[#b57d3c]"
               >
-                View all insights →
+                View All Insights →
               </Link>
             </div>
 
