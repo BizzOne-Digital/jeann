@@ -142,10 +142,7 @@ export const HOMEPAGE_PACKAGING_TEASER = [
     alt: "Grain hopper train beside export silos on a bulk rail corridor",
   }),
   teaser("Tanker Vessel", "tanker-vessel", PACKAGING_IMAGES.tankerVessel),
-  teaser("Bulk Vessel", "bulk-vessel", {
-    src: "/images/home/bulk-vessel-card-unique.png",
-    alt: "Bulk carrier assisted by tugboats at an export berth",
-  }),
+  teaser("Bulk Vessel", "bulk-vessel", PACKAGING_IMAGES.bulkVesselLoading),
   teaser("Bulk Truck", "bulk-truck", {
     src: "/images/home/packaging-teaser-bulk-truck.jpg",
     alt: "Hopper truck loading grain at an elevator terminal",
