@@ -4,18 +4,17 @@ import { PartnersPageSections } from "@/components/marketing/PartnersPageSection
 import { cmsField } from "@/lib/content/cms-field";
 import { cmsPageMetadata } from "@/lib/content/cms-page-metadata";
 import { getEffectiveSectionFields, getPublishedPage } from "@/lib/content/page-content";
-import { getPartners, PARTNERS_PAGE_INTRO } from "@/lib/content/partners-catalog";
+import { PRODUCER_PARTNERS_HERO } from "@/lib/content/producer-partners-content";
 
 export async function generateMetadata(): Promise<Metadata> {
   return cmsPageMetadata("partners", {
-    title: "Independent inspection & certification firms",
+    title: "Producer & manufacturer partnerships",
     description:
-      "Firms Finekarts may appoint on bulk commodity programmes — Finekarts is the trader, not the inspection company.",
+      "Partner with Finekarts on bulk commodity export programmes — scale, quality, and regulatory discipline for international buyers.",
   });
 }
 
 export default async function PartnersPage() {
-  const partners = getPartners();
   const cms = await getPublishedPage("partners");
   const intro = getEffectiveSectionFields(cms, "intro");
 
@@ -25,20 +24,14 @@ export default async function PartnersPage() {
         pageSlug="partners"
         tone="dark"
         defaults={{
-          title: PARTNERS_PAGE_INTRO.title,
-          description: PARTNERS_PAGE_INTRO.lead,
-          primaryCta: { href: "#partners-list", label: "Browse partners →" },
-          secondaryCta: { href: "/verification", label: "Due diligence overview" },
+          title: PRODUCER_PARTNERS_HERO.title,
+          description: PRODUCER_PARTNERS_HERO.lead,
+          primaryCta: { href: "#partner-programmes", label: "Explore programmes →" },
+          secondaryCta: { href: "/supplier-offer", label: "Supplier enquiry" },
         }}
       />
       <PartnersPageSections
-        partners={partners}
-        introNote={cmsField(intro, "note", PARTNERS_PAGE_INTRO.note)}
-        introBody={cmsField(
-          intro,
-          "body",
-          "Profiles highlight inspection, testing, and certification relationships we coordinate on bulk commodity programmes — supporting buyer confidence alongside your contractual inspection scope.",
-        )}
+        introNote={cmsField(intro, "note", PRODUCER_PARTNERS_HERO.note)}
       />
     </>
   );

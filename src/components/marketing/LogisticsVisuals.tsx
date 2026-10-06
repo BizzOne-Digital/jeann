@@ -54,10 +54,10 @@ export function LogisticsFullBleedBand({
   }
 
   return (
-    <Reveal variant="blur-up" y={0} className={`relative ${heightClass} w-full overflow-hidden`}>
+    <div className={`relative ${heightClass} w-full overflow-hidden`}>
       <Image src={image.src} alt={image.alt} fill className="object-cover object-center" sizes="100vw" />
       <div className="absolute inset-0 bg-gradient-to-r from-[#071525]/25 via-transparent to-[#071525]/25" />
-    </Reveal>
+    </div>
   );
 }
 
@@ -83,8 +83,8 @@ export function LogisticsPairedRow({
         className,
       )}
     >
-      <MotionImageFrame
-        className="relative min-h-[200px] overflow-hidden rounded-xl border border-[#d5d0c8] bg-[#e4e0d8] shadow-md sm:min-h-[220px] lg:min-h-[240px] lg:h-full"
+      <div
+        className="relative min-h-[200px] overflow-hidden rounded-lg border border-[#d5d0c8] bg-[#e4e0d8] sm:min-h-[220px] lg:min-h-[240px] lg:h-full"
       >
         <Image
           src={image.src}
@@ -93,17 +93,17 @@ export function LogisticsPairedRow({
           className="object-cover"
           sizes="(max-width: 1024px) 100vw, 50vw"
         />
-      </MotionImageFrame>
-      <Reveal variant={reversed ? "left" : "right"} delay={0.06} bounce className="flex min-h-0">
+      </div>
+      <div className="flex min-h-0">
         <div
           className={cn(
             "flex h-full w-full flex-col justify-center",
-            boxed && "marketing-box rounded-lg p-6 sm:p-8",
+            boxed && "marketing-box rounded-lg p-5 sm:p-6",
           )}
         >
           {children}
         </div>
-      </Reveal>
+      </div>
     </div>
   );
 }
@@ -121,7 +121,7 @@ export function LogisticsPairedStack({
   className?: string;
 }) {
   return (
-    <div className={cn("space-y-8 lg:space-y-10", className)}>
+    <div className={cn("space-y-6 lg:space-y-8", className)}>
       {rows.map((row, index) => (
         <LogisticsPairedRow
           key={`${row.image.src}-${index}`}

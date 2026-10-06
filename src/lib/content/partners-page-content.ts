@@ -1,3 +1,10 @@
+export const PARTNERS_VIDEO_SECTION = {
+  eyebrow: "Independent partners",
+  title: "Recognized inspection and certification relationships",
+  lead:
+    "Overview videos from firms Finekarts may appoint when contracts require independent quality, quantity, or compliance evidence — we coordinate them; we do not operate as those brands.",
+} as const;
+
 export const PARTNERS_PAGE_PILLARS = [
   {
     title: "Independent scope",

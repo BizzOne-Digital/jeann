@@ -98,8 +98,17 @@ export const PARTNERS: PartnerEntry[] = [
   },
 ];
 
+/** Featured on `/partners` video band (single section). */
+export const PARTNERS_VIDEO_FEATURE_SLUGS = ["sgs", "bureau-veritas", "cfia-inspection"] as const;
+
 export function getPartners() {
   return PARTNERS;
+}
+
+export function getPartnersVideoFeatures(): PartnerEntry[] {
+  return PARTNERS_VIDEO_FEATURE_SLUGS.map((slug) => getPartner(slug)).filter(
+    (p): p is PartnerEntry => p != null,
+  );
 }
 
 export function getPartner(slug: string) {

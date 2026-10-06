@@ -14,8 +14,8 @@ export const INSPECTIONS_SECTION_IMAGES = {
     alt: "Visual inspection and representative sampling of bulk grain",
   },
   finalShipment: {
-    src: "/images/inspections/cargo-inspector-loading.png",
-    alt: "Loading supervision and pre-shipment inspection at terminal",
+    src: "/images/inspections/container-rail-loading.png",
+    alt: "Gantry crane loading a container onto rail — pre-shipment supervision",
   },
   ndt: {
     src: "/images/inspections/liquid-sampling.png",

@@ -3,6 +3,8 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { ResourcesHub } from "@/components/marketing/ResourcesHub";
 import { Reveal } from "@/components/motion/Reveal";
+import { ProductQualitySpotlight } from "@/components/marketing/ProductQualitySpotlight";
+import { RESOURCES_PAGE_SPOTLIGHTS } from "@/lib/content/product-quality-spotlights";
 import { RESOURCES_PAGE_INTRO } from "@/lib/content/resources-page-content";
 
 export function ResourcesPageSections({ introBody }: { introBody: string }) {
@@ -22,7 +24,7 @@ export function ResourcesPageSections({ introBody }: { introBody: string }) {
           transition={{ duration: 8, repeat: Infinity }}
         />
         <div className="container-page relative">
-          <Reveal variant="blur-up">
+          <Reveal variant="up">
             <p className="text-xs font-semibold tracking-[0.22em] text-[#d4a84b] uppercase">
               {RESOURCES_PAGE_INTRO.eyebrow}
             </p>
@@ -31,18 +33,18 @@ export function ResourcesPageSections({ introBody }: { introBody: string }) {
             </h2>
             <p className="mt-4 max-w-3xl text-base leading-relaxed text-white/80">{RESOURCES_PAGE_INTRO.lead}</p>
           </Reveal>
-          <ul className="mt-8 grid gap-3 sm:grid-cols-3">
-            {RESOURCES_PAGE_INTRO.bullets.map((bullet, i) => (
-              <Reveal key={bullet} delay={i * 0.06}>
-                <li className="flex h-full gap-3 rounded-lg border border-white/12 bg-white/5 p-4 text-sm leading-relaxed text-white/85 backdrop-blur-sm">
-                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#d4a84b]" aria-hidden />
-                  {bullet}
-                </li>
-              </Reveal>
+          <ul className="mt-6 max-w-3xl space-y-2 text-sm leading-relaxed text-white/88">
+            {RESOURCES_PAGE_INTRO.bullets.map((bullet) => (
+              <li key={bullet} className="flex gap-2">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#d4a84b]" aria-hidden />
+                {bullet}
+              </li>
             ))}
           </ul>
         </div>
       </section>
+
+      <ProductQualitySpotlight spotlights={RESOURCES_PAGE_SPOTLIGHTS} variant="light" />
 
       <ResourcesHub introBody={introBody} />
     </>

@@ -11,10 +11,10 @@ export const RESOURCES_PAGE_INTRO = {
   eyebrow: "Before you open an LC",
   title: "Structure the trade, then align documents",
   lead:
-    "Finekarts programmes combine commodity sale with coordinated inspection, marine insurance on CIF, and bankable documentation. Use this library to understand how SPA banking, payment ranking, and document sets typically fit together — then confirm every line with your bank and counsel.",
+    "Programmes are built around product quality first — specifications, CoA, phytosanitary evidence, and labeling that satisfy government import rules — then banking, insurance, and payment mechanics. Use this library to align documents with the commodity you are buying.",
   bullets: [
+    "Product specs and inspection scope should match destination food-safety and customs law.",
     "SPA banking clauses are templates — jurisdiction and bank policy always win.",
-    "Payment structures show relative buyer/seller protection — not a substitute for legal advice.",
     "Downloadable checklists are educational; your signed PSA defines the binding list.",
   ],
 };

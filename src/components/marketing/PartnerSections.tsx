@@ -6,6 +6,7 @@ import {
   PARTNER_CATEGORIES,
   type PartnerEntry,
 } from "@/lib/content/partners-catalog";
+import { PRODUCER_PARTNERS_PRODUCT_LINES } from "@/lib/content/producer-partners-content";
 import { marketingImageProps } from "@/lib/media/resolve-image-src";
 
 function PartnerPhoto({ partner }: { partner: PartnerEntry }) {
@@ -82,42 +83,42 @@ export function PartnerProfileCard({ partner }: { partner: PartnerEntry }) {
 }
 
 export function PartnersHomeTeaser({
-  partners,
+  partners: _partners,
 }: {
   partners: PartnerEntry[];
 }) {
-  const featured = partners.slice(0, 4);
+  const featured = PRODUCER_PARTNERS_PRODUCT_LINES.slice(0, 4);
 
   return (
     <section className="border-y border-[var(--line)] bg-[#0a1628] py-14 text-white lg:py-16">
       <div className="container-page">
         <Reveal>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#d4a84b]">
-            Verification partners
+            Origin partnerships
           </p>
           <h2 className="mt-3 max-w-2xl text-2xl font-semibold sm:text-3xl">
-            Recognized inspection & certification partners
+            Producers & manufacturers on export programmes
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/75">
-            Finekarts aligns with independent verification organizations so international buyers
-            can confirm counterparties, cargo, and documentation with confidence.
+            Finekarts structures bulk commodity sales to international buyers. Established farms,
+            processors, and manufacturers with scale and quality discipline can explore programmes
+            with the trade desk.
           </p>
         </Reveal>
 
         <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {featured.map((partner, i) => (
-            <Reveal key={partner.slug} delay={i * 0.05}>
+          {featured.map((line, i) => (
+            <Reveal key={line.href} delay={i * 0.05}>
               <li>
                 <Link
-                  href={`/partners#${partner.slug}`}
+                  href={line.href}
                   className="group flex h-full flex-col rounded-md border border-white/12 bg-white/[0.04] p-5 transition hover:border-[#d4a84b]/45 hover:bg-white/[0.08]"
                 >
                   <p className="text-lg font-semibold text-white group-hover:text-[#d4a84b]">
-                    {partner.name}
+                    {line.label}
                   </p>
-                  <p className="mt-2 flex-1 text-sm leading-relaxed text-white/70">{partner.intro}</p>
                   <span className="mt-4 text-xs font-semibold uppercase tracking-wide text-[#d4a84b]">
-                    Read more →
+                    View specifications →
                   </span>
                 </Link>
               </li>
@@ -127,10 +128,10 @@ export function PartnersHomeTeaser({
 
         <Reveal delay={0.12}>
           <Link
-            href="/partners"
+            href="/partners#partner-programmes"
             className="focus-ring mt-8 inline-flex items-center gap-2 rounded-sm border border-[#d4a84b]/60 px-5 py-2.5 text-sm font-semibold text-[#f5e6c8] transition hover:bg-[#d4a84b]/15"
           >
-            View all partners & full profiles →
+            Producer & manufacturer partnerships →
           </Link>
         </Reveal>
       </div>

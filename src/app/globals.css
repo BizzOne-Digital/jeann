@@ -51,9 +51,15 @@ body.intro-active #finekarts-site-root {
   --background: var(--cream);
   --foreground: var(--ink);
   --radius: 0.25rem;
-  --surface-elevated: #faf8f6;
-  /* Body/paragraph copy site-wide (+2% over prior tuning; headings use separate scale) */
-  --copy-scale: 1.0353;
+  --surface-elevated: #eef3f8;
+  /* Body/paragraph copy site-wide (+3% vs prior scale; headings use separate text-* / clamp) */
+  --copy-scale: 1.0664;
+  --type-lead: calc(1.125rem * var(--copy-scale));
+  --type-body: calc(1rem * var(--copy-scale));
+  --type-small: calc(0.875rem * var(--copy-scale));
+  --type-caption: calc(0.8125rem * var(--copy-scale));
+  --text-muted: #4a5c6d;
+  --text-secondary: #444444;
 }
 
 @theme inline {
@@ -74,14 +80,14 @@ body.intro-active #finekarts-site-root {
   --font-sans: var(--font-sans);
   --font-display: var(--font-display);
   --font-mono: var(--font-mono);
-  --text-xs: 0.765rem;
-  --text-xs--line-height: 1.1475rem;
-  --text-sm: 0.9059rem;
-  --text-sm--line-height: 1.2941rem;
-  --text-base: 1.0353rem;
-  --text-base--line-height: 1.553rem;
-  --text-lg: 1.1647rem;
-  --text-lg--line-height: 1.8118rem;
+  --text-xs: 0.788rem;
+  --text-xs--line-height: 1.18rem;
+  --text-sm: 0.933rem;
+  --text-sm--line-height: 1.33rem;
+  --text-base: 1.066rem;
+  --text-base--line-height: 1.6rem;
+  --text-lg: 1.2rem;
+  --text-lg--line-height: 1.85rem;
 }
 
 *,
@@ -132,6 +138,55 @@ body {
   overflow-x: clip;
   position: relative;
   text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#finekarts-site-root :where(p, li, td, th, dd, blockquote) {
+  line-height: 1.65;
+}
+
+/* Marketing heading hierarchy (utilities like text-3xl on the same node still win) */
+#finekarts-site-root .marketing-section :where(h1, h2) {
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+#finekarts-site-root .marketing-section :where(h3, h4) {
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+/* Legibility on dark bands — avoid washed-out greys */
+#finekarts-site-root [class*="text-white/45"],
+#finekarts-site-root [class*="text-white/50"],
+#finekarts-site-root [class*="text-white/55"] {
+  color: rgb(255 255 255 / 0.8) !important;
+}
+
+#finekarts-site-root [class*="text-white/60"],
+#finekarts-site-root [class*="text-white/65"] {
+  color: rgb(255 255 255 / 0.86) !important;
+}
+
+#finekarts-site-root [class*="text-white/70"],
+#finekarts-site-root [class*="text-white/75"] {
+  color: rgb(255 255 255 / 0.9) !important;
+}
+
+#finekarts-site-root [class*="text-white/78"],
+#finekarts-site-root [class*="text-white/80"],
+#finekarts-site-root [class*="text-white/82"] {
+  color: rgb(255 255 255 / 0.92) !important;
+}
+
+#finekarts-site-root [class*="text-[#666666]"],
+#finekarts-site-root [class*="text-[#777777]"] {
+  color: var(--text-muted) !important;
+}
+
+#finekarts-site-root [class*="text-[#555555]"] {
+  color: var(--text-secondary) !important;
 }
 
 img,
@@ -254,9 +309,9 @@ a {
 
 .marketing-box:hover,
 .marketing-box-motion:hover {
-  transform: translateY(-6px) scale(1.015);
-  border-color: rgba(200, 142, 74, 0.4);
-  box-shadow: 0 16px 40px rgba(19, 41, 61, 0.1);
+  transform: translateY(-2px);
+  border-color: rgba(200, 142, 74, 0.35);
+  box-shadow: 0 8px 24px rgba(19, 41, 61, 0.07);
 }
 
 .marketing-box-interactive {
@@ -272,19 +327,13 @@ a {
 
 /* Consistent vertical rhythm for marketing page sections */
 .marketing-section {
-  padding-block: clamp(2.75rem, 5vw, 3.5rem);
+  padding-block: clamp(2.25rem, 4vw, 3rem);
   max-width: 100%;
   min-width: 0;
   overflow-x: clip;
 }
 
-@supports (animation-timeline: view()) {
-  .marketing-section {
-    animation: marketing-section-enter 1s cubic-bezier(0.22, 1, 0.36, 1) both;
-    animation-timeline: view();
-    animation-range: entry 0% cover 32%;
-  }
-}
+/* Scroll-driven section fade removed for calmer, simpler page rhythm */
 
 @keyframes marketing-section-enter {
   from {
@@ -401,7 +450,7 @@ a {
   gap: 0.5rem;
   border-radius: 999px;
   padding: 0.85rem 1.35rem;
-  font-size: 0.9384rem;
+  font-size: calc(0.9384rem * 1.03);
   font-weight: 600;
   letter-spacing: 0.01em;
   transition:
@@ -498,7 +547,7 @@ a {
 .label {
   display: block;
   margin-bottom: 0.4rem;
-  font-size: 0.8925rem;
+  font-size: calc(0.8925rem * 1.03);
   font-weight: 600;
   color: var(--stone);
   letter-spacing: 0.04em;
@@ -608,6 +657,10 @@ a {
     gap: 0.5rem 1.5rem;
   }
 
+  .trade-alert-marquee-duplicate {
+    display: none;
+  }
+
   .food-safety-marquee-track {
     animation: none;
     flex-wrap: wrap;
@@ -615,5 +668,9 @@ a {
     justify-content: center;
     gap: 0.75rem;
     padding-inline: 1rem;
+  }
+
+  .food-safety-marquee-duplicate {
+    display: none;
   }
 }

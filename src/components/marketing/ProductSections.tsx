@@ -12,8 +12,7 @@ import type { SeedCategory } from "@/lib/content/seed-catalog";
 import { resolveImageSrc } from "@/lib/media/resolve-image-src";
 import { buyerOrderHref } from "@/lib/marketing/cta-links";
 import { getCategoryCover, getProductListingImage } from "@/lib/content/product-images";
-import { BulkOrderBox } from "@/components/marketing/BulkOrderBox";
-import { getBulkMinOrderText } from "@/lib/marketing/bulk-order-minimums";
+import { getBulkMinOrderShortText } from "@/lib/marketing/bulk-order-minimums";
 import { cmsField } from "@/lib/content/cms-field";
 
 export function ProductsHero({ cms }: { cms?: Record<string, string> }) {
@@ -24,7 +23,7 @@ export function ProductsHero({ cms }: { cms?: Record<string, string> }) {
       description={cmsField(
         cms,
         "description",
-        "Bulk supply only — browse edible oils, sugar, rice & grains, beans, coffee, spices, and related programmes. Minimum order volumes apply by category. Specifications are confirmed with the trade desk.",
+        "Government-aligned food-safety and import specifications drive every programme we sell — sugar, edible oils, coffee, rice, pulses, and spices. Browse categories below; grades and minimum volumes are confirmed with the trade desk.",
       )}
       imageSrc={hero.src}
       imageAlt={hero.alt}
@@ -133,7 +132,7 @@ export function ProductCatalogSection({
   }, [filtered, categories]);
 
   return (
-    <section id="catalog" className="scroll-mt-24 bg-[#f3f1ec] py-16 lg:py-24">
+    <section id="catalog" className="scroll-mt-24 bg-[var(--mist)] marketing-section">
       <div className="container-page">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
@@ -224,6 +223,9 @@ export function ProductCatalogSection({
                       <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[#666666]">
                         {category.summary}
                       </p>
+                      <p className="mt-2 text-xs font-medium text-[#888888]">
+                        {getBulkMinOrderShortText(category.slug)}
+                      </p>
                     </div>
                     <Link
                       href={`/products/${category.slug}`}
@@ -232,10 +234,6 @@ export function ProductCatalogSection({
                       View category <span aria-hidden>→</span>
                     </Link>
                   </div>
-                </Reveal>
-
-                <Reveal delay={Math.min(groupIndex * 0.04 + 0.04, 0.2)}>
-                  <BulkOrderBox categorySlug={category.slug} className="mt-6" compact />
                 </Reveal>
 
                 <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -272,14 +270,8 @@ export function ProductCatalogSection({
                             </span>
                           </Link>
                           <p className="mt-3 border-t border-[#ebe6de] pt-3 text-xs leading-relaxed text-[#777777]">
-                            {getBulkMinOrderText(product.categorySlug, product.slug)}
+                            {getBulkMinOrderShortText(product.categorySlug, product.slug)}
                           </p>
-                          <Link
-                            href={buyerOrderHref(product.slug)}
-                            className="focus-ring mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[#001a3d] transition hover:text-[#c88e4a]"
-                          >
-                            Click here to ORDER <span aria-hidden>→</span>
-                          </Link>
                         </article>
                       </Reveal>
                     );

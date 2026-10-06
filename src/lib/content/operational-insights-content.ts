@@ -4,7 +4,7 @@ export const INSIGHTS_HERO = {
   eyebrow: "Deep technical & operational insights",
   title: "Global commodity trade & quality assurance",
   description:
-    "Executing high-value bulk commodity transactions across international borders requires a unified operational framework. A single shipment—whether 24,000 MT of ICUMSA 45 cane sugar, 20,000 MT of refined sunflower oil, or 5,000 MT of Grade-A copper cathodes—relies on the seamless integration of quality verification, process validation, and bulk containment logistics.",
+    "Most of what we publish here is about cargo quality and regulatory fit: how sugar, oils, coffee, grains, and pulses meet government food-safety and import rules, how inspection and validation evidence supports PSAs, and how containment and documentation keep programmes bankable.",
   guideLead:
     "This comprehensive insights guide bridges these three critical domains into an actionable framework for trade execution, risk mitigation, and operational governance.",
   primaryCta: { href: "#insights-framework", label: "Explore the framework →" },

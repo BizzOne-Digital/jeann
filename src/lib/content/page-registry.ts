@@ -212,22 +212,23 @@ const BASE_MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
     slug: "partners",
     title: "Partners",
     path: "/partners",
-    seoTitle: "Verification partners",
+    seoTitle: "Producer & manufacturer partnerships",
     seoDescription:
-      "Independent inspection and certification firms Finekarts may appoint on commodity programmes — Finekarts is the trader, not the inspection company.",
+      "Partner with Finekarts on bulk commodity export programmes — scale, quality, and regulatory discipline for international buyers.",
     sections: [
       section("hero", "Hero", {
-        title: "Verification partners",
+        title: "Partner with Finekarts on export programmes",
         description:
-          "Finekarts coordinates with internationally recognized inspection and certification organizations on trades we sell. Listings help buyers see which independent firms may be appointed — they are tools for safer transactions, not services Finekarts operates.",
-        primaryCtaLabel: "Browse partners →",
-        primaryCtaHref: "#partners-list",
-        secondaryCtaLabel: "Inspection overview",
-        secondaryCtaHref: "/inspections",
+          "Finekarts sells bulk agricultural and food commodities to qualified international buyers. We work with established farms, aggregators, processors, and manufacturers who can meet contract specifications and volume commitments.",
+        primaryCtaLabel: "Explore programmes →",
+        primaryCtaHref: "#partner-programmes",
+        secondaryCtaLabel: "Supplier enquiry",
+        secondaryCtaHref: "/supplier-offer",
       }),
       section("intro", "Introduction", {
-        note: "Partnership listings support transparency — they do not replace contractual inspection terms, bank requirements, or independent due diligence.",
-        body: "Independent inspection, testing, and certification firms we coordinate with on commodity programmes. Listings support buyer confidence — contractual inspection scope and bank requirements still apply.",
+        note:
+          "This page is for producers and manufacturers exploring structured export relationships. Buyer purchase requests use the buyer portal; inspection firm overviews are under Inspections.",
+        body: "Share commodity, volume, origin, and loading options with the trade desk for private review.",
       }),
     ],
   },

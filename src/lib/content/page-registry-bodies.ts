@@ -25,7 +25,8 @@ import {
   INSIGHTS_PROTOCOL,
   INSIGHTS_VALIDATION,
 } from "@/lib/content/operational-insights-content";
-import { LOGISTICS_STORY, VERIFICATION_STORY } from "@/lib/content/marketing-pages";
+import { LOGISTICS_STORY } from "@/lib/content/logistics-story";
+import { VERIFICATION_STORY } from "@/lib/content/marketing-pages";
 import {
   COMMERCIAL_INCOTERMS_PRIMARY_NOTE,
   CONTRACT_TO_CARGO_STEPS,

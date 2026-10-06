@@ -1,10 +1,12 @@
 /** Canonical About page copy (marketing redesign). */
 
+import { FINEKARTS_TRADER_ROLE } from "@/lib/content/trader-positioning";
+
 export const ABOUT_HERO = {
   eyebrow: "About Finekarts Incorporated",
   title: "Built for Structured International Commodity Trade",
   description:
-    "Founded in March 2024, Finekarts Incorporated is headquartered in Mississauga, Ontario, Canada — specializing in global sourcing, trade execution, and supply chain management of high-grade agricultural commodities, refined products, and industrial materials.",
+    "Founded in March 2024 and headquartered in Mississauga, Ontario, Canada, Finekarts sells bulk agricultural commodities and refined products to qualified international buyers — coordinating producers, manufacturers, inspection firms, and logistics partners to fulfill each programme under agreed contracts.",
   primaryCtaLabel: "Explore our products",
   primaryCtaHref: "/products",
   secondaryCtaLabel: "Contact the trade desk",
@@ -13,10 +15,11 @@ export const ABOUT_HERO = {
 
 export const ABOUT_INTRO = {
   eyebrow: "Who we are",
-  title: "Connecting producers with qualified global demand",
+  title: "A bulk commodity seller for qualified international buyers",
   paragraphs: [
-    "Finekarts Incorporated is an international trading and commodity distribution company. We bridge primary producers and refineries in key producing regions with industrial buyers, distributors, and food manufacturers across global markets.",
-    "Finekarts delivers consistent quality, transparent execution, and end-to-end supply chain reliability on programmes we manage.",
+    FINEKARTS_TRADER_ROLE,
+    "We are not a marketplace connecting suppliers and buyers for their own account. Finekarts is the seller on programmes we offer — drawing on vetted producers, refineries, and manufacturers as supply partners, and appointing independent inspection, diligence, and logistics specialists where contracts require them.",
+    "Our trade desk focuses on transparent execution, documentary discipline, and reliable delivery on the terms we agree with each buyer.",
   ],
 } as const;
 
@@ -92,12 +95,12 @@ export const ABOUT_SUPPLY_CHAIN = {
   eyebrow: "Supply chain & quality",
   title: "Our supply chain & quality assurance",
   lead:
-    "At Finekarts, trade execution is built on rigorous quality control and modern supply chain infrastructure. Every trade we manage follows a strict operational framework designed to mitigate commercial risk and guarantee cargo integrity:",
+    "On programmes we sell, trade execution is built on contract-led quality scope and coordinated supply-chain controls. We use independent partners where the PSA and corridor require them — to mitigate commercial risk and support cargo integrity:",
   bullets: [
     {
       title: "Third-party inspection",
       body:
-        "Every shipment is independently sampled, tested, and certified by accredited international superintendents (such as SGS, Bureau Veritas, or Intertek) prior to loading.",
+        "When contracts require it, we coordinate independent sampling, testing, and certification through accredited superintendents (such as SGS, Bureau Veritas, or Intertek) prior to loading.",
     },
     {
       title: "Custom containment solutions",
@@ -117,9 +120,9 @@ export const ABOUT_WHY_PARTNER = {
   title: "Why partner with Finekarts?",
   items: [
     {
-      title: "Reliable sourcing network",
+      title: "Supply programmes we can stand behind",
       body:
-        "Direct relationships with vetted producers, mills, and refineries across major export origins.",
+        "Vetted producers, mills, and refineries as supply partners on cargoes Finekarts sells to qualified buyers — not a public supplier directory.",
       icon: "network",
     },
     {
@@ -142,7 +145,7 @@ export const ABOUT_CONTACT = {
   title: "Finekarts Incorporated",
   lines: [
     "Mississauga, Ontario, Canada",
-    "Global trading & agricultural commodity distribution",
+    "Bulk commodity distribution & trade — seller to qualified international buyers",
   ],
   ctaTitle: "Ready to discuss a bulk commodity requirement?",
   ctaBody:

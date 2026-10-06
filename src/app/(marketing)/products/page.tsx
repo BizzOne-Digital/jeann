@@ -7,6 +7,8 @@ import {
   ProductsCta,
 } from "@/components/marketing/ProductSections";
 import { FoodSafetyAgencyMarquee } from "@/components/marketing/FoodSafetyAgencyMarquee";
+import { ProductQualitySpotlight } from "@/components/marketing/ProductQualitySpotlight";
+import { PRODUCTS_PAGE_SPOTLIGHTS } from "@/lib/content/product-quality-spotlights";
 import { cmsPageMetadata } from "@/lib/content/cms-page-metadata";
 import { getEffectiveSectionFields, getPublishedPage } from "@/lib/content/page-content";
 
@@ -27,6 +29,7 @@ export default async function ProductsPage() {
     <>
       <ProductsHero cms={getEffectiveSectionFields(cms, "hero")} />
       <FoodSafetyAgencyMarquee />
+      <ProductQualitySpotlight spotlights={PRODUCTS_PAGE_SPOTLIGHTS} variant="navy" />
       <CategoryShowcase
         categories={categories}
         cms={getEffectiveSectionFields(cms, "categories")}

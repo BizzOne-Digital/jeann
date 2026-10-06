@@ -1,12 +1,24 @@
-import { FOOD_SAFETY_MARKETS } from "@/lib/content/food-safety-agencies";
+import { FOOD_SAFETY_MARKETS, type FoodSafetyMarket } from "@/lib/content/food-safety-agencies";
 import { HOME_FOOD_SAFETY_STACK_HEIGHT } from "@/components/marketing/food-safety-stack-layout";
 
-export function FoodSafetyAgencyMarquee() {
-  const track = [...FOOD_SAFETY_MARKETS, ...FOOD_SAFETY_MARKETS];
+function MarketChip({ market }: { market: FoodSafetyMarket }) {
+  return (
+    <div
+      className="flex shrink-0 items-center gap-2 rounded-full border border-[#c5bfb5] bg-white px-4 py-2.5 shadow-sm"
+    >
+      <span className="text-sm font-bold text-[#001a3d] sm:text-base">{market.country}</span>
+      <span className="text-sm font-bold text-[#555555] sm:inline" aria-hidden>
+        ·
+      </span>
+      <span className="text-sm font-bold text-[#444444]">{market.note}</span>
+    </div>
+  );
+}
 
+export function FoodSafetyAgencyMarquee() {
   return (
     <section
-      className={`flex flex-col justify-center border-y border-[#d5d0c8] bg-[#f9f8f5] py-8 sm:py-10 ${HOME_FOOD_SAFETY_STACK_HEIGHT}`}
+      className={`flex flex-col justify-center border-y border-[var(--line)] bg-white py-8 sm:py-10 ${HOME_FOOD_SAFETY_STACK_HEIGHT}`}
       aria-label="Food safety standards in key trade markets"
     >
       <div className="container-page mb-5 sm:mb-6">
@@ -19,19 +31,27 @@ export function FoodSafetyAgencyMarquee() {
       </div>
 
       <div className="food-safety-marquee overflow-hidden py-1">
-        <div className="food-safety-marquee-track flex w-max items-center gap-3 px-6 sm:gap-4">
-          {track.map((market, index) => (
-            <div
-              key={`${market.id}-${index}`}
-              className="flex shrink-0 items-center gap-2 rounded-full border border-[#c5bfb5] bg-white px-4 py-2.5 shadow-sm"
-            >
-              <span className="text-sm font-bold text-[#001a3d] sm:text-base">{market.country}</span>
-              <span className="text-sm font-bold text-[#555555] sm:inline" aria-hidden>
-                ·
-              </span>
-              <span className="text-sm font-bold text-[#444444]">{market.note}</span>
-            </div>
+        <ul className="sr-only">
+          {FOOD_SAFETY_MARKETS.map((market) => (
+            <li key={market.id}>
+              {market.country}: {market.note}
+            </li>
           ))}
+        </ul>
+        <div className="food-safety-marquee-track flex w-max items-center gap-3 px-6 sm:gap-4">
+          <div className="flex shrink-0 items-center gap-3 sm:gap-4">
+            {FOOD_SAFETY_MARKETS.map((market) => (
+              <MarketChip key={market.id} market={market} />
+            ))}
+          </div>
+          <div
+            className="food-safety-marquee-duplicate flex shrink-0 items-center gap-3 sm:gap-4"
+            aria-hidden="true"
+          >
+            {FOOD_SAFETY_MARKETS.map((market) => (
+              <MarketChip key={`dup-${market.id}`} market={market} />
+            ))}
+          </div>
         </div>
       </div>
     </section>

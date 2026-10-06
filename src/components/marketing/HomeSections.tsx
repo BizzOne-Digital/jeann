@@ -14,12 +14,12 @@ import { HeroVideoBackground } from "@/components/marketing/HeroVideoBackground"
 import { resolveHeroYoutubeInput } from "@/lib/content/hero-video";
 import type { SeedCategory } from "@/lib/content/catalog";
 import { getCategoryCover } from "@/lib/content/product-images";
-import { HOMEPAGE_PACKAGING_TEASER, PACKAGING_IMAGES } from "@/lib/content/packaging-images";
+import { HOMEPAGE_PACKAGING_TEASER } from "@/lib/content/packaging-images";
+import { HOME_PAGE_ONLY_IMAGES } from "@/lib/content/home-page-images";
 import { resolveMarketingHeroImage } from "@/lib/marketing/cms-hero";
 import { isStoredUploadUrl } from "@/lib/media/resolve-image-src";
-import { AGRICULTURE_IMAGES } from "@/lib/content/agriculture-images";
 import { HOME_INSIGHTS_TEASER } from "@/lib/content/operational-insights-content";
-import { INSIGHTS_SECTION_IMAGES } from "@/lib/content/insights-operational-images";
+import { HOME_INSIGHTS_CARD_IMAGES } from "@/lib/content/home-images";
 import {
   HERO_DARK_OVERLAY_BOTTOM,
   HERO_DARK_OVERLAY_WASH,
@@ -134,7 +134,7 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
         <div className={`absolute inset-0 ${HERO_DARK_OVERLAY_BOTTOM}`} />
       </div>
 
-      <div className={MARKETING_HERO_INNER_CLASS}>
+      <div className={`${MARKETING_HERO_INNER_CLASS} pt-[8.75rem] lg:pt-[9.25rem]`}>
         <div className="min-w-0 max-w-xl lg:max-w-2xl">
           <Reveal>
             <p className="text-[0.65rem] font-semibold tracking-[0.18em] text-[#d4a84b] uppercase sm:text-xs sm:tracking-[0.26em]">
@@ -427,7 +427,11 @@ function FeatureIcon({ type }: { type: "sprout" | "shield" | "globe" }) {
   );
 }
 
-export function SourcedResponsibly({ home3 = "/images/home-3.png" }: { home3?: string }) {
+export function SourcedResponsibly({
+  home3 = "/images/home/responsible-sourcing-aerial.jpg",
+}: {
+  home3?: string;
+}) {
   const items = [
     {
       title: "Trusted Sourcing",
@@ -601,8 +605,8 @@ export function ShippingTerms() {
         </div>
         <div className="relative min-h-[320px] lg:min-h-full">
           <Image
-            src={PACKAGING_IMAGES.containerizedCargoPort.src}
-            alt={PACKAGING_IMAGES.containerizedCargoPort.alt}
+            src={HOME_PAGE_ONLY_IMAGES.shippingTerms.src}
+            alt={HOME_PAGE_ONLY_IMAGES.shippingTerms.alt}
             fill
             className="object-cover"
             sizes="(max-width: 1024px) 100vw, 50vw"
@@ -668,8 +672,8 @@ export function ReadyCtaBanner() {
   return (
     <section className="relative overflow-hidden py-16 text-white lg:py-24">
       <Image
-        src={AGRICULTURE_IMAGES.grainSilos.src}
-        alt={AGRICULTURE_IMAGES.grainSilos.alt}
+        src={HOME_PAGE_ONLY_IMAGES.readyCta.src}
+        alt={HOME_PAGE_ONLY_IMAGES.readyCta.alt}
         fill
         className="object-cover object-center"
         sizes="100vw"
@@ -718,11 +722,7 @@ export function ReadyCtaBanner() {
   );
 }
 
-const HOME_INSIGHTS_TEASER_IMAGES = [
-  INSIGHTS_SECTION_IMAGES.architecture,
-  INSIGHTS_SECTION_IMAGES.protocolLoading,
-  INSIGHTS_SECTION_IMAGES.validationOverview,
-] as const;
+const HOME_INSIGHTS_TEASER_IMAGES = HOME_INSIGHTS_CARD_IMAGES;
 
 export function InsightsAndNotes({
   featuredTestimonial,

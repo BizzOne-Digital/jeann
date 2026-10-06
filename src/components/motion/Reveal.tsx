@@ -39,7 +39,7 @@ function variantInitial(
     case "zoom":
       return { opacity: 0, scale: 0.88, y: y * 0.35 };
     case "blur-up":
-      return { opacity: 0, y, filter: "blur(12px)" };
+      return { opacity: 0, y: y * 0.85, filter: "blur(4px)" };
     case "tilt":
       return { opacity: 0, y, rotate: -2.5, scale: 0.96 };
     case "up":
@@ -77,7 +77,11 @@ export function Reveal({
       transition={
         bounce
           ? { ...springBouncy, delay }
-          : { duration: 0.75, ease: variant === "zoom" ? easeOutBack : easeOutExpo, delay }
+          : {
+              duration: variant === "blur-up" ? 0.55 : 0.75,
+              ease: variant === "zoom" ? easeOutBack : easeOutExpo,
+              delay,
+            }
       }
     >
       {children}
@@ -105,9 +109,8 @@ export function MaskedHeadline({
   }
 
   return (
-    <Tag className={cn("overflow-hidden", className)} aria-label={text}>
-      <span className="sr-only">{text}</span>
-      <span aria-hidden className="flex flex-wrap gap-x-[0.35em]">
+    <Tag className={cn("overflow-hidden", className)}>
+      <span className="flex flex-wrap gap-x-[0.35em]">
         {words.map((word, i) => (
           <span key={`${word}-${i}`} className="inline-block overflow-hidden pb-1">
             <motion.span

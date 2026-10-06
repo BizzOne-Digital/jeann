@@ -1,40 +1,40 @@
-/** Body imagery for /verification — hero uses PAGE_HERO_IMAGES.verification (cargo inspector). */
+/** Body imagery for /verification — hero uses PAGE_HERO_IMAGES.verification. No inspection photography (reserved for /inspections). */
 
 export const DUE_DILIGENCE_PAGE_IMAGES = {
   overview: {
-    src: "/images/inspections/warehouse-bulk-inspection.png",
-    alt: "Bulk commodity warehouse review for due diligence documentation",
+    src: "/images/hero-commodities.png",
+    alt: "Structured bulk commodity trade and global supply corridors",
   },
   corporate: {
-    src: "/images/about/team-strategy-meeting.png",
-    alt: "Leadership review of corporate governance and verification scope",
+    src: "/images/packaging/ibc-2.png",
+    alt: "Trade desk review of corporate governance and counterparty records",
   },
   supplyChain: {
-    src: "/images/about/team-collaboration.png",
-    alt: "Trade desk collaboration on supply chain and counterparty diligence",
+    src: "/images/packaging/bulk-railcar.png",
+    alt: "Intermodal bulk corridor from origin elevators to export terminals",
   },
   risk: {
-    src: "/images/inspections/green-coffee-warehouse-inspection.png",
-    alt: "Warehouse inspection supporting traceability and operational risk review",
+    src: "/images/packaging/bags-25kg.png",
+    alt: "Packaged commodity units and operational exposure along the chain",
   },
   documentation: {
-    src: "/images/inspections/sgs-laboratory-grain-sampling.png",
-    alt: "Laboratory sampling supporting COA and compliance documentation",
+    src: "/images/agriculture/tractor-plowing.png",
+    alt: "Origin and production context supporting documentary diligence",
   },
   swiftTypes: {
-    src: "/images/inspections/liquid-sampling.png",
-    alt: "Technical trade finance and settlement discipline in commodity flows",
+    src: "/images/packaging/bulk-railcar-intermodal.png",
+    alt: "Settlement and logistics touchpoints in commodity finance",
   },
   swiftProfile: {
-    src: "/images/inspections/tank-sampling.png",
-    alt: "Tank and terminal sampling aligned with banking and cargo verification",
+    src: "/images/packaging/pp-woven-bags.png",
+    alt: "Unitized export packaging aligned with documentary presentation",
   },
   swiftRouting: {
-    src: "/images/inspections/port-sampling.png",
-    alt: "Port sampling and documentary alignment in international settlement",
+    src: "/images/packaging/bulk-truck-terminal.png",
+    alt: "Terminal hand-offs between road, warehouse, and port programmes",
   },
   cta: {
-    src: "/images/inspections/sugar-bags-hold.png",
-    alt: "Quantity verification in vessel hold — diligence before final approval",
+    src: "/images/packaging/bulk-railcar-intermodal.png",
+    alt: "Intermodal rail corridor supporting trade diligence programmes",
   },
 } as const;

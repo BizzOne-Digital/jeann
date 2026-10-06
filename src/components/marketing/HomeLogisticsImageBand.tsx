@@ -1,10 +1,10 @@
 import Image from "next/image";
-import { LOGISTICS_IMAGES } from "@/lib/content/logistics-images";
+import { HOME_PAGE_ONLY_IMAGES } from "@/lib/content/home-page-images";
 import { HOME_FOOD_SAFETY_STACK_HEIGHT } from "@/components/marketing/food-safety-stack-layout";
 
 /** Home only — visual band matching food-safety stack height (logistics hero imagery). */
 export function HomeLogisticsImageBand() {
-  const image = LOGISTICS_IMAGES.hero;
+  const image = HOME_PAGE_ONLY_IMAGES.logisticsBand;
 
   return (
     <section

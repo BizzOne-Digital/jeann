@@ -1,5 +1,6 @@
 /** How Finekarts uses independent inspection in bulk commodity trade — we coordinate firms; we are not an inspection company. */
 
+import { CATEGORY_COVERS } from "@/lib/content/product-images";
 import { FINEKARTS_COORDINATE_INSPECTION, FINEKARTS_TRADER_ROLE } from "@/lib/content/trader-positioning";
 
 export const INSPECTIONS_HERO = {
@@ -101,43 +102,43 @@ export const COMMODITY_INSPECTION_CATEGORIES = [
   {
     title: "Sugar",
     href: "/products/sugar",
-    image: "/images/inspections/sugar-bags-hold.png",
-    imageAlt: "Quantity verification of bagged sugar in vessel hold",
+    image: CATEGORY_COVERS.sugar.image,
+    imageAlt: CATEGORY_COVERS.sugar.alt,
     text: "ICUMSA colour, polarization, moisture, ash, granulation, packaging, quantity and loading verification.",
   },
   {
     title: "Rice",
     href: "/products/rice-and-grains",
-    image: "/images/inspections/sampling-grain.png",
-    imageAlt: "Inspector sampling bulk grain at port",
+    image: CATEGORY_COVERS["rice-and-grains"].image,
+    imageAlt: CATEGORY_COVERS["rice-and-grains"].alt,
     text: "Grain characteristics, broken percentage, moisture, foreign matter, milling quality, packaging and quantity.",
   },
   {
     title: "Edible Oils",
     href: "/products/edible-oils",
-    image: "/images/inspections/tank-sampling.png",
-    imageAlt: "Tank sampling on vessel deck",
+    image: CATEGORY_COVERS["edible-oils"].image,
+    imageAlt: CATEGORY_COVERS["edible-oils"].alt,
     text: "Crude and refined sunflower, soybean, palm and rapeseed oils — applicable chemical and physical parameters.",
   },
   {
     title: "Grains & Pulses",
     href: "/products/beans-and-pulses",
-    image: "/images/inspections/warehouse-bulk-inspection.png",
-    imageAlt: "Bulk commodity warehouse inspection",
+    image: CATEGORY_COVERS["beans-and-pulses"].image,
+    imageAlt: CATEGORY_COVERS["beans-and-pulses"].alt,
     text: "Wheat, corn, soybeans, beans, chickpeas, lentils and other agricultural commodities.",
   },
   {
     title: "Spices & Nuts",
     href: "/products/spices",
-    image: "/images/inspections/warehouse-sack-sampling.png",
-    imageAlt: "Inspector sampling agricultural sacks in warehouse",
+    image: CATEGORY_COVERS.spices.image,
+    imageAlt: CATEGORY_COVERS.spices.alt,
     text: "Cashews, cinnamon, pepper, turmeric and related products — identity, quality, moisture, foreign matter and packaging.",
   },
   {
     title: "Coffee",
     href: "/products/coffee",
-    image: "/images/inspections/green-coffee-warehouse-inspection.png",
-    imageAlt: "Green coffee beans in burlap sacks stacked in a warehouse for inspection",
+    image: CATEGORY_COVERS.coffee.image,
+    imageAlt: CATEGORY_COVERS.coffee.alt,
     text: "Green, dry and roasted dry coffee — screen size, moisture, defect count, packaging and loading verification.",
   },
 ];

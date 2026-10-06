@@ -65,12 +65,12 @@ export function EdibleOilsCategorySections() {
   const cat = OIL_CATEGORY;
 
   return (
-    <section className="bg-white marketing-section">
+    <section className="bg-white marketing-section" aria-labelledby="edible-oils-category-heading">
       <div className="container-page">
-        <p className="text-xs font-semibold tracking-[0.2em] text-[#c88e4a] uppercase">{cat.eyebrow}</p>
-        <h2 className="mt-2 text-2xl font-semibold text-[#001a3d] sm:text-3xl">{cat.title}</h2>
-        <p className="mt-4 max-w-3xl text-base leading-relaxed text-[#555555]">{cat.lead}</p>
-        <p className="mt-4 text-sm font-medium text-[#001a3d]">Oils in this category include:</p>
+        <h2 id="edible-oils-category-heading" className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">
+          Oils in this category
+        </h2>
+        <p className="mt-4 text-sm font-medium text-[#001a3d]">Programmes we structure include:</p>
         <div className="mt-4 flex flex-wrap gap-2">
           {cat.oils.map((oil) => (
             <span

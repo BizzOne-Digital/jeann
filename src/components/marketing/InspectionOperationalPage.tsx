@@ -14,6 +14,7 @@ import {
   INSPECTIONS_VERIFICATION_SUMMARY,
 } from "@/lib/content/inspections-operational-content";
 import { INSPECTIONS_SECTION_IMAGES } from "@/lib/content/inspections-images";
+import { InspectionFirmVideoStrip } from "@/components/marketing/InspectionFirmVideoStrip";
 import { LogisticsPairedRow } from "@/components/marketing/LogisticsVisuals";
 import { MotionImageFrame } from "@/components/motion/MotionImageFrame";
 import { Reveal } from "@/components/motion/Reveal";
@@ -26,6 +27,7 @@ function TypeCard({
   benefit,
   techniques,
   index,
+  equalHeight = false,
 }: {
   n: number;
   title: string;
@@ -34,6 +36,8 @@ function TypeCard({
   benefit: string;
   techniques?: readonly string[];
   index: number;
+  /** Only for equal-height grids (e.g. timing cards); avoid with paired images. */
+  equalHeight?: boolean;
 }) {
   const reduce = useReducedMotion();
   return (
@@ -42,7 +46,9 @@ function TypeCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-30px" }}
       transition={{ duration: 0.45, delay: index * 0.07 }}
-      className="flex h-full flex-col rounded-xl border border-[#d5d0c8] bg-white p-6 shadow-sm transition hover:border-[#c88e4a]/35 hover:shadow-md"
+      className={`flex flex-col rounded-xl border border-[#d5d0c8] bg-white p-6 shadow-sm transition hover:border-[#c88e4a]/35 hover:shadow-md${
+        equalHeight ? " h-full" : ""
+      }`}
     >
       <span className="text-xs font-bold tracking-[0.2em] text-[#c88e4a]">{String(n).padStart(2, "0")}</span>
       <h3 className="mt-2 text-lg font-semibold text-[#001a3d]">{title}</h3>
@@ -93,38 +99,16 @@ export function InspectionOperationalPage() {
         </div>
       </section>
 
-      <section className="marketing-section bg-[#f3f1ec]">
+      <section className="marketing-section bg-[var(--mist)]">
         <div className="container-page space-y-10">
           <Reveal>
             <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">{INSPECTIONS_TIMING_TYPES.title}</h2>
           </Reveal>
-          <div className="grid gap-6 lg:grid-cols-3">
+          <div className="grid gap-6 lg:grid-cols-3 lg:items-stretch">
             {INSPECTIONS_TIMING_TYPES.items.map((item, i) => (
-              <TypeCard key={item.title} {...item} index={i} />
+              <TypeCard key={item.title} {...item} index={i} equalHeight />
             ))}
           </div>
-          <MotionImageFrame>
-            <div className="relative aspect-[21/9] min-h-[200px] overflow-hidden rounded-xl border border-[#d5d0c8]">
-              <Image
-                src={INSPECTIONS_SECTION_IMAGES.timing.src}
-                alt={INSPECTIONS_SECTION_IMAGES.timing.alt}
-                fill
-                className="object-cover"
-                sizes="100vw"
-              />
-            </div>
-          </MotionImageFrame>
-          <MotionImageFrame>
-            <div className="relative aspect-[21/9] min-h-[200px] overflow-hidden rounded-xl border border-[#d5d0c8]">
-              <Image
-                src={INSPECTIONS_SECTION_IMAGES.finalShipment.src}
-                alt={INSPECTIONS_SECTION_IMAGES.finalShipment.alt}
-                fill
-                className="object-cover"
-                sizes="100vw"
-              />
-            </div>
-          </MotionImageFrame>
         </div>
       </section>
 
@@ -133,9 +117,9 @@ export function InspectionOperationalPage() {
           <Reveal>
             <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">{INSPECTIONS_METHOD_TYPES.title}</h2>
           </Reveal>
-          <div className="grid gap-8 lg:grid-cols-2">
+          <div className="space-y-8 lg:space-y-10">
             {INSPECTIONS_METHOD_TYPES.items.map((item, i) => (
-              <div key={item.title} className="space-y-5">
+              <LogisticsPairedRow key={item.title} image={METHOD_IMAGES[i]} reversed={i % 2 === 1}>
                 <TypeCard
                   n={item.n}
                   title={item.title}
@@ -145,24 +129,13 @@ export function InspectionOperationalPage() {
                   techniques={"techniques" in item && item.techniques ? [...item.techniques] : undefined}
                   index={i}
                 />
-                <MotionImageFrame>
-                  <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-[#d5d0c8]">
-                    <Image
-                      src={METHOD_IMAGES[i].src}
-                      alt={METHOD_IMAGES[i].alt}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 1024px) 100vw, 480px"
-                    />
-                  </div>
-                </MotionImageFrame>
-              </div>
+              </LogisticsPairedRow>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="marketing-section bg-[#f3f1ec]">
+      <section className="marketing-section bg-[var(--mist)]">
         <div className="container-page space-y-10">
           <Reveal>
             <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">{INSPECTIONS_SCOPE_TYPES.title}</h2>
@@ -188,17 +161,6 @@ export function InspectionOperationalPage() {
               ))}
             </div>
           </LogisticsPairedRow>
-          <MotionImageFrame>
-            <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-[#d5d0c8]">
-              <Image
-                src={INSPECTIONS_SECTION_IMAGES.inProcess.src}
-                alt={INSPECTIONS_SECTION_IMAGES.inProcess.alt}
-                fill
-                className="object-cover"
-                sizes="100vw"
-              />
-            </div>
-          </MotionImageFrame>
         </div>
       </section>
 
@@ -289,7 +251,7 @@ export function InspectionOperationalPage() {
         </div>
       </section>
 
-      <section className="marketing-section bg-[#f3f1ec]">
+      <section className="marketing-section bg-[var(--mist)]">
         <div className="container-page min-w-0">
           <Reveal>
             <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">
@@ -321,6 +283,8 @@ export function InspectionOperationalPage() {
         </div>
       </section>
 
+      <InspectionFirmVideoStrip />
+
       <section className="marketing-section bg-white">
         <div className="container-page">
           <Reveal>
@@ -350,16 +314,7 @@ export function InspectionOperationalPage() {
                   </div>
                 </div>
 
-                <div className="relative min-h-[280px] border-t border-white/10 lg:min-h-0 lg:border-t-0 lg:border-l">
-                  <Image
-                    src="/images/inspections/port-cargo-inspection-hero.png"
-                    alt=""
-                    fill
-                    className="object-cover"
-                    sizes="(min-width: 1024px) 50vw, 100vw"
-                    aria-hidden
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#001a3d]/92 via-[#0c2544]/88 to-[#001a3d]/75" />
+                <div className="relative min-h-[280px] border-t border-white/10 bg-[#0c2544] lg:min-h-0 lg:border-t-0 lg:border-l">
                   <div className="relative flex h-full flex-col justify-center p-8 sm:p-10 lg:p-12">
                     <p className="text-xs font-semibold tracking-[0.18em] text-[#d4a84b] uppercase">
                       {INSPECTIONS_CTA.shareTitle}

@@ -35,7 +35,8 @@ export default async function HomePage() {
   const sourced = getEffectiveSectionFields(cms, "sourced");
   const home1 = connection.image1 || "/images/home-1.png";
   const home2 = connection.image2 || "/images/home-2.png";
-  const home3 = sourced.image || "/images/home-3.png";
+  const home3 =
+    sourced.image || "/images/home/responsible-sourcing-aerial.jpg";
   const testimonials = await getPublishedTestimonials();
   const featuredTestimonial = testimonials[0] ?? null;
 

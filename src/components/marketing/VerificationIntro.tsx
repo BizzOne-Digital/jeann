@@ -3,6 +3,7 @@ import { MediaFieldPair } from "@/components/marketing/MediaFieldPair";
 import { HERO_PAGE_OVERLAY_HORIZONTAL } from "@/lib/marketing/hero-layout";
 import { buildVerificationStory } from "@/lib/marketing/verification-cms";
 import type { CmsSectionMap } from "@/lib/content/cms-field";
+import { VERIFICATION_PAGE_IMAGES } from "@/lib/content/verification-page-images";
 
 export function VerificationIntro({ cms }: { cms?: CmsSectionMap }) {
   const story = buildVerificationStory(cms);
@@ -11,7 +12,7 @@ export function VerificationIntro({ cms }: { cms?: CmsSectionMap }) {
     <>
       <section className="relative overflow-hidden py-12 text-white lg:py-16">
         <Image
-          src="/images/inspections/warehouse-bulk-inspection.png"
+          src={VERIFICATION_PAGE_IMAGES.introBanner.src}
           alt=""
           fill
           className="object-cover object-center"

@@ -29,6 +29,15 @@ export function getBulkMinOrderText(categorySlug: string, productSlug?: string):
   return `Bulk supply only. ${mt.toLocaleString("en-US")} MT minimum order.`;
 }
 
+/** Shorter line for catalog cards when bulk policy is already explained above the list. */
+export function getBulkMinOrderShortText(categorySlug: string, productSlug?: string): string {
+  const mt = getBulkMinimumMt(categorySlug, productSlug);
+  if (!mt) {
+    return "Minimum volumes confirmed per enquiry with the trade desk.";
+  }
+  return `${mt.toLocaleString("en-US")} MT minimum order.`;
+}
+
 export function getBulkOnlyNotice(): string {
   return "Finekarts supplies commodities in bulk volumes only. Retail and partial-lot enquiries cannot be processed.";
 }

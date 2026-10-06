@@ -41,8 +41,8 @@ export const PAGE_HERO_IMAGES: Record<PageHeroImageKey, PageHeroImage> = {
   products: AGRICULTURE_IMAGES.greenGrainField,
   resources: AGRICULTURE_IMAGES.resourcesHero,
   contact: {
-    src: "/images/inspections/port-sampling.png",
-    alt: "Trade desk support at the port",
+    src: "/images/hero-reference.png",
+    alt: "Finekarts trade desk and buyer enquiry support",
   },
   insights: {
     src: "/images/insights/market-insights-hero.jpg",
@@ -53,12 +53,12 @@ export const PAGE_HERO_IMAGES: Record<PageHeroImageKey, PageHeroImage> = {
   careers: OFFICE_HERO_IMAGES.careers,
   testimonials: OFFICE_HERO_IMAGES.testimonials,
   booking: {
-    src: "/images/inspections/liquid-sampling.png",
-    alt: "Quality consultation and commodity sampling",
+    src: "/images/packaging/bags-50kg.png",
+    alt: "Packaged commodity units for structured booking enquiries",
   },
   partners: {
-    src: "/images/inspections/sampling-grain.png",
-    alt: "Independent verification partners at origin",
+    src: "/images/partners/hero-verification-partners.jpg",
+    alt: "Grain train beside export silos at a river terminal — verification partners and bulk trade corridors",
   },
   inspections: {
     src: "/images/inspections/port-cargo-inspection-hero.png",
@@ -70,16 +70,25 @@ export const PAGE_HERO_IMAGES: Record<PageHeroImageKey, PageHeroImage> = {
   },
   logistics: LOGISTICS_IMAGES.hero,
   packaging: PACKAGING_IMAGES.tankerVessel,
-  buyerTerms: PACKAGING_IMAGES.containerizedCargoPort,
-  cookies: PACKAGING_IMAGES.palletizedBags,
-  buyerRequest: {
-    src: "/images/inspections/sugar-bags-hold.png",
-    alt: "Bagged sugar quantity verification in a vessel hold",
+  buyerTerms: {
+    src: "/images/packaging/bulk-railcar.jpg",
+    alt: "Covered hopper railcars for dry bulk export programmes",
   },
-  supplierOffer: PACKAGING_IMAGES.bulkTruck,
+  cookies: {
+    src: "/images/packaging/pp-woven-bags.png",
+    alt: "Polypropylene woven sacks for export commodity packaging",
+  },
+  buyerRequest: {
+    src: "/images/products/sugar/icumsa-45-50kg-bags.png",
+    alt: "Fifty-kilogram export sugar bags for bulk purchase requests",
+  },
+  supplierOffer: {
+    src: "/images/packaging/bulk-truck-field.png",
+    alt: "Bulk truck loading at an agricultural elevator for supplier programmes",
+  },
   disputeResolution: {
-    src: "/images/inspections/warehouse-bulk-inspection.png",
-    alt: "Bulk commodity warehouse review for trade dispute documentation",
+    src: "/images/packaging/tanker-vessel.png",
+    alt: "Rail bulk corridor documentation for trade dispute review",
   },
 };
 

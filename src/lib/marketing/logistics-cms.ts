@@ -21,7 +21,7 @@ import {
   SHIPPING_DOCUMENTATION,
   SHIPPING_MODES,
 } from "@/lib/content/logistics-content";
-import { LOGISTICS_STORY } from "@/lib/content/marketing-pages";
+import { LOGISTICS_STORY } from "@/lib/content/logistics-story";
 
 export const LOGISTICS_CMS_SECTION_IDS = [
   "story",

@@ -132,7 +132,7 @@ export function InsightsOperationalPage() {
         </div>
       </section>
 
-      <section className="marketing-section bg-[#f3f1ec]">
+      <section className="marketing-section bg-[var(--mist)]">
         <div className="container-page">
           <Reveal>
             <SectionHeading
@@ -258,8 +258,8 @@ export function InsightsOperationalPage() {
         </div>
       </section>
 
-      <section className="marketing-section bg-[#f3f1ec]">
-        <div className="container-page space-y-14">
+      <section className="marketing-section bg-[var(--mist)]">
+        <div className="container-page space-y-10">
           {INSIGHTS_VALIDATION.domains.map((domain, index) => {
             const image = DOMAIN_IMAGES[domain.id];
             const reversed = index % 2 === 1;

@@ -1,52 +1,52 @@
-/** Cover art used on the Insights hub — distinct paths for articles and the operational guide. */
+/** Cover art for the Insights hub — client photos under `public/images/insights/`. */
 
 const BY_SLUG: Record<string, string> = {
-  "fob-vs-cif-for-bulk-commodities": "/images/packaging/containerized-cargo-port.png",
-  "how-purchase-requests-work": "/images/packaging/containerized-cargo-loading.png",
-  "packaging-options-in-bulk-trade": "/images/packaging/fibc-jumbo-bags.png",
-  "document-checklists-are-route-specific": "/images/packaging/iso-tank-1.png",
+  "fob-vs-cif-for-bulk-commodities": "/images/insights/cover-international-rail-containers.jpg",
+  "how-purchase-requests-work": "/images/insights/cover-purchase-requests.jpg",
+  "packaging-options-in-bulk-trade": "/images/insights/cover-packaging-bulk.jpg",
+  "document-checklists-are-route-specific": "/images/insights/cover-trade-documents.jpg",
 };
 
 const FALLBACK = [
-  "/images/packaging/bulk-liner.png",
-  "/images/packaging/kraft-paper-bags.png",
-  "/images/packaging/drums.png",
-  "/images/packaging/ibc-1.png",
+  "/images/products/product-2.png",
+  "/images/products/product-3.png",
+  "/images/products/product-4.png",
+  "/images/products/product-5.png",
 ];
 
 /** Hero for /insights lives at `/images/insights/market-insights-hero.jpg` (see page hero registry). */
 export const INSIGHTS_HUB_SECTION_PHOTOS = {
   overview: {
     src: BY_SLUG["fob-vs-cif-for-bulk-commodities"],
-    alt: "Container vessel at export port — global commodity trade corridor",
+    alt: "International rail containers — FOB and CIF corridor context",
   },
   architecture: {
     src: BY_SLUG["how-purchase-requests-work"],
-    alt: "Containerized commodity loading at port",
+    alt: "Trade desk and purchase request documentation",
   },
   protocol: {
     src: BY_SLUG["packaging-options-in-bulk-trade"],
-    alt: "FIBC jumbo bags for bulk dry commodity programmes",
+    alt: "FIBC jumbo bags in a warehouse aisle",
   },
   validationBand: {
     src: BY_SLUG["document-checklists-are-route-specific"],
-    alt: "ISO tank container for intermodal liquid bulk",
+    alt: "Shipping documents stamped at a port office",
   },
   domainLab: {
-    src: FALLBACK[0],
-    alt: "Dry bulk container liner for packaged trade flows",
+    src: "/images/insights/validation/domain-lab-wheat.jpg",
+    alt: "Grain sampling tools on a laboratory bench — ISO 17025 test method validation context",
   },
   domainSupply: {
-    src: FALLBACK[1],
-    alt: "Kraft paper sacks for moisture-sensitive soft commodities",
+    src: "/images/insights/validation/domain-supply-wheat-field.jpg",
+    alt: "Wheat field at sunrise with blank clipboard and sealed grain sample — origin verification context",
   },
   domainFinance: {
-    src: FALLBACK[2],
-    alt: "Steel drums for unitized liquid cargo",
+    src: "/images/insights/validation/domain-finance-desk.jpg",
+    alt: "Trade documentation still life — documentary credit and compliance validation context",
   },
   domainCtrm: {
-    src: FALLBACK[3],
-    alt: "IBC tote for specialty liquid distribution units",
+    src: "/images/insights/validation/domain-ctrm-cocoa.jpg",
+    alt: "Raw cocoa beans in burlap — commodity trading and digital risk systems context",
   },
 } as const;
 

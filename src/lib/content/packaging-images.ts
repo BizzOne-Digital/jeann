@@ -41,8 +41,8 @@ export const PACKAGING_IMAGES = {
     alt: "Dry bulk commodity in a ship hold during loading operations",
   },
   bulkVesselPort: {
-    src: "/images/packaging/containerized-cargo-port.png",
-    alt: "Export port with vessel at berth — bulk and container export corridor",
+    src: "/images/packaging/bulk-vessel-hold.png",
+    alt: "Dry bulk commodity in a vessel hold at export",
   },
   containerizedCargoPort: {
     src: "/images/packaging/containerized-cargo-port.png",
@@ -131,11 +131,20 @@ export const HOMEPAGE_PACKAGING_SLUGS = [
   "bulk-truck",
 ] as const;
 
-/** Homepage packaging grid — client-verified transport modes; full catalogue on /packaging. */
+/** Homepage packaging grid — teaser photos are unique from `/packaging` body imagery; slugs link to the catalogue. */
 export const HOMEPAGE_PACKAGING_TEASER = [
-  teaser("Flexitank", "flexitank", PACKAGING_IMAGES.flexitank),
-  teaser("Bulk Railcar", "bulk-railcar", PACKAGING_IMAGES.bulkRailcar),
+  teaser("Flexitank", "flexitank", {
+    src: "/images/home/packaging-teaser-flexitank.jpg",
+    alt: "Flexitank bladder installed inside a shipping container",
+  }),
+  teaser("Bulk Railcar", "bulk-railcar", {
+    src: "/images/home/packaging-teaser-grain-rail.jpg",
+    alt: "Grain hopper train beside export silos on a bulk rail corridor",
+  }),
   teaser("Tanker Vessel", "tanker-vessel", PACKAGING_IMAGES.tankerVessel),
-  teaser("Bulk Vessel", "bulk-vessel", PACKAGING_IMAGES.bulkVessel),
-  teaser("Bulk Truck", "bulk-truck", PACKAGING_IMAGES.bulkTruck),
+  teaser("Bulk Vessel", "bulk-vessel", PACKAGING_IMAGES.bulkVesselLoading),
+  teaser("Bulk Truck", "bulk-truck", {
+    src: "/images/home/packaging-teaser-bulk-truck.jpg",
+    alt: "Hopper truck loading grain at an elevator terminal",
+  }),
 ] as const;

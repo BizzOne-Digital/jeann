@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { CmsPageHero } from "@/components/marketing/CmsPageHero";
+import { ProductQualitySpotlight } from "@/components/marketing/ProductQualitySpotlight";
 import { InsightsOperationalPage } from "@/components/marketing/InsightsOperationalPage";
+import { INSIGHTS_PAGE_SPOTLIGHTS } from "@/lib/content/product-quality-spotlights";
 import { cmsPageMetadata } from "@/lib/content/cms-page-metadata";
 import { INSIGHTS_HERO } from "@/lib/content/operational-insights-content";
 
@@ -24,6 +26,7 @@ export default async function InsightsPage() {
           secondaryCta: INSIGHTS_HERO.secondaryCta,
         }}
       />
+      <ProductQualitySpotlight spotlights={INSIGHTS_PAGE_SPOTLIGHTS} variant="navy" />
       <InsightsOperationalPage />
     </>
   );

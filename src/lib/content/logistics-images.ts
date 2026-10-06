@@ -56,16 +56,38 @@ export const LOGISTICS_IMAGES = {
 /** Full-width band between FOB/CIF and tracking (logistics page only). */
 export const LOGISTICS_SHIP_TRUCK_BAND = LOGISTICS_IMAGES.terminalOperations;
 
+/** Page-only photography (not used on home or other marketing routes). */
+export const LOGISTICS_PAGE_ONLY_IMAGES = {
+  storyInTheField: {
+    src: "/images/logistics/page/story-in-the-field.jpg",
+    alt: "Container terminal at dusk — gantry cranes, vessel at berth, and stacked containers at a major export port",
+  },
+  storyTanker: {
+    src: "/images/logistics/page/story-tanker.jpg",
+    alt: "Liquid bulk tanker vessel at sea with cargo piping on deck",
+  },
+  bulkCarrierLoading: {
+    src: "/images/logistics/page/bulk-carrier-loading.jpg",
+    alt: "Bulk carrier loading grain at an export terminal",
+  },
+  closingCifVessel: {
+    src: "/images/logistics/page/closing-cif-vessel.jpg",
+    alt: "Bulk carrier and tug at an export terminal — CIF marine insurance and coordinated movement",
+  },
+} as const;
+
 /** Each `src` appears once on `/logistics` below the hero (story image is separate in LOGISTICS_STORY). */
 export const LOGISTICS_PAGE_SECTION_IMAGES = {
   globalCoverage: LOGISTICS_IMAGES.seaAirRoutes,
   realTimeTrackingPrimary: LOGISTICS_IMAGES.portTrucks,
-  realTimeTrackingSecondary: LOGISTICS_IMAGES.railIntermodalYard,
+  realTimeTrackingSecondary: LOGISTICS_IMAGES.terminalOperations,
   portToPort: LOGISTICS_IMAGES.railInternationalContainers,
-  documentation: LOGISTICS_IMAGES.gantryCraneRailLoading,
-  bulkVesselMode: LOGISTICS_IMAGES.integratedTerminalMultimodal,
+  documentation: LOGISTICS_IMAGES.terminalHub,
+  bulkVesselMode: LOGISTICS_PAGE_ONLY_IMAGES.bulkCarrierLoading,
   coordinationPrimary: LOGISTICS_IMAGES.bulkGrainRail,
-  coordinationSecondary: LOGISTICS_IMAGES.terminalHub,
+  coordinationSecondary: LOGISTICS_IMAGES.railIntermodalYard,
+  closing: LOGISTICS_PAGE_ONLY_IMAGES.closingCifVessel,
+  bleedSecondary: LOGISTICS_IMAGES.railIntermodalYard,
   contractToCargo: LOGISTICS_IMAGES.supplyChainNight,
 } as const;
 

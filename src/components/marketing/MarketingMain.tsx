@@ -5,14 +5,22 @@ import { cn } from "@/lib/utils/cn";
 import { isHeroMarketingPage } from "@/lib/marketing/hero-pages";
 import type { ReactNode } from "react";
 
-import { MARKETING_HEADER_HEIGHT } from "@/lib/marketing/hero-layout";
+import { MARKETING_HEADER_HEIGHT, TRADE_ALERT_STRIP_HEIGHT } from "@/lib/marketing/hero-layout";
 
 const HEADER_HEIGHT = MARKETING_HEADER_HEIGHT;
 
-export function MarketingMain({ children }: { children: ReactNode }) {
+export function MarketingMain({
+  children,
+  showTradeTicker = false,
+}: {
+  children: ReactNode;
+  showTradeTicker?: boolean;
+}) {
   const pathname = usePathname();
   const isHeroPage = isHeroMarketingPage(pathname);
-  const topOffset = HEADER_HEIGHT;
+  const topOffset = showTradeTicker
+    ? `calc(${HEADER_HEIGHT} + ${TRADE_ALERT_STRIP_HEIGHT})`
+    : HEADER_HEIGHT;
 
   return (
     <main
