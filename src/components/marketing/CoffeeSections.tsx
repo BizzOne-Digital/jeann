@@ -109,8 +109,8 @@ export function CoffeeCategorySections() {
 
           <Reveal delay={0.1} className="mt-10">
             <MediaFieldPair
-              imageSrc="/images/products/coffee/dry-coffee-sun-drying-beds.png"
-              imageAlt="Coffee cherries and beans sun-drying on raised beds at origin"
+              imageSrc="/images/products/coffee/coffee-wet-mill-processing.jpg"
+              imageAlt="Coffee wet-mill processing at origin"
               youtubeUrl={`https://www.youtube.com/watch?v=${COFFEE_YOUTUBE_VIDEO_ID}`}
               videoTitle="Coffee overview"
             />

@@ -20,8 +20,8 @@ export const HOME_INSIGHTS_CARD_IMAGES = [
     alt: "Refined white sugar — home insights teaser",
   },
   {
-    src: "/images/products/rice/jasmine-rice.jpg",
-    alt: "Jasmine rice — home insights teaser",
+    src: "/images/home/insights-teaser.jpg",
+    alt: "Commodity market insights — charts and trade analysis",
   },
   {
     src: "/images/products/beans/beans-variety-bowls.png",

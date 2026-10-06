@@ -149,8 +149,8 @@ const RICE_PRODUCTS: Record<string, RiceProductDetail> = {
       "Multiple grades subject to contract",
       "Broken percentage and moisture per specification",
     ],
-    heroImage: `${RICE_BASE}/long-grain-bag.png`,
-    images: riceImages(`${RICE_BASE}/long-grain-bag.png`, "Premium Basmati rice in export packaging"),
+    heroImage: `${RICE_BASE}/basmati-hero-unique.png`,
+    images: riceImages(`${RICE_BASE}/basmati-hero-unique.png`, "Premium Basmati rice in export packaging"),
   },
   "1121-basmati-rice": {
     slug: "1121-basmati-rice",
@@ -233,8 +233,8 @@ const RICE_PRODUCTS: Record<string, RiceProductDetail> = {
       "Retail and foodservice programmes",
       "Container-based supply",
     ],
-    heroImage: `${RICE_BASE}/long-grain-bag.png`,
-    images: riceImages(`${RICE_BASE}/long-grain-bag.png`, "Long grain white rice in export bags"),
+    heroImage: `${RICE_BASE}/long-grain-white-hero.png`,
+    images: riceImages(`${RICE_BASE}/long-grain-white-hero.png`, "Long grain white rice in export bags"),
   },
   "jasmine-rice": {
     slug: "jasmine-rice",
@@ -300,8 +300,8 @@ const RICE_PRODUCTS: Record<string, RiceProductDetail> = {
       "Bulk commercial applications",
       "Phytosanitary documentation available",
     ],
-    heroImage: `${RICE_BASE}/long-grain-pile.png`,
-    images: riceImages(`${RICE_BASE}/long-grain-pile.png`, "Parboiled long-grain rice reference"),
+    heroImage: `${RICE_BASE}/parboiled-golden-hero.png`,
+    images: riceImages(`${RICE_BASE}/parboiled-golden-hero.png`, "Parboiled long-grain rice reference"),
   },
   "japonica-rice": {
     slug: "japonica-rice",
@@ -327,8 +327,8 @@ const RICE_PRODUCTS: Record<string, RiceProductDetail> = {
       "International supply programmes",
       "Specifications per enquiry",
     ],
-    heroImage: `${RICE_BASE}/long-grain-pile.png`,
-    images: riceImages(`${RICE_BASE}/long-grain-pile.png`, "Japonica rice — short to medium grain reference"),
+    heroImage: `${RICE_BASE}/japonica-short-grain-hero.jpg`,
+    images: riceImages(`${RICE_BASE}/japonica-short-grain-hero.jpg`, "Japonica rice — short to medium grain reference"),
   },
 };
 

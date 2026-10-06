@@ -295,7 +295,7 @@ const PULSE_PRODUCTS: Record<string, PulseProductDetail> = {
       "Calibre sorting per contract",
       "Container programmes common",
     ],
-    heroImage: BEANS_LISTING_IMAGE,
+    heroImage: `${BEANS_BASE}/dry-chickpeas.png`,
     images: [
       {
         src: `${BEANS_BASE}/dry-chickpeas.png`,

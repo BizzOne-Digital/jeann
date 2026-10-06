@@ -51,6 +51,14 @@ export const LOGISTICS_IMAGES = {
     src: "/images/logistics/integrated-terminal-multimodal.jpg",
     alt: "Integrated container terminal — vessel, cranes, and multimodal freight connections",
   },
+  terminalOperationsAlt: {
+    src: "/images/logistics/container-terminal-operations-alt.jpg",
+    alt: "Container terminal at night with cranes and trucks in wet conditions",
+  },
+  railIntermodalYardAlt: {
+    src: "/images/logistics/rail-intermodal-yard-alt.png",
+    alt: "Gantry crane loading a container onto a rail wagon at an intermodal terminal",
+  },
 } as const;
 
 /** Full-width band between FOB/CIF and tracking (logistics page only). */
@@ -80,14 +88,14 @@ export const LOGISTICS_PAGE_ONLY_IMAGES = {
 export const LOGISTICS_PAGE_SECTION_IMAGES = {
   globalCoverage: LOGISTICS_IMAGES.seaAirRoutes,
   realTimeTrackingPrimary: LOGISTICS_IMAGES.portTrucks,
-  realTimeTrackingSecondary: LOGISTICS_IMAGES.terminalOperations,
+  realTimeTrackingSecondary: LOGISTICS_IMAGES.terminalOperationsAlt,
   portToPort: LOGISTICS_IMAGES.railInternationalContainers,
   documentation: LOGISTICS_IMAGES.terminalHub,
   bulkVesselMode: LOGISTICS_PAGE_ONLY_IMAGES.bulkCarrierLoading,
   coordinationPrimary: LOGISTICS_IMAGES.bulkGrainRail,
   coordinationSecondary: LOGISTICS_IMAGES.railIntermodalYard,
   closing: LOGISTICS_PAGE_ONLY_IMAGES.closingCifVessel,
-  bleedSecondary: LOGISTICS_IMAGES.railIntermodalYard,
+  bleedSecondary: LOGISTICS_IMAGES.railIntermodalYardAlt,
   contractToCargo: LOGISTICS_IMAGES.supplyChainNight,
 } as const;
 

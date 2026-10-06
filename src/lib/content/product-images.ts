@@ -12,7 +12,7 @@ export const CATEGORY_COVERS: Record<string, { image: string; shortName: string;
   sugar: {
     shortName: "Sugar",
     image: SUGAR_CATEGORY_COVER_IMAGE,
-    alt: "ICUMSA 45 refined white sugar crystals",
+    alt: "Refined sugar in bulk export warehouse",
   },
   "rice-and-grains": {
     shortName: "Rice & Grains",
@@ -31,8 +31,8 @@ export const CATEGORY_COVERS: Record<string, { image: string; shortName: string;
   },
   spices: {
     shortName: "Spices",
-    image: "/images/products/spices/cinnamon-sticks.png",
-    alt: "Cinnamon sticks and specialty spices",
+    image: "/images/products/spices/spices-category-hero.png",
+    alt: "Assorted bulk spices for export programmes",
   },
 };
 

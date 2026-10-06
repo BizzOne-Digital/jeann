@@ -16,7 +16,7 @@ export type SugarGradeDetail = {
 };
 
 /** Category cards, heroes, and galleries — sugar crystals only, never packaging bags. */
-export const SUGAR_CATEGORY_COVER_IMAGE = "/images/products/sugar/icumsa-45-white-sugar-2.png";
+export const SUGAR_CATEGORY_COVER_IMAGE = "/images/products/sugar/sugar-category-hero.png";
 
 export type ProductMarketingExtras = {
   description: string;
@@ -167,8 +167,8 @@ const SUGAR_GRADES: Record<string, SugarGradeDetail> = {
         alt: "Close-up of ICUMSA 45 premium refined white sugar crystals",
       },
       {
-        src: "/images/products/sugar/icumsa-45-white-sugar-3.png",
-        alt: "ICUMSA 45 refined white sugar granules",
+        src: "/images/products/sugar/icumsa-45-lab-quality.jpg",
+        alt: "Laboratory whiteness testing of ICUMSA 45 refined sugar sample",
       },
       {
         src: "/images/products/sugar/icumsa-45-white-sugar.png",
@@ -214,8 +214,8 @@ const SUGAR_GRADES: Record<string, SugarGradeDetail> = {
         alt: "ICUMSA 100 lite cream crystal sugar grains on a dark surface",
       },
       {
-        src: "/images/products/sugar/icumsa-45-white-sugar-2.png",
-        alt: "Refined white sugar crystals — reference for lite cream grades",
+        src: "/images/products/sugar/icumsa-100-warehouse-aisle.jpg",
+        alt: "ICUMSA 100 sugar bags stacked in bonded warehouse",
       },
     ],
   },
@@ -256,8 +256,8 @@ const SUGAR_GRADES: Record<string, SugarGradeDetail> = {
         alt: "ICUMSA 150 sugar crystals in a wooden spoon",
       },
       {
-        src: "/images/products/sugar/icumsa-600-raw-sugar-cane.png",
-        alt: "Light brown raw sugar crystals",
+        src: "/images/products/sugar/icumsa-150-warehouse-sampling.jpg",
+        alt: "Warehouse sampling of ICUMSA 150 sugar from bulk bags",
       },
     ],
   },
@@ -297,8 +297,8 @@ const SUGAR_GRADES: Record<string, SugarGradeDetail> = {
         alt: "ICUMSA 600 brown sugar crystals in bulk presentation",
       },
       {
-        src: "/images/products/sugar/icumsa-600-raw-sugar-cane.jpg",
-        alt: "ICUMSA 600 brown sugar product",
+        src: "/images/products/sugar/icumsa-600-raw-pile.jpg",
+        alt: "ICUMSA 600 brown raw sugar pile with colour reference",
       },
       {
         src: "/images/products/sugar/icumsa-600-raw-sugar-cane.png",
@@ -342,8 +342,8 @@ const SUGAR_GRADES: Record<string, SugarGradeDetail> = {
         alt: "ICUMSA 1200 red sugar crystals",
       },
       {
-        src: "/images/products/sugar/icumsa-1200-cream-sugar-cane-2.png",
-        alt: "Close-up of ICUMSA 1200 red sugar granules",
+        src: "/images/products/sugar/icumsa-1200-raw-scoop.jpg",
+        alt: "ICUMSA 1200 dark raw sugar granules in bulk scoop",
       },
     ],
   },

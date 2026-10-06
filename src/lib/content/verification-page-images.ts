@@ -3,7 +3,7 @@
 export const VERIFICATION_PAGE_IMAGES = {
   introBanner: {
     src: "/images/verification/intro-banner.png",
-    alt: "Bulk agricultural commodities prepared for export trade",
+    alt: "Independent inspector documenting sealed grain samples in warehouse",
   },
   storyPanel: {
     src: "/images/verification/story-panel.jpg",
@@ -11,11 +11,11 @@ export const VERIFICATION_PAGE_IMAGES = {
   },
   ctaBand: {
     src: "/images/verification/cta-band.jpg",
-    alt: "Bulk carrier loading dry commodity cargo at an export terminal",
+    alt: "Surveyor sealing export sample bags on quayside beside bulk vessel",
   },
   pillarRegistration: {
     src: "/images/verification/pillar-registration.jpg",
-    alt: "Trade desk team reviewing corporate registration and licensing records",
+    alt: "Corporate registration and export licence documents under review",
   },
   pillarCounterparties: {
     src: "/images/verification/pillar-counterparties.png",

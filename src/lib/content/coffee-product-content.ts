@@ -87,8 +87,8 @@ const COFFEE_PRODUCTS: Record<string, CoffeeProductDetail> = {
         alt: "Coffee cherries on the branch — green, Arabica, Robusta, Liberica, and Excelsa subject to contract",
       },
       {
-        src: "/images/products/coffee/green-coffee-beans.png",
-        alt: "Green unroasted coffee beans close-up",
+        src: "/images/products/coffee/green-coffee-grading-table.jpg",
+        alt: "Green coffee defect sorting and grading on stainless table",
       },
       {
         src: "/images/products/coffee/fresh-coffee-harvest.png",
@@ -127,8 +127,8 @@ const COFFEE_PRODUCTS: Record<string, CoffeeProductDetail> = {
         alt: "Coffee cherries and beans sun-drying on raised beds at origin",
       },
       {
-        src: "/images/products/coffee/dry-coffee-beans-hero.png",
-        alt: "Dry coffee beans — dark dried export grade, peppercorn-like appearance",
+        src: "/images/products/coffee/coffee-wet-mill-processing.jpg",
+        alt: "Coffee wet-mill washing channels at origin",
       },
     ],
   },
@@ -157,15 +157,15 @@ const COFFEE_PRODUCTS: Record<string, CoffeeProductDetail> = {
       "Roast level and format per contract",
       "Export carton programmes available",
     ],
-    heroImage: "/images/products/coffee/roasted-robusta-coffee-beans.png",
+    heroImage: "/images/products/coffee/roasted-arabica-coffee-beans.png",
     images: [
       {
-        src: "/images/products/coffee/roasted-robusta-coffee-beans.png",
-        alt: "Roasted Robusta coffee beans in a tin",
+        src: "/images/products/coffee/roasted-arabica-coffee-beans.png",
+        alt: "Roasted Arabica coffee beans close-up",
       },
       {
-        src: "/images/products/coffee/roasted-arabica-coffee-beans.png",
-        alt: "Roasted dry coffee beans close-up",
+        src: "/images/products/coffee/roasted-coffee-moisture-qc.jpg",
+        alt: "Roasted coffee moisture testing at export QC",
       },
     ],
   },

@@ -87,8 +87,8 @@ export const PAGE_HERO_IMAGES: Record<PageHeroImageKey, PageHeroImage> = {
     alt: "Bulk truck loading at an agricultural elevator for supplier programmes",
   },
   disputeResolution: {
-    src: "/images/packaging/tanker-vessel.png",
-    alt: "Rail bulk corridor documentation for trade dispute review",
+    src: "/images/dispute-resolution/hero.jpg",
+    alt: "Mediation meeting for structured trade dispute resolution",
   },
 };
 

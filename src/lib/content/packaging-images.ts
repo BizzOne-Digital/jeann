@@ -41,8 +41,8 @@ export const PACKAGING_IMAGES = {
     alt: "Dry bulk commodity in a ship hold during loading operations",
   },
   bulkVesselPort: {
-    src: "/images/packaging/bulk-vessel-hold.png",
-    alt: "Dry bulk commodity in a vessel hold at export",
+    src: "/images/packaging/bulk-vessel-cargo-loading.png",
+    alt: "Bulk carrier loading dry commodity cargo at port",
   },
   containerizedCargoPort: {
     src: "/images/packaging/containerized-cargo-port.png",
@@ -142,7 +142,10 @@ export const HOMEPAGE_PACKAGING_TEASER = [
     alt: "Grain hopper train beside export silos on a bulk rail corridor",
   }),
   teaser("Tanker Vessel", "tanker-vessel", PACKAGING_IMAGES.tankerVessel),
-  teaser("Bulk Vessel", "bulk-vessel", PACKAGING_IMAGES.bulkVesselLoading),
+  teaser("Bulk Vessel", "bulk-vessel", {
+    src: "/images/home/bulk-vessel-card-unique.png",
+    alt: "Bulk carrier assisted by tugboats at an export berth",
+  }),
   teaser("Bulk Truck", "bulk-truck", {
     src: "/images/home/packaging-teaser-bulk-truck.jpg",
     alt: "Hopper truck loading grain at an elevator terminal",
