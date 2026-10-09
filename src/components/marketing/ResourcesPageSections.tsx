@@ -1,7 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { ResourcesHub } from "@/components/marketing/ResourcesHub";
+import { RESOURCES_PAGE_IMAGES } from "@/lib/content/resources-page-images";
 import { Reveal } from "@/components/motion/Reveal";
 import { ProductQualitySpotlight } from "@/components/marketing/ProductQualitySpotlight";
 import { RESOURCES_PAGE_SPOTLIGHTS } from "@/lib/content/product-quality-spotlights";
@@ -13,14 +15,26 @@ export function ResourcesPageSections({ introBody }: { introBody: string }) {
   return (
     <>
       <section className="relative overflow-hidden border-b border-[#d5d0c8] bg-[#001a3d] py-14 text-white lg:py-16">
+        <Image
+          src={RESOURCES_PAGE_IMAGES.introAbstract.src}
+          alt=""
+          fill
+          className="object-cover object-center"
+          sizes="100vw"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute inset-0 bg-[#001a3d]/82"
+          aria-hidden
+        />
         <motion.div
-          className="pointer-events-none absolute inset-0 opacity-40"
+          className="pointer-events-none absolute inset-0 opacity-50"
           aria-hidden
           style={{
             background:
               "radial-gradient(circle at 20% 50%, rgba(200,142,74,0.35), transparent 55%), radial-gradient(circle at 80% 30%, rgba(255,255,255,0.08), transparent 50%)",
           }}
-          animate={reduce ? undefined : { opacity: [0.35, 0.5, 0.35] }}
+          animate={reduce ? undefined : { opacity: [0.4, 0.55, 0.4] }}
           transition={{ duration: 8, repeat: Infinity }}
         />
         <div className="container-page relative">

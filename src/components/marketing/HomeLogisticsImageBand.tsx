@@ -18,7 +18,10 @@ export function HomeLogisticsImageBand() {
         className="object-cover object-center"
         sizes="100vw"
       />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#071525]/35 via-transparent to-[#071525]/20" />
+      <div
+        className="absolute inset-0 bg-gradient-to-r from-[#001a3d]/55 via-[#001a3d]/25 to-[#c88e4a]/20"
+        aria-hidden
+      />
     </section>
   );
 }

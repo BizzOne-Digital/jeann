@@ -2,8 +2,8 @@
 
 export const HOME_PAGE_ONLY_IMAGES = {
   logisticsBand: {
-    src: "/images/home/logistics-band-intermodal-yard.jpg",
-    alt: "Intermodal rail yard with stacked containers and locomotive",
+    src: "/images/home/logistics-band-bulk-carrier.jpg",
+    alt: "Bulk carrier and tug at export terminal — global commodity shipping",
   },
   shippingTerms: {
     src: "/images/home/fob-cif-highway-truck.jpg",

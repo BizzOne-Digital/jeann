@@ -20,6 +20,10 @@ import { MotionImageFrame } from "@/components/motion/MotionImageFrame";
 import { Reveal } from "@/components/motion/Reveal";
 import { cn } from "@/lib/utils/cn";
 
+/** Wider than default `container-page` for validation domains block only. */
+const INSIGHTS_VALIDATION_WIDTH =
+  "mx-auto w-full max-w-[min(100%,1600px)] px-4 sm:px-6 lg:px-8";
+
 const DOMAIN_IMAGES: Partial<Record<string, { src: string; alt: string }>> = {
   lab: INSIGHTS_SECTION_IMAGES.labValidation,
   supply: INSIGHTS_SECTION_IMAGES.supplyChainValidation,
@@ -98,12 +102,18 @@ function LifecycleFunnel() {
 
 function ProtocolPipeline() {
   return (
-    <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-2">
+    <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-3">
       {INSIGHTS_PROTOCOL.pipeline.map((step, i) => (
-        <Reveal key={step.label} delay={i * 0.06} variant="zoom" bounce className="w-full sm:flex sm:max-w-[11rem] sm:flex-1 sm:items-center sm:gap-2">
-          <div className="flex h-full w-full flex-col rounded-lg border border-[#d5d0c8] bg-white p-4 text-center shadow-sm">
-            <p className="text-sm font-semibold text-[#001a3d]">{step.label}</p>
-            <p className="mt-1 text-xs text-[#777]">{step.note}</p>
+        <Reveal
+          key={step.label}
+          delay={i * 0.06}
+          variant="zoom"
+          bounce
+          className="w-full sm:flex sm:min-w-[12rem] sm:max-w-[14rem] sm:flex-1 sm:items-center sm:gap-2"
+        >
+          <div className="flex h-full w-full flex-col rounded-lg border border-[#d5d0c8] bg-white p-5 text-center shadow-sm sm:p-6">
+            <p className="text-base font-semibold text-[#001a3d]">{step.label}</p>
+            <p className="mt-2 text-sm text-[#666]">{step.note}</p>
           </div>
           {i < INSIGHTS_PROTOCOL.pipeline.length - 1 ? (
             <span className="hidden shrink-0 text-center text-[#c88e4a] sm:inline" aria-hidden>→</span>
@@ -186,11 +196,11 @@ export function InsightsOperationalPage() {
             />
           </Reveal>
           <ProtocolPipeline />
-          <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:items-start">
-            <div className="space-y-4">
+          <div className="mt-12 grid gap-6 lg:grid-cols-2 lg:items-stretch lg:gap-8">
+            <div className="flex flex-col gap-4">
               {INSIGHTS_PROTOCOL.tiers.map((tier, i) => (
-                <Reveal key={tier.n} delay={i * 0.05} variant="right">
-                  <article className="flex gap-4 rounded-xl border border-[#d5d0c8] bg-[#faf9f6] p-5">
+                <Reveal key={tier.n} delay={i * 0.05} variant="right" className="flex-1">
+                  <article className="flex h-full gap-4 rounded-xl border border-[#d5d0c8] bg-[#faf9f6] p-5 sm:p-6">
                     <span
                       className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#001a3d] text-sm font-bold text-[#d4a84b]"
                     >
@@ -204,32 +214,40 @@ export function InsightsOperationalPage() {
                 </Reveal>
               ))}
             </div>
-            <Reveal variant="left" delay={0.08}>
-              <MotionImageFrame>
-                <div className="relative min-h-[280px] overflow-hidden rounded-xl border border-[#d5d0c8] shadow-lg lg:min-h-[480px]">
-                  <Image
-                    src={INSIGHTS_SECTION_IMAGES.protocolLoading.src}
-                    alt={INSIGHTS_SECTION_IMAGES.protocolLoading.alt}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 1024px) 100vw, 480px"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#071525]/40 via-transparent to-transparent" />
-                </div>
-              </MotionImageFrame>
+            <Reveal variant="left" delay={0.08} className="flex min-h-[320px] flex-col gap-4 lg:min-h-0">
+              <div className="relative min-h-[150px] flex-1 overflow-hidden rounded-xl border border-[#d5d0c8] shadow-md">
+                <Image
+                  src={INSIGHTS_SECTION_IMAGES.protocolLabPrimary.src}
+                  alt={INSIGHTS_SECTION_IMAGES.protocolLabPrimary.alt}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#071525]/35 via-transparent to-transparent" />
+              </div>
+              <div className="relative min-h-[150px] flex-1 overflow-hidden rounded-xl border border-[#d5d0c8] shadow-md">
+                <Image
+                  src={INSIGHTS_SECTION_IMAGES.protocolLabSecondary.src}
+                  alt={INSIGHTS_SECTION_IMAGES.protocolLabSecondary.alt}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#071525]/35 via-transparent to-transparent" />
+              </div>
             </Reveal>
           </div>
         </div>
       </section>
 
       <section className="border-y border-white/10 bg-[#001a3d] py-14 text-white lg:py-16">
-        <div className="container-page">
+        <div className={INSIGHTS_VALIDATION_WIDTH}>
           <Reveal>
             <SectionHeading
               n={INSIGHTS_VALIDATION.n}
               title={INSIGHTS_VALIDATION.title}
               lead={INSIGHTS_VALIDATION.lead}
-              className="[&_h2]:text-white [&_p]:text-white/70"
+              className="[&_h2]:text-white [&_p]:max-w-none [&_p]:text-white/70"
             />
           </Reveal>
           <div className="mt-8 flex flex-wrap gap-2">
@@ -241,25 +259,25 @@ export function InsightsOperationalPage() {
               </Reveal>
             ))}
           </div>
-          <div className="mt-10 overflow-hidden rounded-xl border border-white/10">
-            <MotionImageFrame>
-              <div className="relative aspect-[21/9] min-h-[200px]">
-                <Image
-                  src={INSIGHTS_SECTION_IMAGES.validationOverview.src}
-                  alt={INSIGHTS_SECTION_IMAGES.validationOverview.alt}
-                  fill
-                  className="object-cover"
-                  sizes="100vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-r from-[#001a3d]/80 via-[#001a3d]/40 to-transparent" />
-              </div>
-            </MotionImageFrame>
-          </div>
+        </div>
+        <div className="mt-10 w-full overflow-hidden border-y border-white/10">
+          <MotionImageFrame>
+            <div className="relative aspect-[21/9] min-h-[200px] w-full">
+              <Image
+                src={INSIGHTS_SECTION_IMAGES.validationOverview.src}
+                alt={INSIGHTS_SECTION_IMAGES.validationOverview.alt}
+                fill
+                className="object-cover"
+                sizes="100vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#001a3d]/80 via-[#001a3d]/40 to-transparent" />
+            </div>
+          </MotionImageFrame>
         </div>
       </section>
 
       <section className="marketing-section bg-[var(--mist)]">
-        <div className="container-page space-y-10">
+        <div className={`${INSIGHTS_VALIDATION_WIDTH} space-y-10`}>
           {INSIGHTS_VALIDATION.domains.map((domain, index) => {
             const image = DOMAIN_IMAGES[domain.id];
             const reversed = index % 2 === 1;

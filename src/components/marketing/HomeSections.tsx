@@ -653,6 +653,12 @@ export function PackagingSection() {
                     className="object-cover transition duration-300 group-hover:scale-[1.03]"
                     sizes="(max-width: 1024px) 50vw, 220px"
                   />
+                  {item.slug === "bulk-railcar" ? (
+                    <div
+                      className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#001a3d]/75 via-[#001a3d]/35 to-[#c88e4a]/20"
+                      aria-hidden
+                    />
+                  ) : null}
                 </div>
                 <p className="mt-3 text-center text-base font-semibold text-[#0b1f33] group-hover:text-[#c88e4a]">
                   {item.name}

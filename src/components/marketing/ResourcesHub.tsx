@@ -179,7 +179,7 @@ function BankingPanel() {
             className="object-cover"
             sizes="(max-width: 1024px) 100vw, 420px"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#001a3d]/80 via-[#001a3d]/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#001a3d]/90 via-[#001a3d]/45 to-[#c88e4a]/15" />
           <div className="absolute right-0 bottom-0 left-0 p-6 text-white">
             <p className="text-xs font-semibold tracking-[0.2em] text-[#d4a84b] uppercase">
               Illustrative only
@@ -208,6 +208,20 @@ function BankingPanel() {
         <div className="mt-6">
           <ClauseAccordion />
         </div>
+        <aside className="mt-6 rounded-lg border border-[#d5d0c8] bg-[#faf9f6] p-5 sm:p-6">
+          <p className="text-xs font-semibold tracking-[0.16em] text-[#c88e4a] uppercase">Bulk train</p>
+          <p className="mt-2 text-sm leading-relaxed text-[#555555]">
+            Hopper unit trains move grains, oilseeds, sugar, and pulses between inland elevators and port
+            loading — gravity discharge into silos and ship-loading systems. Car type, routing, and
+            demurrage are confirmed per corridor in the PSA.
+          </p>
+          <Link
+            href="/packaging#bulk-railcar"
+            className="mt-4 inline-flex text-sm font-semibold text-[#001a3d] underline-offset-2 hover:text-[#c88e4a] hover:underline"
+          >
+            Bulk railcar packaging →
+          </Link>
+        </aside>
       </div>
     </div>
   );
@@ -223,7 +237,7 @@ function PaymentsPanel() {
     <div className="space-y-10">
       <div className="relative aspect-[21/9] max-h-56 overflow-hidden rounded-lg border border-[#d5d0c8] sm:max-h-none sm:aspect-[3/1]">
         <Image src={img.src} alt={img.alt} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 960px" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#001a3d]/75 via-[#001a3d]/35 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#001a3d]/85 via-[#001a3d]/40 to-[#c88e4a]/10" />
         <p className="absolute bottom-0 left-0 max-w-md p-6 text-sm leading-relaxed text-white/90">
           Programme payment design should match delivery cadence, inspection timing, and how your bank ranks instruments.
         </p>

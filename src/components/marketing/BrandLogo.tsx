@@ -6,6 +6,8 @@ export const BRAND_LOGO_SRC = "/brand/finekarts-logo.png";
 const SIZES = {
   sm: { box: "h-11 w-11 sm:h-12 sm:w-12", px: 48 },
   md: { box: "h-14 w-14 sm:h-16 sm:w-16", px: 64 },
+  /** Site header — larger than `md`, fits marketing header bar */
+  nav: { box: "h-16 w-16 sm:h-[4.5rem] sm:w-[4.5rem]", px: 72 },
   lg: { box: "h-20 w-20 sm:h-24 sm:w-24", px: 96 },
   xl: { box: "h-28 w-28 sm:h-32 sm:w-32", px: 128 },
 } as const;

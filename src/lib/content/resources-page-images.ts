@@ -1,18 +1,20 @@
-import { AGRICULTURE_IMAGES } from "@/lib/content/agriculture-images";
-
 /** Each image used at most once on `/resources` (hero is CMS `resourcesHero`). */
 export const RESOURCES_PAGE_IMAGES = {
   banking: {
-    src: "/images/packaging/ibc-2.png",
-    alt: "Industrial IBC tote in warehouse — trade finance and documentation context",
+    src: "/images/resources/spa-banking-handshake.png",
+    alt: "Business handshake — commodity sale and purchase agreement context",
+  },
+  introAbstract: {
+    src: "/images/resources/intro-abstract-background.jpg",
+    alt: "",
   },
   payments: {
-    src: AGRICULTURE_IMAGES.teaPlantation.src,
-    alt: AGRICULTURE_IMAGES.teaPlantation.alt,
+    src: "/images/resources/payments-programme-finance.png",
+    alt: "Trade finance and structured payment programme planning",
   },
   documents: {
-    src: AGRICULTURE_IMAGES.combineHarvest.src,
-    alt: AGRICULTURE_IMAGES.combineHarvest.alt,
+    src: "/images/resources/documents-trade-audit.jpg",
+    alt: "Trade audit and documentary compliance review",
   },
   downloads: {
     src: "/images/agriculture/grain-silos.png",

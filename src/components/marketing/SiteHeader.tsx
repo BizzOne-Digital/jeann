@@ -77,7 +77,7 @@ export function SiteHeader({ embedded = false }: Props) {
             aria-label="Finekarts Incorporated home"
             data-no-translate
           >
-            <BrandLogo size="md" priority alt="Finekarts Incorporated" />
+            <BrandLogo size="nav" priority alt="Finekarts Incorporated" />
           </Link>
 
           <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Primary">

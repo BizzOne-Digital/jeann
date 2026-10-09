@@ -138,8 +138,8 @@ export const HOMEPAGE_PACKAGING_TEASER = [
     alt: "Flexitank bladder installed inside a shipping container",
   }),
   teaser("Bulk Railcar", "bulk-railcar", {
-    src: "/images/home/packaging-teaser-grain-rail.jpg",
-    alt: "Grain hopper train beside export silos on a bulk rail corridor",
+    src: "/images/home/packaging-teaser-bulk-rail-ship.jpg",
+    alt: "Bulk carrier and export terminal — inland-to-port bulk logistics",
   }),
   teaser("Tanker Vessel", "tanker-vessel", PACKAGING_IMAGES.tankerVessel),
   teaser("Bulk Vessel", "bulk-vessel", PACKAGING_IMAGES.bulkVesselLoading),

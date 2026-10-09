@@ -186,11 +186,11 @@ export default async function ProductPage({ params }: Props) {
             <h2 className="mt-3 text-2xl font-semibold text-[#001a3d]">More in {cover.shortName}</h2>
             <div className="mt-8 grid gap-5 sm:grid-cols-3">
               {related.map((p) => (
-                <Link
+                  <Link
                   key={p.slug}
-                  href={`/products/${category.slug}/${p.slug}`}
+                    href={`/products/${category.slug}/${p.slug}`}
                   className="group marketing-box marketing-box-interactive block rounded-lg p-5 shadow-sm"
-                >
+                  >
                   <h3 className="text-base font-semibold text-[#001a3d] group-hover:text-[#c88e4a]">
                     {p.name}
                   </h3>
@@ -198,7 +198,7 @@ export default async function ProductPage({ params }: Props) {
                   <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#c88e4a]">
                     View details <span aria-hidden>→</span>
                   </span>
-                </Link>
+                  </Link>
               ))}
             </div>
           </div>
