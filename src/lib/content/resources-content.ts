@@ -146,19 +146,24 @@ export const RESOURCES_DOCUMENT_GROUPS = [
 
 export const RESOURCES_TRADE_PRIORITY_LINKS = [
   {
-    href: "/dispute-resolution",
-    label: "Dispute resolution",
-    note: "Commercial resolution, contract roles, and documentation expectations",
-  },
-  {
     href: "/logistics",
-    label: "Trade logistics",
+    label: "CIF & logistics",
     note: "FOB/CIF coordination with carriers — Finekarts is the trader, not the freight operator",
   },
   {
-    href: "/inspections",
-    label: "Inspection in trade",
-    note: "Independent inspection firms we may appoint when the PSA requires it",
+    href: "/logistics",
+    label: "Trade insurance",
+    note: "Marine cargo and related cover where the SPA requires it — scope confirmed in contract",
+  },
+  {
+    href: "/resources#resources-hub",
+    label: "Payment structures",
+    note: "LC, SBLC, and programme schedules in the banking & payments library below",
+  },
+  {
+    href: "/dispute-resolution",
+    label: "Dispute resolution",
+    note: "Commercial resolution, contract roles, and documentation expectations",
   },
 ] as const;
 

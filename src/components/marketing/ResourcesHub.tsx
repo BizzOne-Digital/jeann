@@ -170,25 +170,46 @@ function PillarIcon({ type }: { type: string }) {
 
 function BankingPanel() {
   return (
-    <div className="grid gap-8 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-stretch lg:gap-12">
-      <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-[#d5d0c8] lg:aspect-auto lg:min-h-full">
-        <Image
-          src={RESOURCES_PAGE_IMAGES.banking.src}
-          alt={RESOURCES_PAGE_IMAGES.banking.alt}
-          fill
-          className="object-cover"
-          sizes="(max-width: 1024px) 100vw, 420px"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[var(--footer-bg)]/92 via-[var(--footer-bg)]/40 to-[#c88e4a]/15" />
-        <div className="absolute right-0 bottom-0 left-0 p-6 text-white">
-          <p className="text-xs font-semibold tracking-[0.2em] text-[#d4a84b] uppercase">
-            Illustrative only
-          </p>
-          <p className="mt-2 text-sm leading-relaxed text-white/90">
-            Adapt all SPA banking wording to jurisdiction, bank requirements, and your commercial
-            schedule.
-          </p>
+    <div className="grid gap-8 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-start lg:gap-12">
+      <div className="flex flex-col gap-6">
+        <div className="relative aspect-[4/3] max-h-[min(72vw,22rem)] overflow-hidden rounded-lg border border-[#d5d0c8] lg:max-h-[20rem]">
+          <Image
+            src={RESOURCES_PAGE_IMAGES.banking.src}
+            alt={RESOURCES_PAGE_IMAGES.banking.alt}
+            fill
+            className="object-cover"
+            sizes="(max-width: 1024px) 100vw, 420px"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--footer-bg)]/92 via-[var(--footer-bg)]/40 to-[#c88e4a]/15" />
+          <div className="absolute right-0 bottom-0 left-0 p-6 text-white">
+            <p className="text-xs font-semibold tracking-[0.2em] text-[#d4a84b] uppercase">
+              Illustrative only
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-white/90">
+              Adapt all SPA banking wording to jurisdiction, bank requirements, and your commercial
+              schedule.
+            </p>
+          </div>
         </div>
+
+        <Link
+          href="/dispute-resolution"
+          className="focus-ring group flex h-full min-h-[11rem] flex-col rounded-lg border border-[#d5d0c8] bg-[#001a3d] p-6 text-white shadow-sm transition hover:border-[#c88e4a]/50 hover:shadow-md"
+        >
+          <p className="text-xs font-semibold tracking-[0.18em] text-[#d4a84b] uppercase">
+            Related programme
+          </p>
+          <h3 className="mt-2 text-lg font-semibold text-white group-hover:text-[#e8bc5c]">
+            Dispute resolution
+          </h3>
+          <p className="mt-3 flex-1 text-sm leading-relaxed text-white/78">
+            When specifications, documents, or payment timing diverge from the signed SPA — roles,
+            evidence, and escalation paths buyers should align on early.
+          </p>
+          <span className="mt-4 text-sm font-semibold text-[#d4a84b] group-hover:text-[#e8bc5c]">
+            View dispute resolution →
+          </span>
+        </Link>
       </div>
 
       <div className="flex flex-col">
@@ -459,7 +480,7 @@ function TradePriorityStrip() {
         <h2 className="mt-2 max-w-2xl text-xl font-semibold sm:text-2xl">
           CIF, trade insurance, payments, and dispute resolution
         </h2>
-        <div className="mt-6 grid gap-4 sm:grid-cols-3">
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {RESOURCES_TRADE_PRIORITY_LINKS.map((item) => (
             <Link
               key={item.href}

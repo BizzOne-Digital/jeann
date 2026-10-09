@@ -261,17 +261,24 @@ export function InsightsOperationalPage() {
             ))}
           </div>
         </div>
-        <div className="mt-10 w-full overflow-hidden border-y border-white/10">
+        <div className="mt-10 w-full px-4 sm:px-6 lg:px-8">
           <MotionImageFrame>
-            <div className="relative aspect-[21/9] min-h-[200px] w-full">
+            <div className="relative mx-auto aspect-[21/8] w-full max-w-[min(100%,1600px)] max-h-[min(38vw,22rem)] overflow-hidden rounded-lg border border-white/15 sm:max-h-[20rem] lg:max-h-[22rem]">
               <Image
                 src={INSIGHTS_SECTION_IMAGES.validationOverview.src}
                 alt={INSIGHTS_SECTION_IMAGES.validationOverview.alt}
                 fill
-                className="object-cover"
-                sizes="100vw"
+                className="object-cover object-center"
+                sizes="(max-width: 1600px) 100vw, 1600px"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#001a3d]/80 via-[#001a3d]/40 to-transparent" />
+              <div
+                className="absolute inset-0 bg-gradient-to-r from-[var(--footer-bg)]/92 from-0% via-[var(--footer-bg)]/65 via-[28%] to-transparent to-[62%]"
+                aria-hidden
+              />
+              <div
+                className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#071525]/25 via-transparent to-transparent"
+                aria-hidden
+              />
             </div>
           </MotionImageFrame>
         </div>
