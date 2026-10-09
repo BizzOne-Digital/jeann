@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { MarketingAbstractBand } from "@/components/marketing/MarketingAbstractBand";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import {
@@ -194,7 +195,7 @@ export function InspectionOperationalPage() {
         </div>
       </section>
 
-      <section className="border-y border-white/10 bg-[#001a3d] py-14 text-white lg:py-16">
+      <MarketingAbstractBand className="border-y border-white/10 py-14 lg:py-16">
         <div className="container-page space-y-12">
           <Reveal>
             <h2 className="text-2xl font-semibold sm:text-3xl">{INSPECTIONS_COMMODITY_VALIDATION.title}</h2>
@@ -249,7 +250,7 @@ export function InspectionOperationalPage() {
             ))}
           </div>
         </div>
-      </section>
+      </MarketingAbstractBand>
 
       <section className="marketing-section bg-[var(--mist)]">
         <div className="container-page min-w-0">

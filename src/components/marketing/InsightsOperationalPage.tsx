@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { MarketingAbstractBand } from "@/components/marketing/MarketingAbstractBand";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   INSIGHTS_ARCHITECTURE,
@@ -240,7 +241,7 @@ export function InsightsOperationalPage() {
         </div>
       </section>
 
-      <section className="border-y border-white/10 bg-[#001a3d] py-14 text-white lg:py-16">
+      <MarketingAbstractBand className="border-y border-white/10 py-14 lg:py-16">
         <div className={INSIGHTS_VALIDATION_WIDTH}>
           <Reveal>
             <SectionHeading
@@ -274,7 +275,7 @@ export function InsightsOperationalPage() {
             </div>
           </MotionImageFrame>
         </div>
-      </section>
+      </MarketingAbstractBand>
 
       <section className="marketing-section bg-[var(--mist)]">
         <div className={`${INSIGHTS_VALIDATION_WIDTH} space-y-10`}>

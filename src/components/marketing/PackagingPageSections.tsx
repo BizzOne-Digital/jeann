@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { MarketingAbstractBand } from "@/components/marketing/MarketingAbstractBand";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   PACKAGING_CONTAINMENT_COMPARISON,
@@ -263,7 +264,7 @@ export function PackagingPageSections() {
         </div>
       </section>
 
-      <section className="border-y border-white/10 bg-[#001a3d] py-14 text-white lg:py-16">
+      <MarketingAbstractBand className="border-y border-white/10 py-14 lg:py-16">
         <div className="container-page space-y-14">
           <Reveal>
             <SectionHeading title={PACKAGING_MARITIME.title} lead={PACKAGING_MARITIME.lead} dark />
@@ -314,7 +315,7 @@ export function PackagingPageSections() {
             </div>
           </div>
         </div>
-      </section>
+      </MarketingAbstractBand>
 
       <section className="marketing-section bg-white">
         <div className="container-page min-w-0">

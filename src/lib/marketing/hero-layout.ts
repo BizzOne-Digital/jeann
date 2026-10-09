@@ -19,12 +19,12 @@ export const HERO_DARK_OVERLAY_HORIZONTAL = HERO_HOME_OVERLAY_HORIZONTAL;
 export const HERO_DARK_OVERLAY_BOTTOM =
   "bg-gradient-to-t from-[rgb(var(--navy-rgb)/0.45)] via-transparent to-transparent";
 
-export const MARKETING_HEADER_HEIGHT = "5rem";
+export const MARKETING_HEADER_HEIGHT = "5.775rem";
 
 /** Homepage trade-alert strip below the header (compact mode). */
 export const TRADE_ALERT_STRIP_HEIGHT = "2.75rem";
 
-export const MARKETING_HEADER_HEIGHT_CLASS = "h-[5rem]";
+export const MARKETING_HEADER_HEIGHT_CLASS = "h-[5.775rem]";
 
 export const MARKETING_HERO_HEIGHT_CLASS = "min-h-[min(88svh,720px)]";
 

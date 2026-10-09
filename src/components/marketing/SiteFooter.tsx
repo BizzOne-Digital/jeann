@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { BrandLogo } from "@/components/marketing/BrandLogo";
 import { getPublicSiteSettings } from "@/lib/content/site-settings-public";
-import { FINEKARTS_FOOTER_TAGLINE } from "@/lib/content/trader-positioning";
+import {
+  FINEKARTS_FOOTER_TAGLINE,
+  FINEKARTS_TOOLS_DISCLAIMER,
+} from "@/lib/content/trader-positioning";
 import { SocialLinks } from "@/components/marketing/SocialLinks";
 import { FooterReveal } from "@/components/motion/FooterReveal";
 
@@ -154,39 +157,46 @@ export async function SiteFooter() {
         </div>
 
         <FooterReveal delay={0.18}>
-          <div
-            className="mt-10 flex flex-col gap-4 border-t border-white/10 pt-5 pb-0 text-xs text-white/40 lg:flex-row lg:items-center lg:justify-between"
-          >
-            <div className="space-y-1.5">
-              <p>© {year} Finekarts Incorporated. All rights reserved.</p>
-              <p className="max-w-lg leading-relaxed text-white/35">
-                Finekarts<sup className="text-[0.6rem]">®</sup> and Finekarts Incorporated
-                <sup className="text-[0.6rem]">®</sup> are trademarks of Finekarts Incorporated.
+          <div className="mt-12 space-y-5 border-t border-white/15 pt-6 text-sm text-white/75">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+              <div className="space-y-2">
+                <p className="text-base font-medium text-white">
+                  © {year} Finekarts Incorporated. All rights reserved.
+                </p>
+                <p className="max-w-lg text-xs leading-relaxed text-white/55">
+                  Finekarts<sup className="text-[0.6rem]">®</sup> and Finekarts Incorporated
+                  <sup className="text-[0.6rem]">®</sup> are trademarks of Finekarts Incorporated.
+                </p>
+              </div>
+              <nav
+                className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-white/80"
+                aria-label="Legal"
+              >
+                <Link href="/privacy-policy" className="hover:text-white">
+                  Privacy Policy
+                </Link>
+                <span className="text-white/30" aria-hidden>|</span>
+                <Link href="/terms-and-conditions" className="hover:text-white">
+                  Terms &amp; Conditions
+                </Link>
+                <span className="text-white/30" aria-hidden>|</span>
+                <Link href="/testimonials" className="hover:text-white">
+                  Testimonials
+                </Link>
+                <span className="text-white/30" aria-hidden>|</span>
+                <Link href="/privacy" className="hover:text-white">
+                  Careers
+                </Link>
+              </nav>
+            </div>
+            <div className="mx-auto max-w-3xl text-center">
+              <p className="leading-relaxed text-white/65">
+                <span className="font-semibold text-white/90">Disclaimer:</span> {FINEKARTS_TOOLS_DISCLAIMER}
+              </p>
+              <p className="mt-3 text-white/60">
+                Enquiry submission does not guarantee acceptance, pricing, or shipment.
               </p>
             </div>
-            <nav
-              className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm text-white/55"
-              aria-label="Legal"
-            >
-              <Link href="/privacy-policy" className="hover:text-white">
-                Privacy Policy
-              </Link>
-              <span className="text-white/25" aria-hidden>|</span>
-              <Link href="/terms-and-conditions" className="hover:text-white">
-                Terms &amp; Conditions
-              </Link>
-              <span className="text-white/25" aria-hidden>|</span>
-              <Link href="/testimonials" className="hover:text-white">
-                Testimonials
-              </Link>
-              <span className="text-white/25" aria-hidden>|</span>
-              <Link href="/privacy" className="hover:text-white">
-                Careers
-              </Link>
-            </nav>
-            <p className="max-w-sm text-white/35 lg:text-right">
-              Enquiry submission does not guarantee acceptance, pricing, or shipment.
-            </p>
           </div>
         </FooterReveal>
       </div>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { MarketingAbstractBand } from "@/components/marketing/MarketingAbstractBand";
 import { Reveal } from "@/components/motion/Reveal";
 import {
   type CmsSectionMap,
@@ -152,7 +153,7 @@ export function DisputeResolutionSections({ cms }: { cms?: CmsSectionMap }) {
         </div>
       </section>
 
-      <section className="bg-[#001a3d] text-white marketing-section">
+      <MarketingAbstractBand className="marketing-section">
         <div className="container-page">
           <Reveal variant="blur-up">
             <p className="text-xs font-semibold tracking-[0.22em] text-[#d4a84b] uppercase">
@@ -187,7 +188,7 @@ export function DisputeResolutionSections({ cms }: { cms?: CmsSectionMap }) {
             </div>
           </Reveal>
         </div>
-      </section>
+      </MarketingAbstractBand>
 
       <section className="bg-[#f3f1ec] marketing-section">
         <div className="container-page">

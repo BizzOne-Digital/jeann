@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { LogisticsPairedRow } from "@/components/marketing/LogisticsVisuals";
+import { MarketingAbstractBand } from "@/components/marketing/MarketingAbstractBand";
 import { Reveal } from "@/components/motion/Reveal";
 import {
   HOME_SITE_COMPANY_LINKS,
@@ -56,7 +57,7 @@ export function HomeSiteOverviewIntro() {
   const reduce = useReducedMotion();
 
   return (
-    <section className="border-y border-[#d5d0c8] bg-[#001a3d] py-14 text-white lg:py-16">
+    <MarketingAbstractBand className="border-y border-[#d5d0c8] py-14 lg:py-16">
       <div className="container-page text-center">
         <Reveal variant="blur-up">
           <p className="text-xs font-semibold tracking-[0.24em] text-[#d4a84b] uppercase">
@@ -77,7 +78,7 @@ export function HomeSiteOverviewIntro() {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         />
       </div>
-    </section>
+    </MarketingAbstractBand>
   );
 }
 

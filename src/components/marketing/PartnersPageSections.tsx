@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { MarketingAbstractBand } from "@/components/marketing/MarketingAbstractBand";
 import { Reveal } from "@/components/motion/Reveal";
 import {
   PRODUCER_PARTNERS_CTA,
@@ -16,7 +17,7 @@ export function PartnersPageSections({
 }) {
   return (
     <>
-      <section className="border-b border-[#0d2844] bg-[#001a3d] py-14 text-white lg:py-16 marketing-section">
+      <MarketingAbstractBand className="border-b border-[#0d2844] py-14 lg:py-16 marketing-section">
         <div className="container-page">
           <Reveal variant="up">
             <p className="text-xs font-semibold tracking-[0.22em] text-[#d4a84b] uppercase">
@@ -45,7 +46,7 @@ export function PartnersPageSections({
             ))}
           </div>
         </div>
-      </section>
+      </MarketingAbstractBand>
 
       <section id="partner-programmes" className="scroll-mt-24 bg-white marketing-section">
         <div className="container-page space-y-8">

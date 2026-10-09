@@ -65,9 +65,7 @@ export function SiteHeader({ embedded = false }: Props) {
           !embedded && "fixed inset-x-0 top-0 z-[70]",
           transparent
             ? "border-b border-transparent bg-transparent text-white shadow-none"
-            : isLight
-              ? "border-b border-[var(--line)] bg-white/95 text-[var(--ink)] shadow-[0_4px_24px_rgba(27,58,92,0.08)] backdrop-blur-md"
-              : "border-b border-white/10 bg-[#1b3a5c]/95 text-white shadow-[0_8px_30px_rgba(0,0,0,0.25)] backdrop-blur-md",
+            : "border-b border-white/10 bg-[var(--footer-bg)]/95 text-white shadow-[0_8px_30px_rgba(0,0,0,0.22)] backdrop-blur-md",
         )}
       >
         <div className={`container-page flex ${MARKETING_HEADER_HEIGHT_CLASS} min-w-0 items-center justify-between gap-2 lg:gap-3`}>
@@ -91,18 +89,14 @@ export function SiteHeader({ embedded = false }: Props) {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "focus-ring relative px-3 py-2 text-[0.95rem] font-medium tracking-wide transition-colors duration-200",
+                    "focus-ring relative px-3.5 py-2.5 text-[1.05rem] font-medium tracking-wide transition-colors duration-200",
                     transparent
                       ? active
                         ? "text-[var(--brand-cta)]"
-                        : "text-white/75 hover:text-white"
-                      : isLight
-                        ? active
-                          ? "text-[var(--navy)]"
-                          : "text-[var(--stone)] hover:text-[var(--navy)]"
-                        : active
-                          ? "text-[var(--brand-cta)]"
-                          : "text-white/70 hover:text-white",
+                        : "text-white/80 hover:text-white"
+                      : active
+                        ? "text-[var(--brand-cta)]"
+                        : "text-white/75 hover:text-white",
                   )}
                 >
                   {item.label}
@@ -110,7 +104,7 @@ export function SiteHeader({ embedded = false }: Props) {
                     <span
                       className={cn(
                         "absolute inset-x-3.5 -bottom-0.5 h-[2px]",
-                        isLight && !transparent ? "bg-[var(--ocean)]" : "bg-[var(--brand-cta)]",
+                        "bg-[var(--brand-cta)]",
                       )}
                     />
                   ) : null}
@@ -125,7 +119,6 @@ export function SiteHeader({ embedded = false }: Props) {
               href="/login"
               className={cn(
                 "focus-ring marketing-btn-primary inline-flex items-center gap-2 whitespace-nowrap px-4 py-2 text-sm lg:px-5 lg:py-2.5",
-                isLight && !transparent && "shadow-none",
               )}
             >
               Buyer Portal
@@ -139,9 +132,7 @@ export function SiteHeader({ embedded = false }: Props) {
               "focus-ring flex h-11 w-11 items-center justify-center rounded-full border lg:hidden",
               transparent
                 ? "border-white/25 text-white"
-                : isLight
-                  ? "border-[var(--line-strong)] text-[var(--navy)]"
-                  : "border-[#d4a84b]/50 bg-[#0a2844] text-[#d4a84b]",
+                : "border-[#d4a84b]/50 bg-[var(--footer-bg)] text-[#d4a84b]",
             )}
             aria-expanded={open}
             aria-controls="mobile-nav"
@@ -153,21 +144,21 @@ export function SiteHeader({ embedded = false }: Props) {
                 className={cn(
                   "h-0.5 transition",
                   open && "translate-y-2 rotate-45",
-                  transparent || !isLight ? "bg-white" : "bg-[var(--navy)]",
+                  "bg-white",
                 )}
               />
               <span
                 className={cn(
                   "h-0.5 transition",
                   open && "opacity-0",
-                  transparent || !isLight ? "bg-white" : "bg-[var(--navy)]",
+                  "bg-white",
                 )}
               />
               <span
                 className={cn(
                   "h-0.5 transition",
                   open && "-translate-y-2 -rotate-45",
-                  transparent || !isLight ? "bg-white" : "bg-[var(--navy)]",
+                  "bg-white",
                 )}
               />
             </span>

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { MarketingAbstractBand } from "@/components/marketing/MarketingAbstractBand";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   ABOUT_CONTACT,
@@ -184,7 +185,10 @@ export function AboutPageSections({
         </div>
       </section>
 
-      <section className="border-y border-white/10 bg-[#001a3d] py-12 text-white lg:py-14" aria-label="Highlights">
+      <MarketingAbstractBand
+        className="border-y border-white/10 py-12 lg:py-14"
+        aria-label="Highlights"
+      >
         <div className="container-page">
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {ABOUT_HIGHLIGHTS.map((item, index) => (
@@ -200,7 +204,7 @@ export function AboutPageSections({
             ))}
           </div>
         </div>
-      </section>
+      </MarketingAbstractBand>
 
       <section className="marketing-section bg-[#f3f1ec]">
         <div className="container-page">

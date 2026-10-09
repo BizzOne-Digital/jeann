@@ -1,9 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
+import { MarketingAbstractBand } from "@/components/marketing/MarketingAbstractBand";
 import { ResourcesHub } from "@/components/marketing/ResourcesHub";
-import { RESOURCES_PAGE_IMAGES } from "@/lib/content/resources-page-images";
 import { Reveal } from "@/components/motion/Reveal";
 import { ProductQualitySpotlight } from "@/components/marketing/ProductQualitySpotlight";
 import { RESOURCES_PAGE_SPOTLIGHTS } from "@/lib/content/product-quality-spotlights";
@@ -14,21 +13,9 @@ export function ResourcesPageSections({ introBody }: { introBody: string }) {
 
   return (
     <>
-      <section className="relative overflow-hidden border-b border-[#d5d0c8] bg-[#001a3d] py-14 text-white lg:py-16">
-        <Image
-          src={RESOURCES_PAGE_IMAGES.introAbstract.src}
-          alt=""
-          fill
-          className="object-cover object-center"
-          sizes="100vw"
-          aria-hidden
-        />
-        <div
-          className="pointer-events-none absolute inset-0 bg-[#001a3d]/82"
-          aria-hidden
-        />
+      <MarketingAbstractBand className="py-14 lg:py-16">
         <motion.div
-          className="pointer-events-none absolute inset-0 opacity-50"
+          className="pointer-events-none absolute inset-0 z-[1] opacity-50"
           aria-hidden
           style={{
             background:
@@ -37,7 +24,7 @@ export function ResourcesPageSections({ introBody }: { introBody: string }) {
           animate={reduce ? undefined : { opacity: [0.4, 0.55, 0.4] }}
           transition={{ duration: 8, repeat: Infinity }}
         />
-        <div className="container-page relative">
+        <div className="container-page relative z-[2]">
           <Reveal variant="up">
             <p className="text-xs font-semibold tracking-[0.22em] text-[#d4a84b] uppercase">
               {RESOURCES_PAGE_INTRO.eyebrow}
@@ -56,7 +43,7 @@ export function ResourcesPageSections({ introBody }: { introBody: string }) {
             ))}
           </ul>
         </div>
-      </section>
+      </MarketingAbstractBand>
 
       <ProductQualitySpotlight spotlights={RESOURCES_PAGE_SPOTLIGHTS} variant="light" />
 

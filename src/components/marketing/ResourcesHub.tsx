@@ -29,6 +29,7 @@ import {
   type ResourcesTabId,
 } from "@/lib/content/resources-content";
 import { RESOURCES_PAGE_IMAGES } from "@/lib/content/resources-page-images";
+import { MarketingAbstractBand } from "@/components/marketing/MarketingAbstractBand";
 import { Reveal } from "@/components/motion/Reveal";
 import { cn } from "@/lib/utils/cn";
 
@@ -169,58 +170,42 @@ function PillarIcon({ type }: { type: string }) {
 
 function BankingPanel() {
   return (
-    <div className="grid gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-start lg:gap-12">
-      <div className="space-y-6">
-        <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-[#d5d0c8]">
-          <Image
-            src={RESOURCES_PAGE_IMAGES.banking.src}
-            alt={RESOURCES_PAGE_IMAGES.banking.alt}
-            fill
-            className="object-cover"
-            sizes="(max-width: 1024px) 100vw, 420px"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#001a3d]/90 via-[#001a3d]/45 to-[#c88e4a]/15" />
-          <div className="absolute right-0 bottom-0 left-0 p-6 text-white">
-            <p className="text-xs font-semibold tracking-[0.2em] text-[#d4a84b] uppercase">
-              Illustrative only
-            </p>
-            <p className="mt-2 text-sm leading-relaxed text-white/90">
-              Adapt all SPA banking wording to jurisdiction, bank requirements, and your commercial
-              schedule.
-            </p>
-          </div>
-        </div>
-        <aside className="rounded-lg border border-[#c88e4a]/35 bg-[#fff9ef] p-5 sm:p-6">
-          <p className="text-xs font-semibold tracking-[0.16em] text-[#c88e4a] uppercase">
-            Preferred approach
+    <div className="grid gap-8 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-stretch lg:gap-12">
+      <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-[#d5d0c8] lg:aspect-auto lg:min-h-full">
+        <Image
+          src={RESOURCES_PAGE_IMAGES.banking.src}
+          alt={RESOURCES_PAGE_IMAGES.banking.alt}
+          fill
+          className="object-cover"
+          sizes="(max-width: 1024px) 100vw, 420px"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--footer-bg)]/92 via-[var(--footer-bg)]/40 to-[#c88e4a]/15" />
+        <div className="absolute right-0 bottom-0 left-0 p-6 text-white">
+          <p className="text-xs font-semibold tracking-[0.2em] text-[#d4a84b] uppercase">
+            Illustrative only
           </p>
-          <p className="mt-3 text-sm leading-relaxed text-[#444444]">{PREFERRED_PAYMENT_STRUCTURE}</p>
-        </aside>
+          <p className="mt-2 text-sm leading-relaxed text-white/90">
+            Adapt all SPA banking wording to jurisdiction, bank requirements, and your commercial
+            schedule.
+          </p>
+        </div>
       </div>
 
-      <div>
+      <div className="flex flex-col">
         <p className="text-xs font-semibold tracking-[0.16em] text-[#888] uppercase">
           {BANKING_CLAUSE_SECTION_TITLE}
         </p>
         <p className="mt-3 text-sm leading-relaxed text-[#555555]">
           {BANKING_CLAUSE_INTRO} Not legal or banking advice.
         </p>
-        <div className="mt-6">
+        <div className="mt-6 flex-1">
           <ClauseAccordion />
         </div>
-        <aside className="mt-6 rounded-lg border border-[#d5d0c8] bg-[#faf9f6] p-5 sm:p-6">
-          <p className="text-xs font-semibold tracking-[0.16em] text-[#c88e4a] uppercase">Bulk train</p>
-          <p className="mt-2 text-sm leading-relaxed text-[#555555]">
-            Hopper unit trains move grains, oilseeds, sugar, and pulses between inland elevators and port
-            loading — gravity discharge into silos and ship-loading systems. Car type, routing, and
-            demurrage are confirmed per corridor in the PSA.
+        <aside className="mt-6 rounded-lg border border-[#c88e4a]/35 bg-[#fff9ef] p-5 sm:p-6">
+          <p className="text-xs font-semibold tracking-[0.16em] text-[#c88e4a] uppercase">
+            Preferred approach
           </p>
-          <Link
-            href="/packaging#bulk-railcar"
-            className="mt-4 inline-flex text-sm font-semibold text-[#001a3d] underline-offset-2 hover:text-[#c88e4a] hover:underline"
-          >
-            Bulk railcar packaging →
-          </Link>
+          <p className="mt-3 text-sm leading-relaxed text-[#444444]">{PREFERRED_PAYMENT_STRUCTURE}</p>
         </aside>
       </div>
     </div>
@@ -466,8 +451,8 @@ const PANEL_TITLES: Record<ResourcesTabId, { eyebrow: string; title: string }> =
 
 function TradePriorityStrip() {
   return (
-    <section className="border-b border-[#d5d0c8] bg-[#001a3d] py-10 text-white lg:py-12">
-      <div className="container-page">
+    <MarketingAbstractBand className="py-10 lg:py-12">
+      <div className="container-page py-0">
         <p className="text-xs font-semibold tracking-[0.22em] text-[#d4a84b] uppercase">
           Start here
         </p>
@@ -489,7 +474,7 @@ function TradePriorityStrip() {
           ))}
         </div>
       </div>
-    </section>
+    </MarketingAbstractBand>
   );
 }
 

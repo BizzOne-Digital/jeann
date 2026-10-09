@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { MarketingAbstractBand } from "@/components/marketing/MarketingAbstractBand";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   DUE_DILIGENCE_CORPORATE_IDENTITY,
@@ -240,7 +241,7 @@ export function DueDiligencePageSections() {
         </div>
       </section>
 
-      <section className="overflow-x-clip border-y border-white/10 bg-[#001a3d] py-14 text-white lg:py-20">
+      <MarketingAbstractBand className="overflow-x-clip border-y border-white/10 py-14 lg:py-20">
         <div className="container-page min-w-0 space-y-14">
           <Reveal>
             <p className="text-xs font-semibold tracking-[0.22em] text-[#d4a84b] uppercase">SWIFT</p>
@@ -339,7 +340,7 @@ export function DueDiligencePageSections() {
             </ol>
           </div>
         </div>
-      </section>
+      </MarketingAbstractBand>
 
       <section id="request-verification" className="relative scroll-mt-24 overflow-hidden py-16 text-white lg:py-20">
         <Image

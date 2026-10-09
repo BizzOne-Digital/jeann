@@ -1,4 +1,5 @@
 import { AGRICULTURE_IMAGES } from "@/lib/content/agriculture-images";
+import { RESOURCES_PAGE_IMAGES } from "@/lib/content/resources-page-images";
 import { LOGISTICS_IMAGES } from "@/lib/content/logistics-images";
 import { OFFICE_HERO_IMAGES } from "@/lib/content/office-hero-images";
 import { PACKAGING_IMAGES } from "@/lib/content/packaging-images";
@@ -39,7 +40,7 @@ export const PAGE_HERO_IMAGES: Record<PageHeroImageKey, PageHeroImage> = {
   },
   about: OFFICE_HERO_IMAGES.about,
   products: AGRICULTURE_IMAGES.greenGrainField,
-  resources: AGRICULTURE_IMAGES.resourcesHero,
+  resources: RESOURCES_PAGE_IMAGES.heroBanking,
   contact: {
     src: "/images/hero-reference.png",
     alt: "Finekarts trade desk and buyer enquiry support",
