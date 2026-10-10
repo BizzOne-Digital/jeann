@@ -32,3 +32,10 @@ export const MARKETING_HERO_SECTION_CLASS = `relative w-full max-w-full overflow
 
 export const MARKETING_HERO_INNER_CLASS =
   "container-page relative flex min-h-[min(88svh,720px)] flex-col justify-center pb-16 pt-[6rem] lg:pb-20 lg:pt-[6.5rem]";
+
+/** Inner pages (e.g. Insights) — shorter hero band, closer to home video strip proportions */
+export const MARKETING_HERO_COMPACT_SECTION_CLASS =
+  "relative w-full max-w-full overflow-hidden min-h-[min(52svh,520px)]";
+
+export const MARKETING_HERO_COMPACT_INNER_CLASS =
+  "container-page relative flex min-h-[min(52svh,520px)] flex-col justify-center pb-10 pt-[5.75rem] lg:pb-12 lg:pt-[6.25rem]";

@@ -8,6 +8,8 @@ import {
   HERO_DARK_OVERLAY_BOTTOM,
   HERO_DARK_OVERLAY_WASH,
   HERO_PAGE_OVERLAY_HORIZONTAL,
+  MARKETING_HERO_COMPACT_INNER_CLASS,
+  MARKETING_HERO_COMPACT_SECTION_CLASS,
   MARKETING_HERO_INNER_CLASS,
   MARKETING_HERO_SECTION_CLASS,
 } from "@/lib/marketing/hero-layout";
@@ -37,6 +39,8 @@ type Props = {
   priority?: boolean;
   /** YouTube URL or video ID — optional background video over the hero image. */
   youtubeVideoId?: string;
+  /** Shorter hero — less vertical scroll on dense pages */
+  size?: "default" | "compact";
 };
 
 export function PageHero({
@@ -52,7 +56,11 @@ export function PageHero({
   backgroundLayout = "default",
   priority = true,
   youtubeVideoId,
+  size = "default",
 }: Props) {
+  const compact = size === "compact";
+  const sectionClass = compact ? MARKETING_HERO_COMPACT_SECTION_CLASS : MARKETING_HERO_SECTION_CLASS;
+  const innerClass = compact ? MARKETING_HERO_COMPACT_INNER_CLASS : MARKETING_HERO_INNER_CLASS;
   const resolvedImageSrc = resolveImageSrc(imageSrc);
   const uploadImage = isStoredUploadUrl(resolvedImageSrc);
   const light = tone === "light";
@@ -60,7 +68,7 @@ export function PageHero({
 
   return (
     <section
-      className={`${MARKETING_HERO_SECTION_CLASS} ${
+      className={`${sectionClass} ${
         light ? "bg-[var(--cream)] text-[var(--ink)]" : "bg-[var(--navy)] text-white"
       }`}
     >
@@ -110,7 +118,7 @@ export function PageHero({
         />
       )}
 
-      <div className={MARKETING_HERO_INNER_CLASS}>
+      <div className={innerClass}>
         <div className="min-w-0 max-w-xl lg:max-w-2xl">
           <Reveal>
             <p
@@ -128,7 +136,7 @@ export function PageHero({
             immediate
             className={`mt-4 break-words font-semibold leading-tight tracking-tight ${
               light ? "text-[var(--navy)]" : ""
-            } text-[1.75rem] sm:text-4xl lg:text-[2.85rem]`}
+            } ${compact ? "text-[1.65rem] sm:text-3xl lg:text-[2.35rem]" : "text-[1.75rem] sm:text-4xl lg:text-[2.85rem]"}`}
           />
 
           <Reveal delay={0.12}>

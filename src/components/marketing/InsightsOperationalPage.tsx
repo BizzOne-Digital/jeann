@@ -48,7 +48,7 @@ function SectionHeading({
       {n != null ? (
         <p className="text-xs font-bold tracking-[0.24em] text-[#c88e4a] uppercase">Section {n}</p>
       ) : null}
-      <h2 className="mt-2 text-2xl font-semibold text-[#001a3d] sm:text-3xl lg:text-4xl">{title}</h2>
+      <h2 className="mt-2 text-2xl font-semibold text-[#001a3d] sm:text-3xl">{title}</h2>
       {lead ? (
         <p className="mt-4 max-w-3xl text-sm leading-relaxed text-[#555555] sm:text-base">{lead}</p>
       ) : null}
@@ -152,7 +152,7 @@ export function InsightsOperationalPage() {
               lead={INSIGHTS_ARCHITECTURE.lead}
             />
           </Reveal>
-          <div className="mt-10 grid gap-10 lg:grid-cols-2 lg:items-start">
+          <div className="mt-8 grid gap-8 lg:grid-cols-2 lg:items-start">
             <LifecycleFunnel />
             <LogisticsPairedRow image={INSIGHTS_SECTION_IMAGES.architecture} className="lg:sticky lg:top-28">
               <p className="text-xs font-semibold tracking-[0.18em] text-[#c88e4a] uppercase">
@@ -197,7 +197,7 @@ export function InsightsOperationalPage() {
             />
           </Reveal>
           <ProtocolPipeline />
-          <div className="mt-12 grid gap-6 lg:grid-cols-2 lg:items-stretch lg:gap-8">
+          <div className="mt-8 grid gap-5 lg:grid-cols-2 lg:items-stretch lg:gap-6">
             <div className="flex flex-col gap-4">
               {INSIGHTS_PROTOCOL.tiers.map((tier, i) => (
                 <Reveal key={tier.n} delay={i * 0.05} variant="right" className="flex-1">
@@ -215,8 +215,8 @@ export function InsightsOperationalPage() {
                 </Reveal>
               ))}
             </div>
-            <Reveal variant="left" delay={0.08} className="flex min-h-[320px] flex-col gap-4 lg:min-h-0">
-              <div className="relative min-h-[150px] flex-1 overflow-hidden rounded-xl border border-[#d5d0c8] shadow-md">
+            <Reveal variant="left" delay={0.08} className="flex min-h-[220px] flex-col gap-3 lg:min-h-0">
+              <div className="relative min-h-[100px] flex-1 overflow-hidden rounded-xl border border-[#d5d0c8] shadow-md sm:min-h-[120px]">
                 <Image
                   src={INSIGHTS_SECTION_IMAGES.protocolLabPrimary.src}
                   alt={INSIGHTS_SECTION_IMAGES.protocolLabPrimary.alt}
@@ -226,7 +226,7 @@ export function InsightsOperationalPage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#071525]/35 via-transparent to-transparent" />
               </div>
-              <div className="relative min-h-[150px] flex-1 overflow-hidden rounded-xl border border-[#d5d0c8] shadow-md">
+              <div className="relative min-h-[100px] flex-1 overflow-hidden rounded-xl border border-[#d5d0c8] shadow-md sm:min-h-[120px]">
                 <Image
                   src={INSIGHTS_SECTION_IMAGES.protocolLabSecondary.src}
                   alt={INSIGHTS_SECTION_IMAGES.protocolLabSecondary.alt}
@@ -241,7 +241,7 @@ export function InsightsOperationalPage() {
         </div>
       </section>
 
-      <MarketingAbstractBand className="border-y border-white/10 py-14 lg:py-16">
+      <MarketingAbstractBand className="border-y border-white/10 py-10 lg:py-12">
         <div className={INSIGHTS_VALIDATION_WIDTH}>
           <Reveal>
             <SectionHeading
@@ -263,7 +263,7 @@ export function InsightsOperationalPage() {
         </div>
         <div className="mt-10 w-full px-4 sm:px-6 lg:px-8">
           <MotionImageFrame>
-            <div className="relative mx-auto aspect-[21/8] w-full max-w-[min(100%,1600px)] max-h-[min(38vw,22rem)] overflow-hidden rounded-lg border border-white/15 sm:max-h-[20rem] lg:max-h-[22rem]">
+            <div className="relative mx-auto aspect-[21/8] w-full max-w-[min(100%,1600px)] max-h-[min(32vw,17rem)] overflow-hidden rounded-lg border border-white/15 sm:max-h-[16rem] lg:max-h-[18rem]">
               <Image
                 src={INSIGHTS_SECTION_IMAGES.validationOverview.src}
                 alt={INSIGHTS_SECTION_IMAGES.validationOverview.alt}
@@ -285,7 +285,7 @@ export function InsightsOperationalPage() {
       </MarketingAbstractBand>
 
       <section className="marketing-section bg-[var(--mist)]">
-        <div className={`${INSIGHTS_VALIDATION_WIDTH} space-y-10`}>
+        <div className={`${INSIGHTS_VALIDATION_WIDTH} space-y-7`}>
           {INSIGHTS_VALIDATION.domains.map((domain, index) => {
             const image = DOMAIN_IMAGES[domain.id];
             const reversed = index % 2 === 1;
@@ -379,7 +379,7 @@ export function InsightsOperationalPage() {
               className="[&_h2]:text-white [&_p]:text-white/70"
             />
           </Reveal>
-          <div className="mt-10 grid gap-6 lg:grid-cols-2">
+          <div className="mt-8 grid gap-5 lg:grid-cols-2">
             {INSIGHTS_SOP.phases.map((phase, i) => (
               <Reveal key={phase.title} delay={i * 0.08} variant="up" bounce>
                 <article className="h-full rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">

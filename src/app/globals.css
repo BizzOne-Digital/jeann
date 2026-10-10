@@ -333,6 +333,16 @@ a {
   overflow-x: clip;
 }
 
+/* Insights — tighter rhythm (shorter hero + less scroll) */
+#finekarts-site-root .insights-page-density .marketing-section {
+  padding-block: clamp(1.65rem, 2.8vw, 2.35rem);
+}
+
+#finekarts-site-root .insights-page-density .marketing-section :where(h2) {
+  font-size: clamp(1.35rem, 2.4vw, 1.875rem);
+  line-height: 1.2;
+}
+
 /* Scroll-driven section fade removed for calmer, simpler page rhythm */
 
 @keyframes marketing-section-enter {

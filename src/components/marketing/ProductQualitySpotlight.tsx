@@ -8,18 +8,21 @@ import {
 export function ProductQualitySpotlight({
   spotlights,
   variant = "navy",
+  compact = false,
 }: {
   spotlights: readonly ProductSpotlight[];
   variant?: "navy" | "light";
+  compact?: boolean;
 }) {
   const isNavy = variant === "navy";
+  const pad = compact ? "py-8 lg:py-9" : "py-12 lg:py-14";
 
   return (
     <section
       className={
         isNavy
-          ? "border-y border-[#0d2844] bg-[#001a3d] py-12 text-white lg:py-14"
-          : "border-y border-[var(--line)] bg-[var(--mist)] py-12 lg:py-14"
+          ? `border-y border-[#0d2844] bg-[#001a3d] text-white ${pad}`
+          : `border-y border-[var(--line)] bg-[var(--mist)] ${pad}`
       }
     >
       <div className="container-page">

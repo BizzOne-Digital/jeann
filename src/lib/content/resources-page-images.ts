@@ -1,8 +1,12 @@
 /** Each image used at most once on `/resources` (hero is CMS `resourcesHero`). */
 export const RESOURCES_PAGE_IMAGES = {
   banking: {
-    src: "/images/resources/spa-banking-handshake.jpg",
-    alt: "Business handshake — commodity sale and purchase agreement context",
+    src: "/images/resources/banking-spa-lab-inspection.png",
+    alt: "Laboratory inspection of a commodity sample — evidence for banking and contract programmes",
+  },
+  bankingPanelBackground: {
+    src: "/images/resources/banking-spa-lab-inspection.png",
+    alt: "",
   },
   introAbstract: {
     src: "/images/resources/intro-abstract-background.jpg",

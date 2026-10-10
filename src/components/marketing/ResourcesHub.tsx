@@ -22,6 +22,7 @@ import {
   TRANSACTION_PROGRAMME_TYPES,
 } from "@/lib/content/payment-terms";
 import {
+  RESOURCES_BANKING_PANEL_CALLOUTS,
   RESOURCES_DOCUMENT_GROUPS,
   RESOURCES_PILLARS,
   RESOURCES_RELATED_LINKS,
@@ -168,48 +169,61 @@ function PillarIcon({ type }: { type: string }) {
   );
 }
 
-function BankingPanel() {
-  return (
-    <div className="grid gap-8 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-start lg:gap-12">
-      <div className="flex flex-col gap-6">
-        <div className="relative aspect-[4/3] max-h-[min(72vw,22rem)] overflow-hidden rounded-lg border border-[#d5d0c8] lg:max-h-[20rem]">
-          <Image
-            src={RESOURCES_PAGE_IMAGES.banking.src}
-            alt={RESOURCES_PAGE_IMAGES.banking.alt}
-            fill
-            className="object-cover"
-            sizes="(max-width: 1024px) 100vw, 420px"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--footer-bg)]/92 via-[var(--footer-bg)]/40 to-[#c88e4a]/15" />
-          <div className="absolute right-0 bottom-0 left-0 p-6 text-white">
-            <p className="text-xs font-semibold tracking-[0.2em] text-[#d4a84b] uppercase">
-              Illustrative only
-            </p>
-            <p className="mt-2 text-sm leading-relaxed text-white/90">
-              Adapt all SPA banking wording to jurisdiction, bank requirements, and your commercial
-              schedule.
-            </p>
-          </div>
-        </div>
+function BankingPanelCallout({
+  title,
+  body,
+  href,
+}: {
+  title: string;
+  body: string;
+  href: string | null;
+}) {
+  const boxClass =
+    "flex flex-col rounded-lg border border-white/20 bg-[#001a3d]/55 p-4 shadow-sm backdrop-blur-sm sm:p-5";
 
-        <Link
-          href="/dispute-resolution"
-          className="focus-ring group flex h-full min-h-[11rem] flex-col rounded-lg border border-[#d5d0c8] bg-[#001a3d] p-6 text-white shadow-sm transition hover:border-[#c88e4a]/50 hover:shadow-md"
-        >
-          <p className="text-xs font-semibold tracking-[0.18em] text-[#d4a84b] uppercase">
-            Related programme
-          </p>
-          <h3 className="mt-2 text-lg font-semibold text-white group-hover:text-[#e8bc5c]">
-            Dispute resolution
-          </h3>
-          <p className="mt-3 flex-1 text-sm leading-relaxed text-white/78">
-            When specifications, documents, or payment timing diverge from the signed SPA — roles,
-            evidence, and escalation paths buyers should align on early.
-          </p>
-          <span className="mt-4 text-sm font-semibold text-[#d4a84b] group-hover:text-[#e8bc5c]">
-            View dispute resolution →
-          </span>
-        </Link>
+  if (href) {
+    return (
+      <Link href={href} className={cn("focus-ring group transition hover:border-[#c88e4a]/55 hover:bg-[#001a3d]/70", boxClass)}>
+        <p className="text-xs font-semibold tracking-[0.16em] text-[#d4a84b] uppercase">{title}</p>
+        <p className="mt-2 flex-1 text-sm leading-relaxed text-white/88">{body}</p>
+        <span className="mt-3 text-sm font-semibold text-[#e8bc5c] group-hover:text-white">
+          View dispute resolution →
+        </span>
+      </Link>
+    );
+  }
+
+  return (
+    <div className={boxClass}>
+      <p className="text-xs font-semibold tracking-[0.16em] text-[#d4a84b] uppercase">{title}</p>
+      <p className="mt-2 text-sm leading-relaxed text-white/88">{body}</p>
+    </div>
+  );
+}
+
+function BankingPanel() {
+  const panelBg = RESOURCES_PAGE_IMAGES.bankingPanelBackground;
+
+  return (
+    <div className="grid gap-8 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-stretch lg:gap-12">
+      <div className="relative min-h-[26rem] overflow-hidden rounded-lg border border-[#d5d0c8] lg:min-h-[32rem]">
+        <Image
+          src={panelBg.src}
+          alt={RESOURCES_PAGE_IMAGES.banking.alt}
+          fill
+          className="object-cover object-center"
+          sizes="(max-width: 1024px) 100vw, 440px"
+        />
+        <div className="absolute inset-0 bg-[var(--footer-bg)]/72" aria-hidden />
+        <div
+          className="absolute inset-0 bg-gradient-to-br from-[var(--footer-bg)]/88 via-[var(--footer-bg)]/55 to-[#c88e4a]/15"
+          aria-hidden
+        />
+        <div className="relative flex h-full flex-col justify-center gap-3 p-5 sm:gap-4 sm:p-6">
+          {RESOURCES_BANKING_PANEL_CALLOUTS.map((item) => (
+            <BankingPanelCallout key={item.title} title={item.title} body={item.body} href={item.href} />
+          ))}
+        </div>
       </div>
 
       <div className="flex flex-col">

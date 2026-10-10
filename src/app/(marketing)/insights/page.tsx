@@ -18,6 +18,7 @@ export default async function InsightsPage() {
     <>
       <CmsPageHero
         pageSlug="insights"
+        size="compact"
         defaults={{
           brand: INSIGHTS_HERO.eyebrow,
           title: INSIGHTS_HERO.title,
@@ -26,8 +27,10 @@ export default async function InsightsPage() {
           secondaryCta: INSIGHTS_HERO.secondaryCta,
         }}
       />
-      <ProductQualitySpotlight spotlights={INSIGHTS_PAGE_SPOTLIGHTS} variant="navy" />
-      <InsightsOperationalPage />
+      <div className="insights-page-density">
+        <ProductQualitySpotlight spotlights={INSIGHTS_PAGE_SPOTLIGHTS} variant="navy" compact />
+        <InsightsOperationalPage />
+      </div>
     </>
   );
 }

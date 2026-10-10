@@ -12,6 +12,7 @@ type Props = {
   pageSlug: string;
   sectionId?: string;
   tone?: "dark" | "light";
+  size?: "default" | "compact";
   defaults: {
     brand?: string;
     title: string;
@@ -25,6 +26,7 @@ export async function CmsPageHero({
   pageSlug,
   sectionId = "hero",
   tone = "dark",
+  size = "default",
   defaults,
 }: Props) {
   const page = await getPublishedPage(pageSlug);
@@ -59,6 +61,7 @@ export async function CmsPageHero({
       youtubeVideoId={resolveMarketingHeroYoutube(fields)}
       primaryCta={primaryCta}
       secondaryCta={secondaryCta}
+      size={size}
     />
   );
 }

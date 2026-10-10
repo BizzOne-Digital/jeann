@@ -144,6 +144,25 @@ export const RESOURCES_DOCUMENT_GROUPS = [
   },
 ];
 
+/** Stacked callouts on the banking panel background (last item links to dispute resolution). */
+export const RESOURCES_BANKING_PANEL_CALLOUTS = [
+  {
+    title: "PSA banking clauses",
+    body: "Illustrative wording for documentary credits, confirmations, and payment timing — always adapted to jurisdiction and your bank.",
+    href: null,
+  },
+  {
+    title: "Programme & LC structures",
+    body: "How 12-month commodity schedules commonly align Irrevocable LC, SBLC backup, and transferable revolving lines when banks approve.",
+    href: null,
+  },
+  {
+    title: "DISPUTE RESOLUTION",
+    body: "When specifications, documents, or payment timing diverge from the signed SPA — roles, evidence, and escalation paths to align early.",
+    href: "/dispute-resolution",
+  },
+] as const;
+
 export const RESOURCES_TRADE_PRIORITY_LINKS = [
   {
     href: "/logistics",
