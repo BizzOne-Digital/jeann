@@ -50,10 +50,7 @@ export function CareerPageSections({
                 transition={{ duration: 0.4, delay: i * 0.08 }}
                 className="rounded-xl border border-[#d5d0c8] bg-white p-6 shadow-sm"
               >
-                <span className="text-xs font-bold tracking-[0.2em] text-[#c88e4a]">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <h3 className="mt-2 text-lg font-semibold text-[#001a3d]">{pillar.title}</h3>
+                <h3 className="text-lg font-semibold text-[#001a3d]">{pillar.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-[#555555]">{pillar.body}</p>
               </motion.article>
             ))}

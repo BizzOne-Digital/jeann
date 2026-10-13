@@ -123,8 +123,7 @@ function DivisionCard({
       className="group flex h-full flex-col overflow-hidden rounded-xl border border-[#d5d0c8] bg-white shadow-sm transition hover:border-[#c88e4a]/40 hover:shadow-lg"
     >
       <div className="border-b border-[#ebe6de] bg-gradient-to-br from-[#001a3d] to-[#0c2544] px-6 py-5 text-white">
-        <span className="text-xs font-bold tracking-[0.2em] text-[#d4a84b]">{division.n}</span>
-        <h3 className="mt-2 text-xl font-semibold">{division.title}</h3>
+        <h3 className="text-xl font-semibold">{division.title}</h3>
       </div>
       <div className="flex flex-1 flex-col p-6">
         <p className="text-sm leading-relaxed text-[#555555]">{division.intro}</p>

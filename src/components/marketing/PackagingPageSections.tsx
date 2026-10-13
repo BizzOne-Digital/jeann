@@ -42,13 +42,11 @@ function maritimeSubsectionToCard(id: string, sub: MaritimeDrySub | MaritimeLiqu
 }
 
 function SectionHeading({
-  n,
   title,
   example,
   lead,
   dark,
 }: {
-  n?: number;
   title: string;
   example?: string;
   lead?: string;
@@ -56,19 +54,9 @@ function SectionHeading({
 }) {
   return (
     <div>
-      {n != null ? (
-        <p
-          className={cn(
-            "text-xs font-bold tracking-[0.24em] uppercase",
-            dark ? "text-[#d4a84b]" : "text-[#c88e4a]",
-          )}
-        >
-          Section {n}
-        </p>
-      ) : null}
       <h2
         className={cn(
-          "mt-2 text-2xl font-semibold sm:text-3xl lg:text-4xl",
+          "text-2xl font-semibold sm:text-3xl lg:text-4xl",
           dark ? "text-white" : "text-[#001a3d]",
         )}
       >
@@ -96,8 +84,7 @@ function SubsectionCard({ item, index }: { item: PackagingSubsection; index: num
       transition={{ duration: 0.4, delay: index * 0.06 }}
       className="rounded-xl border border-[#d5d0c8] bg-white p-6 shadow-sm transition hover:border-[#c88e4a]/35 hover:shadow-md"
     >
-      <span className="text-xs font-bold tracking-[0.2em] text-[#c88e4a]">{item.letter}</span>
-      <h3 className="mt-2 text-lg font-semibold text-[#001a3d]">{item.title}</h3>
+      <h3 className="text-lg font-semibold text-[#001a3d]">{item.title}</h3>
       {item.description ? (
         <p className="mt-3 text-sm leading-relaxed text-[#555555]">{item.description}</p>
       ) : null}
@@ -192,7 +179,6 @@ export function PackagingPageSections() {
         <div className="container-page space-y-12">
           <Reveal>
             <SectionHeading
-              n={PACKAGING_DRY_SOFT.n}
               title={PACKAGING_DRY_SOFT.title}
               example={PACKAGING_DRY_SOFT.example}
               lead={PACKAGING_DRY_SOFT.lead}
@@ -219,7 +205,6 @@ export function PackagingPageSections() {
         <div className="container-page space-y-12">
           <Reveal>
             <SectionHeading
-              n={PACKAGING_LIQUID.n}
               title={PACKAGING_LIQUID.title}
               example={PACKAGING_LIQUID.example}
               lead={PACKAGING_LIQUID.lead}
@@ -246,7 +231,6 @@ export function PackagingPageSections() {
         <div className="container-page space-y-10">
           <Reveal>
             <SectionHeading
-              n={PACKAGING_HARD.n}
               title={PACKAGING_HARD.title}
               example={PACKAGING_HARD.example}
               lead={PACKAGING_HARD.lead}

@@ -142,10 +142,7 @@ function ServiceAccordion({ services }: { services: VerificationService[] }) {
               onClick={() => setOpenIndex(open ? null : i)}
             >
               <div>
-                <p className="text-[10px] font-bold tracking-[0.18em] text-[#c88e4a] uppercase">
-                  Service {service.n}
-                </p>
-                <span className="mt-1 block text-sm font-semibold text-[#001a3d] sm:text-base">
+                <span className="block text-sm font-semibold text-[#001a3d] sm:text-base">
                   {service.title}
                 </span>
               </div>
@@ -316,14 +313,9 @@ function RiskPanel() {
           </p>
           <ol className="mt-4 space-y-3">
             {frameworkSteps.map((step) => (
-              <li key={step.step} className="flex gap-3 text-sm">
-                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#071525] text-[10px] font-bold text-[#d4a84b]">
-                  {step.step}
-                </span>
-                <div>
-                  <p className="font-semibold text-[#001a3d]">{step.title}</p>
-                  <p className="mt-0.5 text-xs leading-relaxed text-[#555555]">{step.text}</p>
-                </div>
+              <li key={step.step} className="text-sm">
+                <p className="font-semibold text-[#001a3d]">{step.title}</p>
+                <p className="mt-0.5 text-xs leading-relaxed text-[#555555]">{step.text}</p>
               </li>
             ))}
           </ol>
@@ -357,15 +349,10 @@ function CompliancePanel() {
         <div className="rounded-lg border border-[#d5d0c8] bg-white p-5">
           <p className="text-xs font-semibold tracking-[0.16em] text-[#c88e4a] uppercase">Report sections</p>
           <ol className="mt-4 max-h-64 space-y-2 overflow-y-auto pr-1">
-            {reportSections.map((section, index) => (
-              <li key={section.title} className="flex gap-3 text-sm">
-                <span className="shrink-0 font-bold tabular-nums text-[#c88e4a]">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <div>
-                  <p className="font-medium text-[#001a3d]">{section.title}</p>
-                  <p className="text-xs text-[#666666]">{section.text}</p>
-                </div>
+            {reportSections.map((section) => (
+              <li key={section.title} className="text-sm">
+                <p className="font-medium text-[#001a3d]">{section.title}</p>
+                <p className="text-xs text-[#666666]">{section.text}</p>
               </li>
             ))}
           </ol>

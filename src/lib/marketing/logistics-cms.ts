@@ -52,8 +52,12 @@ function parseShippingModes(lines: string[]) {
 function parseContractSteps(lines: string[]) {
   return lines.map((line) => {
     const match = line.match(/^(\d+)\.\s*(.+?)\s*—\s*(.+)$/);
-    if (!match) return { step: 0, title: line, text: "" };
-    return { step: Number(match[1]), title: match[2], text: match[3] };
+    if (!match) {
+      const title = line.replace(/^\d+\s*[-–—.]\s*/i, "").trim();
+      return { step: 0, title, text: "" };
+    }
+    const title = match[2].replace(/^\d+\s*[-–—.]\s*/i, "").trim();
+    return { step: Number(match[1]), title, text: match[3] };
   });
 }
 

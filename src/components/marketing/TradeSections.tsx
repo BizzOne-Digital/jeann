@@ -49,22 +49,18 @@ export function TradeHero() {
 export function TradeProcess() {
   const steps = [
     {
-      n: "01",
       title: "Submit Request",
       text: "Share product, quantity, destination, and preferred Incoterms through the RFQ form.",
     },
     {
-      n: "02",
       title: "Review & Quote",
       text: "Trade desk reviews fit against supplier programmes and workable logistics structures.",
     },
     {
-      n: "03",
       title: "Contract & Documentation",
       text: "Agreed PSA/SPA and banking wording proceed only after mutual confirmation.",
     },
     {
-      n: "04",
       title: "Inspection & Delivery",
       text: "Inspection, packaging, and shipment milestones follow the signed contract.",
     },
@@ -84,14 +80,10 @@ export function TradeProcess() {
           </h2>
         </Reveal>
         <div className="relative mt-14 grid gap-10 md:grid-cols-4 md:gap-6">
-          <div className="pointer-events-none absolute top-8 right-[12%] left-[12%] hidden h-px bg-white/15 md:block" />
           {steps.map((step, i) => (
-            <Reveal key={step.n} delay={0.1 + i * 0.06}>
+            <Reveal key={step.title} delay={0.1 + i * 0.06}>
               <div className="relative text-center">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border-2 border-[#d4a84b] bg-[#0a1628] text-sm font-bold text-[#d4a84b]">
-                  {step.n}
-                </div>
-                <h3 className="mt-5 font-semibold text-white">{step.title}</h3>
+                <h3 className="font-semibold text-white">{step.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-white/60">{step.text}</p>
               </div>
             </Reveal>
@@ -123,8 +115,8 @@ export function TradePathways() {
               "Binding terms appear only in agreed PSA/SPA and payment instruments such as LC.",
             ].map((item, i) => (
               <Reveal key={item} delay={0.08 + i * 0.04}>
-                <li className="flex gap-4 border-b border-[#d5d0c8] py-4 text-sm leading-relaxed text-[#555555]">
-                  <span className="font-semibold text-[#c88e4a]">0{i + 1}</span>
+                <li className="flex gap-3 border-b border-[#d5d0c8] py-4 text-sm leading-relaxed text-[#555555]">
+                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#c88e4a]" aria-hidden />
                   <span>{item}</span>
                 </li>
               </Reveal>

@@ -20,6 +20,7 @@ import {
 import { LOGISTICS_HERO } from "@/lib/content/logistics-content";
 import { getPublishedPage } from "@/lib/content/page-content";
 import { buildLogisticsContent, LOGISTICS_CMS_SECTION_IDS } from "@/lib/marketing/logistics-cms";
+import { stripLeadingMarker } from "@/lib/marketing/strip-leading-marker";
 
 export async function generateMetadata(): Promise<Metadata> {
   return cmsPageMetadata("logistics", {
@@ -168,12 +169,10 @@ export default async function LogisticsPage() {
               <h2 className="text-2xl font-semibold text-[#001a3d]">{content.portChain.title}</h2>
               <p className="mt-3 text-base text-[#555555]">{content.portChain.lead}</p>
               <ol className="mt-8 space-y-3">
-                {content.portChain.steps.map((step, index) => (
-                  <li key={step} className="flex items-start gap-4">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#071525] text-xs font-semibold text-[#d4a84b]">
-                      {index + 1}
-                    </span>
-                    <span className="pt-1 text-sm text-[#555555]">{step}</span>
+                {content.portChain.steps.map((step) => (
+                  <li key={step} className="flex items-start gap-3 text-sm text-[#555555]">
+                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#c88e4a]" aria-hidden />
+                    <span>{step}</span>
                   </li>
                 ))}
               </ol>
@@ -317,7 +316,7 @@ export default async function LogisticsPage() {
               className="rounded-lg border border-white/15 bg-[#071525]/45 p-5 shadow-lg backdrop-blur-md"
             >
               <p className="text-xs font-semibold tracking-[0.2em] text-[#d4a84b] uppercase">
-                {String(step.step).padStart(2, "0")} — {step.title}
+                {stripLeadingMarker(step.title)}
               </p>
               <p className="mt-2 text-sm leading-relaxed text-white/85">{step.text}</p>
             </li>

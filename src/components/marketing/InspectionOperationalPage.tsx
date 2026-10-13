@@ -21,7 +21,6 @@ import { MotionImageFrame } from "@/components/motion/MotionImageFrame";
 import { Reveal } from "@/components/motion/Reveal";
 
 function TypeCard({
-  n,
   title,
   purpose,
   focus,
@@ -30,7 +29,6 @@ function TypeCard({
   index,
   equalHeight = false,
 }: {
-  n: number;
   title: string;
   purpose: string;
   focus: string;
@@ -51,8 +49,7 @@ function TypeCard({
         equalHeight ? " h-full" : ""
       }`}
     >
-      <span className="text-xs font-bold tracking-[0.2em] text-[#c88e4a]">{String(n).padStart(2, "0")}</span>
-      <h3 className="mt-2 text-lg font-semibold text-[#001a3d]">{title}</h3>
+      <h3 className="text-lg font-semibold text-[#001a3d]">{title}</h3>
       <p className="mt-3 text-sm leading-relaxed text-[#555555]">
         <span className="font-semibold text-[#001a3d]">Purpose: </span>
         {purpose}
@@ -107,7 +104,7 @@ export function InspectionOperationalPage() {
           </Reveal>
           <div className="grid gap-6 lg:grid-cols-3 lg:items-stretch">
             {INSPECTIONS_TIMING_TYPES.items.map((item, i) => (
-              <TypeCard key={item.title} {...item} index={i} equalHeight />
+              <TypeCard key={item.title} title={item.title} purpose={item.purpose} focus={item.focus} benefit={item.benefit} index={i} equalHeight />
             ))}
           </div>
         </div>
@@ -122,7 +119,6 @@ export function InspectionOperationalPage() {
             {INSPECTIONS_METHOD_TYPES.items.map((item, i) => (
               <LogisticsPairedRow key={item.title} image={METHOD_IMAGES[i]} reversed={i % 2 === 1}>
                 <TypeCard
-                  n={item.n}
                   title={item.title}
                   purpose={item.purpose}
                   focus={item.focus}
@@ -146,8 +142,7 @@ export function InspectionOperationalPage() {
               {INSPECTIONS_SCOPE_TYPES.items.map((item, i) => (
                 <Reveal key={item.title} delay={i * 0.06} variant="right">
                   <article className="rounded-xl border border-[#d5d0c8] bg-white p-6 shadow-sm">
-                    <span className="text-xs font-bold tracking-[0.2em] text-[#c88e4a]">{item.n}</span>
-                    <h3 className="mt-2 text-lg font-semibold text-[#001a3d]">{item.title}</h3>
+                    <h3 className="text-lg font-semibold text-[#001a3d]">{item.title}</h3>
                     <p className="mt-3 text-sm leading-relaxed text-[#555555]">{item.lead}</p>
                     <ul className="mt-4 space-y-2">
                       {item.bullets.map((b) => (
@@ -234,8 +229,7 @@ export function InspectionOperationalPage() {
             {INSPECTIONS_COMMODITY_VALIDATION.areas.map((area, i) => (
               <Reveal key={area.title} delay={i * 0.05} variant="up" bounce>
                 <article className="h-full rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-                  <span className="text-xs font-bold tracking-[0.2em] text-[#d4a84b]">{area.n}</span>
-                  <h3 className="mt-2 text-lg font-semibold">{area.title}</h3>
+                  <h3 className="text-lg font-semibold">{area.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-white/75">{area.lead}</p>
                   <ul className="mt-4 space-y-2">
                     {area.bullets.map((b) => (

@@ -11,6 +11,7 @@ import {
 } from "@/components/marketing/LogisticsVisuals";
 import { MarketingStorySection } from "@/components/marketing/MarketingStorySection";
 import { Reveal } from "@/components/motion/Reveal";
+import { stripLeadingMarker } from "@/lib/marketing/strip-leading-marker";
 import {
   LOGISTICS_PAGE_SECTION_IMAGES,
   LOGISTICS_SHIP_TRUCK_BAND,
@@ -162,12 +163,10 @@ export function LogisticsPageSections({ content }: { content: BuiltLogisticsCont
               <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">{content.portChain.title}</h2>
               <p className="mt-3 text-base text-[#555555]">{content.portChain.lead}</p>
               <ol className="mt-8 space-y-3">
-                {content.portChain.steps.map((step, index) => (
-                  <li key={step} className="flex items-start gap-4">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#071525] text-xs font-semibold text-[#d4a84b]">
-                      {index + 1}
-                    </span>
-                    <span className="pt-1 text-sm text-[#555555]">{step}</span>
+                {content.portChain.steps.map((step) => (
+                  <li key={step} className="flex items-start gap-3 text-sm text-[#555555]">
+                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#c88e4a]" aria-hidden />
+                    <span>{step}</span>
                   </li>
                 ))}
               </ol>
@@ -306,7 +305,7 @@ export function LogisticsPageSections({ content }: { content: BuiltLogisticsCont
                 className="list-none rounded-lg border border-white/15 bg-[#071525]/45 p-5 shadow-lg backdrop-blur-md transition hover:border-[#d4a84b]/40"
               >
                 <p className="text-xs font-semibold tracking-[0.2em] text-[#d4a84b] uppercase">
-                  {String(step.step).padStart(2, "0")} — {step.title}
+                  {stripLeadingMarker(step.title)}
                 </p>
                 <p className="mt-2 text-sm leading-relaxed text-white/85">{step.text}</p>
               </li>

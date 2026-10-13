@@ -33,22 +33,17 @@ const DOMAIN_IMAGES: Partial<Record<string, { src: string; alt: string }>> = {
 };
 
 function SectionHeading({
-  n,
   title,
   lead,
   className = "",
 }: {
-  n?: number;
   title: string;
   lead?: string;
   className?: string;
 }) {
   return (
     <div className={className}>
-      {n != null ? (
-        <p className="text-xs font-bold tracking-[0.24em] text-[#c88e4a] uppercase">Section {n}</p>
-      ) : null}
-      <h2 className="mt-2 text-2xl font-semibold text-[#001a3d] sm:text-3xl">{title}</h2>
+      <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">{title}</h2>
       {lead ? (
         <p className="mt-4 max-w-3xl text-sm leading-relaxed text-[#555555] sm:text-base">{lead}</p>
       ) : null}
@@ -147,7 +142,6 @@ export function InsightsOperationalPage() {
         <div className="container-page">
           <Reveal>
             <SectionHeading
-              n={INSIGHTS_ARCHITECTURE.n}
               title={INSIGHTS_ARCHITECTURE.title}
               lead={INSIGHTS_ARCHITECTURE.lead}
             />
@@ -191,7 +185,6 @@ export function InsightsOperationalPage() {
         <div className="container-page">
           <Reveal>
             <SectionHeading
-              n={INSIGHTS_PROTOCOL.n}
               title={INSIGHTS_PROTOCOL.title}
               lead={INSIGHTS_PROTOCOL.lead}
             />
@@ -200,17 +193,10 @@ export function InsightsOperationalPage() {
           <div className="mt-8 grid gap-5 lg:grid-cols-2 lg:items-stretch lg:gap-6">
             <div className="flex flex-col gap-4">
               {INSIGHTS_PROTOCOL.tiers.map((tier, i) => (
-                <Reveal key={tier.n} delay={i * 0.05} variant="right" className="flex-1">
-                  <article className="flex h-full gap-4 rounded-xl border border-[#d5d0c8] bg-[#faf9f6] p-5 sm:p-6">
-                    <span
-                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#001a3d] text-sm font-bold text-[#d4a84b]"
-                    >
-                      {tier.n}
-                    </span>
-                    <div>
-                      <h3 className="font-semibold text-[#001a3d]">{tier.title}</h3>
-                      <p className="mt-2 text-sm leading-relaxed text-[#555555]">{tier.body}</p>
-                    </div>
+                <Reveal key={tier.title} delay={i * 0.05} variant="right" className="flex-1">
+                  <article className="h-full rounded-xl border border-[#d5d0c8] bg-[#faf9f6] p-5 sm:p-6">
+                    <h3 className="font-semibold text-[#001a3d]">{tier.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-[#555555]">{tier.body}</p>
                   </article>
                 </Reveal>
               ))}
@@ -245,7 +231,6 @@ export function InsightsOperationalPage() {
         <div className={INSIGHTS_VALIDATION_WIDTH}>
           <Reveal>
             <SectionHeading
-              n={INSIGHTS_VALIDATION.n}
               title={INSIGHTS_VALIDATION.title}
               lead={INSIGHTS_VALIDATION.lead}
               className="[&_h2]:text-white [&_p]:max-w-none [&_p]:text-white/70"
@@ -326,7 +311,6 @@ export function InsightsOperationalPage() {
         <div className="container-page min-w-0">
           <Reveal>
             <SectionHeading
-              n={INSIGHTS_CONTAINMENT_MATRIX.n}
               title={INSIGHTS_CONTAINMENT_MATRIX.title}
               lead={INSIGHTS_CONTAINMENT_MATRIX.lead}
             />
@@ -373,7 +357,6 @@ export function InsightsOperationalPage() {
         <div className="container-page">
           <Reveal>
             <SectionHeading
-              n={INSIGHTS_SOP.n}
               title={INSIGHTS_SOP.title}
               lead={INSIGHTS_SOP.lead}
               className="[&_h2]:text-white [&_p]:text-white/70"

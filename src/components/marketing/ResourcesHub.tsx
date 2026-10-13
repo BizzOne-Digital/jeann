@@ -38,10 +38,7 @@ function ProtectionBar({ value, label }: { value: number; label: string }) {
   const pct = (value / 5) * 100;
   return (
     <div>
-      <div className="flex items-center justify-between gap-2 text-xs">
-        <span className="font-medium text-[#888]">{label}</span>
-        <span className="tabular-nums text-[#001a3d]">{value}/5</span>
-      </div>
+      <p className="text-xs font-medium text-[#888]">{label}</p>
       <div
         className="mt-1.5 h-2 overflow-hidden rounded-full bg-[#ebe7e0]"
         role="meter"

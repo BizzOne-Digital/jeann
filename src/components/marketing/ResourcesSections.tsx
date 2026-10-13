@@ -197,15 +197,7 @@ export function ResourcesDocumentOverview({ introBody }: { introBody: string }) 
           {DOCUMENT_GROUPS.map((group, gi) => (
             <Reveal key={group.title} delay={gi * 0.04}>
               <article className="flex h-full flex-col marketing-box rounded-lg p-6 sm:p-7">
-                <div className="flex items-start gap-4">
-                  <span
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#001a3d] text-xs font-bold text-[#d4a84b]"
-                    aria-hidden
-                  >
-                    {group.icon}
-                  </span>
-                  <h3 className="pt-1.5 text-lg font-semibold text-[#001a3d]">{group.title}</h3>
-                </div>
+                <h3 className="text-lg font-semibold text-[#001a3d]">{group.title}</h3>
                 <ul className="mt-5 space-y-4">
                   {group.items.map((item) => (
                     <li key={item.name} className="border-t border-[#e4e0d8] pt-4 first:border-0 first:pt-0">

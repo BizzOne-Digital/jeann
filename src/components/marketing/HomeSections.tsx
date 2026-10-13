@@ -514,22 +514,18 @@ export function SourcedResponsibly({
 export function ProcessTimeline() {
   const steps = [
     {
-      n: "01",
       title: "Submit Request",
       text: "Share product, quantity, destination, and preferred Incoterms through the RFQ form.",
     },
     {
-      n: "02",
       title: "Review & Quote",
       text: "Trade desk reviews fit, CIF or FOB structure, and bankable payment options.",
     },
     {
-      n: "03",
       title: "Contract & Documentation",
       text: "Agreed PSA/SPA and banking wording proceed only after mutual confirmation.",
     },
     {
-      n: "04",
       title: "Inspection & Delivery",
       text: "Quality and quantity confirmed before shipment when agreed; CIF insurance and documents align to the PSA.",
     },
@@ -544,14 +540,10 @@ export function ProcessTimeline() {
           </h2>
         </Reveal>
         <div className="relative mt-14 grid gap-8 md:grid-cols-4">
-          <div className="pointer-events-none absolute top-8 right-[12%] left-[12%] hidden h-px bg-[#c9d3dc] md:block" />
           {steps.map((step, i) => (
-            <Reveal key={step.n} delay={i * 0.06}>
+            <Reveal key={step.title} delay={i * 0.06}>
               <div className="relative text-center">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border-2 border-[#e89a2d] bg-white text-sm font-bold text-[#e89a2d]">
-                  {step.n}
-                </div>
-                <h3 className="mt-5 font-semibold text-[#0b1f33]">{step.title}</h3>
+                <h3 className="font-semibold text-[#0b1f33]">{step.title}</h3>
                 <p className="mt-2 text-base leading-relaxed text-stone">{step.text}</p>
               </div>
             </Reveal>

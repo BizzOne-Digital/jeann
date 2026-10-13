@@ -18,13 +18,10 @@ import { LogisticsPairedRow } from "@/components/marketing/LogisticsVisuals";
 import { MotionImageFrame } from "@/components/motion/MotionImageFrame";
 import { Reveal } from "@/components/motion/Reveal";
 
-function SectionLabel({ n, title }: { n?: number; title: string }) {
+function SectionLabel({ title }: { title: string }) {
   return (
     <div>
-      {n != null ? (
-        <p className="text-xs font-bold tracking-[0.24em] text-[#c88e4a] uppercase">Section {n}</p>
-      ) : null}
-      <h2 className="mt-2 text-2xl font-semibold text-[#001a3d] sm:text-3xl lg:text-4xl">{title}</h2>
+      <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl lg:text-4xl">{title}</h2>
     </div>
   );
 }
@@ -90,7 +87,7 @@ export function DueDiligencePageSections() {
       <section className="marketing-section bg-[#f3f1ec]">
         <div className="container-page min-w-0 space-y-8">
           <Reveal>
-            <SectionLabel n={DUE_DILIGENCE_CORPORATE_IDENTITY.n} title={DUE_DILIGENCE_CORPORATE_IDENTITY.title} />
+            <SectionLabel title={DUE_DILIGENCE_CORPORATE_IDENTITY.title} />
           </Reveal>
           <Reveal>
             <div className="table-scroll rounded-xl border border-[#d5d0c8] bg-white shadow-sm">
@@ -125,7 +122,7 @@ export function DueDiligencePageSections() {
       <section className="marketing-section bg-white">
         <div className="container-page">
           <Reveal>
-            <SectionLabel n={DUE_DILIGENCE_SUPPLY_CHAIN.n} title={DUE_DILIGENCE_SUPPLY_CHAIN.title} />
+            <SectionLabel title={DUE_DILIGENCE_SUPPLY_CHAIN.title} />
             <p className="mt-4 max-w-3xl text-sm leading-relaxed text-[#555555]">
               Diligence follows cargo and capital from origin through Finekarts to off-takers — with explicit
               checkpoints for concentration, documentation, and freight execution.
@@ -172,7 +169,7 @@ export function DueDiligencePageSections() {
       <section className="marketing-section bg-[#f3f1ec]">
         <div className="container-page min-w-0 space-y-8">
           <Reveal>
-            <SectionLabel n={DUE_DILIGENCE_RISK_MATRIX.n} title={DUE_DILIGENCE_RISK_MATRIX.title} />
+            <SectionLabel title={DUE_DILIGENCE_RISK_MATRIX.title} />
           </Reveal>
           <Reveal>
             <div className="table-scroll rounded-xl border border-[#d5d0c8] bg-white shadow-sm">
@@ -207,7 +204,7 @@ export function DueDiligencePageSections() {
       <section className="marketing-section bg-white">
         <div className="container-page">
           <Reveal>
-            <SectionLabel n={DUE_DILIGENCE_DOCUMENTATION.n} title={DUE_DILIGENCE_DOCUMENTATION.title} />
+            <SectionLabel title={DUE_DILIGENCE_DOCUMENTATION.title} />
           </Reveal>
           <div className="mt-10 grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
             <div className="grid gap-4 sm:grid-cols-2">
@@ -220,8 +217,7 @@ export function DueDiligencePageSections() {
                   transition={{ delay: i * 0.07 }}
                   className="rounded-xl border border-[#d5d0c8] bg-white p-5 shadow-sm"
                 >
-                  <span className="text-xs font-bold text-[#c88e4a]">{i + 1}</span>
-                  <h3 className="mt-2 text-base font-semibold text-[#001a3d]">{item.title}</h3>
+                  <h3 className="text-base font-semibold text-[#001a3d]">{item.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-[#555555]">{item.body}</p>
                 </motion.article>
               ))}
@@ -326,15 +322,10 @@ export function DueDiligencePageSections() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.08 }}
-                  className="flex list-none gap-4 rounded-xl border border-white/10 bg-white/5 p-4"
+                  className="list-none rounded-xl border border-white/10 bg-white/5 p-4"
                 >
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#d4a84b] text-xs font-bold text-[#001a3d]">
-                    {i + 1}
-                  </span>
-                  <div>
-                    <p className="font-semibold">{step.role}</p>
-                    <p className="mt-1 text-sm text-white/75">{step.action}</p>
-                  </div>
+                  <p className="font-semibold">{step.role}</p>
+                  <p className="mt-1 text-sm text-white/75">{step.action}</p>
                 </motion.li>
               ))}
             </ol>

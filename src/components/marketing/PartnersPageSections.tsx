@@ -36,10 +36,7 @@ export function PartnersPageSections({
             {PRODUCER_PARTNERS_PILLARS.map((pillar, i) => (
               <Reveal key={pillar.title} delay={i * 0.06} variant="up">
                 <article className="h-full rounded-lg border border-white/12 bg-[#0a2540] p-5">
-                  <p className="text-xs font-bold tracking-[0.18em] text-[#d4a84b] uppercase">
-                    {String(i + 1).padStart(2, "0")}
-                  </p>
-                  <h3 className="mt-2 text-lg font-semibold text-white">{pillar.title}</h3>
+                  <h3 className="text-lg font-semibold text-white">{pillar.title}</h3>
                   <p className="mt-3 text-sm leading-relaxed text-white/78">{pillar.body}</p>
                 </article>
               </Reveal>

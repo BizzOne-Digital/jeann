@@ -175,7 +175,7 @@ export const PACKAGING_MARITIME = {
   lead:
     "When transporting bulk commodities via sea, rail, or barge, industrial bulk containment systems range from specialized container-sized bladders to the structural cargo holds and tanks of the ships themselves.",
   dryVessel: {
-    title: "1. Dry bulk cargo vessel packaging & holds",
+    title: "Dry bulk cargo vessel packaging & holds",
     subsections: [
       {
         letter: "A",
@@ -199,7 +199,7 @@ export const PACKAGING_MARITIME = {
     ],
   },
   liquidVessel: {
-    title: "2. Liquid bulk tanker vessel & intermodal systems",
+    title: "Liquid bulk tanker vessel & intermodal systems",
     subsections: [
       {
         letter: "A",
@@ -226,7 +226,7 @@ export const PACKAGING_MARITIME = {
     ],
   },
   gasVessel: {
-    title: "3. Gas & cryogenic bulk tankers",
+    title: "Gas & cryogenic bulk tankers",
     lead: "Specialized containment systems designed for gases that are liquified under pressure or extreme cold.",
     subsections: [
       {

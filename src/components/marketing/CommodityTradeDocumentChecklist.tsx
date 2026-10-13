@@ -38,10 +38,10 @@ export function CommodityTradeDocumentChecklist({ showDownload = true }: { showD
       </header>
 
       <div className="mt-8 space-y-8">
-        {COMMODITY_TRADE_DOCUMENT_CHECKLIST_SECTIONS.map((section, index) => (
+        {COMMODITY_TRADE_DOCUMENT_CHECKLIST_SECTIONS.map((section) => (
           <section key={section.title}>
             <h4 className="text-sm font-semibold tracking-wide text-[#001a3d] uppercase">
-              {index + 1}. {section.title}
+              {section.title}
             </h4>
             <ul className="mt-3 space-y-2">
               {section.items.map((item) => (
