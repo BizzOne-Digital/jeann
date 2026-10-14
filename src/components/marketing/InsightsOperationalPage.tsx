@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { MarketingAbstractBand } from "@/components/marketing/MarketingAbstractBand";
+import { HeroVideoBackground } from "@/components/marketing/HeroVideoBackground";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   INSIGHTS_ARCHITECTURE,
@@ -13,11 +13,11 @@ import {
   INSIGHTS_PROTOCOL,
   INSIGHTS_SOP,
   INSIGHTS_VALIDATION,
+  INSIGHTS_VALIDATION_VIDEO,
   INSIGHTS_VERIFICATION_VS_VALIDATION,
 } from "@/lib/content/operational-insights-content";
 import { INSIGHTS_SECTION_IMAGES } from "@/lib/content/insights-operational-images";
 import { LogisticsPairedRow } from "@/components/marketing/LogisticsVisuals";
-import { MotionImageFrame } from "@/components/motion/MotionImageFrame";
 import { Reveal } from "@/components/motion/Reveal";
 import { cn } from "@/lib/utils/cn";
 
@@ -227,47 +227,47 @@ export function InsightsOperationalPage() {
         </div>
       </section>
 
-      <MarketingAbstractBand className="border-y border-white/10 py-10 lg:py-12">
-        <div className={INSIGHTS_VALIDATION_WIDTH}>
-          <Reveal>
-            <SectionHeading
-              title={INSIGHTS_VALIDATION.title}
-              lead={INSIGHTS_VALIDATION.lead}
-              className="[&_h2]:text-white [&_p]:max-w-none [&_p]:text-white/70"
-            />
-          </Reveal>
-          <div className="mt-8 flex flex-wrap gap-2">
-            {INSIGHTS_VALIDATION.pillars.map((p, i) => (
-              <Reveal key={p} delay={i * 0.04} variant="up">
-                <span className="rounded-full border border-[#d4a84b]/40 bg-white/5 px-4 py-2 text-xs font-semibold text-white/90">
-                  {p}
-                </span>
-              </Reveal>
-            ))}
+      <section
+        className="relative min-h-[min(72svh,680px)] w-full overflow-hidden border-y border-white/10 bg-[#071525]"
+        aria-label="Validation domains overview"
+      >
+        <HeroVideoBackground
+          youtubeInput={INSIGHTS_VALIDATION_VIDEO.youtubeUrl}
+          posterSrc={INSIGHTS_SECTION_IMAGES.validationOverview.src}
+          posterAlt={INSIGHTS_SECTION_IMAGES.validationOverview.alt}
+          iframeTitle={INSIGHTS_VALIDATION_VIDEO.iframeTitle}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(90deg, rgba(4,14,28,0.97) 0%, rgba(4,14,28,0.92) 24%, rgba(4,14,28,0.58) 48%, rgba(4,14,28,0.22) 70%, rgba(4,14,28,0.12) 100%)",
+          }}
+          aria-hidden
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#071525]/70 via-transparent to-[#071525]/25" aria-hidden />
+
+        <div className="container-page relative z-10 flex min-h-[min(72svh,680px)] items-center py-12 lg:py-16">
+          <div className="max-w-xl rounded-xl border border-white/12 bg-gradient-to-br from-[#001a3d]/95 via-[#071525]/88 to-[#0c2544]/75 p-6 shadow-xl backdrop-blur-sm sm:max-w-2xl sm:p-8">
+            <Reveal>
+              <SectionHeading
+                title={INSIGHTS_VALIDATION.title}
+                lead={INSIGHTS_VALIDATION.lead}
+                className="[&_h2]:text-white [&_p]:max-w-none [&_p]:text-white/80"
+              />
+            </Reveal>
+            <div className="mt-6 flex flex-wrap gap-2">
+              {INSIGHTS_VALIDATION.pillars.map((p, i) => (
+                <Reveal key={p} delay={i * 0.04} variant="up">
+                  <span className="rounded-full border border-[#d4a84b]/40 bg-white/10 px-4 py-2 text-xs font-semibold text-white/90">
+                    {p}
+                  </span>
+                </Reveal>
+              ))}
+            </div>
           </div>
         </div>
-        <div className="mt-10 w-full px-4 sm:px-6 lg:px-8">
-          <MotionImageFrame>
-            <div className="relative mx-auto aspect-[21/8] w-full max-w-[min(100%,1600px)] max-h-[min(32vw,17rem)] overflow-hidden rounded-lg border border-white/15 sm:max-h-[16rem] lg:max-h-[18rem]">
-              <Image
-                src={INSIGHTS_SECTION_IMAGES.validationOverview.src}
-                alt={INSIGHTS_SECTION_IMAGES.validationOverview.alt}
-                fill
-                className="object-cover object-center"
-                sizes="(max-width: 1600px) 100vw, 1600px"
-              />
-              <div
-                className="absolute inset-0 bg-gradient-to-r from-[var(--footer-bg)]/92 from-0% via-[var(--footer-bg)]/65 via-[28%] to-transparent to-[62%]"
-                aria-hidden
-              />
-              <div
-                className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#071525]/25 via-transparent to-transparent"
-                aria-hidden
-              />
-            </div>
-          </MotionImageFrame>
-        </div>
-      </MarketingAbstractBand>
+      </section>
 
       <section className="marketing-section bg-[var(--mist)]">
         <div className={`${INSIGHTS_VALIDATION_WIDTH} space-y-7`}>

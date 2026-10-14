@@ -107,6 +107,12 @@ export const INSIGHTS_PROTOCOL = {
   ],
 } as const;
 
+/** Background video for validation band on `/insights` (replaces stamp still). */
+export const INSIGHTS_VALIDATION_VIDEO = {
+  youtubeUrl: "https://www.youtube.com/watch?v=lnN3_uDtJB4&t=24s",
+  iframeTitle: "Commodity trade validation overview",
+} as const;
+
 export const INSIGHTS_VALIDATION = {
   n: 3,
   title: "End-to-end validation domains in commodity trade",

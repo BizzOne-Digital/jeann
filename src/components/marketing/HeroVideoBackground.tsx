@@ -2,18 +2,25 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { parseYoutubeId } from "@/lib/content/youtube";
+import { parseYoutubeId, parseYoutubeStartSeconds } from "@/lib/content/youtube";
 
 export function HeroVideoBackground({
   youtubeInput,
   posterSrc,
   posterAlt,
+  startSeconds,
+  iframeTitle = "Background video",
 }: {
   youtubeInput?: string;
   posterSrc: string;
   posterAlt: string;
+  /** Overrides start time parsed from a watch URL. */
+  startSeconds?: number;
+  iframeTitle?: string;
 }) {
   const videoId = parseYoutubeId(youtubeInput);
+  const start =
+    startSeconds ?? (youtubeInput?.includes("http") ? parseYoutubeStartSeconds(youtubeInput) : 0);
   const [active, setActive] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -50,9 +57,9 @@ export function HeroVideoBackground({
       {videoId && active ? (
         <div className="hero-video-frame absolute inset-0 overflow-hidden">
           <iframe
-            title="Refinery and commodity logistics background video"
+            title={iframeTitle}
             className="hero-video-iframe"
-            src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&cc_load_policy=0&disablekb=1`}
+            src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}&start=${start}&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&cc_load_policy=0&disablekb=1`}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             loading="lazy"
           />

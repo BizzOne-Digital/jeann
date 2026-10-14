@@ -16,3 +16,19 @@ export function parseYoutubeId(input?: string | null): string | null {
   }
   return null;
 }
+
+/** Start offset in seconds from `t` or `start` query params (e.g. `&t=24s`). */
+export function parseYoutubeStartSeconds(input?: string | null): number {
+  const trimmed = (input ?? "").trim();
+  if (!trimmed) return 0;
+  try {
+    const url = new URL(trimmed);
+    const raw = url.searchParams.get("t") ?? url.searchParams.get("start");
+    if (!raw) return 0;
+    if (/^\d+$/.test(raw)) return Number(raw);
+    const match = raw.match(/^(\d+)s?$/i);
+    return match ? Number(match[1]) : 0;
+  } catch {
+    return 0;
+  }
+}
