@@ -1,5 +1,11 @@
 /** Cover art for the Insights hub — client photos under `public/images/insights/`. */
 
+/** Stamp / port-office document photo — shared on verification and article covers. */
+export const MARKETING_TRADE_DOCUMENT_STAMP = {
+  src: "/images/insights/cover-trade-documents.jpg",
+  alt: "Official stamp on trade documents at a port office",
+} as const;
+
 const BY_SLUG: Record<string, string> = {
   "fob-vs-cif-for-bulk-commodities": "/images/insights/cover-international-rail-containers.jpg",
   "how-purchase-requests-work": "/images/insights/cover-purchase-requests.jpg",
@@ -21,17 +27,14 @@ export const INSIGHTS_HUB_SECTION_PHOTOS = {
     alt: "International rail containers — FOB and CIF corridor context",
   },
   architecture: {
-    src: BY_SLUG["how-purchase-requests-work"],
-    alt: "Trade desk and purchase request documentation",
+    src: "/images/insights/architecture-grain-terminal.png",
+    alt: "Bulk carrier at grain elevator and silos — waterfront commodity loading infrastructure",
   },
   protocol: {
     src: BY_SLUG["packaging-options-in-bulk-trade"],
     alt: "FIBC jumbo bags in a warehouse aisle",
   },
-  validationBand: {
-    src: BY_SLUG["document-checklists-are-route-specific"],
-    alt: "Shipping documents stamped at a port office",
-  },
+  validationBand: MARKETING_TRADE_DOCUMENT_STAMP,
   domainLab: {
     src: "/images/insights/validation/domain-lab-wheat.jpg",
     alt: "Grain sampling tools on a laboratory bench — ISO 17025 test method validation context",

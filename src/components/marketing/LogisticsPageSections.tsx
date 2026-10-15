@@ -158,7 +158,11 @@ export function LogisticsPageSections({ content }: { content: BuiltLogisticsCont
 
       <section className="bg-[#f3f1ec] marketing-section">
         <div className="container-page">
-          <LogisticsSplitPanel image={LOGISTICS_PAGE_SECTION_IMAGES.portToPort} reversed>
+          <LogisticsSplitPanel
+            image={LOGISTICS_PAGE_SECTION_IMAGES.portToPort}
+            reversed
+            brandOverlay
+          >
             <Reveal>
               <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">{content.portChain.title}</h2>
               <p className="mt-3 text-base text-[#555555]">{content.portChain.lead}</p>
@@ -166,7 +170,7 @@ export function LogisticsPageSections({ content }: { content: BuiltLogisticsCont
                 {content.portChain.steps.map((step) => (
                   <li key={step} className="flex items-start gap-3 text-sm text-[#555555]">
                     <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#c88e4a]" aria-hidden />
-                    <span>{step}</span>
+                    <span>{stripLeadingMarker(step)}</span>
                   </li>
                 ))}
               </ol>

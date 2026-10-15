@@ -8,6 +8,7 @@ import {
   cmsParagraphs,
   cmsSection,
 } from "@/lib/content/cms-field";
+import { stripLeadingMarker } from "@/lib/marketing/strip-leading-marker";
 import {
   DISPUTE_CTA,
   DISPUTE_DISCLAIMER,
@@ -32,7 +33,7 @@ function SectionHeader({
   return (
     <Reveal variant="blur-up">
       <p className="text-xs font-semibold tracking-[0.22em] text-[#c88e4a] uppercase">{eyebrow}</p>
-      <h2 className="mt-2 max-w-3xl text-2xl font-semibold text-[#001a3d] sm:text-3xl">{title}</h2>
+      <h2 className="mt-2 max-w-3xl text-2xl font-semibold text-[#001a3d] sm:text-3xl">{stripLeadingMarker(title)}</h2>
       <p className="mt-4 max-w-3xl text-base leading-relaxed text-[#555555]">{lead}</p>
     </Reveal>
   );
@@ -83,7 +84,7 @@ export function DisputeResolutionSections({ cms }: { cms?: CmsSectionMap }) {
             {processSteps.map((step, i) => (
               <Reveal key={step.title} delay={i * 0.06} bounce>
                 <article className="h-full marketing-box rounded-lg p-6 shadow-sm">
-                  <p className="text-sm font-semibold text-[#1b3a5c]">{step.title}</p>
+                  <p className="text-sm font-semibold text-[#1b3a5c]">{stripLeadingMarker(step.title)}</p>
                   <p className="mt-2 text-sm leading-relaxed text-[#555555]">{step.body}</p>
                 </article>
               </Reveal>

@@ -128,6 +128,20 @@ export function getPaymentTermById(id: string) {
   return PAYMENT_TERM_STRUCTURES.find((item) => item.id === id) ?? null;
 }
 
+/** Top-ranked cards on `/resources` → Payment structures (2×2 grid). */
+export const RESOURCES_PAYMENT_FEATURED_IDS = [
+  "transferable-revolving-lc",
+  "confirmed-lc",
+  "lc-performance-guarantee",
+  "lc-at-sight",
+] as const;
+
+export function getResourcesPaymentFeaturedStructures(): PaymentTermStructure[] {
+  return RESOURCES_PAYMENT_FEATURED_IDS.map((id) => getPaymentTermById(id)).filter(
+    (row): row is PaymentTermStructure => row != null,
+  );
+}
+
 export const BANKING_CLAUSE_SECTION_TITLE = "Banking and payment instruments";
 
 export const BANKING_CLAUSE_INTRO =

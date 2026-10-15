@@ -11,6 +11,25 @@ import {
 import { HERO_PAGE_OVERLAY_HORIZONTAL } from "@/lib/marketing/hero-layout";
 import { cn } from "@/lib/utils/cn";
 
+/** Navy + gold wash on logistics photography — keeps photos on-brand. */
+function LogisticsBrandImageOverlay({ strong = false }: { strong?: boolean }) {
+  return (
+    <>
+      <div
+        className={cn(
+          "absolute inset-0 bg-gradient-to-tr from-[#001a3d]/50 via-[#0c2544]/30 to-[#c88e4a]/15",
+          strong && "from-[#071525]/75 via-[#001a3d]/55 to-[#071525]/70",
+        )}
+        aria-hidden
+      />
+      <div
+        className={cn("absolute inset-0 bg-[#071525]/10", strong && "bg-[#001a3d]/20")}
+        aria-hidden
+      />
+    </>
+  );
+}
+
 export function LogisticsPhotoGallery({ className = "" }: { className?: string }) {
   return (
     <div className={`grid grid-cols-1 gap-3 sm:grid-cols-3 ${className}`}>
@@ -36,9 +55,11 @@ export function LogisticsPhotoGallery({ className = "" }: { className?: string }
 export function LogisticsFullBleedBand({
   image,
   heightClass = "h-44 sm:h-52 lg:h-60",
+  brandOverlay = false,
 }: {
   image?: LogisticsImage;
   heightClass?: string;
+  brandOverlay?: boolean;
 }) {
   if (!image) {
     return (
@@ -56,7 +77,11 @@ export function LogisticsFullBleedBand({
   return (
     <div className={`relative ${heightClass} w-full overflow-hidden`}>
       <Image src={image.src} alt={image.alt} fill className="object-cover object-center" sizes="100vw" />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#071525]/25 via-transparent to-[#071525]/25" />
+      {brandOverlay ? (
+        <LogisticsBrandImageOverlay strong />
+      ) : (
+        <div className="absolute inset-0 bg-gradient-to-r from-[#071525]/25 via-transparent to-[#071525]/25" />
+      )}
     </div>
   );
 }
@@ -141,11 +166,13 @@ export function LogisticsSplitPanel({
   reversed = false,
   children,
   aspectClassName = "aspect-[16/11] lg:aspect-[16/10]",
+  brandOverlay = false,
 }: {
   image: LogisticsImage;
   reversed?: boolean;
   children: ReactNode;
   aspectClassName?: string;
+  brandOverlay?: boolean;
 }) {
   return (
     <div
@@ -163,6 +190,7 @@ export function LogisticsSplitPanel({
           className="object-cover"
           sizes="(max-width: 1024px) 100vw, 50vw"
         />
+        {brandOverlay ? <LogisticsBrandImageOverlay /> : null}
       </MotionImageFrame>
       <Reveal variant={reversed ? "left" : "right"} delay={0.08} bounce className="flex">
         <div className="flex w-full flex-col justify-center">{children}</div>

@@ -9,6 +9,8 @@ type Props = {
   className?: string;
   /** Navy / footer-blue wash over the photo */
   overlayClassName?: string;
+  /** Gold / light vignette strength (0–1). Default 0.4. */
+  vignetteOpacity?: number;
   imageSrc?: string;
   id?: string;
   "aria-label"?: string;
@@ -19,6 +21,7 @@ export function MarketingAbstractBand({
   children,
   className,
   overlayClassName = "bg-[var(--footer-bg)]/88",
+  vignetteOpacity = 0.4,
   imageSrc = DEFAULT_ABSTRACT,
   id,
   "aria-label": ariaLabel,
@@ -39,9 +42,10 @@ export function MarketingAbstractBand({
       />
       <div className={cn("pointer-events-none absolute inset-0", overlayClassName)} aria-hidden />
       <div
-        className="pointer-events-none absolute inset-0 opacity-40"
+        className="pointer-events-none absolute inset-0"
         aria-hidden
         style={{
+          opacity: vignetteOpacity,
           background:
             "radial-gradient(circle at 18% 40%, rgba(200,142,74,0.28), transparent 55%), radial-gradient(circle at 82% 20%, rgba(255,255,255,0.06), transparent 50%)",
         }}

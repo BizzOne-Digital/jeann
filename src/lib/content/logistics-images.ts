@@ -89,13 +89,13 @@ export const LOGISTICS_PAGE_SECTION_IMAGES = {
   globalCoverage: LOGISTICS_IMAGES.seaAirRoutes,
   realTimeTrackingPrimary: LOGISTICS_IMAGES.portTrucks,
   realTimeTrackingSecondary: LOGISTICS_IMAGES.terminalOperationsAlt,
-  portToPort: LOGISTICS_IMAGES.railInternationalContainers,
+  portToPort: LOGISTICS_IMAGES.integratedTerminalMultimodal,
   documentation: LOGISTICS_IMAGES.terminalHub,
   bulkVesselMode: LOGISTICS_PAGE_ONLY_IMAGES.bulkCarrierLoading,
   coordinationPrimary: LOGISTICS_IMAGES.bulkGrainRail,
   coordinationSecondary: LOGISTICS_IMAGES.railIntermodalYard,
   closing: LOGISTICS_PAGE_ONLY_IMAGES.closingCifVessel,
-  bleedSecondary: LOGISTICS_IMAGES.railIntermodalYardAlt,
+  bleedSecondary: LOGISTICS_IMAGES.portTrucks,
   contractToCargo: LOGISTICS_IMAGES.supplyChainNight,
 } as const;
 

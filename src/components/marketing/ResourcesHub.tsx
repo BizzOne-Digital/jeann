@@ -11,6 +11,8 @@ import {
   BANKING_CLAUSE_INTRO,
   BANKING_CLAUSE_SECTION_TITLE,
   PAYMENT_TERM_STRUCTURES,
+  RESOURCES_PAYMENT_FEATURED_IDS,
+  getResourcesPaymentFeaturedStructures,
   BUYER_DATA_SECURITY_NOTE,
   ESCROW_LOCATION_NOTE,
   LC_ACCEPTED_BANKS_NOTE,
@@ -246,8 +248,9 @@ function BankingPanel() {
 
 function PaymentsPanel() {
   const [showAll, setShowAll] = useState(false);
-  const recommended = PAYMENT_TERM_STRUCTURES.filter((row) => row.recommended);
-  const alternatives = PAYMENT_TERM_STRUCTURES.filter((row) => !row.recommended);
+  const featured = getResourcesPaymentFeaturedStructures();
+  const featuredIdSet = new Set<string>(RESOURCES_PAYMENT_FEATURED_IDS);
+  const alternatives = PAYMENT_TERM_STRUCTURES.filter((row) => !featuredIdSet.has(row.id));
   const img = RESOURCES_PAGE_IMAGES.payments;
 
   return (
@@ -303,7 +306,7 @@ function PaymentsPanel() {
       </article>
 
       <div className="grid gap-4 md:grid-cols-2">
-        {recommended.map((row) => (
+        {featured.map((row) => (
           <article
             key={row.id}
             className="relative overflow-hidden rounded-lg border border-[#c88e4a]/40 bg-white p-6 shadow-sm"
@@ -370,25 +373,6 @@ function DocumentsPanel({ introBody }: { introBody: string }) {
 
   return (
     <div className="space-y-8">
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] lg:items-center">
-        <p className="max-w-3xl text-sm leading-relaxed text-[#555555]">{introBody}</p>
-        <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-[#d5d0c8]">
-          <Image src={img.src} alt={img.alt} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 420px" />
-        </div>
-      </div>
-
-      <div className="flex flex-wrap gap-2">
-        {RESOURCES_RELATED_LINKS.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className="rounded-full border border-[#d5d0c8] bg-white px-4 py-2 text-sm font-medium text-[#001a3d] transition hover:border-[#c88e4a] hover:text-[#c88e4a]"
-          >
-            {item.label} →
-          </Link>
-        ))}
-      </div>
-
       <div className="grid gap-6 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-8">
         <nav className="flex flex-row gap-2 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible lg:pb-0">
           {RESOURCES_DOCUMENT_GROUPS.map((g) => {
@@ -424,6 +408,27 @@ function DocumentsPanel({ introBody }: { introBody: string }) {
               </li>
             ))}
           </ul>
+        </div>
+      </div>
+
+      <div className="space-y-6 border-t border-[#e8e4dc] pt-8">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] lg:items-start">
+          <p className="max-w-3xl text-sm leading-relaxed text-[#555555]">{introBody}</p>
+          <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-[#d5d0c8] lg:max-w-md lg:justify-self-end">
+            <Image src={img.src} alt={img.alt} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 420px" />
+          </div>
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          {RESOURCES_RELATED_LINKS.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="rounded-full border border-[#d5d0c8] bg-white px-4 py-2 text-sm font-medium text-[#001a3d] transition hover:border-[#c88e4a] hover:text-[#c88e4a]"
+            >
+              {item.label} →
+            </Link>
+          ))}
         </div>
       </div>
     </div>
@@ -618,7 +623,7 @@ export function ResourcesHub({ introBody }: { introBody: string }) {
             </p>
             <h2 className="mt-2 text-2xl font-semibold text-[#001a3d] sm:text-3xl">{panel.title}</h2>
 
-            <div className="mt-8">
+            <div className={cn("mt-8", activeTab === "documents" && "mt-4 sm:mt-5")}>
               {reduce ? (
                 <>
                   {activeTab === "banking" ? <BankingPanel /> : null}

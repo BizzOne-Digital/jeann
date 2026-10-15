@@ -19,6 +19,7 @@ import { InspectionFirmVideoStrip } from "@/components/marketing/InspectionFirmV
 import { LogisticsPairedRow } from "@/components/marketing/LogisticsVisuals";
 import { MotionImageFrame } from "@/components/motion/MotionImageFrame";
 import { Reveal } from "@/components/motion/Reveal";
+import { stripLeadingMarker } from "@/lib/marketing/strip-leading-marker";
 
 function TypeCard({
   title,
@@ -49,7 +50,7 @@ function TypeCard({
         equalHeight ? " h-full" : ""
       }`}
     >
-      <h3 className="text-lg font-semibold text-[#001a3d]">{title}</h3>
+      <h3 className="text-lg font-semibold text-[#001a3d]">{stripLeadingMarker(title)}</h3>
       <p className="mt-3 text-sm leading-relaxed text-[#555555]">
         <span className="font-semibold text-[#001a3d]">Purpose: </span>
         {purpose}
@@ -142,7 +143,7 @@ export function InspectionOperationalPage() {
               {INSPECTIONS_SCOPE_TYPES.items.map((item, i) => (
                 <Reveal key={item.title} delay={i * 0.06} variant="right">
                   <article className="rounded-xl border border-[#d5d0c8] bg-white p-6 shadow-sm">
-                    <h3 className="text-lg font-semibold text-[#001a3d]">{item.title}</h3>
+                    <h3 className="text-lg font-semibold text-[#001a3d]">{stripLeadingMarker(item.title)}</h3>
                     <p className="mt-3 text-sm leading-relaxed text-[#555555]">{item.lead}</p>
                     <ul className="mt-4 space-y-2">
                       {item.bullets.map((b) => (
@@ -190,7 +191,12 @@ export function InspectionOperationalPage() {
         </div>
       </section>
 
-      <MarketingAbstractBand className="border-y border-white/10 py-14 lg:py-16">
+      <MarketingAbstractBand
+        className="border-y border-white/10 py-14 lg:py-16"
+        imageSrc={INSPECTIONS_SECTION_IMAGES.commodityBand.src}
+        overlayClassName="bg-[#071525]/52"
+        vignetteOpacity={0.22}
+      >
         <div className="container-page space-y-12">
           <Reveal>
             <h2 className="text-2xl font-semibold sm:text-3xl">{INSPECTIONS_COMMODITY_VALIDATION.title}</h2>
@@ -226,10 +232,17 @@ export function InspectionOperationalPage() {
             </div>
           </MotionImageFrame>
           <div className="grid gap-6 lg:grid-cols-2">
-            {INSPECTIONS_COMMODITY_VALIDATION.areas.map((area, i) => (
-              <Reveal key={area.title} delay={i * 0.05} variant="up" bounce>
-                <article className="h-full rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-                  <h3 className="text-lg font-semibold">{area.title}</h3>
+            {INSPECTIONS_COMMODITY_VALIDATION.areas.map((area, i) => {
+              const isLastWide =
+                i === INSPECTIONS_COMMODITY_VALIDATION.areas.length - 1 &&
+                INSPECTIONS_COMMODITY_VALIDATION.areas.length % 2 === 1;
+              const card = (
+                <article
+                  className={`h-full rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm sm:p-8${
+                    isLastWide ? " lg:py-7" : ""
+                  }`}
+                >
+                  <h3 className="text-lg font-semibold">{stripLeadingMarker(area.title)}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-white/75">{area.lead}</p>
                   <ul className="mt-4 space-y-2">
                     {area.bullets.map((b) => (
@@ -240,8 +253,40 @@ export function InspectionOperationalPage() {
                     ))}
                   </ul>
                 </article>
-              </Reveal>
-            ))}
+              );
+              return (
+                <Reveal
+                  key={area.title}
+                  delay={i * 0.05}
+                  variant="up"
+                  bounce
+                  className={isLastWide ? "lg:col-span-2" : undefined}
+                >
+                  {isLastWide ? (
+                    <div className="grid gap-6 lg:grid-cols-2 lg:items-stretch">
+                      {card}
+                      <MotionImageFrame className="h-full min-h-[220px]">
+                        <div className="relative h-full min-h-[220px] overflow-hidden rounded-xl border border-white/15">
+                          <Image
+                            src={INSPECTIONS_SECTION_IMAGES.commodityValidationAccent.src}
+                            alt={INSPECTIONS_SECTION_IMAGES.commodityValidationAccent.alt}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 1024px) 100vw, 50vw"
+                          />
+                          <div
+                            className="absolute inset-0 bg-gradient-to-tr from-[#001a3d]/30 via-transparent to-[#c88e4a]/10"
+                            aria-hidden
+                          />
+                        </div>
+                      </MotionImageFrame>
+                    </div>
+                  ) : (
+                    card
+                  )}
+                </Reveal>
+              );
+            })}
           </div>
         </div>
       </MarketingAbstractBand>

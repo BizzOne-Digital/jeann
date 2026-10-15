@@ -19,6 +19,7 @@ import { PACKAGING_PAGE_IMAGES } from "@/lib/content/packaging-page-images";
 import { LogisticsPairedRow } from "@/components/marketing/LogisticsVisuals";
 import { MotionImageFrame } from "@/components/motion/MotionImageFrame";
 import { Reveal } from "@/components/motion/Reveal";
+import { stripLeadingMarker } from "@/lib/marketing/strip-leading-marker";
 import { cn } from "@/lib/utils/cn";
 
 type MaritimeDrySub = (typeof PACKAGING_MARITIME.dryVessel.subsections)[number];
@@ -60,7 +61,7 @@ function SectionHeading({
           dark ? "text-white" : "text-[#001a3d]",
         )}
       >
-        {title}
+        {stripLeadingMarker(title)}
       </h2>
       {example ? (
         <p className={cn("mt-2 text-sm italic", dark ? "text-white/65" : "text-[#666]")}>{example}</p>
@@ -84,7 +85,7 @@ function SubsectionCard({ item, index }: { item: PackagingSubsection; index: num
       transition={{ duration: 0.4, delay: index * 0.06 }}
       className="rounded-xl border border-[#d5d0c8] bg-white p-6 shadow-sm transition hover:border-[#c88e4a]/35 hover:shadow-md"
     >
-      <h3 className="text-lg font-semibold text-[#001a3d]">{item.title}</h3>
+      <h3 className="text-lg font-semibold text-[#001a3d]">{stripLeadingMarker(item.title)}</h3>
       {item.description ? (
         <p className="mt-3 text-sm leading-relaxed text-[#555555]">{item.description}</p>
       ) : null}
@@ -146,10 +147,22 @@ function SubsectionCard({ item, index }: { item: PackagingSubsection; index: num
   );
 }
 
-function ImageBand({ image }: { image: { src: string; alt: string } }) {
+function ImageBand({
+  image,
+  fillHeight,
+}: {
+  image: { src: string; alt: string };
+  /** Match adjacent stacked cards in a grid column (e.g. gas tanker subsections). */
+  fillHeight?: boolean;
+}) {
   return (
-    <MotionImageFrame>
-      <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-[#d5d0c8] shadow-md">
+    <MotionImageFrame className={fillHeight ? "h-full min-h-0" : undefined}>
+      <div
+        className={cn(
+          "relative overflow-hidden rounded-xl border border-[#d5d0c8] shadow-md",
+          fillHeight ? "h-full min-h-[220px]" : "aspect-[16/10]",
+        )}
+      >
         <Image src={image.src} alt={image.alt} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 520px" />
       </div>
     </MotionImageFrame>
@@ -285,8 +298,8 @@ export function PackagingPageSections() {
           <div className="space-y-8">
             <h3 className="text-xl font-semibold text-[#d4a84b]">{PACKAGING_MARITIME.gasVessel.title}</h3>
             <p className="text-sm text-white/70">{PACKAGING_MARITIME.gasVessel.lead}</p>
-            <div className="grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:items-center">
-              <ImageBand image={PACKAGING_PAGE_IMAGES.vesselRail} />
+            <div className="grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:items-stretch">
+              <ImageBand image={PACKAGING_PAGE_IMAGES.vesselRail} fillHeight />
               <div className="space-y-6">
                 {PACKAGING_MARITIME.gasVessel.subsections.map((sub, i) => (
                   <SubsectionCard

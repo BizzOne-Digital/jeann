@@ -1,4 +1,5 @@
 import type { MarketingContentBox } from "@/components/marketing/MarketingStorySection";
+import { MARKETING_TRADE_DOCUMENT_STAMP } from "@/lib/content/insight-images";
 export const INSPECTIONS_STORY = {
   eyebrow: "How we trade",
   title: "Bulk commodities with independent inspection where the contract requires it",
@@ -32,8 +33,8 @@ export const VERIFICATION_STORY = {
   lead:
     "Finekarts conducts bulk commodity trades through structured due diligence. We use trusted verification providers, commercial intelligence, validation, and inspection where appropriate — to assess parties, product, and supply chain before signing a PSA. We coordinate these tools; we are not the verification provider.",
   youtubeUrl: "https://www.youtube.com/watch?v=nFFts9WyUm8",
-  imageSrc: "/images/verification/story-panel.jpg",
-  imageAlt: "Trade desk reviewing structured due diligence before committing to a bulk commodity trade",
+  imageSrc: MARKETING_TRADE_DOCUMENT_STAMP.src,
+  imageAlt: MARKETING_TRADE_DOCUMENT_STAMP.alt,
   boxes: [
     {
       title: "Identity",

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { HeroVideoBackground } from "@/components/marketing/HeroVideoBackground";
+import { MarketingAbstractBand } from "@/components/marketing/MarketingAbstractBand";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   INSIGHTS_ARCHITECTURE,
@@ -13,12 +13,12 @@ import {
   INSIGHTS_PROTOCOL,
   INSIGHTS_SOP,
   INSIGHTS_VALIDATION,
-  INSIGHTS_VALIDATION_VIDEO,
   INSIGHTS_VERIFICATION_VS_VALIDATION,
 } from "@/lib/content/operational-insights-content";
 import { INSIGHTS_SECTION_IMAGES } from "@/lib/content/insights-operational-images";
 import { LogisticsPairedRow } from "@/components/marketing/LogisticsVisuals";
 import { Reveal } from "@/components/motion/Reveal";
+import { stripLeadingMarker } from "@/lib/marketing/strip-leading-marker";
 import { cn } from "@/lib/utils/cn";
 
 /** Wider than default `container-page` for validation domains block only. */
@@ -43,7 +43,7 @@ function SectionHeading({
 }) {
   return (
     <div className={className}>
-      <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">{title}</h2>
+      <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">{stripLeadingMarker(title)}</h2>
       {lead ? (
         <p className="mt-4 max-w-3xl text-sm leading-relaxed text-[#555555] sm:text-base">{lead}</p>
       ) : null}
@@ -195,7 +195,7 @@ export function InsightsOperationalPage() {
               {INSIGHTS_PROTOCOL.tiers.map((tier, i) => (
                 <Reveal key={tier.title} delay={i * 0.05} variant="right" className="flex-1">
                   <article className="h-full rounded-xl border border-[#d5d0c8] bg-[#faf9f6] p-5 sm:p-6">
-                    <h3 className="font-semibold text-[#001a3d]">{tier.title}</h3>
+                    <h3 className="font-semibold text-[#001a3d]">{stripLeadingMarker(tier.title)}</h3>
                     <p className="mt-2 text-sm leading-relaxed text-[#555555]">{tier.body}</p>
                   </article>
                 </Reveal>
@@ -227,47 +227,28 @@ export function InsightsOperationalPage() {
         </div>
       </section>
 
-      <section
-        className="relative min-h-[min(72svh,680px)] w-full overflow-hidden border-y border-white/10 bg-[#071525]"
+      <MarketingAbstractBand
+        className="border-y border-white/10 py-14 lg:py-16"
         aria-label="Validation domains overview"
       >
-        <HeroVideoBackground
-          youtubeInput={INSIGHTS_VALIDATION_VIDEO.youtubeUrl}
-          posterSrc={INSIGHTS_SECTION_IMAGES.validationOverview.src}
-          posterAlt={INSIGHTS_SECTION_IMAGES.validationOverview.alt}
-          iframeTitle={INSIGHTS_VALIDATION_VIDEO.iframeTitle}
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(90deg, rgba(4,14,28,0.97) 0%, rgba(4,14,28,0.92) 24%, rgba(4,14,28,0.58) 48%, rgba(4,14,28,0.22) 70%, rgba(4,14,28,0.12) 100%)",
-          }}
-          aria-hidden
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#071525]/70 via-transparent to-[#071525]/25" aria-hidden />
-
-        <div className="container-page relative z-10 flex min-h-[min(72svh,680px)] items-center py-12 lg:py-16">
-          <div className="max-w-xl rounded-xl border border-white/12 bg-gradient-to-br from-[#001a3d]/95 via-[#071525]/88 to-[#0c2544]/75 p-6 shadow-xl backdrop-blur-sm sm:max-w-2xl sm:p-8">
-            <Reveal>
-              <SectionHeading
-                title={INSIGHTS_VALIDATION.title}
-                lead={INSIGHTS_VALIDATION.lead}
-                className="[&_h2]:text-white [&_p]:max-w-none [&_p]:text-white/80"
-              />
-            </Reveal>
-            <div className="mt-6 flex flex-wrap gap-2">
-              {INSIGHTS_VALIDATION.pillars.map((p, i) => (
-                <Reveal key={p} delay={i * 0.04} variant="up">
-                  <span className="rounded-full border border-[#d4a84b]/40 bg-white/10 px-4 py-2 text-xs font-semibold text-white/90">
-                    {p}
-                  </span>
-                </Reveal>
-              ))}
-            </div>
+        <div className={INSIGHTS_VALIDATION_WIDTH}>
+          <Reveal>
+            <h2 className="text-2xl font-semibold sm:text-3xl">{INSIGHTS_VALIDATION.title}</h2>
+            <p className="mt-4 max-w-3xl text-sm leading-relaxed text-white/75 sm:text-base">
+              {INSIGHTS_VALIDATION.lead}
+            </p>
+          </Reveal>
+          <div className="mt-8 flex flex-wrap gap-2">
+            {INSIGHTS_VALIDATION.pillars.map((p, i) => (
+              <Reveal key={p} delay={i * 0.04} variant="up">
+                <span className="rounded-full border border-[#d4a84b]/40 bg-white/10 px-4 py-2 text-xs font-semibold text-white/90">
+                  {p}
+                </span>
+              </Reveal>
+            ))}
           </div>
         </div>
-      </section>
+      </MarketingAbstractBand>
 
       <section className="marketing-section bg-[var(--mist)]">
         <div className={`${INSIGHTS_VALIDATION_WIDTH} space-y-7`}>
@@ -276,8 +257,7 @@ export function InsightsOperationalPage() {
             const reversed = index % 2 === 1;
             const body = (
               <>
-                <p className="text-xs font-bold tracking-[0.2em] text-[#c88e4a]">{domain.roman}</p>
-                <h3 className="mt-2 text-xl font-semibold text-[#001a3d]">{domain.title}</h3>
+                <h3 className="text-xl font-semibold text-[#001a3d]">{stripLeadingMarker(domain.title)}</h3>
                 {"lead" in domain && domain.lead ? (
                   <p className="mt-3 text-sm leading-relaxed text-[#555555]">{domain.lead}</p>
                 ) : null}
@@ -366,7 +346,7 @@ export function InsightsOperationalPage() {
             {INSIGHTS_SOP.phases.map((phase, i) => (
               <Reveal key={phase.title} delay={i * 0.08} variant="up" bounce>
                 <article className="h-full rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-                  <h3 className="text-base font-semibold text-[#d4a84b]">{phase.title}</h3>
+                  <h3 className="text-base font-semibold text-[#d4a84b]">{stripLeadingMarker(phase.title)}</h3>
                   <ul className="mt-4 space-y-3">
                     {phase.items.map((item) => (
                       <li key={item} className="flex gap-3 text-sm leading-relaxed text-white/80">

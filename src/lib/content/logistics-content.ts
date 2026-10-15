@@ -109,6 +109,10 @@ export const SHIPPING_MODES = [
     title: "Bagged & palletized cargo",
     text: "For rice, sugar, grains, pulses and other packaged commodities.",
   },
+  {
+    title: "Bulk train",
+    text: "Hopper cars and unit trains between origin elevators, inland terminals, and port load points for grain, sugar, and dry bulk.",
+  },
 ];
 
 export const SHIPPING_DOCUMENTATION = {
