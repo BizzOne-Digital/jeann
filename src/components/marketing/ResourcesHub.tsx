@@ -550,34 +550,41 @@ export function ResourcesHub({ introBody }: { introBody: string }) {
                   onClick={() => selectTab(pillar.id)}
                   className={cn(
                     "focus-ring group flex h-full flex-col rounded-lg border-2 p-5 text-left transition shadow-sm",
-                    active ? "text-white shadow-md" : "hover:shadow-md",
+                    active ? "hover:shadow-md" : "text-white shadow-md hover:brightness-[1.03]",
                   )}
                   style={
                     active
                       ? {
-                          borderColor: accent.main,
-                          backgroundColor: accent.main,
-                        }
-                      : {
                           borderColor: accent.ring,
                           backgroundColor: accent.light,
+                        }
+                      : {
+                          borderColor: accent.main,
+                          backgroundColor: accent.main,
                         }
                   }
                 >
                   <span
                     className={cn(
                       "flex h-11 w-11 items-center justify-center rounded-full transition",
-                      active ? "bg-white/20 text-white" : "bg-white text-[#1b3a5c]",
+                      active ? "bg-white text-[#1b3a5c]" : "bg-white/20 text-white",
                     )}
-                    style={active ? undefined : { color: accent.main }}
+                    style={active ? { color: accent.main } : undefined}
                   >
                     <PillarIcon type={pillar.icon} />
                   </span>
-                  <span className="mt-4 text-base font-semibold">{pillar.title}</span>
+                  <span
+                    className={cn(
+                      "mt-4 text-base font-semibold",
+                      active ? "text-[#001a3d]" : "text-white",
+                    )}
+                  >
+                    {pillar.title}
+                  </span>
                   <span
                     className={cn(
                       "mt-2 flex-1 text-sm leading-relaxed",
-                      active ? "text-white/85" : "text-[#555555]",
+                      active ? "text-[#555555]" : "text-white/90",
                     )}
                   >
                     {pillar.summary}

@@ -194,7 +194,7 @@ export function InspectionOperationalPage() {
       <MarketingAbstractBand
         className="border-y border-white/10 py-14 lg:py-16"
         imageSrc={INSPECTIONS_SECTION_IMAGES.commodityBand.src}
-        overlayClassName="bg-[#071525]/52"
+        overlayClassName="bg-[#071525]/25"
         vignetteOpacity={0.22}
       >
         <div className="container-page space-y-12">

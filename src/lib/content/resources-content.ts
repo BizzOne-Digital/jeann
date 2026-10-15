@@ -5,9 +5,10 @@ export const RESOURCES_PILLARS = [
     summary: "PSA banking clauses, programme schedules, documentary credits, and trade insurance.",
     icon: "bank",
     accent: {
-      main: "#1b7a4a",
+      /** Logo quadrant — forest green */
+      main: "#1a7a38",
       light: "#edf7f1",
-      ring: "#1b7a4a",
+      ring: "#1a7a38",
     },
   },
   {
@@ -16,9 +17,10 @@ export const RESOURCES_PILLARS = [
     summary: "How 12-month commodity programmes are commonly ranked for buyer and seller risk.",
     icon: "chart",
     accent: {
-      main: "#1e4d8f",
-      light: "#eef3fa",
-      ring: "#1e4d8f",
+      /** Logo quadrant — primary red */
+      main: "#c62828",
+      light: "#fdf0f2",
+      ring: "#c62828",
     },
   },
   {
@@ -27,9 +29,10 @@ export const RESOURCES_PILLARS = [
     summary: "Commercial, transport, origin, quality, and negotiation instruments explained.",
     icon: "folder",
     accent: {
-      main: "#c41e3a",
-      light: "#fdf0f2",
-      ring: "#c41e3a",
+      /** Logo quadrant — navy / royal blue */
+      main: "#1565b0",
+      light: "#eef3fa",
+      ring: "#1565b0",
     },
   },
   {
@@ -38,9 +41,10 @@ export const RESOURCES_PILLARS = [
     summary: "Optional checklists and reference PDFs — confirm final document sets in your PSA.",
     icon: "download",
     accent: {
-      main: "#d4a017",
+      /** Logo quadrant — golden yellow */
+      main: "#e5a100",
       light: "#fff9eb",
-      ring: "#d4a017",
+      ring: "#e5a100",
     },
   },
 ] as const;
