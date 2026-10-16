@@ -388,6 +388,28 @@ function resourcesBodySections(): PageSectionDef[] {
   );
 }
 
+function partnersBodySections(): PageSectionDef[] {
+  return [
+    section("spotlight-single", "Highlight (1 box)", {
+      eyebrow: "Partner spotlight",
+      title: "Additional programme notes",
+      body:
+        "Use this area for a single highlighted message — capacity updates, corridor focus, or onboarding steps. Edit this copy in the admin page editor under Partners.",
+    }),
+    section("spotlight-trio", "Highlights (3 boxes)", {
+      box1Title: "Documentation readiness",
+      box1Body:
+        "Share how your facility supports certificates of origin, analysis, and weight where buyers and banks require them.",
+      box2Title: "Loading & logistics",
+      box2Body:
+        "Describe berths, container stuffing, or inland routes so CIF and FOB programmes can be quoted realistically.",
+      box3Title: "Quality systems",
+      box3Body:
+        "Outline HACCP, traceability, or buyer audit protocols that support recurring export contracts.",
+    }),
+  ];
+}
+
 function productsBodySections(): PageSectionDef[] {
   return [
     section("catalog", "Catalog section", {
@@ -421,6 +443,7 @@ const BODY_BY_SLUG: Record<string, () => PageSectionDef[]> = {
   verification: verificationBodySections,
   resources: resourcesBodySections,
   products: productsBodySections,
+  partners: partnersBodySections,
 };
 
 const HERO_OVERRIDES: Partial<

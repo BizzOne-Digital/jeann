@@ -39,6 +39,16 @@ export const PAYMENT_TERM_STRUCTURES: PaymentTermStructure[] = [
     enabledByDefault: true,
   },
   {
+    id: "transferable-lc-at-sight",
+    structure: "Irrevocable Transferable LC at Sight",
+    primaryFunction: "Payment with transfer rights",
+    iccCode: "UCP 600",
+    buyerProtection: 5,
+    sellerProtection: 5,
+    recommended: true,
+    enabledByDefault: true,
+  },
+  {
     id: "transferable-revolving-lc",
     structure: "Irrevocable Transferable Revolving LC at Sight",
     primaryFunction: "Long-term programme payment",
@@ -126,20 +136,6 @@ export const PAYMENT_TERM_STRUCTURES: PaymentTermStructure[] = [
 
 export function getPaymentTermById(id: string) {
   return PAYMENT_TERM_STRUCTURES.find((item) => item.id === id) ?? null;
-}
-
-/** Top-ranked cards on `/resources` → Payment structures (2×2 grid). */
-export const RESOURCES_PAYMENT_FEATURED_IDS = [
-  "transferable-revolving-lc",
-  "confirmed-lc",
-  "lc-performance-guarantee",
-  "lc-at-sight",
-] as const;
-
-export function getResourcesPaymentFeaturedStructures(): PaymentTermStructure[] {
-  return RESOURCES_PAYMENT_FEATURED_IDS.map((id) => getPaymentTermById(id)).filter(
-    (row): row is PaymentTermStructure => row != null,
-  );
 }
 
 export const BANKING_CLAUSE_SECTION_TITLE = "Banking and payment instruments";

@@ -11,8 +11,6 @@ import {
   BANKING_CLAUSE_INTRO,
   BANKING_CLAUSE_SECTION_TITLE,
   PAYMENT_TERM_STRUCTURES,
-  RESOURCES_PAYMENT_FEATURED_IDS,
-  getResourcesPaymentFeaturedStructures,
   BUYER_DATA_SECURITY_NOTE,
   ESCROW_LOCATION_NOTE,
   LC_ACCEPTED_BANKS_NOTE,
@@ -248,9 +246,8 @@ function BankingPanel() {
 
 function PaymentsPanel() {
   const [showAll, setShowAll] = useState(false);
-  const featured = getResourcesPaymentFeaturedStructures();
-  const featuredIdSet = new Set<string>(RESOURCES_PAYMENT_FEATURED_IDS);
-  const alternatives = PAYMENT_TERM_STRUCTURES.filter((row) => !featuredIdSet.has(row.id));
+  const recommended = PAYMENT_TERM_STRUCTURES.filter((row) => row.recommended);
+  const alternatives = PAYMENT_TERM_STRUCTURES.filter((row) => !row.recommended);
   const img = RESOURCES_PAGE_IMAGES.payments;
 
   return (
@@ -306,7 +303,7 @@ function PaymentsPanel() {
       </article>
 
       <div className="grid gap-4 md:grid-cols-2">
-        {featured.map((row) => (
+        {recommended.map((row) => (
           <article
             key={row.id}
             className="relative overflow-hidden rounded-lg border border-[#c88e4a]/40 bg-white p-6 shadow-sm"

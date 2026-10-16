@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { MarketingAbstractBand } from "@/components/marketing/MarketingAbstractBand";
 import { Reveal } from "@/components/motion/Reveal";
+import { cmsField } from "@/lib/content/cms-field";
 import {
   PRODUCER_PARTNERS_CTA,
   PRODUCER_PARTNERS_INTRO,
@@ -10,10 +11,33 @@ import {
   PRODUCER_PARTNERS_PRODUCT_LINES,
 } from "@/lib/content/producer-partners-content";
 
+const SPOTLIGHT_SINGLE_DEFAULTS = {
+  eyebrow: "Partner spotlight",
+  title: "Additional programme notes",
+  body:
+    "Use this area for a single highlighted message — capacity updates, corridor focus, or onboarding steps.",
+} as const;
+
+const SPOTLIGHT_TRIO_DEFAULTS = {
+  box1Title: "Documentation readiness",
+  box1Body:
+    "Share how your facility supports certificates of origin, analysis, and weight where buyers and banks require them.",
+  box2Title: "Loading & logistics",
+  box2Body:
+    "Describe berths, container stuffing, or inland routes so CIF and FOB programmes can be quoted realistically.",
+  box3Title: "Quality systems",
+  box3Body:
+    "Outline HACCP, traceability, or buyer audit protocols that support recurring export contracts.",
+} as const;
+
 export function PartnersPageSections({
   introNote,
+  spotlightSingle,
+  spotlightTrio,
 }: {
   introNote: string;
+  spotlightSingle?: Record<string, string>;
+  spotlightTrio?: Record<string, string>;
 }) {
   return (
     <>
@@ -78,8 +102,43 @@ export function PartnersPageSections({
             ))}
           </ul>
 
+          <Reveal className="mt-10">
+            <article className="rounded-xl border border-[var(--line)] bg-[var(--mist)] p-6 sm:p-8">
+              <p className="text-xs font-semibold tracking-[0.16em] text-[#c88e4a] uppercase">
+                {cmsField(spotlightSingle, "eyebrow", SPOTLIGHT_SINGLE_DEFAULTS.eyebrow)}
+              </p>
+              <h3 className="mt-2 text-xl font-semibold text-[#001a3d]">
+                {cmsField(spotlightSingle, "title", SPOTLIGHT_SINGLE_DEFAULTS.title)}
+              </h3>
+              <p className="mt-3 max-w-3xl text-sm leading-relaxed text-[#555555]">
+                {cmsField(spotlightSingle, "body", SPOTLIGHT_SINGLE_DEFAULTS.body)}
+              </p>
+            </article>
+          </Reveal>
+
+          <div className="mt-8 grid gap-5 md:grid-cols-3">
+            {(
+              [
+                ["box1Title", "box1Body"],
+                ["box2Title", "box2Body"],
+                ["box3Title", "box3Body"],
+              ] as const
+            ).map(([titleKey, bodyKey], i) => (
+              <Reveal key={titleKey} delay={i * 0.05}>
+                <article className="h-full rounded-xl border border-[var(--line)] bg-white p-6 shadow-sm">
+                  <h3 className="text-base font-semibold text-[#001a3d]">
+                    {cmsField(spotlightTrio, titleKey, SPOTLIGHT_TRIO_DEFAULTS[titleKey])}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-[#555555]">
+                    {cmsField(spotlightTrio, bodyKey, SPOTLIGHT_TRIO_DEFAULTS[bodyKey])}
+                  </p>
+                </article>
+              </Reveal>
+            ))}
+          </div>
+
           <Reveal>
-            <div className="rounded-xl border border-[#1b3a5c]/20 bg-[#001a3d] p-6 text-white sm:p-8">
+            <div className="mt-10 rounded-xl border border-[#1b3a5c]/20 bg-[#001a3d] p-6 text-white sm:p-8">
               <h2 className="text-xl font-semibold sm:text-2xl">{PRODUCER_PARTNERS_CTA.title}</h2>
               <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/80">{PRODUCER_PARTNERS_CTA.lead}</p>
               <div className="mt-6 flex flex-wrap gap-3">

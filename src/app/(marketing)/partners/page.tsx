@@ -17,6 +17,8 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function PartnersPage() {
   const cms = await getPublishedPage("partners");
   const intro = getEffectiveSectionFields(cms, "intro");
+  const spotlightSingle = getEffectiveSectionFields(cms, "spotlight-single");
+  const spotlightTrio = getEffectiveSectionFields(cms, "spotlight-trio");
 
   return (
     <>
@@ -32,6 +34,8 @@ export default async function PartnersPage() {
       />
       <PartnersPageSections
         introNote={cmsField(intro, "note", PRODUCER_PARTNERS_HERO.note)}
+        spotlightSingle={spotlightSingle}
+        spotlightTrio={spotlightTrio}
       />
     </>
   );

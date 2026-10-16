@@ -50,6 +50,8 @@ export default async function CategoryPage({ params }: Props) {
   const isRice = isRiceCategory(category.slug);
   const isCoffee = isCoffeeCategory(category.slug);
   const isSpices = isSpicesCategory(category.slug);
+  /** Spotlight grids above already list each SKU — avoid duplicating the catalog grid (beans-style). */
+  const hideCatalogProductGrid = isSugar || isRice || isCoffee;
 
   return (
     <>
@@ -122,52 +124,56 @@ export default async function CategoryPage({ params }: Props) {
             <span className="text-[#001a3d]">{cover.shortName}</span>
           </nav>
 
-          <div className="mt-8 flex flex-wrap items-end justify-between gap-3">
-            <h2 className="text-2xl font-semibold text-[#001a3d]">Products in this category</h2>
-            <p className="text-sm text-[#666666]">
-              {category.products.length} listing{category.products.length === 1 ? "" : "s"}
-            </p>
-          </div>
+          {hideCatalogProductGrid ? null : (
+            <div className="mt-8 flex flex-wrap items-end justify-between gap-3">
+              <h2 className="text-2xl font-semibold text-[#001a3d]">Products in this category</h2>
+              <p className="text-sm text-[#666666]">
+                {category.products.length} listing{category.products.length === 1 ? "" : "s"}
+              </p>
+            </div>
+          )}
 
-          <BulkOrderBox categorySlug={category.slug} className="mt-8" />
+          <BulkOrderBox categorySlug={category.slug} className={hideCatalogProductGrid ? "mt-8" : "mt-8"} />
 
-          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {category.products.map((product, i) => (
-              <Reveal key={product.slug} delay={Math.min(i * 0.04, 0.2)}>
-                <article className="flex h-full flex-col marketing-box rounded-lg p-4 shadow-sm">
-                  <Link
-                    href={`/products/${category.slug}/${product.slug}`}
-                    className="group block"
-                  >
-                    <div className="relative aspect-[16/11] overflow-hidden bg-[#e4e0d8]">
-                      <Image
-                        src={getProductListingImage(product, category.slug)}
-                        alt=""
-                        fill
-                        className="object-cover transition duration-500 group-hover:scale-[1.03]"
-                        sizes="(max-width: 1024px) 50vw, 360px"
-                      />
-                    </div>
-                    <h3 className="mt-3 text-lg font-semibold text-[#001a3d] transition group-hover:text-[#c88e4a]">
-                      {product.name}
-                    </h3>
-                    <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-[#666666]">
-                      {product.overview}
-                    </p>
-                    <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[#c88e4a]">
-                      View details <span aria-hidden>→</span>
-                    </span>
-                  </Link>
-                  <Link
-                    href={buyerOrderHref(product.slug)}
-                    className="focus-ring mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[#001a3d] transition hover:text-[#c88e4a]"
-                  >
-                    Click here to ORDER <span aria-hidden>→</span>
-                  </Link>
-                </article>
-              </Reveal>
-            ))}
-          </div>
+          {hideCatalogProductGrid ? null : (
+            <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {category.products.map((product, i) => (
+                <Reveal key={product.slug} delay={Math.min(i * 0.04, 0.2)}>
+                  <article className="flex h-full flex-col marketing-box rounded-lg p-4 shadow-sm">
+                    <Link
+                      href={`/products/${category.slug}/${product.slug}`}
+                      className="group block"
+                    >
+                      <div className="relative aspect-[16/11] overflow-hidden bg-[#e4e0d8]">
+                        <Image
+                          src={getProductListingImage(product, category.slug)}
+                          alt=""
+                          fill
+                          className="object-cover transition duration-500 group-hover:scale-[1.03]"
+                          sizes="(max-width: 1024px) 50vw, 360px"
+                        />
+                      </div>
+                      <h3 className="mt-3 text-lg font-semibold text-[#001a3d] transition group-hover:text-[#c88e4a]">
+                        {product.name}
+                      </h3>
+                      <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-[#666666]">
+                        {product.overview}
+                      </p>
+                      <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[#c88e4a]">
+                        View details <span aria-hidden>→</span>
+                      </span>
+                    </Link>
+                    <Link
+                      href={buyerOrderHref(product.slug)}
+                      className="focus-ring mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[#001a3d] transition hover:text-[#c88e4a]"
+                    >
+                      Click here to ORDER <span aria-hidden>→</span>
+                    </Link>
+                  </article>
+                </Reveal>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </>
