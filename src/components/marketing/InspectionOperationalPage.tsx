@@ -194,8 +194,8 @@ export function InspectionOperationalPage() {
       <MarketingAbstractBand
         className="border-y border-white/10 py-14 lg:py-16"
         imageSrc={INSPECTIONS_SECTION_IMAGES.commodityBand.src}
-        overlayClassName="bg-[#071525]/25"
-        vignetteOpacity={0.22}
+        overlayClassName="bg-[#071525]/28"
+        vignetteOpacity={0.18}
       >
         <div className="container-page space-y-12">
           <Reveal>
@@ -232,16 +232,9 @@ export function InspectionOperationalPage() {
             </div>
           </MotionImageFrame>
           <div className="grid gap-6 lg:grid-cols-2">
-            {INSPECTIONS_COMMODITY_VALIDATION.areas.map((area, i) => {
-              const isLastWide =
-                i === INSPECTIONS_COMMODITY_VALIDATION.areas.length - 1 &&
-                INSPECTIONS_COMMODITY_VALIDATION.areas.length % 2 === 1;
-              const card = (
-                <article
-                  className={`h-full rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm sm:p-8${
-                    isLastWide ? " lg:py-7" : ""
-                  }`}
-                >
+            {INSPECTIONS_COMMODITY_VALIDATION.areas.map((area, i) => (
+              <Reveal key={area.title} delay={i * 0.05} variant="up" bounce>
+                <article className="h-full rounded-xl border border-white/15 bg-white/5 p-6 backdrop-blur-sm sm:p-8">
                   <h3 className="text-lg font-semibold">{stripLeadingMarker(area.title)}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-white/75">{area.lead}</p>
                   <ul className="mt-4 space-y-2">
@@ -253,40 +246,8 @@ export function InspectionOperationalPage() {
                     ))}
                   </ul>
                 </article>
-              );
-              return (
-                <Reveal
-                  key={area.title}
-                  delay={i * 0.05}
-                  variant="up"
-                  bounce
-                  className={isLastWide ? "lg:col-span-2" : undefined}
-                >
-                  {isLastWide ? (
-                    <div className="grid gap-6 lg:grid-cols-2 lg:items-stretch">
-                      {card}
-                      <MotionImageFrame className="h-full min-h-[220px]">
-                        <div className="relative h-full min-h-[220px] overflow-hidden rounded-xl border border-white/15">
-                          <Image
-                            src={INSPECTIONS_SECTION_IMAGES.commodityValidationAccent.src}
-                            alt={INSPECTIONS_SECTION_IMAGES.commodityValidationAccent.alt}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 1024px) 100vw, 50vw"
-                          />
-                          <div
-                            className="absolute inset-0 bg-gradient-to-tr from-[#001a3d]/30 via-transparent to-[#c88e4a]/10"
-                            aria-hidden
-                          />
-                        </div>
-                      </MotionImageFrame>
-                    </div>
-                  ) : (
-                    card
-                  )}
-                </Reveal>
-              );
-            })}
+              </Reveal>
+            ))}
           </div>
         </div>
       </MarketingAbstractBand>

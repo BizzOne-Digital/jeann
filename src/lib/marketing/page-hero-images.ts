@@ -42,8 +42,8 @@ export const PAGE_HERO_IMAGES: Record<PageHeroImageKey, PageHeroImage> = {
   products: AGRICULTURE_IMAGES.greenGrainField,
   resources: RESOURCES_PAGE_IMAGES.heroBanking,
   contact: {
-    src: "/images/hero-reference.png",
-    alt: "Finekarts trade desk and buyer enquiry support",
+    src: "/images/hero-commodities.png",
+    alt: "Refinery, port logistics, and agricultural commodities — oils, grains, and bulk trade",
   },
   insights: {
     src: "/images/insights/market-insights-hero.jpg",

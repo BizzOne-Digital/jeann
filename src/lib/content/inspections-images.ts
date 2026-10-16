@@ -43,11 +43,7 @@ export const INSPECTIONS_SECTION_IMAGES = {
   },
   /** Full-width band behind commodity validation block on /inspections */
   commodityBand: {
-    src: "/images/logistics/bulk-grain-rail-silos.jpg",
-    alt: "Bulk grain hopper train beside silos — commodity corridor validation context",
-  },
-  commodityValidationAccent: {
-    src: "/images/inspections/warehouse-bulk-inspection.png",
-    alt: "Independent bulk warehouse inspection for trade compliance",
+    src: "/images/inspections/port-sampling.png",
+    alt: "Port sampling and supervision during commodity validation",
   },
 } as const;

@@ -16,7 +16,15 @@ export type SugarGradeDetail = {
 };
 
 /** Category cards, heroes, and galleries — sugar crystals only, never packaging bags. */
-export const SUGAR_CATEGORY_COVER_IMAGE = "/images/products/sugar/sugar-category-hero.png";
+export const SUGAR_CATEGORY_COVER_IMAGE = "/images/products/sugar/icumsa-45-white-sugar-2.png";
+
+export const SUGAR_SPOTLIGHT_SLUGS = [
+  "icumsa-45",
+  "icumsa-100",
+  "icumsa-150",
+  "icumsa-600",
+  "icumsa-1200",
+] as const;
 
 export type ProductMarketingExtras = {
   description: string;

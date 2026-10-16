@@ -110,6 +110,11 @@ export const SHIPPING_MODES = [
     text: "For rice, sugar, grains, pulses and other packaged commodities.",
   },
   {
+    title: "Packaging type — ore–bulk–oil (OBO)",
+    text:
+      "Multipurpose vessel configuration for alternating ore, dry bulk, and petroleum oil cargoes — a key packaging and stowage arrangement on dedicated OBO trades.",
+  },
+  {
     title: "Bulk train",
     text: "Hopper cars and unit trains between origin elevators, inland terminals, and port load points for grain, sugar, and dry bulk.",
   },

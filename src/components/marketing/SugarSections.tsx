@@ -1,7 +1,22 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
-import { SUGAR_CATEGORY, SUGAR_CATEGORY_COVER_IMAGE, type SugarGradeDetail } from "@/lib/content/sugar-product-content";
+import { MediaFieldPair } from "@/components/marketing/MediaFieldPair";
+import { Reveal } from "@/components/motion/Reveal";
+import {
+  getSugarGradeDetail,
+  SUGAR_CATEGORY,
+  SUGAR_CATEGORY_COVER_IMAGE,
+  SUGAR_SPOTLIGHT_SLUGS,
+  type SugarGradeDetail,
+} from "@/lib/content/sugar-product-content";
 import { buyerQuoteHref } from "@/lib/marketing/cta-links";
+
+const SUGAR_OVERVIEW_IMAGE = {
+  src: "/images/products/sugar/icumsa-100-warehouse-aisle.jpg",
+  alt: "ICUMSA sugar stored in an export warehouse aisle",
+};
 
 function DetailList({ title, items }: { title: string; items: string[] }) {
   return (
@@ -65,26 +80,82 @@ export function SugarGradeDetailSections({ grade }: { grade: SugarGradeDetail })
 
 export function SugarCategorySections() {
   const cat = SUGAR_CATEGORY;
+  const spotlights = SUGAR_SPOTLIGHT_SLUGS.map((slug) => getSugarGradeDetail(slug)).filter(Boolean);
+  const featuredVideo = getSugarGradeDetail("icumsa-45")?.youtubeVideoId;
 
   return (
     <>
-      <section className="bg-white marketing-section">
-        <div className="container-page">
-          <p className="text-xs font-semibold tracking-[0.2em] text-[#c88e4a] uppercase">{cat.eyebrow}</p>
-          <h2 className="mt-2 text-2xl font-semibold text-[#001a3d] sm:text-3xl">{cat.title}</h2>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-[#555555]">{cat.lead}</p>
-          <p className="mt-4 text-sm font-medium text-[#001a3d]">Available grades include:</p>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {cat.grades.map((grade) => (
-              <span
-                key={grade}
-                className="rounded-full border border-[#d5d0c8] bg-[#f9f8f5] px-4 py-2 text-sm font-medium text-[#001a3d]"
-              >
-                {grade}
-              </span>
-            ))}
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#faf8f4] via-[#f5f0e8] to-[#ebe4d8] marketing-section">
+        <div
+          className="pointer-events-none absolute -top-12 right-[8%] h-48 w-48 rounded-full bg-[#d4a84b]/15 blur-3xl"
+          aria-hidden
+        />
+        <div className="container-page relative">
+          <Reveal>
+            <p className="text-xs font-semibold tracking-[0.2em] text-[#c88e4a] uppercase">{cat.eyebrow}</p>
+            <h2 className="mt-2 max-w-3xl text-2xl font-semibold text-[#001a3d] sm:text-3xl">{cat.title}</h2>
+            <div className="gold-rule mt-4" />
+            <p className="mt-4 max-w-3xl text-base leading-relaxed text-[#555555]">{cat.lead}</p>
+          </Reveal>
+
+          <Reveal delay={0.06} className="mt-8">
+            <p className="text-sm font-semibold text-[#001a3d]">Our sugar grades include</p>
+          </Reveal>
+
+          <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {spotlights.map((grade, index) => {
+              if (!grade?.heroImage) return null;
+              const isFeatured = grade.slug === "icumsa-45";
+              return (
+                <Reveal key={grade.slug} delay={0.06 + index * 0.04}>
+                  <Link
+                    href={`/products/sugar/${grade.slug}`}
+                    className="group marketing-box marketing-box-interactive flex h-full flex-col overflow-hidden rounded-xl"
+                  >
+                    <div className="relative aspect-[16/10] overflow-hidden bg-[#e4e0d8]">
+                      <Image
+                        src={grade.heroImage}
+                        alt={grade.code}
+                        fill
+                        className="object-cover transition duration-700 group-hover:scale-105"
+                        sizes="(max-width: 768px) 100vw, 360px"
+                        priority={isFeatured}
+                      />
+                      {isFeatured ? (
+                        <span className="absolute top-3 left-3 rounded-full bg-[#c88e4a] px-2.5 py-1 text-[10px] font-bold tracking-wide text-white uppercase">
+                          Featured
+                        </span>
+                      ) : null}
+                    </div>
+                    <div className="flex flex-1 flex-col p-5">
+                      <h3 className="text-base font-semibold text-[#001a3d] transition group-hover:text-[#c88e4a]">
+                        {grade.code}
+                      </h3>
+                      <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-[#555555]">{grade.subtitle}</p>
+                      <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#c88e4a] transition group-hover:gap-2">
+                        View grade <span aria-hidden>→</span>
+                      </span>
+                    </div>
+                  </Link>
+                </Reveal>
+              );
+            })}
           </div>
-          <p className="mt-6 text-sm text-[#777777]">{cat.disclaimer}</p>
+
+          <Reveal delay={0.1} className="mt-10">
+            <MediaFieldPair
+              imageSrc={SUGAR_OVERVIEW_IMAGE.src}
+              imageAlt={SUGAR_OVERVIEW_IMAGE.alt}
+              youtubeUrl={
+                featuredVideo ? `https://www.youtube.com/watch?v=${featuredVideo}` : undefined
+              }
+              videoTitle="ICUMSA sugar overview"
+            />
+          </Reveal>
+
+          <Reveal delay={0.12} className="mt-8">
+            <p className="text-xs leading-relaxed text-[#777777]">{cat.disclaimer}</p>
+          </Reveal>
         </div>
       </section>
 

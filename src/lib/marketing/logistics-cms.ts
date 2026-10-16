@@ -49,6 +49,21 @@ function parseShippingModes(lines: string[]) {
   });
 }
 
+/** Keep CMS edits; append any canonical modes missing from stored copy (e.g. new OBO card). */
+function shippingModesFromCms(modesF: ReturnType<typeof cmsSection>) {
+  const defaultLines = SHIPPING_MODES.map((m) => `${m.title}: ${m.text}`);
+  const fromCms = parseShippingModes(cmsLines(modesF, "modes", defaultLines));
+  const seen = new Set(fromCms.map((m) => m.title.toLowerCase()));
+  for (const mode of SHIPPING_MODES) {
+    const key = mode.title.toLowerCase();
+    if (!seen.has(key)) {
+      fromCms.push(mode);
+      seen.add(key);
+    }
+  }
+  return fromCms;
+}
+
 function parseContractSteps(lines: string[]) {
   return lines.map((line) => {
     const match = line.match(/^(\d+)\.\s*(.+?)\s*—\s*(.+)$/);
@@ -165,13 +180,7 @@ export function buildLogisticsContent(cms: CmsSectionMap) {
         "On programmes we sell, carriage may use the following modes — coordinated with carriers and forwarders, not sold as standalone Finekarts logistics products:",
       ),
     },
-    shippingModes: parseShippingModes(
-      cmsLines(
-        modesF,
-        "modes",
-        SHIPPING_MODES.map((m) => `${m.title}: ${m.text}`),
-      ),
-    ),
+    shippingModes: shippingModesFromCms(modesF),
     documentation: {
       title: cmsField(docsF, "title", SHIPPING_DOCUMENTATION.title),
       lead: cmsField(docsF, "lead", SHIPPING_DOCUMENTATION.lead),

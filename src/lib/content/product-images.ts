@@ -12,7 +12,7 @@ export const CATEGORY_COVERS: Record<string, { image: string; shortName: string;
   sugar: {
     shortName: "Sugar",
     image: SUGAR_CATEGORY_COVER_IMAGE,
-    alt: "Refined sugar in bulk export warehouse",
+    alt: "ICUMSA 45 refined white sugar crystals",
   },
   "rice-and-grains": {
     shortName: "Rice & Grains",
