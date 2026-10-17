@@ -62,8 +62,8 @@ export const PAGE_HERO_IMAGES: Record<PageHeroImageKey, PageHeroImage> = {
     alt: "Grain train beside export silos at a river terminal — verification partners and bulk trade corridors",
   },
   inspections: {
-    src: "/images/inspections/inspections-hero-hmm-stockholm.png",
-    alt: "Container vessel at Terminal Burchardkai — independent cargo inspection and port supervision",
+    src: "/images/inspections/port-cargo-inspection-hero.png",
+    alt: "Independent cargo inspection at port — SGS inspectors supervising vessel loading",
   },
   verification: {
     src: "/images/inspections/cargo-inspector-loading.png",
