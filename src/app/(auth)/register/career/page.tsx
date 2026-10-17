@@ -7,7 +7,7 @@ export default function RegisterCareerPage() {
       <h1 className="display text-3xl text-[var(--navy)]">Career portal registration</h1>
       <p className="mb-6 mt-2 text-sm text-[var(--stone)]">
         Use your email as your username. After registration you&apos;ll return to the{" "}
-        <Link href="/privacy#career-application" className="font-semibold text-[#c88e4a] underline">
+        <Link href="/careers#career-application" className="font-semibold text-[#c88e4a] underline">
           careers application
         </Link>
         .

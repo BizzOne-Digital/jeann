@@ -421,9 +421,9 @@ const BASE_MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
     ],
   },
   {
-    slug: "privacy",
+    slug: "careers",
     title: "Careers",
-    path: "/privacy",
+    path: "/careers",
     seoTitle: "Careers",
     seoDescription: "Career opportunities and applications at Finekarts Incorporated.",
     sections: [

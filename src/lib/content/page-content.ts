@@ -117,7 +117,11 @@ export async function listEditablePages(): Promise<EditablePage[]> {
   const docs = await Page.find({ locale: "en" }).lean();
   const bySlug = new Map(docs.map((doc) => [doc.slug, doc]));
 
-  return registry.map((entry) => mergePage(entry, bySlug.get(entry.slug)));
+  return registry.map((entry) => {
+    const stored =
+      bySlug.get(entry.slug) ?? (entry.slug === "careers" ? bySlug.get("privacy") : undefined);
+    return mergePage(entry, stored);
+  });
 }
 
 export async function getEditablePage(slug: string): Promise<EditablePage | null> {
@@ -129,7 +133,10 @@ export async function getEditablePage(slug: string): Promise<EditablePage | null
   }
 
   const { Page } = await import("@/models");
-  const doc = await Page.findOne({ slug, locale: "en" }).lean();
+  let doc = await Page.findOne({ slug, locale: "en" }).lean();
+  if (!doc && slug === "careers") {
+    doc = await Page.findOne({ slug: "privacy", locale: "en" }).lean();
+  }
   return mergePage(registry, doc ?? undefined);
 }
 
@@ -141,6 +148,11 @@ export async function getPublishedPage(slug: string): Promise<EditablePage | nul
     return registry ? mergePage(registry) : null;
   }
   return page;
+}
+
+/** Careers page CMS (slug migrated from legacy `privacy`). */
+export async function getPublishedCareersPage(): Promise<EditablePage | null> {
+  return getPublishedPage("careers");
 }
 
 /**

@@ -22,7 +22,7 @@ const STATIC_PATHS = [
   "/booking",
   "/register/buyer",
   "/login",
-  "/privacy",
+  "/careers",
   "/privacy-policy",
   "/terms-and-conditions",
   "/cookies",

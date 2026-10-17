@@ -1,4 +1,4 @@
-/** Body imagery for /privacy (Careers). Hero uses OFFICE_HERO_IMAGES.careers (team culture). */
+/** Body imagery for /careers. Hero uses OFFICE_HERO_IMAGES.careers (team culture). */
 
 export const CAREERS_PAGE_IMAGES = {
   interview: {

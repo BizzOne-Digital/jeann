@@ -84,6 +84,10 @@ const METHOD_IMAGES = [
   INSPECTIONS_SECTION_IMAGES.dimensional,
 ] as const;
 
+const COMMODITY_VALIDATION_AREAS = INSPECTIONS_COMMODITY_VALIDATION.areas;
+const COMMODITY_VALIDATION_BAND_AREAS = COMMODITY_VALIDATION_AREAS.slice(0, -1);
+const COMMODITY_VALIDATION_TRAILING_AREA = COMMODITY_VALIDATION_AREAS.at(-1);
+
 export function InspectionOperationalPage() {
   return (
     <div id="inspection-types" className="scroll-mt-20">
@@ -194,8 +198,8 @@ export function InspectionOperationalPage() {
       <MarketingAbstractBand
         className="border-y border-white/10 py-14 lg:py-16"
         imageSrc={INSPECTIONS_SECTION_IMAGES.commodityBand.src}
-        overlayClassName="bg-[#071525]/28"
-        vignetteOpacity={0.18}
+        overlayClassName="bg-[#071525]/55"
+        vignetteOpacity={0.22}
       >
         <div className="container-page space-y-12">
           <Reveal>
@@ -204,43 +208,43 @@ export function InspectionOperationalPage() {
               {INSPECTIONS_COMMODITY_VALIDATION.lead}
             </p>
             <div className="mt-8 grid gap-4 lg:grid-cols-2">
-              <div className="rounded-xl border border-white/15 bg-white/5 p-5">
-                <p className="text-xs font-semibold uppercase tracking-wide text-[#d4a84b]">Verification</p>
-                <p className="mt-2 text-sm leading-relaxed text-white/80">
+              <div className="rounded-xl border border-[#d5d0c8] bg-white p-5 shadow-sm">
+                <p className="text-xs font-semibold uppercase tracking-wide text-[#c88e4a]">Verification</p>
+                <p className="mt-2 text-sm leading-relaxed text-[#555555]">
                   {INSPECTIONS_COMMODITY_VALIDATION.distinction.verification}
                 </p>
               </div>
-              <div className="rounded-xl border border-white/15 bg-white/5 p-5">
-                <p className="text-xs font-semibold uppercase tracking-wide text-[#d4a84b]">Validation</p>
-                <p className="mt-2 text-sm leading-relaxed text-white/80">
+              <div className="rounded-xl border border-[#d5d0c8] bg-white p-5 shadow-sm">
+                <p className="text-xs font-semibold uppercase tracking-wide text-[#c88e4a]">Validation</p>
+                <p className="mt-2 text-sm leading-relaxed text-[#555555]">
                   {INSPECTIONS_COMMODITY_VALIDATION.distinction.validation}
                 </p>
               </div>
             </div>
-            <p className="mt-6 text-sm text-white/70">{INSPECTIONS_COMMODITY_VALIDATION.intro}</p>
+            <p className="mt-6 text-sm text-white/85">{INSPECTIONS_COMMODITY_VALIDATION.intro}</p>
           </Reveal>
           <MotionImageFrame>
-            <div className="relative aspect-[21/9] min-h-[200px] overflow-hidden rounded-xl border border-white/15">
+            <div className="relative aspect-[21/9] min-h-[200px] overflow-hidden rounded-xl border border-white/20 shadow-lg">
               <Image
-                src={INSPECTIONS_SECTION_IMAGES.commodity.src}
-                alt={INSPECTIONS_SECTION_IMAGES.commodity.alt}
+                src={INSPECTIONS_SECTION_IMAGES.commodityFeature.src}
+                alt={INSPECTIONS_SECTION_IMAGES.commodityFeature.alt}
                 fill
                 className="object-cover"
                 sizes="100vw"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#001a3d]/70 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#001a3d]/50 via-transparent to-transparent" />
             </div>
           </MotionImageFrame>
           <div className="grid gap-6 lg:grid-cols-2">
-            {INSPECTIONS_COMMODITY_VALIDATION.areas.map((area, i) => (
+            {COMMODITY_VALIDATION_BAND_AREAS.map((area, i) => (
               <Reveal key={area.title} delay={i * 0.05} variant="up" bounce>
-                <article className="h-full rounded-xl border border-white/15 bg-white/5 p-6 backdrop-blur-sm sm:p-8">
-                  <h3 className="text-lg font-semibold">{stripLeadingMarker(area.title)}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-white/75">{area.lead}</p>
+                <article className="h-full rounded-xl border border-[#d5d0c8] bg-white p-6 shadow-sm sm:p-8">
+                  <h3 className="text-lg font-semibold text-[#001a3d]">{stripLeadingMarker(area.title)}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-[#555555]">{area.lead}</p>
                   <ul className="mt-4 space-y-2">
                     {area.bullets.map((b) => (
-                      <li key={b} className="flex gap-2 text-sm leading-relaxed text-white/80">
-                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#d4a84b]" aria-hidden />
+                      <li key={b} className="flex gap-2 text-sm leading-relaxed text-[#444444]">
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#c88e4a]" aria-hidden />
                         {b}
                       </li>
                     ))}
@@ -253,7 +257,27 @@ export function InspectionOperationalPage() {
       </MarketingAbstractBand>
 
       <section className="marketing-section bg-[var(--mist)]">
-        <div className="container-page min-w-0">
+        <div className="container-page min-w-0 space-y-10">
+          {COMMODITY_VALIDATION_TRAILING_AREA ? (
+            <Reveal variant="up">
+              <article className="rounded-xl border border-[#d5d0c8] bg-white p-6 shadow-sm sm:p-8">
+                <h3 className="text-lg font-semibold text-[#001a3d]">
+                  {stripLeadingMarker(COMMODITY_VALIDATION_TRAILING_AREA.title)}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-[#555555]">
+                  {COMMODITY_VALIDATION_TRAILING_AREA.lead}
+                </p>
+                <ul className="mt-4 space-y-2">
+                  {COMMODITY_VALIDATION_TRAILING_AREA.bullets.map((b) => (
+                    <li key={b} className="flex gap-2 text-sm leading-relaxed text-[#444444]">
+                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#c88e4a]" aria-hidden />
+                      {b}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            </Reveal>
+          ) : null}
           <Reveal>
             <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">
               {INSPECTIONS_COMMODITY_COMPARISON.title}

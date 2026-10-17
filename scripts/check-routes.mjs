@@ -63,7 +63,7 @@ const staticPages = [
   "/logistics",
   "/packaging",
   "/partners",
-  "/privacy",
+  "/careers",
   "/products",
   "/register/buyer",
   "/resources",

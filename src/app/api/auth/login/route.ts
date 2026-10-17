@@ -41,7 +41,7 @@ function portalRedirectForRoles(roles: string[]): string | null {
     return "/portal/buyer";
   }
   if (roles.includes("career_applicant")) {
-    return "/privacy#career-application";
+    return "/careers#career-application";
   }
   return null;
 }

@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(
-      { ok: true, redirectTo: "/privacy#career-application" },
+      { ok: true, redirectTo: "/careers#career-application" },
       { status: 201 },
     );
   } catch (error) {

@@ -5,7 +5,7 @@ Place counsel-approved PDF files in this folder using **exact filenames**:
 | File | Website page |
 |------|----------------|
 | `finekarts-terms-of-use.pdf` | /terms |
-| `finekarts-privacy-policy.pdf` | /privacy |
+| `finekarts-privacy-policy.pdf` | /privacy-policy |
 | `finekarts-buyer-terms.pdf` | /buyer-terms |
 | `finekarts-general-conditions-of-sale.pdf` | /resources |
 | `finekarts-incoterms-reference.pdf` | /trade |

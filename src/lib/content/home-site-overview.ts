@@ -115,7 +115,7 @@ export const HOME_SITE_COMPANY_LINKS = [
     id: "careers",
     title: "Careers",
     summary: "Join commodity trading, operations, and compliance teams at Finekarts.",
-    href: "/privacy",
+    href: "/careers",
     ctaLabel: "Careers portal →",
     image: HOME_OVERVIEW_COMPANY_IMAGES.careers,
   },

@@ -18,8 +18,8 @@ export const HOME_OVERVIEW_TRADE_IMAGES = {
     alt: "Loading supervision supporting due diligence and counterparty review",
   },
   inspections: {
-    src: "/images/inspections/port-cargo-inspection-hero.png",
-    alt: "Independent cargo inspection at the load port",
+    src: "/images/inspections/port-sampling.png",
+    alt: "Port sampling during independent cargo inspection",
   },
 } as const;
 

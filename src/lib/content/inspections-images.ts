@@ -37,13 +37,14 @@ export const INSPECTIONS_SECTION_IMAGES = {
     src: "/images/inspections/green-coffee-warehouse-inspection.png",
     alt: "Warehouse inspection for trade and environmental compliance",
   },
-  commodity: {
-    src: "/images/inspections/sugar-bags-hold.png",
-    alt: "Commodity hold inspection for quantity and quality verification",
-  },
-  /** Full-width band behind commodity validation block on /inspections */
+  /** Full-width band background (commodity validation) — unique to /inspections */
   commodityBand: {
-    src: "/images/inspections/port-sampling.png",
-    alt: "Port sampling and supervision during commodity validation",
+    src: "/images/inspections/inspections-hero-hmm-stockholm.png",
+    alt: "Container vessel at Terminal Burchardkai with gantry cranes — commodity validation context",
+  },
+  /** Foreground strip above the white content cards inside the band */
+  commodityFeature: {
+    src: "/images/inspections/commodity-validation-team.png",
+    alt: "Inspection team reviewing quality data on site with hard hats and safety glasses",
   },
 } as const;

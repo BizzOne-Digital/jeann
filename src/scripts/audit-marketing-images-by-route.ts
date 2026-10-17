@@ -48,7 +48,7 @@ const ROUTES: RouteDef[] = [
   { route: "/logistics", entry: "src/app/(marketing)/logistics/page.tsx", heroKey: "logistics" },
   { route: "/packaging", entry: "src/app/(marketing)/packaging/page.tsx", heroKey: "packaging" },
   { route: "/team", entry: "src/app/(marketing)/team/page.tsx", heroKey: "team" },
-  { route: "/privacy", entry: "src/app/(marketing)/privacy/page.tsx", heroKey: "careers" },
+  { route: "/careers", entry: "src/app/(marketing)/careers/page.tsx", heroKey: "careers" },
   { route: "/faq", entry: "src/app/(marketing)/faq/page.tsx", heroKey: "faq" },
   { route: "/testimonials", entry: "src/app/(marketing)/testimonials/page.tsx", heroKey: "testimonials" },
   { route: "/booking", entry: "src/app/(marketing)/booking/page.tsx", heroKey: "booking" },

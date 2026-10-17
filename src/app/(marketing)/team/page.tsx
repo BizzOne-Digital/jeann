@@ -84,7 +84,7 @@ export default async function TeamPage() {
               {members.length} team member{members.length === 1 ? "" : "s"} listed
             </p>
             <p>
-              <Link href="/privacy" className="font-bold text-[#c88e4a] underline">
+              <Link href="/careers" className="font-bold text-[#c88e4a] underline">
                 Careers
               </Link>
               {" · "}

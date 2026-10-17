@@ -15,7 +15,7 @@ const LINKS = [
       { href: "/about", label: "About" },
       { href: "/team", label: "Team" },
       { href: "/testimonials", label: "Testimonials" },
-      { href: "/privacy", label: "Careers" },
+      { href: "/careers", label: "Careers" },
       { href: "/faq", label: "FAQ" },
       { href: "/contact", label: "Contact" },
     ],
@@ -184,7 +184,7 @@ export async function SiteFooter() {
                   Testimonials
                 </Link>
                 <span className="text-white/30" aria-hidden>|</span>
-                <Link href="/privacy" className="hover:text-white">
+                <Link href="/careers" className="hover:text-white">
                   Careers
                 </Link>
               </nav>

@@ -1,4 +1,4 @@
-/** Canonical /privacy (Careers) marketing copy & form options. */
+/** Canonical /careers marketing copy & form options. */
 
 export const CAREERS_PAGE_HERO = {
   eyebrow: "Career portal",
