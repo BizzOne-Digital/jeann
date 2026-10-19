@@ -34,8 +34,8 @@ export const INSPECTIONS_SECTION_IMAGES = {
     alt: "In-process bulk warehouse inspection",
   },
   regulatory: {
-    src: "/images/inspections/green-coffee-warehouse-inspection.png",
-    alt: "Warehouse inspection for trade and environmental compliance",
+    src: "/images/inspections/scope-cargo-inspector.jpg",
+    alt: "Cargo inspector supervising bulk grain loading into a vessel hold",
   },
   /** Full-width band background (commodity validation) — unique to /inspections */
   commodityBand: {

@@ -13,6 +13,7 @@ type Props = {
   sectionId?: string;
   tone?: "dark" | "light";
   size?: "default" | "compact";
+  overlayPreset?: "default" | "inspections";
   defaults: {
     brand?: string;
     title: string;
@@ -27,6 +28,7 @@ export async function CmsPageHero({
   sectionId = "hero",
   tone = "dark",
   size = "default",
+  overlayPreset = "default",
   defaults,
 }: Props) {
   const page = await getPublishedPage(pageSlug);
@@ -62,6 +64,7 @@ export async function CmsPageHero({
       primaryCta={primaryCta}
       secondaryCta={secondaryCta}
       size={size}
+      overlayPreset={overlayPreset}
     />
   );
 }

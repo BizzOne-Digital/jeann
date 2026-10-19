@@ -16,6 +16,7 @@ export default async function InspectionsPage() {
     <>
       <CmsPageHero
         pageSlug="inspections"
+        overlayPreset="inspections"
         defaults={{
           brand: INSPECTIONS_HERO.eyebrow,
           title: INSPECTIONS_HERO.title,

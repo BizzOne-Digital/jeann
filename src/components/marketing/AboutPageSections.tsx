@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { MarketingAbstractBand } from "@/components/marketing/MarketingAbstractBand";
 import { motion, useReducedMotion } from "framer-motion";
@@ -15,6 +16,12 @@ import { ABOUT_SECTION_IMAGE_META } from "@/lib/content/about-images";
 import { LogisticsPairedRow } from "@/components/marketing/LogisticsVisuals";
 import { Reveal } from "@/components/motion/Reveal";
 import { buyerQuoteHref } from "@/lib/marketing/cta-links";
+import {
+  HERO_DARK_OVERLAY_WASH,
+  HERO_INSPECTIONS_OVERLAY_ACCENT,
+  HERO_INSPECTIONS_OVERLAY_BOTTOM,
+  HERO_PAGE_OVERLAY_HORIZONTAL,
+} from "@/lib/marketing/hero-layout";
 import { cn } from "@/lib/utils/cn";
 
 function HighlightIcon({ type }: { type: string }) {
@@ -282,15 +289,27 @@ export function AboutPageSections({
         </div>
       </section>
 
-      <section className="relative overflow-hidden bg-[#071525] py-16 text-white lg:py-20">
-        <div
-          className="pointer-events-none absolute inset-0 opacity-40"
+      <section className="relative overflow-hidden py-16 text-white lg:py-20">
+        <Image
+          src={ABOUT_SECTION_IMAGE_META.contactBand.src}
+          alt=""
+          fill
+          className="object-cover object-center"
+          sizes="100vw"
           aria-hidden
-          style={{
-            background:
-              "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(232,154,45,0.18), transparent 65%)",
-          }}
         />
+        <div className={`pointer-events-none absolute inset-0 ${HERO_DARK_OVERLAY_WASH}`} aria-hidden />
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{ background: HERO_INSPECTIONS_OVERLAY_ACCENT }}
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{ background: HERO_PAGE_OVERLAY_HORIZONTAL }}
+          aria-hidden
+        />
+        <div className={`pointer-events-none absolute inset-0 ${HERO_INSPECTIONS_OVERLAY_BOTTOM}`} aria-hidden />
         <div className="container-page relative">
           <div className="mx-auto max-w-3xl text-center">
             <Reveal>

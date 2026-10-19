@@ -36,16 +36,22 @@ function SectionHeading({
   title,
   lead,
   className = "",
+  titleClassName = "text-[#001a3d]",
+  leadClassName = "text-[#555555]",
 }: {
   title: string;
   lead?: string;
   className?: string;
+  titleClassName?: string;
+  leadClassName?: string;
 }) {
   return (
     <div className={className}>
-      <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">{stripLeadingMarker(title)}</h2>
+      <h2 className={cn("text-2xl font-semibold sm:text-3xl", titleClassName)}>
+        {stripLeadingMarker(title)}
+      </h2>
       {lead ? (
-        <p className="mt-4 max-w-3xl text-sm leading-relaxed text-[#555555] sm:text-base">{lead}</p>
+        <p className={cn("mt-4 max-w-3xl text-sm leading-relaxed sm:text-base", leadClassName)}>{lead}</p>
       ) : null}
     </div>
   );
@@ -339,7 +345,8 @@ export function InsightsOperationalPage() {
             <SectionHeading
               title={INSIGHTS_SOP.title}
               lead={INSIGHTS_SOP.lead}
-              className="[&_h2]:text-white [&_p]:text-white/70"
+              titleClassName="text-white"
+              leadClassName="text-white"
             />
           </Reveal>
           <div className="mt-8 grid gap-5 lg:grid-cols-2">

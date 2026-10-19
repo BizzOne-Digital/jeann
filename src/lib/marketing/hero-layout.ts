@@ -19,6 +19,16 @@ export const HERO_DARK_OVERLAY_HORIZONTAL = HERO_HOME_OVERLAY_HORIZONTAL;
 export const HERO_DARK_OVERLAY_BOTTOM =
   "bg-gradient-to-t from-[rgb(var(--navy-rgb)/0.45)] via-transparent to-transparent";
 
+/** Inspections hero — deeper left text band plus warm gold / ocean accent washes. */
+export const HERO_INSPECTIONS_OVERLAY_HORIZONTAL =
+  "linear-gradient(90deg, rgb(var(--navy-rgb)) 0%, rgb(var(--navy-rgb) / 0.94) 12%, rgb(var(--navy-rgb) / 0.82) 24%, rgb(var(--navy-rgb) / 0.58) 38%, rgb(var(--navy-rgb) / 0.28) 52%, transparent 68%)";
+
+export const HERO_INSPECTIONS_OVERLAY_ACCENT =
+  "radial-gradient(ellipse 85% 70% at 8% 92%, rgba(200,142,74,0.38) 0%, transparent 58%), radial-gradient(ellipse 65% 55% at 92% 18%, rgba(58,107,140,0.32) 0%, transparent 52%), radial-gradient(ellipse 50% 40% at 50% 100%, rgba(0,26,61,0.35) 0%, transparent 70%)";
+
+export const HERO_INSPECTIONS_OVERLAY_BOTTOM =
+  "bg-gradient-to-t from-[rgb(var(--navy-rgb)/0.62)] via-[rgb(var(--navy-rgb)/0.18)] to-transparent";
+
 export const MARKETING_HEADER_HEIGHT = "5.775rem";
 
 /** Homepage trade-alert strip below the header (compact mode). */

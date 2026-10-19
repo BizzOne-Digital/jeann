@@ -7,6 +7,9 @@ import { MaskedHeadline, Reveal } from "@/components/motion/Reveal";
 import {
   HERO_DARK_OVERLAY_BOTTOM,
   HERO_DARK_OVERLAY_WASH,
+  HERO_INSPECTIONS_OVERLAY_ACCENT,
+  HERO_INSPECTIONS_OVERLAY_BOTTOM,
+  HERO_INSPECTIONS_OVERLAY_HORIZONTAL,
   HERO_PAGE_OVERLAY_HORIZONTAL,
   MARKETING_HERO_COMPACT_INNER_CLASS,
   MARKETING_HERO_COMPACT_SECTION_CLASS,
@@ -41,6 +44,8 @@ type Props = {
   youtubeVideoId?: string;
   /** Shorter hero — less vertical scroll on dense pages */
   size?: "default" | "compact";
+  /** Richer brand gradients on the photo (e.g. inspections). */
+  overlayPreset?: "default" | "inspections";
 };
 
 export function PageHero({
@@ -57,6 +62,7 @@ export function PageHero({
   priority = true,
   youtubeVideoId,
   size = "default",
+  overlayPreset = "default",
 }: Props) {
   const compact = size === "compact";
   const sectionClass = compact ? MARKETING_HERO_COMPACT_SECTION_CLASS : MARKETING_HERO_SECTION_CLASS;
@@ -101,11 +107,27 @@ export function PageHero({
             />
           )}
           <div className={`absolute inset-0 ${HERO_DARK_OVERLAY_WASH}`} />
+          {overlayPreset === "inspections" ? (
+            <div
+              className="absolute inset-0"
+              style={{ background: HERO_INSPECTIONS_OVERLAY_ACCENT }}
+              aria-hidden
+            />
+          ) : null}
           <div
             className="absolute inset-0"
-            style={{ background: HERO_PAGE_OVERLAY_HORIZONTAL }}
+            style={{
+              background:
+                overlayPreset === "inspections"
+                  ? HERO_INSPECTIONS_OVERLAY_HORIZONTAL
+                  : HERO_PAGE_OVERLAY_HORIZONTAL,
+            }}
           />
-          <div className={`absolute inset-0 ${HERO_DARK_OVERLAY_BOTTOM}`} />
+          <div
+            className={`absolute inset-0 ${
+              overlayPreset === "inspections" ? HERO_INSPECTIONS_OVERLAY_BOTTOM : HERO_DARK_OVERLAY_BOTTOM
+            }`}
+          />
         </div>
       ) : (
         <div

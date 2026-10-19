@@ -49,10 +49,14 @@ function parseShippingModes(lines: string[]) {
   });
 }
 
+const REMOVED_SHIPPING_MODE_TITLES = new Set(["bulk train"]);
+
 /** Keep CMS edits; append any canonical modes missing from stored copy (e.g. new OBO card). */
 function shippingModesFromCms(modesF: ReturnType<typeof cmsSection>) {
   const defaultLines = SHIPPING_MODES.map((m) => `${m.title}: ${m.text}`);
-  const fromCms = parseShippingModes(cmsLines(modesF, "modes", defaultLines));
+  const fromCms = parseShippingModes(cmsLines(modesF, "modes", defaultLines)).filter(
+    (m) => !REMOVED_SHIPPING_MODE_TITLES.has(m.title.toLowerCase()),
+  );
   const seen = new Set(fromCms.map((m) => m.title.toLowerCase()));
   for (const mode of SHIPPING_MODES) {
     const key = mode.title.toLowerCase();
