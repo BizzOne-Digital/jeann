@@ -12,6 +12,7 @@ type Props = {
   /** Gold / light vignette strength (0–1). Default 0.4. */
   vignetteOpacity?: number;
   imageSrc?: string;
+  imageClassName?: string;
   id?: string;
   "aria-label"?: string;
 };
@@ -23,6 +24,7 @@ export function MarketingAbstractBand({
   overlayClassName = "bg-[var(--footer-bg)]/88",
   vignetteOpacity = 0.4,
   imageSrc = DEFAULT_ABSTRACT,
+  imageClassName = "object-cover object-center",
   id,
   "aria-label": ariaLabel,
 }: Props) {
@@ -36,7 +38,7 @@ export function MarketingAbstractBand({
         src={imageSrc}
         alt=""
         fill
-        className="object-cover object-center"
+        className={imageClassName}
         sizes="100vw"
         aria-hidden
       />

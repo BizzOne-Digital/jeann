@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Cormorant_Garamond, Source_Sans_3, IBM_Plex_Mono } from "next/font/google";
 import { IntroGate } from "@/components/motion/IntroGate";
 import "./globals.css";
@@ -69,11 +70,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         suppressHydrationWarning
         className="min-h-full w-full max-w-full overflow-x-clip antialiased"
       >
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{if(!sessionStorage.getItem("finekarts-intro-seen")){document.body.classList.add("intro-active");}}catch(e){}})();`,
-          }}
-        />
+        <Script id="finekarts-intro-active" strategy="beforeInteractive">
+          {`(function(){try{if(!sessionStorage.getItem("finekarts-intro-seen")){document.body.classList.add("intro-active");}}catch(e){}})();`}
+        </Script>
         <IntroGate />
         <div id="finekarts-site-root" className="w-full max-w-full overflow-x-clip">
           {children}

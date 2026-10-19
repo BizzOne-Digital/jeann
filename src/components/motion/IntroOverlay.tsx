@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useLayoutEffect, useState, useSyncExternalStore } from "react";
 
 const SESSION_KEY = "finekarts-intro-seen";
 const INTRO_ACTIVE_CLASS = "intro-active";
@@ -31,6 +31,12 @@ export function IntroOverlay() {
   const shouldOfferIntro = useSyncExternalStore(subscribeIntro, getIntroSnapshot, getServerSnapshot);
   const [dismissed, setDismissed] = useState(false);
   const show = shouldOfferIntro && !dismissed;
+
+  useLayoutEffect(() => {
+    if (show) {
+      document.body.classList.add(INTRO_ACTIVE_CLASS);
+    }
+  }, [show]);
 
   useEffect(() => {
     if (!show) {

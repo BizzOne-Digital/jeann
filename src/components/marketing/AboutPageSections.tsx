@@ -16,12 +16,6 @@ import { ABOUT_SECTION_IMAGE_META } from "@/lib/content/about-images";
 import { LogisticsPairedRow } from "@/components/marketing/LogisticsVisuals";
 import { Reveal } from "@/components/motion/Reveal";
 import { buyerQuoteHref } from "@/lib/marketing/cta-links";
-import {
-  HERO_DARK_OVERLAY_WASH,
-  HERO_INSPECTIONS_OVERLAY_ACCENT,
-  HERO_INSPECTIONS_OVERLAY_BOTTOM,
-  HERO_PAGE_OVERLAY_HORIZONTAL,
-} from "@/lib/marketing/hero-layout";
 import { cn } from "@/lib/utils/cn";
 
 function HighlightIcon({ type }: { type: string }) {
@@ -289,7 +283,7 @@ export function AboutPageSections({
         </div>
       </section>
 
-      <section className="relative overflow-hidden py-16 text-white lg:py-20">
+      <section className="relative overflow-hidden py-[3.4rem] text-white lg:py-[4.25rem]">
         <Image
           src={ABOUT_SECTION_IMAGE_META.contactBand.src}
           alt=""
@@ -298,18 +292,10 @@ export function AboutPageSections({
           sizes="100vw"
           aria-hidden
         />
-        <div className={`pointer-events-none absolute inset-0 ${HERO_DARK_OVERLAY_WASH}`} aria-hidden />
         <div
-          className="pointer-events-none absolute inset-0"
-          style={{ background: HERO_INSPECTIONS_OVERLAY_ACCENT }}
+          className="pointer-events-none absolute inset-0 bg-[#071525]/72"
           aria-hidden
         />
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{ background: HERO_PAGE_OVERLAY_HORIZONTAL }}
-          aria-hidden
-        />
-        <div className={`pointer-events-none absolute inset-0 ${HERO_INSPECTIONS_OVERLAY_BOTTOM}`} aria-hidden />
         <div className="container-page relative">
           <div className="mx-auto max-w-3xl text-center">
             <Reveal>

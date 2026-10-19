@@ -198,8 +198,9 @@ export function InspectionOperationalPage() {
       <MarketingAbstractBand
         className="border-y border-white/10 py-14 lg:py-16"
         imageSrc={INSPECTIONS_SECTION_IMAGES.commodityBand.src}
-        overlayClassName="bg-[#071525]/55"
-        vignetteOpacity={0.22}
+        imageClassName="object-cover object-center saturate-[1.12] brightness-[1.06]"
+        overlayClassName="bg-[#071525]/28"
+        vignetteOpacity={0.1}
       >
         <div className="container-page space-y-12">
           <Reveal>
@@ -208,13 +209,13 @@ export function InspectionOperationalPage() {
               {INSPECTIONS_COMMODITY_VALIDATION.lead}
             </p>
             <div className="mt-8 grid gap-4 lg:grid-cols-2">
-              <div className="rounded-xl border border-[#d5d0c8] bg-white p-5 shadow-sm">
+              <div className="rounded-xl border border-[#d5d0c8] border-t-[3px] border-t-[#c88e4a] bg-white/95 p-5 shadow-[0_10px_32px_rgba(0,26,61,0.14)] ring-1 ring-[#001a3d]/10 backdrop-blur-sm">
                 <p className="text-xs font-semibold uppercase tracking-wide text-[#c88e4a]">Verification</p>
                 <p className="mt-2 text-sm leading-relaxed text-[#555555]">
                   {INSPECTIONS_COMMODITY_VALIDATION.distinction.verification}
                 </p>
               </div>
-              <div className="rounded-xl border border-[#d5d0c8] bg-white p-5 shadow-sm">
+              <div className="rounded-xl border border-[#d5d0c8] border-t-[3px] border-t-[#c88e4a] bg-white/95 p-5 shadow-[0_10px_32px_rgba(0,26,61,0.14)] ring-1 ring-[#001a3d]/10 backdrop-blur-sm">
                 <p className="text-xs font-semibold uppercase tracking-wide text-[#c88e4a]">Validation</p>
                 <p className="mt-2 text-sm leading-relaxed text-[#555555]">
                   {INSPECTIONS_COMMODITY_VALIDATION.distinction.validation}
@@ -238,7 +239,7 @@ export function InspectionOperationalPage() {
           <div className="grid gap-6 lg:grid-cols-2">
             {COMMODITY_VALIDATION_BAND_AREAS.map((area, i) => (
               <Reveal key={area.title} delay={i * 0.05} variant="up" bounce>
-                <article className="h-full rounded-xl border border-[#d5d0c8] bg-white p-6 shadow-sm sm:p-8">
+                <article className="h-full rounded-xl border border-[#d5d0c8] border-t-[3px] border-t-[#c88e4a] bg-white/95 p-6 shadow-[0_10px_32px_rgba(0,26,61,0.14)] ring-1 ring-[#001a3d]/10 backdrop-blur-sm sm:p-8">
                   <h3 className="text-lg font-semibold text-[#001a3d]">{stripLeadingMarker(area.title)}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-[#555555]">{area.lead}</p>
                   <ul className="mt-4 space-y-2">
