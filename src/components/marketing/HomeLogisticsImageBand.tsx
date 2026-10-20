@@ -15,7 +15,7 @@ export function HomeLogisticsImageBand() {
         src={image.src}
         alt={image.alt}
         fill
-        className="object-cover object-center"
+        className="object-cover object-[50%_58%] sm:object-[50%_52%]"
         sizes="100vw"
       />
       <div
