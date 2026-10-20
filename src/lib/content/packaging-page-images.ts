@@ -58,8 +58,8 @@ export const PACKAGING_PAGE_IMAGES = {
     alt: "Unpackaged solid bulk cargo in a vessel hold",
   },
   vesselDryHold: {
-    src: "/images/packaging/bulk-vessel-loading.png",
-    alt: "Dry bulk carrier loading commodity into cargo holds",
+    src: "/images/packaging/bulk-vessel-at-sea.jpg",
+    alt: "Dry bulk carrier at sea for unpackaged commodity programmes",
   },
   vesselLiquidTanks: {
     src: "/images/packaging/iso-tank-2.png",

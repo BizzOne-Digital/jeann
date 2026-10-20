@@ -3,7 +3,7 @@
 export const HOME_PAGE_ONLY_IMAGES = {
   logisticsBand: {
     src: "/images/home/logistics-band-bulk-carrier.jpg",
-    alt: "Bulk carrier and tug at export terminal — global commodity shipping",
+    alt: "Bulk carrier vessel at sea — global dry bulk commodity shipping",
   },
   shippingTerms: {
     src: "/images/home/fob-cif-highway-truck.jpg",

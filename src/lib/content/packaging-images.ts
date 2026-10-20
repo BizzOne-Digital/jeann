@@ -29,20 +29,20 @@ export const PACKAGING_IMAGES = {
     alt: "Warehouse stacked with white FIBC jumbo bags",
   },
   bulkVessel: {
-    src: "/images/packaging/bulk-vessel-cargo-loading.png",
-    alt: "Bulk carrier vessel loading dry commodity cargo at port",
+    src: "/images/packaging/bulk-vessel-at-sea.jpg",
+    alt: "Bulk carrier vessel at sea — dry bulk commodity programmes",
   },
   bulkVesselLoading: {
-    src: "/images/packaging/bulk-vessel-loading.png",
-    alt: "Bulk vessel being loaded with dry bulk cargo at a marine terminal",
+    src: "/images/packaging/bulk-vessel-at-sea.jpg",
+    alt: "Bulk carrier vessel at sea on an international dry bulk route",
   },
   bulkVesselHold: {
     src: "/images/packaging/bulk-vessel-hold.png",
     alt: "Dry bulk commodity in a ship hold during loading operations",
   },
   bulkVesselPort: {
-    src: "/images/packaging/bulk-vessel-cargo-loading.png",
-    alt: "Bulk carrier loading dry commodity cargo at port",
+    src: "/images/packaging/bulk-vessel-at-sea.jpg",
+    alt: "Bulk carrier at sea — port-to-port dry bulk logistics",
   },
   containerizedCargoPort: {
     src: "/images/packaging/containerized-cargo-port.png",

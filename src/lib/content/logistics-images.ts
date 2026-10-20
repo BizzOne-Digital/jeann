@@ -75,8 +75,8 @@ export const LOGISTICS_PAGE_ONLY_IMAGES = {
     alt: "Liquid bulk tanker vessel at sea with cargo piping on deck",
   },
   bulkCarrierLoading: {
-    src: "/images/logistics/page/bulk-carrier-loading.jpg",
-    alt: "Bulk carrier loading grain at an export terminal",
+    src: "/images/packaging/bulk-vessel-at-sea.jpg",
+    alt: "Bulk carrier vessel at sea — dry bulk shipping mode",
   },
   closingCifVessel: {
     src: "/images/logistics/page/closing-cif-vessel.jpg",
