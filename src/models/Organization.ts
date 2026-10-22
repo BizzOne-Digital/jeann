@@ -29,6 +29,8 @@ export interface IOrganization {
   businessAddressCity?: string;
   businessAddressRegion?: string;
   businessAddressPostal?: string;
+  taxNumber?: string;
+  previousHsCode?: string;
   website?: string;
   domain?: string;
   status: OrganizationStatus;
@@ -63,6 +65,8 @@ const organizationSchema = new Schema<IOrganization>(
     businessAddressCity: { type: String, trim: true },
     businessAddressRegion: { type: String, trim: true },
     businessAddressPostal: { type: String, trim: true },
+    taxNumber: { type: String, trim: true },
+    previousHsCode: { type: String, trim: true },
     website: { type: String, trim: true },
     domain: { type: String, lowercase: true, trim: true },
     status: {

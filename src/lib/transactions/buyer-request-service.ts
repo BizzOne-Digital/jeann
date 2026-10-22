@@ -45,6 +45,9 @@ function mapRequestFields(data: Record<string, unknown>) {
       : undefined,
     quantity: data.quantity ? String(data.quantity) : undefined,
     unit: data.unit ? String(data.unit) : undefined,
+    submissionKind: data.submissionKind
+      ? (String(data.submissionKind) as import("@/models/PurchaseRequest").PurchaseRequestSubmissionKind)
+      : undefined,
     quantityTolerance: data.quantityTolerance ? String(data.quantityTolerance) : undefined,
     monthlyRequirement: data.monthlyRequirement ? String(data.monthlyRequirement) : undefined,
     contractDuration: data.contractDuration ? String(data.contractDuration) : undefined,
@@ -107,6 +110,26 @@ export async function submitBuyerRequest(input: {
   if (!doc) throw new Error("request_not_editable");
 
   if (!doc.productName?.trim()) throw new Error("incomplete_request");
+
+  const kind = doc.submissionKind ?? "rfq_legacy";
+  if (kind === "icpo_form") {
+    if (
+      !doc.quantity?.trim() ||
+      !doc.destinationPort?.trim() ||
+      !doc.incoterm ||
+      !doc.pricePerMt ||
+      !doc.requestedSpecification?.trim() ||
+      !doc.packaging?.trim()
+    ) {
+      throw new Error("incomplete_request");
+    }
+    if (!["FOB", "CIF"].includes(doc.incoterm.toUpperCase())) {
+      throw new Error("invalid_incoterm");
+    }
+  }
+  if (kind === "icpo_upload" || kind === "loi_upload") {
+    if (!doc.attachments?.length) throw new Error("attachment_required");
+  }
 
   doc.status = "submitted";
   doc.lockedAt = new Date();

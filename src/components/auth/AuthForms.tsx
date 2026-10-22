@@ -223,8 +223,15 @@ export function BuyerRegistrationForm() {
 
       const result = await submit("/api/auth/register/buyer", {
         legalName: String(form.get("legalName") ?? "").trim(),
-        contactName: String(form.get("contactName") ?? "").trim(),
+        managerName: String(form.get("managerName") ?? "").trim(),
+        registrationNumber: String(form.get("registrationNumber") ?? "").trim(),
+        taxNumber: String(form.get("taxNumber") ?? "").trim(),
+        previousHsCode: String(form.get("previousHsCode") ?? "").trim(),
         country: String(form.get("country") ?? "").trim(),
+        addressLine1: String(form.get("addressLine1") ?? "").trim(),
+        addressCity: String(form.get("addressCity") ?? "").trim(),
+        addressRegion: String(form.get("addressRegion") ?? "").trim(),
+        addressPostal: String(form.get("addressPostal") ?? "").trim(),
         email: String(form.get("email") ?? "").trim(),
         phone: String(form.get("phone") ?? "").trim(),
         password,
@@ -274,27 +281,61 @@ export function BuyerRegistrationForm() {
 
   return (
     <form onSubmit={onSubmit} className="space-y-3">
+      <p className="text-sm text-[var(--stone)]">
+        Use your company <strong>business email</strong> (not Gmail, Yahoo, or other public
+        providers). WhatsApp-capable mobile numbers are preferred.
+      </p>
       <label className="label">
         Legal company name
         <input className="field mt-1" name="legalName" required />
       </label>
+      <label className="label">
+        Registered address (street / suite)
+        <input className="field mt-1" name="addressLine1" required />
+      </label>
       <div className="grid grid-cols-2 gap-3">
         <label className="label">
-          Contact name
-          <input className="field mt-1" name="contactName" required />
+          City
+          <input className="field mt-1" name="addressCity" required />
         </label>
         <label className="label">
           Country
           <input className="field mt-1" name="country" required />
         </label>
       </div>
+      <div className="grid grid-cols-2 gap-3">
+        <label className="label">
+          Region / state
+          <input className="field mt-1" name="addressRegion" />
+        </label>
+        <label className="label">
+          Postal code
+          <input className="field mt-1" name="addressPostal" />
+        </label>
+      </div>
       <label className="label">
-        Work email
+        Manager name
+        <input className="field mt-1" name="managerName" required />
+      </label>
+      <label className="label">
+        Company business email
         <input className="field mt-1" name="email" type="email" autoComplete="email" required />
       </label>
       <label className="label">
-        Phone
+        Manager contact (WhatsApp preferred)
         <input className="field mt-1" name="phone" required />
+      </label>
+      <label className="label">
+        Corporation / legal registration number
+        <input className="field mt-1" name="registrationNumber" required />
+      </label>
+      <label className="label">
+        Tax number (or equivalent)
+        <input className="field mt-1" name="taxNumber" required />
+      </label>
+      <label className="label">
+        Previous HS code(s) traded
+        <input className="field mt-1" name="previousHsCode" placeholder="e.g. 1507.90" required />
       </label>
       <label className="label">
         Password (min. 12 characters, upper, lower, number)
@@ -310,7 +351,12 @@ export function BuyerRegistrationForm() {
         />
       </label>
       <label className="flex gap-2 text-sm">
-        <input name="terms" type="checkbox" required />I accept the buyer terms.
+        <input name="terms" type="checkbox" required />
+        I accept the{" "}
+        <Link href="/buyer-terms" className="font-semibold underline" target="_blank">
+          buyer terms &amp; conditions
+        </Link>
+        .
       </label>
       <label className="flex gap-2 text-sm">
         <input name="privacy" type="checkbox" required />I accept the privacy notice.

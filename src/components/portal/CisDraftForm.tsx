@@ -6,8 +6,11 @@ type CisFormProps = {
   initial: {
     legalName: string;
     registrationNumber: string;
+    taxId: string;
+    previousHsCode: string;
     registeredAddress: string;
     authorizedRepresentative: string;
+    managerPhone: string;
     status: string;
   };
 };
@@ -15,10 +18,13 @@ type CisFormProps = {
 export function CisDraftForm({ initial }: CisFormProps) {
   const [legalName, setLegalName] = useState(initial.legalName);
   const [registrationNumber, setRegistrationNumber] = useState(initial.registrationNumber);
+  const [taxId, setTaxId] = useState(initial.taxId);
+  const [previousHsCode, setPreviousHsCode] = useState(initial.previousHsCode);
   const [registeredAddress, setRegisteredAddress] = useState(initial.registeredAddress);
   const [authorizedRepresentative, setAuthorizedRepresentative] = useState(
     initial.authorizedRepresentative,
   );
+  const [managerPhone, setManagerPhone] = useState(initial.managerPhone);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
@@ -35,8 +41,11 @@ export function CisDraftForm({ initial }: CisFormProps) {
         body: JSON.stringify({
           legalName,
           registrationNumber,
+          taxId,
+          previousHsCode,
           registeredAddress,
           authorizedRepresentative,
+          managerPhone,
         }),
       });
       const body = (await res.json()) as { error?: string; ok?: boolean };
@@ -72,6 +81,20 @@ export function CisDraftForm({ initial }: CisFormProps) {
           className="field mt-1"
           value={registrationNumber}
           onChange={(e) => setRegistrationNumber(e.target.value)}
+          required
+        />
+      </label>
+      <label className="label">
+        Tax number
+        <input className="field mt-1" value={taxId} onChange={(e) => setTaxId(e.target.value)} required />
+      </label>
+      <label className="label">
+        Previous HS code(s)
+        <input
+          className="field mt-1"
+          value={previousHsCode}
+          onChange={(e) => setPreviousHsCode(e.target.value)}
+          required
         />
       </label>
       <label className="label md:col-span-2">
@@ -84,11 +107,20 @@ export function CisDraftForm({ initial }: CisFormProps) {
         />
       </label>
       <label className="label md:col-span-2">
-        Authorized representative
+        Manager / authorized representative
         <input
           className="field mt-1"
           value={authorizedRepresentative}
           onChange={(e) => setAuthorizedRepresentative(e.target.value)}
+          required
+        />
+      </label>
+      <label className="label md:col-span-2">
+        Manager contact (WhatsApp preferred)
+        <input
+          className="field mt-1"
+          value={managerPhone}
+          onChange={(e) => setManagerPhone(e.target.value)}
           required
         />
       </label>

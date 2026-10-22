@@ -10,8 +10,11 @@ export default async function CisPage() {
   let initial = {
     legalName: "",
     registrationNumber: "",
+    taxId: "",
+    previousHsCode: "",
     registeredAddress: "",
     authorizedRepresentative: session.user.name || "",
+    managerPhone: session.user.phone || "",
     status: "draft",
   };
 
@@ -25,11 +28,19 @@ export default async function CisPage() {
       initial = {
         legalName: cis?.legalName || org?.legalName || "",
         registrationNumber: cis?.registrationNumber || org?.registrationNumber || "",
-        registeredAddress: cis?.addresses?.[0]?.line1 || "",
+        taxId: cis?.taxId || org?.taxNumber || "",
+        previousHsCode: org?.previousHsCode || "",
+        registeredAddress:
+          cis?.addresses?.[0]?.line1 || org?.businessAddressLine1 || "",
         authorizedRepresentative:
           cis?.authorizedSigners?.[0]?.name ||
           cis?.representatives?.[0]?.name ||
           session.user.name ||
+          "",
+        managerPhone:
+          cis?.representatives?.[0]?.phone ||
+          cis?.contacts?.[0]?.phone ||
+          session.user.phone ||
           "",
         status: cis?.status || "draft",
       };

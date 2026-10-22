@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { BUSINESS_EMAIL_MESSAGE, isBusinessEmail } from "@/lib/validation/business-email";
 
 export const loginSchema = z.object({
   email: z.string().trim().email().max(254),
@@ -9,10 +10,17 @@ export const loginSchema = z.object({
 export const registerBuyerSchema = z
   .object({
     legalName: z.string().trim().min(2).max(200),
-    registrationNumber: z.string().trim().max(80).optional(),
+    registrationNumber: z.string().trim().min(2).max(80),
+    taxNumber: z.string().trim().min(2).max(80),
+    previousHsCode: z.string().trim().min(4).max(40),
     country: z.string().trim().min(2).max(120),
+    addressLine1: z.string().trim().min(3).max(200),
+    addressCity: z.string().trim().min(2).max(120),
+    addressRegion: z.string().trim().max(120).optional(),
+    addressPostal: z.string().trim().max(32).optional(),
     domain: z.string().trim().max(120).optional(),
-    contactName: z.string().trim().min(2).max(120),
+    managerName: z.string().trim().min(2).max(120),
+    contactName: z.string().trim().min(2).max(120).optional(),
     email: z.string().trim().email().max(254),
     phone: z.string().trim().min(7).max(40),
     password: z
@@ -29,6 +37,10 @@ export const registerBuyerSchema = z
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"],
+  })
+  .refine((data) => isBusinessEmail(data.email), {
+    message: BUSINESS_EMAIL_MESSAGE,
+    path: ["email"],
   });
 
 export const registerCareerApplicantSchema = z

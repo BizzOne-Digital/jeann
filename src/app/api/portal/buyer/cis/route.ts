@@ -6,9 +6,12 @@ import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
 
 const bodySchema = z.object({
   legalName: z.string().trim().min(2).max(200),
-  registrationNumber: z.string().trim().max(80).optional(),
+  registrationNumber: z.string().trim().min(2).max(80),
+  taxId: z.string().trim().min(2).max(80),
+  previousHsCode: z.string().trim().min(4).max(40),
   registeredAddress: z.string().trim().min(3).max(300),
   authorizedRepresentative: z.string().trim().min(2).max(120),
+  managerPhone: z.string().trim().min(7).max(40),
 });
 
 export async function POST(request: NextRequest) {
@@ -47,19 +50,21 @@ export async function POST(request: NextRequest) {
         version,
         status: "draft",
         legalName: input.legalName,
-        registrationNumber: input.registrationNumber || undefined,
+        registrationNumber: input.registrationNumber,
+        taxId: input.taxId,
         representatives: [
           {
             name: input.authorizedRepresentative,
-            title: "Authorized representative",
+            title: "Manager",
             email: session.user.email,
+            phone: input.managerPhone,
           },
         ],
         contacts: [
           {
             name: input.authorizedRepresentative,
             email: session.user.email,
-            phone: session.user.phone,
+            phone: input.managerPhone,
           },
         ],
         addresses: [
@@ -76,10 +81,27 @@ export async function POST(request: NextRequest) {
             email: session.user.email,
           },
         ],
-        productInterests: existing?.productInterests ?? [],
+        productInterests: existing?.productInterests?.length
+          ? existing.productInterests
+          : [{ productName: "—", notes: `Previous HS code: ${input.previousHsCode}` }],
         sensitiveFieldsMasked: existing?.sensitiveFieldsMasked ?? {},
+        businessActivities: `Previous HS code: ${input.previousHsCode}`,
       },
       { upsert: true, new: true },
+    );
+
+    const { Organization } = await import("@/models");
+    await Organization.updateOne(
+      { _id: orgId },
+      {
+        $set: {
+          legalName: input.legalName,
+          registrationNumber: input.registrationNumber,
+          taxNumber: input.taxId,
+          previousHsCode: input.previousHsCode,
+          businessAddressLine1: input.registeredAddress,
+        },
+      },
     );
 
     return NextResponse.json({ ok: true });

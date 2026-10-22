@@ -73,7 +73,8 @@ export async function POST(request: NextRequest) {
     const email = input.email.toLowerCase();
     const normalizedEmail = email;
     const passwordHash = await hashPassword(input.password);
-    const nameParts = splitName(input.contactName);
+    const contactName = input.managerName || input.contactName || "";
+    const nameParts = splitName(contactName);
 
     if (!isMongoConfigured()) {
       return NextResponse.json(
@@ -157,8 +158,14 @@ export async function POST(request: NextRequest) {
       legalName: input.legalName,
       normalizedLegalName: normalized,
       registrationNumber: input.registrationNumber,
+      taxNumber: input.taxNumber,
+      previousHsCode: input.previousHsCode,
       jurisdiction: input.country,
       country,
+      businessAddressLine1: input.addressLine1,
+      businessAddressCity: input.addressCity,
+      businessAddressRegion: input.addressRegion,
+      businessAddressPostal: input.addressPostal,
       domain: input.domain?.toLowerCase() || undefined,
       status: "pending",
       onboardingStatus: "email_verification_pending",
@@ -172,7 +179,7 @@ export async function POST(request: NextRequest) {
       passwordHash,
       firstName: nameParts.firstName,
       lastName: nameParts.lastName,
-      name: input.contactName,
+      name: contactName,
       phone: input.phone,
       status: "pending_verification",
       mfaEnabled: false,
@@ -187,6 +194,40 @@ export async function POST(request: NextRequest) {
       roles: ["buyer_org_admin"],
       customPermissions: [],
       status: "active",
+    });
+
+    const { CisProfile } = await import("@/models");
+    await CisProfile.create({
+      organizationId: org._id,
+      version: 1,
+      status: "draft",
+      legalName: input.legalName,
+      registrationNumber: input.registrationNumber,
+      taxId: input.taxNumber,
+      jurisdiction: input.country,
+      representatives: [
+        {
+          name: contactName,
+          title: "Manager",
+          email,
+          phone: input.phone,
+        },
+      ],
+      contacts: [{ name: contactName, email, phone: input.phone }],
+      addresses: [
+        {
+          label: "Registered",
+          line1: input.addressLine1,
+          city: input.addressCity,
+          region: input.addressRegion,
+          postalCode: input.addressPostal,
+          country,
+        },
+      ],
+      productInterests: [{ productName: "—", notes: `Previous HS code: ${input.previousHsCode}` }],
+      authorizedSigners: [{ name: contactName, email }],
+      sensitiveFieldsMasked: {},
+      businessActivities: `Previous HS code: ${input.previousHsCode}`,
     });
 
     const requiredTerms = await getCurrentTerms([...BUYER_REQUIRED_TERMS_KEYS]);
@@ -222,12 +263,12 @@ export async function POST(request: NextRequest) {
       await Promise.all([
         notifyBuyerRegistrationReceived({
           contactEmail: email,
-          contactName: input.contactName,
+          contactName,
           organizationName: input.legalName,
         }),
         notifyAdminNewBuyerRegistration({
           organizationName: input.legalName,
-          contactName: input.contactName,
+          contactName,
           contactEmail: email,
           country,
           organizationId: String(org._id),

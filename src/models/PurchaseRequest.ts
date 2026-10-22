@@ -18,6 +18,12 @@ export type PurchaseRequestStatus =
 
 export type PurchaseRequestSource = "public_form" | "buyer_portal" | "admin" | "employee";
 
+export type PurchaseRequestSubmissionKind =
+  | "icpo_form"
+  | "icpo_upload"
+  | "loi_upload"
+  | "rfq_legacy";
+
 export interface IPurchaseRequest {
   reference: string;
   organizationId?: Types.ObjectId;
@@ -71,6 +77,7 @@ export interface IPurchaseRequest {
   consentEvidence?: Record<string, unknown>;
   ipHash?: string;
   source?: PurchaseRequestSource;
+  submissionKind?: PurchaseRequestSubmissionKind;
 }
 
 export type PurchaseRequestLean = LeanDoc<IPurchaseRequest>;
@@ -150,6 +157,10 @@ const purchaseRequestSchema = new Schema<IPurchaseRequest>(
       type: String,
       enum: ["public_form", "buyer_portal", "admin", "employee"],
       default: "public_form",
+    },
+    submissionKind: {
+      type: String,
+      enum: ["icpo_form", "icpo_upload", "loi_upload", "rfq_legacy"],
     },
   },
   { timestamps: true },

@@ -1,4 +1,5 @@
 import { PortalAppShell } from "@/components/portal/PortalAppShell";
+import { BuyerProfileMaintenanceNotice } from "@/components/portal/BuyerProfileMaintenanceNotice";
 import { Sidebar } from "@/components/portal/Sidebar";
 import Link from "next/link";
 import { getSession } from "@/lib/auth/session";
@@ -14,7 +15,7 @@ export const dynamic = "force-dynamic";
 const fullLinks = [
   { label: "Overview", href: "/portal/buyer" },
   { label: "Onboarding", href: "/portal/buyer/onboarding" },
-  { label: "New request", href: "/portal/buyer/new-request" },
+  { label: "PO / ICPO", href: "/portal/buyer/new-request" },
   { label: "Requests", href: "/portal/buyer/requests" },
   { label: "Transactions", href: "/portal/buyer/transactions" },
   { label: "Shipments", href: "/portal/buyer/shipments" },
@@ -55,6 +56,9 @@ export default async function BuyerLayout({ children }: { children: React.ReactN
                 View checklist
               </Link>
             </div>
+            <div className="mb-6">
+              <BuyerProfileMaintenanceNotice />
+            </div>
             {children}
           </main>
         </div>
@@ -67,6 +71,9 @@ export default async function BuyerLayout({ children }: { children: React.ReactN
       <div className="portal-shell md:flex">
         <Sidebar title="Buyer portal" links={fullLinks} />
         <main className="min-w-0 w-full max-w-full flex-1 overflow-x-clip p-4 sm:p-6 md:p-10">
+          <div className="mb-6">
+            <BuyerProfileMaintenanceNotice />
+          </div>
           {children}
         </main>
       </div>
