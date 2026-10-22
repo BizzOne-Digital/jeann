@@ -9,11 +9,22 @@
  * already fall back to registry in code, but non-empty Mongo values override until refresh.
  */
 import "./load-env";
-import { refreshMarketingPagesFromRegistry } from "@/lib/content/page-content";
+import {
+  refreshMarketingPagesFromRegistry,
+  syncMarketingPagesFromRegistry,
+} from "@/lib/content/page-content";
 
 async function main() {
-  const count = await refreshMarketingPagesFromRegistry();
-  console.log(`Refreshed ${count} marketing page(s) from registry.`);
+  const mode = process.argv.includes("--force") ? "force" : "sync";
+  const count =
+    mode === "force"
+      ? await refreshMarketingPagesFromRegistry()
+      : await syncMarketingPagesFromRegistry();
+  console.log(
+    mode === "force"
+      ? `Refreshed ${count} marketing page(s) from registry (overwrote CMS copy).`
+      : `Synced ${count} marketing page(s) from registry (merged new sections/fields).`,
+  );
 }
 
 main().catch((error) => {

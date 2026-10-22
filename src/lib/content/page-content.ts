@@ -31,8 +31,9 @@ function encodeSections(sections: PageSectionDef[]): PageSection[] {
   ];
 }
 
-function decodeSections(blocks: PageSection[], registry: PageRegistryEntry): PageSectionDef[] {
+function parseStoredSectionsMap(blocks: PageSection[] | undefined): Map<string, Record<string, string>> {
   const parsed = new Map<string, Record<string, string>>();
+  if (!blocks?.length) return parsed;
 
   for (const block of blocks) {
     const content = "content" in block ? block.content : undefined;
@@ -50,6 +51,12 @@ function decodeSections(blocks: PageSection[], registry: PageRegistryEntry): Pag
       // ignore invalid blocks
     }
   }
+
+  return parsed;
+}
+
+function decodeSections(blocks: PageSection[], registry: PageRegistryEntry): PageSectionDef[] {
+  const parsed = parseStoredSectionsMap(blocks);
 
   return registry.sections.map((section) => ({
     ...section,
@@ -274,6 +281,51 @@ export async function seedPagesFromRegistry(): Promise<number> {
     });
     count += 1;
   }
+  return count;
+}
+
+/**
+ * Upsert every registry page in Mongo: adds missing sections/fields from code,
+ * keeps non-empty values already saved in the admin editor.
+ */
+export async function syncMarketingPagesFromRegistry(): Promise<number> {
+  if (!isMongoConfigured() || !(await tryConnectMongo())) return 0;
+
+  const { Page } = await import("@/models");
+  let count = 0;
+
+  for (const entry of listRegistryPages()) {
+    let doc = await Page.findOne({ slug: entry.slug, locale: "en" }).lean();
+    if (!doc && entry.slug === "careers") {
+      doc = await Page.findOne({ slug: "privacy", locale: "en" }).lean();
+    }
+
+    const storedMap = parseStoredSectionsMap(doc?.sections);
+    const mergedSections = entry.sections.map((section) => ({
+      ...section,
+      defaults: mergeStoredSectionFields(section.defaults, storedMap.get(section.id)),
+    }));
+
+    await Page.findOneAndUpdate(
+      { slug: entry.slug, locale: "en" },
+      {
+        slug: entry.slug,
+        locale: "en",
+        title: doc?.title?.trim() ? doc.title : entry.title,
+        status: doc?.status ?? "published",
+        seo: {
+          title: doc?.seo?.title?.trim() ? doc.seo.title : entry.seoTitle,
+          description: doc?.seo?.description?.trim()
+            ? doc.seo.description
+            : entry.seoDescription,
+        },
+        sections: encodeSections(mergedSections),
+      },
+      { upsert: true },
+    );
+    count += 1;
+  }
+
   return count;
 }
 

@@ -477,9 +477,12 @@ async function main() {
 
   console.log(`Demo buyer ensured: ${demoEmail} / ${demoPassword}`);
 
-  const { seedPagesFromRegistry } = await import("@/lib/content/page-content");
+  const { seedPagesFromRegistry, syncMarketingPagesFromRegistry } = await import(
+    "@/lib/content/page-content"
+  );
   const pagesSeeded = await seedPagesFromRegistry();
-  console.log(`Website pages seeded: ${pagesSeeded} new page(s).`);
+  const pagesSynced = await syncMarketingPagesFromRegistry();
+  console.log(`Website pages: ${pagesSeeded} new, ${pagesSynced} synced from registry.`);
 
   console.log("Seed completed successfully.");
   process.exit(0);

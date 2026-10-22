@@ -53,7 +53,11 @@ const BASE_MARKETING_PAGE_REGISTRY: PageRegistryEntry[] = [
         eyebrow: "Sourced responsibly",
         title: "Quality coordination across origins and corridors",
         body: "Supply is supported through private origin programmes and independent inspection partners where contracts require them — building buyer confidence without advertising supplier identities on this site.",
-        image: "/images/home-3.png",
+        image: "/images/home/responsible-sourcing-aerial.jpg",
+      }),
+      section("logistics-image-band", "Logistics image band", {
+        image: "/images/home/logistics-band-river-vessel.png",
+        imageAlt: "River vessel on a commodity trade corridor",
       }),
       section("process", "Process timeline", {
         eyebrow: "How we work",
