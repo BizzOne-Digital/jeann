@@ -14,7 +14,7 @@ export default function DocumentsPage() {
         <p className="font-semibold text-[var(--navy)]">ICPO and other trade PDFs</p>
         <p className="mt-2 leading-relaxed">
           Pre-filled ICPO drafts and generated trade documents are created inside each{" "}
-          <strong>transaction workspace</strong> once your trade desk opens a programme — open a
+          <strong>transaction workspace</strong> once your trade desk opens a deal — open a
           transaction, use <strong>Documents</strong>, and generate or upload signed copies. Editable
           PDF templates with buyer pre-fill are being extended; use CIS + LOI below until your desk
           sends the transaction pack.

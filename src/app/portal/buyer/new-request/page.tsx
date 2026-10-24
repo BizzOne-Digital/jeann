@@ -8,7 +8,7 @@ export default async function NewRequestPage() {
   return (
     <PortalPage
       title="Purchase order / ICPO"
-      description="Submit a structured ICPO or upload a PO, ICPO, or LOI. Key fields will be used to prepare your Sales Purchase Agreement (PSA) after review."
+      description="Submit an ICPO or upload a PO, ICPO, or LOI. After review, Finekarts may issue a PSA — the purchase and sale contract between buyer and seller. After the PSA is signed and stamped, a Proforma Invoice follows for standard transactions."
     >
       <BuyerPurchaseOrderWorkspace />
     </PortalPage>

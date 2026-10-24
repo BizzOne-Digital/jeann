@@ -3,10 +3,12 @@ import {
   BUYER_PAYMENT_ALIGNMENT_HINTS,
   BUYER_ICPO_LEGAL_WARNING,
 } from "@/lib/content/buyer-portal-guidance";
+import { BuyerTradeContractFlow } from "@/components/portal/BuyerTradeContractFlow";
 
 export function BuyerIcpoGuidancePanel() {
   return (
     <aside className="space-y-4 text-sm text-[var(--stone)]">
+      <BuyerTradeContractFlow />
       <section className="rounded-lg border border-[var(--line)] bg-[var(--cream)] p-4">
         <h3 className="font-semibold text-[var(--navy)]">What must be on your ICPO</h3>
         <ul className="mt-2 list-disc space-y-1 pl-5">

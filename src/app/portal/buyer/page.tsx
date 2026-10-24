@@ -56,7 +56,7 @@ export default async function BuyerDashboard() {
       </div>
       <div className="mt-6 flex flex-wrap gap-3">
         <Link href="/portal/buyer/new-request" className="btn btn-primary">
-          New purchase request
+          Submit PO / ICPO
         </Link>
         <Link href="/portal/buyer/requests" className="btn btn-outline">
           View requests
@@ -69,7 +69,7 @@ export default async function BuyerDashboard() {
         <div className="mt-6">
           <EmptyState
             title="Your trade desk is ready"
-            detail="Submit a purchase request to begin qualification."
+            detail="Submit an ICPO to begin trade desk review toward a PSA contract."
           />
         </div>
       )}

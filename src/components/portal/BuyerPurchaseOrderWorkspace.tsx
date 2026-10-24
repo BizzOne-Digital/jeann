@@ -271,7 +271,7 @@ export function BuyerPurchaseOrderWorkspace() {
             </label>
             {paymentTerms.length > 0 ? (
               <label className="label block">
-                Payment term (must match enabled programme)
+                Payment term (must match enabled contract payment option)
                 <select
                   className="field mt-1 w-full"
                   value={paymentTermId}
