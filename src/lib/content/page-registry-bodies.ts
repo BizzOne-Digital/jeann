@@ -29,15 +29,8 @@ import {
   INSPECTIONS_TIMING_TYPES,
   INSPECTIONS_VERIFICATION_SUMMARY,
 } from "@/lib/content/inspections-operational-content";
-import {
-  INSIGHTS_CONTAINMENT_MATRIX,
-  INSIGHTS_CTA,
-  INSIGHTS_HERO,
-  INSIGHTS_SOP,
-  INSIGHTS_ARCHITECTURE,
-  INSIGHTS_PROTOCOL,
-  INSIGHTS_VALIDATION,
-} from "@/lib/content/operational-insights-content";
+import { INSIGHTS_HERO } from "@/lib/content/operational-insights-content";
+import { insightsSectionDefaults } from "@/lib/marketing/insights-cms";
 import { LOGISTICS_STORY } from "@/lib/content/logistics-story";
 import { VERIFICATION_STORY } from "@/lib/content/marketing-pages";
 import {
@@ -69,6 +62,20 @@ import {
 } from "@/lib/content/packaging-page-content";
 import { PACKAGING_PAGE_IMAGES } from "@/lib/content/packaging-page-images";
 import { INSPECTIONS_SECTION_IMAGES } from "@/lib/content/inspections-images";
+import {
+  formatInspectionCards,
+  formatPipeRows,
+  INSPECTION_FIRM_VIDEOS_DEFAULTS,
+} from "@/lib/marketing/inspection-cms";
+import {
+  PARTNERS_PROGRAMMES_LEAD,
+  PRODUCER_PARTNERS_CTA,
+  PARTNERS_INTRO_NOTE_DEFAULT,
+  PRODUCER_PARTNERS_INTRO,
+  PRODUCER_PARTNERS_PILLARS,
+  PRODUCER_PARTNERS_PRODUCT_LINES,
+} from "@/lib/content/producer-partners-content";
+import { RESOURCES_SECTION_DEFAULTS } from "@/lib/marketing/resources-cms";
 import { RESOURCES_PILLARS } from "@/lib/content/resources-content";
 import {
   VERIFICATION_CTA,
@@ -150,32 +157,6 @@ function disputeBodySections(): PageSectionDef[] {
       body: DISPUTE_DISCLAIMER,
     }),
   ];
-}
-
-function formatInspectionItems(
-  items: ReadonlyArray<{
-    n: number;
-    title: string;
-    purpose?: string;
-    focus?: string;
-    benefit?: string;
-    techniques?: readonly string[];
-    lead?: string;
-    bullets?: readonly string[];
-  }>,
-): string {
-  return joinLines(
-    items.map((item) => {
-      const parts = [`${item.n}. ${item.title}`];
-      if (item.purpose) parts.push(`Purpose: ${item.purpose}`);
-      if (item.focus) parts.push(`Focus: ${item.focus}`);
-      if (item.benefit) parts.push(`Benefit: ${item.benefit}`);
-      if (item.techniques?.length) parts.push(`Techniques: ${item.techniques.join("; ")}`);
-      if (item.lead) parts.push(item.lead);
-      if (item.bullets?.length) parts.push(item.bullets.map((b) => `• ${b}`).join("\n"));
-      return parts.join("\n");
-    }),
-  );
 }
 
 function packagingBodySections(): PageSectionDef[] {
@@ -369,38 +350,32 @@ function logisticsBodySections(): PageSectionDef[] {
 function inspectionBodySections(): PageSectionDef[] {
   const images = INSPECTIONS_SECTION_IMAGES;
   return [
+    section("overview", "Overview (intro + image)", {
+      eyebrow: "Overview",
+      body: INSPECTIONS_HERO.description,
+      image: images.intro.src,
+    }),
     section("timing", INSPECTIONS_TIMING_TYPES.title, {
       title: INSPECTIONS_TIMING_TYPES.title,
-      items: formatInspectionItems(INSPECTIONS_TIMING_TYPES.items),
-      imageSrc: images.timing.src,
-      imageAlt: images.timing.alt,
+      items: formatInspectionCards(INSPECTIONS_TIMING_TYPES.items),
     }),
     section("methodology", INSPECTIONS_METHOD_TYPES.title, {
       title: INSPECTIONS_METHOD_TYPES.title,
-      items: formatInspectionItems(INSPECTIONS_METHOD_TYPES.items),
-      visualImageSrc: images.visual.src,
-      visualImageAlt: images.visual.alt,
-      ndtImageSrc: images.ndt.src,
-      ndtImageAlt: images.ndt.alt,
-      destructiveImageSrc: images.destructive.src,
-      destructiveImageAlt: images.destructive.alt,
-      dimensionalImageSrc: images.dimensional.src,
-      dimensionalImageAlt: images.dimensional.alt,
+      items: formatInspectionCards(INSPECTIONS_METHOD_TYPES.items),
+      image1: images.visual.src,
+      image2: images.ndt.src,
+      image3: images.destructive.src,
+      image4: images.dimensional.src,
     }),
     section("scope", INSPECTIONS_SCOPE_TYPES.title, {
       title: INSPECTIONS_SCOPE_TYPES.title,
-      items: formatInspectionItems(INSPECTIONS_SCOPE_TYPES.items),
-      regulatoryImageSrc: images.regulatory.src,
-      regulatoryImageAlt: images.regulatory.alt,
-      inProcessImageSrc: images.inProcess.src,
-      inProcessImageAlt: images.inProcess.alt,
+      items: formatInspectionCards(INSPECTIONS_SCOPE_TYPES.items),
+      image: images.regulatory.src,
     }),
     section("verification-summary", INSPECTIONS_VERIFICATION_SUMMARY.title, {
       title: INSPECTIONS_VERIFICATION_SUMMARY.title,
-      rows: joinLines(
-        INSPECTIONS_VERIFICATION_SUMMARY.rows.map(
-          (r) => `${r.type}: ${r.focus} — ${r.goal}`,
-        ),
+      rowItems: formatPipeRows(
+        INSPECTIONS_VERIFICATION_SUMMARY.rows.map((r) => [r.type, r.focus, r.goal]),
       ),
     }),
     section("commodity-validation", INSPECTIONS_COMMODITY_VALIDATION.title, {
@@ -409,29 +384,31 @@ function inspectionBodySections(): PageSectionDef[] {
       distinctionVerification: INSPECTIONS_COMMODITY_VALIDATION.distinction.verification,
       distinctionValidation: INSPECTIONS_COMMODITY_VALIDATION.distinction.validation,
       intro: INSPECTIONS_COMMODITY_VALIDATION.intro,
-      areas: joinLines(
-        INSPECTIONS_COMMODITY_VALIDATION.areas.map(
-          (a) => `${a.n}. ${a.title}\n${a.lead}\n${joinLines([...a.bullets])}`,
-        ),
-      ),
-      bandImageSrc: images.commodityBand.src,
-      bandImageAlt: images.commodityBand.alt,
-      foregroundImageSrc: images.commodityFeature.src,
-      foregroundImageAlt: images.commodityFeature.alt,
+      areaItems: formatInspectionCards(INSPECTIONS_COMMODITY_VALIDATION.areas),
+      image1: images.commodityBand.src,
+      image2: images.commodityFeature.src,
     }),
     section("commodity-comparison", INSPECTIONS_COMMODITY_COMPARISON.title, {
       title: INSPECTIONS_COMMODITY_COMPARISON.title,
-      rows: joinLines(
-        INSPECTIONS_COMMODITY_COMPARISON.rows.map(
-          (r) => `${r.aspect}: ${r.focus} — ${r.question} (${r.examples})`,
-        ),
+      rowItems: formatPipeRows(
+        INSPECTIONS_COMMODITY_COMPARISON.rows.map((r) => [r.aspect, r.focus, r.question, r.examples]),
       ),
     }),
+    section("firm-videos", "Inspection firm videos", {
+      eyebrow: INSPECTION_FIRM_VIDEOS_DEFAULTS.eyebrow,
+      title: INSPECTION_FIRM_VIDEOS_DEFAULTS.title,
+      lead: INSPECTION_FIRM_VIDEOS_DEFAULTS.lead,
+    }),
     section("cta", "Inspection CTA", {
+      eyebrow: "Next step",
       title: INSPECTIONS_CTA.title,
       lead: INSPECTIONS_CTA.lead,
+      primaryLabel: INSPECTIONS_CTA.primaryLabel,
       primaryHref: INSPECTIONS_CTA.primaryHref,
+      secondaryLabel: INSPECTIONS_CTA.secondaryLabel,
       secondaryHref: INSPECTIONS_CTA.secondaryHref,
+      shareTitle: INSPECTIONS_CTA.shareTitle,
+      shareItems: joinLines([...INSPECTIONS_CTA.shareItems]),
     }),
   ];
 }
@@ -442,15 +419,16 @@ function aboutBodySections(): PageSectionDef[] {
   const contactBand = ABOUT_SECTION_IMAGE_META.contactBand;
 
   return [
-    section("intro", "Introduction (Who we are)", {
+    section("intro", "Who we are", {
       eyebrow: ABOUT_INTRO.eyebrow,
       title: ABOUT_INTRO.title,
       paragraphs: joinParagraphs([...ABOUT_INTRO.paragraphs]),
+      ctaLabel: "Learn more about products",
       imageSrc: teamStrategy.src,
       imageAlt: teamStrategy.alt,
     }),
-    section("highlights", "Highlight cards", {
-      cards: joinLines(
+    section("highlights", "Highlights (icon row)", {
+      items: joinLines(
         ABOUT_HIGHLIGHTS.map((h) => `${h.title}: ${h.detail}`),
       ),
     }),
@@ -458,14 +436,14 @@ function aboutBodySections(): PageSectionDef[] {
       eyebrow: ABOUT_WHAT_WE_DO.eyebrow,
       title: ABOUT_WHAT_WE_DO.title,
       lead: ABOUT_WHAT_WE_DO.lead,
-      divisions: joinLines(
+      content: joinLines(
         ABOUT_WHAT_WE_DO.divisions.map(
           (d) =>
-            `${d.n}. ${d.title}\n${d.intro}\n${joinLines(d.bullets.map((b) => `• ${b}`))}`,
+            `${d.n}. ${d.title}
+${d.intro}
+${joinLines(d.bullets.map((b) => `• ${b}`))}`,
         ),
       ),
-      imageSrc: teamCollaboration.src,
-      imageAlt: teamCollaboration.alt,
     }),
     section("supply-chain", ABOUT_SUPPLY_CHAIN.title, {
       eyebrow: ABOUT_SUPPLY_CHAIN.eyebrow,
@@ -474,6 +452,9 @@ function aboutBodySections(): PageSectionDef[] {
       bullets: joinLines(
         ABOUT_SUPPLY_CHAIN.bullets.map((b) => `${b.title}: ${b.body}`),
       ),
+      ctaLabel: "Explore trade resources",
+      imageSrc: teamCollaboration.src,
+      imageAlt: teamCollaboration.alt,
     }),
     section("why-partner", ABOUT_WHY_PARTNER.title, {
       eyebrow: ABOUT_WHY_PARTNER.eyebrow,
@@ -483,47 +464,28 @@ function aboutBodySections(): PageSectionDef[] {
     section("contact-band", ABOUT_CONTACT.title, {
       eyebrow: ABOUT_CONTACT.eyebrow,
       title: ABOUT_CONTACT.title,
-      lines: joinLines([...ABOUT_CONTACT.lines]),
+      items: joinLines([...ABOUT_CONTACT.lines]),
       ctaTitle: ABOUT_CONTACT.ctaTitle,
       ctaBody: ABOUT_CONTACT.ctaBody,
+      primaryCtaLabel: "Submit a purchase request",
+      secondaryCtaLabel: "Request a consultation",
       imageSrc: contactBand.src,
-      imageAlt: contactBand.alt,
     }),
   ];
 }
 
 function insightsBodySections(): PageSectionDef[] {
+  const d = insightsSectionDefaults();
   return [
-    section("intro", "Framework intro", {
-      lead: INSIGHTS_HERO.guideLead,
-    }),
-    section("architecture", INSIGHTS_ARCHITECTURE.title, {
-      title: INSIGHTS_ARCHITECTURE.title,
-      lead: INSIGHTS_ARCHITECTURE.lead,
-    }),
-    section("protocol", INSIGHTS_PROTOCOL.title, {
-      title: INSIGHTS_PROTOCOL.title,
-      lead: INSIGHTS_PROTOCOL.lead,
-    }),
-    section("validation", INSIGHTS_VALIDATION.title, {
-      title: INSIGHTS_VALIDATION.title,
-      lead: INSIGHTS_VALIDATION.lead,
-      pillars: joinLines([...INSIGHTS_VALIDATION.pillars]),
-    }),
-    section("matrix", INSIGHTS_CONTAINMENT_MATRIX.title, {
-      title: INSIGHTS_CONTAINMENT_MATRIX.title,
-      lead: INSIGHTS_CONTAINMENT_MATRIX.lead,
-    }),
-    section("sop", INSIGHTS_SOP.title, {
-      title: INSIGHTS_SOP.title,
-      lead: INSIGHTS_SOP.lead,
-    }),
-    section("cta", "Insights CTA", {
-      title: INSIGHTS_CTA.title,
-      lead: INSIGHTS_CTA.lead,
-      primaryHref: INSIGHTS_CTA.primaryHref,
-      secondaryHref: INSIGHTS_CTA.secondaryHref,
-    }),
+    section("quality-band", "Quality & regulatory band (top)", d.qualityBand),
+    section("intro", "Framework overview", d.intro),
+    section("architecture", "Quality & process architecture", d.architecture),
+    section("protocol", "Multi-layered inspection protocol", d.protocol),
+    section("validation", "Validation domains band", d.validation),
+    section("validation-domains", "Validation domains (I-V)", d.domains),
+    section("matrix", "Containment master matrix", d.matrix),
+    section("sop", "SOP checklist", d.sop),
+    section("cta", "Insights CTA", d.cta),
   ];
 }
 
@@ -601,16 +563,41 @@ function verificationBodySections(): PageSectionDef[] {
 }
 
 function resourcesBodySections(): PageSectionDef[] {
-  return RESOURCES_PILLARS.map((pillar, i) =>
-    section(`pillar-${i + 1}`, `Hub pillar: ${pillar.title}`, {
-      title: pillar.title,
-      summary: pillar.summary,
-    }),
-  );
+  const d = RESOURCES_SECTION_DEFAULTS;
+  return [
+    section("intro", "Introduction band", d.intro),
+    section("spotlight", "Quality & regulatory spotlight", d.spotlight),
+    section("priority", "Start here links", d.priority),
+    section("library", "Resource library heading", d.library),
+    ...RESOURCES_PILLARS.map((pillar, i) =>
+      section(`pillar-${i + 1}`, `Library card: ${pillar.title}`, {
+        title: pillar.title,
+        summary: pillar.summary,
+      }),
+    ),
+    section("banking", "Tab: Banking & SPA", d.banking),
+    section("payments", "Tab: Payment structures", d.payments),
+    section("documents", "Tab: Trade documents", d.documents),
+    section("downloads", "Tab: Downloads", d.downloads),
+  ];
 }
 
 function partnersBodySections(): PageSectionDef[] {
+  const intro = PRODUCER_PARTNERS_INTRO;
   return [
+    section("intro", "Introduction & pillars", {
+      eyebrow: intro.eyebrow,
+      title: intro.title,
+      lead: intro.lead,
+      note: PARTNERS_INTRO_NOTE_DEFAULT,
+      pillars: joinLines(PRODUCER_PARTNERS_PILLARS.map((p) => `${p.title}: ${p.body}`)),
+    }),
+    section("programmes", "Commodity programmes", {
+      eyebrow: "Commodity lines",
+      title: "Programmes we structure for international buyers",
+      lead: PARTNERS_PROGRAMMES_LEAD,
+      lines: joinLines(PRODUCER_PARTNERS_PRODUCT_LINES.map((l) => `${l.label} | ${l.href}`)),
+    }),
     section("spotlight-single", "Highlight (1 box)", {
       eyebrow: "Partner spotlight",
       title: "Additional programme notes",
@@ -627,6 +614,16 @@ function partnersBodySections(): PageSectionDef[] {
       box3Title: "Quality systems",
       box3Body:
         "Outline HACCP, traceability, or buyer audit protocols that support recurring export contracts.",
+    }),
+    section("cta", "Trade desk CTA", {
+      title: PRODUCER_PARTNERS_CTA.title,
+      lead: PRODUCER_PARTNERS_CTA.lead,
+      primaryCtaLabel: PRODUCER_PARTNERS_CTA.primary.label,
+      primaryCtaHref: PRODUCER_PARTNERS_CTA.primary.href,
+      secondaryCtaLabel: PRODUCER_PARTNERS_CTA.secondary.label,
+      secondaryCtaHref: PRODUCER_PARTNERS_CTA.secondary.href,
+      tertiaryCtaLabel: PRODUCER_PARTNERS_CTA.inspections.label,
+      tertiaryCtaHref: PRODUCER_PARTNERS_CTA.inspections.href,
     }),
   ];
 }

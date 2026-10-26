@@ -6,30 +6,10 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useCallback, useState } from "react";
 import { CommodityTradeDocumentChecklist } from "@/components/marketing/CommodityTradeDocumentChecklist";
 import { LegalDocumentsPanel } from "@/components/marketing/LegalDocumentsPanel";
-import {
-  BANKING_CLAUSES,
-  BANKING_CLAUSE_INTRO,
-  BANKING_CLAUSE_SECTION_TITLE,
-  PAYMENT_TERM_STRUCTURES,
-  BUYER_DATA_SECURITY_NOTE,
-  ESCROW_LOCATION_NOTE,
-  LC_ACCEPTED_BANKS_NOTE,
-  LC_INSTRUMENTS_HIGHLIGHT,
-  PAYMENT_TERMS_INTRO,
-  PREFERRED_PAYMENT_STRUCTURE,
-  REVOLVING_LC_PROGRAMME_NOTE,
-  SWIFT_INSTRUMENT_NOTE,
-  TRANSACTION_PROGRAMME_TYPES,
-} from "@/lib/content/payment-terms";
-import {
-  RESOURCES_BANKING_PANEL_CALLOUTS,
-  RESOURCES_DOCUMENT_GROUPS,
-  RESOURCES_PILLARS,
-  RESOURCES_RELATED_LINKS,
-  RESOURCES_TRADE_PRIORITY_LINKS,
-  type ResourcesTabId,
-} from "@/lib/content/resources-content";
-import { RESOURCES_PAGE_IMAGES } from "@/lib/content/resources-page-images";
+import { CmsInlineText } from "@/components/marketing/CmsInlineText";
+import type { ResourcesCms } from "@/lib/marketing/resources-cms";
+import type { ResourcesTabId } from "@/lib/content/resources-content";
+import { marketingImageProps } from "@/lib/media/resolve-image-src";
 import { MarketingAbstractBand } from "@/components/marketing/MarketingAbstractBand";
 import { Reveal } from "@/components/motion/Reveal";
 import { cn } from "@/lib/utils/cn";
@@ -56,13 +36,13 @@ function ProtectionBar({ value, label }: { value: number; label: string }) {
   );
 }
 
-function ClauseAccordion() {
+function ClauseAccordion({ clauses }: { clauses: { title: string; body: string }[] }) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const reduce = useReducedMotion();
 
   return (
     <div className="divide-y divide-[#e4e0d8] marketing-box rounded-lg">
-      {BANKING_CLAUSES.map((clause, i) => {
+      {clauses.map((clause, i) => {
         const open = openIndex === i;
         return (
           <div key={clause.title}>
@@ -198,18 +178,19 @@ function BankingPanelCallout({
   );
 }
 
-function BankingPanel() {
-  const panelBg = RESOURCES_PAGE_IMAGES.bankingPanelBackground;
+function BankingPanel({ d }: { d: ResourcesCms["banking"] }) {
+  const panelBg = marketingImageProps(d.imageSrc);
 
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-stretch lg:gap-12">
       <div className="relative min-h-[26rem] overflow-hidden rounded-lg border border-[#d5d0c8] lg:min-h-[32rem]">
         <Image
           src={panelBg.src}
-          alt={RESOURCES_PAGE_IMAGES.banking.alt}
+          alt={d.imageAlt}
           fill
           className="object-cover object-center"
           sizes="(max-width: 1024px) 100vw, 440px"
+          unoptimized={panelBg.unoptimized}
         />
         <div className="absolute inset-0 bg-[var(--footer-bg)]/72" aria-hidden />
         <div
@@ -217,7 +198,7 @@ function BankingPanel() {
           aria-hidden
         />
         <div className="relative flex h-full flex-col justify-center gap-3 p-5 sm:gap-4 sm:p-6">
-          {RESOURCES_BANKING_PANEL_CALLOUTS.map((item) => (
+          {d.callouts.map((item) => (
             <BankingPanelCallout key={item.title} title={item.title} body={item.body} href={item.href} />
           ))}
         </div>
@@ -225,54 +206,54 @@ function BankingPanel() {
 
       <div className="flex flex-col">
         <p className="text-xs font-semibold tracking-[0.16em] text-[#888] uppercase">
-          {BANKING_CLAUSE_SECTION_TITLE}
+          {d.clausesTitle}
         </p>
         <p className="mt-3 text-sm leading-relaxed text-[#555555]">
-          {BANKING_CLAUSE_INTRO} Not legal or banking advice.
+          {d.clausesIntro}
         </p>
         <div className="mt-6 flex-1">
-          <ClauseAccordion />
+          <ClauseAccordion clauses={d.clauses} />
         </div>
         <aside className="mt-6 rounded-lg border border-[#c88e4a]/35 bg-[#fff9ef] p-5 sm:p-6">
           <p className="text-xs font-semibold tracking-[0.16em] text-[#c88e4a] uppercase">
-            Preferred approach
+            {d.preferredLabel}
           </p>
-          <p className="mt-3 text-sm leading-relaxed text-[#444444]">{PREFERRED_PAYMENT_STRUCTURE}</p>
+          <p className="mt-3 text-sm leading-relaxed text-[#444444]">{d.preferredBody}</p>
         </aside>
       </div>
     </div>
   );
 }
 
-function PaymentsPanel() {
+function PaymentsPanel({ d }: { d: ResourcesCms["payments"] }) {
   const [showAll, setShowAll] = useState(false);
-  const recommended = PAYMENT_TERM_STRUCTURES.filter((row) => row.recommended);
-  const alternatives = PAYMENT_TERM_STRUCTURES.filter((row) => !row.recommended);
-  const img = RESOURCES_PAGE_IMAGES.payments;
+  const recommended = d.structures.filter((row) => row.recommended);
+  const alternatives = d.structures.filter((row) => !row.recommended);
+  const img = marketingImageProps(d.imageSrc);
 
   return (
     <div className="space-y-10">
       <div className="relative aspect-[21/9] max-h-56 overflow-hidden rounded-lg border border-[#d5d0c8] sm:max-h-none sm:aspect-[3/1]">
-        <Image src={img.src} alt={img.alt} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 960px" />
+        <Image src={img.src} alt={d.imageAlt} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 960px" unoptimized={img.unoptimized} />
         <div className="absolute inset-0 bg-gradient-to-r from-[#001a3d]/85 via-[#001a3d]/40 to-[#c88e4a]/10" />
         <p className="absolute bottom-0 left-0 max-w-md p-6 text-sm leading-relaxed text-white/90">
-          Programme payment design should match delivery cadence, inspection timing, and how your bank ranks instruments.
+          {d.bannerText}
         </p>
       </div>
       <p className="max-w-3xl text-sm leading-relaxed text-[#555555]">
-        {PAYMENT_TERMS_INTRO} Not legal or banking advice.
+        {d.intro}
       </p>
-      <p className="max-w-3xl text-sm leading-relaxed text-[#555555]">{LC_ACCEPTED_BANKS_NOTE}</p>
+      <p className="max-w-3xl text-sm leading-relaxed text-[#555555]">{d.banksNote}</p>
       <p className="max-w-3xl text-sm font-medium leading-relaxed text-[#001a3d]">
-        {LC_INSTRUMENTS_HIGHLIGHT}
+        {d.highlight}
       </p>
 
       <div>
         <p className="text-xs font-semibold tracking-[0.16em] text-[#c88e4a] uppercase">
-          Programme types
+          {d.programmesLabel}
         </p>
         <div className="mt-4 grid gap-4 md:grid-cols-3">
-          {TRANSACTION_PROGRAMME_TYPES.map((programme) => (
+          {d.programmes.map((programme) => (
             <article
               key={programme.id}
               className="marketing-box h-full rounded-lg p-5 shadow-sm"
@@ -290,16 +271,16 @@ function PaymentsPanel() {
           ))}
         </div>
         <p className="mt-5 max-w-3xl text-sm leading-relaxed text-[#555555]">
-          {REVOLVING_LC_PROGRAMME_NOTE}
+          {d.revolvingNote}
         </p>
-        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-[#555555]">{ESCROW_LOCATION_NOTE}</p>
+        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-[#555555]">{d.escrowNote}</p>
       </div>
 
       <article className="rounded-lg border border-[#1b3a5c]/20 bg-[#eef2f7] p-5 sm:p-6">
         <p className="text-xs font-semibold tracking-[0.16em] text-[#1b3a5c] uppercase">
-          Data security
+          {d.securityLabel}
         </p>
-        <p className="mt-2 text-sm leading-relaxed text-[#555555]">{BUYER_DATA_SECURITY_NOTE}</p>
+        <p className="mt-2 text-sm leading-relaxed text-[#555555]">{d.securityNote}</p>
       </article>
 
       <div className="grid gap-4 md:grid-cols-2">
@@ -309,7 +290,7 @@ function PaymentsPanel() {
             className="relative overflow-hidden rounded-lg border border-[#c88e4a]/40 bg-white p-6 shadow-sm"
           >
             <span className="absolute top-0 right-0 rounded-bl-lg bg-[#c88e4a] px-3 py-1 text-[10px] font-bold tracking-wide text-[#001a3d] uppercase">
-              Top ranked
+              {d.topRankedLabel}
             </span>
             <h3 className="pr-20 text-lg font-semibold text-[#001a3d]">{row.structure}</h3>
             <p className="mt-1 text-sm text-[#666666]">{row.primaryFunction}</p>
@@ -354,25 +335,24 @@ function PaymentsPanel() {
 
       <article className="marketing-box rounded-lg p-6">
         <p className="text-xs font-semibold tracking-[0.16em] text-[#001a3d] uppercase">
-          SWIFT vs banking instruments
+          {d.swiftLabel}
         </p>
-        <p className="mt-3 text-sm leading-relaxed text-[#555555]">{SWIFT_INSTRUMENT_NOTE}</p>
+        <p className="mt-3 text-sm leading-relaxed text-[#555555]">{d.swiftNote}</p>
       </article>
     </div>
   );
 }
 
-function DocumentsPanel({ introBody }: { introBody: string }) {
-  const [activeGroup, setActiveGroup] = useState(RESOURCES_DOCUMENT_GROUPS[0].id);
-  const group =
-    RESOURCES_DOCUMENT_GROUPS.find((g) => g.id === activeGroup) ?? RESOURCES_DOCUMENT_GROUPS[0];
-  const img = RESOURCES_PAGE_IMAGES.documents;
+function DocumentsPanel({ d }: { d: ResourcesCms["documents"] }) {
+  const [activeGroup, setActiveGroup] = useState(d.groups[0]?.id ?? "");
+  const group = d.groups.find((g) => g.id === activeGroup) ?? d.groups[0];
+  const img = marketingImageProps(d.imageSrc);
 
   return (
     <div className="space-y-8">
       <div className="grid gap-6 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-8">
         <nav className="flex flex-row gap-2 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible lg:pb-0">
-          {RESOURCES_DOCUMENT_GROUPS.map((g) => {
+          {d.groups.map((g) => {
             const active = g.id === activeGroup;
             return (
               <button
@@ -393,9 +373,9 @@ function DocumentsPanel({ introBody }: { introBody: string }) {
         </nav>
 
         <div className="marketing-box rounded-lg p-6 sm:p-8">
-          <h3 className="text-xl font-semibold text-[#001a3d]">{group.title}</h3>
+          <h3 className="text-xl font-semibold text-[#001a3d]">{group?.title}</h3>
           <ul className="mt-6 grid gap-4 sm:grid-cols-2">
-            {group.items.map((item) => (
+            {group?.items.map((item) => (
               <li
                 key={item.name}
                 className="rounded-md border border-[#ebe7e0] bg-[#f9f8f5] p-4"
@@ -410,14 +390,14 @@ function DocumentsPanel({ introBody }: { introBody: string }) {
 
       <div className="space-y-6 border-t border-[#e8e4dc] pt-8">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] lg:items-start">
-          <p className="max-w-3xl text-sm leading-relaxed text-[#555555]">{introBody}</p>
+          <p className="max-w-3xl text-sm leading-relaxed text-[#555555]">{d.introBody}</p>
           <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-[#d5d0c8] lg:max-w-md lg:justify-self-end">
-            <Image src={img.src} alt={img.alt} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 420px" />
+            <Image src={img.src} alt={d.imageAlt} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 420px" unoptimized={img.unoptimized} />
           </div>
         </div>
 
         <div className="flex flex-wrap gap-2">
-          {RESOURCES_RELATED_LINKS.map((item) => (
+          {d.relatedLinks.map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -432,69 +412,44 @@ function DocumentsPanel({ introBody }: { introBody: string }) {
   );
 }
 
-function DownloadsPanel() {
-  const img = RESOURCES_PAGE_IMAGES.downloads;
+function DownloadsPanel({ d }: { d: ResourcesCms["downloads"] }) {
+  const img = marketingImageProps(d.imageSrc);
   return (
     <div className="space-y-8">
       <div className="relative aspect-[21/9] max-h-48 overflow-hidden rounded-lg border border-[#d5d0c8] sm:max-h-none">
-        <Image src={img.src} alt={img.alt} fill className="object-cover" sizes="100vw" />
+        <Image src={img.src} alt={d.imageAlt} fill className="object-cover" sizes="100vw" unoptimized={img.unoptimized} />
         <div className="absolute inset-0 bg-gradient-to-t from-[#001a3d]/80 to-transparent" />
         <p className="absolute right-0 bottom-0 left-0 p-5 text-sm text-white/90">
-          Use downloads as a study aid — the buyer CIS and signed PSA remain authoritative.
+          {d.bannerText}
         </p>
       </div>
       <div className="max-w-3xl space-y-3 text-sm leading-relaxed text-[#555555]">
-        <p>
-          <strong className="text-[#001a3d]">Official buyer form:</strong> download the{" "}
-          <strong>Buyer Corporate Information Sheet (CIS)</strong> PDF — that is the real
-          qualification form Finekarts uses.
-        </p>
-        <p>
-          <strong className="text-[#001a3d]">Educational checklist below:</strong> a plain-language
-          index of documents that often appear in bulk commodity trade. It is a{" "}
-          <em>dummy / reference</em> only — not a complete or binding list for any specific deal.
-        </p>
-        <p>Confirm final document sets with counsel, your bank, and the signed PSA.</p>
+        {d.paragraphs.map((text) => (
+          <p key={text}>
+            <CmsInlineText text={text} boldClassName="text-[#001a3d]" />
+          </p>
+        ))}
       </div>
 
-      <CommodityTradeDocumentChecklist />
+      <CommodityTradeDocumentChecklist content={d.checklist} />
 
-      <LegalDocumentsPanel category="trade" title="Legal & trade documents (PDF)" />
+      <LegalDocumentsPanel category="trade" title={d.legalTitle} />
     </div>
   );
 }
 
-const PANEL_TITLES: Record<ResourcesTabId, { eyebrow: string; title: string }> = {
-  banking: {
-    eyebrow: "SPA reference",
-    title: "Recommended banking clause for commodity SPA",
-  },
-  payments: {
-    eyebrow: "Payment structures",
-    title: "Best structure for 12-month commodity contracts",
-  },
-  documents: {
-    eyebrow: "Document overview",
-    title: "What buyers typically review",
-  },
-  downloads: {
-    eyebrow: "Downloads",
-    title: "Commodity trade document checklist",
-  },
-};
-
-function TradePriorityStrip() {
+function TradePriorityStrip({ d }: { d: ResourcesCms["priority"] }) {
   return (
     <MarketingAbstractBand className="py-10 lg:py-12">
       <div className="container-page py-0">
         <p className="text-xs font-semibold tracking-[0.22em] text-[#d4a84b] uppercase">
-          Start here
+          {d.eyebrow}
         </p>
         <h2 className="mt-2 max-w-2xl text-xl font-semibold sm:text-2xl">
-          CIF, trade insurance, payments, and dispute resolution
+          {d.title}
         </h2>
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {RESOURCES_TRADE_PRIORITY_LINKS.map((item) => (
+          {d.links.map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -512,7 +467,7 @@ function TradePriorityStrip() {
   );
 }
 
-export function ResourcesHub({ introBody }: { introBody: string }) {
+export function ResourcesHub({ cms }: { cms: ResourcesCms }) {
   const [activeTab, setActiveTab] = useState<ResourcesTabId>("banking");
   const reduce = useReducedMotion();
 
@@ -522,21 +477,22 @@ export function ResourcesHub({ introBody }: { introBody: string }) {
     el?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);
 
-  const panel = PANEL_TITLES[activeTab];
+  const panel = cms[activeTab];
+  const pillars = cms.library.pillars;
 
   return (
     <>
-      <TradePriorityStrip />
+      <TradePriorityStrip d={cms.priority} />
       <section className="border-b border-[#d5d0c8] bg-white py-12 lg:py-16">
         <div className="container-page">
           <p className="text-xs font-semibold tracking-[0.22em] text-[#c88e4a] uppercase">
-            Resource library
+            {cms.library.eyebrow}
           </p>
           <h2 className="mt-3 max-w-2xl text-2xl font-semibold text-[#001a3d] sm:text-3xl">
-            Banking, payments, and trade documents — downloads are supplementary
+            {cms.library.title}
           </h2>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {RESOURCES_PILLARS.map((pillar, index) => {
+            {pillars.map((pillar, index) => {
               const active = activeTab === pillar.id;
               const accent = pillar.accent;
               return (
@@ -598,7 +554,7 @@ export function ResourcesHub({ introBody }: { introBody: string }) {
         <div className="container-page">
           <div className="sticky top-[4.5rem] z-10 mb-8 max-w-full overflow-x-auto overscroll-x-contain border-b border-[#d5d0c8] bg-[#f3f1ec]/95 pb-px backdrop-blur-sm">
             <div className="flex min-w-max gap-1">
-              {RESOURCES_PILLARS.map((tab) => (
+              {pillars.map((tab) => (
                 <button
                   key={tab.id}
                   type="button"
@@ -630,10 +586,10 @@ export function ResourcesHub({ introBody }: { introBody: string }) {
             <div className={cn("mt-8", activeTab === "documents" && "mt-4 sm:mt-5")}>
               {reduce ? (
                 <>
-                  {activeTab === "banking" ? <BankingPanel /> : null}
-                  {activeTab === "payments" ? <PaymentsPanel /> : null}
-                  {activeTab === "documents" ? <DocumentsPanel introBody={introBody} /> : null}
-                  {activeTab === "downloads" ? <DownloadsPanel /> : null}
+                  {activeTab === "banking" ? <BankingPanel d={cms.banking} /> : null}
+                  {activeTab === "payments" ? <PaymentsPanel d={cms.payments} /> : null}
+                  {activeTab === "documents" ? <DocumentsPanel d={cms.documents} /> : null}
+                  {activeTab === "downloads" ? <DownloadsPanel d={cms.downloads} /> : null}
                 </>
               ) : (
                 <AnimatePresence mode="wait">
@@ -644,10 +600,10 @@ export function ResourcesHub({ introBody }: { introBody: string }) {
                     exit={{ opacity: 0, y: -8 }}
                     transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    {activeTab === "banking" ? <BankingPanel /> : null}
-                    {activeTab === "payments" ? <PaymentsPanel /> : null}
-                    {activeTab === "documents" ? <DocumentsPanel introBody={introBody} /> : null}
-                    {activeTab === "downloads" ? <DownloadsPanel /> : null}
+                    {activeTab === "banking" ? <BankingPanel d={cms.banking} /> : null}
+                    {activeTab === "payments" ? <PaymentsPanel d={cms.payments} /> : null}
+                    {activeTab === "documents" ? <DocumentsPanel d={cms.documents} /> : null}
+                    {activeTab === "downloads" ? <DownloadsPanel d={cms.downloads} /> : null}
                   </motion.div>
                 </AnimatePresence>
               )}

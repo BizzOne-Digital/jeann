@@ -50,3 +50,10 @@ export const PRODUCER_PARTNERS_CTA = {
   secondary: { href: "/contact", label: "Contact trade desk" },
   inspections: { href: "/inspections", label: "Inspection & verification context" },
 } as const;
+
+export const PARTNERS_PROGRAMMES_LEAD =
+  "Buyers source sugar, oils, coffee, grains, pulses, and spices through Finekarts export contracts. Partners should be ready to discuss specifications, packaging, and inspection scope that match these categories — with evidence that supports government import rules in target markets.";
+
+/** Intro note as currently shown on the live /partners page. */
+export const PARTNERS_INTRO_NOTE_DEFAULT =
+  "This page is for producers and manufacturers exploring structured export relationships. Buyer purchase requests use the buyer portal; inspection firm overviews are under Inspections.";

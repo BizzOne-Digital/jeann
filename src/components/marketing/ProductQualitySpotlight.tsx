@@ -9,11 +9,22 @@ export function ProductQualitySpotlight({
   spotlights,
   variant = "navy",
   compact = false,
+  content,
 }: {
   spotlights: readonly ProductSpotlight[];
   variant?: "navy" | "light";
   compact?: boolean;
+  /** Optional CMS-resolved copy; falls back to the shared defaults. */
+  content?: {
+    eyebrow: string;
+    title: string;
+    lead: string;
+    bullets: readonly string[];
+    cards: readonly ProductSpotlight[];
+  };
 }) {
+  const copy = content ?? PRODUCT_QUALITY_COMPLIANCE;
+  const cards = content?.cards ?? spotlights;
   const isNavy = variant === "navy";
   const pad = compact ? "py-8 lg:py-9" : "py-12 lg:py-14";
 
@@ -34,28 +45,28 @@ export function ProductQualitySpotlight({
                 : "text-xs font-semibold tracking-[0.22em] text-[#c88e4a] uppercase"
             }
           >
-            {PRODUCT_QUALITY_COMPLIANCE.eyebrow}
+            {copy.eyebrow}
           </p>
           <h2
             className={`mt-2 max-w-3xl text-2xl font-semibold sm:text-3xl ${
               isNavy ? "text-white" : "text-[#001a3d]"
             }`}
           >
-            {PRODUCT_QUALITY_COMPLIANCE.title}
+            {copy.title}
           </h2>
           <p
             className={`mt-3 max-w-3xl text-base leading-relaxed ${
               isNavy ? "text-white/82" : "text-[#555555]"
             }`}
           >
-            {PRODUCT_QUALITY_COMPLIANCE.lead}
+            {copy.lead}
           </p>
           <ul
             className={`mt-5 max-w-3xl space-y-2 text-sm leading-relaxed ${
               isNavy ? "text-white/88" : "text-[#444444]"
             }`}
           >
-            {PRODUCT_QUALITY_COMPLIANCE.bullets.map((bullet) => (
+            {copy.bullets.map((bullet) => (
               <li key={bullet} className="flex gap-2">
                 <span
                   className={`mt-2 h-1.5 w-1.5 shrink-0 rounded-full ${isNavy ? "bg-[#d4a84b]" : "bg-[#c88e4a]"}`}
@@ -68,7 +79,7 @@ export function ProductQualitySpotlight({
         </Reveal>
 
         <ul className="mt-8 grid gap-3 sm:grid-cols-3">
-          {spotlights.map((item) => (
+          {cards.map((item) => (
             <li key={item.href}>
               <Link
                 href={item.href}

@@ -1,10 +1,13 @@
 import Image from "next/image";
+import { cmsField } from "@/lib/content/cms-field";
+import { resolveImageSrc } from "@/lib/media/resolve-image-src";
 import { HOME_PAGE_ONLY_IMAGES } from "@/lib/content/home-page-images";
 import { HOME_FOOD_SAFETY_STACK_HEIGHT } from "@/components/marketing/food-safety-stack-layout";
 
 /** Home only — visual band matching food-safety stack height (logistics hero imagery). */
-export function HomeLogisticsImageBand() {
+export function HomeLogisticsImageBand({ cms }: { cms?: Record<string, string> }) {
   const image = HOME_PAGE_ONLY_IMAGES.logisticsBand;
+  const src = cmsField(cms, "image", image.src);
 
   return (
     <section
@@ -12,8 +15,9 @@ export function HomeLogisticsImageBand() {
       aria-label="Global shipping and logistics"
     >
       <Image
-        src={image.src}
-        alt={image.alt}
+        src={resolveImageSrc(src)}
+        alt={cmsField(cms, "imageAlt", image.alt)}
+        unoptimized={src.startsWith("/api/uploads/")}
         fill
         className="object-cover object-[50%_58%] sm:object-[50%_52%]"
         sizes="100vw"

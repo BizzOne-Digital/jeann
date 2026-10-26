@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/motion/Reveal";
-import { cmsField } from "@/lib/content/cms-field";
+import { cmsField, cmsLines } from "@/lib/content/cms-field";
 import { resolveMarketingHeroImage } from "@/lib/marketing/cms-hero";
 import { resolveImageSrc } from "@/lib/media/resolve-image-src";
 import { PageHero } from "@/components/marketing/PageHero";
@@ -37,12 +37,14 @@ export function ContactChannels({
   email,
   phone,
   phoneDisplay,
+  cms,
 }: {
   email: string;
   phone: string;
   phoneDisplay: string;
+  cms?: Record<string, string>;
 }) {
-  const channels = [
+  const defaultChannels = [
     {
       title: "Purchase requests",
       text: "RFQs, specifications, Incoterms, and logistics discussions for signed-in buyers.",
@@ -62,18 +64,31 @@ export function ContactChannels({
       linkLabel: "Dispute resolution",
     },
   ];
+  // CMS line format: "Title: text | Link label | /href" (falls back to the default card at that index)
+  const channelLines = cmsLines(cms, "items", []);
+  const channels = defaultChannels.map((d, i) => {
+    const parts = (channelLines[i] ?? "").split("|").map((p) => p.trim());
+    const idx = parts[0].indexOf(":");
+    if (!channelLines[i] || idx === -1 || parts.length < 3) return d;
+    return {
+      title: parts[0].slice(0, idx).trim(),
+      text: parts[0].slice(idx + 1).trim(),
+      linkLabel: parts[1],
+      href: parts[2],
+    };
+  });
 
   return (
     <section className="bg-gradient-to-br from-[#1a3352] via-[#1f3d5c] to-[#25466a] py-14 text-white lg:py-20">
       <div className="container-page">
         <Reveal>
           <p className="text-xs font-semibold tracking-[0.22em] text-[#d4a84b] uppercase">
-            How to reach us
+            {cmsField(cms, "eyebrow", "How to reach us")}
           </p>
         </Reveal>
         <Reveal delay={0.06}>
           <h2 className="mt-3 max-w-xl text-3xl font-semibold sm:text-4xl">
-            Choose the right path for your enquiry
+            {cmsField(cms, "title", "Choose the right path for your enquiry")}
           </h2>
         </Reveal>
 
@@ -123,12 +138,14 @@ export function ContactFormSection({
   phoneDisplay,
   addressLine1,
   addressLine2,
+  cms,
 }: {
   email: string;
   phone: string;
   phoneDisplay: string;
   addressLine1: string;
   addressLine2: string;
+  cms?: Record<string, string>;
 }) {
   return (
     <section id="contact-form" className="scroll-mt-24 bg-[#f3f1ec] py-16 lg:py-24">
@@ -136,18 +153,21 @@ export function ContactFormSection({
         <div>
           <Reveal>
             <p className="text-xs font-semibold tracking-[0.22em] text-[#c88e4a] uppercase">
-              Message
+              {cmsField(cms, "eyebrow", "Message")}
             </p>
           </Reveal>
           <Reveal delay={0.06}>
             <h2 className="mt-3 text-3xl font-semibold text-[#001a3d] sm:text-4xl">
-              Send a message
+              {cmsField(cms, "title", "Send a message")}
             </h2>
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mt-5 text-base leading-relaxed text-[#555555]">
-              Tell us who you are, which department should receive the note, and what you need.
-              Submitting a message does not create a binding trade commitment.
+              {cmsField(
+                cms,
+                "body",
+                "Tell us who you are, which department should receive the note, and what you need. Submitting a message does not create a binding trade commitment.",
+              )}
             </p>
           </Reveal>
 
@@ -201,11 +221,11 @@ export function ContactFormSection({
   );
 }
 
-export function ContactCta() {
+export function ContactCta({ cms }: { cms?: Record<string, string> }) {
   return (
     <section className="relative overflow-hidden py-16 text-white lg:py-20">
       <Image
-        src="/images/contact/enquiry-cta.jpg"
+        src={cmsField(cms, "image", "/images/contact/enquiry-cta.jpg")}
         alt=""
         fill
         className="object-cover object-center"
@@ -216,28 +236,31 @@ export function ContactCta() {
       <div className="container-page relative text-center">
         <Reveal>
           <h2 className="mx-auto max-w-2xl text-3xl font-semibold leading-tight sm:text-4xl">
-            Prefer to start with a purchase request?
+            {cmsField(cms, "title", "Prefer to start with a purchase request?")}
           </h2>
         </Reveal>
         <Reveal delay={0.08}>
           <p className="mx-auto mt-4 max-w-lg text-base leading-relaxed text-white/70">
-            Share product, quantity, destination, and preferred Incoterms. Submission does not
-            guarantee acceptance or pricing.
+            {cmsField(
+              cms,
+              "body",
+              "Share product, quantity, destination, and preferred Incoterms. Submission does not guarantee acceptance or pricing.",
+            )}
           </p>
         </Reveal>
         <Reveal delay={0.14}>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link
-              href="/login"
+              href={cmsField(cms, "primaryCtaHref", "/login")}
               className="focus-ring inline-flex items-center justify-center gap-2 marketing-btn-primary px-6 py-3.5 text-base font-semibold"
             >
-              Buyer sign in <span aria-hidden>→</span>
+              {cmsField(cms, "primaryCtaLabel", "Buyer sign in")} <span aria-hidden>→</span>
             </Link>
             <Link
-              href="/products"
+              href={cmsField(cms, "secondaryCtaHref", "/products")}
               className="focus-ring inline-flex items-center justify-center gap-2 rounded-md border border-white/70 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10"
             >
-              Browse products
+              {cmsField(cms, "secondaryCtaLabel", "Browse products")}
             </Link>
           </div>
         </Reveal>

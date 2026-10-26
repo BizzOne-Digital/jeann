@@ -5,7 +5,15 @@ import { Reveal } from "@/components/motion/Reveal";
 import { getPartnersVideoFeatures } from "@/lib/content/partners-catalog";
 
 /** Independent inspection firms — shown on `/inspections`, not the producer `/partners` page. */
-export function InspectionFirmVideoStrip() {
+export function InspectionFirmVideoStrip({
+  eyebrow,
+  title,
+  lead,
+}: {
+  eyebrow: string;
+  title: string;
+  lead: string;
+}) {
   const firms = getPartnersVideoFeatures();
 
   return (
@@ -13,14 +21,13 @@ export function InspectionFirmVideoStrip() {
       <div className="container-page">
         <Reveal>
           <p className="text-xs font-semibold tracking-[0.22em] text-[#d4a84b] uppercase">
-            Firms we may appoint
+            {eyebrow}
           </p>
           <h2 className="mt-2 max-w-2xl text-2xl font-semibold sm:text-3xl">
-            Overview videos from recognized inspection organizations
+            {title}
           </h2>
           <p className="mt-3 max-w-3xl text-sm leading-relaxed text-white/75">
-            Finekarts coordinates these brands when contracts require independent evidence — certificates
-            are issued under their mandate, not by Finekarts.
+            {lead}
           </p>
         </Reveal>
         <div className="mt-8 grid gap-6 lg:grid-cols-3">

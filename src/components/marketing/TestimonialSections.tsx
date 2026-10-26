@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { cmsField } from "@/lib/content/cms-field";
 import type { PublicTestimonial } from "@/lib/content/testimonials-catalog";
 import { formatTestimonialDate } from "@/lib/content/testimonials-shared";
 import { Reveal } from "@/components/motion/Reveal";
@@ -156,8 +157,10 @@ export function TestimonialsGrid({ testimonials }: { testimonials: PublicTestimo
 
 export function FeaturedTestimonialAside({
   testimonial,
+  cms,
 }: {
   testimonial: PublicTestimonial | null;
+  cms?: Record<string, string>;
 }) {
   if (!testimonial) return null;
 
@@ -167,7 +170,7 @@ export function FeaturedTestimonialAside({
     <Reveal y={20}>
       <aside className="flex w-full flex-col justify-center rounded-lg bg-white/50 p-8 lg:p-10">
         <p className="text-xs font-semibold tracking-[0.2em] text-[#c88e4a] uppercase">
-          Client Perspective
+          {cmsField(cms, "eyebrow", "Client Perspective")}
         </p>
         <div className="mt-4">
           <TestimonialStars rating={testimonial.rating} />
@@ -189,7 +192,7 @@ export function FeaturedTestimonialAside({
           href="/testimonials"
           className="mt-6 text-sm font-medium text-[#c88e4a] transition-colors hover:text-[#b57d3c]"
         >
-          Read more testimonials →
+          {cmsField(cms, "linkLabel", "Read more testimonials →")}
         </Link>
       </aside>
     </Reveal>

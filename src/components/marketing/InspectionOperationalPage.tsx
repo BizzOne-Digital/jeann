@@ -4,17 +4,7 @@ import Image from "next/image";
 import { MarketingAbstractBand } from "@/components/marketing/MarketingAbstractBand";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import {
-  INSPECTIONS_COMMODITY_COMPARISON,
-  INSPECTIONS_COMMODITY_VALIDATION,
-  INSPECTIONS_CTA,
-  INSPECTIONS_HERO,
-  INSPECTIONS_METHOD_TYPES,
-  INSPECTIONS_SCOPE_TYPES,
-  INSPECTIONS_TIMING_TYPES,
-  INSPECTIONS_VERIFICATION_SUMMARY,
-} from "@/lib/content/inspections-operational-content";
-import { INSPECTIONS_SECTION_IMAGES } from "@/lib/content/inspections-images";
+import type { InspectionContent } from "@/lib/marketing/inspection-cms";
 import { InspectionFirmVideoStrip } from "@/components/marketing/InspectionFirmVideoStrip";
 import { LogisticsPairedRow } from "@/components/marketing/LogisticsVisuals";
 import { MotionImageFrame } from "@/components/motion/MotionImageFrame";
@@ -77,26 +67,19 @@ function TypeCard({
   );
 }
 
-const METHOD_IMAGES = [
-  INSPECTIONS_SECTION_IMAGES.visual,
-  INSPECTIONS_SECTION_IMAGES.ndt,
-  INSPECTIONS_SECTION_IMAGES.destructive,
-  INSPECTIONS_SECTION_IMAGES.dimensional,
-] as const;
-
-const COMMODITY_VALIDATION_AREAS = INSPECTIONS_COMMODITY_VALIDATION.areas;
-const COMMODITY_VALIDATION_BAND_AREAS = COMMODITY_VALIDATION_AREAS.slice(0, -1);
-const COMMODITY_VALIDATION_TRAILING_AREA = COMMODITY_VALIDATION_AREAS.at(-1);
-
-export function InspectionOperationalPage() {
+export function InspectionOperationalPage({ content }: { content: InspectionContent }) {
+  const { overview, timing, methodology, scope, summary, validation, comparison, firmVideos, cta } =
+    content;
+  const COMMODITY_VALIDATION_BAND_AREAS = validation.areas.slice(0, -1);
+  const COMMODITY_VALIDATION_TRAILING_AREA = validation.areas.at(-1);
   return (
     <div id="inspection-types" className="scroll-mt-20">
       <section className="marketing-section bg-white">
         <div className="container-page">
-          <LogisticsPairedRow image={INSPECTIONS_SECTION_IMAGES.intro} reversed>
+          <LogisticsPairedRow image={overview.image} reversed>
             <Reveal>
-              <p className="text-xs font-semibold tracking-[0.22em] text-[#c88e4a] uppercase">Overview</p>
-              <p className="mt-4 text-sm leading-relaxed text-[#555555] sm:text-base">{INSPECTIONS_HERO.description}</p>
+              <p className="text-xs font-semibold tracking-[0.22em] text-[#c88e4a] uppercase">{overview.eyebrow}</p>
+              <p className="mt-4 text-sm leading-relaxed text-[#555555] sm:text-base">{overview.body}</p>
             </Reveal>
           </LogisticsPairedRow>
         </div>
@@ -105,10 +88,10 @@ export function InspectionOperationalPage() {
       <section className="marketing-section bg-[var(--mist)]">
         <div className="container-page space-y-10">
           <Reveal>
-            <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">{INSPECTIONS_TIMING_TYPES.title}</h2>
+            <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">{timing.title}</h2>
           </Reveal>
           <div className="grid gap-6 lg:grid-cols-3 lg:items-stretch">
-            {INSPECTIONS_TIMING_TYPES.items.map((item, i) => (
+            {timing.cards.map((item, i) => (
               <TypeCard key={item.title} title={item.title} purpose={item.purpose} focus={item.focus} benefit={item.benefit} index={i} equalHeight />
             ))}
           </div>
@@ -118,17 +101,17 @@ export function InspectionOperationalPage() {
       <section className="marketing-section bg-white">
         <div className="container-page space-y-10">
           <Reveal>
-            <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">{INSPECTIONS_METHOD_TYPES.title}</h2>
+            <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">{methodology.title}</h2>
           </Reveal>
           <div className="space-y-8 lg:space-y-10">
-            {INSPECTIONS_METHOD_TYPES.items.map((item, i) => (
-              <LogisticsPairedRow key={item.title} image={METHOD_IMAGES[i]} reversed={i % 2 === 1}>
+            {methodology.cards.map((item, i) => (
+              <LogisticsPairedRow key={item.title} image={methodology.images[i] ?? methodology.images[0]} reversed={i % 2 === 1}>
                 <TypeCard
                   title={item.title}
                   purpose={item.purpose}
                   focus={item.focus}
                   benefit={item.benefit}
-                  techniques={"techniques" in item && item.techniques ? [...item.techniques] : undefined}
+                  techniques={item.bullets.length ? item.bullets : undefined}
                   index={i}
                 />
               </LogisticsPairedRow>
@@ -140,11 +123,11 @@ export function InspectionOperationalPage() {
       <section className="marketing-section bg-[var(--mist)]">
         <div className="container-page space-y-10">
           <Reveal>
-            <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">{INSPECTIONS_SCOPE_TYPES.title}</h2>
+            <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">{scope.title}</h2>
           </Reveal>
-          <LogisticsPairedRow image={INSPECTIONS_SECTION_IMAGES.regulatory}>
+          <LogisticsPairedRow image={scope.image}>
             <div className="space-y-8">
-              {INSPECTIONS_SCOPE_TYPES.items.map((item, i) => (
+              {scope.cards.map((item, i) => (
                 <Reveal key={item.title} delay={i * 0.06} variant="right">
                   <article className="rounded-xl border border-[#d5d0c8] bg-white p-6 shadow-sm">
                     <h3 className="text-lg font-semibold text-[#001a3d]">{stripLeadingMarker(item.title)}</h3>
@@ -169,7 +152,7 @@ export function InspectionOperationalPage() {
         <div className="container-page min-w-0">
           <Reveal>
             <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">
-              {INSPECTIONS_VERIFICATION_SUMMARY.title}
+              {summary.title}
             </h2>
           </Reveal>
           <div className="table-scroll mt-8 rounded-xl border border-[#d5d0c8] bg-white shadow-sm">
@@ -182,11 +165,11 @@ export function InspectionOperationalPage() {
                 </tr>
               </thead>
               <tbody>
-                {INSPECTIONS_VERIFICATION_SUMMARY.rows.map((row) => (
-                  <tr key={row.type} className="border-t border-[#e8e4dc] even:bg-[#faf9f6]">
-                    <td className="px-4 py-4 align-top font-semibold text-[#001a3d]">{row.type}</td>
-                    <td className="px-4 py-4 align-top text-[#555555]">{row.focus}</td>
-                    <td className="px-4 py-4 align-top text-[#555555]">{row.goal}</td>
+                {summary.rows.map((row) => (
+                  <tr key={row[0]} className="border-t border-[#e8e4dc] even:bg-[#faf9f6]">
+                    <td className="px-4 py-4 align-top font-semibold text-[#001a3d]">{row[0]}</td>
+                    <td className="px-4 py-4 align-top text-[#555555]">{row[1]}</td>
+                    <td className="px-4 py-4 align-top text-[#555555]">{row[2]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -197,38 +180,38 @@ export function InspectionOperationalPage() {
 
       <MarketingAbstractBand
         className="border-y border-white/10 py-14 lg:py-16"
-        imageSrc={INSPECTIONS_SECTION_IMAGES.commodityBand.src}
+        imageSrc={validation.bandImageSrc}
         imageClassName="object-cover object-center saturate-[1.12] brightness-[1.06]"
         overlayClassName="bg-[#071525]/28"
         vignetteOpacity={0.1}
       >
         <div className="container-page space-y-12">
           <Reveal>
-            <h2 className="text-2xl font-semibold sm:text-3xl">{INSPECTIONS_COMMODITY_VALIDATION.title}</h2>
+            <h2 className="text-2xl font-semibold sm:text-3xl">{validation.title}</h2>
             <p className="mt-4 max-w-3xl text-sm leading-relaxed text-white/75 sm:text-base">
-              {INSPECTIONS_COMMODITY_VALIDATION.lead}
+              {validation.lead}
             </p>
             <div className="mt-8 grid gap-4 lg:grid-cols-2">
               <div className="rounded-xl border border-[#d5d0c8] border-t-[3px] border-t-[#c88e4a] bg-white/95 p-5 shadow-[0_10px_32px_rgba(0,26,61,0.14)] ring-1 ring-[#001a3d]/10 backdrop-blur-sm">
                 <p className="text-xs font-semibold uppercase tracking-wide text-[#c88e4a]">Verification</p>
                 <p className="mt-2 text-sm leading-relaxed text-[#555555]">
-                  {INSPECTIONS_COMMODITY_VALIDATION.distinction.verification}
+                  {validation.verification}
                 </p>
               </div>
               <div className="rounded-xl border border-[#d5d0c8] border-t-[3px] border-t-[#c88e4a] bg-white/95 p-5 shadow-[0_10px_32px_rgba(0,26,61,0.14)] ring-1 ring-[#001a3d]/10 backdrop-blur-sm">
                 <p className="text-xs font-semibold uppercase tracking-wide text-[#c88e4a]">Validation</p>
                 <p className="mt-2 text-sm leading-relaxed text-[#555555]">
-                  {INSPECTIONS_COMMODITY_VALIDATION.distinction.validation}
+                  {validation.validation}
                 </p>
               </div>
             </div>
-            <p className="mt-6 text-sm text-white/85">{INSPECTIONS_COMMODITY_VALIDATION.intro}</p>
+            <p className="mt-6 text-sm text-white/85">{validation.intro}</p>
           </Reveal>
           <MotionImageFrame>
             <div className="relative aspect-[21/9] min-h-[200px] overflow-hidden rounded-xl border border-white/20 shadow-lg">
               <Image
-                src={INSPECTIONS_SECTION_IMAGES.commodityFeature.src}
-                alt={INSPECTIONS_SECTION_IMAGES.commodityFeature.alt}
+                src={validation.featureImage.src}
+                alt={validation.featureImage.alt}
                 fill
                 className="object-cover"
                 sizes="100vw"
@@ -281,7 +264,7 @@ export function InspectionOperationalPage() {
           ) : null}
           <Reveal>
             <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">
-              {INSPECTIONS_COMMODITY_COMPARISON.title}
+              {comparison.title}
             </h2>
           </Reveal>
           <div className="table-scroll mt-8 rounded-xl border border-[#d5d0c8] bg-white shadow-sm">
@@ -295,12 +278,12 @@ export function InspectionOperationalPage() {
                 </tr>
               </thead>
               <tbody>
-                {INSPECTIONS_COMMODITY_COMPARISON.rows.map((row) => (
-                  <tr key={row.aspect} className="border-t border-[#e8e4dc] even:bg-[#faf9f6]">
-                    <td className="px-4 py-4 align-top font-semibold text-[#001a3d]">{row.aspect}</td>
-                    <td className="px-4 py-4 align-top text-[#555555]">{row.focus}</td>
-                    <td className="px-4 py-4 align-top text-[#555555]">{row.question}</td>
-                    <td className="px-4 py-4 align-top text-[#555555]">{row.examples}</td>
+                {comparison.rows.map((row) => (
+                  <tr key={row[0]} className="border-t border-[#e8e4dc] even:bg-[#faf9f6]">
+                    <td className="px-4 py-4 align-top font-semibold text-[#001a3d]">{row[0]}</td>
+                    <td className="px-4 py-4 align-top text-[#555555]">{row[1]}</td>
+                    <td className="px-4 py-4 align-top text-[#555555]">{row[2]}</td>
+                    <td className="px-4 py-4 align-top text-[#555555]">{row[3]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -309,7 +292,11 @@ export function InspectionOperationalPage() {
         </div>
       </section>
 
-      <InspectionFirmVideoStrip />
+      <InspectionFirmVideoStrip
+        eyebrow={firmVideos.eyebrow}
+        title={firmVideos.title}
+        lead={firmVideos.lead}
+      />
 
       <section className="marketing-section bg-white">
         <div className="container-page">
@@ -321,21 +308,21 @@ export function InspectionOperationalPage() {
               />
               <div className="relative grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-stretch">
                 <div className="flex flex-col justify-center p-8 sm:p-10 lg:p-12 lg:pr-8">
-                  <p className="text-xs font-semibold tracking-[0.22em] text-[#d4a84b] uppercase">Next step</p>
-                  <h2 className="mt-3 text-2xl font-semibold sm:text-3xl">{INSPECTIONS_CTA.title}</h2>
-                  <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/75 sm:text-base">{INSPECTIONS_CTA.lead}</p>
+                  <p className="text-xs font-semibold tracking-[0.22em] text-[#d4a84b] uppercase">{cta.eyebrow}</p>
+                  <h2 className="mt-3 text-2xl font-semibold sm:text-3xl">{cta.title}</h2>
+                  <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/75 sm:text-base">{cta.lead}</p>
                   <div className="mt-8 flex flex-wrap gap-3">
                     <Link
-                      href={INSPECTIONS_CTA.primaryHref}
+                      href={cta.primaryHref}
                       className="marketing-btn-primary px-6 py-3 text-sm font-semibold"
                     >
-                      {INSPECTIONS_CTA.primaryLabel} <span aria-hidden>→</span>
+                      {cta.primaryLabel} <span aria-hidden>→</span>
                     </Link>
                     <Link
-                      href={INSPECTIONS_CTA.secondaryHref}
+                      href={cta.secondaryHref}
                       className="rounded-md border border-white/40 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
                     >
-                      {INSPECTIONS_CTA.secondaryLabel}
+                      {cta.secondaryLabel}
                     </Link>
                   </div>
                 </div>
@@ -343,10 +330,10 @@ export function InspectionOperationalPage() {
                 <div className="relative min-h-[280px] border-t border-white/10 bg-[#0c2544] lg:min-h-0 lg:border-t-0 lg:border-l">
                   <div className="relative flex h-full flex-col justify-center p-8 sm:p-10 lg:p-12">
                     <p className="text-xs font-semibold tracking-[0.18em] text-[#d4a84b] uppercase">
-                      {INSPECTIONS_CTA.shareTitle}
+                      {cta.shareTitle}
                     </p>
                     <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-                      {INSPECTIONS_CTA.shareItems.map((item) => (
+                      {cta.shareItems.map((item) => (
                         <li
                           key={item}
                           className="flex gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-sm leading-snug text-white/90"

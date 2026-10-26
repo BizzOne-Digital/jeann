@@ -6,7 +6,17 @@ import { FeaturedTestimonialAside } from "@/components/marketing/TestimonialSect
 import type { PublicTestimonial } from "@/lib/content/testimonials-catalog";
 import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { cmsField } from "@/lib/content/cms-field";
+import { cmsField, cmsLines } from "@/lib/content/cms-field";
+import {
+  HOME_COMMODITY_SLUGS,
+  HOME_DEFAULTS,
+  HOME_HERO_TRUST_LABELS,
+  HOME_PACKAGING_BODY,
+  HOME_PROCESS_STEPS,
+  HOME_SHIPPING_TERMS,
+  HOME_SOURCED_ITEMS,
+  parseTitleText,
+} from "@/lib/marketing/home-cms";
 import { resolveImageSrc } from "@/lib/media/resolve-image-src";
 import { Reveal } from "@/components/motion/Reveal";
 import { HomeCtaChat } from "@/components/marketing/HomeCtaChat";
@@ -28,14 +38,7 @@ import {
   MARKETING_HERO_SECTION_CLASS,
 } from "@/lib/marketing/hero-layout";
 
-const COMMODITY_CARDS = [
-  "edible-oils",
-  "sugar",
-  "rice-and-grains",
-  "beans-and-pulses",
-  "coffee",
-  "spices",
-].map((slug) => {
+const COMMODITY_CARDS = HOME_COMMODITY_SLUGS.map((slug) => {
   const cover = getCategoryCover(slug);
   return { slug, name: cover.shortName, image: cover.image, alt: cover.alt };
 });
@@ -63,9 +66,10 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
   const reduce = useReducedMotion();
   const hero = resolveMarketingHeroImage(cms, "home");
 
+  const trustLabels = cmsLines(cms, "bullets", [...HOME_HERO_TRUST_LABELS]);
   const trust = [
     {
-      label: "FOB & CIF",
+      label: trustLabels[0] ?? HOME_HERO_TRUST_LABELS[0],
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
           <path
@@ -79,7 +83,7 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
       ),
     },
     {
-      label: "Irrevocable LC · Revolving",
+      label: trustLabels[1] ?? HOME_HERO_TRUST_LABELS[1],
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
           <path
@@ -99,7 +103,7 @@ export function HomeHero({ cms }: { cms?: Record<string, string> }) {
       ),
     },
     {
-      label: "CIF & trade insurance",
+      label: trustLabels[2] ?? HOME_HERO_TRUST_LABELS[2],
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
           <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="1.6" />
@@ -281,7 +285,7 @@ export function ConnectionSection({
                 href="/about"
                 className="mt-7 inline-flex items-center gap-2 text-base font-semibold text-[#c88e4a] transition hover:gap-3"
               >
-                Discover Finekarts <span aria-hidden>→</span>
+                {cmsField(cms, "ctaLabel", "Discover Finekarts")} <span aria-hidden>→</span>
               </Link>
             </Reveal>
           </div>
@@ -339,20 +343,27 @@ export function ConnectionSection({
   );
 }
 
-export function CommoditiesWeTrade({ categories }: { categories: SeedCategory[] }) {
+export function CommoditiesWeTrade({
+  categories,
+  cms,
+}: {
+  categories: SeedCategory[];
+  cms?: Record<string, string>;
+}) {
   void categories;
+  const names = cmsLines(cms, "items", []);
   return (
     <section className="bg-[#0a1628] py-12 text-white lg:py-16">
       <div className="container-page">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <h2 className="text-2xl font-medium tracking-tight sm:text-[1.75rem]">
-            Products we sell
+            {cmsField(cms, "title", HOME_DEFAULTS.commodities.title)}
           </h2>
           <Link
             href="/products"
             className="text-base font-medium text-[#d4a84b] transition hover:text-[#e8bc5c]"
           >
-            View All Products →
+            {cmsField(cms, "ctaLabel", HOME_DEFAULTS.commodities.ctaLabel)}
           </Link>
         </div>
 
@@ -362,15 +373,16 @@ export function CommoditiesWeTrade({ categories }: { categories: SeedCategory[] 
               <Link href={`/products/${card.slug}`} className="group block min-w-0">
                 <div className="relative aspect-[4/5] overflow-hidden rounded-[2px] border border-white/25 bg-[#122033]">
                   <Image
-                    src={card.image}
+                    src={resolveImageSrc(cmsField(cms, `image${i + 1}`, card.image))}
                     alt={card.alt}
                     fill
                     className="object-cover transition duration-500 group-hover:scale-[1.03]"
+                    unoptimized={cmsField(cms, `image${i + 1}`, "").startsWith("/api/uploads/")}
                     sizes="(max-width: 1024px) 33vw, 16vw"
                   />
                 </div>
                 <p className="mt-3 text-left text-base font-medium tracking-wide text-white">
-                  {card.name}
+                  {names[i] ?? card.name}
                 </p>
               </Link>
             </Reveal>
@@ -429,26 +441,17 @@ function FeatureIcon({ type }: { type: "sprout" | "shield" | "globe" }) {
 
 export function SourcedResponsibly({
   home3 = "/images/home/responsible-sourcing-aerial.jpg",
+  cms,
 }: {
   home3?: string;
+  cms?: Record<string, string>;
 }) {
-  const items = [
-    {
-      title: "Trusted Sourcing",
-      text: "We partner with reputable producers who share our commitment to quality and integrity.",
-      icon: "sprout" as const,
-    },
-    {
-      title: "Quality Coordination",
-      text: "Rigorous quality checks and consistent standards across every shipment and origin.",
-      icon: "shield" as const,
-    },
-    {
-      title: "Global Logistics",
-      text: "Coordinated freight and documentation with established logistics partners on programmes we sell.",
-      icon: "globe" as const,
-    },
-  ];
+  const icons = ["sprout", "shield", "globe"] as const;
+  const items = parseTitleText(
+    cmsLines(cms, "items", HOME_SOURCED_ITEMS.map((i) => `${i.title}: ${i.text}`)),
+    HOME_SOURCED_ITEMS,
+  ).map((item, i) => ({ ...item, icon: icons[i] ?? icons[0] }));
+  const titleLines = cmsField(cms, "title", HOME_DEFAULTS.sourced.title).split(/\r?\n/);
 
   return (
     <section className="bg-[#f4f6f8] py-16 lg:py-24">
@@ -470,16 +473,17 @@ export function SourcedResponsibly({
         <div>
           <Reveal>
             <h2 className="text-3xl font-semibold leading-tight text-[#001a3d] sm:text-4xl">
-              Sourced Responsibly.
-              <br />
-              Delivered Globally.
+              {titleLines.map((line, i) => (
+                <span key={i}>
+                  {i > 0 ? <br /> : null}
+                  {line}
+                </span>
+              ))}
             </h2>
           </Reveal>
           <Reveal delay={0.08}>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-[#555555]">
-              As a bulk commodity trader, we work with established producers and logistics
-              partners to fulfil PSAs reliably — inspection and insurance are coordinated where
-              contracts require them.
+              {cmsField(cms, "body", HOME_DEFAULTS.sourced.body)}
             </p>
           </Reveal>
 
@@ -502,7 +506,7 @@ export function SourcedResponsibly({
               href="/resources"
               className="focus-ring mt-10 inline-flex items-center gap-2 marketing-btn-primary px-6 py-3.5 text-base font-semibold"
             >
-              Resources & documents <span aria-hidden>→</span>
+              {cmsField(cms, "ctaLabel", HOME_DEFAULTS.sourced.ctaLabel)} <span aria-hidden>→</span>
             </Link>
           </Reveal>
         </div>
@@ -511,32 +515,18 @@ export function SourcedResponsibly({
   );
 }
 
-export function ProcessTimeline() {
-  const steps = [
-    {
-      title: "Submit Request",
-      text: "Share product, quantity, destination, and preferred Incoterms through the RFQ form.",
-    },
-    {
-      title: "Review & Quote",
-      text: "Trade desk reviews fit, CIF or FOB structure, and bankable payment options.",
-    },
-    {
-      title: "Contract & Documentation",
-      text: "Agreed PSA/SPA and banking wording proceed only after mutual confirmation.",
-    },
-    {
-      title: "Inspection & Delivery",
-      text: "Quality and quantity confirmed before shipment when agreed; CIF insurance and documents align to the PSA.",
-    },
-  ];
+export function ProcessTimeline({ cms }: { cms?: Record<string, string> }) {
+  const steps = parseTitleText(
+    cmsLines(cms, "items", HOME_PROCESS_STEPS.map((s) => `${s.title}: ${s.text}`)),
+    HOME_PROCESS_STEPS,
+  );
 
   return (
     <section className="bg-[#eef2f5] py-16 lg:py-24">
       <div className="container-page">
         <Reveal>
           <h2 className="mx-auto max-w-2xl text-center text-3xl font-semibold text-[#0b1f33] sm:text-4xl">
-            A Clear Path From Request to Delivery
+            {cmsField(cms, "title", HOME_DEFAULTS.process.title)}
           </h2>
         </Reveal>
         <div className="relative mt-14 grid gap-8 md:grid-cols-4">
@@ -554,30 +544,26 @@ export function ProcessTimeline() {
   );
 }
 
-export function ShippingTerms() {
+export function ShippingTerms({ cms }: { cms?: Record<string, string> }) {
+  const terms = parseTitleText(
+    cmsLines(cms, "items", HOME_SHIPPING_TERMS.map((t) => `${t.title}: ${t.text}`)),
+    HOME_SHIPPING_TERMS,
+  );
+  const shippingImage = cmsField(cms, "image", HOME_PAGE_ONLY_IMAGES.shippingTerms.src);
   return (
     <section className="relative bg-white overflow-hidden">
       <div className="grid lg:grid-cols-2">
         <div className="relative bg-[#0b1f33] px-6 py-14 text-white sm:px-10 lg:px-16 lg:py-20 z-10">
           <Reveal>
             <h2 className="text-3xl font-semibold sm:text-4xl">
-              Shipping Terms Built Around Your Trade
+              {cmsField(cms, "title", HOME_DEFAULTS.shipping.title)}
             </h2>
           </Reveal>
           <div className="mt-8 space-y-4">
-            {[
-              {
-                term: "FOB",
-                text: "Free On Board — seller typically delivers on board at the named port of shipment; buyer arranges main carriage and insurance from that point.",
-              },
-              {
-                term: "CIF",
-                text: "Cost, Insurance and Freight — seller typically arranges carriage and minimum insurance to the named destination port, subject to contract wording.",
-              },
-            ].map((item, i) => (
-              <Reveal key={item.term} delay={i * 0.08}>
+            {terms.map((item, i) => (
+              <Reveal key={item.title} delay={i * 0.08}>
                 <div className="border border-white/15 bg-white/5 p-5">
-                  <p className="text-lg font-semibold text-[#e89a2d]">{item.term}</p>
+                  <p className="text-lg font-semibold text-[#e89a2d]">{item.title}</p>
                   <p className="mt-2 text-base leading-relaxed text-white/70">{item.text}</p>
                 </div>
               </Reveal>
@@ -585,23 +571,26 @@ export function ShippingTerms() {
           </div>
           <Reveal delay={0.16}>
             <div className="mt-8 flex flex-wrap gap-3">
-              <GoldButton href="/logistics">CIF coordination →</GoldButton>
+              <GoldButton href="/logistics">
+                {cmsField(cms, "primaryCtaLabel", HOME_DEFAULTS.shipping.primaryCtaLabel)}
+              </GoldButton>
               <Link
                 href="/dispute-resolution"
                 className="focus-ring inline-flex items-center justify-center gap-2 rounded-md border border-white/40 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10"
               >
-                Trade assurance →
+                {cmsField(cms, "secondaryCtaLabel", HOME_DEFAULTS.shipping.secondaryCtaLabel)}
               </Link>
             </div>
           </Reveal>
         </div>
         <div className="relative min-h-[320px] lg:min-h-full">
           <Image
-            src={HOME_PAGE_ONLY_IMAGES.shippingTerms.src}
-            alt={HOME_PAGE_ONLY_IMAGES.shippingTerms.alt}
+            src={resolveImageSrc(shippingImage)}
+            alt={cmsField(cms, "imageAlt", HOME_PAGE_ONLY_IMAGES.shippingTerms.alt)}
             fill
             className="object-cover"
             sizes="(max-width: 1024px) 100vw, 50vw"
+            unoptimized={shippingImage.startsWith("/api/uploads/")}
           />
         </div>
       </div>
@@ -609,27 +598,27 @@ export function ShippingTerms() {
   );
 }
 
-export function PackagingSection() {
+export function PackagingSection({ cms }: { cms?: Record<string, string> }) {
+  const names = cmsLines(cms, "items", []);
   return (
     <section className="relative bg-[#f4f6f8] py-16 lg:py-24 overflow-hidden">
       <div className="container-page relative z-10">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <Reveal>
             <h2 className="text-3xl font-semibold text-[#0b1f33] sm:text-4xl">
-              Packaging for Every Commodity
+              {cmsField(cms, "title", HOME_DEFAULTS.packaging.title)}
             </h2>
           </Reveal>
           <Reveal delay={0.08}>
             <Link href="/packaging" className="text-base font-semibold text-[#e89a2d] hover:underline">
-              View packaging options →
+              {cmsField(cms, "ctaLabel", HOME_DEFAULTS.packaging.ctaLabel)}
             </Link>
           </Reveal>
         </div>
         <p className="mt-3 max-w-2xl text-base text-stone">
-          Featured transport modes below. All other packaging types — IBC totes, drums, jumbo bags,
-          ISO tanks, bulk vessel, containerized cargo and more — are explained on the{" "}
+          {cmsField(cms, "body", HOME_PACKAGING_BODY)}{" "}
           <Link href="/packaging" className="font-semibold text-[#c88e4a] hover:underline">
-            full packaging page
+            {cmsField(cms, "bodyLinkLabel", HOME_DEFAULTS.packaging.bodyLinkLabel)}
           </Link>
           .
         </p>
@@ -639,10 +628,11 @@ export function PackagingSection() {
               <Link href={`/packaging#${item.slug}`} className="group block">
                 <div className="relative aspect-[4/3] overflow-hidden rounded-sm bg-[#dfe5ea]">
                   <Image
-                    src={item.image}
+                    src={resolveImageSrc(cmsField(cms, `image${i + 1}`, item.image))}
                     alt={item.alt}
                     fill
                     className="object-cover transition duration-300 group-hover:scale-[1.03]"
+                    unoptimized={cmsField(cms, `image${i + 1}`, "").startsWith("/api/uploads/")}
                     sizes="(max-width: 1024px) 50vw, 220px"
                   />
                   {item.slug === "bulk-railcar" ? (
@@ -653,7 +643,7 @@ export function PackagingSection() {
                   ) : null}
                 </div>
                 <p className="mt-3 text-center text-base font-semibold text-[#0b1f33] group-hover:text-[#c88e4a]">
-                  {item.name}
+                  {names[i] ?? item.name}
                 </p>
               </Link>
             </Reveal>
@@ -664,17 +654,19 @@ export function PackagingSection() {
   );
 }
 
-export function ReadyCtaBanner() {
+export function ReadyCtaBanner({ cms }: { cms?: Record<string, string> }) {
   const [chatFocus, setChatFocus] = useState(0);
+  const ctaImage = cmsField(cms, "image", HOME_PAGE_ONLY_IMAGES.readyCta.src);
 
   return (
     <section className="relative overflow-hidden py-16 text-white lg:py-24">
       <Image
-        src={HOME_PAGE_ONLY_IMAGES.readyCta.src}
-        alt={HOME_PAGE_ONLY_IMAGES.readyCta.alt}
+        src={resolveImageSrc(ctaImage)}
+        alt={cmsField(cms, "imageAlt", HOME_PAGE_ONLY_IMAGES.readyCta.alt)}
         fill
         className="object-cover object-center"
         sizes="100vw"
+        unoptimized={ctaImage.startsWith("/api/uploads/")}
       />
       <div className="absolute inset-0 bg-[#071525]/80" />
 
@@ -682,12 +674,12 @@ export function ReadyCtaBanner() {
         <div>
           <Reveal>
             <h2 className="max-w-xl text-3xl font-semibold leading-tight sm:text-4xl lg:text-[2.75rem]">
-              Ready to Source Your Next Commodity?
+              {cmsField(cms, "title", HOME_DEFAULTS.cta.title)}
             </h2>
           </Reveal>
           <Reveal delay={0.08}>
             <p className="mt-4 max-w-lg text-base leading-relaxed text-white/75">
-              Tell us what you need, where it is going, and your preferred trade terms.
+              {cmsField(cms, "body", HOME_DEFAULTS.cta.body)}
             </p>
           </Reveal>
           <Reveal delay={0.14}>
@@ -696,7 +688,7 @@ export function ReadyCtaBanner() {
                 href="/login"
                 className="focus-ring inline-flex items-center gap-2 marketing-btn-primary px-6 py-3.5 text-base font-semibold"
               >
-                Buyer portal sign in <span aria-hidden>→</span>
+                {cmsField(cms, "primaryCtaLabel", HOME_DEFAULTS.cta.primaryCtaLabel)} <span aria-hidden>→</span>
               </Link>
               <button
                 type="button"
@@ -704,7 +696,7 @@ export function ReadyCtaBanner() {
                 suppressHydrationWarning
                 className="focus-ring inline-flex items-center gap-2 rounded-md marketing-btn-primary px-6 py-3.5 text-base font-semibold"
               >
-                Live chat
+                {cmsField(cms, "secondaryCtaLabel", HOME_DEFAULTS.cta.secondaryCtaLabel)}
               </button>
             </div>
           </Reveal>
@@ -724,9 +716,23 @@ const HOME_INSIGHTS_TEASER_IMAGES = HOME_INSIGHTS_CARD_IMAGES;
 
 export function InsightsAndNotes({
   featuredTestimonial,
+  cms,
+  testimonialCms,
 }: {
   featuredTestimonial?: PublicTestimonial | null;
+  cms?: Record<string, string>;
+  testimonialCms?: Record<string, string>;
 }) {
+  // Card line format: "Title | excerpt" (links stay fixed per card).
+  const cardTexts = parseTitleText(
+    cmsLines(
+      cms,
+      "items",
+      HOME_INSIGHTS_TEASER.cards.map((c) => `${c.title} | ${c.excerpt}`),
+    ),
+    HOME_INSIGHTS_TEASER.cards.map((c) => ({ title: c.title, text: c.excerpt })),
+    "|",
+  );
   return (
     <section className="relative w-full overflow-hidden bg-[#f4f6f8] py-16 lg:py-24">
       <div className="container-page relative z-10 w-full">
@@ -736,31 +742,33 @@ export function InsightsAndNotes({
             <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold tracking-[0.2em] text-[#c88e4a] uppercase">
-                  {HOME_INSIGHTS_TEASER.eyebrow}
+                  {cmsField(cms, "eyebrow", HOME_INSIGHTS_TEASER.eyebrow)}
                 </p>
                 <h2 className="mt-1 text-3xl font-semibold text-[#001a3d] lg:text-4xl">
-                  {HOME_INSIGHTS_TEASER.title}
+                  {cmsField(cms, "title", HOME_INSIGHTS_TEASER.title)}
                 </h2>
               </div>
               <Link
                 href={HOME_INSIGHTS_TEASER.viewAllHref}
                 className="text-base font-medium text-[#c88e4a] transition-colors hover:text-[#b57d3c]"
               >
-                {HOME_INSIGHTS_TEASER.viewAllLabel}
+                {cmsField(cms, "ctaLabel", HOME_INSIGHTS_TEASER.viewAllLabel)}
               </Link>
             </div>
 
             <div className="grid w-full gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
               {HOME_INSIGHTS_TEASER.cards.map((card, i) => {
                 const image = HOME_INSIGHTS_TEASER_IMAGES[i] ?? HOME_INSIGHTS_TEASER_IMAGES[0];
+                const imageSrc = cmsField(cms, `image${i + 1}`, image.src);
                 return (
                   <Reveal key={card.title} delay={i * 0.06}>
                     <article className="group w-full">
                       <Link href={card.href} className="block w-full">
                         <div className="relative aspect-[16/11] w-full overflow-hidden rounded-lg bg-[#e4e0d8]">
                           <Image
-                            src={image.src}
+                            src={resolveImageSrc(imageSrc)}
                             alt={image.alt}
+                            unoptimized={imageSrc.startsWith("/api/uploads/")}
                             fill
                             className="object-cover transition-transform duration-500 group-hover:scale-105"
                             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 300px"
@@ -768,13 +776,13 @@ export function InsightsAndNotes({
                         </div>
                         <div className="w-full pt-4">
                           <h3 className="text-base font-semibold leading-snug text-[#001a3d] transition-colors group-hover:text-[#c88e4a]">
-                            {card.title}
+                            {cardTexts[i]?.title ?? card.title}
                           </h3>
                           <p className="mt-2 line-clamp-3 text-base leading-relaxed text-[#666666]">
-                            {card.excerpt}
+                            {cardTexts[i]?.text ?? card.excerpt}
                           </p>
                           <span className="mt-3 inline-flex items-center gap-1 text-base font-medium text-[#c88e4a]">
-                            Read guide <span aria-hidden="true">→</span>
+                            {cmsField(cms, "cardLinkLabel", HOME_DEFAULTS.insights.cardLinkLabel)} <span aria-hidden="true">→</span>
                           </span>
                         </div>
                       </Link>
@@ -786,7 +794,7 @@ export function InsightsAndNotes({
           </div>
 
           <Reveal delay={0.1}>
-            <FeaturedTestimonialAside testimonial={featuredTestimonial ?? null} />
+            <FeaturedTestimonialAside testimonial={featuredTestimonial ?? null} cms={testimonialCms} />
           </Reveal>
         </div>
       </div>

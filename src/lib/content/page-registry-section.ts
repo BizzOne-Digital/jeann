@@ -61,7 +61,8 @@ export function buildPageSection(
         ? "image"
         : /youtube/i.test(key)
           ? "url"
-          : key.includes("description") ||
+          : /items|rows|cards|steps|areas|lines/i.test(key) ||
+              key.includes("description") ||
               key.includes("body") ||
               key.includes("note") ||
               key.includes("lead") ||

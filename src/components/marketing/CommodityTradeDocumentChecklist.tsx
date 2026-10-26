@@ -7,15 +7,35 @@ import { BUYER_CIS_PDF } from "@/lib/content/buyer-cis-download";
 
 const CHECKLIST_DOWNLOAD_HREF = "/docs/commodity-trade-document-checklist.txt";
 
-export function CommodityTradeDocumentChecklist({ showDownload = true }: { showDownload?: boolean }) {
+export type CommodityChecklistContent = {
+  eyebrow: string;
+  title: string;
+  sections: { title: string; items: string[] }[];
+  noteLabel: string;
+  note: string;
+};
+
+export function CommodityTradeDocumentChecklist({
+  showDownload = true,
+  content,
+}: {
+  showDownload?: boolean;
+  /** Optional CMS-resolved copy; falls back to the shared defaults. */
+  content?: CommodityChecklistContent;
+}) {
+  const eyebrow = content?.eyebrow ?? "Reference checklist";
+  const title = content?.title ?? COMMODITY_TRADE_DOCUMENT_CHECKLIST_TITLE;
+  const sections = content?.sections ?? COMMODITY_TRADE_DOCUMENT_CHECKLIST_SECTIONS;
+  const noteLabel = content?.noteLabel ?? "Important note";
+  const note = content?.note ?? COMMODITY_TRADE_DOCUMENT_CHECKLIST_NOTE;
   return (
     <article className="marketing-box rounded-lg p-6 sm:p-8 shadow-sm">
       <header className="border-b border-[#ebe7e0] pb-6">
         <p className="text-xs font-semibold tracking-[0.18em] text-[#c88e4a] uppercase">
-          Reference checklist
+          {eyebrow}
         </p>
         <h3 className="mt-2 text-xl font-semibold text-[#001a3d] sm:text-2xl">
-          {COMMODITY_TRADE_DOCUMENT_CHECKLIST_TITLE}
+          {title}
         </h3>
         {showDownload ? (
           <div className="mt-4 flex flex-wrap gap-3">
@@ -38,7 +58,7 @@ export function CommodityTradeDocumentChecklist({ showDownload = true }: { showD
       </header>
 
       <div className="mt-8 space-y-8">
-        {COMMODITY_TRADE_DOCUMENT_CHECKLIST_SECTIONS.map((section) => (
+        {sections.map((section) => (
           <section key={section.title}>
             <h4 className="text-sm font-semibold tracking-wide text-[#001a3d] uppercase">
               {section.title}
@@ -57,10 +77,10 @@ export function CommodityTradeDocumentChecklist({ showDownload = true }: { showD
 
       <div className="mt-10 rounded-lg border border-[#e8e4dc] bg-[#f9f8f5] p-5 sm:p-6">
         <p className="text-xs font-semibold tracking-wide text-[#001a3d] uppercase">
-          Important note
+          {noteLabel}
         </p>
         <p className="mt-3 text-sm leading-relaxed text-[#555555]">
-          {COMMODITY_TRADE_DOCUMENT_CHECKLIST_NOTE}
+          {note}
         </p>
       </div>
     </article>

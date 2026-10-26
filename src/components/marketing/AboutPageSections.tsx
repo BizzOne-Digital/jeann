@@ -4,15 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { MarketingAbstractBand } from "@/components/marketing/MarketingAbstractBand";
 import { motion, useReducedMotion } from "framer-motion";
-import {
-  ABOUT_CONTACT,
-  ABOUT_HIGHLIGHTS,
-  ABOUT_INTRO,
-  ABOUT_SUPPLY_CHAIN,
-  ABOUT_WHAT_WE_DO,
-  ABOUT_WHY_PARTNER,
-} from "@/lib/content/about-content";
-import { ABOUT_SECTION_IMAGE_META } from "@/lib/content/about-images";
+import type { ResolvedAbout } from "@/lib/marketing/about-cms";
 import { LogisticsPairedRow } from "@/components/marketing/LogisticsVisuals";
 import { Reveal } from "@/components/motion/Reveal";
 import { buyerQuoteHref } from "@/lib/marketing/cta-links";
@@ -111,7 +103,7 @@ function DivisionCard({
   division,
   index,
 }: {
-  division: (typeof ABOUT_WHAT_WE_DO.divisions)[number];
+  division: ResolvedAbout["whatWeDo"]["divisions"][number];
   index: number;
 }) {
   const reduce = useReducedMotion();
@@ -151,13 +143,21 @@ export function AboutPageSections({
   email,
   phone,
   phoneDisplay,
+  content,
 }: {
   email: string;
   phone: string;
   phoneDisplay: string;
+  content: ResolvedAbout;
 }) {
-  const strategy = ABOUT_SECTION_IMAGE_META.teamStrategy;
-  const collaboration = ABOUT_SECTION_IMAGE_META.teamCollaboration;
+  const strategy = content.intro.image;
+  const collaboration = content.supplyChain.image;
+  const ABOUT_INTRO = content.intro;
+  const ABOUT_HIGHLIGHTS = content.highlights;
+  const ABOUT_WHAT_WE_DO = content.whatWeDo;
+  const ABOUT_SUPPLY_CHAIN = content.supplyChain;
+  const ABOUT_WHY_PARTNER = content.whyPartner;
+  const ABOUT_CONTACT = content.contact;
 
   return (
     <>
@@ -179,7 +179,7 @@ export function AboutPageSections({
               href="/products"
               className="mt-7 inline-flex items-center gap-2 marketing-btn-primary px-5 py-2.5 text-sm font-semibold"
             >
-              Learn more about products <span aria-hidden>→</span>
+              {ABOUT_INTRO.ctaLabel} <span aria-hidden>→</span>
             </Link>
           </LogisticsPairedRow>
         </div>
@@ -251,7 +251,7 @@ export function AboutPageSections({
               href="/resources"
               className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-[#c88e4a] transition hover:gap-3"
             >
-              Explore trade resources <span aria-hidden>→</span>
+              {ABOUT_SUPPLY_CHAIN.ctaLabel} <span aria-hidden>→</span>
             </Link>
           </LogisticsPairedRow>
         </div>
@@ -285,7 +285,7 @@ export function AboutPageSections({
 
       <section className="relative overflow-hidden py-[3.4rem] text-white lg:py-[4.25rem]">
         <Image
-          src={ABOUT_SECTION_IMAGE_META.contactBand.src}
+          src={ABOUT_CONTACT.imageSrc}
           alt=""
           fill
           className="object-cover object-center"
@@ -314,13 +314,13 @@ export function AboutPageSections({
               <p className="mt-3 text-sm leading-relaxed text-white/65">{ABOUT_CONTACT.ctaBody}</p>
               <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
                 <Link href={buyerQuoteHref()} className="marketing-btn-primary px-6 py-3 text-sm font-semibold">
-                  Submit a purchase request <span aria-hidden>→</span>
+                  {ABOUT_CONTACT.primaryCtaLabel} <span aria-hidden>→</span>
                 </Link>
                 <Link
                   href="/contact"
                   className="rounded-md border border-white/60 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
                 >
-                  Request a consultation
+                  {ABOUT_CONTACT.secondaryCtaLabel}
                 </Link>
               </div>
               <p className="mt-8 text-sm text-white/55">

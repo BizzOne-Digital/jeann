@@ -4,18 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { MarketingAbstractBand } from "@/components/marketing/MarketingAbstractBand";
 import { motion, useReducedMotion } from "framer-motion";
-import {
-  INSIGHTS_ARCHITECTURE,
-  INSIGHTS_CONTAINMENT_MATRIX,
-  INSIGHTS_CTA,
-  INSIGHTS_HERO,
-  INSIGHTS_LIFECYCLE,
-  INSIGHTS_PROTOCOL,
-  INSIGHTS_SOP,
-  INSIGHTS_VALIDATION,
-  INSIGHTS_VERIFICATION_VS_VALIDATION,
-} from "@/lib/content/operational-insights-content";
-import { INSIGHTS_SECTION_IMAGES } from "@/lib/content/insights-operational-images";
+import type { InsightsContent } from "@/lib/marketing/insights-cms";
 import { LogisticsPairedRow } from "@/components/marketing/LogisticsVisuals";
 import { Reveal } from "@/components/motion/Reveal";
 import { stripLeadingMarker } from "@/lib/marketing/strip-leading-marker";
@@ -24,13 +13,6 @@ import { cn } from "@/lib/utils/cn";
 /** Wider than default `container-page` for validation domains block only. */
 const INSIGHTS_VALIDATION_WIDTH =
   "mx-auto w-full max-w-[min(100%,1600px)] px-4 sm:px-6 lg:px-8";
-
-const DOMAIN_IMAGES: Partial<Record<string, { src: string; alt: string }>> = {
-  lab: INSIGHTS_SECTION_IMAGES.labValidation,
-  supply: INSIGHTS_SECTION_IMAGES.supplyChainValidation,
-  finance: INSIGHTS_SECTION_IMAGES.financeValidation,
-  ctrm: INSIGHTS_SECTION_IMAGES.ctrmValidation,
-};
 
 function SectionHeading({
   title,
@@ -57,13 +39,13 @@ function SectionHeading({
   );
 }
 
-function LifecycleFunnel() {
+function LifecycleFunnel({ stages }: { stages: InsightsContent["architecture"]["lifecycle"] }) {
   const reduce = useReducedMotion();
   return (
     <div className="mt-10 space-y-0">
-      {INSIGHTS_LIFECYCLE.map((stage, index) => (
+      {stages.map((stage, index) => (
         <motion.div
-          key={stage.phase}
+          key={stage.title}
           initial={reduce ? false : { opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-30px" }}
@@ -83,9 +65,9 @@ function LifecycleFunnel() {
           >
             <div className="bg-gradient-to-r from-[#001a3d] to-[#0c2544] px-6 py-4 text-white sm:px-8">
               <p className="text-xs font-semibold tracking-[0.16em] text-[#d4a84b] uppercase">
-                {stage.subtitle}
+                {stage.lead}
               </p>
-              <h3 className="mt-1 text-lg font-semibold sm:text-xl">{stage.phase}</h3>
+              <h3 className="mt-1 text-lg font-semibold sm:text-xl">{stage.title}</h3>
             </div>
             <ul className="grid gap-2 p-6 sm:grid-cols-2 sm:p-8">
               {stage.bullets.map((item) => (
@@ -102,22 +84,22 @@ function LifecycleFunnel() {
   );
 }
 
-function ProtocolPipeline() {
+function ProtocolPipeline({ pipeline }: { pipeline: string[][] }) {
   return (
     <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-3">
-      {INSIGHTS_PROTOCOL.pipeline.map((step, i) => (
+      {pipeline.map((step, i) => (
         <Reveal
-          key={step.label}
+          key={step[0]}
           delay={i * 0.06}
           variant="zoom"
           bounce
           className="w-full sm:flex sm:min-w-[12rem] sm:max-w-[14rem] sm:flex-1 sm:items-center sm:gap-2"
         >
           <div className="flex h-full w-full flex-col rounded-lg border border-[#d5d0c8] bg-white p-5 text-center shadow-sm sm:p-6">
-            <p className="text-base font-semibold text-[#001a3d]">{step.label}</p>
-            <p className="mt-2 text-sm text-[#666]">{step.note}</p>
+            <p className="text-base font-semibold text-[#001a3d]">{step[0]}</p>
+            <p className="mt-2 text-sm text-[#666]">{step[1]}</p>
           </div>
-          {i < INSIGHTS_PROTOCOL.pipeline.length - 1 ? (
+          {i < pipeline.length - 1 ? (
             <span className="hidden shrink-0 text-center text-[#c88e4a] sm:inline" aria-hidden>→</span>
           ) : null}
         </Reveal>
@@ -126,18 +108,19 @@ function ProtocolPipeline() {
   );
 }
 
-export function InsightsOperationalPage() {
+export function InsightsOperationalPage({ content }: { content: InsightsContent }) {
+  const { intro, architecture, protocol, validation, domains, matrix, sop, cta } = content;
   return (
     <div id="insights-framework" className="scroll-mt-20">
       <section className="marketing-section bg-white">
         <div className="container-page">
-          <LogisticsPairedRow image={INSIGHTS_SECTION_IMAGES.introLab}>
+          <LogisticsPairedRow image={intro.image}>
             <Reveal>
               <p className="text-xs font-semibold tracking-[0.22em] text-[#c88e4a] uppercase">
-                Framework overview
+                {intro.eyebrow}
               </p>
               <p className="mt-4 text-sm leading-relaxed text-[#555555] sm:text-base">
-                {INSIGHTS_HERO.guideLead}
+                {intro.lead}
               </p>
             </Reveal>
           </LogisticsPairedRow>
@@ -148,37 +131,37 @@ export function InsightsOperationalPage() {
         <div className="container-page">
           <Reveal>
             <SectionHeading
-              title={INSIGHTS_ARCHITECTURE.title}
-              lead={INSIGHTS_ARCHITECTURE.lead}
+              title={architecture.title}
+              lead={architecture.lead}
             />
           </Reveal>
           <div className="mt-8 grid gap-8 lg:grid-cols-2 lg:items-start">
-            <LifecycleFunnel />
-            <LogisticsPairedRow image={INSIGHTS_SECTION_IMAGES.architecture} className="lg:sticky lg:top-28">
+            <LifecycleFunnel stages={architecture.lifecycle} />
+            <LogisticsPairedRow image={architecture.image} className="lg:sticky lg:top-28">
               <p className="text-xs font-semibold tracking-[0.18em] text-[#c88e4a] uppercase">
-                {INSIGHTS_VERIFICATION_VS_VALIDATION.title}
+                {architecture.compareTitle}
               </p>
               <div className="mt-5 space-y-5">
                 <div className="rounded-lg border border-[#e0dbd3] bg-white p-5">
                   <p className="text-sm font-semibold text-[#001a3d]">
-                    {INSIGHTS_VERIFICATION_VS_VALIDATION.verification.label}
+                    {architecture.verificationLabel}
                   </p>
                   <p className="mt-2 text-sm italic text-[#666]">
-                    {INSIGHTS_VERIFICATION_VS_VALIDATION.verification.question}
+                    {architecture.verificationQuestion}
                   </p>
                   <p className="mt-2 text-sm leading-relaxed text-[#555555]">
-                    {INSIGHTS_VERIFICATION_VS_VALIDATION.verification.body}
+                    {architecture.verificationBody}
                   </p>
                 </div>
                 <div className="rounded-lg border border-[#001a3d]/15 bg-[#001a3d] p-5 text-white">
                   <p className="text-sm font-semibold text-[#d4a84b]">
-                    {INSIGHTS_VERIFICATION_VS_VALIDATION.validation.label}
+                    {architecture.validationLabel}
                   </p>
                   <p className="mt-2 text-sm italic text-white/75">
-                    {INSIGHTS_VERIFICATION_VS_VALIDATION.validation.question}
+                    {architecture.validationQuestion}
                   </p>
                   <p className="mt-2 text-sm leading-relaxed text-white/80">
-                    {INSIGHTS_VERIFICATION_VS_VALIDATION.validation.body}
+                    {architecture.validationBody}
                   </p>
                 </div>
               </div>
@@ -191,18 +174,18 @@ export function InsightsOperationalPage() {
         <div className="container-page">
           <Reveal>
             <SectionHeading
-              title={INSIGHTS_PROTOCOL.title}
-              lead={INSIGHTS_PROTOCOL.lead}
+              title={protocol.title}
+              lead={protocol.lead}
             />
           </Reveal>
-          <ProtocolPipeline />
+          <ProtocolPipeline pipeline={protocol.pipeline} />
           <div className="mt-8 grid gap-5 lg:grid-cols-2 lg:items-stretch lg:gap-6">
             <div className="flex flex-col gap-4">
-              {INSIGHTS_PROTOCOL.tiers.map((tier, i) => (
-                <Reveal key={tier.title} delay={i * 0.05} variant="right" className="flex-1">
+              {protocol.tiers.map((tier, i) => (
+                <Reveal key={tier[0]} delay={i * 0.05} variant="right" className="flex-1">
                   <article className="h-full rounded-xl border border-[#d5d0c8] bg-[#faf9f6] p-5 sm:p-6">
-                    <h3 className="font-semibold text-[#001a3d]">{stripLeadingMarker(tier.title)}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-[#555555]">{tier.body}</p>
+                    <h3 className="font-semibold text-[#001a3d]">{stripLeadingMarker(tier[0])}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-[#555555]">{tier[1]}</p>
                   </article>
                 </Reveal>
               ))}
@@ -210,8 +193,8 @@ export function InsightsOperationalPage() {
             <Reveal variant="left" delay={0.08} className="flex min-h-[220px] flex-col gap-3 lg:min-h-0">
               <div className="relative min-h-[100px] flex-1 overflow-hidden rounded-xl border border-[#d5d0c8] shadow-md sm:min-h-[120px]">
                 <Image
-                  src={INSIGHTS_SECTION_IMAGES.protocolLabPrimary.src}
-                  alt={INSIGHTS_SECTION_IMAGES.protocolLabPrimary.alt}
+                  src={protocol.imagePrimary.src}
+                  alt={protocol.imagePrimary.alt}
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 50vw"
@@ -220,8 +203,8 @@ export function InsightsOperationalPage() {
               </div>
               <div className="relative min-h-[100px] flex-1 overflow-hidden rounded-xl border border-[#d5d0c8] shadow-md sm:min-h-[120px]">
                 <Image
-                  src={INSIGHTS_SECTION_IMAGES.protocolLabSecondary.src}
-                  alt={INSIGHTS_SECTION_IMAGES.protocolLabSecondary.alt}
+                  src={protocol.imageSecondary.src}
+                  alt={protocol.imageSecondary.alt}
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 50vw"
@@ -239,13 +222,13 @@ export function InsightsOperationalPage() {
       >
         <div className={INSIGHTS_VALIDATION_WIDTH}>
           <Reveal>
-            <h2 className="text-2xl font-semibold sm:text-3xl">{INSIGHTS_VALIDATION.title}</h2>
+            <h2 className="text-2xl font-semibold sm:text-3xl">{validation.title}</h2>
             <p className="mt-4 max-w-3xl text-sm leading-relaxed text-white/75 sm:text-base">
-              {INSIGHTS_VALIDATION.lead}
+              {validation.lead}
             </p>
           </Reveal>
           <div className="mt-8 flex flex-wrap gap-2">
-            {INSIGHTS_VALIDATION.pillars.map((p, i) => (
+            {validation.pillars.map((p, i) => (
               <Reveal key={p} delay={i * 0.04} variant="up">
                 <span className="rounded-full border border-[#d4a84b]/40 bg-white/10 px-4 py-2 text-xs font-semibold text-white/90">
                   {p}
@@ -258,13 +241,13 @@ export function InsightsOperationalPage() {
 
       <section className="marketing-section bg-[var(--mist)]">
         <div className={`${INSIGHTS_VALIDATION_WIDTH} space-y-7`}>
-          {INSIGHTS_VALIDATION.domains.map((domain, index) => {
-            const image = DOMAIN_IMAGES[domain.id];
+          {domains.map((domain, index) => {
+            const image = domain.image;
             const reversed = index % 2 === 1;
             const body = (
               <>
                 <h3 className="text-xl font-semibold text-[#001a3d]">{stripLeadingMarker(domain.title)}</h3>
-                {"lead" in domain && domain.lead ? (
+                {domain.lead ? (
                   <p className="mt-3 text-sm leading-relaxed text-[#555555]">{domain.lead}</p>
                 ) : null}
                 <ul className="mt-4 space-y-3">
@@ -279,13 +262,13 @@ export function InsightsOperationalPage() {
             );
             if (!image) {
               return (
-                <Reveal key={domain.id} variant="up" delay={index * 0.05}>
+                <Reveal key={domain.title} variant="up" delay={index * 0.05}>
                   <article className="rounded-xl border border-[#d5d0c8] bg-white p-6 shadow-sm sm:p-8">{body}</article>
                 </Reveal>
               );
             }
             return (
-              <LogisticsPairedRow key={domain.id} image={image} reversed={reversed} boxed>
+              <LogisticsPairedRow key={domain.title} image={image} reversed={reversed} boxed>
                 {body}
               </LogisticsPairedRow>
             );
@@ -297,8 +280,8 @@ export function InsightsOperationalPage() {
         <div className="container-page min-w-0">
           <Reveal>
             <SectionHeading
-              title={INSIGHTS_CONTAINMENT_MATRIX.title}
-              lead={INSIGHTS_CONTAINMENT_MATRIX.lead}
+              title={matrix.title}
+              lead={matrix.lead}
             />
           </Reveal>
 
@@ -321,20 +304,20 @@ export function InsightsOperationalPage() {
                 </tr>
               </thead>
               <tbody>
-                {INSIGHTS_CONTAINMENT_MATRIX.rows.map((row) => (
-                  <tr key={row.classification} className="border-t border-[#e8e4dc] bg-white even:bg-[#faf9f6]">
-                    <td className="px-4 py-4 align-top font-semibold text-[#001a3d]">{row.classification}</td>
-                    <td className="px-4 py-4 align-top leading-relaxed text-[#555555]">{row.specs}</td>
-                    <td className="px-4 py-4 align-top leading-relaxed text-[#555555]">{row.packaging}</td>
-                    <td className="px-4 py-4 align-top leading-relaxed text-[#555555]">{row.unit}</td>
-                    <td className="px-4 py-4 align-top leading-relaxed text-[#555555]">{row.hazards}</td>
+                {matrix.rows.map((row) => (
+                  <tr key={row[0]} className="border-t border-[#e8e4dc] bg-white even:bg-[#faf9f6]">
+                    <td className="px-4 py-4 align-top font-semibold text-[#001a3d]">{row[0]}</td>
+                    <td className="px-4 py-4 align-top leading-relaxed text-[#555555]">{row[1]}</td>
+                    <td className="px-4 py-4 align-top leading-relaxed text-[#555555]">{row[2]}</td>
+                    <td className="px-4 py-4 align-top leading-relaxed text-[#555555]">{row[3]}</td>
+                    <td className="px-4 py-4 align-top leading-relaxed text-[#555555]">{row[4]}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
           <p className="mt-2 text-center text-xs text-[#888] sm:text-left">
-            Swipe or scroll horizontally on smaller screens to view all columns.
+            {matrix.scrollHint}
           </p>
         </div>
       </section>
@@ -343,19 +326,19 @@ export function InsightsOperationalPage() {
         <div className="container-page">
           <Reveal>
             <SectionHeading
-              title={INSIGHTS_SOP.title}
-              lead={INSIGHTS_SOP.lead}
+              title={sop.title}
+              lead={sop.lead}
               titleClassName="text-white"
               leadClassName="text-white"
             />
           </Reveal>
           <div className="mt-8 grid gap-5 lg:grid-cols-2">
-            {INSIGHTS_SOP.phases.map((phase, i) => (
+            {sop.phases.map((phase, i) => (
               <Reveal key={phase.title} delay={i * 0.08} variant="up" bounce>
                 <article className="h-full rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
                   <h3 className="text-base font-semibold text-[#d4a84b]">{stripLeadingMarker(phase.title)}</h3>
                   <ul className="mt-4 space-y-3">
-                    {phase.items.map((item) => (
+                    {phase.bullets.map((item) => (
                       <li key={item} className="flex gap-3 text-sm leading-relaxed text-white/80">
                         <span
                           className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border border-[#d4a84b]/50 text-[10px] text-[#d4a84b]"
@@ -384,29 +367,29 @@ export function InsightsOperationalPage() {
               />
               <div className="relative grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-12">
                 <div>
-                  <h2 className="text-2xl font-semibold sm:text-3xl">{INSIGHTS_CTA.title}</h2>
-                  <p className="mt-4 text-sm leading-relaxed text-white/75 sm:text-base">{INSIGHTS_CTA.lead}</p>
+                  <h2 className="text-2xl font-semibold sm:text-3xl">{cta.title}</h2>
+                  <p className="mt-4 text-sm leading-relaxed text-white/75 sm:text-base">{cta.lead}</p>
                   <div className="mt-8 flex flex-wrap gap-3">
                     <Link
-                      href={INSIGHTS_CTA.primaryHref}
+                      href={cta.primaryHref}
                       className="marketing-btn-primary px-6 py-3 text-sm font-semibold"
                     >
-                      {INSIGHTS_CTA.primaryLabel} <span aria-hidden>→</span>
+                      {cta.primaryLabel} <span aria-hidden>→</span>
                     </Link>
                     <Link
-                      href={INSIGHTS_CTA.secondaryHref}
+                      href={cta.secondaryHref}
                       className="rounded-md border border-white/40 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
                     >
-                      {INSIGHTS_CTA.secondaryLabel}
+                      {cta.secondaryLabel}
                     </Link>
                   </div>
                 </div>
                 <div className="rounded-xl border border-white/15 bg-white/5 p-6 backdrop-blur-sm sm:p-7">
                   <p className="text-xs font-semibold tracking-[0.18em] text-[#d4a84b] uppercase">
-                    {INSIGHTS_CTA.shareTitle}
+                    {cta.shareTitle}
                   </p>
                   <ul className="mt-4 space-y-3">
-                    {INSIGHTS_CTA.shareItems.map((item) => (
+                    {cta.shareItems.map((item) => (
                       <li key={item} className="flex gap-3 text-sm leading-relaxed text-white/85">
                         <span
                           className="mt-1.5 flex h-2 w-2 shrink-0 rounded-full bg-[#e89a2d]"
@@ -417,10 +400,10 @@ export function InsightsOperationalPage() {
                     ))}
                   </ul>
                   <Link
-                    href="/login"
+                    href={cta.portalHref}
                     className="mt-6 inline-flex text-sm font-semibold text-[#e89a2d] transition hover:text-white"
                   >
-                    Buyer portal — submit after sign-in <span aria-hidden>→</span>
+                    {cta.portalLabel} <span aria-hidden>→</span>
                   </Link>
                 </div>
               </div>

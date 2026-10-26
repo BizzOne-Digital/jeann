@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { CmsPageHero } from "@/components/marketing/CmsPageHero";
 import { PartnersPageSections } from "@/components/marketing/PartnersPageSections";
-import { cmsField } from "@/lib/content/cms-field";
 import { cmsPageMetadata } from "@/lib/content/cms-page-metadata";
 import { getEffectiveSectionFields, getPublishedPage } from "@/lib/content/page-content";
 import { PRODUCER_PARTNERS_HERO } from "@/lib/content/producer-partners-content";
@@ -17,6 +16,8 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function PartnersPage() {
   const cms = await getPublishedPage("partners");
   const intro = getEffectiveSectionFields(cms, "intro");
+  const programmes = getEffectiveSectionFields(cms, "programmes");
+  const cta = getEffectiveSectionFields(cms, "cta");
   const spotlightSingle = getEffectiveSectionFields(cms, "spotlight-single");
   const spotlightTrio = getEffectiveSectionFields(cms, "spotlight-trio");
 
@@ -33,9 +34,11 @@ export default async function PartnersPage() {
         }}
       />
       <PartnersPageSections
-        introNote={cmsField(intro, "note", PRODUCER_PARTNERS_HERO.note)}
+        intro={intro}
+        programmes={programmes}
         spotlightSingle={spotlightSingle}
         spotlightTrio={spotlightTrio}
+        cta={cta}
       />
     </>
   );

@@ -37,6 +37,7 @@ export default async function HomePage() {
   const home2 = connection.image2 || "/images/home-2.png";
   const home3 =
     sourced.image || "/images/home/responsible-sourcing-aerial.jpg";
+  const sectionCms = (id: string) => getEffectiveSectionFields(cms, id);
   const testimonials = await getPublishedTestimonials();
   const featuredTestimonial = testimonials[0] ?? null;
 
@@ -45,7 +46,7 @@ export default async function HomePage() {
       <HomeHero cms={getEffectiveSectionFields(cms, "hero")} />
       <section className="bg-white marketing-section pt-0">
         <div className="container-page -mt-4">
-          <TraderRoleNotice variant="full" />
+          <TraderRoleNotice variant="full" cms={sectionCms("trader-notice")} />
         </div>
       </section>
       <ConnectionSection
@@ -53,16 +54,20 @@ export default async function HomePage() {
         home2={home2}
         cms={connection}
       />
-      <CommoditiesWeTrade categories={categories} />
-      <SourcedResponsibly home3={home3} />
-      <HomeLogisticsImageBand />
-      <FoodSafetyAgencyMarquee />
-      <ProcessTimeline />
-      <ShippingTerms />
-      <PartnersHomeTeaser partners={getPartners()} />
-      <PackagingSection />
-      <ReadyCtaBanner />
-      <InsightsAndNotes featuredTestimonial={featuredTestimonial} />
+      <CommoditiesWeTrade categories={categories} cms={sectionCms("commodities")} />
+      <SourcedResponsibly home3={home3} cms={sourced} />
+      <HomeLogisticsImageBand cms={sectionCms("logistics-image-band")} />
+      <FoodSafetyAgencyMarquee cms={sectionCms("food-safety")} />
+      <ProcessTimeline cms={sectionCms("process")} />
+      <ShippingTerms cms={sectionCms("shipping")} />
+      <PartnersHomeTeaser partners={getPartners()} cms={sectionCms("partners-teaser")} />
+      <PackagingSection cms={sectionCms("packaging")} />
+      <ReadyCtaBanner cms={sectionCms("cta-banner")} />
+      <InsightsAndNotes
+        featuredTestimonial={featuredTestimonial}
+        cms={sectionCms("insights")}
+        testimonialCms={sectionCms("testimonial")}
+      />
     </>
   );
 }

@@ -3,7 +3,9 @@ import { CmsPageHero } from "@/components/marketing/CmsPageHero";
 import { ResourcesPageSections } from "@/components/marketing/ResourcesPageSections";
 import { cmsField } from "@/lib/content/cms-field";
 import { cmsPageMetadata } from "@/lib/content/cms-page-metadata";
+import { collectCmsSections } from "@/lib/content/cms-collect";
 import { getEffectiveSectionFields, getPublishedPage } from "@/lib/content/page-content";
+import { RESOURCES_CMS_SECTION_IDS, resolveResourcesCms } from "@/lib/marketing/resources-cms";
 import { RESOURCES_PAGE_HERO } from "@/lib/content/resources-page-content";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -17,20 +19,14 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function ResourcesPage() {
   const cms = await getPublishedPage("resources");
   const hero = getEffectiveSectionFields(cms, "hero");
-  const intro = getEffectiveSectionFields(cms, "intro");
-
-  const introBody = `${cmsField(
-    intro,
-    "body",
-    "Document sets vary by product, corridor, bank, and contract. Lists below are starting points for discussion — not guarantees that every document will be issued or accepted without amendment.",
-  )}`;
+  const resources = resolveResourcesCms(collectCmsSections(cms, [...RESOURCES_CMS_SECTION_IDS]));
 
   return (
     <>
       <CmsPageHero
         pageSlug="resources"
         defaults={{
-          brand: RESOURCES_PAGE_HERO.eyebrow,
+          brand: cmsField(hero, "eyebrow", RESOURCES_PAGE_HERO.eyebrow),
           title: cmsField(hero, "title", RESOURCES_PAGE_HERO.title),
           description: cmsField(hero, "description", RESOURCES_PAGE_HERO.description),
           primaryCta: {
@@ -43,7 +39,7 @@ export default async function ResourcesPage() {
           },
         }}
       />
-      <ResourcesPageSections introBody={introBody} />
+      <ResourcesPageSections cms={resources} />
     </>
   );
 }

@@ -24,6 +24,7 @@ export default async function ContactPage() {
         email={site.email}
         phone={site.phone}
         phoneDisplay={site.phoneDisplay}
+        cms={getEffectiveSectionFields(cms, "channels")}
       />
       <ContactFormSection
         email={site.email}
@@ -31,8 +32,9 @@ export default async function ContactPage() {
         phoneDisplay={site.phoneDisplay}
         addressLine1={site.addressLine1}
         addressLine2={site.addressLine2}
+        cms={getEffectiveSectionFields(cms, "message")}
       />
-      <ContactCta />
+      <ContactCta cms={getEffectiveSectionFields(cms, "cta")} />
     </>
   );
 }

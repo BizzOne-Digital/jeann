@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { cmsField, cmsLines } from "@/lib/content/cms-field";
 import { Reveal } from "@/components/motion/Reveal";
 import { YouTubeEmbed } from "@/components/marketing/YouTubeEmbed";
 import {
@@ -84,25 +85,33 @@ export function PartnerProfileCard({ partner }: { partner: PartnerEntry }) {
 
 export function PartnersHomeTeaser({
   partners: _partners,
+  cms,
 }: {
   partners: PartnerEntry[];
+  cms?: Record<string, string>;
 }) {
-  const featured = PRODUCER_PARTNERS_PRODUCT_LINES.slice(0, 4);
+  const labels = cmsLines(cms, "items", []);
+  const featured = PRODUCER_PARTNERS_PRODUCT_LINES.slice(0, 4).map((line, i) => ({
+    ...line,
+    label: labels[i] ?? line.label,
+  }));
 
   return (
     <section className="border-y border-[var(--line)] bg-[#0a1628] py-14 text-white lg:py-16">
       <div className="container-page">
         <Reveal>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#d4a84b]">
-            Origin partnerships
+            {cmsField(cms, "eyebrow", "Origin partnerships")}
           </p>
           <h2 className="mt-3 max-w-2xl text-2xl font-semibold sm:text-3xl">
-            Producers & manufacturers on export programmes
+            {cmsField(cms, "title", "Producers & manufacturers on export programmes")}
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/75">
-            Finekarts structures bulk commodity sales to international buyers. Established farms,
-            processors, and manufacturers with scale and quality discipline can explore programmes
-            with the trade desk.
+            {cmsField(
+              cms,
+              "body",
+              "Finekarts structures bulk commodity sales to international buyers. Established farms, processors, and manufacturers with scale and quality discipline can explore programmes with the trade desk.",
+            )}
           </p>
         </Reveal>
 
@@ -118,7 +127,7 @@ export function PartnersHomeTeaser({
                     {line.label}
                   </p>
                   <span className="mt-4 text-xs font-semibold uppercase tracking-wide text-[#d4a84b]">
-                    View specifications →
+                    {cmsField(cms, "cardLinkLabel", "View specifications →")}
                   </span>
                 </Link>
               </li>
@@ -131,7 +140,7 @@ export function PartnersHomeTeaser({
             href="/partners#partner-programmes"
             className="focus-ring mt-8 inline-flex items-center gap-2 rounded-sm border border-[#d4a84b]/60 px-5 py-2.5 text-sm font-semibold text-[#f5e6c8] transition hover:bg-[#d4a84b]/15"
           >
-            Producer & manufacturer partnerships →
+            {cmsField(cms, "ctaLabel", "Producer & manufacturer partnerships →")}
           </Link>
         </Reveal>
       </div>
