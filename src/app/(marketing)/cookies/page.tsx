@@ -1,52 +1,63 @@
 import type { Metadata } from "next";
 import { LegalPageBody } from "@/components/marketing/LegalPageBody";
 import { LegalReviewBanner } from "@/components/marketing/LegalReviewBanner";
-import { PageHero } from "@/components/marketing/PageHero";
-import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
+import { CmsPageHero } from "@/components/marketing/CmsPageHero";
+import { collectCmsSections } from "@/lib/content/cms-collect";
+import { getPublishedPage } from "@/lib/content/page-content";
+import {
+  cmsMerged,
+  COOKIES_ANALYTICS_DEFAULTS,
+  COOKIES_ESSENTIAL_DEFAULTS,
+  COOKIES_HERO_DEFAULTS,
+  COOKIES_INTRO_DEFAULTS,
+  COOKIES_PREFERENCES_DEFAULTS,
+  LEGAL_NOTICE_DEFAULTS,
+} from "@/lib/marketing/simple-pages-cms";
 
 export const metadata: Metadata = {
   title: "Cookie policy",
   description: "How Finekarts uses cookies and similar technologies on the website and buyer portal.",
 };
 
-export default function CookiesPage() {
-  const hero = getPageHeroImage("cookies");
+export default async function CookiesPage() {
+  const cms = await getPublishedPage("cookies");
+  const sections = collectCmsSections(cms, [
+    "notice",
+    "intro",
+    "essential",
+    "analytics",
+    "preferences",
+  ]);
+  const notice = cmsMerged(sections, "notice", LEGAL_NOTICE_DEFAULTS);
+  const intro = cmsMerged(sections, "intro", COOKIES_INTRO_DEFAULTS);
+  const essential = cmsMerged(sections, "essential", COOKIES_ESSENTIAL_DEFAULTS);
+  const analytics = cmsMerged(sections, "analytics", COOKIES_ANALYTICS_DEFAULTS);
+  const preferences = cmsMerged(sections, "preferences", COOKIES_PREFERENCES_DEFAULTS);
 
   return (
     <>
-      <PageHero
-        title="Cookie policy"
-        description="How Finekarts may use cookies and similar technologies on the marketing site and authenticated portals."
-        imageSrc={hero.src}
-        imageAlt={hero.alt}
+      <CmsPageHero
+        pageSlug="cookies"
+        defaults={{
+          title: COOKIES_HERO_DEFAULTS.title,
+          description: COOKIES_HERO_DEFAULTS.description,
+        }}
       />
       <article className="bg-[#f3f1ec] marketing-section">
         <div className="container-narrow">
-          <LegalPageBody banner={<LegalReviewBanner version="2026" />}>
-            <p>
-              This notice explains how Finekarts may use cookies and similar technologies on the
-              marketing site and authenticated portals.
-            </p>
+          <LegalPageBody banner={<LegalReviewBanner title={notice.title} body={notice.body} />}>
+            <p>{intro.body}</p>
             <div>
-              <h2 className="display text-xl text-navy">Essential cookies</h2>
-              <p>
-                Session and security cookies may be used to maintain sign-in state, CSRF protection,
-                and basic site functionality.
-              </p>
+              <h2 className="display text-xl text-navy">{essential.title}</h2>
+              <p>{essential.body}</p>
             </div>
             <div>
-              <h2 className="display text-xl text-navy">Analytics</h2>
-              <p>
-                Analytics cookies, if enabled after review, would help understand aggregate site usage.
-                Details will be updated before any non-essential tracking is activated.
-              </p>
+              <h2 className="display text-xl text-navy">{analytics.title}</h2>
+              <p>{analytics.body}</p>
             </div>
             <div>
-              <h2 className="display text-xl text-navy">Managing preferences</h2>
-              <p>
-                Browser settings can limit cookies. Restricting essential cookies may affect portal
-                functionality.
-              </p>
+              <h2 className="display text-xl text-navy">{preferences.title}</h2>
+              <p>{preferences.body}</p>
             </div>
           </LegalPageBody>
         </div>

@@ -3,10 +3,10 @@ import Link from "next/link";
 import { FaqAccordion } from "@/components/marketing/FaqAccordion";
 import { PageHero } from "@/components/marketing/PageHero";
 import { AnimatedSection } from "@/components/motion/AnimatedSection";
-import { buyerQuoteHref } from "@/lib/marketing/cta-links";
-import { cmsField } from "@/lib/content/cms-field";
+import { collectCmsSections } from "@/lib/content/cms-collect";
+import { cmsMerged, FAQ_CTA_DEFAULTS, FAQ_HERO_DEFAULTS } from "@/lib/marketing/simple-pages-cms";
 import { getPublishedFaqs } from "@/lib/content/faqs-catalog";
-import { getEffectiveSectionFields, getPublishedPage } from "@/lib/content/page-content";
+import { getPublishedPage } from "@/lib/content/page-content";
 import {
   resolveMarketingHeroImage,
   resolveMarketingHeroYoutube,
@@ -19,28 +19,27 @@ export const metadata: Metadata = {
 
 export default async function FaqPage() {
   const [faqs, cms] = await Promise.all([getPublishedFaqs(), getPublishedPage("faq")]);
-  const heroFields = getEffectiveSectionFields(cms, "hero");
+  const sections = collectCmsSections(cms, ["hero", "cta"]);
+  const heroFields = sections.hero;
+  const heroText = cmsMerged(sections, "hero", FAQ_HERO_DEFAULTS);
+  const ctaText = cmsMerged(sections, "cta", FAQ_CTA_DEFAULTS);
   const hero = resolveMarketingHeroImage(heroFields, "faq");
 
   return (
     <>
       <PageHero
-        title={cmsField(heroFields, "title", "Common questions")}
-        description={cmsField(
-          heroFields,
-          "description",
-          "Straight answers about how we trade. For deal-specific advice, contact the trade desk.",
-        )}
+        title={heroText.title}
+        description={heroText.description}
         imageSrc={hero.src}
         imageAlt={hero.alt}
         youtubeVideoId={resolveMarketingHeroYoutube(heroFields)}
         primaryCta={{
-          href: cmsField(heroFields, "primaryCtaHref", buyerQuoteHref()),
-          label: cmsField(heroFields, "primaryCtaLabel", "Request a Quote →"),
+          href: heroText.primaryCtaHref,
+          label: heroText.primaryCtaLabel,
         }}
         secondaryCta={{
-          href: cmsField(heroFields, "secondaryCtaHref", "/contact"),
-          label: cmsField(heroFields, "secondaryCtaLabel", "Contact us"),
+          href: heroText.secondaryCtaHref,
+          label: heroText.secondaryCtaLabel,
         }}
       />
 
@@ -49,16 +48,16 @@ export default async function FaqPage() {
           <FaqAccordion items={faqs} />
           <AnimatedSection className="mt-12 flex flex-wrap gap-3" delay={0.1}>
             <Link
-              href={buyerQuoteHref()}
+              href={ctaText.primaryHref}
               className="focus-ring inline-flex items-center gap-2 marketing-btn-primary px-6 py-3.5 text-sm font-semibold"
             >
-              Request a Quote <span aria-hidden>→</span>
+              {ctaText.primaryLabel} <span aria-hidden>→</span>
             </Link>
             <Link
-              href="/contact"
+              href={ctaText.secondaryHref}
               className="focus-ring inline-flex items-center gap-2 rounded-md border border-[#001a3d]/25 px-6 py-3.5 text-sm font-semibold text-[#001a3d] transition hover:border-[#001a3d]"
             >
-              Contact us
+              {ctaText.secondaryLabel}
             </Link>
           </AnimatedSection>
         </div>

@@ -29,8 +29,14 @@ import { PACKAGING_PAGE_IMAGES } from "@/lib/content/packaging-page-images";
  * Table rows: columns separated by " | ", one row per line.
  */
 
-type CardSource = Partial<Omit<PackagingSubsection, "id" | "letter" | "primaryGoods">> & {
+type CardSource = {
   title: string;
+  description?: string;
+  capacity?: string;
+  mechanism?: string;
+  structure?: string;
+  use?: string;
+  keyConsiderations?: string;
   primaryGoods?: string;
   keyFeatures?: readonly string[];
   bullets?: readonly string[];
@@ -90,7 +96,7 @@ function parsePackagingCard(raw: string | undefined, fallback: CardSource): Pack
 
 type ImageRef = { src: string; alt: string };
 
-type CardGroup = { prefix: string; cards: CardSource[]; images: ImageRef[] };
+type CardGroup = { prefix: string; cards: readonly CardSource[]; images: ImageRef[] };
 
 const D = PACKAGING_PAGE_IMAGES;
 const M = PACKAGING_MARITIME;

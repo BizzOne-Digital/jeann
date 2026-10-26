@@ -12,13 +12,13 @@ export function CmsInlineText({
   boldClassName?: string;
 }) {
   const parts = text.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g).filter(Boolean);
-  let firstBold = true;
+  const isBold = (part: string) => part.startsWith("**") && part.endsWith("**") && part.length > 4;
+  const firstBoldIndex = parts.findIndex(isBold);
   return (
     <>
       {parts.map((part, i) => {
-        if (part.startsWith("**") && part.endsWith("**") && part.length > 4) {
-          const cls = firstBold ? boldClassName : undefined;
-          firstBold = false;
+        if (isBold(part)) {
+          const cls = i === firstBoldIndex ? boldClassName : undefined;
           return (
             <strong key={i} className={cls}>
               {part.slice(2, -2)}

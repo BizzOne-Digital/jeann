@@ -9,6 +9,7 @@ import {
   type LogisticsImage,
 } from "@/lib/content/logistics-images";
 import { HERO_PAGE_OVERLAY_HORIZONTAL } from "@/lib/marketing/hero-layout";
+import { isStoredUploadUrl } from "@/lib/media/resolve-image-src";
 import { cn } from "@/lib/utils/cn";
 
 /** Navy + gold wash on logistics photography — keeps photos on-brand. */
@@ -117,6 +118,7 @@ export function LogisticsPairedRow({
           fill
           className="object-cover"
           sizes="(max-width: 1024px) 100vw, 50vw"
+          unoptimized={isStoredUploadUrl(image.src)}
         />
       </div>
       <div className="flex min-h-0">

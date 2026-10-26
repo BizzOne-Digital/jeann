@@ -20,7 +20,17 @@ async function postJson(path: string, values: Record<string, unknown>) {
   return { ok: response.ok, body };
 }
 
-export function CareerApplicantAuth({ className }: { className?: string }) {
+export function CareerApplicantAuth({
+  className,
+  eyebrow = "Step 1",
+  title = CAREERS_PORTAL_ACCOUNT.title,
+  lead = CAREERS_PORTAL_ACCOUNT.lead,
+}: {
+  className?: string;
+  eyebrow?: string;
+  title?: string;
+  lead?: string;
+}) {
   const [tab, setTab] = useState<Tab>("register");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -74,9 +84,9 @@ export function CareerApplicantAuth({ className }: { className?: string }) {
       )}
     >
       <div className="border-b border-[#e8e4dc] bg-gradient-to-r from-[#001a3d] to-[#0c2544] px-6 py-5 text-white sm:px-8">
-        <p className="text-xs font-semibold tracking-[0.22em] text-[#d4a84b] uppercase">Step 1</p>
-        <h3 className="mt-2 text-xl font-semibold sm:text-2xl">{CAREERS_PORTAL_ACCOUNT.title}</h3>
-        <p className="mt-2 text-sm leading-relaxed text-white/75">{CAREERS_PORTAL_ACCOUNT.lead}</p>
+        <p className="text-xs font-semibold tracking-[0.22em] text-[#d4a84b] uppercase">{eyebrow}</p>
+        <h3 className="mt-2 text-xl font-semibold sm:text-2xl">{title}</h3>
+        <p className="mt-2 text-sm leading-relaxed text-white/75">{lead}</p>
       </div>
 
       <div className="flex border-b border-[#e8e4dc]">

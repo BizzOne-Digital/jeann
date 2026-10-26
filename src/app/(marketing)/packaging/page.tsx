@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { CmsPageHero } from "@/components/marketing/CmsPageHero";
 import { PackagingPageSections } from "@/components/marketing/PackagingPageSections";
 import { cmsPageMetadata } from "@/lib/content/cms-page-metadata";
+import { collectCmsSections } from "@/lib/content/cms-collect";
+import { getPublishedPage } from "@/lib/content/page-content";
+import { PACKAGING_CMS_SECTION_IDS, resolvePackagingCms } from "@/lib/marketing/packaging-cms";
 import { PACKAGING_PAGE_HERO } from "@/lib/content/packaging-page-content";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -12,6 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function PackagingPage() {
+  const cms = await getPublishedPage("packaging");
   return (
     <>
       <CmsPageHero
@@ -24,7 +28,7 @@ export default async function PackagingPage() {
           secondaryCta: PACKAGING_PAGE_HERO.secondaryCta,
         }}
       />
-      <PackagingPageSections />
+      <PackagingPageSections cms={resolvePackagingCms(collectCmsSections(cms, [...PACKAGING_CMS_SECTION_IDS]))} />
     </>
   );
 }

@@ -2,6 +2,16 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CmsPageHero } from "@/components/marketing/CmsPageHero";
 import { Reveal } from "@/components/motion/Reveal";
+import { collectCmsSections } from "@/lib/content/cms-collect";
+import { cmsLines } from "@/lib/content/cms-field";
+import { getPublishedPage } from "@/lib/content/page-content";
+import {
+  BUYER_REQUEST_DISCLAIMER_DEFAULTS,
+  BUYER_REQUEST_FORM_CARD_DEFAULTS,
+  BUYER_REQUEST_HERO_DEFAULTS,
+  BUYER_REQUEST_STEPS_DEFAULTS,
+  cmsMerged,
+} from "@/lib/marketing/simple-pages-cms";
 
 export const metadata: Metadata = {
   title: "Buyer Purchase Request",
@@ -9,50 +19,55 @@ export const metadata: Metadata = {
     "Submit a structured purchase request for bulk agricultural commodities through the Finekarts buyer portal after registration and approval.",
 };
 
-export default function BuyerRequestPage() {
+export default async function BuyerRequestPage() {
+  const cms = await getPublishedPage("buyer-request");
+  const sections = collectCmsSections(cms, ["steps", "form-card", "disclaimer"]);
+  const stepsText = cmsMerged(sections, "steps", BUYER_REQUEST_STEPS_DEFAULTS);
+  const steps = cmsLines(sections.steps, "stepItems", BUYER_REQUEST_STEPS_DEFAULTS.stepItems.split("\n"));
+  const card = cmsMerged(sections, "form-card", BUYER_REQUEST_FORM_CARD_DEFAULTS);
+  const disclaimer = cmsMerged(sections, "disclaimer", BUYER_REQUEST_DISCLAIMER_DEFAULTS);
   return (
     <>
       <CmsPageHero
         pageSlug="buyer-request"
         tone="dark"
         defaults={{
-          title: "Buyer purchase request",
-          description:
-            "Qualified buyers submit RFQs for listed commodities and on-demand volumes through the secure buyer portal. Registration and trade-desk qualification are required before programmes proceed.",
-          primaryCta: { href: "/register/buyer", label: "Register your company →" },
-          secondaryCta: { href: "/login", label: "Buyer sign in" },
+          title: BUYER_REQUEST_HERO_DEFAULTS.title,
+          description: BUYER_REQUEST_HERO_DEFAULTS.description,
+          primaryCta: {
+            href: BUYER_REQUEST_HERO_DEFAULTS.primaryCtaHref,
+            label: BUYER_REQUEST_HERO_DEFAULTS.primaryCtaLabel,
+          },
+          secondaryCta: {
+            href: BUYER_REQUEST_HERO_DEFAULTS.secondaryCtaHref,
+            label: BUYER_REQUEST_HERO_DEFAULTS.secondaryCtaLabel,
+          },
         }}
       />
 
       <section className="bg-white marketing-section">
         <div className="container-page max-w-3xl space-y-8">
           <Reveal>
-            <h2 className="text-2xl font-semibold text-[var(--navy)]">How buyer requests work</h2>
+            <h2 className="text-2xl font-semibold text-[var(--navy)]">{stepsText.title}</h2>
             <ol className="mt-4 list-decimal space-y-3 pl-5 text-base leading-relaxed text-[var(--stone)]">
-              <li>Register your buyer organization and accept the current terms.</li>
-              <li>Finekarts reviews your company (CIS/KYB may be requested).</li>
-              <li>After approval, sign in to the buyer portal.</li>
-              <li>
-                Submit a purchase request with product, grade, quantity (MT), destination port,
-                FOB or CIF, contract duration, and ICC-aligned payment terms (for example Irrevocable LC at sight).
-              </li>
-              <li>The trade desk qualifies your enquiry — submission is not a binding contract.</li>
+              {steps.map((step) => (
+                <li key={step}>{step}</li>
+              ))}
             </ol>
           </Reveal>
 
           <Reveal delay={0.06}>
             <div className="rounded-lg border border-[var(--line)] bg-[var(--cream)]/50 p-6">
-              <h3 className="font-semibold text-[var(--navy)]">Edible oils programme form</h3>
+              <h3 className="font-semibold text-[var(--navy)]">{card.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-[var(--stone)]">
-                Approved buyers can specify grade, monthly MT volume, destination, 12- or 24-month
-                contracts, and agreed payment structures from our published programme options.
+                {card.body}
               </p>
               <div className="mt-4 flex flex-wrap gap-3">
-                <Link href="/portal/buyer/new-request" className="btn btn-primary">
-                  Open request form (sign-in required)
+                <Link href={card.primaryHref} className="btn btn-primary">
+                  {card.primaryLabel}
                 </Link>
-                <Link href="/resources" className="btn btn-secondary">
-                  Payment & document resources
+                <Link href={card.secondaryHref} className="btn btn-secondary">
+                  {card.secondaryLabel}
                 </Link>
               </div>
             </div>
@@ -60,9 +75,7 @@ export default function BuyerRequestPage() {
 
           <Reveal delay={0.1}>
             <p className="text-sm text-[var(--stone)]">
-              Finekarts does not guarantee availability, pricing, financing, or shipment based on a
-              website submission alone. Binding terms appear only in signed PSA/SPA and banking
-              instruments.
+              {disclaimer.body}
             </p>
           </Reveal>
         </div>

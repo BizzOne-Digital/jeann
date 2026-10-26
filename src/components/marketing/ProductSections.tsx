@@ -4,19 +4,23 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Reveal } from "@/components/motion/Reveal";
-import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
-import { AGRICULTURE_IMAGES } from "@/lib/content/agriculture-images";
+import { resolveMarketingHeroImage } from "@/lib/marketing/cms-hero";
 import { PageHero } from "@/components/marketing/PageHero";
 import { searchCatalogProducts, type CatalogProduct } from "@/lib/content/catalog-utils";
 import type { SeedCategory } from "@/lib/content/seed-catalog";
-import { resolveImageSrc } from "@/lib/media/resolve-image-src";
+import { marketingImageProps, resolveImageSrc } from "@/lib/media/resolve-image-src";
 import { buyerOrderHref } from "@/lib/marketing/cta-links";
 import { getCategoryCover, getProductListingImage } from "@/lib/content/product-images";
 import { getBulkMinOrderShortText } from "@/lib/marketing/bulk-order-minimums";
-import { cmsField } from "@/lib/content/cms-field";
+import { cmsField, cmsLines } from "@/lib/content/cms-field";
+import {
+  PRODUCTS_BULK_MINIMUMS_DEFAULT,
+  PRODUCTS_CATALOG_EXTRA_DEFAULTS,
+  PRODUCTS_CTA_IMAGE_DEFAULT,
+} from "@/lib/marketing/products-cms";
 
 export function ProductsHero({ cms }: { cms?: Record<string, string> }) {
-  const hero = getPageHeroImage("products");
+  const hero = resolveMarketingHeroImage(cms, "products");
   return (
     <PageHero
       title={cmsField(cms, "title", "Commodities we trade")}
@@ -186,24 +190,22 @@ export function ProductCatalogSection({
         <Reveal delay={0.12}>
           <div className="mt-8 marketing-box rounded-lg p-5 sm:p-6">
             <p className="text-xs font-semibold tracking-[0.18em] text-[#c88e4a] uppercase">
-              Bulk supply only
+              {cmsField(cms, "bulkLabel", PRODUCTS_CATALOG_EXTRA_DEFAULTS.bulkLabel)}
             </p>
             <p className="mt-2 text-sm leading-relaxed text-[#555555]">
-              Finekarts supplies commodities in bulk volumes only. Minimum order quantities vary by
-              category — see each section below.
+              {cmsField(cms, "bulkText", PRODUCTS_CATALOG_EXTRA_DEFAULTS.bulkText)}
             </p>
             <ul className="mt-4 grid gap-2 text-sm text-[#001a3d] sm:grid-cols-2 lg:grid-cols-3">
-              <li>Spices, nuts &amp; cashews — 300 MT min</li>
-              <li>Beans — 300 MT min</li>
-              <li>Rice — 500 MT min</li>
-              <li>Edible oils — 500 MT min</li>
-              <li>Sugar — 5,000 MT min</li>
+              {cmsLines(cms, "minimums", PRODUCTS_BULK_MINIMUMS_DEFAULT).map((line) => (
+                <li key={line}>{line}</li>
+              ))}
             </ul>
             <Link
               href={buyerOrderHref()}
               className="focus-ring mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#c88e4a] transition hover:text-[#a87338]"
             >
-              Click here to ORDER <span aria-hidden>→</span>
+              {cmsField(cms, "orderLabel", PRODUCTS_CATALOG_EXTRA_DEFAULTS.orderLabel)}{" "}
+              <span aria-hidden>→</span>
             </Link>
           </div>
         </Reveal>
@@ -291,14 +293,16 @@ export function ProductCatalogSection({
 }
 
 export function ProductsCta({ cms }: { cms?: Record<string, string> }) {
+  const cmsImage = marketingImageProps(cmsField(cms, "imageSrc", PRODUCTS_CTA_IMAGE_DEFAULT));
   return (
     <section className="relative overflow-hidden py-16 text-white lg:py-20">
       <Image
-        src={AGRICULTURE_IMAGES.combineHarvest.src}
+        src={cmsImage.src}
         alt=""
         fill
         className="object-cover object-center"
         sizes="100vw"
+        unoptimized={cmsImage.unoptimized}
         aria-hidden
       />
       <div className="absolute inset-0 bg-[#071525]/85" />

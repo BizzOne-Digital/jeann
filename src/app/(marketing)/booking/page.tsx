@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { PageHero } from "@/components/marketing/PageHero";
-import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
+import { CmsPageHero } from "@/components/marketing/CmsPageHero";
 import { Reveal } from "@/components/motion/Reveal";
 import { BuyerPortalGate } from "@/components/marketing/BuyerPortalGate";
 import { getSite } from "@/lib/content/catalog";
+import { collectCmsSections } from "@/lib/content/cms-collect";
+import { getPublishedPage } from "@/lib/content/page-content";
+import {
+  BOOKING_HERO_DEFAULTS,
+  BOOKING_PORTAL_GATE_DEFAULTS,
+  BOOKING_SCHEDULE_DEFAULTS,
+  cmsMerged,
+} from "@/lib/marketing/simple-pages-cms";
 
 export const metadata: Metadata = {
   title: "Book a consultation",
@@ -12,20 +19,29 @@ export const metadata: Metadata = {
     "Request a trade desk consultation through the buyer portal. Preferred times are not confirmed until Finekarts staff responds.",
 };
 
-export default function BookingPage() {
+export default async function BookingPage() {
   const site = getSite();
-
-  const hero = getPageHeroImage("booking");
+  const cms = await getPublishedPage("booking");
+  const sections = collectCmsSections(cms, ["schedule", "portal-gate"]);
+  const schedule = cmsMerged(sections, "schedule", BOOKING_SCHEDULE_DEFAULTS);
+  const gate = cmsMerged(sections, "portal-gate", BOOKING_PORTAL_GATE_DEFAULTS);
 
   return (
     <>
-      <PageHero
-        title="Book a consultation"
-        description="Request a conversation about RFQs, logistics, or qualification. A submitted request is not a confirmed appointment."
-        imageSrc={hero.src}
-        imageAlt={hero.alt}
-        primaryCta={{ href: "/login", label: "Sign in to book →" }}
-        secondaryCta={{ href: "/register/buyer", label: "Register" }}
+      <CmsPageHero
+        pageSlug="booking"
+        defaults={{
+          title: BOOKING_HERO_DEFAULTS.title,
+          description: BOOKING_HERO_DEFAULTS.description,
+          primaryCta: {
+            href: BOOKING_HERO_DEFAULTS.primaryCtaHref,
+            label: BOOKING_HERO_DEFAULTS.primaryCtaLabel,
+          },
+          secondaryCta: {
+            href: BOOKING_HERO_DEFAULTS.secondaryCtaHref,
+            label: BOOKING_HERO_DEFAULTS.secondaryCtaLabel,
+          },
+        }}
       />
 
       <section className="bg-white py-16 lg:py-24">
@@ -33,22 +49,21 @@ export default function BookingPage() {
           <div>
             <Reveal>
               <h2 className="text-3xl font-semibold text-[var(--navy)] sm:text-4xl">
-                Schedule a conversation
+                {schedule.title}
               </h2>
             </Reveal>
             <Reveal delay={0.06}>
               <p className="mt-5 text-base leading-relaxed text-[var(--stone)]">
-                Include your timezone and a realistic time window. Our team may propose alternative
-                slots based on availability and enquiry priority.
+                {schedule.body}
               </p>
             </Reveal>
             <Reveal delay={0.1}>
               <p className="mt-4 text-base leading-relaxed text-[var(--stone)]">
-                Email{" "}
+                {schedule.emailPrefix}{" "}
                 <a href={`mailto:${site.email}`} className="font-semibold text-[var(--navy)] underline">
                   {site.email}
                 </a>{" "}
-                or call{" "}
+                {schedule.phonePrefix}{" "}
                 <a href={`tel:${site.phone}`} className="font-semibold text-[var(--navy)] underline">
                   {site.phoneDisplay}
                 </a>
@@ -57,18 +72,18 @@ export default function BookingPage() {
             </Reveal>
             <Reveal delay={0.14}>
               <Link
-                href="/resources"
+                href={schedule.resourcesHref}
                 className="mt-8 inline-flex items-center gap-2 text-base font-semibold text-[var(--ocean)] transition hover:gap-3"
               >
-                Browse resources first <span aria-hidden>→</span>
+                {schedule.resourcesLabel} <span aria-hidden>→</span>
               </Link>
             </Reveal>
           </div>
 
           <Reveal delay={0.08} y={20}>
             <BuyerPortalGate
-              title="Consultation booking"
-              description="Signed-in buyers can request a consultation from the buyer portal. Staff confirms appointments — calendar integration is optional."
+              title={gate.title}
+              description={gate.description}
             />
           </Reveal>
         </div>

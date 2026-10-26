@@ -56,11 +56,9 @@ import {
   PACKAGING_HARD,
   PACKAGING_LIQUID,
   PACKAGING_MARITIME,
-  PACKAGING_PAGE_CTA,
   PACKAGING_PAGE_HERO,
   PACKAGING_SUMMARY_MATRIX,
 } from "@/lib/content/packaging-page-content";
-import { PACKAGING_PAGE_IMAGES } from "@/lib/content/packaging-page-images";
 import { INSPECTIONS_SECTION_IMAGES } from "@/lib/content/inspections-images";
 import {
   formatInspectionCards,
@@ -75,6 +73,13 @@ import {
   PRODUCER_PARTNERS_PILLARS,
   PRODUCER_PARTNERS_PRODUCT_LINES,
 } from "@/lib/content/producer-partners-content";
+import { PACKAGING_SECTION_DEFAULTS } from "@/lib/marketing/packaging-cms";
+import {
+  PRODUCTS_CATALOG_EXTRA_DEFAULTS,
+  PRODUCTS_CTA_IMAGE_DEFAULT,
+  PRODUCTS_FOOD_SAFETY_DEFAULTS,
+  PRODUCTS_SPOTLIGHT_DEFAULTS,
+} from "@/lib/marketing/products-cms";
 import { RESOURCES_SECTION_DEFAULTS } from "@/lib/marketing/resources-cms";
 import { RESOURCES_PILLARS } from "@/lib/content/resources-content";
 import {
@@ -160,85 +165,16 @@ function disputeBodySections(): PageSectionDef[] {
 }
 
 function packagingBodySections(): PageSectionDef[] {
-  const img = PACKAGING_PAGE_IMAGES;
+  const d = PACKAGING_SECTION_DEFAULTS;
   return [
-    section("overview", "Overview", {
-      description: PACKAGING_PAGE_HERO.description,
-      categoriesLead: PACKAGING_PAGE_HERO.categoriesLead,
-      imageSrc: img.intro.src,
-      imageAlt: img.intro.alt,
-    }),
-    section("dry-soft", PACKAGING_DRY_SOFT.title, {
-      title: PACKAGING_DRY_SOFT.title,
-      example: PACKAGING_DRY_SOFT.example,
-      lead: PACKAGING_DRY_SOFT.lead,
-      imageSrc: img.dryFibc.src,
-      imageAlt: img.dryFibc.alt,
-      subsections: joinLines(
-        PACKAGING_DRY_SOFT.subsections.map(
-          (s) => `${s.letter}. ${s.title}\n${s.description ?? ""}\n${s.primaryGoods}`,
-        ),
-      ),
-    }),
-    section("liquid", PACKAGING_LIQUID.title, {
-      title: PACKAGING_LIQUID.title,
-      example: PACKAGING_LIQUID.example,
-      lead: PACKAGING_LIQUID.lead,
-      imageSrc: img.liquidFlexi.src,
-      imageAlt: img.liquidFlexi.alt,
-      subsections: joinLines(
-        PACKAGING_LIQUID.subsections.map(
-          (s) => `${s.letter}. ${s.title}\n${s.description ?? ""}\n${s.primaryGoods}`,
-        ),
-      ),
-    }),
-    section("hard", PACKAGING_HARD.title, {
-      title: PACKAGING_HARD.title,
-      example: PACKAGING_HARD.example,
-      lead: PACKAGING_HARD.lead,
-      imageSrc: img.hardBundles.src,
-      imageAlt: img.hardBundles.alt,
-      subsections: joinLines(
-        PACKAGING_HARD.subsections.map(
-          (s) => `${s.letter}. ${s.title}\n${s.description ?? ""}\n${s.primaryGoods}`,
-        ),
-      ),
-    }),
-    section("maritime", PACKAGING_MARITIME.title, {
-      title: PACKAGING_MARITIME.title,
-      lead: PACKAGING_MARITIME.lead,
-      imageSrc: img.vesselDryHold.src,
-      imageAlt: img.vesselDryHold.alt,
-      dryVessel: PACKAGING_MARITIME.dryVessel.title,
-      liquidVessel: PACKAGING_MARITIME.liquidVessel.title,
-      gasVessel: PACKAGING_MARITIME.gasVessel.title,
-    }),
-    section("containment-comparison", PACKAGING_CONTAINMENT_COMPARISON.title, {
-      title: PACKAGING_CONTAINMENT_COMPARISON.title,
-      rows: joinLines(
-        PACKAGING_CONTAINMENT_COMPARISON.rows.map(
-          (r) => `${r.type} | ${r.vessel} | ${r.capacity} | ${r.applications}`,
-        ),
-      ),
-    }),
-    section("summary-matrix", PACKAGING_SUMMARY_MATRIX.title, {
-      title: PACKAGING_SUMMARY_MATRIX.title,
-      rows: joinLines(
-        PACKAGING_SUMMARY_MATRIX.rows.map(
-          (r) => `${r.commodity} | ${r.packaging} | ${r.unit} | ${r.protection}`,
-        ),
-      ),
-    }),
-    section("cta", "Packaging CTA", {
-      title: PACKAGING_PAGE_CTA.title,
-      lead: PACKAGING_PAGE_CTA.lead,
-      shareTitle: PACKAGING_PAGE_CTA.shareTitle,
-      shareItems: joinLines([...PACKAGING_PAGE_CTA.shareItems]),
-      primaryCtaLabel: PACKAGING_PAGE_CTA.primaryLabel,
-      primaryCtaHref: PACKAGING_PAGE_CTA.primaryHref,
-      secondaryCtaLabel: PACKAGING_PAGE_CTA.secondaryLabel,
-      secondaryCtaHref: PACKAGING_PAGE_CTA.secondaryHref,
-    }),
+    section("overview", "Overview", d.overview),
+    section("dry-soft", PACKAGING_DRY_SOFT.title, d["dry-soft"]),
+    section("liquid", PACKAGING_LIQUID.title, d.liquid),
+    section("hard", PACKAGING_HARD.title, d.hard),
+    section("maritime", PACKAGING_MARITIME.title, d.maritime),
+    section("summary-matrix", PACKAGING_SUMMARY_MATRIX.title, d["summary-matrix"]),
+    section("containment-comparison", PACKAGING_CONTAINMENT_COMPARISON.title, d["containment-comparison"]),
+    section("cta", "Packaging CTA", d.cta),
   ];
 }
 
@@ -630,15 +566,16 @@ function partnersBodySections(): PageSectionDef[] {
 
 function productsBodySections(): PageSectionDef[] {
   return [
-    section("catalog", "Catalog section", {
-      eyebrow: "Catalog",
-      title: "Catalog by category",
-      description:
-        "Search and filter listed commodities. Specifications and availability are confirmed with the trade desk.",
-    }),
+    section("food-safety", "Food safety markets strip", { ...PRODUCTS_FOOD_SAFETY_DEFAULTS }),
+    section("spotlight", "Quality & regulatory spotlight", { ...PRODUCTS_SPOTLIGHT_DEFAULTS }),
     section("categories", "Categories band", {
       title: "Categories",
       description: "Select a category to view product overviews available for qualified buyers.",
+    }),
+    section("catalog", "Catalog section", {
+      eyebrow: "Catalog",
+      title: "Catalog by category",
+      ...PRODUCTS_CATALOG_EXTRA_DEFAULTS,
     }),
     section("cta", "Products CTA", {
       title: "Ready to place a bulk order?",
@@ -648,6 +585,7 @@ function productsBodySections(): PageSectionDef[] {
       primaryCtaHref: "/login",
       secondaryCtaLabel: "Contact the desk",
       secondaryCtaHref: "/contact",
+      imageSrc: PRODUCTS_CTA_IMAGE_DEFAULT,
     }),
   ];
 }

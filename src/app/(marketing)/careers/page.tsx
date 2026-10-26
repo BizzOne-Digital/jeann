@@ -3,9 +3,10 @@ import { PageHero } from "@/components/marketing/PageHero";
 import { CareerPageSections } from "@/components/marketing/CareerPageSections";
 import { getCareerFormPrefill } from "@/lib/auth/career-prefill";
 import { getSession } from "@/lib/auth/session";
-import { cmsField } from "@/lib/content/cms-field";
-import { CAREERS_PAGE_HERO } from "@/lib/content/careers-page-content";
-import { getEffectiveSectionFields, getPublishedCareersPage } from "@/lib/content/page-content";
+import { collectCmsSections } from "@/lib/content/cms-collect";
+import { getPublishedCareersPage } from "@/lib/content/page-content";
+import { buildCareersContent, CAREERS_CMS_SECTION_IDS } from "@/lib/marketing/careers-cms";
+import { cmsMerged, CAREERS_HERO_DEFAULTS } from "@/lib/marketing/simple-pages-cms";
 import {
   resolveMarketingHeroImage,
   resolveMarketingHeroYoutube,
@@ -21,28 +22,31 @@ export default async function CareersPage() {
   const session = await getSession();
   const prefill = session ? await getCareerFormPrefill(session) : undefined;
   const cms = await getPublishedCareersPage();
-  const heroFields = getEffectiveSectionFields(cms, "hero");
+  const sections = collectCmsSections(cms, [...CAREERS_CMS_SECTION_IDS]);
+  const heroFields = sections.hero;
+  const heroText = cmsMerged(sections, "hero", CAREERS_HERO_DEFAULTS);
+  const content = buildCareersContent(sections);
   const hero = resolveMarketingHeroImage(heroFields, "careers");
 
   return (
     <>
       <PageHero
-        title={cmsField(heroFields, "title", CAREERS_PAGE_HERO.title)}
-        brand={cmsField(heroFields, "eyebrow", CAREERS_PAGE_HERO.eyebrow)}
-        description={cmsField(heroFields, "description", CAREERS_PAGE_HERO.description)}
+        title={heroText.title}
+        brand={heroText.eyebrow}
+        description={heroText.description}
         imageSrc={hero.src}
         imageAlt={hero.alt}
         youtubeVideoId={resolveMarketingHeroYoutube(heroFields)}
         primaryCta={{
-          href: cmsField(heroFields, "primaryCtaHref", CAREERS_PAGE_HERO.primaryCta.href),
-          label: cmsField(heroFields, "primaryCtaLabel", CAREERS_PAGE_HERO.primaryCta.label),
+          href: heroText.primaryCtaHref,
+          label: heroText.primaryCtaLabel,
         }}
         secondaryCta={{
-          href: cmsField(heroFields, "secondaryCtaHref", CAREERS_PAGE_HERO.secondaryCta.href),
-          label: cmsField(heroFields, "secondaryCtaLabel", CAREERS_PAGE_HERO.secondaryCta.label),
+          href: heroText.secondaryCtaHref,
+          label: heroText.secondaryCtaLabel,
         }}
       />
-      <CareerPageSections signedIn={Boolean(session)} prefill={prefill} />
+      <CareerPageSections signedIn={Boolean(session)} prefill={prefill} content={content} />
     </>
   );
 }

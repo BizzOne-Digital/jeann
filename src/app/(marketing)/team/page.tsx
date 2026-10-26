@@ -4,8 +4,8 @@ import { PageHero } from "@/components/marketing/PageHero";
 import { TeamRosterSection } from "@/components/marketing/TeamSections";
 import { AnimatedSection } from "@/components/motion/AnimatedSection";
 import { Reveal } from "@/components/motion/Reveal";
-import { cmsField } from "@/lib/content/cms-field";
-import { getEffectiveSectionFields, getPublishedPage } from "@/lib/content/page-content";
+import { collectCmsSections } from "@/lib/content/cms-collect";
+import { getPublishedPage } from "@/lib/content/page-content";
 import {
   getPublishedTeamFieldDefinitions,
   getPublishedTeamMembers,
@@ -15,6 +15,12 @@ import {
   resolveMarketingHeroYoutube,
 } from "@/lib/marketing/cms-hero";
 import { cmsPageMetadata } from "@/lib/content/cms-page-metadata";
+import {
+  cmsMerged,
+  TEAM_FOOTER_DEFAULTS,
+  TEAM_HERO_DEFAULTS,
+  TEAM_INTRO_DEFAULTS,
+} from "@/lib/marketing/simple-pages-cms";
 
 export async function generateMetadata(): Promise<Metadata> {
   return cmsPageMetadata("team", {
@@ -29,46 +35,41 @@ export default async function TeamPage() {
     getPublishedTeamFieldDefinitions(),
     getPublishedPage("team"),
   ]);
-  const heroFields = getEffectiveSectionFields(cms, "hero");
-  const boardIntro = getEffectiveSectionFields(cms, "board-intro");
+  const sections = collectCmsSections(cms, ["hero", "board-intro", "footer-links"]);
+  const heroFields = sections.hero;
+  const heroText = cmsMerged(sections, "hero", TEAM_HERO_DEFAULTS);
+  const intro = cmsMerged(sections, "board-intro", TEAM_INTRO_DEFAULTS);
+  const footer = cmsMerged(sections, "footer-links", TEAM_FOOTER_DEFAULTS);
   const hero = resolveMarketingHeroImage(heroFields, "team");
   const youtubeVideoId = resolveMarketingHeroYoutube(heroFields);
 
   return (
     <>
       <PageHero
-        title={cmsField(heroFields, "title", "Our team")}
-        description={cmsField(
-          heroFields,
-          "description",
-          "The people who lead trade programmes, logistics, compliance, and buyer relationships at Finekarts.",
-        )}
+        title={heroText.title}
+        description={heroText.description}
         imageSrc={hero.src}
         imageAlt={hero.alt}
         youtubeVideoId={youtubeVideoId}
         primaryCta={{
-          href: cmsField(heroFields, "primaryCtaHref", "/contact"),
-          label: cmsField(heroFields, "primaryCtaLabel", "Contact the trade desk →"),
+          href: heroText.primaryCtaHref,
+          label: heroText.primaryCtaLabel,
         }}
         secondaryCta={{
-          href: cmsField(heroFields, "secondaryCtaHref", "/about"),
-          label: cmsField(heroFields, "secondaryCtaLabel", "About Finekarts"),
+          href: heroText.secondaryCtaHref,
+          label: heroText.secondaryCtaLabel,
         }}
       />
 
       <section className="bg-[#f3f1ec] py-16 lg:py-24">
         <div className="container-page">
           <Reveal>
-            <p className="text-xs font-bold tracking-[0.2em] text-[#c88e4a] uppercase">Our team</p>
+            <p className="text-xs font-bold tracking-[0.2em] text-[#c88e4a] uppercase">{intro.eyebrow}</p>
             <h2 className="mt-3 text-2xl font-bold text-[#001a3d] sm:text-3xl">
-              {cmsField(boardIntro, "title", "Team members")}
+              {intro.title}
             </h2>
             <p className="mt-4 max-w-3xl text-base font-semibold leading-relaxed text-[#555555]">
-              {cmsField(
-                boardIntro,
-                "body",
-                "Each profile shows photo, name, title, and department. Additional columns can be added from the admin team settings.",
-              )}
+              {intro.body}
             </p>
           </Reveal>
 
@@ -84,12 +85,12 @@ export default async function TeamPage() {
               {members.length} team member{members.length === 1 ? "" : "s"} listed
             </p>
             <p>
-              <Link href="/careers" className="font-bold text-[#c88e4a] underline">
-                Careers
+              <Link href={footer.careersHref} className="font-bold text-[#c88e4a] underline">
+                {footer.careersLabel}
               </Link>
               {" · "}
-              <Link href="/contact" className="font-bold text-[#c88e4a] underline">
-                Contact
+              <Link href={footer.contactHref} className="font-bold text-[#c88e4a] underline">
+                {footer.contactLabel}
               </Link>
             </p>
           </AnimatedSection>

@@ -4,43 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { MarketingAbstractBand } from "@/components/marketing/MarketingAbstractBand";
 import { motion, useReducedMotion } from "framer-motion";
-import {
-  PACKAGING_CONTAINMENT_COMPARISON,
-  PACKAGING_DRY_SOFT,
-  PACKAGING_HARD,
-  PACKAGING_LIQUID,
-  PACKAGING_MARITIME,
-  PACKAGING_PAGE_CTA,
-  PACKAGING_PAGE_HERO,
-  PACKAGING_SUMMARY_MATRIX,
-  type PackagingSubsection,
-} from "@/lib/content/packaging-page-content";
-import { PACKAGING_PAGE_IMAGES } from "@/lib/content/packaging-page-images";
+import type { PackagingSubsection } from "@/lib/content/packaging-page-content";
+import type { PackagingCms } from "@/lib/marketing/packaging-cms";
+import { isStoredUploadUrl } from "@/lib/media/resolve-image-src";
 import { LogisticsPairedRow } from "@/components/marketing/LogisticsVisuals";
 import { MotionImageFrame } from "@/components/motion/MotionImageFrame";
 import { Reveal } from "@/components/motion/Reveal";
 import { stripLeadingMarker } from "@/lib/marketing/strip-leading-marker";
 import { cn } from "@/lib/utils/cn";
-
-type MaritimeDrySub = (typeof PACKAGING_MARITIME.dryVessel.subsections)[number];
-type MaritimeLiquidSub = (typeof PACKAGING_MARITIME.liquidVessel.subsections)[number];
-type MaritimeGasSub = (typeof PACKAGING_MARITIME.gasVessel.subsections)[number];
-
-function maritimeSubsectionToCard(id: string, sub: MaritimeDrySub | MaritimeLiquidSub | MaritimeGasSub): PackagingSubsection {
-  const item: PackagingSubsection = {
-    id,
-    letter: sub.letter,
-    title: sub.title,
-    primaryGoods: "primaryGoods" in sub ? sub.primaryGoods : "use" in sub ? sub.use : "",
-  };
-  if ("capacity" in sub) item.capacity = sub.capacity;
-  if ("mechanism" in sub) item.mechanism = sub.mechanism;
-  if ("structure" in sub) item.structure = sub.structure;
-  if ("use" in sub) item.use = sub.use;
-  if ("keyConsiderations" in sub) item.keyConsiderations = sub.keyConsiderations;
-  if ("keyFeatures" in sub) item.keyFeatures = [...sub.keyFeatures];
-  return item;
-}
 
 function SectionHeading({
   title,
@@ -163,25 +134,26 @@ function ImageBand({
           fillHeight ? "h-full min-h-[220px]" : "aspect-[16/10]",
         )}
       >
-        <Image src={image.src} alt={image.alt} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 520px" />
+        <Image src={image.src} alt={image.alt} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 520px" unoptimized={isStoredUploadUrl(image.src)} />
       </div>
     </MotionImageFrame>
   );
 }
 
-export function PackagingPageSections() {
+export function PackagingPageSections({ cms }: { cms: PackagingCms }) {
+  const { dry, liquid, hard, maritime, summary, containment, cta } = cms;
   return (
     <div id="packaging-overview" className="scroll-mt-20">
       <section className="marketing-section bg-white">
         <div className="container-page min-w-0">
-          <LogisticsPairedRow image={PACKAGING_PAGE_IMAGES.intro}>
+          <LogisticsPairedRow image={cms.overview.image}>
             <Reveal>
-              <p className="text-xs font-semibold tracking-[0.22em] text-[#c88e4a] uppercase">Overview</p>
+              <p className="text-xs font-semibold tracking-[0.22em] text-[#c88e4a] uppercase">{cms.overview.eyebrow}</p>
               <p className="mt-4 text-sm leading-relaxed text-[#555555] sm:text-base">
-                {PACKAGING_PAGE_HERO.description}
+                {cms.overview.description}
               </p>
               <p className="mt-4 text-sm leading-relaxed text-[#555555] sm:text-base">
-                {PACKAGING_PAGE_HERO.categoriesLead}
+                {cms.overview.categoriesLead}
               </p>
             </Reveal>
           </LogisticsPairedRow>
@@ -191,25 +163,21 @@ export function PackagingPageSections() {
       <section className="marketing-section bg-[#f3f1ec]">
         <div className="container-page space-y-12">
           <Reveal>
-            <SectionHeading
-              title={PACKAGING_DRY_SOFT.title}
-              example={PACKAGING_DRY_SOFT.example}
-              lead={PACKAGING_DRY_SOFT.lead}
-            />
+            <SectionHeading title={dry.title} example={dry.example} lead={dry.lead} />
           </Reveal>
-          <LogisticsPairedRow image={PACKAGING_PAGE_IMAGES.dryFibc} reversed>
-            <SubsectionCard item={PACKAGING_DRY_SOFT.subsections[0]} index={0} />
+          <LogisticsPairedRow image={dry.cards[0].image} reversed>
+            <SubsectionCard item={dry.cards[0].item} index={0} />
           </LogisticsPairedRow>
           <div className="grid gap-8 lg:grid-cols-2">
-            <LogisticsPairedRow image={PACKAGING_PAGE_IMAGES.dryPpBags}>
-              <SubsectionCard item={PACKAGING_DRY_SOFT.subsections[1]} index={1} />
+            <LogisticsPairedRow image={dry.cards[1].image}>
+              <SubsectionCard item={dry.cards[1].item} index={1} />
             </LogisticsPairedRow>
-            <LogisticsPairedRow image={PACKAGING_PAGE_IMAGES.dryJute} reversed>
-              <SubsectionCard item={PACKAGING_DRY_SOFT.subsections[2]} index={2} />
+            <LogisticsPairedRow image={dry.cards[2].image} reversed>
+              <SubsectionCard item={dry.cards[2].item} index={2} />
             </LogisticsPairedRow>
           </div>
-          <LogisticsPairedRow image={PACKAGING_PAGE_IMAGES.dryLiner}>
-            <SubsectionCard item={PACKAGING_DRY_SOFT.subsections[3]} index={3} />
+          <LogisticsPairedRow image={dry.cards[3].image}>
+            <SubsectionCard item={dry.cards[3].item} index={3} />
           </LogisticsPairedRow>
         </div>
       </section>
@@ -217,24 +185,20 @@ export function PackagingPageSections() {
       <section className="marketing-section bg-white">
         <div className="container-page space-y-12">
           <Reveal>
-            <SectionHeading
-              title={PACKAGING_LIQUID.title}
-              example={PACKAGING_LIQUID.example}
-              lead={PACKAGING_LIQUID.lead}
-            />
+            <SectionHeading title={liquid.title} example={liquid.example} lead={liquid.lead} />
           </Reveal>
-          <LogisticsPairedRow image={PACKAGING_PAGE_IMAGES.liquidFlexi} reversed>
-            <SubsectionCard item={PACKAGING_LIQUID.subsections[0]} index={0} />
+          <LogisticsPairedRow image={liquid.cards[0].image} reversed>
+            <SubsectionCard item={liquid.cards[0].item} index={0} />
           </LogisticsPairedRow>
-          <LogisticsPairedRow image={PACKAGING_PAGE_IMAGES.liquidIso}>
-            <SubsectionCard item={PACKAGING_LIQUID.subsections[1]} index={1} />
+          <LogisticsPairedRow image={liquid.cards[1].image}>
+            <SubsectionCard item={liquid.cards[1].item} index={1} />
           </LogisticsPairedRow>
           <div className="grid gap-8 lg:grid-cols-2 lg:items-stretch">
             <Reveal variant="up">
-              <SubsectionCard item={PACKAGING_LIQUID.subsections[2]} index={2} />
+              <SubsectionCard item={liquid.cards[2].item} index={2} />
             </Reveal>
             <Reveal variant="up" delay={0.08}>
-              <ImageBand image={PACKAGING_PAGE_IMAGES.liquidDrums} />
+              <ImageBand image={liquid.cards[2].image} />
             </Reveal>
           </div>
         </div>
@@ -243,20 +207,16 @@ export function PackagingPageSections() {
       <section className="marketing-section bg-[#f3f1ec]">
         <div className="container-page space-y-10">
           <Reveal>
-            <SectionHeading
-              title={PACKAGING_HARD.title}
-              example={PACKAGING_HARD.example}
-              lead={PACKAGING_HARD.lead}
-            />
+            <SectionHeading title={hard.title} example={hard.example} lead={hard.lead} />
           </Reveal>
-          <LogisticsPairedRow image={PACKAGING_PAGE_IMAGES.hardBundles} reversed>
-            <SubsectionCard item={PACKAGING_HARD.subsections[0]} index={0} />
+          <LogisticsPairedRow image={hard.cards[0].image} reversed>
+            <SubsectionCard item={hard.cards[0].item} index={0} />
           </LogisticsPairedRow>
-          <LogisticsPairedRow image={PACKAGING_PAGE_IMAGES.hardFibc}>
-            <SubsectionCard item={PACKAGING_HARD.subsections[1]} index={1} />
+          <LogisticsPairedRow image={hard.cards[1].image}>
+            <SubsectionCard item={hard.cards[1].item} index={1} />
           </LogisticsPairedRow>
-          <LogisticsPairedRow image={PACKAGING_PAGE_IMAGES.hardBreakbulk} reversed>
-            <SubsectionCard item={PACKAGING_HARD.subsections[2]} index={2} />
+          <LogisticsPairedRow image={hard.cards[2].image} reversed>
+            <SubsectionCard item={hard.cards[2].item} index={2} />
           </LogisticsPairedRow>
         </div>
       </section>
@@ -264,49 +224,35 @@ export function PackagingPageSections() {
       <MarketingAbstractBand className="border-y border-white/10 py-14 lg:py-16">
         <div className="container-page space-y-14">
           <Reveal>
-            <SectionHeading title={PACKAGING_MARITIME.title} lead={PACKAGING_MARITIME.lead} dark />
+            <SectionHeading title={maritime.title} lead={maritime.lead} dark />
           </Reveal>
 
           <div className="space-y-8">
-            <h3 className="text-xl font-semibold text-[#d4a84b]">{PACKAGING_MARITIME.dryVessel.title}</h3>
-            {PACKAGING_MARITIME.dryVessel.subsections.map((sub, i) => (
-              <LogisticsPairedRow
-                key={sub.title}
-                image={i === 0 ? PACKAGING_PAGE_IMAGES.vesselDryHold : PACKAGING_PAGE_IMAGES.vesselContainerLiner}
-                reversed={i % 2 === 1}
-                boxed
-              >
-                <SubsectionCard item={maritimeSubsectionToCard(`dry-v-${i}`, sub)} index={i} />
+            <h3 className="text-xl font-semibold text-[#d4a84b]">{maritime.dryTitle}</h3>
+            {maritime.dryCards.map((card, i) => (
+              <LogisticsPairedRow key={card.item.title} image={card.image} reversed={i % 2 === 1} boxed>
+                <SubsectionCard item={card.item} index={i} />
               </LogisticsPairedRow>
             ))}
           </div>
 
           <div className="space-y-8">
-            <h3 className="text-xl font-semibold text-[#d4a84b]">{PACKAGING_MARITIME.liquidVessel.title}</h3>
-            {PACKAGING_MARITIME.liquidVessel.subsections.map((sub, i) => (
-              <LogisticsPairedRow
-                key={sub.title}
-                image={i === 0 ? PACKAGING_PAGE_IMAGES.vesselLiquidTanks : PACKAGING_PAGE_IMAGES.vesselFlexiAtSea}
-                reversed={i % 2 === 1}
-                boxed
-              >
-                <SubsectionCard item={maritimeSubsectionToCard(`liq-v-${i}`, sub)} index={i} />
+            <h3 className="text-xl font-semibold text-[#d4a84b]">{maritime.liquidTitle}</h3>
+            {maritime.liquidCards.map((card, i) => (
+              <LogisticsPairedRow key={card.item.title} image={card.image} reversed={i % 2 === 1} boxed>
+                <SubsectionCard item={card.item} index={i} />
               </LogisticsPairedRow>
             ))}
           </div>
 
           <div className="space-y-8">
-            <h3 className="text-xl font-semibold text-[#d4a84b]">{PACKAGING_MARITIME.gasVessel.title}</h3>
-            <p className="text-sm text-white/70">{PACKAGING_MARITIME.gasVessel.lead}</p>
+            <h3 className="text-xl font-semibold text-[#d4a84b]">{maritime.gasTitle}</h3>
+            <p className="text-sm text-white/70">{maritime.gasLead}</p>
             <div className="grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:items-stretch">
-              <ImageBand image={PACKAGING_PAGE_IMAGES.vesselRail} fillHeight />
+              <ImageBand image={maritime.gasImage} fillHeight />
               <div className="space-y-6">
-                {PACKAGING_MARITIME.gasVessel.subsections.map((sub, i) => (
-                  <SubsectionCard
-                    key={sub.title}
-                    index={i}
-                    item={maritimeSubsectionToCard(`gas-${i}`, sub)}
-                  />
+                {maritime.gasCards.map((card, i) => (
+                  <SubsectionCard key={card.item.title} index={i} item={card.item} />
                 ))}
               </div>
             </div>
@@ -317,25 +263,24 @@ export function PackagingPageSections() {
       <section className="marketing-section bg-white">
         <div className="container-page min-w-0">
           <Reveal>
-            <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">{PACKAGING_SUMMARY_MATRIX.title}</h2>
+            <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">{summary.title}</h2>
           </Reveal>
           <div className="table-scroll mt-8 rounded-xl border border-[#d5d0c8] bg-white shadow-sm">
             <table className="w-full min-w-[48rem] border-collapse text-left text-sm">
               <thead>
                 <tr className="bg-[#001a3d] text-[0.7rem] uppercase tracking-wide text-white sm:text-xs">
-                  <th className="px-4 py-3.5 font-semibold">Commodity type</th>
-                  <th className="px-4 py-3.5 font-semibold">Standard bulk packaging</th>
-                  <th className="px-4 py-3.5 font-semibold">Typical unit weight / volume</th>
-                  <th className="px-4 py-3.5 font-semibold">Primary protection requirement</th>
+                  {summary.headers.slice(0, 4).map((h) => (
+                    <th key={h} className="px-4 py-3.5 font-semibold">{h}</th>
+                  ))}
                 </tr>
               </thead>
               <tbody>
-                {PACKAGING_SUMMARY_MATRIX.rows.map((row) => (
-                  <tr key={row.commodity} className="border-t border-[#e8e4dc] even:bg-[#faf9f6]">
-                    <td className="px-4 py-4 align-top font-semibold text-[#001a3d]">{row.commodity}</td>
-                    <td className="px-4 py-4 align-top text-[#555555]">{row.packaging}</td>
-                    <td className="px-4 py-4 align-top text-[#555555]">{row.unit}</td>
-                    <td className="px-4 py-4 align-top text-[#555555]">{row.protection}</td>
+                {summary.rows.map((row) => (
+                  <tr key={row[0]} className="border-t border-[#e8e4dc] even:bg-[#faf9f6]">
+                    <td className="px-4 py-4 align-top font-semibold text-[#001a3d]">{row[0]}</td>
+                    <td className="px-4 py-4 align-top text-[#555555]">{row[1]}</td>
+                    <td className="px-4 py-4 align-top text-[#555555]">{row[2]}</td>
+                    <td className="px-4 py-4 align-top text-[#555555]">{row[3]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -348,26 +293,25 @@ export function PackagingPageSections() {
         <div className="container-page min-w-0">
           <Reveal>
             <h2 className="text-2xl font-semibold text-[#001a3d] sm:text-3xl">
-              {PACKAGING_CONTAINMENT_COMPARISON.title}
+              {containment.title}
             </h2>
           </Reveal>
           <div className="table-scroll mt-8 rounded-xl border border-[#d5d0c8] bg-white shadow-sm">
             <table className="w-full min-w-[52rem] border-collapse text-left text-sm">
               <thead>
                 <tr className="bg-[#001a3d] text-[0.7rem] uppercase tracking-wide text-white sm:text-xs">
-                  <th className="px-4 py-3.5 font-semibold">Containment type</th>
-                  <th className="px-4 py-3.5 font-semibold">Primary vessel / transport</th>
-                  <th className="px-4 py-3.5 font-semibold">Unit capacity range</th>
-                  <th className="px-4 py-3.5 font-semibold">Primary commodity applications</th>
+                  {containment.headers.slice(0, 4).map((h) => (
+                    <th key={h} className="px-4 py-3.5 font-semibold">{h}</th>
+                  ))}
                 </tr>
               </thead>
               <tbody>
-                {PACKAGING_CONTAINMENT_COMPARISON.rows.map((row) => (
-                  <tr key={row.type} className="border-t border-[#e8e4dc] even:bg-[#faf9f6]">
-                    <td className="px-4 py-4 align-top font-semibold text-[#001a3d]">{row.type}</td>
-                    <td className="px-4 py-4 align-top text-[#555555]">{row.vessel}</td>
-                    <td className="px-4 py-4 align-top text-[#555555]">{row.capacity}</td>
-                    <td className="px-4 py-4 align-top text-[#555555]">{row.applications}</td>
+                {containment.rows.map((row) => (
+                  <tr key={row[0]} className="border-t border-[#e8e4dc] even:bg-[#faf9f6]">
+                    <td className="px-4 py-4 align-top font-semibold text-[#001a3d]">{row[0]}</td>
+                    <td className="px-4 py-4 align-top text-[#555555]">{row[1]}</td>
+                    <td className="px-4 py-4 align-top text-[#555555]">{row[2]}</td>
+                    <td className="px-4 py-4 align-top text-[#555555]">{row[3]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -382,26 +326,26 @@ export function PackagingPageSections() {
             <div className="relative overflow-hidden rounded-2xl border border-[#d5d0c8] bg-gradient-to-br from-[#001a3d] via-[#0c2544] to-[#001a3d] p-8 text-white sm:p-10 lg:p-12">
               <div className="relative grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-12">
                 <div>
-                  <h2 className="text-2xl font-semibold sm:text-3xl">{PACKAGING_PAGE_CTA.title}</h2>
-                  <p className="mt-4 text-sm leading-relaxed text-white/75 sm:text-base">{PACKAGING_PAGE_CTA.lead}</p>
+                  <h2 className="text-2xl font-semibold sm:text-3xl">{cta.title}</h2>
+                  <p className="mt-4 text-sm leading-relaxed text-white/75 sm:text-base">{cta.lead}</p>
                   <div className="mt-8 flex flex-wrap gap-3">
-                    <Link href={PACKAGING_PAGE_CTA.primaryHref} className="marketing-btn-primary px-6 py-3 text-sm font-semibold">
-                      {PACKAGING_PAGE_CTA.primaryLabel} <span aria-hidden>→</span>
+                    <Link href={cta.primaryHref} className="marketing-btn-primary px-6 py-3 text-sm font-semibold">
+                      {cta.primaryLabel} <span aria-hidden>→</span>
                     </Link>
                     <Link
-                      href={PACKAGING_PAGE_CTA.secondaryHref}
+                      href={cta.secondaryHref}
                       className="rounded-md border border-white/40 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
                     >
-                      {PACKAGING_PAGE_CTA.secondaryLabel}
+                      {cta.secondaryLabel}
                     </Link>
                   </div>
                 </div>
                 <div className="rounded-xl border border-white/15 bg-white/5 p-6 backdrop-blur-sm sm:p-7">
                   <p className="text-xs font-semibold tracking-[0.18em] text-[#d4a84b] uppercase">
-                    {PACKAGING_PAGE_CTA.shareTitle}
+                    {cta.shareTitle}
                   </p>
                   <ul className="mt-4 space-y-3">
-                    {PACKAGING_PAGE_CTA.shareItems.map((item) => (
+                    {cta.shareItems.map((item) => (
                       <li key={item} className="flex gap-3 text-sm leading-relaxed text-white/85">
                         <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#e89a2d]" aria-hidden />
                         {item}

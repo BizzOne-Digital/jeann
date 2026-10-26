@@ -2,56 +2,69 @@ import type { Metadata } from "next";
 import { LegalDocumentsPanel } from "@/components/marketing/LegalDocumentsPanel";
 import { LegalPageBody } from "@/components/marketing/LegalPageBody";
 import { LegalReviewBanner } from "@/components/marketing/LegalReviewBanner";
-import { PageHero } from "@/components/marketing/PageHero";
-import { getPageHeroImage } from "@/lib/marketing/page-hero-images";
+import { CmsPageHero } from "@/components/marketing/CmsPageHero";
+import { collectCmsSections } from "@/lib/content/cms-collect";
+import { getPublishedPage } from "@/lib/content/page-content";
+import {
+  BUYER_TERMS_CONFIDENTIALITY_DEFAULTS,
+  BUYER_TERMS_DOCUMENTS_DEFAULTS,
+  BUYER_TERMS_HERO_DEFAULTS,
+  BUYER_TERMS_INTRO_DEFAULTS,
+  BUYER_TERMS_NON_BINDING_DEFAULTS,
+  BUYER_TERMS_REPRESENTATIONS_DEFAULTS,
+  cmsMerged,
+  LEGAL_NOTICE_DEFAULTS,
+} from "@/lib/marketing/simple-pages-cms";
 
 export const metadata: Metadata = {
   title: "Buyer terms",
   description: "Terms for purchase requests and buyer portal use on the Finekarts website.",
 };
 
-export default function BuyerTermsPage() {
-  const hero = getPageHeroImage("buyerTerms");
+export default async function BuyerTermsPage() {
+  const cms = await getPublishedPage("buyer-terms");
+  const sections = collectCmsSections(cms, [
+    "notice",
+    "intro",
+    "non-binding",
+    "representations",
+    "confidentiality",
+    "documents",
+  ]);
+  const notice = cmsMerged(sections, "notice", LEGAL_NOTICE_DEFAULTS);
+  const intro = cmsMerged(sections, "intro", BUYER_TERMS_INTRO_DEFAULTS);
+  const nonBinding = cmsMerged(sections, "non-binding", BUYER_TERMS_NON_BINDING_DEFAULTS);
+  const representations = cmsMerged(sections, "representations", BUYER_TERMS_REPRESENTATIONS_DEFAULTS);
+  const confidentiality = cmsMerged(sections, "confidentiality", BUYER_TERMS_CONFIDENTIALITY_DEFAULTS);
+  const documents = cmsMerged(sections, "documents", BUYER_TERMS_DOCUMENTS_DEFAULTS);
 
   return (
     <>
-      <PageHero
-        title="Buyer terms"
-        description="Terms that apply when qualified buyers submit purchase requests or use buyer portal features."
-        imageSrc={hero.src}
-        imageAlt={hero.alt}
+      <CmsPageHero
+        pageSlug="buyer-terms"
+        defaults={{
+          title: BUYER_TERMS_HERO_DEFAULTS.title,
+          description: BUYER_TERMS_HERO_DEFAULTS.description,
+        }}
       />
       <article className="bg-[#f3f1ec] marketing-section">
         <div className="container-narrow">
           <LegalPageBody
-            banner={<LegalReviewBanner version="2026" />}
-            footer={<LegalDocumentsPanel category="buyer" title="Download buyer terms (PDF)" />}
+            banner={<LegalReviewBanner title={notice.title} body={notice.body} />}
+            footer={<LegalDocumentsPanel category="buyer" title={documents.title} />}
           >
-            <p>
-              These terms apply when buyers submit purchase requests or use buyer portal features.
-              Binding trade terms appear in the signed PSA/SPA and banking instruments — not in this
-              summary alone.
-            </p>
+            <p>{intro.body}</p>
             <div>
-              <h2 className="display text-xl text-navy">Non-binding enquiries</h2>
-              <p>
-                Submitting an RFQ or purchase request does not guarantee acceptance, pricing, supply,
-                financing, inspection outcomes, or shipment.
-              </p>
+              <h2 className="display text-xl text-navy">{nonBinding.title}</h2>
+              <p>{nonBinding.body}</p>
             </div>
             <div>
-              <h2 className="display text-xl text-navy">Representations</h2>
-              <p>
-                Buyers represent that enquiry information is provided in good faith and that they have
-                authority to conduct trade discussions for their organization.
-              </p>
+              <h2 className="display text-xl text-navy">{representations.title}</h2>
+              <p>{representations.body}</p>
             </div>
             <div>
-              <h2 className="display text-xl text-navy">Confidentiality</h2>
-              <p>
-                Mutual confidentiality for non-public deal terms may be addressed in separate NDAs or
-                contract documents where appropriate.
-              </p>
+              <h2 className="display text-xl text-navy">{confidentiality.title}</h2>
+              <p>{confidentiality.body}</p>
             </div>
           </LegalPageBody>
         </div>
