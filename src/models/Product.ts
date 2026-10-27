@@ -48,6 +48,8 @@ export interface IProduct {
   documentCategories: ProductDocumentCategory[];
   gallery: ProductGalleryItem[];
   minOrderText?: string;
+  /** Internal back-office price. Admin-only — never expose on public pages or APIs. */
+  internalPrice?: string;
   claims: ProductClaims;
   seo?: SeoFields;
   displayOrder: number;
@@ -110,6 +112,7 @@ const productSchema = new Schema<IProduct>(
     documentCategories: [documentCategorySchema],
     gallery: [galleryItemSchema],
     minOrderText: { type: String },
+    internalPrice: { type: String, trim: true },
     claims: { type: claimsSchema, default: () => ({}) },
     seo: seoSchema,
     displayOrder: { type: Number, default: 0 },

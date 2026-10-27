@@ -16,6 +16,7 @@ type FormState = {
   inspectionOptions: string;
   incotermOptions: string;
   minOrderText: string;
+  internalPrice: string;
   image: string;
   displayOrder: number;
 };
@@ -32,6 +33,7 @@ const emptyForm = (categoryId: string): FormState => ({
   inspectionOptions: "",
   incotermOptions: "",
   minOrderText: "",
+  internalPrice: "",
   image: "",
   displayOrder: 0,
 });
@@ -49,6 +51,7 @@ function itemToForm(item: AdminProductItem): FormState {
     inspectionOptions: item.inspectionOptions.join("\n"),
     incotermOptions: item.incotermOptions.join("\n"),
     minOrderText: item.minOrderText,
+    internalPrice: item.internalPrice,
     image: item.image,
     displayOrder: item.displayOrder,
   };
@@ -112,6 +115,7 @@ export function AdminProductsManager({
       inspectionOptions: splitLines(current.inspectionOptions),
       incotermOptions: splitLines(current.incotermOptions),
       minOrderText: current.minOrderText.trim(),
+      internalPrice: current.internalPrice.trim(),
       image: current.image.trim(),
       displayOrder: current.displayOrder,
     };
@@ -264,6 +268,16 @@ export function AdminProductsManager({
         </label>
 
         <label className="label lg:col-span-2">
+          Internal price (admin only — never shown on the website)
+          <input
+            className="field mt-1"
+            value={form.internalPrice}
+            onChange={(e) => setForm({ ...form, internalPrice: e.target.value })}
+            placeholder="e.g. USD 920 / MT FOB"
+          />
+        </label>
+
+        <label className="label lg:col-span-2">
           Grade summary
           <textarea
             className="field mt-1 min-h-20"
@@ -336,6 +350,7 @@ export function AdminProductsManager({
               <th className="px-4 py-3 font-semibold">Product</th>
               <th className="px-4 py-3 font-semibold">Category</th>
               <th className="px-4 py-3 font-semibold">Slug</th>
+              <th className="px-4 py-3 font-semibold">Internal price</th>
               <th className="px-4 py-3 font-semibold">Status</th>
               <th className="px-4 py-3 font-semibold" />
             </tr>
@@ -351,6 +366,7 @@ export function AdminProductsManager({
                 </td>
                 <td className="px-4 py-3">{item.categoryName}</td>
                 <td className="px-4 py-3 font-mono text-xs text-[var(--ocean)]">{item.slug}</td>
+                <td className="px-4 py-3">{item.internalPrice || "—"}</td>
                 <td className="px-4 py-3 capitalize">{item.status.replace(/_/g, " ")}</td>
                 <td className="px-4 py-3 text-right whitespace-nowrap">
                   <button

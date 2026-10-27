@@ -15,6 +15,7 @@ export type AdminProductItem = {
   inspectionOptions: string[];
   incotermOptions: string[];
   minOrderText: string;
+  internalPrice: string;
   image: string;
   displayOrder: number;
 };
@@ -44,6 +45,7 @@ export function serializeProduct(
     inspectionOptions: product.inspectionOptions ?? [],
     incotermOptions: product.incotermOptions ?? [],
     minOrderText: product.minOrderText ?? "",
+    internalPrice: product.internalPrice ?? "",
     image: product.gallery?.[0]?.storageKey ?? "",
     displayOrder: product.displayOrder ?? 0,
   };

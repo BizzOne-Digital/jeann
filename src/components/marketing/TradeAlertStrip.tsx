@@ -25,7 +25,15 @@ function TradeIndexItem({ line }: { line: TradeIndexLine }) {
   );
 }
 
-export function TradeAlertStrip({ compact = false }: { compact?: boolean }) {
+export function TradeAlertStrip({
+  compact = false,
+  lines = TRADE_INDEX_LINES,
+  disclaimer = TRADE_ALERT_DISCLAIMER,
+}: {
+  compact?: boolean;
+  lines?: TradeIndexLine[];
+  disclaimer?: string;
+}) {
   return (
     <section
       className="border-b border-[#d5d0c8] bg-[#f4f6f8]"
@@ -43,7 +51,7 @@ export function TradeAlertStrip({ compact = false }: { compact?: boolean }) {
         </div>
         <div className="relative min-w-0 flex-1 overflow-hidden">
           <ul className="sr-only">
-            {TRADE_INDEX_LINES.map((line) => (
+            {lines.map((line) => (
               <li key={line.id}>
                 {line.label}: {line.value} ({line.change})
               </li>
@@ -51,12 +59,12 @@ export function TradeAlertStrip({ compact = false }: { compact?: boolean }) {
           </ul>
           <div className="trade-alert-marquee flex w-max gap-8 whitespace-nowrap text-sm text-[#333333]">
             <div className="flex shrink-0 gap-8">
-              {TRADE_INDEX_LINES.map((line) => (
+              {lines.map((line) => (
                 <TradeIndexItem key={line.id} line={line} />
               ))}
             </div>
             <div className="trade-alert-marquee-duplicate flex shrink-0 gap-8" aria-hidden="true">
-              {TRADE_INDEX_LINES.map((line) => (
+              {lines.map((line) => (
                 <TradeIndexItem key={`dup-${line.id}`} line={line} />
               ))}
             </div>
@@ -64,7 +72,7 @@ export function TradeAlertStrip({ compact = false }: { compact?: boolean }) {
         </div>
       </div>
       {!compact ? (
-        <p className="container-page pb-2 text-xs leading-snug text-[#888888]">{TRADE_ALERT_DISCLAIMER}</p>
+        <p className="container-page pb-2 text-xs leading-snug text-[#888888]">{disclaimer}</p>
       ) : null}
     </section>
   );

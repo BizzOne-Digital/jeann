@@ -19,6 +19,7 @@ export const adminProductSchema = z.object({
   inspectionOptions: z.array(z.string().trim().max(200)).max(20).default([]),
   incotermOptions: z.array(z.string().trim().max(50)).max(20).default([]),
   minOrderText: z.string().trim().max(500).optional().default(""),
+  internalPrice: z.string().trim().max(100).optional().default(""),
   image: z.string().trim().max(500).optional().default(""),
   displayOrder: z.number().int().min(0).optional().default(0),
 });
@@ -38,6 +39,7 @@ export function productInputToMongo(input: AdminProductInput) {
     inspectionOptions: input.inspectionOptions,
     incotermOptions: input.incotermOptions,
     minOrderText: input.minOrderText || undefined,
+    internalPrice: input.internalPrice || undefined,
     gallery: input.image
       ? [{ storageKey: input.image, alt: input.name, displayOrder: 0 }]
       : [],
