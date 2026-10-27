@@ -11,6 +11,8 @@ export type TradeDocumentType =
   | "icpo"
   | "spa"
   | "proposed_lc_wording"
+  | "proforma_invoice"
+  | "passport_copy"
   | "contract_amendment"
   | "other";
 
@@ -70,7 +72,7 @@ const documentSchema = new Schema<IDocument>(
     stepKey: { type: String, trim: true },
     documentType: {
       type: String,
-      enum: ["loi", "sco", "fco", "icpo", "spa", "proposed_lc_wording", "contract_amendment", "other"],
+      enum: ["loi", "sco", "fco", "icpo", "spa", "proposed_lc_wording", "proforma_invoice", "passport_copy", "contract_amendment", "other"],
     },
     templateKey: { type: String, trim: true },
     templateVersion: { type: Number, min: 1 },

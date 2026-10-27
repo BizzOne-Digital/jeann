@@ -8,6 +8,8 @@ export interface IOrganizationMembership {
   organizationId: Types.ObjectId;
   roles: RoleKey[];
   customPermissions: Permission[];
+  /** Permissions explicitly denied by CEO/GM; always subtracted from role + custom grants. */
+  deniedPermissions?: Permission[];
   status: MembershipStatus;
   invitedBy?: Types.ObjectId;
   deletedAt?: Date;
@@ -25,6 +27,7 @@ const organizationMembershipSchema = new Schema<IOrganizationMembership>(
     },
     roles: [{ type: String, enum: ROLE_KEYS }],
     customPermissions: [{ type: String }],
+    deniedPermissions: [{ type: String }],
     status: {
       type: String,
       enum: ["active", "invited", "suspended", "removed"],

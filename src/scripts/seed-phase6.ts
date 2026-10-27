@@ -278,6 +278,36 @@ async function main() {
     });
   }
 
+  {
+    const { DocumentRequirementTemplate } = await import("@/models");
+    const { SHIPPING_DOCUMENT_TYPES } = await import("@/lib/shipments/checklist-service");
+    const defaults: Array<{ name: string; documentTypes: string[] }> = [
+      {
+        name: "Standard ocean bulk shipment (bank presentation)",
+        documentTypes: [
+          "ocean_bill_of_lading", "commercial_invoice", "packing_list", "certificate_of_origin",
+          "certificate_of_inspection", "certificate_of_quality", "certificate_of_weight_quantity",
+          "insurance_certificate", "pre_shipment_inspection_certificate", "letter_of_credit", "bill_of_exchange",
+        ],
+      },
+      {
+        name: "Full catalogue (select what applies)",
+        documentTypes: SHIPPING_DOCUMENT_TYPES.filter((t) => t !== "other"),
+      },
+    ];
+    for (const d of defaults) {
+      const exists = await DocumentRequirementTemplate.findOne({ name: d.name });
+      if (!exists) {
+        await DocumentRequirementTemplate.create({
+          ...d,
+          effectiveDate: new Date(),
+          active: true,
+          createdByUserId: tradeUser._id,
+        });
+      }
+    }
+  }
+
   console.log("Phase 6 seed complete.");
   console.log("Buyer shipment:", BUYER_SHIPMENT);
   console.log("Supplier shipment:", SUPPLIER_SHIPMENT);

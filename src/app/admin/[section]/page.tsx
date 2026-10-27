@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { FinanceTransactionTabs } from "@/components/portal/FinanceTransactionTabs";
 import { PortalPage } from "@/components/portal/PortalPage";
 import { AdminDataTable } from "@/components/admin/AdminDataTable";
 import { loadAdminSectionData } from "@/lib/admin/section-data";
@@ -105,6 +106,7 @@ export default async function AdminSection({
         <p className="text-sm text-[var(--stone)]">
           Database: {countLabel ?? "Not connected — set MONGODB_URI and run npm run seed"}
         </p>
+        {section === "finance" ? <FinanceTransactionTabs /> : null}
         <AdminDataTable columns={columns} rows={rows} emptyMessage={emptyMessage} />
       </div>
     </PortalPage>

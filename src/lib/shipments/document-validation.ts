@@ -1,4 +1,9 @@
 import { tryConnectMongo } from "@/lib/db/mongoose";
+import {
+  compareShippingDocumentFields,
+  compareToLotReference,
+  type ShippingDocFields,
+} from "@/lib/shipments/cross-document-checks";
 
 export type ValidationFinding = {
   severity: "blocking" | "warning" | "info";
@@ -85,6 +90,53 @@ export async function validateShippingDocuments(
         actual: doc.workflowStatus,
       });
     }
+  }
+
+  // Cross-document exact-match checks from structured data of each document's current version.
+  const { DocumentVersion } = await import("@/models");
+  const versionIds = docs.map((d) => d.currentVersionId).filter(Boolean);
+  const versions = versionIds.length
+    ? await DocumentVersion.find({ _id: { $in: versionIds } }).select("documentId structuredData").lean()
+    : [];
+  const fieldsByDoc: ShippingDocFields[] = [];
+  for (const doc of docs) {
+    if (!doc.shippingDocumentType) continue;
+    const v = versions.find((x) => String(x.documentId) === String(doc._id));
+    const data = (v?.structuredData ?? {}) as Record<string, unknown>;
+    if (!Object.keys(data).length) continue;
+    fieldsByDoc.push({
+      documentType: doc.shippingDocumentType,
+      label: doc.title,
+      amount: data.amount as string | number | undefined,
+      currency: data.currency as string | undefined,
+      consignee: data.consignee as string | undefined,
+      shipper: data.shipper as string | undefined,
+      blNumber: data.blNumber as string | undefined,
+      quantity: data.quantity as string | number | undefined,
+      quantityUnit: data.quantityUnit as string | undefined,
+      product: data.product as string | undefined,
+      portOfLoading: data.portOfLoading as string | undefined,
+      portOfDischarge: data.portOfDischarge as string | undefined,
+      vesselName: data.vesselName as string | undefined,
+      issueDate: data.issueDate as string | undefined,
+      shippedOnBoardDate: data.shippedOnBoardDate as string | undefined,
+      lcNumber: data.lcNumber as string | undefined,
+    });
+  }
+  const crossFindings = [
+    ...compareShippingDocumentFields(fieldsByDoc),
+    ...compareToLotReference(fieldsByDoc, {
+      product: lot.productName,
+      portOfLoading: lot.loadingPort,
+      portOfDischarge: lot.destinationPort,
+      quantity: lot.plannedQuantity ? Number(lot.plannedQuantity.toString()) : undefined,
+      quantityUnit: lot.quantityUnit,
+    }),
+  ];
+  for (const f of crossFindings) {
+    if (f.severity === "blocking") blocking.push(f);
+    else if (f.severity === "warning") warnings.push(f);
+    else informational.push(f);
   }
 
   informational.push({

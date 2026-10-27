@@ -10,7 +10,21 @@ export type CourierRecordStatus =
   | "returned"
   | "cancelled";
 
+export type CourierVerificationStatus = "pending" | "verified_authentic" | "discrepancies_found";
+export type CourierPaymentStatus = "pending" | "payment_confirmed" | "payment_refused";
+
 export interface ICourierRecord {
+  presentationPackageId?: Types.ObjectId;
+  senderAdviserUserId?: Types.ObjectId;
+  recipientBankName?: string;
+  recipientAdviserName?: string;
+  receivedDate?: Date;
+  verificationStatus?: CourierVerificationStatus;
+  verifiedAt?: Date;
+  paymentStatus?: CourierPaymentStatus;
+  paymentConfirmedAt?: Date;
+  paymentReference?: string;
+  statusNotes?: string;
   bankingInstrumentId: Types.ObjectId;
   courierCompany: string;
   trackingNumber?: string;
@@ -29,6 +43,17 @@ export type CourierRecordLean = LeanDoc<ICourierRecord>;
 
 const courierRecordSchema = new Schema<ICourierRecord>(
   {
+    presentationPackageId: { type: Schema.Types.ObjectId, ref: "PresentationPackage" },
+    senderAdviserUserId: { type: Schema.Types.ObjectId, ref: "User" },
+    recipientBankName: { type: String },
+    recipientAdviserName: { type: String },
+    receivedDate: { type: Date },
+    verificationStatus: { type: String, enum: ["pending", "verified_authentic", "discrepancies_found"], default: "pending" },
+    verifiedAt: { type: Date },
+    paymentStatus: { type: String, enum: ["pending", "payment_confirmed", "payment_refused"], default: "pending" },
+    paymentConfirmedAt: { type: Date },
+    paymentReference: { type: String },
+    statusNotes: { type: String },
     bankingInstrumentId: { type: Schema.Types.ObjectId, ref: "BankingInstrument", required: true },
     courierCompany: { type: String, required: true },
     trackingNumber: { type: String },

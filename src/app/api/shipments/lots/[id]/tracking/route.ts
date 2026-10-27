@@ -7,7 +7,7 @@ import {
   loadShipmentLotTrackingView,
   syncShipmentLotLiveTracking,
 } from "@/lib/shipments/lot-tracking-view";
-import { addTrackingReference } from "@/lib/shipments/tracking-service";
+import { addTrackingReference, recordTrackingEvent } from "@/lib/shipments/tracking-service";
 
 export const runtime = "nodejs";
 
@@ -47,6 +47,16 @@ const postSchema = z.discriminatedUnion("action", [
     action: z.literal("sync"),
   }),
   z.object({
+    action: z.literal("add_event"),
+    eventType: z.string().min(1),
+    eventTimestamp: z.string().min(1),
+    location: z.string().optional(),
+    description: z.string().min(1),
+    confidence: z.enum(["confirmed", "estimated"]).default("estimated"),
+    buyerVisible: z.boolean().optional(),
+    supplierVisible: z.boolean().optional(),
+  }),
+  z.object({
     action: z.literal("add_reference"),
     provider: z.string(),
     referenceType: z.string(),
@@ -83,6 +93,26 @@ export async function POST(request: NextRequest, { params }: Params) {
     const auth = await requireApiAuth({ permissions: "shipments:write" });
     if ("error" in auth) return auth.error;
     await assertShipmentLotAccess(auth.ctx.userId, id);
+
+    if (body.action === "add_event") {
+      // Manual milestone entry is staff-only; defaults to estimated so nothing shows as confirmed unless staff says so.
+      if (!auth.ctx.isInternal) {
+        return NextResponse.json({ error: "Forbidden." }, { status: 403 });
+      }
+      const evt = await recordTrackingEvent({
+        shipmentLotId: id,
+        eventType: body.eventType,
+        eventTimestamp: new Date(body.eventTimestamp).toISOString(),
+        location: body.location,
+        description: body.description,
+        source: "manual",
+        confidence: body.confidence,
+        buyerVisible: body.buyerVisible ?? true,
+        supplierVisible: body.supplierVisible ?? true,
+        actorUserId: auth.ctx.userId,
+      });
+      return NextResponse.json({ id: String(evt._id) });
+    }
 
     const ref = await addTrackingReference({
       shipmentLotId: id,

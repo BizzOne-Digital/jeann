@@ -46,7 +46,9 @@ export async function GET(
         submittedAt: tx.submittedAt,
         createdAt: tx.createdAt,
       },
-      commercialTerms: terms,
+      commercialTerms: terms
+        ? { ...terms, internalNotes: undefined }
+        : terms,
       workflowSteps: steps.map((s) => ({
         key: s.key,
         order: s.order,

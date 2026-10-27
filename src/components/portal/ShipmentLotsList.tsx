@@ -15,6 +15,8 @@ type ShipmentRow = {
   statusLabel: string;
   plannedLoadingDate?: string;
   estimatedArrival?: string;
+  trackingNumbers?: string[];
+  latestTracking?: { eventType: string; eventTimestamp: string; location?: string; confidence: string };
 };
 
 export function ShipmentLotsList({
@@ -58,6 +60,9 @@ export function ShipmentLotsList({
             <th className="px-4 py-3">Route</th>
             <th className="px-4 py-3">Status</th>
             <th className="px-4 py-3">ETA</th>
+            {items.some((l) => l.trackingNumbers || l.latestTracking) && (
+              <th className="px-4 py-3">Tracking</th>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -83,6 +88,19 @@ export function ShipmentLotsList({
                   ? new Date(lot.estimatedArrival).toLocaleDateString()
                   : "—"}
               </td>
+              {items.some((l) => l.trackingNumbers || l.latestTracking) && (
+                <td className="px-4 py-3">
+                  {lot.trackingNumbers?.join(", ") ?? "No tracking no."}
+                  {lot.latestTracking ? (
+                    <span className="block text-xs text-[var(--stone)]">
+                      {lot.latestTracking.eventType.replace(/_/g, " ")}
+                      {lot.latestTracking.location ? ` @ ${lot.latestTracking.location}` : ""} ·{" "}
+                      {lot.latestTracking.confidence === "confirmed" ? "Confirmed" : "Estimated"} ·{" "}
+                      {new Date(lot.latestTracking.eventTimestamp).toLocaleDateString()}
+                    </span>
+                  ) : null}
+                </td>
+              )}
             </tr>
           ))}
         </tbody>

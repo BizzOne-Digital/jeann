@@ -7,6 +7,7 @@ import { checksumBuffer } from "@/lib/files/kyb-upload";
 import { writeAuditEvent } from "@/lib/audit/log";
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
 import type { TradeDocumentType, TradeDocumentStatus } from "@/models/Document";
+import { defaultStepForDocument, stepNumberFor, documentFilename } from "@/lib/transactions/document-steps";
 import type { DocumentVersionStatus } from "@/models/DocumentVersion";
 
 const TEST_WATERMARK = "TEST DOCUMENT — NOT VALID — FOR SOFTWARE QA ONLY";
@@ -22,10 +23,17 @@ export async function createTradeDocument(input: {
   internalOnly?: boolean;
   templateKey?: string;
   templateVersion?: number;
+  stepKey?: string;
 }) {
   await tryConnectMongo();
-  const { Document } = await import("@/models");
+  const { Document, Transaction } = await import("@/models");
+  let stepKey = input.stepKey;
+  if (!stepKey) {
+    const t = await Transaction.findById(input.transactionId).select("side").lean();
+    stepKey = defaultStepForDocument(input.documentType, t?.side === "supplier" ? "supplier" : "buyer")?.stepKey;
+  }
   return Document.create({
+    stepKey,
     organizationId: new Types.ObjectId(input.organizationId),
     transactionId: new Types.ObjectId(input.transactionId),
     documentType: input.documentType,
@@ -53,9 +61,19 @@ export async function generateDocumentPdf(input: {
   documentType?: string;
 }) {
   await tryConnectMongo();
-  const { Document, DocumentVersion } = await import("@/models");
+  const { Document, DocumentVersion, Transaction } = await import("@/models");
   const doc = await Document.findById(input.documentId);
   if (!doc || doc.deletedAt) throw new Error("document_not_found");
+  const txForStep = doc.transactionId
+    ? await Transaction.findById(doc.transactionId).select("side transactionNumber").lean()
+    : null;
+  const side = txForStep?.side === "supplier" ? "supplier" : "buyer";
+  if (!doc.stepKey) {
+    const def = defaultStepForDocument(doc.documentType, side);
+    if (def) doc.stepKey = def.stepKey;
+  }
+  const stepNumber = stepNumberFor(doc.stepKey, side);
+  const txNumber = input.transactionNumber ?? txForStep?.transactionNumber ?? "";
 
   const latest = await DocumentVersion.findOne({ documentId: doc._id })
     .sort({ version: -1 })
@@ -64,8 +82,9 @@ export async function generateDocumentPdf(input: {
 
   const pdfBytes = await buildPdf({
     title: doc.title,
-    transactionNumber: input.transactionNumber ?? "",
-    documentType: input.documentType ?? doc.documentType ?? "document",
+    transactionNumber: txNumber,
+    documentType: doc.documentType ?? input.documentType ?? "document",
+    stepNumber,
     version,
     isDraft: input.isDraft ?? true,
     structuredData: input.structuredData,
@@ -73,13 +92,19 @@ export async function generateDocumentPdf(input: {
   });
 
   const buffer = Buffer.from(pdfBytes);
+  const pdfName = documentFilename({
+    transactionNumber: txNumber,
+    stepNumber,
+    documentType: doc.documentType,
+    version,
+  });
   const storageKey = `trade/${doc.organizationId}/${doc.transactionId}/${doc._id}/v${version}-${nanoid(12)}`;
   const storage = getStorageProvider();
   await storage.putPrivate({
     key: storageKey,
     body: buffer,
     mimeType: "application/pdf",
-    filename: `${doc.title}-v${version}.pdf`,
+    filename: pdfName,
   });
 
   const versionDoc = await DocumentVersion.create({
@@ -89,7 +114,7 @@ export async function generateDocumentPdf(input: {
     checksum: checksumBuffer(buffer),
     mimeType: "application/pdf",
     size: buffer.length,
-    originalFilename: `${doc.title}-v${version}.pdf`,
+    originalFilename: pdfName,
     uploadedBy: new Types.ObjectId(input.actorUserId),
     status: "draft",
     watermarkPolicy: input.isDraft ? "draft" : "none",
@@ -109,12 +134,18 @@ async function buildPdf(input: {
   title: string;
   transactionNumber: string;
   documentType: string;
+  stepNumber?: number;
   version: number;
   isDraft: boolean;
   structuredData: Record<string, unknown>;
   clauseTexts: string[];
 }): Promise<Uint8Array> {
   const pdf = await PDFDocument.create();
+  pdf.setTitle(input.title);
+  pdf.setSubject(
+    `${input.transactionNumber} | Step ${input.stepNumber ?? "-"} | ${input.documentType} | v${input.version}`,
+  );
+  pdf.setKeywords([input.transactionNumber, input.documentType, `step-${input.stepNumber ?? 0}`]);
   const page = pdf.addPage([595, 842]);
   const font = await pdf.embedFont(StandardFonts.Helvetica);
   const bold = await pdf.embedFont(StandardFonts.HelveticaBold);
@@ -139,7 +170,7 @@ async function buildPdf(input: {
 
   draw(input.title, 16, true);
   draw(`Transaction: ${input.transactionNumber}`);
-  draw(`Document type: ${input.documentType} — Version ${input.version}`);
+  draw(`Document type: ${input.documentType} — Step ${input.stepNumber ?? "-"} — Version ${input.version}`);
   draw(`Generated: ${new Date().toISOString().slice(0, 10)}`);
   y -= 8;
 
@@ -255,13 +286,18 @@ export async function sendDocumentToBuyer(input: {
   actorUserId: string;
 }) {
   await tryConnectMongo();
-  const { Document, DocumentVersion } = await import("@/models");
+  const { Document, DocumentVersion, Transaction } = await import("@/models");
   const version = await DocumentVersion.findOne({
     _id: input.versionId,
     documentId: input.documentId,
     status: "approved",
   });
   if (!version) throw new Error("version_not_approved");
+  const docRow = await Document.findById(input.documentId).select("transactionId").lean();
+  const sendTx = docRow?.transactionId
+    ? await Transaction.findById(docRow.transactionId).select("side").lean()
+    : null;
+  const toSupplier = sendTx?.side === "supplier";
 
   version.status = "sent";
   version.locked = true;
@@ -269,7 +305,11 @@ export async function sendDocumentToBuyer(input: {
 
   await Document.updateOne(
     { _id: input.documentId },
-    { $set: { workflowStatus: "sent", buyerVisible: true, internalOnly: false } },
+    {
+      $set: toSupplier
+        ? { workflowStatus: "sent", supplierVisible: true, internalOnly: false, currentVersionId: version._id }
+        : { workflowStatus: "sent", buyerVisible: true, internalOnly: false, currentVersionId: version._id },
+    },
   );
 
   await writeAuditEvent({
@@ -307,6 +347,13 @@ export async function uploadSignedDocument(input: {
     status: { $in: ["sent", "approved"] },
   });
   if (!version) throw new Error("version_not_signable");
+
+  const passport = await Document.exists({
+    transactionId: new Types.ObjectId(input.transactionId),
+    documentType: "passport_copy",
+    createdByUserId: new Types.ObjectId(input.actorUserId),
+  });
+  if (!passport) throw new Error("passport_required");
 
   const storageKey = `trade/signed/${input.transactionId}/${input.documentId}/${nanoid(16)}`;
   const storage = getStorageProvider();
@@ -424,6 +471,8 @@ export async function getDocumentDownloadUrl(input: {
   documentId: string;
   versionId?: string;
   userId: string;
+  /** Non-staff caller: only sent/signed versions or the caller's own uploads are downloadable. */
+  external?: boolean;
 }): Promise<{ url: string; filename: string }> {
   await tryConnectMongo();
   const { Document, DocumentVersion } = await import("@/models");
@@ -437,6 +486,22 @@ export async function getDocumentDownloadUrl(input: {
       : await DocumentVersion.findOne({ documentId: doc._id }).sort({ version: -1 }).lean();
 
   if (!version?.storageKey) throw new Error("version_not_found");
+  if (input.external) {
+    const ok =
+      ["sent", "signed"].includes(String(version.status)) ||
+      String(version.uploadedBy) === input.userId;
+    if (!ok || String(version.documentId) !== String(doc._id)) {
+      // fall back to latest released version, if any
+      const released = await DocumentVersion.findOne({
+        documentId: doc._id,
+        status: { $in: ["sent", "signed"] },
+      })
+        .sort({ version: -1 })
+        .lean();
+      if (!released?.storageKey || input.versionId) throw new Error("version_not_found");
+      return getDocumentDownloadUrl({ ...input, versionId: String(released._id) });
+    }
+  }
 
   const storage = getStorageProvider();
   const url = await storage.getSignedUrl(version.storageKey, {

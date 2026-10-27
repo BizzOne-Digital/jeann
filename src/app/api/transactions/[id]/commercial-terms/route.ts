@@ -43,9 +43,15 @@ export async function GET(
       await assertOrgScope(auth.ctx.userId, String(tx.organizationId), "transactions:read");
     }
 
+    if (!auth.ctx.isInternal && tx.side === "supplier") {
+      return NextResponse.json({ error: "Forbidden." }, { status: 403 });
+    }
     const terms = await CommercialTerms.findOne({ transactionId: tx._id })
       .sort({ version: -1 })
       .lean();
+    if (terms && !auth.ctx.isInternal) {
+      delete (terms as { internalNotes?: string }).internalNotes;
+    }
     return NextResponse.json({ terms });
   } catch (error) {
     return handleApiError(error);
@@ -60,6 +66,9 @@ export async function PUT(
     const auth = await requireApiAuth({ permissions: "transactions:write" });
     if ("error" in auth) return auth.error;
 
+    if (!auth.ctx.isInternal) {
+      return NextResponse.json({ error: "Forbidden." }, { status: 403 });
+    }
     const { id } = await params;
     const body = updateSchema.parse(await request.json());
     const { CommercialTerms, Transaction } = await import("@/models");

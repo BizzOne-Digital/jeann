@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { Types } from "mongoose";
+import { buildAdviserDocumentRow, isBankingAdviserDocument } from "@/lib/banking/adviser-documents";
 import { requireApiAuth, handleApiError } from "@/lib/api/require-api-auth";
 
 export const runtime = "nodejs";
@@ -15,7 +16,7 @@ export async function GET() {
       return NextResponse.json({ error: "Banking adviser role required." }, { status: 403 });
     }
 
-    const { BankingPartyAssignment, PresentationPackage, CourierRecord, BankingInstrument } =
+    const { BankingPartyAssignment, PresentationPackage, CourierRecord, BankingInstrument, Document, DocumentVersion, Transaction } =
       await import("@/models");
 
     const assignments = await BankingPartyAssignment.find({
@@ -39,7 +40,36 @@ export async function GET() {
         .lean(),
     ]);
 
+    // Steps 1-6 documents for assigned deals only (buyer-sale and supplier-purchase alike).
+    const txIds = instruments.map((i) => i.transactionId);
+    const [rawDocs, txs] = await Promise.all([
+      txIds.length
+        ? Document.find({ transactionId: { $in: txIds }, deletedAt: null }).sort({ createdAt: 1 }).limit(500).lean()
+        : Promise.resolve([]),
+      txIds.length ? Transaction.find({ _id: { $in: txIds } }).select("transactionNumber").lean() : Promise.resolve([]),
+    ]);
+    const txNumber = new Map(txs.map((t) => [String(t._id), t.transactionNumber]));
+    const sideByTx = new Map(instruments.map((i) => [String(i.transactionId), i.transactionSide]));
+    const released = rawDocs.filter((d) => isBankingAdviserDocument(d));
+    const versionIds = released.map((d) => d.currentVersionId).filter(Boolean);
+    const versions = versionIds.length
+      ? await DocumentVersion.find({ _id: { $in: versionIds } }).select("originalFilename mimeType").lean()
+      : [];
+    const versionMap = new Map(versions.map((v) => [String(v._id), v]));
+    const documents = released
+      .map((d) => {
+        const v = d.currentVersionId ? versionMap.get(String(d.currentVersionId)) : undefined;
+        return buildAdviserDocumentRow(d, {
+          side: (sideByTx.get(String(d.transactionId)) ?? "buyer_sale") as "buyer_sale" | "supplier_purchase",
+          transactionNumber: txNumber.get(String(d.transactionId)),
+          filename: v?.originalFilename,
+          mimeType: v?.mimeType,
+        });
+      })
+      .sort((a, b) => (a.transactionNumber ?? "").localeCompare(b.transactionNumber ?? "") || (a.stepNumber ?? 99) - (b.stepNumber ?? 99));
+
     return NextResponse.json({
+      documents,
       packages: packages.map((p) => {
         const instrument = instrumentMap.get(String(p.bankingInstrumentId));
         return {
@@ -49,6 +79,7 @@ export async function GET() {
           checksum: p.checksum,
           documentCount: p.documentManifest?.length ?? 0,
           instrumentId: instrument?.instrumentId ?? String(p.bankingInstrumentId),
+          instrumentDbId: String(p.bankingInstrumentId),
           createdAt: p.createdAt,
         };
       }),
@@ -65,6 +96,13 @@ export async function GET() {
           expectedDeliveryDate: c.expectedDeliveryDate,
           packageDescription: c.packageDescription,
           instrumentId: instrument?.instrumentId ?? String(c.bankingInstrumentId),
+          instrumentDbId: String(c.bankingInstrumentId),
+          presentationPackageId: c.presentationPackageId ? String(c.presentationPackageId) : undefined,
+          recipientBankName: c.recipientBankName,
+          receivedDate: c.receivedDate,
+          verificationStatus: c.verificationStatus ?? "pending",
+          paymentStatus: c.paymentStatus ?? "pending",
+          paymentConfirmedAt: c.paymentConfirmedAt,
           createdAt: c.createdAt,
         };
       }),

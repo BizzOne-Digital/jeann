@@ -46,7 +46,7 @@ export function ShipmentTrackingPanel({ lotId }: { lotId: string }) {
   const [syncing, setSyncing] = useState(false);
   const [registerOpen, setRegisterOpen] = useState(false);
   const [form, setForm] = useState({
-    integration: "terminal49" as "terminal49" | "easypost",
+    integration: "terminal49" as "terminal49" | "easypost" | "manual",
     referenceType: "container",
     trackingNumber: "",
     scac: "",
@@ -105,6 +105,39 @@ export function ShipmentTrackingPanel({ lotId }: { lotId: string }) {
     }
   }
 
+  const [evt, setEvt] = useState({
+    eventType: "loaded",
+    eventTimestamp: "",
+    location: "",
+    description: "",
+    confidence: "estimated" as "confirmed" | "estimated",
+  });
+
+  async function handleAddEvent(e: React.FormEvent) {
+    e.preventDefault();
+    setSyncing(true);
+    try {
+      const res = await fetch(`/api/shipments/lots/${lotId}/tracking`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "add_event",
+          ...evt,
+          eventTimestamp: new Date(evt.eventTimestamp).toISOString(),
+          location: evt.location.trim() || undefined,
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error ?? "Could not add milestone");
+      setEvt((x) => ({ ...x, eventTimestamp: "", location: "", description: "" }));
+      await load();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not add milestone");
+    } finally {
+      setSyncing(false);
+    }
+  }
+
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault();
     setSyncing(true);
@@ -119,7 +152,7 @@ export function ShipmentTrackingPanel({ lotId }: { lotId: string }) {
           trackingNumber: form.trackingNumber.trim(),
           scac: form.integration === "terminal49" ? form.scac.trim() || undefined : undefined,
           carrier:
-            form.integration === "easypost"
+            form.integration === "easypost" || form.integration === "manual"
               ? form.carrier.trim() || undefined
               : form.scac.trim() || undefined,
         }),
@@ -183,7 +216,7 @@ export function ShipmentTrackingPanel({ lotId }: { lotId: string }) {
               className="text-sm font-medium text-[var(--navy)] underline"
               onClick={() => setRegisterOpen(true)}
             >
-              Register tracking (Terminal49 or EasyPost)
+              Register tracking number (forwarder / Terminal49 / EasyPost)
             </button>
           ) : (
             <form onSubmit={handleRegister} className="grid gap-2 sm:grid-cols-2">
@@ -195,15 +228,16 @@ export function ShipmentTrackingPanel({ lotId }: { lotId: string }) {
                   onChange={(ev) =>
                     setForm((f) => ({
                       ...f,
-                      integration: ev.target.value as "terminal49" | "easypost",
+                      integration: ev.target.value as "terminal49" | "easypost" | "manual",
                     }))
                   }
                 >
                   <option value="terminal49">Terminal49 — ocean container / BOL</option>
                   <option value="easypost">EasyPost — parcel / courier</option>
+                  <option value="manual">Manual — freight forwarder tracking number (no live feed)</option>
                 </select>
               </label>
-              {form.integration === "terminal49" && (
+              {form.integration !== "easypost" && (
                 <label className="text-sm sm:col-span-2">
                   <span className="text-[var(--stone)]">Reference type</span>
                   <select
@@ -214,6 +248,7 @@ export function ShipmentTrackingPanel({ lotId }: { lotId: string }) {
                     <option value="container">Container number</option>
                     <option value="booking_number">Booking number</option>
                     <option value="bill_of_lading">Bill of lading</option>
+                    <option value="forwarder_tracking">Forwarder tracking number</option>
                   </select>
                 </label>
               )}
@@ -238,9 +273,9 @@ export function ShipmentTrackingPanel({ lotId }: { lotId: string }) {
                 </label>
               ) : (
                 <label className="text-sm">
-                  <span className="text-[var(--stone)]">Carrier (required)</span>
+                  <span className="text-[var(--stone)]">{form.integration === "manual" ? "Freight forwarder / carrier" : "Carrier (required)"}</span>
                   <input
-                    required
+                    required={form.integration === "easypost"}
                     className="mt-1 w-full rounded border border-[var(--line)] px-2 py-1.5"
                     value={form.carrier}
                     onChange={(ev) => setForm((f) => ({ ...f, carrier: ev.target.value }))}
@@ -325,6 +360,25 @@ export function ShipmentTrackingPanel({ lotId }: { lotId: string }) {
         </div>
       )}
 
+      {data.capabilities.canManageTracking && (
+        <form onSubmit={handleAddEvent} className="grid gap-2 rounded border border-[var(--line)] p-3 text-sm sm:grid-cols-2">
+          <h4 className="font-medium text-[var(--navy)] sm:col-span-2">Add manual milestone (loading port to destination port)</h4>
+          <select className="rounded border border-[var(--line)] px-2 py-1.5" value={evt.eventType} onChange={(ev) => setEvt((x) => ({ ...x, eventType: ev.target.value }))}>
+            {["loaded", "departed", "transshipment", "arrived", "discharged", "customs_hold", "customs_released", "out_for_delivery", "delivered", "exception"].map((t) => (
+              <option key={t} value={t}>{t.replace(/_/g, " ")}</option>
+            ))}
+          </select>
+          <input required type="datetime-local" className="rounded border border-[var(--line)] px-2 py-1.5" value={evt.eventTimestamp} onChange={(ev) => setEvt((x) => ({ ...x, eventTimestamp: ev.target.value }))} />
+          <input className="rounded border border-[var(--line)] px-2 py-1.5" placeholder="Location (port / place)" value={evt.location} onChange={(ev) => setEvt((x) => ({ ...x, location: ev.target.value }))} />
+          <select className="rounded border border-[var(--line)] px-2 py-1.5" value={evt.confidence} onChange={(ev) => setEvt((x) => ({ ...x, confidence: ev.target.value as "confirmed" | "estimated" }))}>
+            <option value="estimated">Estimated (unverified or not yet happened)</option>
+            <option value="confirmed">Confirmed (verified by document or forwarder)</option>
+          </select>
+          <input required className="rounded border border-[var(--line)] px-2 py-1.5 sm:col-span-2" placeholder="Description / source (e.g. forwarder update)" value={evt.description} onChange={(ev) => setEvt((x) => ({ ...x, description: ev.target.value }))} />
+          <button type="submit" disabled={syncing} className="w-fit rounded bg-[var(--navy)] px-3 py-1.5 text-white">Add milestone</button>
+        </form>
+      )}
+
       <div>
         <h4 className="text-sm font-medium text-[var(--navy)] mb-2">Event timeline</h4>
         {data.events.length === 0 ? (
@@ -335,7 +389,11 @@ export function ShipmentTrackingPanel({ lotId }: { lotId: string }) {
               <li key={e.id} className="rounded border border-[var(--line)] bg-white p-3 text-sm">
                 <div className="font-medium">{e.eventLabel}</div>
                 <div className="text-[var(--stone)]">
-                  {new Date(e.eventTimestamp).toLocaleString()} · {e.confidence}
+                  {new Date(e.eventTimestamp).toLocaleString()} ·{" "}
+                  <span className={e.confidence === "confirmed" ? "text-emerald-700" : "text-amber-700"}>
+                    {e.confidence === "confirmed" ? "Confirmed" : "Estimated"}
+                  </span>
+                  {e.source === "manual" ? " · manual entry" : ""}
                   {e.source === "terminal49"
                     ? " · Terminal49"
                     : e.source === "easypost"

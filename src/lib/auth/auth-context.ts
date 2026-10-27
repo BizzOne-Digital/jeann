@@ -53,12 +53,13 @@ export async function getAuthContext(userId: string): Promise<AuthContext | null
 
   const membershipContexts: AuthMembership[] = memberships.map((m) => {
     const org = orgById.get(String(m.organizationId));
+    const denied = new Set<string>(m.deniedPermissions ?? []);
     const perms = [
       ...new Set([
         ...permissionsForRoles(m.roles),
         ...(m.customPermissions ?? []),
       ]),
-    ];
+    ].filter((p) => !denied.has(p) && m.status === "active");
     return {
       organizationId: String(m.organizationId),
       organizationType: org?.type ?? "buyer",
@@ -73,9 +74,9 @@ export async function getAuthContext(userId: string): Promise<AuthContext | null
   ];
 
   const isInternal = membershipContexts.some(
-    (m) => m.organizationType === "internal" || m.roles.some((r) =>
+    (m) => m.status === "active" && (m.organizationType === "internal" || m.roles.some((r) =>
       ["ceo_super_admin", "general_manager", "trade_manager", "employee_operations", "finance", "compliance_reviewer"].includes(r),
-    ),
+    )),
   );
 
   return {

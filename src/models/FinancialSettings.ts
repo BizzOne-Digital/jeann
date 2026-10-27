@@ -14,6 +14,8 @@ export interface IFinancialSettings {
   billNumberFormat: string;
   creditNoteNumberFormat: string;
   separationOfDutiesEnabled: boolean;
+  /** Corporate tax rate as decimal string (e.g. "0.15"); used only by the optional tax estimate. */
+  corporateTaxRate?: string;
 }
 
 export type FinancialSettingsLean = LeanDoc<IFinancialSettings>;
@@ -36,6 +38,7 @@ const financialSettingsSchema = new Schema<IFinancialSettings>(
     billNumberFormat: { type: String, default: "FK-BILL-{YEAR}-{SEQ}" },
     creditNoteNumberFormat: { type: String, default: "FK-CN-{YEAR}-{SEQ}" },
     separationOfDutiesEnabled: { type: Boolean, default: true },
+    corporateTaxRate: { type: String },
   },
   { timestamps: true },
 );

@@ -94,3 +94,65 @@ export async function POST(request: NextRequest) {
     return handleApiError(error);
   }
 }
+
+/**
+ * Lookup by tracking number. Visibility-filtered: staff see all, buyer/supplier only their
+ * own organisation's lots, banking adviser only lots of deals assigned to them.
+ * Other sides' data is never returned; unauthorised lots look like "not found".
+ */
+export async function GET(request: NextRequest) {
+  try {
+    const auth = await requireApiAuth();
+    if ("error" in auth) return auth.error;
+    const trackingNumber = request.nextUrl.searchParams.get("trackingNumber")?.trim();
+    if (!trackingNumber) {
+      return NextResponse.json({ error: "trackingNumber is required." }, { status: 400 });
+    }
+    const { tryConnectMongo } = await import("@/lib/db/mongoose");
+    await tryConnectMongo();
+    const { TrackingReference, ShipmentTrackingEvent, ShipmentLot } = await import("@/models");
+    const { resolveShipmentViewerSide } = await import("@/lib/shipments/access");
+    const refs = await TrackingReference.find({ trackingNumber }).limit(20).lean();
+    const results = [];
+    for (const ref of refs) {
+      const lot = await ShipmentLot.findById(ref.shipmentLotId).lean();
+      if (!lot) continue;
+      const side = await resolveShipmentViewerSide(auth.ctx.userId, lot);
+      if (!side) continue;
+      const q: Record<string, unknown> = { shipmentLotId: lot._id };
+      if (side === "buyer") q.buyerVisible = true;
+      if (side === "supplier") q.supplierVisible = true;
+      if (side === "banking") q.$or = [{ buyerVisible: true }, { supplierVisible: true }];
+      const events = await ShipmentTrackingEvent.find(q).sort({ eventTimestamp: -1 }).limit(100).lean();
+      results.push({
+        shipmentLotId: String(lot._id),
+        shipmentLotNumber: lot.shipmentLotNumber,
+        loadingPort: lot.loadingPort,
+        destinationPort: lot.destinationPort,
+        status: lot.currentStatus,
+        reference: {
+          trackingNumber: ref.trackingNumber,
+          provider: ref.provider,
+          referenceType: ref.referenceType,
+          carrier: ref.carrier,
+          dataSource: ref.dataSource,
+        },
+        events: events.map((e) => ({
+          id: String(e._id),
+          eventType: e.eventType,
+          eventTimestamp: e.eventTimestamp,
+          location: e.location,
+          description: e.description,
+          source: e.source,
+          confidence: e.confidence === "confirmed" ? "confirmed" : "estimated",
+        })),
+      });
+    }
+    return NextResponse.json({
+      results,
+      note: "Events are manual or carrier-provided; estimated events are not live positions.",
+    });
+  } catch (error) {
+    return handleApiError(error);
+  }
+}

@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { requireApiAuth, handleApiError } from "@/lib/api/require-api-auth";
 import {
+  SHIPPING_DOCUMENT_CATALOGUE,
+  createRequirementTemplate,
   createShipmentChecklist,
   submitBuyerDocumentRequests,
   approveAndLockChecklist,
@@ -15,6 +17,19 @@ const createSchema = z.object({
   bankingInstrumentId: z.string().optional(),
   destinationCountry: z.string().optional(),
   destinationPort: z.string().optional(),
+  requirementTemplateId: z.string().optional(),
+  documentTypes: z.array(z.string()).optional(),
+});
+
+const templateSchema = z.object({
+  action: z.literal("create_template"),
+  name: z.string().min(1),
+  documentTypes: z.array(z.string()).min(1),
+  destinationCountry: z.string().optional(),
+  destinationPort: z.string().optional(),
+  transportMode: z.string().optional(),
+  incoterm: z.string().optional(),
+  notes: z.string().optional(),
 });
 
 const buyerInputSchema = z.object({
@@ -29,6 +44,32 @@ const lockSchema = z.object({
   action: z.literal("lock"),
   checklistId: z.string(),
 });
+
+/** Selectable shipping document types plus active requirement templates. */
+export async function GET() {
+  try {
+    const auth = await requireApiAuth({ permissions: "shipments:read" });
+    if ("error" in auth) return auth.error;
+    const { tryConnectMongo } = await import("@/lib/db/mongoose");
+    await tryConnectMongo();
+    const { DocumentRequirementTemplate } = await import("@/models");
+    const templates = await DocumentRequirementTemplate.find({ active: true }).sort({ name: 1 }).limit(200).lean();
+    return NextResponse.json({
+      catalogue: Object.entries(SHIPPING_DOCUMENT_CATALOGUE).map(([type, label]) => ({ type, label })),
+      templates: templates.map((t) => ({
+        id: String(t._id),
+        name: t.name,
+        documentTypes: t.documentTypes,
+        destinationCountry: t.destinationCountry,
+        destinationPort: t.destinationPort,
+        transportMode: t.transportMode,
+        incoterm: t.incoterm,
+      })),
+    });
+  } catch (error) {
+    return handleApiError(error);
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -62,6 +103,12 @@ export async function POST(request: NextRequest) {
 
     const authWrite = await requireApiAuth({ permissions: "shipments:write" });
     if ("error" in authWrite) return authWrite.error;
+
+    if (body.action === "create_template") {
+      const t = templateSchema.parse(body);
+      const tpl = await createRequirementTemplate({ ...t, actorUserId: authWrite.ctx.userId });
+      return NextResponse.json({ id: String(tpl._id) });
+    }
     const parsed = createSchema.parse(body);
     const checklist = await createShipmentChecklist({
       ...parsed,
@@ -70,6 +117,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ id: String(checklist._id), version: checklist.version });
   } catch (error) {
+    if (error instanceof Error && error.message === "unknown_document_type") {
+      return NextResponse.json({ error: "Unknown shipping document type." }, { status: 400 });
+    }
     if (error instanceof Error && error.message === "authority_notice_required") {
       return NextResponse.json(
         {

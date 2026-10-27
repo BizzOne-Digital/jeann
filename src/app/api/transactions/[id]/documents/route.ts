@@ -15,7 +15,7 @@ import { auditRequestMeta } from "@/lib/api/request-meta";
 export const runtime = "nodejs";
 
 const createSchema = z.object({
-  documentType: z.enum(["loi", "sco", "fco", "icpo", "spa", "proposed_lc_wording", "contract_amendment", "other"]),
+  documentType: z.enum(["loi", "sco", "fco", "icpo", "spa", "proposed_lc_wording", "proforma_invoice", "passport_copy", "contract_amendment", "other"]),
   title: z.string().min(1),
   buyerVisible: z.boolean().optional(),
   templateKey: z.string().optional(),
@@ -43,7 +43,8 @@ export async function GET(
       deletedAt: null,
     };
     if (!auth.ctx.isInternal) {
-      filter.buyerVisible = true;
+      if (tx.side === "supplier") filter.supplierVisible = true;
+      else filter.buyerVisible = true;
       filter.internalOnly = false;
     }
 
@@ -61,6 +62,10 @@ export async function POST(
   try {
     const auth = await requireApiAuth({ permissions: "documents:write" });
     if ("error" in auth) return auth.error;
+
+    if (!auth.ctx.isInternal) {
+      return NextResponse.json({ error: "Forbidden." }, { status: 403 });
+    }
 
     const { id: transactionId } = await params;
     const body = createSchema.parse(await request.json());

@@ -19,6 +19,10 @@ export async function POST(
     const auth = await requireApiAuth({ permissions: "documents:write" });
     if ("error" in auth) return auth.error;
 
+    if (!auth.ctx.isInternal) {
+      return NextResponse.json({ error: "Forbidden." }, { status: 403 });
+    }
+
     const { id: transactionId, docId } = await params;
     const body = schema.parse(await request.json());
     const { Transaction } = await import("@/models");

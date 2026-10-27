@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { WorkflowStepper, type WorkflowStepView } from "@/components/portal/WorkflowStepper";
 import { TransactionDocumentsPanel } from "@/components/portal/TransactionDocumentsPanel";
+import { StaffDocumentTools } from "@/components/portal/StaffDocumentTools";
 import { TransactionFinancePanel } from "@/components/portal/TransactionFinancePanel";
 import { TransactionWorkflowActions } from "@/components/portal/TransactionWorkflowActions";
 
@@ -26,6 +27,7 @@ type TxDetail = {
     title: string;
     documentType?: string;
     workflowStatus: string;
+    bankingVisible?: boolean;
     currentVersionId?: string | null;
   }>;
   banking: {
@@ -148,12 +150,21 @@ export function TransactionWorkspaceTabs({
       ) : null}
 
       {tab === "documents" ? (
-        <TransactionDocumentsPanel
-          transactionId={transactionId}
-          documents={data.documents}
-          canUpload
-          onUploaded={load}
-        />
+        <div className="space-y-6">
+          <TransactionDocumentsPanel
+            transactionId={transactionId}
+            documents={data.documents}
+            canUpload
+            onUploaded={load}
+          />
+          {showStaffActions && data.isInternal !== false ? (
+            <StaffDocumentTools
+              transactionId={transactionId}
+              documents={data.documents}
+              onChanged={load}
+            />
+          ) : null}
+        </div>
       ) : null}
 
       {tab === "finance" && showFinance ? (

@@ -19,6 +19,7 @@ const NAV: Array<{ label: string; href: string }> = [
   { label: "Employees & Roles", href: "/admin/employees" },
   { label: "Documents & Templates", href: "/admin/documents" },
   { label: "Validation Rules", href: "/admin/validation-rules" },
+  { label: "Step Templates", href: "/admin/step-templates" },
   { label: "Payment Terms", href: "/admin/payment-terms" },
   { label: "Approvals", href: "/admin/approvals" },
   { label: "Bookings", href: "/admin/bookings" },

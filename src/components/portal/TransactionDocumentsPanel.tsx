@@ -15,6 +15,8 @@ const UPLOAD_TYPES = [
   { value: "icpo", label: "ICPO" },
   { value: "spa", label: "SPA / PSA" },
   { value: "proposed_lc_wording", label: "LC wording" },
+  { value: "proforma_invoice", label: "Proforma invoice" },
+  { value: "passport_copy", label: "Passport copy (signer)" },
   { value: "other", label: "Passport / other signer document" },
 ];
 

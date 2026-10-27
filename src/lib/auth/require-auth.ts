@@ -33,7 +33,8 @@ async function loadMembershipPermissions(
 
   const rolePerms = permissionsForRoles(membership.roles);
   const custom = membership.customPermissions ?? [];
-  return [...new Set([...rolePerms, ...custom])];
+  const denied = new Set<string>(membership.deniedPermissions ?? []);
+  return [...new Set([...rolePerms, ...custom])].filter((x) => !denied.has(x));
 }
 
 export async function requireUser(options?: {

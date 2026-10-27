@@ -6,6 +6,7 @@ import {
   confirmIssuanceRequested,
   ALLOWED_INSTRUMENT_TYPES,
 } from "@/lib/transactions/banking-service";
+import { assertOrgScope } from "@/lib/authorization/authorize";
 import { assertBuyerTransactionAccess } from "@/lib/transactions/buyer-access";
 
 export const runtime = "nodejs";
@@ -19,10 +20,18 @@ export async function GET(
     if ("error" in auth) return auth.error;
 
     const { id } = await params;
-    const { BankingInstrumentRecord } = await import("@/models");
+    const { BankingInstrumentRecord, Transaction } = await import("@/models");
+    if (!auth.ctx.isInternal) {
+      const t = await Transaction.findById(id).select("organizationId").lean();
+      if (!t) return NextResponse.json({ error: "Not found." }, { status: 404 });
+      await assertOrgScope(auth.ctx.userId, String(t.organizationId), "transactions:read");
+    }
     const record = await BankingInstrumentRecord.findOne({
       transactionId: id,
     }).lean();
+    if (record && !auth.ctx.isInternal) {
+      delete (record as { internalNotes?: string }).internalNotes;
+    }
 
     return NextResponse.json({
       record,

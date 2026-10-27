@@ -43,6 +43,7 @@ export async function GET(
       documentId: docId,
       versionId,
       userId: auth.ctx.userId,
+      external: !auth.ctx.isInternal,
     });
 
     return NextResponse.json({ ok: true, url: result.url, filename: result.filename });

@@ -75,6 +75,8 @@ export async function GET(
         workflowStatus: d.workflowStatus,
         buyerVisible: d.buyerVisible,
         supplierVisible: d.supplierVisible,
+        bankingVisible: Boolean(d.bankingVisible),
+        stepKey: d.stepKey,
         currentVersionId: d.currentVersionId ? String(d.currentVersionId) : null,
       })),
       banking: banking

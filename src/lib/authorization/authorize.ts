@@ -61,7 +61,7 @@ export async function assertOrgScope(
       ...permissionsForRoles(membership.roles),
       ...(membership.customPermissions ?? []),
     ]),
-  ];
+  ].filter((x) => !(membership.deniedPermissions ?? []).includes(x));
 
   if (required) {
     assertPermission(granted, required);

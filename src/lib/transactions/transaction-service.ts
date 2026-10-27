@@ -184,6 +184,9 @@ export async function skipOfferStep(input: {
   const { Transaction, WorkflowStep } = await import("@/models");
   const tx = await Transaction.findById(input.transactionId);
   if (!tx) throw new Error("not_found");
+  if (tx.offerSkipped || (tx.currentStepKey && !["sco_fco", "supplier_sco_fco"].includes(tx.currentStepKey))) {
+    throw new Error("step_not_skippable");
+  }
 
   tx.offerSkipped = true;
   tx.offerSkipReason = input.reason;

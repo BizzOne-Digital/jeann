@@ -206,6 +206,9 @@ export async function skipProcurementOffer(input: {
   if (!tx || tx.transactionType !== "supplier_purchase") throw new Error("not_found");
   if (!hasPermission(input.permissions, "transactions:approve")) throw new Error("forbidden");
   if (!input.reason?.trim() || input.reason.trim().length < 8) throw new Error("reason_required");
+  if (tx.offerSkipped || (tx.currentStepKey && !["sco_fco", "supplier_sco_fco"].includes(tx.currentStepKey))) {
+    throw new Error("step_not_skippable");
+  }
 
   tx.offerSkipped = true;
   tx.offerSkipReason = input.reason;

@@ -122,7 +122,10 @@ Internal `FK-DG-YYYY-NNNNNN` links buyer sale + supplier purchase(s). Buyer and 
 
 **Templates seeded:** buyer 6-step, supplier 6-step.
 
-**Gap:** No service persists step transitions on `Transaction` + `WorkflowStep` from API handlers.
+**Implemented (code is the source of truth):**
+- Transitions: `POST /api/transactions/[id]/transition` (buyer: `transaction-service.ts`, supplier: `procurement-service.ts`).
+- Skip Step 1 (both portals): `POST /api/transactions/[id]/skip-offer`, permission `transactions:approve`, reason of at least 16 chars (buyer) / 8 (supplier), audited, only while Step 1 is current (409 otherwise). Staff button is in `TransactionWorkflowActions`.
+- Step templates: admins add/edit/remove document and workflow templates at `/admin/step-templates` (`/api/admin/step-templates`); each save creates a new version and is audited. Built-in step lists in `src/lib/workflows` remain the default until a stored template is used. AI-assisted drafting is NOT built.
 
 ## 7. Document lifecycle (target)
 
@@ -132,7 +135,14 @@ Draft → Under Review → Changes Requested → Approved → Sent → Viewed �
 
 Submitted and signed revisions are **immutable**. Reopen creates new `DocumentVersion`.
 
-**Current:** Models exist; no upload or PDF generation pipeline.
+**Current:**
+- Document types: loi, sco, fco, icpo, spa, proposed_lc_wording, proforma_invoice, passport_copy, contract_amendment, other.
+- Staff create/revise a SCO/FCO with an editable price: `POST /api/transactions/[id]/offers` (prefill via GET from Product.internalPrice, staff only). Every call creates a new `DocumentVersion` (price in `structuredData`); sent versions are locked. Staff UI: Documents tab > Staff document tools.
+- Step 3 PDFs (PSA/SPA, LC wording, proforma invoice): `.../documents/[docId]/generate`. Filename `<TX>_STEP<n>_<TYPE>_v<n>.pdf`, PDF metadata carries transaction number, step and type. `Document.stepKey` is set from the type.
+- Lifecycle actions (staff only): submit, review, send (sets buyerVisible or supplierVisible by transaction side), share_banking (`Document.bankingVisible`, audited).
+- Banking read interface: `GET /api/transactions/[id]/documents/by-step[?bankingOnly=1]` (internal users) returns documents grouped by `stepKey`.
+- Signing (steps 4/5): `.../documents/[docId]/sign`; the signer must first upload a `passport_copy` document on that transaction. Buyer, supplier and staff (admin-recorded) paths each check organisation ownership.
+- External users can download only sent/signed versions or their own uploads.
 
 ## 8. Banking statuses (target)
 

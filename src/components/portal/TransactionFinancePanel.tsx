@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { FinanceTransactionTabs } from "@/components/portal/FinanceTransactionTabs";
+import { TransactionEntriesManager } from "@/components/portal/TransactionEntriesManager";
 
 type Profitability = {
   revenue?: string;
@@ -80,6 +82,10 @@ export function TransactionFinancePanel({
           </div>
         ))}
       </dl>
+      <div className="mt-6 space-y-6">
+        <FinanceTransactionTabs transactionId={transactionId} />
+        <TransactionEntriesManager transactionId={transactionId} />
+      </div>
     </section>
   );
 }

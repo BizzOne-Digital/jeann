@@ -50,6 +50,9 @@ export async function POST(
     if (error instanceof Error && error.message === "forbidden") {
       return NextResponse.json({ error: "Forbidden." }, { status: 403 });
     }
+    if (error instanceof Error && error.message === "step_not_skippable") {
+      return NextResponse.json({ error: "Step 1 can no longer be skipped." }, { status: 409 });
+    }
     return handleApiError(error);
   }
 }

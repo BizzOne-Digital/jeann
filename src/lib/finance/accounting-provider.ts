@@ -21,7 +21,24 @@ export type AccountingSyncResult = {
   idempotencyKey: string;
 };
 
+export type CorporateTaxEstimateInput = {
+  periodLabel: string;
+  currency: string;
+  /** Operational profit for the period (not audited taxable income). */
+  operationalProfit: string;
+  /** Rate as decimal string, if configured. */
+  rate?: string;
+};
+
+export type CorporateTaxEstimateResult = {
+  ok: boolean;
+  estimatedTax?: string;
+  message?: string;
+};
+
 export interface AccountingProvider {
+  /** Optional: real accounting/tax providers implement this; the development mock does not. */
+  estimateCorporateTax?(input: CorporateTaxEstimateInput): Promise<CorporateTaxEstimateResult>;
   readonly name: string;
   testConnection(): Promise<AccountingConnectionResult>;
   syncCustomer(internalOrgId: string): Promise<AccountingSyncResult>;

@@ -12,6 +12,9 @@ export async function GET(
     const auth = await requireApiAuth({ permissions: "transactions:read" });
     if ("error" in auth) return auth.error;
 
+    if (!auth.ctx.isInternal) {
+      return NextResponse.json({ error: "Forbidden." }, { status: 403 });
+    }
     const { id } = await params;
     const result = await validateTransactionConsistency(id);
     return NextResponse.json(result);

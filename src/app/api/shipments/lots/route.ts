@@ -48,8 +48,37 @@ export async function GET() {
 
     const items = await ShipmentLot.find(query).sort({ createdAt: -1 }).limit(100).lean();
 
+    // Monitoring data (staff / CEO / GM only): latest tracking event + tracking numbers per lot.
+    const latestByLot = new Map<string, { eventType: string; eventTimestamp: Date; location?: string; confidence: string }>();
+    const trackingByLot = new Map<string, string[]>();
+    if (isInternal && items.length) {
+      const { ShipmentTrackingEvent, TrackingReference } = await import("@/models");
+      const lotIds = items.map((l) => l._id);
+      const [events, refs] = await Promise.all([
+        ShipmentTrackingEvent.find({ shipmentLotId: { $in: lotIds } }).sort({ eventTimestamp: -1 }).limit(2000).lean(),
+        TrackingReference.find({ shipmentLotId: { $in: lotIds }, active: true }).lean(),
+      ]);
+      for (const e of events) {
+        const k = String(e.shipmentLotId);
+        if (!latestByLot.has(k)) latestByLot.set(k, e);
+      }
+      for (const r of refs) {
+        const k = String(r.shipmentLotId);
+        trackingByLot.set(k, [...(trackingByLot.get(k) ?? []), r.trackingNumber]);
+      }
+    }
+
     return NextResponse.json({
       items: items.map((lot) => ({
+        trackingNumbers: trackingByLot.get(String(lot._id)),
+        latestTracking: latestByLot.has(String(lot._id))
+          ? {
+              eventType: latestByLot.get(String(lot._id))!.eventType,
+              eventTimestamp: latestByLot.get(String(lot._id))!.eventTimestamp,
+              location: latestByLot.get(String(lot._id))!.location,
+              confidence: latestByLot.get(String(lot._id))!.confidence === "confirmed" ? "confirmed" : "estimated",
+            }
+          : undefined,
         id: String(lot._id),
         shipmentLotNumber: lot.shipmentLotNumber,
         transactionId: String(lot.transactionId),
