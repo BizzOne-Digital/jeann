@@ -32,6 +32,15 @@ export interface CisAuthorizedSigner {
   authorizedAt?: Date;
 }
 
+export interface CisOwner {
+  name: string;
+  ownershipPercent?: number;
+  isUbo?: boolean;
+  isCorporate?: boolean;
+  isControllingPerson?: boolean;
+  nationality?: string;
+}
+
 export interface CisProductInterest {
   productId?: Types.ObjectId;
   productName?: string;
@@ -55,6 +64,9 @@ export interface ICisProfile {
   incorporationDate?: Date;
   jurisdiction?: string;
   businessType?: string;
+  legalStructure?: string;
+  corporateEmail?: string;
+  owners?: CisOwner[];
   website?: string;
   representatives: CisRepresentative[];
   contacts: ContactFields[];
@@ -82,6 +94,18 @@ const representativeSchema = new Schema<CisRepresentative>(
     phone: { type: String },
     nationality: { type: String },
     ownershipPercent: { type: String },
+  },
+  { _id: false },
+);
+
+const ownerSchema = new Schema<CisOwner>(
+  {
+    name: { type: String, required: true },
+    ownershipPercent: { type: Number, min: 0, max: 100 },
+    isUbo: { type: Boolean, default: false },
+    isCorporate: { type: Boolean, default: false },
+    isControllingPerson: { type: Boolean, default: false },
+    nationality: { type: String },
   },
   { _id: false },
 );
@@ -134,6 +158,9 @@ const cisProfileSchema = new Schema<ICisProfile>(
     incorporationDate: { type: Date },
     jurisdiction: { type: String },
     businessType: { type: String },
+    legalStructure: { type: String },
+    corporateEmail: { type: String, lowercase: true, trim: true },
+    owners: { type: [ownerSchema], default: [] },
     website: { type: String },
     representatives: [representativeSchema],
     contacts: [contactSchema],

@@ -4,6 +4,7 @@ import { ForbiddenError, AuthError } from "@/lib/auth/errors";
 import { getSession } from "@/lib/auth/session";
 import { authContextHasPermission, getAuthContext, type AuthContext } from "@/lib/auth/auth-context";
 import { writeAuditEvent } from "@/lib/audit/log";
+import { isPrimaryContactVerified } from "@/lib/auth/verification-policy";
 import { logSecurityEvent } from "@/lib/security/security-service";
 
 export type ApiAuthOptions = {
@@ -43,9 +44,12 @@ export async function requireApiAuth(options: ApiAuthOptions = {}): Promise<ApiA
     };
   }
 
-  if (options.requireEmailVerified && !ctx.user.emailVerified) {
+  if (options.requireEmailVerified && !isPrimaryContactVerified(ctx.user)) {
     return {
-      error: NextResponse.json({ error: "Email verification required." }, { status: 403 }),
+      error: NextResponse.json(
+        { error: "Please verify your phone number (primary) to continue." },
+        { status: 403 },
+      ),
     };
   }
 
@@ -81,6 +85,27 @@ export function handleApiError(error: unknown): NextResponse {
   }
   if (error instanceof ForbiddenError) {
     return NextResponse.json({ error: error.message }, { status: 403 });
+  }
+  if (error instanceof Error && error.name === "StepRuleError") {
+    const status = (error as Error & { status?: number }).status ?? 409;
+    return NextResponse.json({ error: error.message }, { status });
+  }
+  if (error instanceof Error) {
+    const known: Record<string, [string, number]> = {
+      version_not_submitted: ["Only a submitted version can be reviewed.", 409],
+      version_not_signable: ["This document version cannot be signed.", 409],
+      version_not_approved: ["The version must be approved before sending.", 409],
+      version_not_editable: ["This version is locked and cannot be changed.", 409],
+      passport_required: ["Upload a passport copy of the signer (document type Passport copy) before signing.", 422],
+      document_not_found: ["Document not found.", 404],
+      version_not_found: ["Version not found.", 404],
+      comment_required: ["A comment is required.", 422],
+      reason_required: ["A reason is required.", 422],
+      invalid_transition: ["That status change is not allowed from the current state.", 409],
+      not_found: ["Not found.", 404],
+    };
+    const hit = known[error.message];
+    if (hit) return NextResponse.json({ error: hit[0] }, { status: hit[1] });
   }
   console.error("[api]", error);
   return NextResponse.json({ error: "Unable to process request." }, { status: 500 });

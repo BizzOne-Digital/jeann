@@ -3,6 +3,7 @@ import { z } from "zod";
 import { requireApiAuth, handleApiError } from "@/lib/api/require-api-auth";
 import { uploadSignedDocument } from "@/lib/transactions/trade-document-service";
 import { auditRequestMeta } from "@/lib/api/request-meta";
+import { assertSignAllowed } from "@/lib/transactions/step-service";
 import { assertSupplierTransactionAccess } from "@/lib/transactions/supplier-access";
 import { assertBuyerTransactionAccess } from "@/lib/transactions/buyer-access";
 
@@ -20,7 +21,9 @@ export async function POST(
     const { Transaction, Document } = await import("@/models");
     const tx = await Transaction.findById(transactionId).lean();
     if (!tx) return NextResponse.json({ error: "Not found." }, { status: 404 });
-    const doc = await Document.findById(docId).select("transactionId").lean();
+    const doc = await Document.findById(docId)
+      .select("transactionId buyerVisible supplierVisible internalOnly")
+      .lean();
     if (!doc || String(doc.transactionId) !== String(tx._id)) {
       return NextResponse.json({ error: "Not found." }, { status: 404 });
     }
@@ -36,6 +39,14 @@ export async function POST(
     if (String(tx.organizationId) !== access.organizationId) {
       return NextResponse.json({ error: "Forbidden." }, { status: 403 });
     }
+    if (!auth.ctx.isInternal) {
+      const visible = tx.side === "supplier" ? doc.supplierVisible : doc.buyerVisible;
+      if (!visible || doc.internalOnly) {
+        return NextResponse.json({ error: "Forbidden." }, { status: 403 });
+      }
+    }
+    const signer = auth.ctx.isInternal ? "staff" : "external";
+    await assertSignAllowed({ tx, signer });
 
     const form = await request.formData();
     const file = form.get("file");
@@ -60,6 +71,7 @@ export async function POST(
       filename: file.name,
       mimeType: file.type || "application/pdf",
       method: auth.ctx.isInternal ? "admin_recorded_external" : "controlled_upload",
+      signer,
       organizationId: access.organizationId,
       transactionId,
       ipHash: meta.ipHash,
@@ -68,12 +80,6 @@ export async function POST(
 
     return NextResponse.json({ ok: true, checksum: result.checksum });
   } catch (error) {
-    if (error instanceof Error && error.message === "passport_required") {
-      return NextResponse.json(
-        { error: "Upload a passport copy of the signer (document type Passport copy) before signing." },
-        { status: 422 },
-      );
-    }
     return handleApiError(error);
   }
 }

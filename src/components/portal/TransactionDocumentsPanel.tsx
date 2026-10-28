@@ -25,12 +25,53 @@ export function TransactionDocumentsPanel({
   documents,
   canUpload = true,
   onUploaded,
+  mode = "buyer",
+  isStaff = false,
 }: {
   transactionId: string;
   documents: Doc[];
   canUpload?: boolean;
   onUploaded?: () => void;
+  mode?: "buyer" | "supplier";
+  isStaff?: boolean;
 }) {
+  const uploadTypes = UPLOAD_TYPES.filter((t) =>
+    isStaff
+      ? true
+      : mode === "buyer"
+        ? ["icpo", "loi", "passport_copy", "other"].includes(t.value)
+        : t.value !== "icpo",
+  );
+  const [signDocId, setSignDocId] = useState<string | null>(null);
+  const [signerName, setSignerName] = useState("");
+
+  async function signAndReturn(e: FormEvent<HTMLFormElement>, d: Doc) {
+    e.preventDefault();
+    const file = (e.currentTarget.elements.namedItem("signedFile") as HTMLInputElement).files?.[0];
+    if (!file || !d.currentVersionId || !signerName.trim()) return;
+    setBusy(true);
+    setMessage(null);
+    try {
+      const body = new FormData();
+      body.append("file", file);
+      body.append("versionId", d.currentVersionId);
+      body.append("signatoryName", signerName.trim());
+      const res = await fetch(`/api/transactions/${transactionId}/documents/${d.id}/sign`, {
+        method: "POST",
+        credentials: "same-origin",
+        body,
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error ?? "Signing failed");
+      setMessage("Signed copy returned. Remember a passport copy of the signer must be uploaded first.");
+      setSignDocId(null);
+      onUploaded?.();
+    } catch (err) {
+      setMessage(err instanceof Error ? err.message : "Signing failed.");
+    } finally {
+      setBusy(false);
+    }
+  }
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [docType, setDocType] = useState("icpo");
@@ -102,13 +143,35 @@ export function TransactionDocumentsPanel({
                   {d.documentType ?? "document"} · {d.workflowStatus.replaceAll("_", " ")}
                 </p>
               </div>
-              <button
-                type="button"
-                className="btn text-xs"
-                onClick={() => download(d.id)}
-              >
-                Download
-              </button>
+              <div className="flex gap-2">
+                {!isStaff && d.documentType === "spa" && ["sent", "approved"].includes(d.workflowStatus) ? (
+                  <button type="button" className="btn text-xs" onClick={() => setSignDocId(d.id)}>
+                    Sign and return
+                  </button>
+                ) : null}
+                <button type="button" className="btn text-xs" onClick={() => download(d.id)}>
+                  Download
+                </button>
+              </div>
+              {signDocId === d.id ? (
+                <form onSubmit={(e) => signAndReturn(e, d)} className="w-full space-y-2 pt-2">
+                  <p className="text-xs text-[var(--stone)]">
+                    Upload the signed and stamped PDF. A passport copy of the signer must already be
+                    uploaded (type: Passport copy).
+                  </p>
+                  <input
+                    className="field"
+                    placeholder="Signatory full name"
+                    value={signerName}
+                    onChange={(e) => setSignerName(e.target.value)}
+                    required
+                  />
+                  <input className="field text-sm" name="signedFile" type="file" accept=".pdf,.png,.jpg,.jpeg" required />
+                  <button className="btn btn-primary" type="submit" disabled={busy}>
+                    Submit signed copy
+                  </button>
+                </form>
+              ) : null}
             </li>
           ))}
         </ul>
@@ -125,7 +188,7 @@ export function TransactionDocumentsPanel({
                 value={docType}
                 onChange={(e) => setDocType(e.target.value)}
               >
-                {UPLOAD_TYPES.map((t) => (
+                {uploadTypes.map((t) => (
                   <option key={t.value} value={t.value}>
                     {t.label}
                   </option>

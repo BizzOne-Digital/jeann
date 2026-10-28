@@ -9,6 +9,18 @@ export const KYB_DOCUMENT_TYPES = [
   "proof_of_address",
   "tax_registration",
   "authorized_signatory",
+  "registry_extract",
+  "articles_of_incorporation",
+  "annual_filings",
+  "director_list",
+  "authorization_evidence",
+  "ownership_chart",
+  "ubo_declaration",
+  "identity_document",
+  "license_permit",
+  "trade_reference",
+  "financial_statements",
+  "bank_reference",
   "other",
 ] as const;
 

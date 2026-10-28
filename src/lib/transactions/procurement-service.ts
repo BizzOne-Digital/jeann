@@ -1,3 +1,4 @@
+import { assertSkipStepOne } from "@/lib/transactions/step-service";
 import { Types } from "mongoose";
 import {
   allocateSupplierPurchaseTransactionNumber,
@@ -143,6 +144,7 @@ export async function transitionProcurementTransaction(input: {
   actorUserId: string;
   permissions: Permission[];
   comment?: string;
+  supplierVisibleComment?: string;
   reason?: string;
 }) {
   await tryConnectMongo();
@@ -177,7 +179,7 @@ export async function transitionProcurementTransaction(input: {
     tx.status = "active";
   }
 
-  if (input.comment) tx.supplierVisibleNotes = input.comment;
+  if (input.supplierVisibleComment?.trim()) tx.supplierVisibleNotes = input.supplierVisibleComment.trim();
   await tx.save();
 
   await writeAuditEvent({
@@ -206,9 +208,12 @@ export async function skipProcurementOffer(input: {
   if (!tx || tx.transactionType !== "supplier_purchase") throw new Error("not_found");
   if (!hasPermission(input.permissions, "transactions:approve")) throw new Error("forbidden");
   if (!input.reason?.trim() || input.reason.trim().length < 8) throw new Error("reason_required");
-  if (tx.offerSkipped || (tx.currentStepKey && !["sco_fco", "supplier_sco_fco"].includes(tx.currentStepKey))) {
-    throw new Error("step_not_skippable");
-  }
+  await assertSkipStepOne({
+    tx,
+    actorUserId: input.actorUserId,
+    approverUserId: input.approverUserId ?? "",
+    reason: input.reason,
+  });
 
   tx.offerSkipped = true;
   tx.offerSkipReason = input.reason;
@@ -219,6 +224,16 @@ export async function skipProcurementOffer(input: {
   tx.workflowStatus = "icpo_draft";
   tx.currentStepKey = "finekarts_icpo";
   await tx.save();
+
+  const { WorkflowStep } = await import("@/models");
+  await WorkflowStep.updateOne(
+    { transactionId: tx._id, key: "supplier_sco_fco" },
+    { $set: { status: "skipped", skipReason: input.reason, locked: true } },
+  );
+  await WorkflowStep.updateOne(
+    { transactionId: tx._id, key: "finekarts_icpo", status: "not_started" },
+    { $set: { status: "ready" } },
+  );
 
   await writeAuditEvent({
     action: "procurement.offer_skipped",

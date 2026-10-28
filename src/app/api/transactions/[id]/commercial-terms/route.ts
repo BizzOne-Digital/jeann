@@ -3,6 +3,8 @@ import { z } from "zod";
 import { Types } from "mongoose";
 import { requireApiAuth, handleApiError } from "@/lib/api/require-api-auth";
 import { money, mulMoney } from "@/lib/finance/money";
+import { assertBuyerTransactionAccess } from "@/lib/transactions/buyer-access";
+import { whitelistBuyerTerms } from "@/lib/transactions/step-rules";
 import { assertOrgScope } from "@/lib/authorization/authorize";
 
 export const runtime = "nodejs";
@@ -43,16 +45,21 @@ export async function GET(
       await assertOrgScope(auth.ctx.userId, String(tx.organizationId), "transactions:read");
     }
 
-    if (!auth.ctx.isInternal && tx.side === "supplier") {
-      return NextResponse.json({ error: "Forbidden." }, { status: 403 });
+    if (!auth.ctx.isInternal) {
+      if (tx.side === "supplier") {
+        return NextResponse.json({ error: "Forbidden." }, { status: 403 });
+      }
+      const access = await assertBuyerTransactionAccess(auth.ctx.userId);
+      if (access.organizationId !== String(tx.organizationId)) {
+        return NextResponse.json({ error: "Forbidden." }, { status: 403 });
+      }
     }
     const terms = await CommercialTerms.findOne({ transactionId: tx._id })
       .sort({ version: -1 })
       .lean();
-    if (terms && !auth.ctx.isInternal) {
-      delete (terms as { internalNotes?: string }).internalNotes;
-    }
-    return NextResponse.json({ terms });
+    return NextResponse.json({
+      terms: auth.ctx.isInternal ? terms : whitelistBuyerTerms(terms as Record<string, unknown> | null),
+    });
   } catch (error) {
     return handleApiError(error);
   }

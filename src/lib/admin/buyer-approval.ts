@@ -75,6 +75,7 @@ export async function decideBuyerOrganization(input: {
   decision: "approved" | "rejected";
   actorUserId: Types.ObjectId | string;
   reason?: string;
+  kybOverrideReason?: string;
 }) {
   const { Organization, OrganizationMembership, User, Approval } = await import("@/models");
   const org = await Organization.findOne({
@@ -96,6 +97,16 @@ export async function decideBuyerOrganization(input: {
     ? await User.findOne({ _id: membership.userId, deletedAt: null }).lean()
     : null;
 
+  let kyb: { overridden: boolean; warning?: string } = { overridden: false };
+  if (input.decision === "approved") {
+    const { assertKybApprovalGate } = await import("@/lib/kyb/kyb-service");
+    kyb = await assertKybApprovalGate({
+      organizationId: String(org._id),
+      actorUserId: String(input.actorUserId),
+      overrideReason: input.kybOverrideReason,
+    });
+  }
+
   org.status = input.decision === "approved" ? "verified" : "rejected";
   org.onboardingStatus = input.decision === "approved" ? "approved" : "rejected";
   if (input.decision === "approved") {
@@ -113,5 +124,5 @@ export async function decideBuyerOrganization(input: {
     reason: input.reason,
   });
 
-  return { org: org.toObject(), contact };
+  return { org: org.toObject(), contact, kyb };
 }

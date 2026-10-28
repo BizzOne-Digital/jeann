@@ -22,6 +22,8 @@ export function AdminBuyerReview({
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [canOverride, setCanOverride] = useState(false);
+  const [overrideReason, setOverrideReason] = useState("");
 
   async function decide(decision: "approved" | "rejected") {
     setSaving(true);
@@ -30,10 +32,20 @@ export function AdminBuyerReview({
     const res = await fetch(`/api/admin/buyers/${encodeURIComponent(buyer._id)}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ decision, reason: reason.trim() || undefined }),
+      body: JSON.stringify({
+        decision,
+        reason: reason.trim() || undefined,
+        kybOverrideReason: overrideReason.trim() || undefined,
+      }),
     });
-    const data = (await res.json()) as { buyer?: AdminBuyerDetail; error?: string };
+    const data = (await res.json()) as {
+      buyer?: AdminBuyerDetail;
+      error?: string;
+      code?: string;
+      canOverride?: boolean;
+    };
     setSaving(false);
+    if (res.status === 409) setCanOverride(Boolean(data.canOverride));
     if (!res.ok || !data.buyer) {
       setError(data.error || "Unable to save decision.");
       return;
@@ -96,6 +108,16 @@ export function AdminBuyerReview({
                 onChange={(e) => setReason(e.target.value)}
               />
             </label>
+            {canOverride ? (
+              <label className="label">
+                KYB override reason (CEO/GM only, audited)
+                <textarea
+                  className="field mt-1 min-h-16"
+                  value={overrideReason}
+                  onChange={(e) => setOverrideReason(e.target.value)}
+                />
+              </label>
+            ) : null}
             <div className="flex flex-wrap gap-3">
               <button
                 type="button"

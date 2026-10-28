@@ -20,6 +20,8 @@ export function buildOnboardingSteps(input: {
   emailVerified: boolean;
   phoneVerified: boolean;
   phoneRequired: boolean;
+  /** True when SMS is configured: phone is the primary check and email is secondary. */
+  phonePrimary?: boolean;
   termsAccepted: boolean;
   cisStatus?: CisProfileStatus;
   orgOnboardingStatus?: OrganizationOnboardingStatus;
@@ -35,13 +37,13 @@ export function buildOnboardingSteps(input: {
   return [
     {
       key: "email_verification",
-      label: "Verify email",
+      label: input.phonePrimary ? "Verify company email (secondary)" : "Verify email",
       complete: input.emailVerified,
-      required: true,
+      required: !input.phonePrimary,
     },
     {
       key: "phone_verification",
-      label: "Verify phone",
+      label: input.phonePrimary ? "Verify phone (primary code)" : "Verify phone",
       complete: input.phoneVerified,
       required: input.phoneRequired,
     },
@@ -105,12 +107,15 @@ export async function loadOnboardingStatusForUser(userId: string, organizationId
   );
 
   const { getEnv } = await import("@/lib/config/env");
-  const phoneRequired = getEnv().REQUIRE_PHONE_OTP;
+  const { isSmsConfigured } = await import("@/lib/auth/verification-policy");
+  const phonePrimary = isSmsConfigured();
+  const phoneRequired = getEnv().REQUIRE_PHONE_OTP || phonePrimary;
 
   const steps = buildOnboardingSteps({
     emailVerified: Boolean(user.emailVerifiedAt),
     phoneVerified: Boolean(user.phoneVerifiedAt),
     phoneRequired,
+    phonePrimary,
     termsAccepted: termsComplete,
     cisStatus: cis?.status,
     orgOnboardingStatus: org.onboardingStatus,

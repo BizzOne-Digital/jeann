@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { WorkflowStepper, type WorkflowStepView } from "@/components/portal/WorkflowStepper";
 import { TransactionDocumentsPanel } from "@/components/portal/TransactionDocumentsPanel";
+import { BuyerLcDetailsForm } from "@/components/portal/BuyerLcDetailsForm";
 import { StaffDocumentTools } from "@/components/portal/StaffDocumentTools";
 import { TransactionFinancePanel } from "@/components/portal/TransactionFinancePanel";
 import { TransactionWorkflowActions } from "@/components/portal/TransactionWorkflowActions";
@@ -156,6 +157,8 @@ export function TransactionWorkspaceTabs({
             documents={data.documents}
             canUpload
             onUploaded={load}
+            mode={workflowMode}
+            isStaff={showStaffActions}
           />
           {showStaffActions && data.isInternal !== false ? (
             <StaffDocumentTools
@@ -169,6 +172,10 @@ export function TransactionWorkspaceTabs({
 
       {tab === "finance" && showFinance ? (
         <TransactionFinancePanel transactionId={transactionId} canView />
+      ) : null}
+
+      {tab === "banking" && !showStaffActions && workflowMode === "buyer" ? (
+        <BuyerLcDetailsForm transactionId={transactionId} onSaved={load} />
       ) : null}
 
       {tab === "banking" ? (

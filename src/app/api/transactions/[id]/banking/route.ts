@@ -4,6 +4,7 @@ import { requireApiAuth, handleApiError } from "@/lib/api/require-api-auth";
 import {
   selectBankingInstrument,
   confirmIssuanceRequested,
+  recordBuyerLcDetails,
   ALLOWED_INSTRUMENT_TYPES,
 } from "@/lib/transactions/banking-service";
 import { assertOrgScope } from "@/lib/authorization/authorize";
@@ -29,12 +30,25 @@ export async function GET(
     const record = await BankingInstrumentRecord.findOne({
       transactionId: id,
     }).lean();
-    if (record && !auth.ctx.isInternal) {
-      delete (record as { internalNotes?: string }).internalNotes;
-    }
+    const safeRecord =
+      record && !auth.ctx.isInternal
+        ? {
+            instrumentType: record.instrumentType,
+            status: record.status,
+            lcNumber: record.lcNumber,
+            issuingBank: record.issuingBank,
+            advisingBank: record.advisingBank,
+            amount: record.amount,
+            currency: record.currency,
+            expiryDate: record.expiryDate,
+            buyerNotes: record.buyerNotes,
+            buyerInstructions: record.buyerInstructions,
+            issuanceReference: record.issuanceReference,
+          }
+        : record;
 
     return NextResponse.json({
-      record,
+      record: safeRecord,
       allowedInstrumentTypes: ALLOWED_INSTRUMENT_TYPES,
     });
   } catch (error) {
@@ -47,6 +61,18 @@ const selectSchema = z.object({
   proposedWordingDocumentId: z.string().optional(),
   internalNotes: z.string().optional(),
   buyerInstructions: z.string().optional(),
+});
+
+const lcSchema = z.object({
+  action: z.literal("record_lc_details"),
+  instrumentType: z.string(),
+  lcNumber: z.string().max(80).optional(),
+  issuingBank: z.string().max(200).optional(),
+  advisingBank: z.string().max(200).optional(),
+  amount: z.string().regex(/^d+(.d{1,2})?$/).optional(),
+  currency: z.string().length(3).optional(),
+  expiryDate: z.string().optional(),
+  notes: z.string().max(2000).optional(),
 });
 
 const confirmSchema = z.object({
@@ -62,6 +88,20 @@ export async function POST(
   try {
     const { id } = await params;
     const raw = await request.json();
+
+    if (raw.action === "record_lc_details") {
+      const auth = await requireApiAuth({ permissions: "transactions:read" });
+      if ("error" in auth) return auth.error;
+      const access = await assertBuyerTransactionAccess(auth.ctx.userId);
+      const body = lcSchema.parse(raw);
+      const record = await recordBuyerLcDetails({
+        transactionId: id,
+        organizationId: access.organizationId,
+        userId: auth.ctx.userId,
+        details: body,
+      });
+      return NextResponse.json({ ok: true, status: record.status });
+    }
 
     if (raw.action === "confirm_issuance") {
       const auth = await requireApiAuth({ permissions: "transactions:read" });

@@ -4,6 +4,7 @@ import { requireApiAuth, handleApiError } from "@/lib/api/require-api-auth";
 import { reviewCisProfile } from "@/lib/onboarding/cis-service";
 import { writeAuditEvent } from "@/lib/audit/log";
 import { auditRequestMeta } from "@/lib/api/request-meta";
+import { KybGateError } from "@/lib/kyb/kyb-service";
 
 export const runtime = "nodejs";
 
@@ -12,6 +13,7 @@ const reviewSchema = z.object({
   cisProfileId: z.string(),
   comment: z.string().trim().max(2000).optional(),
   reason: z.string().trim().max(2000).optional(),
+  kybOverrideReason: z.string().trim().max(2000).optional(),
 });
 
 export async function POST(
@@ -28,13 +30,14 @@ export async function POST(
       return NextResponse.json({ error: "Invalid review request." }, { status: 422 });
     }
 
-    await reviewCisProfile({
+    const result = await reviewCisProfile({
       organizationId,
       cisProfileId: parsed.data.cisProfileId,
       actorUserId: auth.ctx.userId,
       action: parsed.data.action,
       comment: parsed.data.comment,
       reason: parsed.data.reason,
+      kybOverrideReason: parsed.data.kybOverrideReason,
     });
 
     const meta = auditRequestMeta(request);
@@ -45,11 +48,22 @@ export async function POST(
       actorUserId: auth.ctx.userId,
       organizationId,
       ...meta,
-      metadata: { cisProfileId: parsed.data.cisProfileId },
+      metadata: {
+        cisProfileId: parsed.data.cisProfileId,
+        kybOverridden: result.kybOverridden,
+        kybWarning: result.kybWarning,
+        kybOverrideReason: result.kybOverridden ? parsed.data.kybOverrideReason : undefined,
+      },
     });
 
     return NextResponse.json({ ok: true });
   } catch (error) {
+    if (error instanceof KybGateError) {
+      return NextResponse.json(
+        { error: error.message, code: error.code, canOverride: error.canOverride },
+        { status: 409 },
+      );
+    }
     if (error instanceof Error) {
       if (error.message === "comment_required" || error.message === "reason_required") {
         return NextResponse.json({ error: "A comment or reason is required." }, { status: 422 });

@@ -8,6 +8,7 @@ import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
 import type { TransactionWorkflowStatus } from "@/models/Transaction";
 import type { Permission } from "@/lib/authorization/permissions";
 import { hasPermission } from "@/lib/authorization/permissions";
+import { assertSkipStepOne } from "@/lib/transactions/step-service";
 import { BUYER_WORKFLOW_STEPS } from "@/lib/workflows/transitions";
 
 export async function createTransactionFromRequest(input: {
@@ -107,6 +108,8 @@ export async function transitionTransaction(input: {
   actorUserId: string;
   permissions: Permission[];
   comment?: string;
+  /** Optional explicit message shown to the buyer. Internal comment is never exposed. */
+  buyerVisibleComment?: string;
   reason?: string;
 }) {
   await tryConnectMongo();
@@ -146,8 +149,8 @@ export async function transitionTransaction(input: {
     // already skipped
   }
 
-  if (input.comment) {
-    tx.buyerVisibleNotes = input.comment;
+  if (input.buyerVisibleComment?.trim()) {
+    tx.buyerVisibleNotes = input.buyerVisibleComment.trim();
   }
 
   await tx.save();
@@ -184,9 +187,12 @@ export async function skipOfferStep(input: {
   const { Transaction, WorkflowStep } = await import("@/models");
   const tx = await Transaction.findById(input.transactionId);
   if (!tx) throw new Error("not_found");
-  if (tx.offerSkipped || (tx.currentStepKey && !["sco_fco", "supplier_sco_fco"].includes(tx.currentStepKey))) {
-    throw new Error("step_not_skippable");
-  }
+  await assertSkipStepOne({
+    tx,
+    actorUserId: input.actorUserId,
+    approverUserId: input.approverUserId ?? "",
+    reason: input.reason,
+  });
 
   tx.offerSkipped = true;
   tx.offerSkipReason = input.reason;

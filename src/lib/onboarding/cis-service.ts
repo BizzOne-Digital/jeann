@@ -39,6 +39,9 @@ export async function getOrCreateDraftCis(organizationId: string) {
       incorporationDate: latest.incorporationDate,
       jurisdiction: latest.jurisdiction,
       businessType: latest.businessType,
+      legalStructure: latest.legalStructure,
+      corporateEmail: latest.corporateEmail,
+      owners: latest.owners,
       website: latest.website,
       representatives: latest.representatives,
       contacts: latest.contacts,
@@ -85,6 +88,9 @@ export async function updateCisDraft(
     "incorporationDate",
     "jurisdiction",
     "businessType",
+    "legalStructure",
+    "corporateEmail",
+    "owners",
     "website",
     "representatives",
     "contacts",
@@ -172,7 +178,9 @@ export async function reviewCisProfile(input: {
   action: "approve" | "reject" | "request_changes" | "start_review";
   comment?: string;
   reason?: string;
-}): Promise<void> {
+  /** CEO/GM only: reason to approve despite an unable_to_validate / escalated outcome. */
+  kybOverrideReason?: string;
+}): Promise<{ kybOverridden: boolean; kybWarning?: string }> {
   await tryConnectMongo();
   const { CisProfile, Organization } = await import("@/models");
 
@@ -187,6 +195,19 @@ export async function reviewCisProfile(input: {
 
   const actorId = new Types.ObjectId(input.actorUserId);
   const now = new Date();
+  let kybOverridden = false;
+  let kybWarning: string | undefined;
+
+  if (input.action === "approve") {
+    const { assertKybApprovalGate } = await import("@/lib/kyb/kyb-service");
+    const gate = await assertKybApprovalGate({
+      organizationId: input.organizationId,
+      actorUserId: input.actorUserId,
+      overrideReason: input.kybOverrideReason,
+    });
+    kybOverridden = gate.overridden;
+    kybWarning = gate.warning;
+  }
 
   switch (input.action) {
     case "start_review":
@@ -238,6 +259,7 @@ export async function reviewCisProfile(input: {
 
   await cis.save();
   await org.save();
+  return { kybOverridden, kybWarning };
 }
 
 export async function listCisVersions(organizationId: string) {

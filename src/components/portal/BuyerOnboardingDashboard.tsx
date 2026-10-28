@@ -19,6 +19,11 @@ type Props = {
   canTrade: boolean;
   cisStatus?: string;
   reviewComments?: string;
+  /** The organization's own submission progress (never staff validation findings). */
+  kybProgress?: {
+    label: string;
+    sections: { key: string; label: string; complete: boolean }[];
+  };
 };
 
 export function BuyerOnboardingDashboard({
@@ -31,6 +36,7 @@ export function BuyerOnboardingDashboard({
   canTrade,
   cisStatus,
   reviewComments,
+  kybProgress,
 }: Props) {
   const [emailCode, setEmailCode] = useState("");
   const [phoneCode, setPhoneCode] = useState("");
@@ -165,6 +171,23 @@ export function BuyerOnboardingDashboard({
         <p className="mt-1 text-sm text-[var(--stone)]">
           Current submission: {cisStatus ?? "not started"}
         </p>
+        {kybProgress ? (
+          <div className="mt-3">
+            <p className="text-sm font-medium text-[var(--navy)]">
+              Company information checklist: {kybProgress.label}
+            </p>
+            <ul className="mt-2 space-y-1 text-sm">
+              {kybProgress.sections.map((s) => (
+                <li key={s.key} className={s.complete ? "text-green-700" : "text-[var(--stone)]"}>
+                  {s.complete ? "Done" : "To do"}: {s.label}
+                </li>
+              ))}
+            </ul>
+            <p className="mt-2 text-xs text-[var(--stone)]">
+              This shows what you have submitted. Verification of your information is carried out by our team.
+            </p>
+          </div>
+        ) : null}
         <a href="/portal/buyer/cis" className="btn btn-primary mt-4 inline-flex text-sm">
           {cisStatus === "changes_requested" ? "Revise CIS/KYB" : "Complete CIS/KYB"}
         </a>

@@ -11,6 +11,7 @@ import {
   getCurrentTerms,
 } from "@/lib/terms/service";
 import { sendVerificationCode } from "@/lib/auth/verification-service";
+import { sendRegistrationCodes } from "@/lib/auth/registration-codes";
 import {
   notifyAdminNewBuyerRegistration,
   notifyBuyerRegistrationReceived,
@@ -95,21 +96,21 @@ export async function POST(request: NextRequest) {
     const existingEmail = await User.findOne({ email, deletedAt: null });
     if (existingEmail) {
       if (existingEmail.status === "pending_verification") {
-        const verification = await sendVerificationCode({
+        const verification = await sendRegistrationCodes({
           userId: existingEmail._id,
-          channel: "email",
-          purpose: "email_verify",
-          destination: email,
+          email,
+          phone: existingEmail.phone,
           name: existingEmail.name,
         });
         return NextResponse.json(
           {
             ok: true,
             status: "pending_verification",
-            redirectTo: "/login",
+            redirectTo: `/verify-email?email=${encodeURIComponent(email)}`,
             message:
-              "This email is already registered but not verified. We sent a new verification code — check your inbox, then sign in.",
-            devVerificationCode: verification.devCode,
+              "This email is already registered but not verified. We sent new verification codes — enter them on the next screen.",
+            devVerificationCode: verification.devEmailCode,
+            devPhoneCode: verification.devPhoneCode,
           },
           { status: 200 },
         );
@@ -251,12 +252,11 @@ export async function POST(request: NextRequest) {
       actorUserId: user._id,
     });
 
-    const verification = await sendVerificationCode({
+    const verification = await sendRegistrationCodes({
       userId: user._id,
-      channel: "email",
-      purpose: "email_verify",
-      destination: email,
-      name: input.contactName,
+      email,
+      phone: input.phone,
+      name: contactName,
     });
 
     try {
@@ -287,7 +287,7 @@ export async function POST(request: NextRequest) {
       ...meta,
       metadata: {
         duplicateReviewFlag: duplicateCheck.duplicateReviewFlag,
-        devVerificationCode: verification.devCode,
+        devVerificationCode: verification.devEmailCode,
       },
     });
 
@@ -295,9 +295,11 @@ export async function POST(request: NextRequest) {
       {
         ok: true,
         status: "pending_verification",
-        redirectTo: "/login",
-        message: "Registration received. Verify your email to continue onboarding.",
-        devVerificationCode: verification.devCode,
+        redirectTo: `/verify-email?email=${encodeURIComponent(email)}`,
+        message:
+          "Registration received. Enter the code sent to your phone (primary), then the code sent to your company email.",
+        devVerificationCode: verification.devEmailCode,
+        devPhoneCode: verification.devPhoneCode,
       },
       { status: 201 },
     );

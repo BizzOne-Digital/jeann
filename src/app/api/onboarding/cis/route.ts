@@ -20,7 +20,22 @@ const patchSchema = z.object({
   registrationNumber: z.string().trim().max(80).optional(),
   jurisdiction: z.string().trim().max(120).optional(),
   businessType: z.string().trim().max(120).optional(),
+  legalStructure: z.string().trim().max(120).optional(),
+  corporateEmail: z.string().trim().email().max(200).optional(),
   website: z.string().trim().max(200).optional(),
+  owners: z
+    .array(
+      z.object({
+        name: z.string().trim().min(1).max(200),
+        ownershipPercent: z.number().min(0).max(100).optional(),
+        isUbo: z.boolean().optional(),
+        isCorporate: z.boolean().optional(),
+        isControllingPerson: z.boolean().optional(),
+        nationality: z.string().trim().max(80).optional(),
+      }),
+    )
+    .max(50)
+    .optional(),
   businessActivities: z.string().trim().max(2000).optional(),
   representatives: z.array(z.record(z.string(), z.unknown())).optional(),
   contacts: z.array(z.record(z.string(), z.unknown())).optional(),

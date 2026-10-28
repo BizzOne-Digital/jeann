@@ -4,6 +4,7 @@ import { getAuthContext } from "@/lib/auth/auth-context";
 import { loadOnboardingStatusForUser } from "@/lib/onboarding/status";
 import { assertOrgScope } from "@/lib/authorization/authorize";
 import { getEnv } from "@/lib/config/env";
+import { isSmsConfigured } from "@/lib/auth/verification-policy";
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
 import type { Permission } from "@/lib/authorization/permissions";
 
@@ -42,8 +43,14 @@ export async function assertBuyerTransactionAccess(
   const blockers: string[] = [];
   const env = getEnv();
 
-  if (!ctx.user.emailVerified) blockers.push("email_verification");
-  if (env.REQUIRE_PHONE_OTP && !ctx.user.phoneVerified) blockers.push("phone_verification");
+  if (isSmsConfigured()) {
+    if (!ctx.user.phoneVerified) blockers.push("phone_verification");
+  } else if (!ctx.user.emailVerified) {
+    blockers.push("email_verification");
+  }
+  if (env.REQUIRE_PHONE_OTP && !ctx.user.phoneVerified && !blockers.includes("phone_verification")) {
+    blockers.push("phone_verification");
+  }
 
   const onboarding = await loadOnboardingStatusForUser(userId, membership.organizationId);
   if (!onboarding?.canTrade) {

@@ -24,6 +24,14 @@ export interface IBankingInstrumentRecord {
   internalNotes?: string;
   issuanceRequestedAt?: Date;
   issuanceReference?: string;
+  /** Buyer-entered metadata. The portal only records details; it never issues an instrument. */
+  lcNumber?: string;
+  issuingBank?: string;
+  advisingBank?: string;
+  amount?: string;
+  currency?: string;
+  expiryDate?: Date;
+  buyerNotes?: string;
 }
 
 export type BankingInstrumentRecordLean = LeanDoc<IBankingInstrumentRecord>;
@@ -55,6 +63,13 @@ const bankingInstrumentRecordSchema = new Schema<IBankingInstrumentRecord>(
     internalNotes: { type: String },
     issuanceRequestedAt: { type: Date },
     issuanceReference: { type: String, trim: true },
+    lcNumber: { type: String, trim: true, maxlength: 80 },
+    issuingBank: { type: String, trim: true, maxlength: 200 },
+    advisingBank: { type: String, trim: true, maxlength: 200 },
+    amount: { type: String, trim: true, maxlength: 40 },
+    currency: { type: String, trim: true, uppercase: true, maxlength: 3 },
+    expiryDate: { type: Date },
+    buyerNotes: { type: String, maxlength: 2000 },
   },
   { timestamps: true },
 );

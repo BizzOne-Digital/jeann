@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireApiAuth, handleApiError } from "@/lib/api/require-api-auth";
 import { getDocumentDownloadUrl } from "@/lib/transactions/trade-document-service";
+import { assertBuyerTransactionAccess } from "@/lib/transactions/buyer-access";
+import { assertSupplierTransactionAccess } from "@/lib/transactions/supplier-access";
 import { assertOrgScope } from "@/lib/authorization/authorize";
 
 export const runtime = "nodejs";
@@ -28,6 +30,13 @@ export async function GET(
     if (!auth.ctx.isInternal) {
       await assertOrgScope(auth.ctx.userId, String(tx.organizationId), "documents:download");
       if (doc.internalOnly) {
+        return NextResponse.json({ error: "Forbidden." }, { status: 403 });
+      }
+      const access =
+        tx.side === "supplier"
+          ? await assertSupplierTransactionAccess(auth.ctx.userId)
+          : await assertBuyerTransactionAccess(auth.ctx.userId);
+      if (access.organizationId !== String(tx.organizationId)) {
         return NextResponse.json({ error: "Forbidden." }, { status: 403 });
       }
       const isBuyer = tx.side === "buyer";

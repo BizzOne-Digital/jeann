@@ -9,6 +9,7 @@ import {
   sendDocumentToBuyer,
   uploadSignedDocument,
 } from "@/lib/transactions/trade-document-service";
+import { assertDocumentAllowed } from "@/lib/transactions/step-service";
 import { assertOrgScope } from "@/lib/authorization/authorize";
 import { auditRequestMeta } from "@/lib/api/request-meta";
 
@@ -72,6 +73,13 @@ export async function POST(
     const { Transaction } = await import("@/models");
     const tx = await Transaction.findById(transactionId);
     if (!tx) return NextResponse.json({ error: "Not found." }, { status: 404 });
+
+    await assertDocumentAllowed({
+      tx,
+      isInternal: true,
+      documentType: body.documentType,
+      action: "create",
+    });
 
     const doc = await createTradeDocument({
       transactionId,

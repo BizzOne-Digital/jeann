@@ -10,6 +10,8 @@ export const runtime = "nodejs";
 const transitionSchema = z.object({
   toStatus: z.string(),
   comment: z.string().optional(),
+  buyerVisibleComment: z.string().max(2000).optional(),
+  supplierVisibleComment: z.string().max(2000).optional(),
   reason: z.string().optional(),
 });
 
@@ -18,8 +20,12 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const auth = await requireApiAuth({ permissions: "transactions:approve" });
+    // Each transition carries its own permission (checked in the service), so documents:write staff can run theirs.
+    const auth = await requireApiAuth();
     if ("error" in auth) return auth.error;
+    if (!auth.ctx.isInternal) {
+      return NextResponse.json({ error: "Forbidden." }, { status: 403 });
+    }
 
     const { id } = await params;
     const body = transitionSchema.parse(await request.json());
@@ -38,6 +44,7 @@ export async function POST(
             actorUserId: auth.ctx.userId,
             permissions: auth.ctx.permissions,
             comment: body.comment,
+            supplierVisibleComment: body.supplierVisibleComment,
             reason: body.reason,
           })
         : await transitionTransaction({
@@ -46,6 +53,7 @@ export async function POST(
             actorUserId: auth.ctx.userId,
             permissions: auth.ctx.permissions,
             comment: body.comment,
+            buyerVisibleComment: body.buyerVisibleComment,
             reason: body.reason,
           });
 

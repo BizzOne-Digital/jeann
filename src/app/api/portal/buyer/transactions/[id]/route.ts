@@ -5,6 +5,7 @@ import {
   loadTransactionForBuyer,
 } from "@/lib/transactions/buyer-access";
 import { getTransactionBankingSummary } from "@/lib/banking/transaction-banking-summary";
+import { whitelistBuyerTerms } from "@/lib/transactions/step-rules";
 import { WORKFLOW_STATUS_LABELS, allowedTransitionsFrom } from "@/lib/transactions/workflow";
 
 export const runtime = "nodejs";
@@ -46,9 +47,7 @@ export async function GET(
         submittedAt: tx.submittedAt,
         createdAt: tx.createdAt,
       },
-      commercialTerms: terms
-        ? { ...terms, internalNotes: undefined }
-        : terms,
+      commercialTerms: whitelistBuyerTerms(terms as Record<string, unknown> | null),
       workflowSteps: steps.map((s) => ({
         key: s.key,
         order: s.order,

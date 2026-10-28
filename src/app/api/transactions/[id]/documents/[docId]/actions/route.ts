@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { requireApiAuth, handleApiError } from "@/lib/api/require-api-auth";
+import { assertDocumentAllowed } from "@/lib/transactions/step-service";
 import { writeAuditEvent } from "@/lib/audit/log";
 import { submitDocumentRevision, reviewDocumentRevision, sendDocumentToBuyer } from "@/lib/transactions/trade-document-service";
 
@@ -19,7 +20,7 @@ export async function POST(
     }
 
     const { id: actionTxId, docId } = await params;
-    const { Document: DocModel } = await import("@/models");
+    const { Document: DocModel, Transaction: TxModel } = await import("@/models");
     const owned = await DocModel.exists({ _id: docId, transactionId: actionTxId });
     if (!owned) return NextResponse.json({ error: "Not found." }, { status: 404 });
     const body = z.object({
@@ -77,6 +78,16 @@ export async function POST(
 
     if (!auth.ctx.permissions.includes("documents:write")) {
       return NextResponse.json({ error: "Forbidden." }, { status: 403 });
+    }
+    const sendTx = await TxModel.findById(actionTxId).select("side transactionType").lean();
+    const sendDoc = await DocModel.findById(docId).select("documentType").lean();
+    if (sendTx && sendDoc?.documentType) {
+      await assertDocumentAllowed({
+        tx: { _id: actionTxId, side: sendTx.side, transactionType: sendTx.transactionType },
+        isInternal: true,
+        documentType: sendDoc.documentType,
+        action: "send",
+      });
     }
     const version = await sendDocumentToBuyer({
       documentId: docId,

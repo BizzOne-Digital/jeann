@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { requireApiAuth, handleApiError } from "@/lib/api/require-api-auth";
 import { authContextHasPermission } from "@/lib/auth/auth-context";
+import { ForbiddenError } from "@/lib/auth/errors";
 import { assertShipmentLotAccess } from "@/lib/shipments/access";
 import {
   loadShipmentLotTrackingView,
@@ -19,7 +20,8 @@ function viewerSideFromRoles(
 ): "internal" | "buyer" | "supplier" {
   if (isInternal) return "internal";
   if (roles.some((r) => r.startsWith("buyer_"))) return "buyer";
-  return "supplier";
+  if (roles.some((r) => r.startsWith("supplier_"))) return "supplier";
+  throw new ForbiddenError("Shipment access denied for this role");
 }
 
 export async function GET(_request: NextRequest, { params }: Params) {

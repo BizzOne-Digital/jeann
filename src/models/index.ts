@@ -131,3 +131,4 @@ export * from "./BackupVerification";
 export * from "./UATTestCase";
 export * from "./ReleaseRecord";
 export * from "./StoredUpload";
+export * from "./KybValidationRecord";

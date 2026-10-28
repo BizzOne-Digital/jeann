@@ -145,3 +145,42 @@ export async function advanceForDocumentEvent(input: {
     actorUserId: input.actorUserId,
   });
 }
+
+/** Server-side checks for skipping Step 1 (verbal agreement). Throws StepRuleError. */
+export async function assertSkipStepOne(input: {
+  tx: { _id: unknown; side?: string; transactionType?: string; workflowStatus: string; offerSkipped?: boolean };
+  actorUserId: string;
+  approverUserId: string;
+  reason: string;
+}) {
+  const { canSkipStepOne } = await import("@/lib/transactions/step-rules");
+  const { getAuthContext } = await import("@/lib/auth/auth-context");
+  await tryConnectMongo();
+  const { Document } = await import("@/models");
+  if (input.actorUserId === input.approverUserId) {
+    throw new StepRuleError("The approver must be a different manager than the person requesting the skip.", 403);
+  }
+  const approver = await getAuthContext(input.approverUserId);
+  const approverOk =
+    approver &&
+    approver.isInternal &&
+    approver.permissions.includes("transactions:approve");
+  if (!approverOk) {
+    throw new StepRuleError("The selected approver does not hold approval authority.", 403);
+  }
+  const side = sideOf(input.tx);
+  const steps = await loadStepDefs(input.tx._id);
+  const released = await Document.exists({
+    transactionId: input.tx._id,
+    documentType: { $in: ["sco", "fco"] },
+    workflowStatus: { $in: ["approved", "sent", "viewed", "signed"] },
+  });
+  const msg = canSkipStepOne({
+    side,
+    workflowStatus: input.tx.workflowStatus,
+    step1Status: steps.find((s) => s.order === 1)?.status,
+    hasReleasedOffer: Boolean(released),
+    alreadySkipped: Boolean(input.tx.offerSkipped),
+  });
+  if (msg) throw new StepRuleError(msg, 409);
+}

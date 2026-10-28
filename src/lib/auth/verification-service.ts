@@ -8,6 +8,7 @@ import {
 } from "@/lib/auth/otp";
 import type { VerificationPurpose, VerificationChannel } from "@/models/VerificationChallenge";
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
+import { isPrimaryContactVerified } from "@/lib/auth/verification-policy";
 
 export async function sendVerificationCode(input: {
   userId: string | Types.ObjectId;
@@ -74,16 +75,8 @@ export async function markEmailVerified(userId: string | Types.ObjectId): Promis
   await tryConnectMongo();
   const { User } = await import("@/models");
   const uid = userId instanceof Types.ObjectId ? userId : new Types.ObjectId(userId);
-  await User.updateOne(
-    { _id: uid },
-  {
-    $set: { emailVerifiedAt: new Date() },
-    $setOnInsert: {},
-  });
-  const user = await User.findById(uid).lean();
-  if (user && user.status === "pending_verification") {
-    await User.updateOne({ _id: uid }, { $set: { status: "active" } });
-  }
+  await User.updateOne({ _id: uid }, { $set: { emailVerifiedAt: new Date() } });
+  await activateIfPrimaryVerified(uid);
 }
 
 export async function markPhoneVerified(userId: string | Types.ObjectId): Promise<void> {
@@ -92,4 +85,19 @@ export async function markPhoneVerified(userId: string | Types.ObjectId): Promis
   const { User } = await import("@/models");
   const uid = userId instanceof Types.ObjectId ? userId : new Types.ObjectId(userId);
   await User.updateOne({ _id: uid }, { $set: { phoneVerifiedAt: new Date() } });
+  await activateIfPrimaryVerified(uid);
+}
+
+/** Phone code is primary; email code is primary only when SMS is not configured. */
+async function activateIfPrimaryVerified(uid: Types.ObjectId): Promise<void> {
+  const { User } = await import("@/models");
+  const user = await User.findById(uid).lean();
+  if (!user || user.status !== "pending_verification") return;
+  const verified = isPrimaryContactVerified({
+    emailVerified: Boolean(user.emailVerifiedAt),
+    phoneVerified: Boolean(user.phoneVerifiedAt),
+  });
+  if (verified) {
+    await User.updateOne({ _id: uid }, { $set: { status: "active" } });
+  }
 }

@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { assertDocumentAllowed } from "@/lib/transactions/step-service";
+import { assertBuyerTransactionAccess } from "@/lib/transactions/buyer-access";
+import { assertSupplierTransactionAccess } from "@/lib/transactions/supplier-access";
 import { requireApiAuth, handleApiError } from "@/lib/api/require-api-auth";
 import { uploadTransactionDocument } from "@/lib/transactions/trade-document-service";
 import { assertOrgScope } from "@/lib/authorization/authorize";
@@ -53,7 +56,23 @@ export async function POST(
 
     if (!auth.ctx.isInternal) {
       await assertOrgScope(auth.ctx.userId, String(tx.organizationId), "documents:write");
+      const access =
+        tx.side === "supplier"
+          ? await assertSupplierTransactionAccess(auth.ctx.userId)
+          : await assertBuyerTransactionAccess(auth.ctx.userId);
+      if (access.organizationId !== String(tx.organizationId)) {
+        return NextResponse.json({ error: "Forbidden." }, { status: 403 });
+      }
     }
+    if (file.size > 15 * 1024 * 1024) {
+      return NextResponse.json({ error: "File is too large (15 MB maximum)." }, { status: 413 });
+    }
+    await assertDocumentAllowed({
+      tx,
+      isInternal: auth.ctx.isInternal,
+      documentType: parsed.data.documentType,
+      action: "upload",
+    });
 
     const buffer = Buffer.from(await file.arrayBuffer());
     const isBuyerSide = tx.side === "buyer";

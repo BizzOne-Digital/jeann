@@ -59,6 +59,27 @@ export function StaffDocumentTools({
   const [internalPrice, setInternalPrice] = useState("");
   const [s3Type, setS3Type] = useState("spa");
   const [s3Text, setS3Text] = useState("");
+  const [signName, setSignName] = useState("");
+
+  function counterSign(e: FormEvent<HTMLFormElement>, d: Doc) {
+    e.preventDefault();
+    const file = (e.currentTarget.elements.namedItem("signedFile") as HTMLInputElement).files?.[0];
+    if (!file || !d.currentVersionId || !signName.trim()) return;
+    void run(async () => {
+      const body = new FormData();
+      body.append("file", file);
+      body.append("versionId", d.currentVersionId as string);
+      body.append("signatoryName", signName.trim());
+      const res = await fetch(`/api/transactions/${transactionId}/documents/${d.id}/sign`, {
+        method: "POST",
+        credentials: "same-origin",
+        body,
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error ?? "Counter-signing failed.");
+      return "Counter-signed copy recorded.";
+    });
+  }
 
   useEffect(() => {
     fetch(`/api/transactions/${transactionId}/offers`, { credentials: "same-origin" })
@@ -239,6 +260,14 @@ export function StaffDocumentTools({
                   {d.bankingVisible ? "Unshare banking" : "Share with banking"}
                 </button>
               </span>
+              {d.documentType === "spa" && ["sent", "approved", "signed"].includes(d.workflowStatus) ? (
+                <form onSubmit={(e) => counterSign(e, d)} className="flex w-full flex-wrap items-center gap-2 pt-1">
+                  <input className="field w-48" placeholder="Finekarts signatory" value={signName}
+                    onChange={(e) => setSignName(e.target.value)} required />
+                  <input className="field text-sm" name="signedFile" type="file" accept=".pdf" required />
+                  <button className="btn" type="submit" disabled={busy}>Record counter-signed copy</button>
+                </form>
+              ) : null}
             </li>
           ))}
         </ul>

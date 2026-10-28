@@ -41,5 +41,8 @@ export async function getTransactionBankingSummary(
     status,
     statusLabel: BANKING_STATUS_LABELS[status] ?? status.replaceAll("_", " "),
     instrumentType: legacy.instrumentType ?? "Banking instrument",
+    instrumentId: legacy.lcNumber,
+    currency: legacy.currency,
+    amount: legacy.amount,
   };
 }

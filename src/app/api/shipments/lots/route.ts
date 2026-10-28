@@ -51,11 +51,18 @@ export async function GET() {
     // Monitoring data (staff / CEO / GM only): latest tracking event + tracking numbers per lot.
     const latestByLot = new Map<string, { eventType: string; eventTimestamp: Date; location?: string; confidence: string }>();
     const trackingByLot = new Map<string, string[]>();
-    if (isInternal && items.length) {
+    const listRoles = ctx.memberships.flatMap((m) => m.roles);
+    const listIsBuyer = listRoles.some((r) => r.startsWith("buyer_"));
+    const eventScope: Record<string, unknown> = isInternal
+      ? {}
+      : listIsBuyer
+        ? { buyerVisible: true }
+        : { supplierVisible: true };
+    if (items.length) {
       const { ShipmentTrackingEvent, TrackingReference } = await import("@/models");
       const lotIds = items.map((l) => l._id);
       const [events, refs] = await Promise.all([
-        ShipmentTrackingEvent.find({ shipmentLotId: { $in: lotIds } }).sort({ eventTimestamp: -1 }).limit(2000).lean(),
+        ShipmentTrackingEvent.find({ shipmentLotId: { $in: lotIds }, ...eventScope }).sort({ eventTimestamp: -1 }).limit(2000).lean(),
         TrackingReference.find({ shipmentLotId: { $in: lotIds }, active: true }).lean(),
       ]);
       for (const e of events) {

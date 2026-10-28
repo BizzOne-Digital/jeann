@@ -16,6 +16,8 @@ export function TransactionWorkflowActions({
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [skipReason, setSkipReason] = useState("");
+  const [approverId, setApproverId] = useState("");
+  const [visibleComment, setVisibleComment] = useState("");
   const [toStatus, setToStatus] = useState(allowedTransitions[0] ?? "");
 
   if (!isInternal) return null;
@@ -30,7 +32,11 @@ export function TransactionWorkflowActions({
         method: "POST",
         headers: { "content-type": "application/json" },
         credentials: "same-origin",
-        body: JSON.stringify({ toStatus }),
+        body: JSON.stringify({
+          toStatus,
+          buyerVisibleComment: visibleComment.trim() || undefined,
+          supplierVisibleComment: visibleComment.trim() || undefined,
+        }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error ?? "Transition failed");
@@ -51,16 +57,14 @@ export function TransactionWorkflowActions({
     setBusy(true);
     setMessage(null);
     try {
-      const me = await fetch("/api/auth/session", { credentials: "same-origin" }).then((r) =>
-        r.json(),
-      );
+      if (!approverId.trim()) throw new Error("Enter the user ID of a different approving manager.");
       const res = await fetch(`/api/transactions/${transactionId}/skip-offer`, {
         method: "POST",
         headers: { "content-type": "application/json" },
         credentials: "same-origin",
         body: JSON.stringify({
           reason: skipReason,
-          approverUserId: me.userId,
+          approverUserId: approverId.trim(),
         }),
       });
       const json = await res.json();
@@ -97,6 +101,15 @@ export function TransactionWorkflowActions({
               ))}
             </select>
           </label>
+          <label className="label text-xs">
+            Message visible to the counterparty (optional)
+            <input
+              className="field mt-1"
+              value={visibleComment}
+              onChange={(e) => setVisibleComment(e.target.value)}
+              placeholder="Leave empty to share nothing"
+            />
+          </label>
           <button className="btn btn-primary" type="submit" disabled={busy}>
             Apply transition
           </button>
@@ -111,6 +124,14 @@ export function TransactionWorkflowActions({
             value={skipReason}
             onChange={(e) => setSkipReason(e.target.value)}
             placeholder="Describe the verbal agreement and approver reference…"
+          />
+        </label>
+        <label className="label mt-2 block text-xs">
+          Approving manager user ID (must be someone other than you)
+          <input
+            className="field mt-1"
+            value={approverId}
+            onChange={(e) => setApproverId(e.target.value)}
           />
         </label>
         <button

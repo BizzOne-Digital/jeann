@@ -8,6 +8,7 @@ import { writeAuditEvent } from "@/lib/audit/log";
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
 import type { TradeDocumentType, TradeDocumentStatus } from "@/models/Document";
 import { defaultStepForDocument, stepNumberFor, documentFilename } from "@/lib/transactions/document-steps";
+import { advanceForDocumentEvent } from "@/lib/transactions/step-service";
 import type { DocumentVersionStatus } from "@/models/DocumentVersion";
 
 const TEST_WATERMARK = "TEST DOCUMENT — NOT VALID — FOR SOFTWARE QA ONLY";
@@ -51,6 +52,100 @@ export async function createTradeDocument(input: {
   });
 }
 
+/** Commercial-terms prefill for SCO/FCO/PSA/LC wording/proforma. Never includes internal price or cost data. */
+export async function buildDocumentPrefill(
+  transactionId: string,
+  documentType?: string,
+): Promise<Record<string, unknown>> {
+  if (!documentType || !["sco", "fco", "spa", "proposed_lc_wording", "proforma_invoice", "icpo"].includes(documentType)) {
+    return {};
+  }
+  const { Transaction, CommercialTerms, Organization } = await import("@/models");
+  const tx = await Transaction.findById(transactionId).select("organizationId side").lean();
+  if (!tx) return {};
+  const [terms, org] = await Promise.all([
+    CommercialTerms.findOne({ transactionId: tx._id }).sort({ version: -1 }).lean(),
+    Organization.findById(tx.organizationId).select("legalName").lean(),
+  ]);
+  const out: Record<string, unknown> = {
+    seller: tx.side === "supplier" ? org?.legalName : "Finekarts",
+    buyer: tx.side === "supplier" ? "Finekarts" : org?.legalName,
+  };
+  if (terms) {
+    Object.assign(out, {
+      product: terms.productName,
+      quantity: terms.quantity ? String(terms.quantity) + " " + terms.quantityUnit : undefined,
+      unitPrice: terms.unitPrice ? String(terms.currency) + " " + String(terms.unitPrice) : undefined,
+      totalValue: terms.totalEstimatedValue ? String(terms.currency) + " " + String(terms.totalEstimatedValue) : undefined,
+      incoterm: terms.incoterm,
+      loadingPort: terms.loadingPort,
+      destinationPort: terms.destinationPort,
+      paymentTerms: terms.paymentProposal,
+      shipmentSchedule: terms.shipmentSchedule,
+      packaging: terms.packaging,
+      inspection: terms.inspectionCompany,
+    });
+  }
+  return out;
+}
+
+/** Approval produces a clean (non-draft) PDF version so the version that is sent carries no DRAFT stamp. */
+async function createCleanApprovedVersion(documentId: string, draftVersionId: string, actorUserId: string) {
+  const { Document, DocumentVersion, Transaction } = await import("@/models");
+  const draft = await DocumentVersion.findById(draftVersionId);
+  const doc = await Document.findById(documentId);
+  if (!draft || !doc || draft.watermarkPolicy !== "draft" || !draft.structuredData) return null;
+  const sd = { ...(draft.structuredData as Record<string, unknown>) };
+  const clauses = Array.isArray(sd._clauseTexts) ? (sd._clauseTexts as string[]) : [];
+  const tx = doc.transactionId
+    ? await Transaction.findById(doc.transactionId).select("side transactionNumber").lean()
+    : null;
+  const side = tx?.side === "supplier" ? "supplier" : "buyer";
+  const stepNumber = stepNumberFor(doc.stepKey, side);
+  const latest = await DocumentVersion.findOne({ documentId: doc._id }).sort({ version: -1 }).select("version").lean();
+  const version = (latest?.version ?? draft.version) + 1;
+  const bytes = await buildPdf({
+    title: doc.title,
+    transactionNumber: tx?.transactionNumber ?? "",
+    documentType: doc.documentType ?? "document",
+    stepNumber,
+    version,
+    isDraft: false,
+    structuredData: sd,
+    clauseTexts: clauses,
+  });
+  const buffer = Buffer.from(bytes);
+  const name = documentFilename({
+    transactionNumber: tx?.transactionNumber,
+    stepNumber,
+    documentType: doc.documentType,
+    version,
+  });
+  const storageKey = `trade/${doc.organizationId}/${doc.transactionId}/${doc._id}/v${version}-${nanoid(12)}`;
+  await getStorageProvider().putPrivate({ key: storageKey, body: buffer, mimeType: "application/pdf", filename: name });
+  const clean = await DocumentVersion.create({
+    documentId: doc._id,
+    version,
+    storageKey,
+    checksum: checksumBuffer(buffer),
+    mimeType: "application/pdf",
+    size: buffer.length,
+    originalFilename: name,
+    uploadedBy: new Types.ObjectId(actorUserId),
+    status: "approved",
+    watermarkPolicy: "none",
+    locked: true,
+    structuredData: sd,
+    selectedClauseIds: [],
+  });
+  draft.status = "superseded";
+  draft.supersededAt = new Date();
+  await draft.save();
+  doc.currentVersionId = clean._id;
+  await doc.save();
+  return clean;
+}
+
 export async function generateDocumentPdf(input: {
   documentId: string;
   actorUserId: string;
@@ -80,6 +175,13 @@ export async function generateDocumentPdf(input: {
     .lean();
   const version = latest ? latest.version + 1 : 1;
 
+  const prefill = doc.transactionId ? await buildDocumentPrefill(String(doc.transactionId), doc.documentType) : {};
+  const structuredData: Record<string, unknown> = { ...prefill };
+  for (const [k, v] of Object.entries(input.structuredData)) {
+    if (v !== undefined && v !== null && v !== "") structuredData[k] = v;
+  }
+  structuredData._clauseTexts = input.clauseTexts ?? [];
+
   const pdfBytes = await buildPdf({
     title: doc.title,
     transactionNumber: txNumber,
@@ -87,7 +189,7 @@ export async function generateDocumentPdf(input: {
     stepNumber,
     version,
     isDraft: input.isDraft ?? true,
-    structuredData: input.structuredData,
+    structuredData,
     clauseTexts: input.clauseTexts ?? [],
   });
 
@@ -119,13 +221,22 @@ export async function generateDocumentPdf(input: {
     status: "draft",
     watermarkPolicy: input.isDraft ? "draft" : "none",
     locked: false,
-    structuredData: input.structuredData,
+    structuredData,
     selectedClauseIds: [],
   });
 
   doc.currentVersionId = versionDoc._id;
   doc.workflowStatus = "draft";
   await doc.save();
+
+  if (doc.transactionId) {
+    await advanceForDocumentEvent({
+      transactionId: String(doc.transactionId),
+      documentType: doc.documentType,
+      event: "created",
+      actorUserId: input.actorUserId,
+    });
+  }
 
   return { document: doc, version: versionDoc };
 }
@@ -175,6 +286,7 @@ async function buildPdf(input: {
   y -= 8;
 
   for (const [key, value] of Object.entries(input.structuredData)) {
+    if (key.startsWith("_")) continue;
     if (value === undefined || value === null || value === "") continue;
     draw(`${key}: ${String(value)}`);
   }
@@ -228,6 +340,15 @@ export async function submitDocumentRevision(input: {
     { _id: input.documentId },
     { $set: { workflowStatus: "under_review" } },
   );
+  const submittedDoc = await Document.findById(input.documentId).select("transactionId documentType").lean();
+  if (submittedDoc?.transactionId) {
+    await advanceForDocumentEvent({
+      transactionId: String(submittedDoc.transactionId),
+      documentType: submittedDoc.documentType,
+      event: "submitted",
+      actorUserId: input.actorUserId,
+    });
+  }
 
   return version;
 }
@@ -242,8 +363,12 @@ export async function reviewDocumentRevision(input: {
   await tryConnectMongo();
   const { Document, DocumentVersion, DocumentReview } = await import("@/models");
 
-  const version = await DocumentVersion.findById(input.versionId);
+  const version = await DocumentVersion.findOne({
+    _id: input.versionId,
+    documentId: input.documentId,
+  });
   if (!version) throw new Error("version_not_found");
+  if (version.status !== "submitted") throw new Error("version_not_submitted");
 
   if (input.decision === "changes_requested" && !input.comments?.trim()) {
     throw new Error("comment_required");
@@ -276,8 +401,22 @@ export async function reviewDocumentRevision(input: {
     { _id: input.documentId },
     { $set: { workflowStatus: docStatusMap[input.decision] } },
   );
+  let cleanVersionId: string | undefined;
+  if (input.decision === "approved") {
+    const clean = await createCleanApprovedVersion(input.documentId, String(version._id), input.reviewerUserId);
+    if (clean) cleanVersionId = String(clean._id);
+    const reviewedDoc = await Document.findById(input.documentId).select("transactionId documentType").lean();
+    if (reviewedDoc?.transactionId) {
+      await advanceForDocumentEvent({
+        transactionId: String(reviewedDoc.transactionId),
+        documentType: reviewedDoc.documentType,
+        event: "approved",
+        actorUserId: input.reviewerUserId,
+      });
+    }
+  }
 
-  return version;
+  return Object.assign(version, { cleanVersionId });
 }
 
 export async function sendDocumentToBuyer(input: {
@@ -312,6 +451,16 @@ export async function sendDocumentToBuyer(input: {
     },
   );
 
+  const sentDoc = await Document.findById(input.documentId).select("transactionId documentType").lean();
+  if (sentDoc?.transactionId) {
+    await advanceForDocumentEvent({
+      transactionId: String(sentDoc.transactionId),
+      documentType: sentDoc.documentType,
+      event: "sent",
+      actorUserId: input.actorUserId,
+    });
+  }
+
   await writeAuditEvent({
     action: "document.sent",
     targetType: "document",
@@ -333,6 +482,7 @@ export async function uploadSignedDocument(input: {
   filename: string;
   mimeType: string;
   method: "controlled_upload" | "admin_recorded_external";
+  signer?: "external" | "staff";
   organizationId: string;
   transactionId: string;
   ipHash?: string;
@@ -344,9 +494,13 @@ export async function uploadSignedDocument(input: {
   const version = await DocumentVersion.findOne({
     _id: input.versionId,
     documentId: input.documentId,
-    status: { $in: ["sent", "approved"] },
+    status: { $in: ["sent", "approved", "signed"] },
   });
   if (!version) throw new Error("version_not_signable");
+  const latestVersion = await DocumentVersion.findOne({ documentId: input.documentId })
+    .sort({ version: -1 })
+    .select("version")
+    .lean();
 
   const passport = await Document.exists({
     transactionId: new Types.ObjectId(input.transactionId),
@@ -383,16 +537,45 @@ export async function uploadSignedDocument(input: {
     status: "completed",
   });
 
-  version.status = "signed";
-  version.locked = true;
-  await version.save();
+  // The signed copy becomes its own immutable version so every party (and the banking adviser) can download it.
+  const signedVersion = await DocumentVersion.create({
+    documentId: version.documentId,
+    version: (latestVersion?.version ?? version.version) + 1,
+    storageKey,
+    checksum,
+    mimeType: input.mimeType,
+    size: input.buffer.length,
+    originalFilename: input.filename,
+    uploadedBy: new Types.ObjectId(input.actorUserId),
+    status: "signed",
+    watermarkPolicy: "none",
+    locked: true,
+    structuredData: { signedBy: input.signatoryName, signer: input.signer ?? "external" },
+    selectedClauseIds: [],
+  });
 
-  await Document.updateOne(
-    { _id: input.documentId },
-    { $set: { workflowStatus: "signed" } },
-  );
+  const signedDoc = await Document.findByIdAndUpdate(
+    input.documentId,
+    {
+      $set: {
+        workflowStatus: "signed",
+        currentVersionId: signedVersion._id,
+        bankingVisible: true,
+        internalOnly: false,
+      },
+    },
+    { new: true },
+  ).select("documentType").lean();
 
-  return { checksum, storageKey };
+  await advanceForDocumentEvent({
+    transactionId: input.transactionId,
+    documentType: signedDoc?.documentType,
+    event: "signed",
+    signer: input.signer ?? "external",
+    actorUserId: input.actorUserId,
+  });
+
+  return { checksum, storageKey, signedVersionId: String(signedVersion._id) };
 }
 
 /** Upload a new trade document file (e.g. buyer ICPO, passport copy, supplier SPA). */
@@ -454,6 +637,13 @@ export async function uploadTransactionDocument(input: {
   doc.currentVersionId = versionDoc._id;
   doc.workflowStatus = input.submitForReview ? "under_review" : "draft";
   await doc.save();
+
+  await advanceForDocumentEvent({
+    transactionId: input.transactionId,
+    documentType: input.documentType,
+    event: input.submitForReview ? "submitted" : "created",
+    actorUserId: input.actorUserId,
+  });
 
   await writeAuditEvent({
     action: "document.uploaded",

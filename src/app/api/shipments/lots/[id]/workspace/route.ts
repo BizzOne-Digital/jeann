@@ -19,6 +19,9 @@ export async function GET(_request: NextRequest, { params }: Params) {
     const isInternal = auth.ctx.isInternal;
     const isBuyer = roles.some((r) => r.startsWith("buyer_"));
     const isSupplier = roles.some((r) => r.startsWith("supplier_"));
+    if (!isInternal && !isBuyer && !isSupplier) {
+      return NextResponse.json({ error: "Forbidden." }, { status: 403 });
+    }
     const viewerSide: "internal" | "buyer" | "supplier" = isInternal
       ? "internal"
       : isBuyer

@@ -8,6 +8,7 @@ import {
   notifyBuyerRejected,
 } from "@/lib/email/buyer-notifications";
 import { tryConnectMongo } from "@/lib/db/mongoose";
+import { KybGateError } from "@/lib/kyb/kyb-service";
 
 export const runtime = "nodejs";
 
@@ -16,6 +17,7 @@ type RouteContext = { params: Promise<{ id: string }> };
 const decisionSchema = z.object({
   decision: z.enum(["approved", "rejected"]),
   reason: z.string().trim().max(1000).optional(),
+  kybOverrideReason: z.string().trim().max(2000).optional(),
 });
 
 export async function GET(_request: NextRequest, context: RouteContext) {
@@ -80,12 +82,25 @@ export async function POST(request: NextRequest, context: RouteContext) {
   }
 
   try {
-    const { org, contact } = await decideBuyerOrganization({
+    const { org, contact, kyb } = await decideBuyerOrganization({
       orgId: id,
       decision: parsed.data.decision,
       actorUserId: new Types.ObjectId(String(session.userId)),
       reason: parsed.data.reason,
+      kybOverrideReason: parsed.data.kybOverrideReason,
     });
+
+    if (kyb.overridden || kyb.warning) {
+      const { writeAuditEvent } = await import("@/lib/audit/log");
+      await writeAuditEvent({
+        action: kyb.overridden ? "kyb.approval_override" : "kyb.approval_warning",
+        targetType: "organization",
+        targetId: id,
+        actorUserId: String(session.userId),
+        organizationId: id,
+        metadata: { warning: kyb.warning, reason: kyb.overridden ? parsed.data.kybOverrideReason : undefined },
+      });
+    }
 
     if (contact) {
       if (parsed.data.decision === "approved") {
@@ -107,6 +122,12 @@ export async function POST(request: NextRequest, context: RouteContext) {
     const buyer = await loadBuyerDetail(id);
     return NextResponse.json({ ok: true, buyer });
   } catch (error) {
+    if (error instanceof KybGateError) {
+      return NextResponse.json(
+        { error: error.message, code: error.code, canOverride: error.canOverride },
+        { status: 409 },
+      );
+    }
     console.error("[admin/buyers/:id POST]", error);
     return NextResponse.json({ error: "Unable to update buyer organization." }, { status: 500 });
   }
