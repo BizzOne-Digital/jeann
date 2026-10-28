@@ -8,7 +8,7 @@ import {
 } from "@/lib/auth/otp";
 import type { VerificationPurpose, VerificationChannel } from "@/models/VerificationChallenge";
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
-import { isPrimaryContactVerified } from "@/lib/auth/verification-policy";
+import { isPrimaryContactVerified, isSmsConfigured } from "@/lib/auth/verification-policy";
 
 export async function sendVerificationCode(input: {
   userId: string | Types.ObjectId;
@@ -46,6 +46,25 @@ export async function sendVerificationCode(input: {
       text,
       tags: [input.purpose],
     });
+  } else if (input.channel === "phone" && !isSmsConfigured()) {
+    // No SMS provider on this server: deliver the phone code to the account's email instead.
+    const { User } = await import("@/models");
+    const uid = input.userId instanceof Types.ObjectId ? input.userId : new Types.ObjectId(input.userId);
+    const user = await User.findById(uid).lean();
+    if (user?.email) {
+      await sendEmail({
+        to: { email: user.email },
+        subject: "Your Finekarts phone verification code",
+        text: `Hello ${input.name ?? user.name ?? "there"},
+
+Your phone verification code is: ${code}
+
+This code expires at ${expiresAt.toISOString()}.
+
+If you did not request this, ignore this message.`,
+        tags: [input.purpose],
+      });
+    }
   } else if (input.channel === "phone") {
     const { sendSms } = await import("@/lib/sms");
     await sendSms({

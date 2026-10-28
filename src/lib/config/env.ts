@@ -14,6 +14,18 @@ const envSchema = z.object({
   EMAIL_PROVIDER: z.enum(["none", "console", "resend", "smtp"]).default("console"),
   EMAIL_FROM: z.string().optional(),
   EMAIL_API_KEY: z.string().optional(),
+  SMTP_HOST: z.string().optional(),
+  SMTP_PORT: z
+    .string()
+    .optional()
+    .transform((v) => (v ? Number(v) : undefined))
+    .pipe(z.number().int().positive().optional()),
+  SMTP_SECURE: z
+    .string()
+    .optional()
+    .transform((v) => (v === undefined || v === "" ? undefined : v === "true")),
+  SMTP_USER: z.string().optional(),
+  SMTP_PASS: z.string().optional(),
   SMS_PROVIDER: z.enum(["none", "console", "twilio"]).default("none"),
   SMS_API_KEY: z.string().optional(),
   TWILIO_ACCOUNT_SID: z.string().optional(),

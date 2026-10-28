@@ -1,5 +1,6 @@
 import { Types } from "mongoose";
 import { sendVerificationCode } from "@/lib/auth/verification-service";
+import { isSmsConfigured } from "@/lib/auth/verification-policy";
 
 /**
  * After registration: the primary confirmation code goes to the buyer's phone (SMS)
@@ -14,7 +15,7 @@ export async function sendRegistrationCodes(input: {
 }): Promise<{ devEmailCode?: string; devPhoneCode?: string }> {
   const out: { devEmailCode?: string; devPhoneCode?: string } = {};
 
-  if (input.phone?.trim()) {
+  if (input.phone?.trim() && isSmsConfigured()) {
     try {
       const phone = await sendVerificationCode({
         userId: input.userId,
