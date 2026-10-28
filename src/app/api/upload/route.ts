@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdminApiSession } from "@/lib/admin/require-admin-api";
+import { adminDeniedResponse, requireAdminApiSession } from "@/lib/admin/require-admin-api";
 import { UPLOAD_MAX_BYTES, isUploadFolder } from "@/lib/uploads/constants";
 import { resolveImageUploadMime } from "@/lib/uploads/resolve-image-mime";
 import {
@@ -12,7 +12,7 @@ export const maxDuration = 30;
 
 export async function POST(request: NextRequest) {
   if (!(await requireAdminApiSession())) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    return adminDeniedResponse();
   }
 
   let formData: FormData;
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   if (!(await requireAdminApiSession())) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    return adminDeniedResponse();
   }
 
   let body: { url?: string };

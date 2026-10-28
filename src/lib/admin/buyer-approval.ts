@@ -17,6 +17,8 @@ export type AdminBuyerDetail = {
     email: string;
     phone: string;
     userStatus: string;
+    emailVerified: boolean;
+    phoneVerified: boolean;
   } | null;
 };
 
@@ -40,6 +42,8 @@ export function serializeBuyerDetail(
           email: contact.email,
           phone: contact.phone ?? "",
           userStatus: contact.status,
+          emailVerified: Boolean(contact.emailVerifiedAt),
+          phoneVerified: Boolean(contact.phoneVerifiedAt),
         }
       : null,
   };

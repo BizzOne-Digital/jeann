@@ -26,6 +26,8 @@ export interface IKybValidationRecord {
   outcomeAt?: Date;
   outcomeBy?: Types.ObjectId;
   waiver?: { waived: boolean; reason?: string; byUserId?: Types.ObjectId; at?: Date };
+  /** Buyers: KYB is optional by default; staff can choose to require it for a specific buyer. */
+  kybRequired?: boolean;
   approvalOverride?: { reason: string; byUserId: Types.ObjectId; at: Date; outcomeAtOverride?: string };
 }
 
@@ -67,6 +69,7 @@ const kybValidationRecordSchema = new Schema<IKybValidationRecord>(
         { _id: false },
       ),
     },
+    kybRequired: { type: Boolean, default: false },
     approvalOverride: {
       type: new Schema(
         {

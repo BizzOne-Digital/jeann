@@ -109,3 +109,18 @@ describe("outcome recording", () => {
     expect(canRecordOutcome({ outcome: "partially_validated", checks: [], report: "r" }).ok).toBe(true);
   });
 });
+
+describe("buyer KYB is optional unless staff require it", () => {
+  it("allows a buyer without an outcome by default", () => {
+    expect(evaluateApprovalGate({ orgType: "buyer", actorIsCeoOrGm: false }).allowed).toBe(true);
+  });
+
+  it("blocks a buyer marked as KYB-required until validated, with CEO/GM override possible", () => {
+    const blocked = evaluateApprovalGate({ orgType: "buyer", kybRequired: true, actorIsCeoOrGm: true });
+    expect(blocked.allowed).toBe(false);
+    expect(
+      evaluateApprovalGate({ orgType: "buyer", kybRequired: true, outcome: "validated", actorIsCeoOrGm: false })
+        .allowed,
+    ).toBe(true);
+  });
+});

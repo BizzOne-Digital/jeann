@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
-import { requireAdminApiSession } from "@/lib/admin/require-admin-api";
+import { adminDeniedResponse, requireAdminApiSession } from "@/lib/admin/require-admin-api";
 import { listEditablePages } from "@/lib/content/page-content";
 
 export const runtime = "nodejs";
 
 export async function GET() {
   if (!(await requireAdminApiSession())) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    return adminDeniedResponse();
   }
   try {
     const pages = await listEditablePages();

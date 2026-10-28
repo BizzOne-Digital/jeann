@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdminApiSession } from "@/lib/admin/require-admin-api";
+import { adminDeniedResponse, requireAdminApiSession } from "@/lib/admin/require-admin-api";
 import { serializeBuyerDetail, loadBuyerDetail } from "@/lib/admin/buyer-approval";
 import { tryConnectMongo } from "@/lib/db/mongoose";
 
@@ -7,7 +7,7 @@ export const runtime = "nodejs";
 
 export async function GET() {
   if (!(await requireAdminApiSession())) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    return adminDeniedResponse();
   }
   if (!(await tryConnectMongo())) {
     return NextResponse.json({ error: "Service temporarily unavailable." }, { status: 503 });

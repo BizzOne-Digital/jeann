@@ -206,6 +206,8 @@ export type ApprovalGateInput = {
   orgType: string;
   outcome?: ValidationOutcome | null;
   waived?: boolean;
+  /** Buyers only: staff chose to require KYB for this buyer. */
+  kybRequired?: boolean;
   actorIsCeoOrGm: boolean;
   overrideReason?: string | null;
 };
@@ -241,6 +243,15 @@ export function evaluateApprovalGate(input: ApprovalGateInput): ApprovalGateResu
   }
 
   if (ok || input.waived) return { allowed: true };
+  if (!outcome && input.kybRequired) {
+    return {
+      allowed: false,
+      code: "validation_required",
+      message:
+        "KYB was marked as required for this buyer. Complete validation (validated or partially validated), or have the CEO/GM override with a reason.",
+      canOverride: true,
+    };
+  }
   if (!outcome) {
     return { allowed: true, warning: "No KYB validation outcome has been recorded for this organization." };
   }

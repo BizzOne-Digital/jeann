@@ -63,6 +63,25 @@ export function AdminBuyerReview({
 
   const isPending = buyer.status === "pending";
 
+  async function confirmContact(action: "mark_email_verified" | "mark_phone_verified") {
+    setSaving(true);
+    setMessage(null);
+    setError(null);
+    const res = await fetch(`/api/admin/buyers/${encodeURIComponent(buyer._id)}/contact`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action }),
+    });
+    const data = (await res.json()) as { buyer?: AdminBuyerDetail; error?: string };
+    setSaving(false);
+    if (!res.ok || !data.buyer) {
+      setError(data.error || "Unable to confirm contact.");
+      return;
+    }
+    setBuyer(data.buyer);
+    setMessage("Contact confirmed.");
+  }
+
   return (
     <div className="space-y-6">
       <Link href="/admin/buyers" className="text-sm font-semibold text-[var(--ocean)] underline">
@@ -92,6 +111,32 @@ export function AdminBuyerReview({
               <p>{buyer.primaryContact.name}</p>
               <p>{buyer.primaryContact.email}</p>
               {buyer.primaryContact.phone ? <p>{buyer.primaryContact.phone}</p> : null}
+              <p>
+                Phone: {buyer.primaryContact.phoneVerified ? "confirmed" : "not confirmed"} · Email:{" "}
+                {buyer.primaryContact.emailVerified ? "confirmed" : "not confirmed"}
+              </p>
+              <div className="flex flex-wrap gap-3 pt-1">
+                {!buyer.primaryContact.phoneVerified ? (
+                  <button
+                    type="button"
+                    className="text-sm font-semibold text-[var(--navy)] underline"
+                    disabled={saving}
+                    onClick={() => confirmContact("mark_phone_verified")}
+                  >
+                    Confirm phone manually
+                  </button>
+                ) : null}
+                {!buyer.primaryContact.emailVerified ? (
+                  <button
+                    type="button"
+                    className="text-sm font-semibold text-[var(--navy)] underline"
+                    disabled={saving}
+                    onClick={() => confirmContact("mark_email_verified")}
+                  >
+                    Confirm email manually
+                  </button>
+                ) : null}
+              </div>
             </div>
           ) : (
             <p className="mt-2 text-sm text-[var(--stone)]">No contact linked.</p>

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdminApiSession } from "@/lib/admin/require-admin-api";
+import { adminDeniedResponse, requireAdminApiSession } from "@/lib/admin/require-admin-api";
 import { serializeTestimonial } from "@/lib/admin/testimonial-serializer";
 import { adminTestimonialSchema } from "@/lib/admin/testimonial-validation";
 import { tryConnectMongo } from "@/lib/db/mongoose";
@@ -23,7 +23,7 @@ function buildTestimonialPayload(data: ReturnType<typeof adminTestimonialSchema.
 
 export async function GET() {
   if (!(await requireAdminApiSession())) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    return adminDeniedResponse();
   }
   if (!(await tryConnectMongo())) {
     return NextResponse.json({ error: "Service temporarily unavailable." }, { status: 503 });
@@ -41,7 +41,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   if (!(await requireAdminApiSession())) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    return adminDeniedResponse();
   }
   if (!(await tryConnectMongo())) {
     return NextResponse.json({ error: "Service temporarily unavailable." }, { status: 503 });

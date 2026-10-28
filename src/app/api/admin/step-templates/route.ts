@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { requireAdminApiSession } from "@/lib/admin/require-admin-api";
+import { adminDeniedResponse, requireAdminApiSession } from "@/lib/admin/require-admin-api";
 import { writeAuditEvent } from "@/lib/audit/log";
 
 export const runtime = "nodejs";
@@ -46,7 +46,7 @@ async function latestOnly<T extends { key: string; version: number }>(rows: T[])
 
 export async function GET() {
   if (!(await requireAdminApiSession())) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    return adminDeniedResponse();
   }
   const { DocumentTemplate, WorkflowTemplate } = await import("@/models");
   const docs = await DocumentTemplate.find().sort({ key: 1, version: -1 }).lean();

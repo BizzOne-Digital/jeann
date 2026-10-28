@@ -1,3 +1,4 @@
+import { NextResponse } from "next/server";
 import { Types } from "mongoose";
 import { getSession, type ActiveSession } from "@/lib/auth/session";
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
@@ -30,4 +31,28 @@ export async function requireAdminApiSession(): Promise<ActiveSession | null> {
 
   if (!isMongoConfigured() || !(await tryConnectMongo())) return null;
   return (await hasAdminMembership(session.userId)) ? session : null;
+}
+
+/**
+ * Response for a failed requireAdminApiSession(). Tells the admin the real reason
+ * (expired session, database unavailable, or wrong role) instead of a bare "Forbidden".
+ */
+export async function adminDeniedResponse(): Promise<NextResponse> {
+  const session = await getSession();
+  if (!session) {
+    return NextResponse.json(
+      { error: "Your session has expired. Please sign in again, then retry." },
+      { status: 401 },
+    );
+  }
+  if (!isMongoConfigured() || !(await tryConnectMongo())) {
+    return NextResponse.json(
+      { error: "The database is temporarily unavailable. Please try again in a moment." },
+      { status: 503 },
+    );
+  }
+  return NextResponse.json(
+    { error: "Only the CEO or General Manager account can do this." },
+    { status: 403 },
+  );
 }

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Types } from "mongoose";
 import { z } from "zod";
-import { requireAdminApiSession } from "@/lib/admin/require-admin-api";
+import { adminDeniedResponse, requireAdminApiSession } from "@/lib/admin/require-admin-api";
 import { decideBuyerOrganization, loadBuyerDetail } from "@/lib/admin/buyer-approval";
 import {
   notifyBuyerApproved,
@@ -22,7 +22,7 @@ const decisionSchema = z.object({
 
 export async function GET(_request: NextRequest, context: RouteContext) {
   if (!(await requireAdminApiSession())) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    return adminDeniedResponse();
   }
   if (!(await tryConnectMongo())) {
     return NextResponse.json({ error: "Service temporarily unavailable." }, { status: 503 });
@@ -58,7 +58,7 @@ export async function GET(_request: NextRequest, context: RouteContext) {
 export async function POST(request: NextRequest, context: RouteContext) {
   const session = await requireAdminApiSession();
   if (!session) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    return adminDeniedResponse();
   }
   if (!(await tryConnectMongo())) {
     return NextResponse.json({ error: "Service temporarily unavailable." }, { status: 503 });

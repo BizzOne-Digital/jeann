@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdminApiSession } from "@/lib/admin/require-admin-api";
+import { adminDeniedResponse, requireAdminApiSession } from "@/lib/admin/require-admin-api";
 import {
   getTradeAlert,
   sanitizeTradeAlert,
@@ -10,14 +10,14 @@ export const runtime = "nodejs";
 
 export async function GET() {
   if (!(await requireAdminApiSession())) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    return adminDeniedResponse();
   }
   return NextResponse.json({ tradeAlert: await getTradeAlert() });
 }
 
 export async function PUT(request: NextRequest) {
   if (!(await requireAdminApiSession())) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    return adminDeniedResponse();
   }
 
   let body: unknown;

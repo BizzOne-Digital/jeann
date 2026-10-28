@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Types } from "mongoose";
-import { requireAdminApiSession } from "@/lib/admin/require-admin-api";
+import { adminDeniedResponse, requireAdminApiSession } from "@/lib/admin/require-admin-api";
 import { serializeFaq } from "@/lib/admin/faq-serializer";
 import { adminFaqSchema } from "@/lib/admin/faq-validation";
 import { tryConnectMongo } from "@/lib/db/mongoose";
@@ -12,7 +12,7 @@ type RouteContext = { params: Promise<{ id: string }> };
 
 export async function PUT(request: NextRequest, context: RouteContext) {
   if (!(await requireAdminApiSession())) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    return adminDeniedResponse();
   }
   if (!(await tryConnectMongo())) {
     return NextResponse.json({ error: "Service temporarily unavailable." }, { status: 503 });
@@ -54,7 +54,7 @@ export async function PUT(request: NextRequest, context: RouteContext) {
 
 export async function DELETE(_request: NextRequest, context: RouteContext) {
   if (!(await requireAdminApiSession())) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    return adminDeniedResponse();
   }
   if (!(await tryConnectMongo())) {
     return NextResponse.json({ error: "Service temporarily unavailable." }, { status: 503 });

@@ -8,6 +8,7 @@ import {
   KybGateError,
   loadStaffKybView,
   recordValidationOutcome,
+  setBuyerKybRequired,
   setSupplierWaiver,
   updateKybItem,
 } from "@/lib/kyb/kyb-service";
@@ -35,6 +36,10 @@ const bodySchema = z.discriminatedUnion("action", [
     action: z.literal("record_outcome"),
     outcome: z.enum(VALIDATION_OUTCOMES),
     report: z.string().trim().min(1).max(8000),
+  }),
+  z.object({
+    action: z.literal("set_required"),
+    required: z.boolean(),
   }),
   z.object({
     action: z.literal("set_waiver"),
@@ -105,6 +110,16 @@ export async function PATCH(request: NextRequest, { params }: Ctx) {
         organizationId: id,
         ...meta,
         metadata: { outcome: body.outcome },
+      });
+    } else if (body.action === "set_required") {
+      await setBuyerKybRequired({ organizationId: id, required: body.required, actorUserId: actor });
+      await writeAuditEvent({
+        action: body.required ? "kyb.required_set" : "kyb.required_cleared",
+        targetType: "organization",
+        targetId: id,
+        actorUserId: actor,
+        organizationId: id,
+        ...meta,
       });
     } else {
       await setSupplierWaiver({ organizationId: id, waived: body.waived, reason: body.reason, actorUserId: actor });

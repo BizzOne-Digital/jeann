@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { requireAdminApiSession } from "@/lib/admin/require-admin-api";
+import { adminDeniedResponse, requireAdminApiSession } from "@/lib/admin/require-admin-api";
 import {
   loadPaymentTermsConfig,
   mergePaymentTermsWithConfig,
@@ -17,7 +17,7 @@ const updateSchema = z.object({
 
 export async function GET() {
   if (!(await requireAdminApiSession())) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    return adminDeniedResponse();
   }
   const config = await loadPaymentTermsConfig();
   return NextResponse.json({
@@ -28,7 +28,7 @@ export async function GET() {
 
 export async function PUT(request: NextRequest) {
   if (!(await requireAdminApiSession())) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    return adminDeniedResponse();
   }
 
   let body: unknown;

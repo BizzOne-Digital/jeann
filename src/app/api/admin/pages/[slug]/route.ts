@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { requireAdminApiSession } from "@/lib/admin/require-admin-api";
+import { adminDeniedResponse, requireAdminApiSession } from "@/lib/admin/require-admin-api";
 import {
   getAdminPageForEditor,
   saveEditablePage,
@@ -27,7 +27,7 @@ export async function GET(
   context: { params: Promise<{ slug: string }> },
 ) {
   if (!(await requireAdminApiSession())) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    return adminDeniedResponse();
   }
   const { slug } = await context.params;
   try {
@@ -45,7 +45,7 @@ export async function PUT(
   context: { params: Promise<{ slug: string }> },
 ) {
   if (!(await requireAdminApiSession())) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    return adminDeniedResponse();
   }
   const { slug } = await context.params;
 

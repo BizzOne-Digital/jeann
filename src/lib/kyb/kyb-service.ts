@@ -127,6 +127,25 @@ export async function recordValidationOutcome(input: {
   return rec;
 }
 
+/** Buyers: choose whether KYB is required for this buyer (optional by default). */
+export async function setBuyerKybRequired(input: {
+  organizationId: string;
+  required: boolean;
+  actorUserId: string;
+}) {
+  await tryConnectMongo();
+  const { Organization } = await import("@/models");
+  const org = await Organization.findById(input.organizationId).lean();
+  if (!org) throw new Error("org_not_found");
+  if (org.type !== "buyer") {
+    throw new KybGateError("waiver_invalid", "Only buyers can be switched; suppliers always need KYB unless waived.");
+  }
+  const rec = await getOrCreateKybRecord(input.organizationId);
+  rec.kybRequired = input.required;
+  await rec.save();
+  return rec;
+}
+
 export async function setSupplierWaiver(input: {
   organizationId: string;
   waived: boolean;
@@ -177,6 +196,7 @@ export async function assertKybApprovalGate(input: {
     orgType: org.type,
     outcome: rec?.outcome ?? null,
     waived,
+    kybRequired: Boolean(rec?.kybRequired),
     actorIsCeoOrGm,
     overrideReason: input.overrideReason,
   });
@@ -249,6 +269,7 @@ export async function loadStaffKybView(organizationId: string) {
       label: c.label,
       ...ser((rec.validationChecks as LeanItem[]).find((i) => i.key === c.key) ?? { key: c.key, status: "not_started" }),
     })),
+    kybRequired: Boolean(rec.kybRequired),
     outcome: rec.outcome ?? null,
     outcomeReport: rec.outcomeReport ?? "",
     outcomeAt: rec.outcomeAt ? new Date(rec.outcomeAt).toISOString() : null,

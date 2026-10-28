@@ -30,6 +30,7 @@ export type AdminKybView = {
   outcomeReport: string;
   outcomeAt: string | null;
   waiver: { waived: boolean; reason: string; at: string | null };
+  kybRequired: boolean;
   approvalOverride: { reason: string; at: string; outcomeAtOverride: string } | null;
 };
 
@@ -227,6 +228,24 @@ export function AdminKybPanel({ organizationId, initial }: { organizationId: str
           ) : null}
         </div>
       </section>
+
+      {!isSupplier ? (
+        <section className="rounded-lg border border-[var(--line)] bg-white p-5">
+          <h3 className="font-semibold text-[var(--navy)]">Run KYB for this buyer?</h3>
+          <p className="mt-2 text-sm text-[var(--stone)]">
+            Buyer verification is optional. Turn it on for buyers you want to verify; approval is then blocked
+            until validation is validated or partially validated (CEO/GM can override with a reason).
+          </p>
+          <label className="mt-3 flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={view.kybRequired}
+              onChange={(e) => patch({ action: "set_required", required: e.target.checked })}
+            />
+            Require KYB for this buyer
+          </label>
+        </section>
+      ) : null}
 
       {isSupplier ? (
         <section className="rounded-lg border border-[var(--line)] bg-white p-5">
