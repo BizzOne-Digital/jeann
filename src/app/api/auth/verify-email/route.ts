@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { requireApiAuth } from "@/lib/api/require-api-auth";
+import { classifyEmailError } from "@/lib/email/error-reason";
 import {
   sendVerificationCode,
   verifyUserCode,
@@ -87,13 +88,9 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ ok: true, devCode: sent.devCode, sentTo: user.email });
   } catch (error) {
     console.error("[verify-email PUT]", error);
+    const failure = classifyEmailError(error);
     return NextResponse.json(
-      {
-        error:
-          error instanceof Error && error.message === "email_not_configured"
-            ? "Email delivery is not set up on the server yet. Please contact support."
-            : "We could not send the email right now. Please try again in a minute or contact support.",
-      },
+      { error: failure.message, code: failure.code },
       { status: 502 },
     );
   }

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { sendVerificationCode } from "@/lib/auth/verification-service";
+import { classifyEmailError } from "@/lib/email/error-reason";
 import { findPendingUserByEmail, throttleVerification } from "@/lib/auth/public-verification";
 
 export const runtime = "nodejs";
@@ -49,14 +50,9 @@ export async function POST(request: NextRequest) {
         devCode = sent.devCode;
       } catch (error) {
         console.error("[resend-code]", error);
+        const failure = classifyEmailError(error);
         return NextResponse.json(
-          {
-            error:
-              error instanceof Error && error.message === "email_not_configured"
-                ? "Email delivery is not set up on the server yet. Please contact support."
-                : "We could not send the code right now. Please try again in a minute or contact support.",
-            code: error instanceof Error && error.message === "email_not_configured" ? "email_not_configured" : "send_failed",
-          },
+          { error: failure.message, code: failure.code },
           { status: 502 },
         );
       }

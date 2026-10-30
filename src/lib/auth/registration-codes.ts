@@ -1,6 +1,7 @@
 import { Types } from "mongoose";
 import { sendVerificationCode } from "@/lib/auth/verification-service";
 import { isSmsConfigured } from "@/lib/auth/verification-policy";
+import { classifyEmailError, type EmailFailure } from "@/lib/email/error-reason";
 
 /**
  * After registration: the primary confirmation code goes to the buyer's phone (SMS)
@@ -12,8 +13,18 @@ export async function sendRegistrationCodes(input: {
   email: string;
   phone?: string;
   name?: string;
-}): Promise<{ devEmailCode?: string; devPhoneCode?: string; emailSent: boolean }> {
-  const out: { devEmailCode?: string; devPhoneCode?: string; emailSent: boolean } = {
+}): Promise<{
+  devEmailCode?: string;
+  devPhoneCode?: string;
+  emailSent: boolean;
+  emailFailure?: EmailFailure;
+}> {
+  const out: {
+    devEmailCode?: string;
+    devPhoneCode?: string;
+    emailSent: boolean;
+    emailFailure?: EmailFailure;
+  } = {
     emailSent: false,
   };
 
@@ -43,7 +54,8 @@ export async function sendRegistrationCodes(input: {
     out.devEmailCode = email.devCode;
     out.emailSent = true;
   } catch (error) {
-    console.error("[registration] email code", error);
+    out.emailFailure = classifyEmailError(error);
+    console.error("[registration] email code", out.emailFailure.code, error);
   }
 
   return out;

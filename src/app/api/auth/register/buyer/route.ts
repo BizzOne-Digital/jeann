@@ -293,9 +293,10 @@ export async function POST(request: NextRequest) {
         status: "pending_verification",
         redirectTo: `/verify-email?email=${encodeURIComponent(email)}`,
         emailSent: verification.emailSent,
+        emailFailure: verification.emailFailure?.code,
         message: verification.emailSent
           ? "Registration received. Enter the verification code sent to you on the next screen."
-          : "Registration received, but we could not send the verification email. Use 'Send a new code' on the next screen, or contact support.",
+          : `Registration received, but the verification email could not be sent. ${verification.emailFailure?.message ?? ""} Use 'Send a new code' on the next screen once this is fixed, or contact support.`,
         devVerificationCode: verification.devEmailCode,
         devPhoneCode: verification.devPhoneCode,
       },
