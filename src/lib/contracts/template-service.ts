@@ -32,7 +32,7 @@ export async function seedMissingDefaultTemplates(actorUserId?: string) {
   return { created, skipped };
 }
 
-/** Latest version's body if that version is published, else null (callers fall back to built-in content). */
+/** Body of the newest PUBLISHED version (a newer draft never switches generation off), else null (callers fall back to built-in content). */
 export async function findPublishedTemplate(
   documentType: string | undefined | null,
   side: ContractSide,
@@ -40,9 +40,12 @@ export async function findPublishedTemplate(
   const slug = templateSlugForDocumentType(documentType);
   if (!slug) return null;
   const { DocumentTemplate } = await import("@/models");
-  const latest = await DocumentTemplate.findOne({ key: templateKeyFor(slug, side) })
+  const latest = await DocumentTemplate.findOne({
+    key: templateKeyFor(slug, side),
+    status: "published",
+  })
     .sort({ version: -1 })
     .lean();
-  if (!latest || latest.status !== "published" || !latest.bodyBlocks?.length) return null;
+  if (!latest || !latest.bodyBlocks?.length) return null;
   return { key: latest.key, version: latest.version, bodyBlocks: latest.bodyBlocks };
 }

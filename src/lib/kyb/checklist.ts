@@ -283,7 +283,7 @@ export function validateWaiver(input: {
   reason?: string | null;
 }): SimpleCheck {
   if (input.orgType !== "supplier") {
-    return { ok: false, error: "KYB can only be waived for known suppliers. Buyers always complete KYB." };
+    return { ok: false, error: "KYB can only be waived for known suppliers. For buyers, use the per-buyer KYB switch instead." };
   }
   if (!input.actorIsCeoOrGm) return { ok: false, error: "Only the CEO or General Manager can waive KYB." };
   if (!input.reason?.trim() || input.reason.trim().length < 10) {

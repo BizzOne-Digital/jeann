@@ -43,8 +43,33 @@ export function IntegrationsHealthPanel() {
       .catch((e) => setError(e instanceof Error ? e.message : "Error"));
   }, []);
 
-  if (error) return <p className="text-sm text-red-600">{error}</p>;
-  if (!data) return <p className="text-sm text-[var(--stone)]">Loading integration health…</p>;
+  const emailCard = (
+    <div className="rounded-lg border border-[var(--line)] bg-white p-4">
+      <h3 className="font-semibold text-[var(--navy)]">Email delivery</h3>
+      <p className="mt-1 text-sm text-[var(--stone)]">
+        Sends a test message to your own admin email to confirm verification codes and notifications will arrive.
+      </p>
+      <button type="button" className="btn btn-secondary mt-3 text-sm" disabled={testing} onClick={sendTestEmail}>
+        {testing ? "Sending…" : "Send test email"}
+      </button>
+      {testResult ? <p className="mt-2 text-sm text-[var(--ink)]">{testResult}</p> : null}
+    </div>
+  );
+
+  if (error)
+    return (
+      <div className="space-y-6">
+        <p className="text-sm text-red-600">{error}</p>
+        {emailCard}
+      </div>
+    );
+  if (!data)
+    return (
+      <div className="space-y-6">
+        <p className="text-sm text-[var(--stone)]">Loading integration health…</p>
+        {emailCard}
+      </div>
+    );
 
   const providerEntries = Object.entries(data.providers ?? {});
 
@@ -75,16 +100,7 @@ export function IntegrationsHealthPanel() {
           ))}
         </ul>
       </div>
-      <div className="rounded-lg border border-[var(--line)] bg-white p-4">
-        <h3 className="font-semibold text-[var(--navy)]">Email delivery</h3>
-        <p className="mt-1 text-sm text-[var(--stone)]">
-          Sends a test message to your own admin email to confirm verification codes and notifications will arrive.
-        </p>
-        <button type="button" className="btn btn-secondary mt-3 text-sm" disabled={testing} onClick={sendTestEmail}>
-          {testing ? "Sending…" : "Send test email"}
-        </button>
-        {testResult ? <p className="mt-2 text-sm text-[var(--ink)]">{testResult}</p> : null}
-      </div>
+      {emailCard}
       <p className="text-xs text-[var(--stone)]">{data.disclaimer}</p>
     </div>
   );

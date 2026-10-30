@@ -54,7 +54,7 @@ const BODIES: Record<string, Block[]> = {
     PARTIES,
     P("1. Goods. The seller agrees to sell and the buyer agrees to buy the goods described below."),
     GOODS,
-    P("2. Quality and quantity are verified by the inspection company named above at loading.\n3. Payment is made as stated in the payment terms, normally by documentary letter of credit.\n4. Disputes are handled under the governing law and venue agreed in the signed schedule."),
+    P("2. Quality and quantity are verified by the inspection company named above at loading.\n3. Payment is made as stated in the payment terms agreed between the parties.\n4. Disputes are handled under the governing law and venue agreed in the signed schedule."),
     P("Signed for the seller: ____________________\nSigned for the buyer: ____________________"),
   ],
   lc_wording: [

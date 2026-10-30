@@ -86,6 +86,12 @@ export function handleApiError(error: unknown): NextResponse {
   if (error instanceof ForbiddenError) {
     return NextResponse.json({ error: error.message }, { status: 403 });
   }
+  if (error instanceof Error && error.name === "ZodError") {
+    const issues = (error as Error & { issues?: Array<{ message?: string; path?: unknown[] }> }).issues;
+    const first = issues?.[0];
+    const where = first?.path?.length ? `${first.path.join(".")}: ` : "";
+    return NextResponse.json({ error: `${where}${first?.message ?? "Invalid input."}` }, { status: 422 });
+  }
   if (error instanceof Error && error.name === "StepRuleError") {
     const status = (error as Error & { status?: number }).status ?? 409;
     return NextResponse.json({ error: error.message }, { status });

@@ -49,6 +49,10 @@ export async function POST(request: NextRequest) {
         devCode = sent.devCode;
       } catch (error) {
         console.error("[resend-code]", error);
+        return NextResponse.json(
+          { error: "We could not send the code right now. Please try again in a minute or contact support." },
+          { status: 502 },
+        );
       }
     }
   }

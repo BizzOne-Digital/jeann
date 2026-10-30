@@ -62,6 +62,7 @@ export async function selectBankingInstrument(input: {
   if (tx.workflowStatus !== "banking_setup" && tx.workflowStatus !== "contract_executed") {
     throw new Error("invalid_workflow_state");
   }
+  await assertRwaForLc(tx, input.instrumentType);
 
   const record = await BankingInstrumentRecord.findOneAndUpdate(
     { transactionId: tx._id },

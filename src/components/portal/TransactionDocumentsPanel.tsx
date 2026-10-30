@@ -41,7 +41,7 @@ export function TransactionDocumentsPanel({
       ? true
       : mode === "buyer"
         ? ["icpo", "loi", "passport_copy", "rwa", "other"].includes(t.value)
-        : t.value !== "icpo",
+        : t.value !== "icpo" && t.value !== "rwa",
   );
   const [signDocId, setSignDocId] = useState<string | null>(null);
   const [signerName, setSignerName] = useState("");

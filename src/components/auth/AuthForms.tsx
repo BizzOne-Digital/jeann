@@ -8,6 +8,7 @@ type ApiBody = {
   error?: string;
   message?: string;
   redirectTo?: string;
+  emailSent?: boolean;
   status?: string;
   requiresMfa?: boolean;
   mfaToken?: string;
@@ -252,7 +253,9 @@ export function BuyerRegistrationForm() {
             "Registration received. We will email you when your account is approved.",
         );
         if (result.body.redirectTo) {
-          setTimeout(() => window.location.assign(result.body.redirectTo!), 2500);
+          // Keep the screen longer when the verification email could not be sent so the message can be read.
+          const delay = result.body.emailSent === false ? 9000 : 2500;
+          setTimeout(() => window.location.assign(result.body.redirectTo!), delay);
         }
         return;
       }

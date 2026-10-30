@@ -63,6 +63,7 @@ export function AdminStepTemplatesManager() {
       else
         setDoc({
           ...blankDoc(),
+          status: "published",
           key: editKey,
           name: q.get("name") ?? "",
           side: q.get("side") === "supplier" ? "supplier" : "buyer",

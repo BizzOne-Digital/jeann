@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 import { getEnv } from "@/lib/config/env";
-import { sendEmail } from "@/lib/email";
+import { isEmailDeliveryConfigured, sendEmail } from "@/lib/email";
 import {
   generateOtpCode,
   storeOtpChallenge,
@@ -17,6 +17,13 @@ export async function sendVerificationCode(input: {
   destination: string;
   name?: string;
 }): Promise<{ sent: boolean; devCode?: string }> {
+  const sendsEmail =
+    input.channel === "email" || (input.channel === "phone" && !isSmsConfigured());
+  if (sendsEmail && !isEmailDeliveryConfigured()) {
+    // Never pretend a code was sent when email delivery is not set up on this server.
+    throw new Error("email_not_configured");
+  }
+
   const code = generateOtpCode();
   const { expiresAt } = await storeOtpChallenge({
     userId: input.userId,
