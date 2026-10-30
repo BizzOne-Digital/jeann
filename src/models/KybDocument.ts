@@ -21,6 +21,7 @@ export const KYB_DOCUMENT_TYPES = [
   "trade_reference",
   "financial_statements",
   "bank_reference",
+  "rwa",
   "other",
 ] as const;
 

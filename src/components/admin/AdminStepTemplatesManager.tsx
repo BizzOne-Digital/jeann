@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type Block = { type: string; content: string };
 type DocTpl = {
@@ -44,13 +44,30 @@ export function AdminStepTemplatesManager() {
   const [doc, setDoc] = useState<DocTpl | null>(null);
   const [wf, setWf] = useState<WfTpl | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
+  const deepLinked = useRef(false);
 
   const load = useCallback(async () => {
     const res = await fetch("/api/admin/step-templates", { credentials: "same-origin" });
     const json = await res.json();
     if (!res.ok) return setMsg(json.error ?? "Unable to load templates.");
-    setDocs(json.documentTemplates ?? []);
+    const loaded: DocTpl[] = json.documentTemplates ?? [];
+    setDocs(loaded);
     setWfs(json.workflowTemplates ?? []);
+    // Deep link from Contract Automation: ?edit=<key>&side=<buyer|supplier>&name=<label>
+    const q = new URLSearchParams(window.location.search);
+    const editKey = q.get("edit");
+    if (editKey && !deepLinked.current) {
+      deepLinked.current = true;
+      const found = loaded.find((d) => d.key === editKey);
+      if (found) setDoc(found);
+      else
+        setDoc({
+          ...blankDoc(),
+          key: editKey,
+          name: q.get("name") ?? "",
+          side: q.get("side") === "supplier" ? "supplier" : "buyer",
+        });
+    }
   }, []);
 
   useEffect(() => {

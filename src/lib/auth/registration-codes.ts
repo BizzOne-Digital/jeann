@@ -12,8 +12,10 @@ export async function sendRegistrationCodes(input: {
   email: string;
   phone?: string;
   name?: string;
-}): Promise<{ devEmailCode?: string; devPhoneCode?: string }> {
-  const out: { devEmailCode?: string; devPhoneCode?: string } = {};
+}): Promise<{ devEmailCode?: string; devPhoneCode?: string; emailSent: boolean }> {
+  const out: { devEmailCode?: string; devPhoneCode?: string; emailSent: boolean } = {
+    emailSent: false,
+  };
 
   if (input.phone?.trim() && isSmsConfigured()) {
     try {
@@ -39,6 +41,7 @@ export async function sendRegistrationCodes(input: {
       name: input.name,
     });
     out.devEmailCode = email.devCode;
+    out.emailSent = true;
   } catch (error) {
     console.error("[registration] email code", error);
   }

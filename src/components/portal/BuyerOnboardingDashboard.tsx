@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Step = {
   key: string;
@@ -20,9 +20,9 @@ type Props = {
   cisStatus?: string;
   reviewComments?: string;
   /** The organization's own submission progress (never staff validation findings). */
-  kybProgress?: {
+  cisProgress?: {
     label: string;
-    sections: { key: string; label: string; complete: boolean }[];
+    items: { key: string; label: string; complete: boolean }[];
   };
 };
 
@@ -36,7 +36,7 @@ export function BuyerOnboardingDashboard({
   canTrade,
   cisStatus,
   reviewComments,
-  kybProgress,
+  cisProgress,
 }: Props) {
   const [emailCode, setEmailCode] = useState("");
   const [phoneCode, setPhoneCode] = useState("");
@@ -54,8 +54,27 @@ export function BuyerOnboardingDashboard({
       setError(data.error ?? "Could not send code.");
       return;
     }
-    setMessage(data.devCode ? `Dev code: ${data.devCode}` : "Verification email sent.");
+    setMessage(
+      data.devCode
+        ? `Dev code: ${data.devCode}`
+        : `Verification code sent${data.sentTo ? ` to ${data.sentTo}` : ""}. Check your inbox and spam folder.`,
+    );
   }
+
+  const emailPending = !steps.find((s) => s.key === "email_verification")?.complete;
+
+  // Send the code automatically the first time this page opens in a browser session.
+  useEffect(() => {
+    if (!emailPending) return;
+    try {
+      if (window.sessionStorage.getItem("fk-email-code-sent")) return;
+      window.sessionStorage.setItem("fk-email-code-sent", "1");
+    } catch {
+      return;
+    }
+    void resendEmail();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [emailPending]);
 
   async function verifyEmail() {
     setLoading(true);
@@ -96,7 +115,7 @@ export function BuyerOnboardingDashboard({
       <div>
         <h1 className="text-2xl font-semibold text-[var(--navy)]">Buyer onboarding</h1>
         <p className="mt-2 text-sm text-[var(--stone)]">
-          Complete verification and CIS/KYB for {organizationName}. Trading functions unlock after
+          Complete verification and your CIS (Corporation Information Sheet) for {organizationName}. Trading functions unlock after
           admin approval.
         </p>
         <p className="mt-1 text-xs capitalize text-[var(--stone)]">

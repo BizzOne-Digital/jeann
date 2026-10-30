@@ -14,6 +14,24 @@ type Health = {
 export function IntegrationsHealthPanel() {
   const [data, setData] = useState<Health | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [testing, setTesting] = useState(false);
+  const [testResult, setTestResult] = useState<string | null>(null);
+
+  async function sendTestEmail() {
+    setTesting(true);
+    setTestResult(null);
+    try {
+      const res = await fetch("/api/admin/email-test", { method: "POST", credentials: "same-origin" });
+      const json = (await res.json()) as { ok?: boolean; to?: string; note?: string; error?: string };
+      setTestResult(
+        res.ok ? (json.note ?? `Test email sent to ${json.to}. Check the inbox and spam folder.`) : (json.error ?? "Email test failed."),
+      );
+    } catch {
+      setTestResult("Email test failed.");
+    } finally {
+      setTesting(false);
+    }
+  }
 
   useEffect(() => {
     fetch("/api/integrations/health")
@@ -56,6 +74,16 @@ export function IntegrationsHealthPanel() {
             </li>
           ))}
         </ul>
+      </div>
+      <div className="rounded-lg border border-[var(--line)] bg-white p-4">
+        <h3 className="font-semibold text-[var(--navy)]">Email delivery</h3>
+        <p className="mt-1 text-sm text-[var(--stone)]">
+          Sends a test message to your own admin email to confirm verification codes and notifications will arrive.
+        </p>
+        <button type="button" className="btn btn-secondary mt-3 text-sm" disabled={testing} onClick={sendTestEmail}>
+          {testing ? "Sending…" : "Send test email"}
+        </button>
+        {testResult ? <p className="mt-2 text-sm text-[var(--ink)]">{testResult}</p> : null}
       </div>
       <p className="text-xs text-[var(--stone)]">{data.disclaimer}</p>
     </div>

@@ -2,7 +2,7 @@ import { BuyerOnboardingDashboard } from "@/components/portal/BuyerOnboardingDas
 import { getSession } from "@/lib/auth/session";
 import { getBuyerOrganizationForUser } from "@/lib/buyers/verification";
 import { loadOnboardingStatusForUser } from "@/lib/onboarding/status";
-import { loadOwnSubmissionProgress } from "@/lib/kyb/kyb-service";
+import { loadCisProgress } from "@/lib/onboarding/cis-progress";
 import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
@@ -21,7 +21,7 @@ export default async function BuyerOnboardingPage() {
     return <p className="text-sm text-[var(--stone)]">Unable to load onboarding status.</p>;
   }
 
-  const kybProgress = await loadOwnSubmissionProgress(String(org._id));
+  const cisProgress = await loadCisProgress(String(org._id));
 
   return (
     <BuyerOnboardingDashboard
@@ -34,7 +34,7 @@ export default async function BuyerOnboardingPage() {
       canTrade={status.canTrade}
       cisStatus={status.cis?.status}
       reviewComments={status.cis?.reviewComments}
-      kybProgress={kybProgress}
+      cisProgress={cisProgress}
     />
   );
 }

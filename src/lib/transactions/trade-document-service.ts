@@ -10,6 +10,8 @@ import type { TradeDocumentType, TradeDocumentStatus } from "@/models/Document";
 import { defaultStepForDocument, stepNumberFor, documentFilename } from "@/lib/transactions/document-steps";
 import { advanceForDocumentEvent } from "@/lib/transactions/step-service";
 import type { DocumentVersionStatus } from "@/models/DocumentVersion";
+import { findPublishedTemplate } from "@/lib/contracts/template-service";
+import { placeholderValues, renderTemplateLines, wrapLine } from "@/lib/contracts/template-merge";
 
 const TEST_WATERMARK = "TEST DOCUMENT — NOT VALID — FOR SOFTWARE QA ONLY";
 
@@ -182,6 +184,19 @@ export async function generateDocumentPdf(input: {
   }
   structuredData._clauseTexts = input.clauseTexts ?? [];
 
+  // Use the published admin template for this document type when one exists; otherwise built-in layout.
+  const template = await findPublishedTemplate(doc.documentType, side);
+  if (template) {
+    structuredData._templateLines = renderTemplateLines(
+      template.bodyBlocks,
+      placeholderValues(structuredData, { transactionNumber: txNumber }),
+    );
+    structuredData._templateKey = template.key;
+    structuredData._templateVersion = template.version;
+    doc.templateKey = template.key;
+    doc.templateVersion = template.version;
+  }
+
   const pdfBytes = await buildPdf({
     title: doc.title,
     transactionNumber: txNumber,
@@ -257,13 +272,20 @@ async function buildPdf(input: {
     `${input.transactionNumber} | Step ${input.stepNumber ?? "-"} | ${input.documentType} | v${input.version}`,
   );
   pdf.setKeywords([input.transactionNumber, input.documentType, `step-${input.stepNumber ?? 0}`]);
-  const page = pdf.addPage([595, 842]);
+  let page = pdf.addPage([595, 842]);
   const font = await pdf.embedFont(StandardFonts.Helvetica);
   const bold = await pdf.embedFont(StandardFonts.HelveticaBold);
   let y = 800;
+  const templateLines = Array.isArray(input.structuredData._templateLines)
+    ? (input.structuredData._templateLines as unknown[]).map(String)
+    : null;
 
   const draw = (text: string, size = 10, useBold = false) => {
-    if (y < 60) return;
+    if (y < 60) {
+      if (!templateLines) return;
+      page = pdf.addPage([595, 842]);
+      y = 800;
+    }
     page.drawText(text.slice(0, 90), {
       x: 50,
       y,
@@ -285,7 +307,12 @@ async function buildPdf(input: {
   draw(`Generated: ${new Date().toISOString().slice(0, 10)}`);
   y -= 8;
 
+  if (templateLines) {
+    for (const line of templateLines) for (const part of wrapLine(line)) draw(part, 10);
+  }
+
   for (const [key, value] of Object.entries(input.structuredData)) {
+    if (templateLines) break;
     if (key.startsWith("_")) continue;
     if (value === undefined || value === null || value === "") continue;
     draw(`${key}: ${String(value)}`);

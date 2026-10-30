@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { WorkflowStepper, type WorkflowStepView } from "@/components/portal/WorkflowStepper";
 import { TransactionDocumentsPanel } from "@/components/portal/TransactionDocumentsPanel";
 import { BuyerLcDetailsForm } from "@/components/portal/BuyerLcDetailsForm";
+import { RWA_DESCRIPTION, hasQualifyingRwa, isRwaRequiredFor } from "@/lib/banking/rwa";
 import { StaffDocumentTools } from "@/components/portal/StaffDocumentTools";
 import { TransactionFinancePanel } from "@/components/portal/TransactionFinancePanel";
 import { TransactionWorkflowActions } from "@/components/portal/TransactionWorkflowActions";
@@ -82,6 +83,35 @@ export function TransactionWorkspaceTabs({
   const workflowMode =
     data.transaction.transactionType === "supplier_purchase" ? "supplier" : mode;
 
+  const rwaApplies =
+    workflowMode === "buyer" &&
+    isRwaRequiredFor(
+      data.banking?.instrumentType,
+      typeof data.terms?.paymentProposal === "string" ? data.terms.paymentProposal : undefined,
+      typeof data.terms?.bankingInstrumentProposal === "string"
+        ? data.terms.bankingInstrumentProposal
+        : undefined,
+    );
+  const rwaOnFile = hasQualifyingRwa(data.documents);
+  const rwaNotice = rwaApplies ? (
+    <div
+      className={`rounded-lg border p-4 text-sm ${
+        rwaOnFile
+          ? "border-green-200 bg-green-50 text-green-900"
+          : "border-amber-200 bg-amber-50 text-amber-900"
+      }`}
+    >
+      <p className="font-medium">
+        {rwaOnFile ? "RWA letter received." : "RWA required for LC payment terms."}
+      </p>
+      <p className="mt-1">
+        {rwaOnFile
+          ? "Your bank's Ready, Willing and Able letter is on file."
+          : `${RWA_DESCRIPTION} Upload it in the Documents tab (type: RWA) before recording your LC details.`}
+      </p>
+    </div>
+  ) : null;
+
   const tabs: { id: Tab; label: string }[] = [
     { id: "overview", label: "Overview" },
     { id: "workflow", label: "Workflow" },
@@ -152,6 +182,7 @@ export function TransactionWorkspaceTabs({
 
       {tab === "documents" ? (
         <div className="space-y-6">
+          {rwaNotice}
           <TransactionDocumentsPanel
             transactionId={transactionId}
             documents={data.documents}
@@ -175,7 +206,10 @@ export function TransactionWorkspaceTabs({
       ) : null}
 
       {tab === "banking" && !showStaffActions && workflowMode === "buyer" ? (
-        <BuyerLcDetailsForm transactionId={transactionId} onSaved={load} />
+        <div className="space-y-4">
+          {rwaNotice}
+          <BuyerLcDetailsForm transactionId={transactionId} onSaved={load} />
+        </div>
       ) : null}
 
       {tab === "banking" ? (

@@ -16,7 +16,7 @@ import { auditRequestMeta } from "@/lib/api/request-meta";
 export const runtime = "nodejs";
 
 const createSchema = z.object({
-  documentType: z.enum(["loi", "sco", "fco", "icpo", "spa", "proposed_lc_wording", "proforma_invoice", "passport_copy", "contract_amendment", "other"]),
+  documentType: z.enum(["loi", "sco", "fco", "icpo", "spa", "proposed_lc_wording", "proforma_invoice", "passport_copy", "rwa", "contract_amendment", "other"]),
   title: z.string().min(1),
   buyerVisible: z.boolean().optional(),
   templateKey: z.string().optional(),

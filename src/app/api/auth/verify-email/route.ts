@@ -76,13 +76,20 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ error: "User not found." }, { status: 404 });
   }
 
-  const sent = await sendVerificationCode({
-    userId: auth.ctx.userId,
-    channel: "email",
-    purpose: "email_verify",
-    destination: user.email,
-    name: user.name,
-  });
-
-  return NextResponse.json({ ok: true, devCode: sent.devCode });
+  try {
+    const sent = await sendVerificationCode({
+      userId: auth.ctx.userId,
+      channel: "email",
+      purpose: "email_verify",
+      destination: user.email,
+      name: user.name,
+    });
+    return NextResponse.json({ ok: true, devCode: sent.devCode, sentTo: user.email });
+  } catch (error) {
+    console.error("[verify-email PUT]", error);
+    return NextResponse.json(
+      { error: "We could not send the email right now. Please try again in a minute or contact support." },
+      { status: 502 },
+    );
+  }
 }

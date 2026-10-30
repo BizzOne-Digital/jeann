@@ -4,6 +4,7 @@ import { StepRuleError, applyStepStatus, loadStepDefs } from "@/lib/transactions
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
 import { hasPermission } from "@/lib/authorization/permissions";
 import type { Permission } from "@/lib/authorization/permissions";
+import { RWA_REQUIRED_MESSAGE, hasQualifyingRwa, isRwaRequiredFor } from "@/lib/banking/rwa";
 
 export const ALLOWED_INSTRUMENT_TYPES = [
   "irrevocable_documentary_lc",
@@ -18,6 +19,25 @@ export function isAllowedInstrumentType(t: string): boolean {
 
 export function assertInstrumentType(t: string) {
   if (!isAllowedInstrumentType(t)) throw new StepRuleError("Unsupported instrument type.", 422);
+}
+
+/** Blocks buyer-side banking progress for LC payment terms until an RWA letter is on file (409). */
+async function assertRwaForLc(tx: { _id: unknown; organizationId: unknown }, instrumentType?: string) {
+  const { CommercialTerms, Document } = await import("@/models");
+  const terms = await CommercialTerms.findOne({ transactionId: tx._id })
+    .sort({ version: -1 })
+    .select("paymentProposal bankingInstrumentProposal")
+    .lean();
+  if (!isRwaRequiredFor(instrumentType, terms?.paymentProposal, terms?.bankingInstrumentProposal)) return;
+  const docs = await Document.find({
+    transactionId: tx._id,
+    organizationId: tx.organizationId,
+    documentType: "rwa",
+    deletedAt: null,
+  })
+    .select("documentType workflowStatus deletedAt")
+    .lean();
+  if (!hasQualifyingRwa(docs)) throw new StepRuleError(RWA_REQUIRED_MESSAGE, 409);
 }
 
 export async function selectBankingInstrument(input: {
@@ -86,6 +106,10 @@ export async function confirmIssuanceRequested(input: {
     organizationId: new Types.ObjectId(input.organizationId),
   });
   if (!record) throw new Error("banking_record_not_found");
+  await assertRwaForLc(
+    { _id: new Types.ObjectId(input.transactionId), organizationId: new Types.ObjectId(input.organizationId) },
+    record.instrumentType,
+  );
 
   record.status = "issuance_requested";
   record.issuanceRequestedAt = new Date();
@@ -133,6 +157,7 @@ export async function recordBuyerLcDetails(input: {
     throw new StepRuleError("Step 6 opens after the contract is fully executed (steps 1-5).", 409);
   }
   const d = input.details;
+  await assertRwaForLc(tx, d.instrumentType);
   const record = await BankingInstrumentRecord.findOneAndUpdate(
     { transactionId: tx._id },
     {

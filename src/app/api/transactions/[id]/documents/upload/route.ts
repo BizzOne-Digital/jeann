@@ -19,6 +19,7 @@ const metaSchema = z.object({
     "proposed_lc_wording",
     "proforma_invoice",
     "passport_copy",
+    "rwa",
     "contract_amendment",
     "other",
   ]),

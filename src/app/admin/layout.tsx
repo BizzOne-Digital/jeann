@@ -13,6 +13,7 @@ const NAV: Array<{ label: string; href: string }> = [
   { label: "Purchase Requests", href: "/admin/purchase-requests" },
   { label: "Trade Offers", href: "/admin/trade-offers" },
   { label: "Transactions", href: "/admin/transactions" },
+  { label: "Contract Automation", href: "/admin/contract-automation" },
   { label: "Buyer Organizations", href: "/admin/buyers" },
   { label: "Supplier Organizations", href: "/admin/suppliers" },
   { label: "Invitations", href: "/admin/invitations" },
