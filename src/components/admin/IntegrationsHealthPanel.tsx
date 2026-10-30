@@ -16,6 +16,35 @@ export function IntegrationsHealthPanel() {
   const [error, setError] = useState<string | null>(null);
   const [testing, setTesting] = useState(false);
   const [testResult, setTestResult] = useState<string | null>(null);
+  const [emailStatus, setEmailStatus] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/admin/email-test", { credentials: "same-origin" })
+      .then(async (res) => {
+        const json = (await res.json()) as {
+          provider?: string;
+          deliveryConfigured?: boolean;
+          missing?: string[];
+          smtpHost?: string | null;
+          smtpUser?: string | null;
+          login?: string;
+          error?: string;
+        };
+        if (!res.ok) {
+          setEmailStatus(json.error ?? "Could not read the email settings.");
+          return;
+        }
+        const parts = [`Provider: ${json.provider}`];
+        if (json.smtpHost) parts.push(`Host: ${json.smtpHost}`);
+        if (json.smtpUser) parts.push(`User: ${json.smtpUser}`);
+        if (json.missing?.length) parts.push(`Missing settings: ${json.missing.join(", ")}`);
+        if (json.provider !== "smtp") parts.push("EMAIL_PROVIDER must be smtp for real emails.");
+        if (json.login) parts.push(`SMTP login: ${json.login}`);
+        parts.push(json.deliveryConfigured ? "Delivery is configured." : "Delivery is NOT configured on this server.");
+        setEmailStatus(parts.join(" · "));
+      })
+      .catch(() => setEmailStatus("Could not read the email settings."));
+  }, []);
 
   async function sendTestEmail() {
     setTesting(true);
@@ -52,6 +81,7 @@ export function IntegrationsHealthPanel() {
       <button type="button" className="btn btn-secondary mt-3 text-sm" disabled={testing} onClick={sendTestEmail}>
         {testing ? "Sending…" : "Send test email"}
       </button>
+      {emailStatus ? <p className="mt-3 break-words text-xs text-[var(--stone)]">{emailStatus}</p> : null}
       {testResult ? <p className="mt-2 text-sm text-[var(--ink)]">{testResult}</p> : null}
     </div>
   );

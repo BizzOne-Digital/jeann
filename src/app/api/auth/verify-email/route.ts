@@ -88,7 +88,12 @@ export async function PUT(request: NextRequest) {
   } catch (error) {
     console.error("[verify-email PUT]", error);
     return NextResponse.json(
-      { error: "We could not send the email right now. Please try again in a minute or contact support." },
+      {
+        error:
+          error instanceof Error && error.message === "email_not_configured"
+            ? "Email delivery is not set up on the server yet. Please contact support."
+            : "We could not send the email right now. Please try again in a minute or contact support.",
+      },
       { status: 502 },
     );
   }

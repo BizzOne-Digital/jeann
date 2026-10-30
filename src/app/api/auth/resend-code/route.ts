@@ -50,7 +50,13 @@ export async function POST(request: NextRequest) {
       } catch (error) {
         console.error("[resend-code]", error);
         return NextResponse.json(
-          { error: "We could not send the code right now. Please try again in a minute or contact support." },
+          {
+            error:
+              error instanceof Error && error.message === "email_not_configured"
+                ? "Email delivery is not set up on the server yet. Please contact support."
+                : "We could not send the code right now. Please try again in a minute or contact support.",
+            code: error instanceof Error && error.message === "email_not_configured" ? "email_not_configured" : "send_failed",
+          },
           { status: 502 },
         );
       }

@@ -2,6 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // Load nodemailer from node_modules at runtime instead of bundling it (SMTP email).
+  serverExternalPackages: ["nodemailer"],
   async redirects() {
     return [
       {
