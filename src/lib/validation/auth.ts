@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { BUSINESS_EMAIL_MESSAGE, isBusinessEmail } from "@/lib/validation/business-email";
 
 export const loginSchema = z.object({
   email: z.string().trim().email().max(254),
@@ -37,10 +36,6 @@ export const registerBuyerSchema = z
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"],
-  })
-  .refine((data) => isBusinessEmail(data.email), {
-    message: BUSINESS_EMAIL_MESSAGE,
-    path: ["email"],
   });
 
 export const registerCareerApplicantSchema = z

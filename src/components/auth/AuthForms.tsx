@@ -285,8 +285,8 @@ export function BuyerRegistrationForm() {
   return (
     <form onSubmit={onSubmit} className="space-y-3">
       <p className="text-sm text-[var(--stone)]">
-        Use your company <strong>business email</strong> (not Gmail, Yahoo, or other public
-        providers). WhatsApp-capable mobile numbers are preferred.
+        Any email address is accepted (company, Gmail, Yahoo, Outlook and others). WhatsApp-capable
+        mobile numbers are preferred.
       </p>
       <label className="label">
         Legal company name
@@ -321,7 +321,7 @@ export function BuyerRegistrationForm() {
         <input className="field mt-1" name="managerName" required />
       </label>
       <label className="label">
-        Company business email
+        Email address
         <input className="field mt-1" name="email" type="email" autoComplete="email" required />
       </label>
       <label className="label">
