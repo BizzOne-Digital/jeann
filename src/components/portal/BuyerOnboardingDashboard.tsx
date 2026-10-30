@@ -68,11 +68,18 @@ export function BuyerOnboardingDashboard({
     if (!emailPending) return;
     try {
       if (window.sessionStorage.getItem("fk-email-code-sent")) return;
-      window.sessionStorage.setItem("fk-email-code-sent", "1");
     } catch {
       return;
     }
-    void resendEmail();
+    const timer = window.setTimeout(() => {
+      try {
+        window.sessionStorage.setItem("fk-email-code-sent", "1");
+      } catch {
+        // storage unavailable: still send once per page load
+      }
+      void resendEmail();
+    }, 0);
+    return () => window.clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [emailPending]);
 
@@ -186,29 +193,32 @@ export function BuyerOnboardingDashboard({
         )}
 
       <div className="rounded-lg border border-[var(--line)] bg-white p-4">
-        <h2 className="font-medium text-[var(--navy)]">CIS/KYB</h2>
+        <h2 className="font-medium text-[var(--navy)]">CIS (Corporation Information Sheet)</h2>
         <p className="mt-1 text-sm text-[var(--stone)]">
-          Current submission: {cisStatus ?? "not started"}
+          Current submission: {(cisStatus ?? "not started").replace(/_/g, " ")}
         </p>
-        {kybProgress ? (
+        {cisProgress ? (
           <div className="mt-3">
             <p className="text-sm font-medium text-[var(--navy)]">
-              Company information checklist: {kybProgress.label}
+              CIS progress: {cisProgress.label}
             </p>
             <ul className="mt-2 space-y-1 text-sm">
-              {kybProgress.sections.map((s) => (
+              {cisProgress.items.map((s) => (
                 <li key={s.key} className={s.complete ? "text-green-700" : "text-[var(--stone)]"}>
                   {s.complete ? "Done" : "To do"}: {s.label}
                 </li>
               ))}
             </ul>
-            <p className="mt-2 text-xs text-[var(--stone)]">
-              This shows what you have submitted. Verification of your information is carried out by our team.
-            </p>
           </div>
         ) : null}
+        <p className="mt-3 text-xs text-[var(--stone)]">
+          If your payment terms are by Letter of Credit (LC), you will also need to upload an RWA
+          (Ready, Willing and Able) letter issued by your bank, showing your readiness to complete
+          the transaction and your account balance. You can upload it in the transaction&apos;s
+          Documents tab.
+        </p>
         <a href="/portal/buyer/cis" className="btn btn-primary mt-4 inline-flex text-sm">
-          {cisStatus === "changes_requested" ? "Revise CIS/KYB" : "Complete CIS/KYB"}
+          {cisStatus === "changes_requested" ? "Revise CIS" : "Complete CIS"}
         </a>
       </div>
 

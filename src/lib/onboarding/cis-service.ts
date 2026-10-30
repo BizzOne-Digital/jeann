@@ -154,18 +154,18 @@ export async function submitCisProfile(input: {
     userId: input.userId,
     organizationId: input.organizationId,
     type: "cis_submitted",
-    title: "CIS/KYB submitted",
-    body: "Your CIS/KYB application has been submitted for review.",
+    title: "CIS submitted",
+    body: "Your CIS (Corporation Information Sheet) has been submitted for review.",
     href: "/portal/buyer/onboarding",
   });
 
   await notifyAdmins({
     type: "cis_submitted",
-    title: "CIS/KYB submission",
-    body: `${org?.legalName ?? "An organization"} submitted CIS/KYB for review.`,
+    title: "CIS submission",
+    body: `${org?.legalName ?? "An organization"} submitted a CIS for review.`,
     href: `/admin/organizations`,
-    emailSubject: "CIS/KYB submission pending review",
-    emailText: `${org?.legalName ?? "An organization"} submitted CIS/KYB for review.`,
+    emailSubject: "CIS submission pending review",
+    emailText: `${org?.legalName ?? "An organization"} submitted a CIS for review.`,
   });
 
   return { version: draft.version };

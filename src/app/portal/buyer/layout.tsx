@@ -31,7 +31,7 @@ const fullLinks = [
 
 const onboardingLinks = [
   { label: "Onboarding", href: "/portal/buyer/onboarding" },
-  { label: "CIS/KYB", href: "/portal/buyer/cis" },
+  { label: "CIS", href: "/portal/buyer/cis" },
   { label: "Documents", href: "/portal/buyer/documents" },
   { label: "Help", href: "/portal/buyer/help" },
 ];
