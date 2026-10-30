@@ -133,22 +133,15 @@ export async function POST(request: NextRequest) {
       email,
     });
 
-    if (duplicateCheck.blockAutoCreate) {
+    // A matching registration number no longer stops the sign-up (that left the buyer with no
+    // account and no code). The new organization is created separately, flagged for admin review.
+    if (duplicateCheck.duplicateReviewFlag) {
       await writeAuditEvent({
-        action: "organization.duplicate_blocked",
+        action: "organization.duplicate_flagged",
         targetType: "organization",
         ...meta,
         metadata: { reasons: duplicateCheck.reasons },
       });
-      return NextResponse.json(
-        {
-          ok: true,
-          status: "review",
-          message:
-            "A company with this registration details already exists. An administrator will review your request.",
-        },
-        { status: 202 },
-      );
     }
 
     const normalized = normalizeCompanyName(input.legalName) || "buyer";
@@ -172,6 +165,9 @@ export async function POST(request: NextRequest) {
       onboardingStatus: "email_verification_pending",
       duplicateReviewFlag: duplicateCheck.duplicateReviewFlag,
       mergeReviewFlag: duplicateCheck.mergeReviewFlag,
+      verificationNotes: duplicateCheck.duplicateReviewFlag
+        ? `Possible duplicate of an existing company (${duplicateCheck.reasons.join(", ")}). Review before approving.`
+        : undefined,
     });
 
     const user = await User.create({

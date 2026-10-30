@@ -102,6 +102,11 @@ export function AdminBuyerReview({
             <p className="mt-1 text-sm text-[var(--stone)]">Domain: {buyer.domain}</p>
           ) : null}
           <p className="mt-1 text-sm text-[var(--stone)]">Registered: {buyer.createdAt ?? "—"}</p>
+          {buyer.verificationNotes ? (
+            <p className="mt-2 rounded border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+              {buyer.verificationNotes}
+            </p>
+          ) : null}
         </div>
 
         <div>
