@@ -4,6 +4,7 @@ import { getAuthContext } from "@/lib/auth/auth-context";
 import { loadOnboardingStatusForUser } from "@/lib/onboarding/status";
 import { assertOrgScope } from "@/lib/authorization/authorize";
 import { getEnv } from "@/lib/config/env";
+import { describeBlockers } from "@/lib/onboarding/blocker-labels";
 import { isSmsConfigured } from "@/lib/auth/verification-policy";
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
 import type { Permission } from "@/lib/authorization/permissions";
@@ -70,7 +71,7 @@ export async function assertBuyerTransactionAccess(
 
   if (blockers.length > 0) {
     throw new ForbiddenError(
-      `Complete onboarding before accessing transactions: ${blockers.join(", ")}`,
+      `Please complete onboarding before accessing transactions. Still needed: ${describeBlockers(blockers)}.`,
     );
   }
 

@@ -10,6 +10,9 @@ import {
 export const DEFAULT_OTP_LENGTH = 6;
 export const DEFAULT_OTP_TTL_MS = 10 * 60 * 1000;
 export const MAX_OTP_ATTEMPTS = 5;
+/** Sign-up email/phone codes: up to this many live codes at once (resend must not break the first email). */
+const MAX_LIVE_CODES = 3;
+const KEEP_RECENT_CODES_PURPOSES = new Set<VerificationPurpose>(["email_verify", "phone_verify"]);
 
 export function generateOtpCode(length = DEFAULT_OTP_LENGTH): string {
   const max = 10 ** length;
@@ -49,10 +52,22 @@ export async function storeOtpChallenge(
   }
 
   await tryConnectMongo();
-  await VerificationChallenge.updateMany(
-    { userId, purpose: options.purpose, consumedAt: null },
-    { $set: { consumedAt: new Date() } },
-  );
+  if (KEEP_RECENT_CODES_PURPOSES.has(options.purpose)) {
+    // Keep the two newest live codes so a re-send does not invalidate a code already delivered.
+    const live = await VerificationChallenge.find({ userId, purpose: options.purpose, consumedAt: null })
+      .sort({ createdAt: -1 })
+      .select("_id")
+      .lean();
+    const stale = live.slice(MAX_LIVE_CODES - 1).map((c) => c._id);
+    if (stale.length) {
+      await VerificationChallenge.updateMany({ _id: { $in: stale } }, { $set: { consumedAt: new Date() } });
+    }
+  } else {
+    await VerificationChallenge.updateMany(
+      { userId, purpose: options.purpose, consumedAt: null },
+      { $set: { consumedAt: new Date() } },
+    );
+  }
 
   const doc = await VerificationChallenge.create({
     userId,
@@ -85,35 +100,36 @@ export async function verifyStoredOtp(
       ? options.userId
       : new Types.ObjectId(options.userId);
 
-  const challenge = await VerificationChallenge.findOne({
+  const challenges = await VerificationChallenge.find({
     userId,
     purpose: options.purpose,
     consumedAt: null,
     expiresAt: { $gt: new Date() },
   })
     .select("+codeHash")
-    .sort({ createdAt: -1 });
+    .sort({ createdAt: -1 })
+    .limit(KEEP_RECENT_CODES_PURPOSES.has(options.purpose) ? MAX_LIVE_CODES : 1);
 
-  if (!challenge) {
+  if (challenges.length === 0) {
     return { valid: false, reason: "not_found_or_expired" };
   }
 
-  if (challenge.attempts >= MAX_OTP_ATTEMPTS) {
-    return { valid: false, reason: "max_attempts" };
+  let anyCheckable = false;
+  for (const challenge of challenges) {
+    if (challenge.attempts >= MAX_OTP_ATTEMPTS) continue;
+    anyCheckable = true;
+
+    challenge.attempts += 1;
+    await challenge.save();
+
+    if (await verifyOtp(options.code, challenge.codeHash)) {
+      challenge.consumedAt = new Date();
+      await challenge.save();
+      return { valid: true };
+    }
   }
 
-  challenge.attempts += 1;
-  await challenge.save();
-
-  const match = await verifyOtp(options.code, challenge.codeHash);
-  if (!match) {
-    return { valid: false, reason: "invalid_code" };
-  }
-
-  challenge.consumedAt = new Date();
-  await challenge.save();
-
-  return { valid: true };
+  return { valid: false, reason: anyCheckable ? "invalid_code" : "max_attempts" };
 }
 
 export function isOtpExpired(expiresAt: Date): boolean {

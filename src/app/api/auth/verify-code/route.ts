@@ -18,7 +18,7 @@ const schema = z.object({
   code: z.string().trim().min(4).max(12),
 });
 
-const INVALID = { error: "Invalid or expired code." };
+const INVALID = { error: "Invalid or expired code. If you requested more than one code, use the newest code." };
 
 /** Public (no session): verify the phone (primary) or email (secondary) code after registration. */
 export async function POST(request: NextRequest) {

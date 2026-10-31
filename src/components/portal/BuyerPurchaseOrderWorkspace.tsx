@@ -7,6 +7,7 @@ import {
   BUYER_LOI_REVIEW_NOTICE,
 } from "@/lib/content/buyer-portal-guidance";
 import { BuyerIcpoGuidancePanel } from "@/components/portal/BuyerIcpoGuidancePanel";
+import { ICPO_SPECIFICATION_NOTE } from "@/lib/content/buyer-portal-guidance";
 import { BuyerPortalAssistant } from "@/components/portal/BuyerPortalAssistant";
 
 type PaymentTerm = { id: string; structure: string; iccCode: string; preferred?: boolean };
@@ -258,6 +259,9 @@ export function BuyerPurchaseOrderWorkspace() {
                 onChange={(e) => setRequestedSpecification(e.target.value)}
                 required
               />
+              <span className="mt-1 block text-xs font-normal normal-case tracking-normal text-amber-800">
+                {ICPO_SPECIFICATION_NOTE}
+              </span>
             </label>
             <label className="label block">
               Packaging type

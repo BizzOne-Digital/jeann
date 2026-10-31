@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
       failureReason: result.reason,
       ...meta,
     });
-    return NextResponse.json({ error: "Invalid or expired code." }, { status: 400 });
+    return NextResponse.json({ error: "Invalid or expired code. If you requested more than one code, use the newest code." }, { status: 400 });
   }
 
   await markEmailVerified(auth.ctx.userId);

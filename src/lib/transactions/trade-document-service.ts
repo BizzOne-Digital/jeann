@@ -9,6 +9,7 @@ import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
 import type { TradeDocumentType, TradeDocumentStatus } from "@/models/Document";
 import { defaultStepForDocument, stepNumberFor, documentFilename } from "@/lib/transactions/document-steps";
 import { advanceForDocumentEvent } from "@/lib/transactions/step-service";
+import { ICPO_SPECIFICATION_NOTE } from "@/lib/content/buyer-portal-guidance";
 import type { DocumentVersionStatus } from "@/models/DocumentVersion";
 import { findPublishedTemplate } from "@/lib/contracts/template-service";
 import { placeholderValues, renderTemplateLines, wrapLine } from "@/lib/contracts/template-merge";
@@ -316,6 +317,14 @@ async function buildPdf(input: {
     if (key.startsWith("_")) continue;
     if (value === undefined || value === null || value === "") continue;
     draw(`${key}: ${String(value)}`);
+  }
+
+  if (
+    input.documentType === "icpo" &&
+    !(templateLines ?? []).some((line) => line.includes("Indicative commercial specifications only"))
+  ) {
+    y -= 6;
+    for (const part of wrapLine(ICPO_SPECIFICATION_NOTE)) draw(part, 9, true);
   }
 
   if (input.clauseTexts.length) {

@@ -66,3 +66,7 @@ export const BUYER_ICPO_REVIEW_NOTICE =
 
 export const BUYER_PO_AI_PROMPT_HINT =
   "Ask about ICPO fields, FOB vs CIF, PSA contract steps, or what must match our payment terms. I cannot provide binding prices, legal advice, or approve your order.";
+
+/** Shown under "Product specification" on the buyer ICPO form and printed on generated ICPO PDFs. */
+export const ICPO_SPECIFICATION_NOTE =
+  "Note: Indicative commercial specifications only. Final quality parameters and tolerances must be confirmed by the supplier's Certificate of Analysis (CoA), applicable standards, and signed SPA.";
