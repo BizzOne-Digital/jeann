@@ -97,7 +97,8 @@ export function BuyerOnboardingDashboard({
       setError(data.error ?? "Invalid code.");
       return;
     }
-    setMessage("Email verified. Refresh to update your progress.");
+    setMessage("Email verified. Updating your checklist…");
+    window.setTimeout(() => window.location.reload(), 1200);
   }
 
   async function verifyPhone() {
@@ -114,7 +115,8 @@ export function BuyerOnboardingDashboard({
       setError(data.error ?? "Invalid code.");
       return;
     }
-    setMessage("Phone verified.");
+    setMessage("Phone verified. Updating your checklist…");
+    window.setTimeout(() => window.location.reload(), 1200);
   }
 
   return (
