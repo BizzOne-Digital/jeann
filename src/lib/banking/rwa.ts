@@ -40,3 +40,21 @@ export function hasQualifyingRwa(
       !NON_QUALIFYING_STATUSES.includes(String(d.workflowStatus)),
   );
 }
+
+export const FIS_REQUIRED_MESSAGE =
+  "FIS (Financial Information Services) document from your bank is required for LC payment terms";
+
+export const FIS_DESCRIPTION =
+  "FIS (Financial Information Services) document: uploaded by the buyer separately, together with the CIS and the RWA letter, for every LC transaction.";
+
+/** An FIS counts once uploaded by the buyer organization and not rejected/withdrawn/deleted. */
+export function hasQualifyingFis(
+  docs: Array<{ documentType?: string; workflowStatus?: string; deletedAt?: unknown }>,
+): boolean {
+  return docs.some(
+    (d) =>
+      d.documentType === "fis" &&
+      !d.deletedAt &&
+      !NON_QUALIFYING_STATUSES.includes(String(d.workflowStatus)),
+  );
+}

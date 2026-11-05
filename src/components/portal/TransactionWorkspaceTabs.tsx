@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { WorkflowStepper, type WorkflowStepView } from "@/components/portal/WorkflowStepper";
 import { TransactionDocumentsPanel } from "@/components/portal/TransactionDocumentsPanel";
 import { BuyerLcDetailsForm } from "@/components/portal/BuyerLcDetailsForm";
-import { RWA_DESCRIPTION, hasQualifyingRwa, isRwaRequiredFor } from "@/lib/banking/rwa";
+import { FIS_DESCRIPTION, RWA_DESCRIPTION, hasQualifyingFis, hasQualifyingRwa, isRwaRequiredFor } from "@/lib/banking/rwa";
 import { StaffDocumentTools } from "@/components/portal/StaffDocumentTools";
 import { TransactionFinancePanel } from "@/components/portal/TransactionFinancePanel";
 import { TransactionWorkflowActions } from "@/components/portal/TransactionWorkflowActions";
@@ -92,7 +92,7 @@ export function TransactionWorkspaceTabs({
         ? data.terms.bankingInstrumentProposal
         : undefined,
     );
-  const rwaOnFile = hasQualifyingRwa(data.documents);
+  const rwaOnFile = hasQualifyingRwa(data.documents) && hasQualifyingFis(data.documents);
   const rwaNotice = rwaApplies ? (
     <div
       className={`rounded-lg border p-4 text-sm ${
@@ -102,12 +102,12 @@ export function TransactionWorkspaceTabs({
       }`}
     >
       <p className="font-medium">
-        {rwaOnFile ? "RWA letter received." : "RWA required for LC payment terms."}
+        {rwaOnFile ? "RWA and FIS documents received." : "RWA and FIS required for LC payment terms."}
       </p>
       <p className="mt-1">
         {rwaOnFile
-          ? "Your bank's Ready, Willing and Able letter is on file."
-          : `${RWA_DESCRIPTION} Upload it in the Documents tab (type: RWA) before recording your LC details.`}
+          ? "Your RWA letter and FIS document are on file."
+          : `${RWA_DESCRIPTION} ${FIS_DESCRIPTION} Upload both in the Documents tab (types: RWA and FIS) before recording your LC details.`}
       </p>
     </div>
   ) : null;

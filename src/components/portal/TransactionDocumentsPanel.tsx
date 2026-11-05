@@ -18,6 +18,7 @@ const UPLOAD_TYPES = [
   { value: "proforma_invoice", label: "Proforma invoice" },
   { value: "passport_copy", label: "Passport copy (signer)" },
   { value: "rwa", label: "RWA - Ready, Willing and Able letter (from your bank)" },
+  { value: "fis", label: "FIS - Financial Information Services document" },
   { value: "other", label: "Passport / other signer document" },
 ];
 
@@ -40,8 +41,8 @@ export function TransactionDocumentsPanel({
     isStaff
       ? true
       : mode === "buyer"
-        ? ["icpo", "loi", "passport_copy", "rwa", "other"].includes(t.value)
-        : t.value !== "icpo" && t.value !== "rwa",
+        ? ["icpo", "loi", "passport_copy", "rwa", "fis", "other"].includes(t.value)
+        : t.value !== "icpo" && t.value !== "rwa" && t.value !== "fis",
   );
   const [signDocId, setSignDocId] = useState<string | null>(null);
   const [signerName, setSignerName] = useState("");

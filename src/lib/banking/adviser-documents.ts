@@ -9,6 +9,7 @@ export const ADVISER_DOCUMENT_TYPES = [
   "proposed_lc_wording",
   "proforma_invoice",
   "rwa",
+  "fis",
 ] as const;
 
 const RELEASED = ["approved", "sent", "viewed", "signed"];

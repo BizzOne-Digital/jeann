@@ -4,7 +4,7 @@ import { StepRuleError, applyStepStatus, loadStepDefs } from "@/lib/transactions
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
 import { hasPermission } from "@/lib/authorization/permissions";
 import type { Permission } from "@/lib/authorization/permissions";
-import { RWA_REQUIRED_MESSAGE, hasQualifyingRwa, isRwaRequiredFor } from "@/lib/banking/rwa";
+import { FIS_REQUIRED_MESSAGE, RWA_REQUIRED_MESSAGE, hasQualifyingFis, hasQualifyingRwa, isRwaRequiredFor } from "@/lib/banking/rwa";
 
 export const ALLOWED_INSTRUMENT_TYPES = [
   "irrevocable_documentary_lc",
@@ -21,7 +21,7 @@ export function assertInstrumentType(t: string) {
   if (!isAllowedInstrumentType(t)) throw new StepRuleError("Unsupported instrument type.", 422);
 }
 
-/** Blocks buyer-side banking progress for LC payment terms until an RWA letter is on file (409). */
+/** Blocks buyer-side banking progress for LC payment terms until the RWA and FIS documents are on file (409). */
 async function assertRwaForLc(tx: { _id: unknown; organizationId: unknown }, instrumentType?: string) {
   const { CommercialTerms, Document } = await import("@/models");
   const terms = await CommercialTerms.findOne({ transactionId: tx._id })
@@ -32,12 +32,13 @@ async function assertRwaForLc(tx: { _id: unknown; organizationId: unknown }, ins
   const docs = await Document.find({
     transactionId: tx._id,
     organizationId: tx.organizationId,
-    documentType: "rwa",
+    documentType: { $in: ["rwa", "fis"] },
     deletedAt: null,
   })
     .select("documentType workflowStatus deletedAt")
     .lean();
   if (!hasQualifyingRwa(docs)) throw new StepRuleError(RWA_REQUIRED_MESSAGE, 409);
+  if (!hasQualifyingFis(docs)) throw new StepRuleError(FIS_REQUIRED_MESSAGE, 409);
 }
 
 export async function selectBankingInstrument(input: {
