@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 
-/** Buyer-facing CIS (Corporation Information Sheet) progress. Never exposes staff verification data. */
+/** Buyer-facing CIS (Corporate Information Sheet) progress. Never exposes staff verification data. */
 
 export type CisProgressItem = { key: string; label: string; complete: boolean };
 

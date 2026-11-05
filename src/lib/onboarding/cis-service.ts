@@ -155,7 +155,7 @@ export async function submitCisProfile(input: {
     organizationId: input.organizationId,
     type: "cis_submitted",
     title: "CIS submitted",
-    body: "Your CIS (Corporation Information Sheet) has been submitted for review.",
+    body: "Your CIS (Corporate Information Sheet) has been submitted for review.",
     href: "/portal/buyer/onboarding",
   });
 

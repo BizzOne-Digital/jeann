@@ -2,7 +2,7 @@ const LABELS: Record<string, string> = {
   email_verification: "verify your email",
   phone_verification: "verify your phone number",
   terms_acceptance: "accept the required terms",
-  cis_kyb: "complete the CIS (Corporation Information Sheet)",
+  cis_kyb: "complete the CIS (Corporate Information Sheet)",
   cis_kyb_not_approved: "CIS approval by our team",
   admin_review: "admin review of your CIS",
   organization_not_approved: "admin approval of your organization",
