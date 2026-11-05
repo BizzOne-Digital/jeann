@@ -126,14 +126,22 @@ export async function submitCisProfile(input: {
     throw new Error("no_editable_cis");
   }
 
-  if (!draft.legalName?.trim()) throw new Error("incomplete_cis");
-  if (!draft.addresses?.length) throw new Error("incomplete_cis");
-
   const docCount = await KybDocument.countDocuments({
     organizationId: new Types.ObjectId(input.organizationId),
     cisProfileId: draft._id,
     deletedAt: null,
   });
+  // The buyer uploads the completed CIS form; the online fields are only required when no form was uploaded.
+  const uploadedForm = await KybDocument.countDocuments({
+    organizationId: new Types.ObjectId(input.organizationId),
+    cisProfileId: draft._id,
+    documentType: "cis_form",
+    deletedAt: null,
+  });
+  if (uploadedForm === 0) {
+    if (!draft.legalName?.trim()) throw new Error("incomplete_cis");
+    if (!draft.addresses?.length) throw new Error("incomplete_cis");
+  }
   if (docCount === 0) throw new Error("documents_required");
 
   const wasChangesRequested = draft.status === "changes_requested";

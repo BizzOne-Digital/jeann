@@ -9,7 +9,7 @@ export type DocEvent = "created" | "submitted" | "approved" | "sent" | "signed";
 
 /** Document types authored by Finekarts staff (the counterparty only receives them). */
 const STAFF_AUTHORED: Record<DocStepSide, string[]> = {
-  buyer: ["sco", "fco", "spa", "proposed_lc_wording", "proforma_invoice"],
+  buyer: ["sco", "fco", "spa", "proposed_lc_wording", "proforma_invoice", "commercial_invoice"],
   supplier: ["icpo"],
 };
 
@@ -20,7 +20,7 @@ const EXTERNAL_UPLOAD: Record<DocStepSide, string[]> = {
 };
 
 /** Documents that can be uploaded at any time (supporting material, no step). */
-const FREE_TYPES = ["passport_copy", "loi", "rwa", "fis", "other", "contract_amendment"];
+const FREE_TYPES = ["commercial_invoice", "passport_copy", "loi", "rwa", "fis", "other", "contract_amendment"];
 
 const RANK: Record<string, number> = {
   not_started: 0,

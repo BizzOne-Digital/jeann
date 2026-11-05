@@ -71,6 +71,13 @@ const BODIES: Record<string, Block[]> = {
     GOODS,
     P("This proforma invoice is issued for arranging payment and is not a tax invoice."),
   ],
+  commercial_invoice: [
+    H("Commercial invoice"),
+    PARTIES,
+    GOODS,
+    P("Invoice number: ____________________\nShipment / bill of lading reference: ____________________\nAmount due: {{totalValue}}"),
+    P("Goods are invoiced as shipped, on the terms stated above. Payment is made through the agreed banking instrument."),
+  ],
 };
 
 export function defaultTemplates(): DefaultTemplate[] {

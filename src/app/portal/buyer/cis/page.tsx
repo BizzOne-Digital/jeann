@@ -3,10 +3,12 @@ import { getBuyerOrganizationId } from "@/lib/auth/buyer-org";
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
 import { BuyerCisPdfDownload } from "@/components/portal/BuyerCisPdfDownload";
 import { CisDraftForm } from "@/components/portal/CisDraftForm";
+import { CisUploadForm } from "@/components/portal/CisUploadForm";
 import { PortalPage } from "@/components/portal/PortalPage";
 
 export default async function CisPage() {
   const session = await requirePortalAccess("buyer");
+  let orgId: string | null = null;
   let initial = {
     legalName: "",
     registrationNumber: "",
@@ -20,7 +22,8 @@ export default async function CisPage() {
 
   if (isMongoConfigured()) {
     await tryConnectMongo();
-    const orgId = await getBuyerOrganizationId(session);
+    const resolved = await getBuyerOrganizationId(session);
+    orgId = resolved ? String(resolved) : null;
     if (orgId) {
       const { CisProfile, Organization } = await import("@/models");
       const org = await Organization.findById(orgId).lean();
@@ -50,9 +53,10 @@ export default async function CisPage() {
   return (
     <PortalPage
       title="Corporate information sheet"
-      description="Provide your company details for qualification — use the PDF or the online draft below."
+      description="Download the CIS form, complete it, and upload it here for Finekarts to review."
     >
       <BuyerCisPdfDownload />
+      {orgId ? <CisUploadForm organizationId={String(orgId)} status={initial.status} /> : null}
       <CisDraftForm initial={initial} />
     </PortalPage>
   );

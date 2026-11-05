@@ -60,7 +60,7 @@ export async function buildDocumentPrefill(
   transactionId: string,
   documentType?: string,
 ): Promise<Record<string, unknown>> {
-  if (!documentType || !["sco", "fco", "spa", "proposed_lc_wording", "proforma_invoice", "icpo", "loi"].includes(documentType)) {
+  if (!documentType || !["sco", "fco", "spa", "proposed_lc_wording", "proforma_invoice", "commercial_invoice", "icpo", "loi"].includes(documentType)) {
     return {};
   }
   const { Transaction, CommercialTerms, Organization } = await import("@/models");

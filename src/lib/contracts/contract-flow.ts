@@ -48,6 +48,12 @@ export const DOC_PROFORMA: FlowDocument = {
   label: "Proforma invoice",
   fullName: "Proforma invoice",
 };
+export const DOC_COMMERCIAL: FlowDocument = {
+  slug: "commercial_invoice",
+  documentType: "commercial_invoice",
+  label: "Commercial invoice",
+  fullName: "Commercial invoice",
+};
 export const DOC_PASSPORT: FlowDocument = {
   documentType: "passport_copy",
   label: "Signed PSA with passport copies",
@@ -75,6 +81,7 @@ export function templateSlugForDocumentType(type: string | undefined | null): st
     case "icpo":
     case "spa":
     case "proforma_invoice":
+    case "commercial_invoice":
       return type;
     case "proposed_lc_wording":
       return "lc_wording";
@@ -113,7 +120,7 @@ export function contractFlow(side: ContractSide): FlowStep[] {
       },
       {
         number: 6, stepKey: "banking", title: "Banking: LC details / RWA", actor: "buyer",
-        documents: [DOC_RWA],
+        documents: [DOC_RWA, DOC_COMMERCIAL],
         direction: "The buyer proceeds with the agreed banking instrument. Staff tracks it in the Banking step.",
       },
     ];
@@ -146,7 +153,7 @@ export function contractFlow(side: ContractSide): FlowStep[] {
     },
     {
       number: 6, stepKey: "banking", title: "Banking: LC details / RWA", actor: "staff",
-      documents: [DOC_RWA],
+      documents: [DOC_RWA, DOC_COMMERCIAL],
       direction: "Finekarts proceeds with the agreed banking instrument. Track it in the Banking step.",
     },
   ];

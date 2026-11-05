@@ -15,6 +15,7 @@ const STEP3_TYPES = [
   { value: "spa", label: "PSA / SPA" },
   { value: "proposed_lc_wording", label: "LC wording" },
   { value: "proforma_invoice", label: "Proforma invoice" },
+  { value: "commercial_invoice", label: "Commercial invoice (for each shipment)" },
 ];
 
 async function post(url: string, body: unknown) {
@@ -224,7 +225,7 @@ export function StaffDocumentTools({
       </form>
 
       <form onSubmit={generateStep3} className="space-y-3 border-t border-[var(--line)] pt-4">
-        <h3 className="text-sm font-semibold">Step 3 - generate PSA/SPA, LC wording or proforma invoice</h3>
+        <h3 className="text-sm font-semibold">Generate PSA/SPA, LC wording, proforma invoice or commercial invoice</h3>
         <select className="field" value={s3Type} onChange={(e) => setS3Type(e.target.value)}>
           {STEP3_TYPES.map((t) => (
             <option key={t.value} value={t.value}>

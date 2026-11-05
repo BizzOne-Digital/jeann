@@ -8,6 +8,7 @@ export const ADVISER_DOCUMENT_TYPES = [
   "spa",
   "proposed_lc_wording",
   "proforma_invoice",
+  "commercial_invoice",
   "rwa",
   "fis",
 ] as const;

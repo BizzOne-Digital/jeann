@@ -18,6 +18,7 @@ const metaSchema = z.object({
     "spa",
     "proposed_lc_wording",
     "proforma_invoice",
+    "commercial_invoice",
     "passport_copy",
     "rwa",
     "fis",
