@@ -21,8 +21,48 @@ export function assertInstrumentType(t: string) {
   if (!isAllowedInstrumentType(t)) throw new StepRuleError("Unsupported instrument type.", 422);
 }
 
-/** Blocks buyer-side banking progress for LC payment terms until the RWA and FIS documents are on file (409). */
-async function assertRwaForLc(tx: { _id: unknown; organizationId: unknown }, instrumentType?: string) {
+const normalizeBank = (v: unknown) => String(v ?? "").trim().toLowerCase().replace(/\s+/g, " ");
+
+/**
+ * The FIS is reused across a buyer's transactions: an FIS uploaded on an earlier transaction stays on record
+ * as long as the issuing bank is the same. If the buyer names a different bank, a new FIS is needed.
+ */
+export async function hasStandingFis(tx: { _id: unknown; organizationId: unknown }, issuingBank?: string) {
+  const { Document, BankingInstrumentRecord, Transaction } = await import("@/models");
+  const earlier = await Document.find({
+    organizationId: tx.organizationId,
+    documentType: "fis",
+    deletedAt: null,
+    transactionId: { $ne: tx._id },
+  })
+    .select("documentType workflowStatus deletedAt")
+    .lean();
+  if (!hasQualifyingFis(earlier)) return false;
+
+  const bank = normalizeBank(issuingBank);
+  if (!bank) return true;
+  const otherTx = await Transaction.find({ organizationId: tx.organizationId, _id: { $ne: tx._id } })
+    .select("_id")
+    .lean();
+  const records = await BankingInstrumentRecord.find({
+    transactionId: { $in: otherTx.map((t) => t._id) },
+    issuingBank: { $exists: true, $ne: "" },
+  })
+    .select("issuingBank")
+    .lean();
+  if (records.length === 0) return true;
+  return records.some((r) => normalizeBank(r.issuingBank) === bank);
+}
+
+/**
+ * Blocks buyer-side banking progress for LC payment terms until the RWA (every transaction) and the FIS
+ * (once per issuing bank) are on file (409).
+ */
+async function assertRwaForLc(
+  tx: { _id: unknown; organizationId: unknown },
+  instrumentType?: string,
+  issuingBank?: string,
+) {
   const { CommercialTerms, Document } = await import("@/models");
   const terms = await CommercialTerms.findOne({ transactionId: tx._id })
     .sort({ version: -1 })
@@ -38,7 +78,9 @@ async function assertRwaForLc(tx: { _id: unknown; organizationId: unknown }, ins
     .select("documentType workflowStatus deletedAt")
     .lean();
   if (!hasQualifyingRwa(docs)) throw new StepRuleError(RWA_REQUIRED_MESSAGE, 409);
-  if (!hasQualifyingFis(docs)) throw new StepRuleError(FIS_REQUIRED_MESSAGE, 409);
+  if (!hasQualifyingFis(docs) && !(await hasStandingFis(tx, issuingBank))) {
+    throw new StepRuleError(FIS_REQUIRED_MESSAGE, 409);
+  }
 }
 
 export async function selectBankingInstrument(input: {
@@ -111,6 +153,7 @@ export async function confirmIssuanceRequested(input: {
   await assertRwaForLc(
     { _id: new Types.ObjectId(input.transactionId), organizationId: new Types.ObjectId(input.organizationId) },
     record.instrumentType,
+    record.issuingBank,
   );
 
   record.status = "issuance_requested";
@@ -159,7 +202,7 @@ export async function recordBuyerLcDetails(input: {
     throw new StepRuleError("Step 6 opens after the contract is fully executed (steps 1-5).", 409);
   }
   const d = input.details;
-  await assertRwaForLc(tx, d.instrumentType);
+  await assertRwaForLc(tx, d.instrumentType, d.issuingBank);
   const record = await BankingInstrumentRecord.findOneAndUpdate(
     { transactionId: tx._id },
     {

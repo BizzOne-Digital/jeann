@@ -24,6 +24,7 @@ type TxDetail = {
     internalNotes?: string;
   };
   workflowSteps?: WorkflowStepView[];
+  fisOnRecord?: boolean;
   documents: Array<{
     id: string;
     title: string;
@@ -92,7 +93,7 @@ export function TransactionWorkspaceTabs({
         ? data.terms.bankingInstrumentProposal
         : undefined,
     );
-  const rwaOnFile = hasQualifyingRwa(data.documents) && hasQualifyingFis(data.documents);
+  const rwaOnFile = hasQualifyingRwa(data.documents) && (hasQualifyingFis(data.documents) || Boolean(data.fisOnRecord));
   const rwaNotice = rwaApplies ? (
     <div
       className={`rounded-lg border p-4 text-sm ${
@@ -106,8 +107,8 @@ export function TransactionWorkspaceTabs({
       </p>
       <p className="mt-1">
         {rwaOnFile
-          ? "Your RWA letter and FIS document are on file."
-          : `${RWA_DESCRIPTION} ${FIS_DESCRIPTION} Upload both in the Documents tab (types: RWA and FIS) before recording your LC details.`}
+          ? "Your RWA letter is on file for this transaction, and your FIS is on record for your bank."
+          : `${RWA_DESCRIPTION} ${FIS_DESCRIPTION} Upload the RWA for every transaction. The FIS and CIS are needed only once for the same bank. Use the Documents tab (types: RWA and FIS) before recording your LC details.`}
       </p>
     </div>
   ) : null;

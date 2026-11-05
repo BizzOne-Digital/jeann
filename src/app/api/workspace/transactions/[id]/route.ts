@@ -9,6 +9,7 @@ import {
   allowedProcurementTransitionsFrom,
 } from "@/lib/transactions/procurement-workflow";
 import { getTransactionBankingSummary } from "@/lib/banking/transaction-banking-summary";
+import { hasStandingFis } from "@/lib/transactions/banking-service";
 
 export const runtime = "nodejs";
 
@@ -38,6 +39,7 @@ export async function GET(
     const steps = await WorkflowStep.find({ transactionId: tx._id }).sort({ order: 1 }).lean();
     const documents = await Document.find({ transactionId: tx._id, deletedAt: null }).lean();
     const banking = await getTransactionBankingSummary(tx._id);
+    const fisOnRecord = await hasStandingFis(tx);
 
     const allowedTransitions = isProcurement
       ? allowedProcurementTransitionsFrom(tx.workflowStatus).map((t) => t.to)
@@ -68,6 +70,7 @@ export async function GET(
         status: s.status,
         skipReason: s.skipReason,
       })),
+      fisOnRecord,
       documents: documents.map((d) => ({
         id: String(d._id),
         title: d.title,
