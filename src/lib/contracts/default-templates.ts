@@ -34,6 +34,7 @@ const BODIES: Record<string, Block[]> = {
     PARTIES,
     P("We confirm our full offer on the terms below. This offer is valid for the period stated in the accompanying message."),
     GOODS,
+    P("Banking requirement: any Letter of Credit (LC) or Standby Letter of Credit (SBLC) under this offer must be issued by a financial institution ranked among the top 50 banking institutions in the world. The buyer shall provide its banking information, including the name of the issuing bank, to the seller for review before the transaction is committed."),
     P("Acceptance by ICPO or signed contract is the basis for the sales and purchase agreement."),
   ],
   loi: [

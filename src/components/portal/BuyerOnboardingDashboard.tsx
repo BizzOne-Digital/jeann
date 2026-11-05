@@ -124,7 +124,7 @@ export function BuyerOnboardingDashboard({
       <div>
         <h1 className="text-2xl font-semibold text-[var(--navy)]">Buyer onboarding</h1>
         <p className="mt-2 text-sm text-[var(--stone)]">
-          Complete verification and your CIS (Corporate Information Sheet) for {organizationName}. Trading functions unlock after
+          Complete verification and your onboarding (Corporate Information Sheet) for {organizationName}. Trading functions unlock after
           admin approval.
         </p>
         <p className="mt-1 text-xs capitalize text-[var(--stone)]">
@@ -195,14 +195,14 @@ export function BuyerOnboardingDashboard({
         )}
 
       <div className="rounded-lg border border-[var(--line)] bg-white p-4">
-        <h2 className="font-medium text-[var(--navy)]">CIS (Corporate Information Sheet)</h2>
+        <h2 className="font-medium text-[var(--navy)]">Onboarding: Corporate Information Sheet</h2>
         <p className="mt-1 text-sm text-[var(--stone)]">
           Current submission: {(cisStatus ?? "not started").replace(/_/g, " ")}
         </p>
         {cisProgress ? (
           <div className="mt-3">
             <p className="text-sm font-medium text-[var(--navy)]">
-              CIS progress: {cisProgress.label}
+              Onboarding progress: {cisProgress.label}
             </p>
             <ul className="mt-2 space-y-1 text-sm">
               {cisProgress.items.map((s) => (
@@ -220,7 +220,7 @@ export function BuyerOnboardingDashboard({
           Documents tab.
         </p>
         <a href="/portal/buyer/cis" className="btn btn-primary mt-4 inline-flex text-sm">
-          {cisStatus === "changes_requested" ? "Revise CIS" : "Complete CIS"}
+          {cisStatus === "changes_requested" ? "Revise onboarding" : "Complete onboarding"}
         </a>
       </div>
 
