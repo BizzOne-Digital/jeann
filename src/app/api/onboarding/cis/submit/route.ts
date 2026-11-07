@@ -48,13 +48,13 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     if (error instanceof Error) {
       if (error.message === "incomplete_cis") {
-        return NextResponse.json({ error: "Complete required CIS fields first." }, { status: 422 });
+        return NextResponse.json({ error: "Complete the required company profile fields first." }, { status: 422 });
       }
       if (error.message === "documents_required") {
         return NextResponse.json({ error: "Upload supporting documents first." }, { status: 422 });
       }
       if (error.message === "no_editable_cis") {
-        return NextResponse.json({ error: "No editable CIS profile." }, { status: 409 });
+        return NextResponse.json({ error: "No editable company profile." }, { status: 409 });
       }
     }
     return handleApiError(error);

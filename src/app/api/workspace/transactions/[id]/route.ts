@@ -40,6 +40,7 @@ export async function GET(
     const documents = await Document.find({ transactionId: tx._id, deletedAt: null }).lean();
     const banking = await getTransactionBankingSummary(tx._id);
     const fisOnRecord = await hasStandingFis(tx);
+    const cisOnRecord = await hasStandingFis(tx, undefined, "cis");
 
     const allowedTransitions = isProcurement
       ? allowedProcurementTransitionsFrom(tx.workflowStatus).map((t) => t.to)
@@ -71,6 +72,7 @@ export async function GET(
         skipReason: s.skipReason,
       })),
       fisOnRecord,
+      cisOnRecord,
       documents: documents.map((d) => ({
         id: String(d._id),
         title: d.title,

@@ -2,9 +2,9 @@ const LABELS: Record<string, string> = {
   email_verification: "verify your email",
   phone_verification: "verify your phone number",
   terms_acceptance: "accept the required terms",
-  cis_kyb: "complete your onboarding (upload the Corporate Information Sheet for review)",
-  cis_kyb_not_approved: "onboarding approval by our team",
-  admin_review: "admin review of your onboarding",
+  cis_kyb: "complete your company profile",
+  cis_kyb_not_approved: "company profile approval by our team",
+  admin_review: "admin review of your company profile",
   organization_not_approved: "admin approval of your organization",
 };
 

@@ -126,22 +126,14 @@ export async function submitCisProfile(input: {
     throw new Error("no_editable_cis");
   }
 
+  if (!draft.legalName?.trim()) throw new Error("incomplete_cis");
+  if (!draft.addresses?.length) throw new Error("incomplete_cis");
+
   const docCount = await KybDocument.countDocuments({
     organizationId: new Types.ObjectId(input.organizationId),
     cisProfileId: draft._id,
     deletedAt: null,
   });
-  // The buyer uploads the completed CIS form; the online fields are only required when no form was uploaded.
-  const uploadedForm = await KybDocument.countDocuments({
-    organizationId: new Types.ObjectId(input.organizationId),
-    cisProfileId: draft._id,
-    documentType: "cis_form",
-    deletedAt: null,
-  });
-  if (uploadedForm === 0) {
-    if (!draft.legalName?.trim()) throw new Error("incomplete_cis");
-    if (!draft.addresses?.length) throw new Error("incomplete_cis");
-  }
   if (docCount === 0) throw new Error("documents_required");
 
   const wasChangesRequested = draft.status === "changes_requested";
@@ -162,18 +154,18 @@ export async function submitCisProfile(input: {
     userId: input.userId,
     organizationId: input.organizationId,
     type: "cis_submitted",
-    title: "CIS submitted",
-    body: "Your CIS (Corporate Information Sheet) has been submitted for review.",
+    title: "Company profile submitted",
+    body: "Your company profile has been submitted for review.",
     href: "/portal/buyer/onboarding",
   });
 
   await notifyAdmins({
     type: "cis_submitted",
-    title: "CIS submission",
-    body: `${org?.legalName ?? "An organization"} submitted a CIS for review.`,
+    title: "Company profile submission",
+    body: `${org?.legalName ?? "An organization"} submitted a company profile for review.`,
     href: `/admin/organizations`,
-    emailSubject: "CIS submission pending review",
-    emailText: `${org?.legalName ?? "An organization"} submitted a CIS for review.`,
+    emailSubject: "Company profile pending review",
+    emailText: `${org?.legalName ?? "An organization"} submitted a company profile for review.`,
   });
 
   return { version: draft.version };

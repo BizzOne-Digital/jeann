@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     }
     if (!isMongoConfigured()) {
       return NextResponse.json(
-        { error: "MongoDB is required to save CIS profiles." },
+        { error: "MongoDB is required to save company profiles." },
         { status: 503 },
       );
     }
@@ -107,6 +107,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("[portal/buyer/cis]", error);
-    return NextResponse.json({ error: "Unable to save CIS draft." }, { status: 400 });
+    return NextResponse.json({ error: "Unable to save the company profile draft." }, { status: 400 });
   }
 }

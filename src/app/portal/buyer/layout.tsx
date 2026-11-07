@@ -20,7 +20,7 @@ const fullLinks = [
   { label: "Transactions", href: "/portal/buyer/transactions" },
   { label: "Shipments", href: "/portal/buyer/shipments" },
   { label: "Invoices", href: "/portal/buyer/invoices" },
-  { label: "Corporate information", href: "/portal/buyer/cis" },
+  { label: "Company profile", href: "/portal/buyer/cis" },
   { label: "Documents", href: "/portal/buyer/documents" },
   { label: "Booking", href: "/portal/buyer/booking" },
   { label: "Contact", href: "/portal/buyer/contact" },
@@ -31,7 +31,7 @@ const fullLinks = [
 
 const onboardingLinks = [
   { label: "Onboarding", href: "/portal/buyer/onboarding" },
-  { label: "CIS", href: "/portal/buyer/cis" },
+  { label: "Company profile", href: "/portal/buyer/cis" },
   { label: "Documents", href: "/portal/buyer/documents" },
   { label: "Help", href: "/portal/buyer/help" },
 ];

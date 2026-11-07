@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { WorkflowStepper, type WorkflowStepView } from "@/components/portal/WorkflowStepper";
 import { TransactionDocumentsPanel } from "@/components/portal/TransactionDocumentsPanel";
 import { BuyerLcDetailsForm } from "@/components/portal/BuyerLcDetailsForm";
-import { FIS_DESCRIPTION, RWA_DESCRIPTION, hasQualifyingFis, hasQualifyingRwa, isRwaRequiredFor } from "@/lib/banking/rwa";
+import { CIS_DESCRIPTION, FIS_DESCRIPTION, RWA_DESCRIPTION, hasQualifyingCis, hasQualifyingFis, hasQualifyingRwa, isRwaRequiredFor } from "@/lib/banking/rwa";
 import { StaffDocumentTools } from "@/components/portal/StaffDocumentTools";
 import { TransactionFinancePanel } from "@/components/portal/TransactionFinancePanel";
 import { TransactionWorkflowActions } from "@/components/portal/TransactionWorkflowActions";
@@ -25,6 +25,7 @@ type TxDetail = {
   };
   workflowSteps?: WorkflowStepView[];
   fisOnRecord?: boolean;
+  cisOnRecord?: boolean;
   documents: Array<{
     id: string;
     title: string;
@@ -93,7 +94,9 @@ export function TransactionWorkspaceTabs({
         ? data.terms.bankingInstrumentProposal
         : undefined,
     );
-  const rwaOnFile = hasQualifyingRwa(data.documents) && (hasQualifyingFis(data.documents) || Boolean(data.fisOnRecord));
+  const rwaOnFile = hasQualifyingRwa(data.documents) &&
+    (hasQualifyingFis(data.documents) || Boolean(data.fisOnRecord)) &&
+    (hasQualifyingCis(data.documents) || Boolean(data.cisOnRecord));
   const rwaNotice = rwaApplies ? (
     <div
       className={`rounded-lg border p-4 text-sm ${
@@ -103,12 +106,12 @@ export function TransactionWorkspaceTabs({
       }`}
     >
       <p className="font-medium">
-        {rwaOnFile ? "RWA and FIS documents received." : "RWA and FIS required for LC payment terms."}
+        {rwaOnFile ? "CIS, RWA and FIS documents received." : "CIS, RWA and FIS required for LC payment terms."}
       </p>
       <p className="mt-1">
         {rwaOnFile
-          ? "Your RWA letter is on file for this transaction, and your FIS is on record for your bank."
-          : `${RWA_DESCRIPTION} ${FIS_DESCRIPTION} Upload the RWA for every transaction. The FIS and CIS are needed only once for the same bank. Use the Documents tab (types: RWA and FIS) before recording your LC details.`}
+          ? "Your RWA letter is on file for this transaction. Your CIS and FIS are on record for your bank."
+          : `${RWA_DESCRIPTION} ${FIS_DESCRIPTION} ${CIS_DESCRIPTION} Upload the RWA for every transaction. The CIS and FIS are needed only once for the same bank. Upload them in the Documents tab (types: CIS, RWA and FIS) so we can confirm your funds with your bank. The blank CIS form is on the Documents page of your portal.`}
       </p>
     </div>
   ) : null;

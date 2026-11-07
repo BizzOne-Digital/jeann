@@ -50,12 +50,12 @@ export function CisDraftForm({ initial }: CisFormProps) {
       });
       const body = (await res.json()) as { error?: string; ok?: boolean };
       if (!res.ok) {
-        setError(body.error || "Unable to save CIS draft.");
+        setError(body.error || "Unable to save the company profile draft.");
         return;
       }
-      setMessage("CIS draft saved. Finekarts will review after you submit a purchase request.");
+      setMessage("Company profile draft saved. Finekarts will review after you submit a purchase request.");
     } catch {
-      setError("Unable to save CIS draft.");
+      setError("Unable to save the company profile draft.");
     } finally {
       setPending(false);
     }

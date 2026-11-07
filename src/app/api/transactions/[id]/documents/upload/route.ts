@@ -22,6 +22,7 @@ const metaSchema = z.object({
     "passport_copy",
     "rwa",
     "fis",
+    "cis",
     "contract_amendment",
     "other",
   ]),

@@ -55,7 +55,7 @@ export function buildOnboardingSteps(input: {
     },
     {
       key: "cis_kyb",
-      label: "Complete onboarding (Corporate Information Sheet, uploaded for review)",
+      label: "Complete your company profile",
       complete: cisComplete,
       required: true,
     },

@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 
-/** Buyer-facing CIS (Corporate Information Sheet) progress. Never exposes staff verification data. */
+/** Buyer-facing company profile progress. Never exposes staff verification data. */
 
 export type CisProgressItem = { key: string; label: string; complete: boolean };
 
@@ -21,7 +21,7 @@ export function buildCisProgress(input: {
     { key: "company_details", label: "Company name, registration and tax details", complete: input.hasCompanyDetails },
     { key: "registered_address", label: "Registered address", complete: input.hasRegisteredAddress },
     { key: "representative", label: "Authorized representative and contact", complete: input.hasAuthorizedRepresentative },
-    { key: "supporting_documents", label: "CIS supporting documents uploaded", complete: input.hasSupportingDocuments },
+    { key: "supporting_documents", label: "Supporting documents uploaded", complete: input.hasSupportingDocuments },
   ];
   const complete = items.filter((i) => i.complete).length;
   return { items, complete, total: items.length, label: `${complete} of ${items.length} complete` };

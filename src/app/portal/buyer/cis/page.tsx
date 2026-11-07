@@ -1,9 +1,7 @@
 import { requirePortalAccess } from "@/lib/auth/portal-access";
 import { getBuyerOrganizationId } from "@/lib/auth/buyer-org";
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
-import { BuyerCisPdfDownload } from "@/components/portal/BuyerCisPdfDownload";
 import { CisDraftForm } from "@/components/portal/CisDraftForm";
-import { CisUploadForm } from "@/components/portal/CisUploadForm";
 import { PortalPage } from "@/components/portal/PortalPage";
 
 export default async function CisPage() {
@@ -52,11 +50,9 @@ export default async function CisPage() {
 
   return (
     <PortalPage
-      title="Corporate information sheet"
-      description="Download the CIS form, complete it, and upload it here for Finekarts to review."
+      title="Company profile"
+      description="Tell us about your company so we can review and approve your buyer account."
     >
-      <BuyerCisPdfDownload />
-      {orgId ? <CisUploadForm organizationId={String(orgId)} status={initial.status} /> : null}
       <CisDraftForm initial={initial} />
     </PortalPage>
   );

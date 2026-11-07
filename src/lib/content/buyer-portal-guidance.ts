@@ -1,7 +1,7 @@
-/** Copy for buyer portal only (registration, CIS, PO / ICPO / LOI). */
+/** Copy for buyer portal only (registration, company profile, PO / ICPO / LOI). */
 
 export const BUYER_PROFILE_MAINTENANCE_DISCLAIMER =
-  "Your company profile is stored after registration. If your company name, registered address, ownership, or primary contact details change, you must update your Corporate Information Sheet (CIS) promptly. Outdated information may delay trade desk review, banking, or shipment documentation.";
+  "Your company profile is stored after registration. If your company name, registered address, ownership, or primary contact details change, you must update your company profile promptly. Outdated information may delay trade desk review, banking, or shipment documentation.";
 
 /** PSA = Purchase and Sale Agreement — the contract between buyer and seller. */
 export const BUYER_PSA_DEFINITION =

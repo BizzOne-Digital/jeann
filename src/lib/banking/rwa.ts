@@ -41,11 +41,28 @@ export function hasQualifyingRwa(
   );
 }
 
+export const CIS_REQUIRED_MESSAGE =
+  "CIS (Corporate Information Sheet) is required for LC payment terms";
+
+export const CIS_DESCRIPTION =
+  "CIS (Corporate Information Sheet): uploaded by the buyer for review, once for the same bank.";
+
+export function hasQualifyingCis(
+  docs: Array<{ documentType?: string; workflowStatus?: string; deletedAt?: unknown }>,
+): boolean {
+  return docs.some(
+    (d) =>
+      d.documentType === "cis" &&
+      !d.deletedAt &&
+      !NON_QUALIFYING_STATUSES.includes(String(d.workflowStatus)),
+  );
+}
+
 export const FIS_REQUIRED_MESSAGE =
   "FIS (Financial Information Services) document from your bank is required for LC payment terms";
 
 export const FIS_DESCRIPTION =
-  "FIS (Financial Information Services) document: uploaded by the buyer separately, together with the CIS and the RWA letter, for every LC transaction.";
+  "FIS (Financial Information Services) document: uploaded by the buyer for review, once for the same bank. Together with the CIS and the RWA letter it lets us confirm the buyer has the funds.";
 
 /** An FIS counts once uploaded by the buyer organization and not rejected/withdrawn/deleted. */
 export function hasQualifyingFis(

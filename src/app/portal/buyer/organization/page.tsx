@@ -54,9 +54,9 @@ export default async function BuyerOrganizationPage() {
         </div>
       </dl>
       <p className="mt-6 text-sm text-[var(--stone)]">
-        Update your Customer Information Sheet on{" "}
+        Update your company profile on{" "}
         <Link href="/portal/buyer/cis" className="font-semibold text-[var(--navy)] underline">
-          CIS profile
+          Company profile
         </Link>{" "}
         or complete{" "}
         <Link href="/portal/buyer/onboarding" className="font-semibold text-[var(--navy)] underline">

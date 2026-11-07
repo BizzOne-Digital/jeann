@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
 
     const parsed = patchSchema.safeParse(await request.json());
     if (!parsed.success) {
-      return NextResponse.json({ error: "Invalid CIS data." }, { status: 422 });
+      return NextResponse.json({ error: "Invalid company profile data." }, { status: 422 });
     }
 
     const { organizationId, ...patch } = parsed.data;
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true });
   } catch (error) {
     if (error instanceof Error && error.message === "cis_locked") {
-      return NextResponse.json({ error: "CIS profile is locked." }, { status: 409 });
+      return NextResponse.json({ error: "Company profile is locked." }, { status: 409 });
     }
     return handleApiError(error);
   }

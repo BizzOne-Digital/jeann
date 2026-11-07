@@ -11,6 +11,7 @@ export const ADVISER_DOCUMENT_TYPES = [
   "commercial_invoice",
   "rwa",
   "fis",
+  "cis",
 ] as const;
 
 const RELEASED = ["approved", "sent", "viewed", "signed"];

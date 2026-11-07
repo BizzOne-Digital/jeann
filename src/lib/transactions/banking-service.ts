@@ -4,7 +4,7 @@ import { StepRuleError, applyStepStatus, loadStepDefs } from "@/lib/transactions
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
 import { hasPermission } from "@/lib/authorization/permissions";
 import type { Permission } from "@/lib/authorization/permissions";
-import { FIS_REQUIRED_MESSAGE, RWA_REQUIRED_MESSAGE, hasQualifyingFis, hasQualifyingRwa, isRwaRequiredFor } from "@/lib/banking/rwa";
+import { CIS_REQUIRED_MESSAGE, hasQualifyingCis, FIS_REQUIRED_MESSAGE, RWA_REQUIRED_MESSAGE, hasQualifyingFis, hasQualifyingRwa, isRwaRequiredFor } from "@/lib/banking/rwa";
 
 export const ALLOWED_INSTRUMENT_TYPES = [
   "irrevocable_documentary_lc",
@@ -27,17 +27,21 @@ const normalizeBank = (v: unknown) => String(v ?? "").trim().toLowerCase().repla
  * The FIS is reused across a buyer's transactions: an FIS uploaded on an earlier transaction stays on record
  * as long as the issuing bank is the same. If the buyer names a different bank, a new FIS is needed.
  */
-export async function hasStandingFis(tx: { _id: unknown; organizationId: unknown }, issuingBank?: string) {
+export async function hasStandingFis(
+  tx: { _id: unknown; organizationId: unknown },
+  issuingBank?: string,
+  docType: "fis" | "cis" = "fis",
+) {
   const { Document, BankingInstrumentRecord, Transaction } = await import("@/models");
   const earlier = await Document.find({
     organizationId: tx.organizationId,
-    documentType: "fis",
+    documentType: docType,
     deletedAt: null,
     transactionId: { $ne: tx._id },
   })
     .select("documentType workflowStatus deletedAt")
     .lean();
-  if (!hasQualifyingFis(earlier)) return false;
+  if (!(docType === "fis" ? hasQualifyingFis(earlier) : hasQualifyingCis(earlier))) return false;
 
   const bank = normalizeBank(issuingBank);
   if (!bank) return true;
@@ -56,7 +60,7 @@ export async function hasStandingFis(tx: { _id: unknown; organizationId: unknown
 
 /**
  * Blocks buyer-side banking progress for LC payment terms until the RWA (every transaction) and the FIS
- * (once per issuing bank) are on file (409).
+ * (CIS and FIS once per issuing bank) are on file (409).
  */
 async function assertRwaForLc(
   tx: { _id: unknown; organizationId: unknown },
@@ -72,12 +76,15 @@ async function assertRwaForLc(
   const docs = await Document.find({
     transactionId: tx._id,
     organizationId: tx.organizationId,
-    documentType: { $in: ["rwa", "fis"] },
+    documentType: { $in: ["rwa", "fis", "cis"] },
     deletedAt: null,
   })
     .select("documentType workflowStatus deletedAt")
     .lean();
   if (!hasQualifyingRwa(docs)) throw new StepRuleError(RWA_REQUIRED_MESSAGE, 409);
+  if (!hasQualifyingCis(docs) && !(await hasStandingFis(tx, issuingBank, "cis"))) {
+    throw new StepRuleError(CIS_REQUIRED_MESSAGE, 409);
+  }
   if (!hasQualifyingFis(docs) && !(await hasStandingFis(tx, issuingBank))) {
     throw new StepRuleError(FIS_REQUIRED_MESSAGE, 409);
   }
