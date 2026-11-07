@@ -55,6 +55,7 @@ export * from "./TransportUnit";
 export * from "./DocumentRequirementTemplate";
 export * from "./SignatureRecord";
 export * from "./PurchaseRequest";
+export * from "./AgentDeal";
 export * from "./TradeOffer";
 export * from "./Transaction";
 export * from "./TransactionParticipant";

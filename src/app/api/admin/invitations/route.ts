@@ -14,7 +14,7 @@ const createSchema = z.object({
   email: z.string().trim().email(),
   phone: z.string().trim().min(7).max(40).optional(),
   contactName: z.string().trim().min(2).max(120).optional(),
-  organizationType: z.enum(["buyer", "supplier", "internal", "banking_adviser"]),
+  organizationType: z.enum(["buyer", "supplier", "agent", "internal", "banking_adviser"]),
   organizationId: z.string().optional(),
   intendedLegalName: z.string().trim().max(200).optional(),
   roles: z

@@ -45,6 +45,7 @@ export const PERMISSIONS = [
   "procurement:read",
   "procurement:write",
   "supplier:access",
+  "agent:access",
   "buyer:access",
   "workspace:access",
   "admin:access",
@@ -69,6 +70,8 @@ export type RoleKey =
   | "buyer_member"
   | "supplier_org_admin"
   | "supplier_member"
+  | "agent_org_admin"
+  | "agent_member"
   | "banking_advisor"
   | "readonly_auditor"
   | "career_applicant";
@@ -216,6 +219,8 @@ export const ROLE_PERMISSIONS: Record<RoleKey, Permission[]> = {
     "messages:write",
     "shipments:read",
   ],
+  agent_org_admin: ["agent:access", "messages:read", "messages:write"],
+  agent_member: ["agent:access"],
   supplier_org_admin: [
     "supplier:access",
     "transactions:read",

@@ -30,6 +30,8 @@ const ROLE_LABELS: Record<RoleKey, string> = {
   buyer_member: "Buyer Member",
   supplier_org_admin: "Supplier Org Admin",
   supplier_member: "Supplier Member",
+  agent_org_admin: "Agent Org Admin",
+  agent_member: "Agent Member",
   banking_advisor: "Banking Advisor",
   readonly_auditor: "Read-only Auditor",
   career_applicant: "Career applicant",

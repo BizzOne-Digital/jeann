@@ -12,6 +12,8 @@ export const ROLE_KEYS: RoleKey[] = [
   "buyer_member",
   "supplier_org_admin",
   "supplier_member",
+  "agent_org_admin",
+  "agent_member",
   "banking_advisor",
   "readonly_auditor",
   "career_applicant",
