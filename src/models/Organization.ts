@@ -1,7 +1,7 @@
 import { Schema, model, models, Types } from "mongoose";
 import type { LeanDoc } from "./shared";
 
-export type OrganizationType = "buyer" | "supplier" | "agent" | "internal" | "banking_adviser";
+export type OrganizationType = "buyer" | "supplier" | "agent" | "broker" | "internal" | "banking_adviser";
 export type OrganizationStatus = "pending" | "verified" | "rejected" | "suspended";
 
 export type OrganizationOnboardingStatus =
@@ -52,7 +52,7 @@ const organizationSchema = new Schema<IOrganization>(
   {
     type: {
       type: String,
-      enum: ["buyer", "supplier", "agent", "internal", "banking_adviser"],
+      enum: ["buyer", "supplier", "agent", "broker", "internal", "banking_adviser"],
       required: true,
     },
     legalName: { type: String, required: true, trim: true },

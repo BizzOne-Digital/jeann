@@ -7,6 +7,7 @@ type Deal = {
   reference: string;
   agent: string;
   buyerCompanyName: string;
+  supplierCompanyName: string;
   buyerContactName: string;
   buyerEmail: string;
   buyerPhone: string;
@@ -29,13 +30,13 @@ const STATUSES = [
   { value: "declined", label: "Declined" },
 ];
 
-export function AdminAgentDealsManager() {
+export function AdminAgentDealsManager({ channel = "agent" }: { channel?: "agent" | "broker" }) {
   const [items, setItems] = useState<Deal[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
-    const res = await fetch("/api/admin/agent-deals", { credentials: "same-origin" });
+    const res = await fetch(`/api/admin/agent-deals?channel=${channel}`, { credentials: "same-origin" });
     const data = (await res.json().catch(() => ({}))) as { items?: Deal[]; error?: string };
     if (!res.ok) {
       setError(data.error ?? "Unable to load submissions.");
@@ -43,7 +44,7 @@ export function AdminAgentDealsManager() {
     }
     setError(null);
     setItems(data.items ?? []);
-  }, []);
+  }, [channel]);
 
   useEffect(() => {
     const t = window.setTimeout(() => void load(), 0);
@@ -67,19 +68,19 @@ export function AdminAgentDealsManager() {
 
   if (error && !items) return <p className="text-sm text-red-700">{error}</p>;
   if (!items) return <p className="text-sm text-[var(--stone)]">Loading…</p>;
-  if (items.length === 0) return <p className="text-sm text-[var(--stone)]">No agent submissions yet.</p>;
+  if (items.length === 0) return <p className="text-sm text-[var(--stone)]">No {channel} submissions yet.</p>;
 
   return (
     <div className="space-y-4">
       {error ? <p className="text-sm text-red-700">{error}</p> : null}
       {items.map((d) => (
-        <DealCard key={d.id} d={d} busy={busyId === d.id} onSave={update} />
+        <DealCard key={d.id} d={d} channel={channel} busy={busyId === d.id} onSave={update} />
       ))}
     </div>
   );
 }
 
-function DealCard({ d, busy, onSave }: { d: Deal; busy: boolean; onSave: (d: Deal, status: string, notes: string) => void }) {
+function DealCard({ d, channel, busy, onSave }: { d: Deal; channel: "agent" | "broker"; busy: boolean; onSave: (d: Deal, status: string, notes: string) => void }) {
   const [status, setStatus] = useState(d.status);
   const [notes, setNotes] = useState(d.staffNotes);
   return (
@@ -93,7 +94,8 @@ function DealCard({ d, busy, onSave }: { d: Deal; busy: boolean; onSave: (d: Dea
         </a>
       </div>
       <p className="mt-1 text-[var(--stone)]">
-        Agent: {d.agent} · Product: {d.productName}
+        {channel === "broker" ? "Broker" : "Agent"}: {d.agent} · Product: {d.productName}
+        {d.supplierCompanyName ? ` · Supplier: ${d.supplierCompanyName}` : ""}
         {d.quantity ? ` · Quantity: ${d.quantity}` : ""}
         {d.buyerCountry ? ` · ${d.buyerCountry}` : ""}
       </p>

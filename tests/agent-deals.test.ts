@@ -61,3 +61,19 @@ describe("agent deal submission", () => {
     expect(created).toHaveLength(0);
   });
 });
+
+import { POST as BROKER_POST } from "@/app/api/portal/broker/deals/route";
+
+describe("agent and broker portals stay separate", () => {
+  beforeEach(() => {
+    created.length = 0;
+  });
+
+  it("does not let an agent submit through the broker portal", async () => {
+    const res = await BROKER_POST(
+      req({ ...base, supplierCompanyName: "Supplier Co" }, new File(["%PDF"], "loi.pdf", { type: "application/pdf" })),
+    );
+    expect(res.status).toBe(403);
+    expect(created).toHaveLength(0);
+  });
+});

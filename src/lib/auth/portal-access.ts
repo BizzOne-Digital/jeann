@@ -3,12 +3,13 @@ import { getSession } from "@/lib/auth/session";
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
 import { OrganizationMembership } from "@/models/OrganizationMembership";
 
-export type PortalArea = "buyer" | "supplier" | "agent" | "banking" | "workspace" | "admin";
+export type PortalArea = "buyer" | "supplier" | "agent" | "broker" | "banking" | "workspace" | "admin";
 
 const allowedRoles: Record<PortalArea, string[]> = {
   buyer: ["buyer_org_admin", "buyer_member"],
   supplier: ["supplier_org_admin", "supplier_member"],
   agent: ["agent_org_admin", "agent_member"],
+  broker: ["broker_org_admin", "broker_member"],
   banking: ["banking_advisor", "finance"],
   workspace: ["ceo_super_admin", "general_manager", "trade_manager", "employee_operations", "finance", "compliance_reviewer"],
   admin: ["ceo_super_admin", "general_manager"],

@@ -3,7 +3,7 @@
 import { FormEvent, useState } from "react";
 
 /** The agent submits the end buyer's LOI or ICPO. The agent does not sign; the buyer signs. */
-export function AgentDealForm() {
+export function AgentDealForm({ kind = "agent" }: { kind?: "agent" | "broker" }) {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -15,7 +15,7 @@ export function AgentDealForm() {
     setError(null);
     setMessage(null);
     try {
-      const res = await fetch("/api/portal/agent/deals", {
+      const res = await fetch(`/api/portal/${kind}/deals`, {
         method: "POST",
         body: new FormData(form),
         credentials: "same-origin",
@@ -35,8 +35,9 @@ export function AgentDealForm() {
   return (
     <form onSubmit={onSubmit} className="grid gap-4 rounded-lg border border-[var(--line)] bg-white p-5 md:grid-cols-2">
       <p className="text-sm text-[var(--stone)] md:col-span-2">
-        Submit the end buyer&apos;s LOI or ICPO. You pass documents between Finekarts and the buyer. The buyer signs, not
-        the agent.
+        {kind === "broker"
+          ? "Introduce a buyer and a supplier by submitting the buyer's LOI or ICPO. A broker is neutral and is not a party to the contract. The buyer signs, not the broker."
+          : "Submit your principal's LOI or ICPO. You act for one principal, the end buyer, and pass documents between Finekarts and that buyer. The buyer signs, not the agent."}
       </p>
       <label className="label">
         <span>Buyer company</span>
@@ -58,6 +59,18 @@ export function AgentDealForm() {
         <span>Buyer country</span>
         <input className="field mt-1" name="buyerCountry" maxLength={120} />
       </label>
+      {kind === "broker" ? (
+        <>
+          <label className="label">
+            <span>Supplier company</span>
+            <input className="field mt-1" name="supplierCompanyName" required minLength={2} maxLength={200} />
+          </label>
+          <label className="label">
+            <span>Supplier contact name</span>
+            <input className="field mt-1" name="supplierContactName" maxLength={120} />
+          </label>
+        </>
+      ) : null}
       <label className="label">
         <span>Product</span>
         <input className="field mt-1" name="productName" required minLength={2} maxLength={200} />

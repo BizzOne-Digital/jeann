@@ -17,6 +17,7 @@ const NAV: Array<{ label: string; href: string }> = [
   { label: "Buyer Organizations", href: "/admin/buyers" },
   { label: "Supplier Organizations", href: "/admin/suppliers" },
   { label: "Agent Submissions", href: "/admin/agent-deals" },
+  { label: "Broker Submissions", href: "/admin/broker-deals" },
   { label: "Invitations", href: "/admin/invitations" },
   { label: "Employees & Roles", href: "/admin/employees" },
   { label: "Documents & Templates", href: "/admin/documents" },

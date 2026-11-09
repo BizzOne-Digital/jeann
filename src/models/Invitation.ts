@@ -34,7 +34,7 @@ const invitationSchema = new Schema<IInvitation>(
     },
     organizationType: {
       type: String,
-      enum: ["buyer", "supplier", "agent", "internal", "banking_adviser"],
+      enum: ["buyer", "supplier", "agent", "broker", "internal", "banking_adviser"],
       required: true,
     },
     intendedLegalName: { type: String, trim: true },

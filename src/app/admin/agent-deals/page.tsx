@@ -9,7 +9,7 @@ export default async function AdminAgentDealsPage() {
   return (
     <PortalPage
       title="Agent Submissions"
-      description="LOI and ICPO files that agents and brokers submit on behalf of end buyers."
+      description="LOI and ICPO files that agents submit on behalf of their principal, the end buyer."
     >
       <AdminAgentDealsManager />
     </PortalPage>

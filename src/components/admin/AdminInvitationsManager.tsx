@@ -16,7 +16,8 @@ type InvitationRow = {
 const ORG_TYPES = [
   { value: "buyer", label: "Buyer organization" },
   { value: "supplier", label: "Supplier organization" },
-  { value: "agent", label: "Agent / broker organization" },
+  { value: "agent", label: "Agent organization (acts for one principal)" },
+  { value: "broker", label: "Broker organization (neutral, introduces both sides)" },
   { value: "internal", label: "Internal (employee)" },
   { value: "banking_adviser", label: "Banking adviser" },
 ] as const;
@@ -33,6 +34,10 @@ const ROLE_OPTIONS: Record<string, { value: string; label: string }[]> = {
   agent: [
     { value: "agent_org_admin", label: "Agent org admin" },
     { value: "agent_member", label: "Agent member" },
+  ],
+  broker: [
+    { value: "broker_org_admin", label: "Broker org admin" },
+    { value: "broker_member", label: "Broker member" },
   ],
   internal: [
     { value: "employee_operations", label: "Operations" },

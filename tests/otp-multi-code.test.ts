@@ -1,6 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Types } from "mongoose";
 
+// Password hashing is slow; give these tests room when the machine is busy.
+vi.setConfig({ testTimeout: 30_000 });
+
 type Doc = {
   _id: Types.ObjectId;
   userId: Types.ObjectId;

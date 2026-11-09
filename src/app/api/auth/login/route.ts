@@ -34,6 +34,9 @@ function portalRedirectForRoles(roles: string[]): string | null {
   if (roles.some((r) => r.startsWith("agent_"))) {
     return "/portal/agent";
   }
+  if (roles.some((r) => r.startsWith("broker_"))) {
+    return "/portal/broker";
+  }
   if (roles.some((r) => r.startsWith("supplier_"))) {
     return "/portal/supplier";
   }

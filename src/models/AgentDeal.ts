@@ -11,11 +11,16 @@ export interface IAgentDeal {
   reference: string;
   agentOrganizationId: Types.ObjectId;
   submittedByUserId: Types.ObjectId;
+  /** "agent" acts for one principal; "broker" is neutral and introduces both sides. */
+  channel: "agent" | "broker";
   buyerCompanyName: string;
   buyerContactName?: string;
   buyerEmail?: string;
   buyerPhone?: string;
   buyerCountry?: string;
+  /** Brokers introduce both sides, so they also name the supplier. */
+  supplierCompanyName?: string;
+  supplierContactName?: string;
   productName: string;
   quantity?: string;
   notes?: string;
@@ -35,11 +40,14 @@ const agentDealSchema = new Schema<IAgentDeal>(
     reference: { type: String, required: true, unique: true },
     agentOrganizationId: { type: Schema.Types.ObjectId, ref: "Organization", required: true },
     submittedByUserId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    channel: { type: String, enum: ["agent", "broker"], default: "agent" },
     buyerCompanyName: { type: String, required: true, trim: true, maxlength: 200 },
     buyerContactName: { type: String, trim: true, maxlength: 120 },
     buyerEmail: { type: String, trim: true, lowercase: true, maxlength: 254 },
     buyerPhone: { type: String, trim: true, maxlength: 40 },
     buyerCountry: { type: String, trim: true, maxlength: 120 },
+    supplierCompanyName: { type: String, trim: true, maxlength: 200 },
+    supplierContactName: { type: String, trim: true, maxlength: 120 },
     productName: { type: String, required: true, trim: true, maxlength: 200 },
     quantity: { type: String, trim: true, maxlength: 80 },
     notes: { type: String, trim: true, maxlength: 4000 },
@@ -56,5 +64,6 @@ const agentDealSchema = new Schema<IAgentDeal>(
 
 agentDealSchema.index({ agentOrganizationId: 1, createdAt: -1 });
 agentDealSchema.index({ status: 1, createdAt: -1 });
+agentDealSchema.index({ channel: 1, createdAt: -1 });
 
 export const AgentDeal = models.AgentDeal ?? model<IAgentDeal>("AgentDeal", agentDealSchema);
