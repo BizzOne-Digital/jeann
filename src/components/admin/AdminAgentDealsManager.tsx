@@ -16,6 +16,7 @@ type Deal = {
   quantity: string;
   notes: string;
   documentType: string;
+  source: string;
   filename: string;
   status: string;
   staffNotes: string;
@@ -87,7 +88,7 @@ function DealCard({ d, channel, busy, onSave }: { d: Deal; channel: "agent" | "b
     <div className="rounded-lg border border-[var(--line)] bg-white p-4 text-sm">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="font-semibold text-[var(--navy)]">
-          {d.reference} · {d.documentType.toUpperCase()} · {d.buyerCompanyName}
+          {d.reference} · {d.documentType.toUpperCase()} ({d.source === "created" ? "created in portal" : "posted by " + (channel === "broker" ? "broker" : "agent")}) · {d.buyerCompanyName}
         </p>
         <a className="font-semibold text-[var(--navy)] underline" href={`/api/admin/agent-deals/${d.id}/file`}>
           Download {d.filename}

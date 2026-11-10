@@ -15,6 +15,7 @@ vi.mock("@/lib/api/require-api-auth", () => ({
     throw e;
   },
 }));
+vi.mock("@/lib/contracts/template-service", () => ({ findPublishedTemplate: vi.fn(async () => null) }));
 vi.mock("@/lib/db/mongoose", () => ({ tryConnectMongo: vi.fn(async () => true) }));
 vi.mock("@/lib/audit/log", () => ({ writeAuditEvent: vi.fn(async () => undefined) }));
 vi.mock("@/lib/api/request-meta", () => ({ auditRequestMeta: () => ({}) }));
@@ -74,6 +75,22 @@ describe("agent and broker portals stay separate", () => {
       req({ ...base, supplierCompanyName: "Supplier Co" }, new File(["%PDF"], "loi.pdf", { type: "application/pdf" })),
     );
     expect(res.status).toBe(403);
+    expect(created).toHaveLength(0);
+  });
+});
+
+describe("create a new document instead of uploading", () => {
+  it("accepts a create request without a file and stores a generated PDF", async () => {
+    created.length = 0;
+    const res = await POST(req({ ...base, documentType: "icpo", quantity: "100 MT", mode: "create" }));
+    expect(res.status).toBe(200);
+    expect(created[0]).toMatchObject({ documentType: "icpo", source: "created", mimeType: "application/pdf" });
+    expect(String(created[0].filename)).toMatch(/^ICPO-.*\.pdf$/);
+  });
+
+  it("still requires a file when the agent is posting a received document", async () => {
+    created.length = 0;
+    expect((await POST(req({ ...base, mode: "upload" }))).status).toBe(422);
     expect(created).toHaveLength(0);
   });
 });

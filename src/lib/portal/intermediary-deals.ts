@@ -6,6 +6,7 @@ import { writeAuditEvent } from "@/lib/audit/log";
 import { auditRequestMeta } from "@/lib/api/request-meta";
 import { notifyAdmins } from "@/lib/notifications/service";
 import { tryConnectMongo } from "@/lib/db/mongoose";
+import { createIntermediaryDocument } from "@/lib/portal/intermediary-document";
 
 /**
  * Agents and brokers are two separate portals with different responsibilities:
@@ -85,16 +86,20 @@ export async function submitIntermediaryDeal(request: NextRequest, kind: Interme
     if (!orgId) return NextResponse.json({ error: `No ${kind} organization.` }, { status: 403 });
 
     const form = await request.formData();
+    // "upload": post the LOI or ICPO received from the end buyer. "create": prepare a new one in the portal.
+    const mode = form.get("mode") === "create" ? "create" : "upload";
     const file = form.get("file");
-    if (!(file instanceof File) || file.size === 0) {
-      return NextResponse.json({ error: "Attach the buyer's LOI or ICPO file." }, { status: 422 });
-    }
-    if (file.size > MAX_BYTES) {
-      return NextResponse.json({ error: "File is too large (10 MB maximum)." }, { status: 413 });
-    }
-    const lower = file.name.toLowerCase();
-    if (!ALLOWED_EXT.some((ext) => lower.endsWith(ext))) {
-      return NextResponse.json({ error: "Upload a PDF, Word document or image." }, { status: 422 });
+    if (mode === "upload") {
+      if (!(file instanceof File) || file.size === 0) {
+        return NextResponse.json({ error: "Attach the buyer's LOI or ICPO file, or choose to create a new one." }, { status: 422 });
+      }
+      if (file.size > MAX_BYTES) {
+        return NextResponse.json({ error: "File is too large (10 MB maximum)." }, { status: 413 });
+      }
+      const lower = file.name.toLowerCase();
+      if (!ALLOWED_EXT.some((ext) => lower.endsWith(ext))) {
+        return NextResponse.json({ error: "Upload a PDF, Word document or image." }, { status: 422 });
+      }
     }
 
     const parsed = metaSchema.safeParse(
@@ -118,6 +123,25 @@ export async function submitIntermediaryDeal(request: NextRequest, kind: Interme
     const { AgentDeal } = await import("@/models");
     const prefix = kind === "agent" ? "AGD" : "BRD";
     const reference = `${prefix}-${nanoid(8).toUpperCase().replace(/[^A-Z0-9]/g, "X")}`;
+    let stored: { filename: string; mimeType: string; size: number; bytes: Buffer };
+    if (mode === "create") {
+      const made = await createIntermediaryDocument({
+        documentType: data.documentType,
+        buyerCompanyName: data.buyerCompanyName,
+        productName: data.productName,
+        quantity: data.quantity,
+        reference,
+      });
+      stored = { filename: made.filename, mimeType: "application/pdf", size: made.bytes.length, bytes: Buffer.from(made.bytes) };
+    } else {
+      const upload = file as File;
+      stored = {
+        filename: upload.name.slice(0, 255),
+        mimeType: upload.type || "application/octet-stream",
+        size: upload.size,
+        bytes: Buffer.from(await upload.arrayBuffer()),
+      };
+    }
     const doc = await AgentDeal.create({
       reference,
       channel: kind,
@@ -127,10 +151,11 @@ export async function submitIntermediaryDeal(request: NextRequest, kind: Interme
       buyerEmail: data.buyerEmail || undefined,
       supplierCompanyName: kind === "broker" ? data.supplierCompanyName : undefined,
       supplierContactName: kind === "broker" ? data.supplierContactName : undefined,
-      filename: file.name.slice(0, 255),
-      mimeType: file.type || "application/octet-stream",
-      size: file.size,
-      fileData: Buffer.from(await file.arrayBuffer()),
+      filename: stored.filename,
+      mimeType: stored.mimeType,
+      size: stored.size,
+      fileData: stored.bytes,
+      source: mode === "create" ? "created" : "uploaded",
     });
 
     const meta = auditRequestMeta(request);
@@ -141,7 +166,7 @@ export async function submitIntermediaryDeal(request: NextRequest, kind: Interme
       actorUserId: auth.ctx.userId,
       organizationId: orgId,
       ...meta,
-      metadata: { reference, documentType: data.documentType },
+      metadata: { reference, documentType: data.documentType, source: mode },
     });
     await notifyAdmins({
       type: `${kind}_deal_submitted`,

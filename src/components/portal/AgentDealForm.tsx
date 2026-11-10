@@ -5,6 +5,7 @@ import { FormEvent, useState } from "react";
 /** The agent submits the end buyer's LOI or ICPO. The agent does not sign; the buyer signs. */
 export function AgentDealForm({ kind = "agent" }: { kind?: "agent" | "broker" }) {
   const [busy, setBusy] = useState(false);
+  const [mode, setMode] = useState<"upload" | "create">("upload");
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -24,6 +25,7 @@ export function AgentDealForm({ kind = "agent" }: { kind?: "agent" | "broker" })
       if (!res.ok) throw new Error(data.error ?? "Could not submit. Please try again.");
       setMessage(`Submitted. Your reference is ${data.reference}. Finekarts will review it.`);
       form.reset();
+      setMode("upload");
       window.setTimeout(() => window.location.reload(), 1500);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong.");
@@ -90,10 +92,29 @@ export function AgentDealForm({ kind = "agent" }: { kind?: "agent" | "broker" })
         <span>Notes for Finekarts</span>
         <textarea className="field mt-1 min-h-20" name="notes" maxLength={4000} />
       </label>
-      <label className="label md:col-span-2">
-        <span>LOI or ICPO file (PDF, Word or image, 10 MB maximum)</span>
-        <input className="field mt-1 text-sm" name="file" type="file" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" required />
-      </label>
+      <fieldset className="md:col-span-2">
+        <legend className="label">What do you want to do?</legend>
+        <div className="mt-2 flex flex-wrap gap-6 text-sm">
+          <label className="flex items-center gap-2">
+            <input type="radio" name="mode" value="upload" checked={mode === "upload"} onChange={() => setMode("upload")} />
+            Post the LOI or ICPO I received from the buyer
+          </label>
+          <label className="flex items-center gap-2">
+            <input type="radio" name="mode" value="create" checked={mode === "create"} onChange={() => setMode("create")} />
+            Create a new one here
+          </label>
+        </div>
+      </fieldset>
+      {mode === "upload" ? (
+        <label className="label md:col-span-2">
+          <span>LOI or ICPO file (PDF, Word or image, 10 MB maximum)</span>
+          <input className="field mt-1 text-sm" name="file" type="file" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" required />
+        </label>
+      ) : (
+        <p className="text-sm text-[var(--stone)] md:col-span-2">
+          We prepare the selected document as a PDF from the details above. The end buyer reviews and signs it.
+        </p>
+      )}
       <div className="md:col-span-2">
         <button type="submit" className="btn btn-primary" disabled={busy}>
           {busy ? "Submitting…" : "Submit to Finekarts"}

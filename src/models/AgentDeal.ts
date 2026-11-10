@@ -25,6 +25,8 @@ export interface IAgentDeal {
   quantity?: string;
   notes?: string;
   documentType: "loi" | "icpo";
+  /** "uploaded": received from the end buyer and posted. "created": prepared in the portal from the template. */
+  source: "uploaded" | "created";
   filename: string;
   mimeType: string;
   size: number;
@@ -52,6 +54,7 @@ const agentDealSchema = new Schema<IAgentDeal>(
     quantity: { type: String, trim: true, maxlength: 80 },
     notes: { type: String, trim: true, maxlength: 4000 },
     documentType: { type: String, enum: ["loi", "icpo"], required: true },
+    source: { type: String, enum: ["uploaded", "created"], default: "uploaded" },
     filename: { type: String, required: true, maxlength: 255 },
     mimeType: { type: String, required: true, maxlength: 120 },
     size: { type: Number, required: true },

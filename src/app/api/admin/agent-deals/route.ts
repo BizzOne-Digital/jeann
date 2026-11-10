@@ -28,6 +28,7 @@ export async function GET(request: Request) {
       quantity: d.quantity ?? "",
       notes: d.notes ?? "",
       documentType: d.documentType,
+      source: d.source ?? "uploaded",
       filename: d.filename,
       status: d.status,
       staffNotes: d.staffNotes ?? "",
