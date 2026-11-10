@@ -27,6 +27,17 @@ export interface IFreightBooking {
   plannedDeparture?: Date;
   estimatedArrival?: Date;
   bookingDocumentId?: Types.ObjectId;
+  /** Fields of the central booking request sent to a logistics provider. */
+  cargoType?: "container" | "flexitank" | "dry_bulk" | "liquid_tanker";
+  commodity?: string;
+  quantityMt?: number;
+  preferredLoadingDate?: string;
+  incoterm?: "FOB" | "CIF";
+  packagingHandling?: string;
+  shipperName?: string;
+  consigneeName?: string;
+  customerAccountNumber?: string;
+  providerReference?: string;
   status: FreightBookingStatus;
   source: string;
   createdByUserId: Types.ObjectId;
@@ -58,6 +69,16 @@ const freightBookingSchema = new Schema<IFreightBooking>(
     plannedDeparture: { type: Date },
     estimatedArrival: { type: Date },
     bookingDocumentId: { type: Schema.Types.ObjectId, ref: "Document" },
+    cargoType: { type: String, enum: ["container", "flexitank", "dry_bulk", "liquid_tanker"] },
+    commodity: { type: String, trim: true, maxlength: 200 },
+    quantityMt: { type: Number },
+    preferredLoadingDate: { type: String, trim: true, maxlength: 60 },
+    incoterm: { type: String, enum: ["FOB", "CIF"] },
+    packagingHandling: { type: String, trim: true, maxlength: 500 },
+    shipperName: { type: String, trim: true, maxlength: 200 },
+    consigneeName: { type: String, trim: true, maxlength: 200 },
+    customerAccountNumber: { type: String, trim: true, maxlength: 60 },
+    providerReference: { type: String, trim: true, maxlength: 120 },
     status: {
       type: String,
       enum: ["draft", "requested", "confirmed", "cancelled", "completed"],
