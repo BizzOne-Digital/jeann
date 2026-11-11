@@ -10,10 +10,18 @@ import { BuyerIcpoGuidancePanel } from "@/components/portal/BuyerIcpoGuidancePan
 import { ICPO_SPECIFICATION_NOTE } from "@/lib/content/buyer-portal-guidance";
 import { BuyerPortalAssistant } from "@/components/portal/BuyerPortalAssistant";
 import { BuyerRequiredDocsPanel } from "@/components/portal/BuyerRequiredDocsPanel";
+import { BuyerProcessPanel } from "@/components/portal/BuyerProcessPanel";
 
 type PaymentTerm = { id: string; structure: string; iccCode: string; preferred?: boolean };
 
-type Mode = "icpo_form" | "icpo_upload" | "loi_upload" | "required_docs";
+type Mode =
+  | "icpo_form"
+  | "icpo_upload"
+  | "loi_upload"
+  | "required_docs"
+  | "psa"
+  | "invoice"
+  | "banking";
 
 export function BuyerPurchaseOrderWorkspace() {
   const [mode, setMode] = useState<Mode>("icpo_form");
@@ -165,6 +173,9 @@ export function BuyerPurchaseOrderWorkspace() {
               ["icpo_upload", "Upload ICPO / PO"],
               ["loi_upload", "Upload LOI"],
               ["required_docs", "CIS, RWA, FIS"],
+              ["psa", "PSA"],
+              ["invoice", "Commercial invoice"],
+              ["banking", "Banking (LC)"],
             ] as const
           ).map(([key, label]) => (
             <button
@@ -183,7 +194,13 @@ export function BuyerPurchaseOrderWorkspace() {
         </div>
 
         {mode === "required_docs" ? (
-          <BuyerRequiredDocsPanel />
+          <BuyerRequiredDocsPanel onNext={() => setMode("psa")} />
+        ) : mode === "psa" ? (
+          <BuyerProcessPanel step="psa" onNext={() => setMode("invoice")} />
+        ) : mode === "invoice" ? (
+          <BuyerProcessPanel step="invoice" onNext={() => setMode("banking")} />
+        ) : mode === "banking" ? (
+          <BuyerProcessPanel step="banking" />
         ) : mode === "icpo_form" ? (
           <form
             onSubmit={onSubmitForm}

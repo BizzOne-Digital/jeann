@@ -41,7 +41,7 @@ const ITEMS = [
   },
 ] as const;
 
-export function BuyerRequiredDocsPanel() {
+export function BuyerRequiredDocsPanel({ onNext }: { onNext?: () => void }) {
   const [transactions, setTransactions] = useState<TransactionRow[] | null>(null);
   const [transactionId, setTransactionId] = useState("");
   const [documents, setDocuments] = useState<Doc[]>([]);
@@ -138,6 +138,10 @@ export function BuyerRequiredDocsPanel() {
         <Link href="/portal/buyer/requests" className="font-semibold text-[var(--navy)] underline">
           View my requests →
         </Link>
+        <p className="border-t border-[var(--line)] pt-4">
+          <strong className="text-[var(--navy)]">Next step:</strong> after review of your CIS, RWA and
+          FIS, Finekarts sends you the PSA to sign and stamp.
+        </p>
       </div>
     );
   }
@@ -224,6 +228,18 @@ export function BuyerRequiredDocsPanel() {
 
       {error ? <p className="text-sm text-red-700">{error}</p> : null}
       {message ? <p className="text-sm text-[var(--forest)]">{message}</p> : null}
+
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[var(--line)] pt-4 text-sm">
+        <p className="text-[var(--stone)]">
+          <strong className="text-[var(--navy)]">Next step:</strong> after review of your CIS, RWA and
+          FIS, Finekarts sends you the PSA to sign and stamp.
+        </p>
+        {onNext ? (
+          <button type="button" className="btn text-sm" onClick={onNext}>
+            Go to PSA
+          </button>
+        ) : null}
+      </div>
     </div>
   );
 }

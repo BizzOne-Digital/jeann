@@ -12,25 +12,31 @@ export const BUYER_TRADE_DOCUMENT_FLOW = [
     step: "1",
     title: "ICPO or LOI",
     body:
-      "You submit an Irrevocable Corporate Purchase Order (ICPO) or, optionally, a non-binding Letter of Intent (LOI).",
+      "You submit an Irrevocable Corporate Purchase Order (ICPO) or a non-binding Letter of Intent (LOI). Both are accepted.",
   },
   {
     step: "2",
-    title: "PSA — contract",
+    title: "CIS, RWA and FIS",
     body:
-      "After review, Finekarts issues a PSA for signature. The PSA is the sale contract between buyer and seller.",
+      "After Finekarts reviews your ICPO or LOI, upload your CIS, RWA and FIS. The RWA is required on every LC transaction.",
   },
   {
     step: "3",
-    title: "Proforma Invoice (PI)",
+    title: "PSA — contract",
     body:
-      "After the PSA is signed and stamped, Finekarts provides a Proforma Invoice — a pre-shipment specification document, not a demand for payment.",
+      "After review, Finekarts sends the PSA. You sign and stamp it and upload it with a passport copy of the signer. Finekarts then signs and stamps it.",
   },
   {
     step: "4",
-    title: "Payment",
+    title: "Commercial invoice",
     body:
-      "For Letter of Credit (LC) transactions, your bank drafts the credit using the PSA and PI. For Telegraphic Transfer (TT), payment follows the contract and PI; LC bank wording does not apply.",
+      "Once the PSA is signed, Finekarts issues the Commercial Invoice. From that point you have 72 hours to submit your LC.",
+  },
+  {
+    step: "5",
+    title: "Banking (LC)",
+    body:
+      "Submit your LC details under Banking. For Telegraphic Transfer (TT), payment follows the contract and invoice; LC bank wording does not apply.",
   },
 ] as const;
 
