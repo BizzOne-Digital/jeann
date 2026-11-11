@@ -38,6 +38,11 @@ export interface IFreightBooking {
   consigneeName?: string;
   customerAccountNumber?: string;
   providerReference?: string;
+  laycanFrom?: string;
+  laycanTo?: string;
+  cargoTolerancePct?: number;
+  vesselSizeClass?: string;
+  charterPartyForm?: string;
   status: FreightBookingStatus;
   source: string;
   createdByUserId: Types.ObjectId;
@@ -79,6 +84,11 @@ const freightBookingSchema = new Schema<IFreightBooking>(
     consigneeName: { type: String, trim: true, maxlength: 200 },
     customerAccountNumber: { type: String, trim: true, maxlength: 60 },
     providerReference: { type: String, trim: true, maxlength: 120 },
+    laycanFrom: { type: String, trim: true, maxlength: 30 },
+    laycanTo: { type: String, trim: true, maxlength: 30 },
+    cargoTolerancePct: { type: Number },
+    vesselSizeClass: { type: String, trim: true, maxlength: 80 },
+    charterPartyForm: { type: String, trim: true, maxlength: 80 },
     status: {
       type: String,
       enum: ["draft", "requested", "confirmed", "cancelled", "completed"],

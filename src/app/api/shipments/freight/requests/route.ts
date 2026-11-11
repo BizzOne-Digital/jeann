@@ -3,7 +3,7 @@ import { Types } from "mongoose";
 import { requireApiAuth, handleApiError } from "@/lib/api/require-api-auth";
 import { writeAuditEvent } from "@/lib/audit/log";
 import { getBookingProvider, listBookingProviders } from "@/lib/shipments/booking-provider";
-import { bookingRequestSchema, requiresCharteringBroker } from "@/lib/shipments/booking-request";
+import { bookingRequestSchema, defaultProviderFor, requiresCharteringBroker } from "@/lib/shipments/booking-request";
 
 export const runtime = "nodejs";
 
@@ -19,7 +19,10 @@ export async function POST(request: NextRequest) {
     const parsed = bookingRequestSchema.safeParse(await request.json().catch(() => null));
     if (!parsed.success) {
       return NextResponse.json(
-        { error: "Complete the cargo, ports, loading date, FOB or CIF term, shipper and consignee." },
+        {
+          error:
+            "Complete the cargo, ports, loading date, FOB or CIF term, shipper and consignee. Dry bulk and tanker enquiries also need the laycan window and vessel size.",
+        },
         { status: 422 },
       );
     }
@@ -28,10 +31,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Shipment lot not found." }, { status: 404 });
     }
 
-    const provider = getBookingProvider(input.provider);
+    // Bulk vessels and tankers can only be chartered through brokers, never through the container desk.
+    const providerName = requiresCharteringBroker(input.cargoType)
+      ? "chartering_broker"
+      : (input.provider ?? defaultProviderFor(input.cargoType));
+    const provider = getBookingProvider(providerName);
     if (!provider) {
       return NextResponse.json(
-        { error: `Provider "${input.provider}" is not connected yet. Available: ${listBookingProviders().join(", ")}.` },
+        { error: `Provider "${providerName}" is not connected yet. Available: ${listBookingProviders().join(", ")}.` },
         { status: 422 },
       );
     }
@@ -44,7 +51,7 @@ export async function POST(request: NextRequest) {
     const booking = await FreightBooking.create({
       shipmentLotId: new Types.ObjectId(input.shipmentLotId),
       transportMode: "ocean",
-      carrier: provider.name === "manual" ? undefined : provider.name,
+      carrier: provider.name === "manual" || provider.name === "chartering_broker" ? undefined : provider.name,
       bookingNumber: result.bookingNumber,
       bookingDate: new Date(),
       vesselName: result.vesselName,
@@ -62,6 +69,11 @@ export async function POST(request: NextRequest) {
       shipperName: input.shipperName,
       consigneeName: input.consigneeName,
       customerAccountNumber: input.customerAccountNumber,
+      laycanFrom: input.laycanFrom,
+      laycanTo: input.laycanTo,
+      cargoTolerancePct: input.cargoTolerancePct,
+      vesselSizeClass: input.vesselSizeClass,
+      charterPartyForm: input.charterPartyForm,
       providerReference: result.providerReference,
       createdByUserId: new Types.ObjectId(auth.ctx.userId),
     });

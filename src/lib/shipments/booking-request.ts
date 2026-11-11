@@ -14,7 +14,7 @@ export const CARGO_TYPE_LABELS: Record<CargoType, string> = {
 /** What a booking request must contain before it is sent to a logistics provider. */
 export const bookingRequestSchema = z.object({
   shipmentLotId: z.string().min(1),
-  provider: z.string().trim().min(1).max(40).default("manual"),
+  provider: z.string().trim().min(1).max(40).optional(),
   cargoType: z.enum(CARGO_TYPES),
   commodity: z.string().trim().min(2).max(200),
   quantityMt: z.number().positive().max(1_000_000),
@@ -27,6 +27,20 @@ export const bookingRequestSchema = z.object({
   shipperName: z.string().trim().min(2).max(200),
   consigneeName: z.string().trim().min(2).max(200),
   customerAccountNumber: z.string().trim().max(60).optional(),
+  /** Charter enquiry details, required for dry bulk vessels and tankers. */
+  laycanFrom: z.string().trim().max(30).optional(),
+  laycanTo: z.string().trim().max(30).optional(),
+  cargoTolerancePct: z.number().min(0).max(25).optional(),
+  vesselSizeClass: z.string().trim().max(80).optional(),
+  charterPartyForm: z.string().trim().max(80).optional(),
+}).superRefine((value, ctx) => {
+  if (value.cargoType !== "dry_bulk" && value.cargoType !== "liquid_tanker") return;
+  // Bulk vessels and tankers are chartered through brokers, who need a laycan window and a vessel size.
+  for (const field of ["laycanFrom", "laycanTo", "vesselSizeClass"] as const) {
+    if (!value[field]) {
+      ctx.addIssue({ code: "custom", path: [field], message: "Required for a charter enquiry." });
+    }
+  }
 });
 
 export type BookingRequestInput = z.infer<typeof bookingRequestSchema>;
@@ -34,4 +48,9 @@ export type BookingRequestInput = z.infer<typeof bookingRequestSchema>;
 /** Bulk vessels and tankers are booked through vessel operators and chartering brokers, not container APIs. */
 export function requiresCharteringBroker(cargoType: CargoType): boolean {
   return cargoType === "dry_bulk" || cargoType === "liquid_tanker";
+}
+
+/** The provider used when none is named: container cargo goes to the manual desk, bulk and tankers to a broker. */
+export function defaultProviderFor(cargoType: CargoType): string {
+  return requiresCharteringBroker(cargoType) ? "chartering_broker" : "manual";
 }

@@ -33,8 +33,23 @@ class ManualBookingProvider implements BookingProvider {
   }
 }
 
+/**
+ * Dry bulk vessels and tankers have no booking API: they are chartered through brokers (enquiry, offers, negotiation,
+ * fixture). The request is recorded as a charter enquiry for Finekarts to send to its chartering brokers.
+ */
+class CharteringBrokerProvider implements BookingProvider {
+  readonly name = "chartering_broker";
+  async submit(): Promise<BookingSubmitResult> {
+    return {
+      status: "requested",
+      message: "Recorded as a charter enquiry. Finekarts will send it to chartering brokers and record the fixture.",
+    };
+  }
+}
+
 const PROVIDERS: Record<string, () => BookingProvider> = {
   manual: () => new ManualBookingProvider(),
+  chartering_broker: () => new CharteringBrokerProvider(),
   // API adapters are registered here once Finekarts has credentials and a sandbox from the provider, for example:
   // maersk: () => new MaerskBookingProvider(),
 };
