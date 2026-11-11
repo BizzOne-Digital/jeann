@@ -5,5 +5,5 @@ export const BUYER_CIS_PDF = {
   fileName: "Buyer_CIS-Corporate_Information_Sheet_CIS.pdf",
   title: "Buyer Corporate Information Sheet (CIS)",
   description:
-    "Complete this form for commodity-trade qualification. You may fill it online below (summary fields) or download the PDF, complete it, and upload supporting documents when your trade desk requests them.",
+    "Official blank CIS form. Share it with a buyer only when the buyer requests it. The buyer returns the completed CIS through the Documents tab of their transaction.",
 };

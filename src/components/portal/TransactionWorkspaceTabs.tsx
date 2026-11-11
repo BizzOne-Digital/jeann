@@ -111,7 +111,7 @@ export function TransactionWorkspaceTabs({
       <p className="mt-1">
         {rwaOnFile
           ? "Your RWA letter is on file for this transaction. Your CIS and FIS are on record for your bank."
-          : `${RWA_DESCRIPTION} ${FIS_DESCRIPTION} ${CIS_DESCRIPTION} Upload the RWA for every transaction. The CIS and FIS are needed only once for the same bank. Upload them in the Documents tab (types: CIS, RWA and FIS) so we can confirm your funds with your bank. The blank CIS form is on the Documents page of your portal.`}
+          : `${RWA_DESCRIPTION} ${FIS_DESCRIPTION} ${CIS_DESCRIPTION} Upload the RWA for every transaction. The CIS and FIS are needed only once for the same bank. Upload them in the Documents tab (types: CIS, RWA and FIS) so we can confirm your funds with your bank. If you need our CIS form, ask your trade desk and we will send it to you.`}
       </p>
     </div>
   ) : null;

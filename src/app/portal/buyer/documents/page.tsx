@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { BuyerCisPdfDownload } from "@/components/portal/BuyerCisPdfDownload";
 import { BuyerLoiUploadPanel } from "@/components/portal/BuyerLoiUploadPanel";
 import { PortalPage } from "@/components/portal/PortalPage";
 
@@ -7,17 +6,17 @@ export default function DocumentsPage() {
   return (
     <PortalPage
       title="Documents"
-      description="Transaction documents: CIS, RWA, FIS, LOI uploads, ICPO and PSA. Each transaction has its own Documents tab."
+      description="Upload your LOI here. Other transaction documents are handled inside each transaction's Documents tab."
     >
-      <BuyerCisPdfDownload />
       <div className="mb-8 rounded-lg border border-[var(--line)] bg-white p-5 text-sm text-[var(--stone)]">
-        <p className="font-semibold text-[var(--navy)]">ICPO and other trade PDFs</p>
+        <p className="font-semibold text-[var(--navy)]">How documents are requested</p>
         <p className="mt-2 leading-relaxed">
-          Pre-filled ICPO drafts and generated trade documents are created inside each{" "}
-          <strong>transaction workspace</strong> once your trade desk opens a deal — open a
-          transaction, use <strong>Documents</strong>, and generate or upload signed copies. Editable
-          PDF templates with buyer pre-fill are being extended; use the LOI upload below until your desk
-          sends the transaction pack.
+          After your ICPO or LOI has been reviewed, Finekarts will request any further documents
+          it needs, such as the <strong>CIS</strong>, <strong>RWA</strong> and <strong>FIS</strong>{" "}
+          for Letter of Credit (LC) transactions. The RWA is required on every LC transaction. The
+          CIS and FIS are needed once for the same bank. When requested, upload them in the{" "}
+          <strong>Documents</strong> tab of the relevant transaction. ICPO drafts and other trade
+          PDFs are also handled there.
         </p>
         <Link href="/portal/buyer/transactions" className="mt-3 inline-block font-semibold text-[var(--navy)] underline">
           View my transactions →

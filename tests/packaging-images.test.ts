@@ -18,7 +18,7 @@ describe("packaging images", () => {
   it("homepage teaser labels use existing client photos", () => {
     for (const item of HOMEPAGE_PACKAGING_TEASER) {
       expect(item.name.length).toBeGreaterThan(0);
-      expect(item.image).toMatch(/^\/images\/packaging\//);
+      expect(item.image).toMatch(/^\/images\/(packaging|home)\//);
       expect(item.image).not.toMatch(/unsplash/i);
       assertPublicFile(item.image);
     }

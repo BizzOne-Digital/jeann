@@ -6,6 +6,7 @@ import { tryConnectMongo } from "@/lib/db/mongoose";
 import { PortalPage } from "@/components/portal/PortalPage";
 import { AdminBuyerReview } from "@/components/admin/AdminBuyerReview";
 import { AdminKybPanel } from "@/components/admin/AdminKybPanel";
+import { BuyerCisPdfDownload } from "@/components/portal/BuyerCisPdfDownload";
 import { loadStaffKybView } from "@/lib/kyb/kyb-service";
 
 export const dynamic = "force-dynamic";
@@ -43,6 +44,9 @@ export default async function AdminBuyerDetailPage({
           createdAt: item.createdAt ? new Date(item.createdAt).toLocaleString() : null,
         }))}
       />
+      <div className="mt-8">
+        <BuyerCisPdfDownload />
+      </div>
       <div className="mt-8">
         <h2 className="mb-3 text-xl font-semibold text-[var(--navy)]">KYB and company validation</h2>
         <AdminKybPanel organizationId={id} initial={JSON.parse(JSON.stringify(kybView))} />
