@@ -6,6 +6,7 @@ import { TransactionDocumentsPanel } from "@/components/portal/TransactionDocume
 import { BuyerLcDetailsForm } from "@/components/portal/BuyerLcDetailsForm";
 import { CIS_DESCRIPTION, FIS_DESCRIPTION, RWA_DESCRIPTION, hasQualifyingCis, hasQualifyingFis, hasQualifyingRwa, isRwaRequiredFor } from "@/lib/banking/rwa";
 import { StaffDocumentTools } from "@/components/portal/StaffDocumentTools";
+import { StaffFisWaiver } from "@/components/portal/StaffFisWaiver";
 import { TransactionFinancePanel } from "@/components/portal/TransactionFinancePanel";
 import { TransactionWorkflowActions } from "@/components/portal/TransactionWorkflowActions";
 
@@ -26,6 +27,7 @@ type TxDetail = {
   workflowSteps?: WorkflowStepView[];
   fisOnRecord?: boolean;
   cisOnRecord?: boolean;
+  fisWaived?: boolean;
   documents: Array<{
     id: string;
     title: string;
@@ -95,7 +97,7 @@ export function TransactionWorkspaceTabs({
         : undefined,
     );
   const rwaOnFile = hasQualifyingRwa(data.documents) &&
-    (hasQualifyingFis(data.documents) || Boolean(data.fisOnRecord)) &&
+    (hasQualifyingFis(data.documents) || Boolean(data.fisOnRecord) || Boolean(data.fisWaived)) &&
     (hasQualifyingCis(data.documents) || Boolean(data.cisOnRecord));
   const rwaNotice = rwaApplies ? (
     <div
@@ -195,6 +197,13 @@ export function TransactionWorkspaceTabs({
             mode={workflowMode}
             isStaff={showStaffActions}
           />
+          {showStaffActions && data.isInternal !== false && workflowMode === "buyer" ? (
+            <StaffFisWaiver
+              transactionId={transactionId}
+              waived={Boolean(data.fisWaived)}
+              onChanged={load}
+            />
+          ) : null}
           {showStaffActions && data.isInternal !== false ? (
             <StaffDocumentTools
               transactionId={transactionId}

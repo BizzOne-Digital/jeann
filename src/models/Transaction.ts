@@ -79,6 +79,9 @@ export interface ITransaction {
   priority?: string;
   internalNotes?: string;
   buyerVisibleNotes?: string;
+  /** Staff decision: this transaction may proceed without an FIS (Finekarts' bank obtains the buyer's banking information). */
+  fisWaived?: boolean;
+  fisWaivedReason?: string;
   supplierVisibleNotes?: string;
   submittedAt?: Date;
   closedAt?: Date;
@@ -187,6 +190,8 @@ const transactionSchema = new Schema<ITransaction>(
     priority: { type: String, trim: true },
     internalNotes: { type: String },
     buyerVisibleNotes: { type: String },
+    fisWaived: { type: Boolean, default: false },
+    fisWaivedReason: { type: String },
     supplierVisibleNotes: { type: String },
     submittedAt: { type: Date },
     closedAt: { type: Date },

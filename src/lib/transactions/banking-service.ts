@@ -67,7 +67,7 @@ async function assertRwaForLc(
   instrumentType?: string,
   issuingBank?: string,
 ) {
-  const { CommercialTerms, Document } = await import("@/models");
+  const { CommercialTerms, Document, Transaction } = await import("@/models");
   const terms = await CommercialTerms.findOne({ transactionId: tx._id })
     .sort({ version: -1 })
     .select("paymentProposal bankingInstrumentProposal")
@@ -85,7 +85,12 @@ async function assertRwaForLc(
   if (!hasQualifyingCis(docs) && !(await hasStandingFis(tx, issuingBank, "cis"))) {
     throw new StepRuleError(CIS_REQUIRED_MESSAGE, 409);
   }
-  if (!hasQualifyingFis(docs) && !(await hasStandingFis(tx, issuingBank))) {
+  const txFlags = await Transaction.findById(tx._id).select("fisWaived").lean();
+  if (
+    !txFlags?.fisWaived &&
+    !hasQualifyingFis(docs) &&
+    !(await hasStandingFis(tx, issuingBank))
+  ) {
     throw new StepRuleError(FIS_REQUIRED_MESSAGE, 409);
   }
 }

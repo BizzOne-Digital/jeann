@@ -5,6 +5,7 @@ import {
   loadTransactionForBuyer,
 } from "@/lib/transactions/buyer-access";
 import { getTransactionBankingSummary } from "@/lib/banking/transaction-banking-summary";
+import { hasStandingFis } from "@/lib/transactions/banking-service";
 import { whitelistBuyerTerms } from "@/lib/transactions/step-rules";
 import { WORKFLOW_STATUS_LABELS, allowedTransitionsFrom } from "@/lib/transactions/workflow";
 
@@ -34,8 +35,13 @@ export async function GET(
       buyerVisible: true,
     }).lean();
     const banking = await getTransactionBankingSummary(tx._id);
+    const fisOnRecord = await hasStandingFis(tx);
+    const cisOnRecord = await hasStandingFis(tx, undefined, "cis");
 
     return NextResponse.json({
+      fisOnRecord,
+      cisOnRecord,
+      fisWaived: Boolean(tx.fisWaived),
       transaction: {
         id: String(tx._id),
         transactionNumber: tx.transactionNumber,
