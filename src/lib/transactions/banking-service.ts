@@ -4,7 +4,7 @@ import { StepRuleError, applyStepStatus, loadStepDefs } from "@/lib/transactions
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
 import { hasPermission } from "@/lib/authorization/permissions";
 import type { Permission } from "@/lib/authorization/permissions";
-import { CIS_REQUIRED_MESSAGE, hasQualifyingCis, FIS_REQUIRED_MESSAGE, RWA_REQUIRED_MESSAGE, hasQualifyingFis, hasQualifyingRwa, isRwaRequiredFor } from "@/lib/banking/rwa";
+import { CIS_REQUIRED_MESSAGE, hasQualifyingCis, RWA_REQUIRED_MESSAGE, hasQualifyingFis, hasQualifyingRwa, isRwaRequiredFor } from "@/lib/banking/rwa";
 
 export const ALLOWED_INSTRUMENT_TYPES = [
   "irrevocable_documentary_lc",
@@ -59,15 +59,16 @@ export async function hasStandingFis(
 }
 
 /**
- * Blocks buyer-side banking progress for LC payment terms until the RWA (every transaction) and the FIS
- * (CIS and FIS once per issuing bank) are on file (409).
+ * Blocks buyer-side banking progress for LC payment terms until the RWA (every transaction) and the CIS
+ * (once per issuing bank) are on file (409). The FIS is optional: if the buyer can provide it we use it,
+ * otherwise the transaction proceeds without it.
  */
 async function assertRwaForLc(
   tx: { _id: unknown; organizationId: unknown },
   instrumentType?: string,
   issuingBank?: string,
 ) {
-  const { CommercialTerms, Document, Transaction } = await import("@/models");
+  const { CommercialTerms, Document } = await import("@/models");
   const terms = await CommercialTerms.findOne({ transactionId: tx._id })
     .sort({ version: -1 })
     .select("paymentProposal bankingInstrumentProposal")
@@ -84,14 +85,6 @@ async function assertRwaForLc(
   if (!hasQualifyingRwa(docs)) throw new StepRuleError(RWA_REQUIRED_MESSAGE, 409);
   if (!hasQualifyingCis(docs) && !(await hasStandingFis(tx, issuingBank, "cis"))) {
     throw new StepRuleError(CIS_REQUIRED_MESSAGE, 409);
-  }
-  const txFlags = await Transaction.findById(tx._id).select("fisWaived").lean();
-  if (
-    !txFlags?.fisWaived &&
-    !hasQualifyingFis(docs) &&
-    !(await hasStandingFis(tx, issuingBank))
-  ) {
-    throw new StepRuleError(FIS_REQUIRED_MESSAGE, 409);
   }
 }
 

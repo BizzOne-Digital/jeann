@@ -41,7 +41,6 @@ export async function GET(
     return NextResponse.json({
       fisOnRecord,
       cisOnRecord,
-      fisWaived: Boolean(tx.fisWaived),
       transaction: {
         id: String(tx._id),
         transactionNumber: tx.transactionNumber,

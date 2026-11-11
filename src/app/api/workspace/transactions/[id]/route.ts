@@ -73,7 +73,6 @@ export async function GET(
       })),
       fisOnRecord,
       cisOnRecord,
-      fisWaived: Boolean(tx.fisWaived),
       documents: documents.map((d) => ({
         id: String(d._id),
         title: d.title,

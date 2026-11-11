@@ -6,7 +6,6 @@ import { TransactionDocumentsPanel } from "@/components/portal/TransactionDocume
 import { BuyerLcDetailsForm } from "@/components/portal/BuyerLcDetailsForm";
 import { CIS_DESCRIPTION, FIS_DESCRIPTION, RWA_DESCRIPTION, hasQualifyingCis, hasQualifyingFis, hasQualifyingRwa, isRwaRequiredFor } from "@/lib/banking/rwa";
 import { StaffDocumentTools } from "@/components/portal/StaffDocumentTools";
-import { StaffFisWaiver } from "@/components/portal/StaffFisWaiver";
 import { TransactionFinancePanel } from "@/components/portal/TransactionFinancePanel";
 import { TransactionWorkflowActions } from "@/components/portal/TransactionWorkflowActions";
 
@@ -27,7 +26,6 @@ type TxDetail = {
   workflowSteps?: WorkflowStepView[];
   fisOnRecord?: boolean;
   cisOnRecord?: boolean;
-  fisWaived?: boolean;
   documents: Array<{
     id: string;
     title: string;
@@ -97,7 +95,6 @@ export function TransactionWorkspaceTabs({
         : undefined,
     );
   const rwaOnFile = hasQualifyingRwa(data.documents) &&
-    (hasQualifyingFis(data.documents) || Boolean(data.fisOnRecord) || Boolean(data.fisWaived)) &&
     (hasQualifyingCis(data.documents) || Boolean(data.cisOnRecord));
   const rwaNotice = rwaApplies ? (
     <div
@@ -108,12 +105,12 @@ export function TransactionWorkspaceTabs({
       }`}
     >
       <p className="font-medium">
-        {rwaOnFile ? "CIS, RWA and FIS documents received." : "CIS, RWA and FIS required for LC payment terms."}
+        {rwaOnFile ? "RWA and CIS received." : "RWA and CIS required for LC payment terms."}
       </p>
       <p className="mt-1">
         {rwaOnFile
-          ? "Your RWA letter is on file for this transaction. Your CIS and FIS are on record for your bank."
-          : `${RWA_DESCRIPTION} ${FIS_DESCRIPTION} ${CIS_DESCRIPTION} Upload the RWA for every transaction. The CIS and FIS are needed only once for the same bank. Upload them in the Documents tab (types: CIS, RWA and FIS) so we can confirm your funds with your bank. If you need our CIS form, ask your trade desk and we will send it to you.`}
+          ? "Your RWA letter is on file for this transaction and your CIS is on record. The FIS is optional."
+          : `${RWA_DESCRIPTION} ${FIS_DESCRIPTION} ${CIS_DESCRIPTION} Upload the RWA for every transaction. The CIS is needed only once for the same bank. The FIS is optional: upload it if you can, otherwise we proceed without it. Upload documents in the Documents tab (types: RWA, CIS and FIS). If you need our CIS form, ask your trade desk and we will send it to you.`}
       </p>
     </div>
   ) : null;
@@ -197,13 +194,6 @@ export function TransactionWorkspaceTabs({
             mode={workflowMode}
             isStaff={showStaffActions}
           />
-          {showStaffActions && data.isInternal !== false && workflowMode === "buyer" ? (
-            <StaffFisWaiver
-              transactionId={transactionId}
-              waived={Boolean(data.fisWaived)}
-              onChanged={load}
-            />
-          ) : null}
           {showStaffActions && data.isInternal !== false ? (
             <StaffDocumentTools
               transactionId={transactionId}

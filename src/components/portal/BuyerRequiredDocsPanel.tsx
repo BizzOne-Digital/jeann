@@ -35,7 +35,7 @@ const ITEMS = [
     type: "fis",
     label: "FIS",
     name: "Financial Information Services document",
-    note: "New buyers upload it once. Returning buyers already have it on record. In some cases we can proceed without it.",
+    note: "Optional. Upload it if you can. If not, we proceed without it. Returning buyers already have it on record.",
     description: FIS_DESCRIPTION,
     has: hasQualifyingFis,
   },
@@ -45,7 +45,7 @@ export function BuyerRequiredDocsPanel({ onNext }: { onNext?: () => void }) {
   const [transactions, setTransactions] = useState<TransactionRow[] | null>(null);
   const [transactionId, setTransactionId] = useState("");
   const [documents, setDocuments] = useState<Doc[]>([]);
-  const [onRecord, setOnRecord] = useState({ cis: false, fis: false, fisWaived: false });
+  const [onRecord, setOnRecord] = useState({ cis: false, fis: false });
   const [busyType, setBusyType] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -76,7 +76,6 @@ export function BuyerRequiredDocsPanel({ onNext }: { onNext?: () => void }) {
       setOnRecord({
         cis: Boolean(json.cisOnRecord),
         fis: Boolean(json.fisOnRecord),
-        fisWaived: Boolean(json.fisWaived),
       });
     } catch (e) {
       setError(e instanceof Error ? e.message : "Unable to load documents.");
@@ -90,12 +89,12 @@ export function BuyerRequiredDocsPanel({ onNext }: { onNext?: () => void }) {
       .then(async (res) => {
         const json = await res.json();
         if (!res.ok) throw new Error(json.error ?? "Unable to load documents.");
-        if (!cancelled) setDocuments(json.documents ?? []);
-      setOnRecord({
-        cis: Boolean(json.cisOnRecord),
-        fis: Boolean(json.fisOnRecord),
-        fisWaived: Boolean(json.fisWaived),
-      });
+        if (cancelled) return;
+        setDocuments(json.documents ?? []);
+        setOnRecord({
+          cis: Boolean(json.cisOnRecord),
+          fis: Boolean(json.fisOnRecord),
+        });
       })
       .catch((e) => {
         if (!cancelled) setError(e instanceof Error ? e.message : "Unable to load documents.");
@@ -163,13 +162,14 @@ export function BuyerRequiredDocsPanel({ onNext }: { onNext?: () => void }) {
         <p className="font-semibold text-[var(--navy)]">Instructions</p>
         <ul className="list-disc space-y-1 pl-5">
           <li>The RWA is required on every LC transaction.</li>
-          <li>New buyers need all three documents: RWA, CIS and FIS.</li>
+          <li>New buyers upload the RWA and the CIS. The FIS is optional.</li>
           <li>
             Returning buyers already have the CIS and FIS on record, so only the RWA is needed.
           </li>
           <li>
-            In some cases we can proceed without the FIS. Our bank will obtain your banking
-            information. Finekarts will tell you if this applies.
+            If you can provide the FIS, please upload it. If you cannot, we proceed without it. For
+            a very large transaction, the bank that handles the transaction may contact you or ask
+            for it.
           </li>
         </ul>
         <p>A checkmark shows the document is received or already on record.</p>
@@ -201,8 +201,7 @@ export function BuyerRequiredDocsPanel({ onNext }: { onNext?: () => void }) {
           const uploaded = item.has(documents);
           const standing =
             !uploaded && ((item.type === "cis" && onRecord.cis) || (item.type === "fis" && onRecord.fis));
-          const waived = !uploaded && item.type === "fis" && onRecord.fisWaived;
-          const done = uploaded || standing || waived;
+          const done = uploaded || standing;
           const busy = busyType === item.type;
           return (
             <li key={item.type} className="flex flex-wrap items-center justify-between gap-3 py-4">
@@ -225,11 +224,6 @@ export function BuyerRequiredDocsPanel({ onNext }: { onNext?: () => void }) {
                   {standing ? (
                     <p className="mt-1 text-xs font-medium text-green-800">
                       Already on record from your earlier transaction. No upload needed.
-                    </p>
-                  ) : null}
-                  {waived ? (
-                    <p className="mt-1 text-xs font-medium text-green-800">
-                      Not required for this transaction. Our bank will obtain your banking information.
                     </p>
                   ) : null}
                   <p className="mt-1 text-xs text-[var(--stone)]">{item.description}</p>

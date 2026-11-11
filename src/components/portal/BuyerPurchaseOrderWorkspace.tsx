@@ -163,8 +163,15 @@ export function BuyerPurchaseOrderWorkspace() {
     }
   }
 
+  const isProcessTab =
+    mode === "required_docs" || mode === "psa" || mode === "invoice" || mode === "banking";
+
   return (
-    <div className="grid gap-8 lg:grid-cols-[1fr_minmax(280px,340px)]">
+    <div
+      className={
+        isProcessTab ? "max-w-3xl" : "grid gap-8 lg:grid-cols-[1fr_minmax(280px,340px)]"
+      }
+    >
       <div className="space-y-6">
         <div className="flex flex-wrap gap-2">
           {(
@@ -399,10 +406,12 @@ export function BuyerPurchaseOrderWorkspace() {
         ) : null}
       </div>
 
-      <div className="space-y-4">
-        <BuyerIcpoGuidancePanel />
-        <BuyerPortalAssistant />
-      </div>
+      {isProcessTab ? null : (
+        <div className="space-y-4">
+          <BuyerIcpoGuidancePanel />
+          <BuyerPortalAssistant />
+        </div>
+      )}
     </div>
   );
 }
