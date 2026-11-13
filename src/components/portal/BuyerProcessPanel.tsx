@@ -20,7 +20,7 @@ type StepView = { key: string; title: string; status: string };
 const NON_QUALIFYING = ["changes_requested", "superseded", "archived"];
 
 export const LC_DEADLINE_WARNING =
-  "Important: once the PSA is signed and the Commercial Invoice has been issued to you, you have 72 hours to submit your LC (Banking tab).";
+  "Important: once the PSA is signed and the Commercial Invoice has been issued to you, you have 24 hours to submit your LC (Banking tab).";
 
 function Notice({ tone, children }: { tone: "info" | "warn"; children: React.ReactNode }) {
   return (
@@ -199,7 +199,7 @@ export function BuyerProcessPanel({
         "After the PSA is signed by both parties, Finekarts issues the Commercial Invoice here.",
         "Download it and give it to your bank when you arrange your LC.",
       ],
-      next: "Banking. Submit your LC details within 72 hours of the invoice being issued.",
+      next: "Banking. Submit your LC details within 24 hours of the invoice being issued.",
       nextLabel: "Go to Banking",
     },
     banking: {
