@@ -83,11 +83,26 @@ Rules shown on the supplier diagram:
 
 - The SCO/FCO is used to **make an offer**. If it is not ready, the trade is discussed by text, email or phone. When both sides agree on terms, the trade proceeds.
 - **Price and payment terms are the key part of the discussion.**
-- Finekarts works with **TT** and **Irrevocable Transferable Letter of Credit**. The buyer may have different terms.
+- Finekarts works with **TT** and **Irrevocable Transferable Letter of Credit**. The buyer may have different terms. (See the 2026-11-18 correction below on how these relate.)
 - So staff must be able to open a transaction directly from terms agreed outside the portal (no SCO/FCO, no portal request), entering price and payment terms.
-- The RWA, CIS and FIS rules apply to LC payment terms. TT transactions do not use LC bank wording.
+- (Superseded by the 2026-11-18 correction below: the CIS, RWA and FIS are verification documents and are not tied to the payment term.)
 
 ## Clarification chat (client, 2026-11-17)
 
 Even when an SCO or FCO has been sent, there will be a conversation to clarify it. A **live text chat** between the parties (buyer or supplier, and Finekarts) is needed, tied to the transaction.
 Existing code: `MessageThread` (optional `transactionId`), `src/lib/messages/message-service.ts`, and the Messages pages in the buyer/supplier portals. These are not live (no refresh or push) and no admin inbox page was found.
+
+## Correction: CIS, RWA, FIS and payment instruments (client, 2026-11-18)
+
+- **The Irrevocable Transferable LC is one of many banking instruments** that can be used in trades. It is not the only one.
+- **TT (Telegraphic Transfer) is another way to pay, but it is unsafe for the buyer.**
+- **CIS, RWA and FIS are not related to payment terms.** They are verification documents:
+  - **RWA** (ready, willing and able): the supplier requests it to make sure the buyer has the funds ready for the transaction.
+  - **CIS**: verifies the corporation's registration details.
+  - **FIS**: helps verify the banking institutions that handle the transaction.
+  - Together they check that the buyer is legitimate.
+- If the FIS is not collected at the beginning, there are ways to find out where that bank ranks among the **top 50 banks**.
+
+**Open conflict to confirm with the client:** the diagrams say "RWA only used in LC transactions" and "RWA is required on every LC transaction", while this message says the documents are not related to payment terms. The current code only requires the RWA/CIS for LC payment terms. Need to confirm whether TT trades also request CIS, RWA and FIS.
+
+**TT (client, 2026-11-19):** TT is **not a banking instrument**, and not many buyers use it. Keep TT out of the banking-instrument list. Treat TT as a minor, rarely used payment method; the main flow is built around banking instruments such as the Irrevocable Transferable LC.
