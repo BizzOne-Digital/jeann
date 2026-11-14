@@ -106,3 +106,27 @@ Existing code: `MessageThread` (optional `transactionId`), `src/lib/messages/mes
 **Open conflict to confirm with the client:** the diagrams say "RWA only used in LC transactions" and "RWA is required on every LC transaction", while this message says the documents are not related to payment terms. The current code only requires the RWA/CIS for LC payment terms. Need to confirm whether TT trades also request CIS, RWA and FIS.
 
 **TT (client, 2026-11-19):** TT is **not a banking instrument**, and not many buyers use it. Keep TT out of the banking-instrument list. Treat TT as a minor, rarely used payment method; the main flow is built around banking instruments such as the Irrevocable Transferable LC.
+
+**Answer on TT and the verification documents (client, 2026-11-20), resolves the open conflict above:**
+- If a buyer agrees to pay by **TT, no RWA is necessary**.
+- The buyer should still provide the **CIS and FIS for verification**, on every trade.
+- So: the **RWA** depends on the payment (needed for LC and other banking instruments, not for TT). The **CIS** and **FIS** are requested on every trade (FIS keeps the exception rules recorded earlier).
+- Current code only requires RWA and CIS when the payment term is an LC (`src/lib/transactions/banking-service.ts`, `src/lib/banking/rwa.ts`). CIS/FIS are not requested on TT trades, and the CIS/RWA/FIS tab always shows the RWA row.
+
+## Simplification, payment terms and order numbers (client, 2026-11-21)
+
+**CIS, RWA, FIS: keep them simple.**
+- Finekarts requests them in the SCO/FCO, or by whatever means the trade is discussed. The buyer uploads them. Finekarts verifies them. That is all.
+- Do not tie them to payment terms or to regulation: "there is no regulation for that". (This simplifies the earlier LC/TT rules; the automatic blocking in `banking-service.ts` goes beyond what the client asked for.)
+- General rule: **an upload button and a download button at every step.**
+
+**Payment terms.**
+- Only a **manager** can change the payment terms.
+- If the buyer has different terms, that is a matter of discussion until both sides agree.
+- When Finekarts buys from a supplier, Finekarts chooses the payment terms.
+
+**Supplier order must match the buyer order.**
+- Product name, quantity, quality, destination port and Incoterm on the supplier order must be **exactly the same** as the buyer order Finekarts is buying for.
+- Example: a buyer buys 500 MT of sugar. The sale is completed on the buyer portal. The **same order number is used in the supplier portal, with a modification** to tell the two apart.
+- Current code: buyer orders are numbered `FK-S-YYYY-NNNNNN` and supplier orders `FK-P-YYYY-NNNNNN` from two separate counters, so they are unrelated. `Transaction.linkedTransactionId` exists but is not used to derive the number or lock the fields.
+- Current code: any staff user with `transactions:write` can change payment terms (`/api/transactions/[id]/commercial-terms`). The manager-level permission is `transactions:approve`.
