@@ -86,3 +86,8 @@ Rules shown on the supplier diagram:
 - Finekarts works with **TT** and **Irrevocable Transferable Letter of Credit**. The buyer may have different terms.
 - So staff must be able to open a transaction directly from terms agreed outside the portal (no SCO/FCO, no portal request), entering price and payment terms.
 - The RWA, CIS and FIS rules apply to LC payment terms. TT transactions do not use LC bank wording.
+
+## Clarification chat (client, 2026-11-17)
+
+Even when an SCO or FCO has been sent, there will be a conversation to clarify it. A **live text chat** between the parties (buyer or supplier, and Finekarts) is needed, tied to the transaction.
+Existing code: `MessageThread` (optional `transactionId`), `src/lib/messages/message-service.ts`, and the Messages pages in the buyer/supplier portals. These are not live (no refresh or push) and no admin inbox page was found.
