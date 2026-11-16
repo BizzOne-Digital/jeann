@@ -7,6 +7,7 @@ type Doc = {
   title: string;
   documentType?: string;
   workflowStatus: string;
+  currentVersionId?: string | null;
 };
 
 type StepDef = {
@@ -117,6 +118,38 @@ export function AdminSevenSteps({
   const [open, setOpen] = useState<number>(1);
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [signDocId, setSignDocId] = useState<string | null>(null);
+  const [signerName, setSignerName] = useState("");
+
+  /** Finekarts signs and stamps the PSA: upload the signed copy and record who signed. */
+  async function signDoc(e: FormEvent<HTMLFormElement>, d: Doc) {
+    e.preventDefault();
+    const file = (e.currentTarget.elements.namedItem("signedFile") as HTMLInputElement).files?.[0];
+    if (!file || !d.currentVersionId || !signerName.trim()) return;
+    setBusy(true);
+    setMessage(null);
+    try {
+      const body = new FormData();
+      body.append("file", file);
+      body.append("versionId", d.currentVersionId);
+      body.append("signatoryName", signerName.trim());
+      const res = await fetch(`/api/transactions/${transactionId}/documents/${d.id}/sign`, {
+        method: "POST",
+        credentials: "same-origin",
+        body,
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error ?? "Signing failed");
+      setMessage("Signed copy recorded.");
+      setSignDocId(null);
+      setSignerName("");
+      onChanged();
+    } catch (err) {
+      setMessage(err instanceof Error ? err.message : "Signing failed.");
+    } finally {
+      setBusy(false);
+    }
+  }
 
   async function download(docId: string) {
     const res = await fetch(`/api/transactions/${transactionId}/documents/${docId}/download`, {
@@ -165,7 +198,7 @@ export function AdminSevenSteps({
     <div className="space-y-3">
       <p className="text-sm text-[var(--stone)]">
         The seven steps of the buyer process. At each step you can upload and download documents.
-        Signing, generating and sending are done from the Documents tab.
+        The PSA can be signed here. Generating and sending documents are done from the Documents tab.
       </p>
       {isLocked ? (
         <p className="rounded border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900">
@@ -218,9 +251,35 @@ export function AdminSevenSteps({
                               {d.workflowStatus.replaceAll("_", " ")}
                             </span>
                           </span>
-                          <button type="button" className="btn text-xs" onClick={() => download(d.id)}>
-                            Download
-                          </button>
+                          <span className="flex gap-2">
+                            {!isLocked && d.documentType === "spa" && d.currentVersionId ? (
+                              <button
+                                type="button"
+                                className="btn btn-secondary text-xs"
+                                onClick={() => setSignDocId(signDocId === d.id ? null : d.id)}
+                              >
+                                Sign
+                              </button>
+                            ) : null}
+                            <button type="button" className="btn text-xs" onClick={() => download(d.id)}>
+                              Download
+                            </button>
+                          </span>
+                          {signDocId === d.id ? (
+                            <form onSubmit={(e) => signDoc(e, d)} className="flex w-full flex-wrap items-center gap-2 pt-2">
+                              <input
+                                className="field"
+                                placeholder="Name of signer"
+                                value={signerName}
+                                onChange={(e) => setSignerName(e.target.value)}
+                                required
+                              />
+                              <input name="signedFile" type="file" required className="text-xs" />
+                              <button type="submit" className="btn btn-primary text-xs" disabled={busy}>
+                                {busy ? "Saving…" : "Upload signed copy"}
+                              </button>
+                            </form>
+                          ) : null}
                         </li>
                       ))}
                     </ul>
