@@ -146,3 +146,10 @@ Existing code: `MessageThread` (optional `transactionId`), `src/lib/messages/mes
 
 **Business model (client, 2026-11-17):** Finekarts buys the exact same product it sold. It sells high and buys low. The profit margin may not be high, depending on the market. **The price can never be the same** between the buyer order and the supplier order.
 Build note: the mirrored supplier order copies everything except the price (done). Suggested next step: a staff-side margin view and a warning when the supplier price is equal to or higher than the buyer price.
+
+## PSA governs the transaction (client, 2026-11-18)
+
+- **The PSA governs the transaction** once the buyer signs it.
+- **The LC deadline is not fixed.** 24 hours is the default; it can be adjusted **on the PSA** if the buyer requests more time. The portal must show the deadline written in the PSA, not a hard-coded 24 hours.
+- **Amendments:** if the buyer requests an amendment, an **amendment fee** is added to the total cost.
+- Current code: the "24 hours" text is hard-coded in `src/components/portal/BuyerProcessPanel.tsx` and `src/lib/content/buyer-portal-guidance.ts`. There is no LC-deadline field on the PSA or commercial terms, and no amendment-fee line on the total cost.
