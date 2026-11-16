@@ -4,7 +4,7 @@ import { StepRuleError, applyStepStatus, loadStepDefs } from "@/lib/transactions
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
 import { hasPermission } from "@/lib/authorization/permissions";
 import type { Permission } from "@/lib/authorization/permissions";
-import { CIS_REQUIRED_MESSAGE, hasQualifyingCis, RWA_REQUIRED_MESSAGE, hasQualifyingFis, hasQualifyingRwa, isRwaRequiredFor } from "@/lib/banking/rwa";
+import { hasQualifyingCis, hasQualifyingFis } from "@/lib/banking/rwa";
 
 export const ALLOWED_INSTRUMENT_TYPES = [
   "irrevocable_documentary_lc",
@@ -58,35 +58,10 @@ export async function hasStandingFis(
   return records.some((r) => normalizeBank(r.issuingBank) === bank);
 }
 
-/**
- * Blocks buyer-side banking progress for LC payment terms until the RWA (every transaction) and the CIS
- * (once per issuing bank) are on file (409). The FIS is optional: if the buyer can provide it we use it,
- * otherwise the transaction proceeds without it.
+/*
+ * CIS, RWA and FIS are verification documents: Finekarts requests them, the buyer uploads them and staff verify them.
+ * They no longer block the banking steps automatically (client decision, see docs/BUYER_PROCESS_SPEC.md).
  */
-async function assertRwaForLc(
-  tx: { _id: unknown; organizationId: unknown },
-  instrumentType?: string,
-  issuingBank?: string,
-) {
-  const { CommercialTerms, Document } = await import("@/models");
-  const terms = await CommercialTerms.findOne({ transactionId: tx._id })
-    .sort({ version: -1 })
-    .select("paymentProposal bankingInstrumentProposal")
-    .lean();
-  if (!isRwaRequiredFor(instrumentType, terms?.paymentProposal, terms?.bankingInstrumentProposal)) return;
-  const docs = await Document.find({
-    transactionId: tx._id,
-    organizationId: tx.organizationId,
-    documentType: { $in: ["rwa", "fis", "cis"] },
-    deletedAt: null,
-  })
-    .select("documentType workflowStatus deletedAt")
-    .lean();
-  if (!hasQualifyingRwa(docs)) throw new StepRuleError(RWA_REQUIRED_MESSAGE, 409);
-  if (!hasQualifyingCis(docs) && !(await hasStandingFis(tx, issuingBank, "cis"))) {
-    throw new StepRuleError(CIS_REQUIRED_MESSAGE, 409);
-  }
-}
 
 export async function selectBankingInstrument(input: {
   transactionId: string;
@@ -110,8 +85,6 @@ export async function selectBankingInstrument(input: {
   if (tx.workflowStatus !== "banking_setup" && tx.workflowStatus !== "contract_executed") {
     throw new Error("invalid_workflow_state");
   }
-  await assertRwaForLc(tx, input.instrumentType);
-
   const record = await BankingInstrumentRecord.findOneAndUpdate(
     { transactionId: tx._id },
     {
@@ -155,12 +128,6 @@ export async function confirmIssuanceRequested(input: {
     organizationId: new Types.ObjectId(input.organizationId),
   });
   if (!record) throw new Error("banking_record_not_found");
-  await assertRwaForLc(
-    { _id: new Types.ObjectId(input.transactionId), organizationId: new Types.ObjectId(input.organizationId) },
-    record.instrumentType,
-    record.issuingBank,
-  );
-
   record.status = "issuance_requested";
   record.issuanceRequestedAt = new Date();
   record.issuanceReference = input.reference;
@@ -207,7 +174,6 @@ export async function recordBuyerLcDetails(input: {
     throw new StepRuleError("Step 6 opens after the contract is fully executed (steps 1-5).", 409);
   }
   const d = input.details;
-  await assertRwaForLc(tx, d.instrumentType, d.issuingBank);
   const record = await BankingInstrumentRecord.findOneAndUpdate(
     { transactionId: tx._id },
     {

@@ -46,6 +46,15 @@ export async function POST(
     if (!auth.ctx.isInternal) return NextResponse.json({ error: "Forbidden." }, { status: 403 });
     const { id } = await params;
     const body = schema.parse(await request.json());
+    if (body.paymentTerms !== undefined && !auth.ctx.permissions.includes("payment_terms:decide")) {
+      const current = String((await getOfferPrefill(id)).paymentTerms ?? "").trim();
+      if (body.paymentTerms.trim() !== current) {
+        return NextResponse.json(
+          { error: "Only a senior manager can decide or change the payment terms." },
+          { status: 403 },
+        );
+      }
+    }
     const r = await createOrReviseOffer({ ...body, transactionId: id, actorUserId: auth.ctx.userId });
     return NextResponse.json({
       ok: true,

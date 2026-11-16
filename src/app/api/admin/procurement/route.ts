@@ -13,6 +13,7 @@ const createSchema = z.object({
   productName: z.string().optional(),
   assignedTradeManagerId: z.string().optional(),
   internalNotes: z.string().optional(),
+  buyerTransactionId: z.string().optional(),
 });
 
 export async function GET() {
@@ -62,6 +63,7 @@ export async function POST(request: NextRequest) {
       productName: body.productName,
       assignedTradeManagerId: body.assignedTradeManagerId ?? auth.ctx.userId,
       internalNotes: body.internalNotes,
+      buyerTransactionId: body.buyerTransactionId,
     });
 
     return NextResponse.json({
@@ -72,6 +74,12 @@ export async function POST(request: NextRequest) {
     if (error instanceof Error) {
       if (error.message === "supplier_not_approved") {
         return NextResponse.json({ error: "Supplier not approved." }, { status: 403 });
+      }
+      if (error.message === "buyer_transaction_not_found") {
+        return NextResponse.json({ error: "Buyer order not found." }, { status: 404 });
+      }
+      if (error.message === "supplier_order_already_exists") {
+        return NextResponse.json({ error: "A supplier order already exists for this buyer order." }, { status: 409 });
       }
     }
     return handleApiError(error);

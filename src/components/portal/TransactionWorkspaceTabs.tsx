@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from "react";
 import { WorkflowStepper, type WorkflowStepView } from "@/components/portal/WorkflowStepper";
 import { TransactionDocumentsPanel } from "@/components/portal/TransactionDocumentsPanel";
 import { BuyerLcDetailsForm } from "@/components/portal/BuyerLcDetailsForm";
-import { CIS_DESCRIPTION, FIS_DESCRIPTION, RWA_DESCRIPTION, hasQualifyingCis, hasQualifyingFis, hasQualifyingRwa, isRwaRequiredFor } from "@/lib/banking/rwa";
 import { StaffDocumentTools } from "@/components/portal/StaffDocumentTools";
 import { TransactionFinancePanel } from "@/components/portal/TransactionFinancePanel";
 import { TransactionWorkflowActions } from "@/components/portal/TransactionWorkflowActions";
@@ -85,35 +84,18 @@ export function TransactionWorkspaceTabs({
   const workflowMode =
     data.transaction.transactionType === "supplier_purchase" ? "supplier" : mode;
 
-  const rwaApplies =
-    workflowMode === "buyer" &&
-    isRwaRequiredFor(
-      data.banking?.instrumentType,
-      typeof data.terms?.paymentProposal === "string" ? data.terms.paymentProposal : undefined,
-      typeof data.terms?.bankingInstrumentProposal === "string"
-        ? data.terms.bankingInstrumentProposal
-        : undefined,
-    );
-  const rwaOnFile = hasQualifyingRwa(data.documents) &&
-    (hasQualifyingCis(data.documents) || Boolean(data.cisOnRecord));
-  const rwaNotice = rwaApplies ? (
-    <div
-      className={`rounded-lg border p-4 text-sm ${
-        rwaOnFile
-          ? "border-green-200 bg-green-50 text-green-900"
-          : "border-amber-200 bg-amber-50 text-amber-900"
-      }`}
-    >
-      <p className="font-medium">
-        {rwaOnFile ? "RWA and CIS received." : "RWA and CIS required for LC payment terms."}
-      </p>
-      <p className="mt-1">
-        {rwaOnFile
-          ? "Your RWA letter is on file for this transaction and your CIS is on record. The FIS is optional."
-          : `${RWA_DESCRIPTION} ${FIS_DESCRIPTION} ${CIS_DESCRIPTION} Upload the RWA for every transaction. The CIS is needed only once for the same bank. The FIS is optional: upload it if you can, otherwise we proceed without it. Upload documents in the Documents tab (types: RWA, CIS and FIS). If you need our CIS form, ask your trade desk and we will send it to you.`}
-      </p>
-    </div>
-  ) : null;
+  // CIS, RWA and FIS are verification documents: upload, then Finekarts verifies. No blocking rules.
+  const rwaNotice =
+    workflowMode === "buyer" ? (
+      <div className="rounded-lg border border-[var(--line)] bg-white p-4 text-sm text-[var(--stone)]">
+        <p className="font-medium text-[var(--navy)]">CIS, RWA and FIS</p>
+        <p className="mt-1">
+          Finekarts requests these documents in the offer or during the trade discussion. Upload them
+          below (types: RWA, CIS and FIS) and Finekarts will verify them. If you need our CIS form,
+          ask your trade desk and we will send it to you.
+        </p>
+      </div>
+    ) : null;
 
   const tabs: { id: Tab; label: string }[] = [
     { id: "overview", label: "Overview" },

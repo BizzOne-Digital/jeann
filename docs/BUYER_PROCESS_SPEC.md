@@ -130,3 +130,16 @@ Existing code: `MessageThread` (optional `transactionId`), `src/lib/messages/mes
 - Example: a buyer buys 500 MT of sugar. The sale is completed on the buyer portal. The **same order number is used in the supplier portal, with a modification** to tell the two apart.
 - Current code: buyer orders are numbered `FK-S-YYYY-NNNNNN` and supplier orders `FK-P-YYYY-NNNNNN` from two separate counters, so they are unrelated. `Transaction.linkedTransactionId` exists but is not used to derive the number or lock the fields.
 - Current code: any staff user with `transactions:write` can change payment terms (`/api/transactions/[id]/commercial-terms`). The manager-level permission is `transactions:approve`.
+
+**Back-to-back (client, 2026-11-15):** the products Finekarts sells, Finekarts buys in the **same product, with the same terms, everything the same**. The supplier order is a mirror of the buyer order: product, quantity, quality, destination port, Incoterm and the terms.
+(Earlier note: "when Finekarts buys, Finekarts chooses the payment terms". Read together, the terms Finekarts chooses for the supplier order are the same as the buyer's agreed terms. Confirm if the price may differ, for example the supplier's price versus Finekarts' selling price.)
+
+## Price, Incoterms, document skeletons and who can change what (client, 2026-11-16)
+
+- **Price is NOT the same** between the buyer order and the supplier order. (Answers the earlier question.)
+- **Incoterm is the same.** If buyer and seller agree CIF, the seller must deliver CIF and the buyer must receive the insurance certificates.
+- **Payment terms:** only a **senior manager** can decide or change them. After that, everything else can be changed.
+- **Documents are skeletons.** The client sent a contract that stays as the skeleton. The parts added to complete each document are decided by the person in charge. The parts to add will be marked; the client will send them again when we get there.
+- **Editing:** everything can be modified, arranged and rearranged. The format stays the same. Build it with all formatting tools (a rich-text editor over the fixed skeleton).
+- The client asks for a **user-friendly workflow**.
+- Current code: document templates exist (`DocumentTemplate` with `bodyBlocks`, published templates, placeholders) and PDFs are generated from them, but no rich-text editor was found in the code base. Roles in code include `general_manager` and `trade_manager`; there is no explicit "senior manager" role.

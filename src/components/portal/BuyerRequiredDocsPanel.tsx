@@ -19,7 +19,7 @@ const ITEMS = [
     type: "rwa",
     label: "RWA",
     name: "Ready, Willing and Able letter",
-    note: "Required on every LC transaction.",
+    note: "Proves you have the funds ready for the transaction.",
     description: RWA_DESCRIPTION,
     has: hasQualifyingRwa,
   },
@@ -27,7 +27,7 @@ const ITEMS = [
     type: "cis",
     label: "CIS",
     name: "Corporate Information Sheet",
-    note: "New buyers upload it once. Returning buyers already have it on record.",
+    note: "Verifies your company registration details.",
     description: CIS_DESCRIPTION,
     has: hasQualifyingCis,
   },
@@ -35,11 +35,20 @@ const ITEMS = [
     type: "fis",
     label: "FIS",
     name: "Financial Information Services document",
-    note: "Optional. Upload it if you can. If not, we proceed without it. Returning buyers already have it on record.",
+    note: "Helps verify the bank that handles the transaction. If you cannot provide it, we can still proceed.",
     description: FIS_DESCRIPTION,
     has: hasQualifyingFis,
   },
 ] as const;
+
+function statusFor(docs: Doc[], type: string): string | null {
+  const mine = docs.filter((d) => d.documentType === type && d.workflowStatus !== "superseded" && d.workflowStatus !== "archived");
+  const d = mine[mine.length - 1];
+  if (!d) return null;
+  if (d.workflowStatus === "approved") return "Verified by Finekarts";
+  if (d.workflowStatus === "changes_requested") return "Changes requested";
+  return "Uploaded, waiting for verification";
+}
 
 export function BuyerRequiredDocsPanel({ onNext }: { onNext?: () => void }) {
   const [transactions, setTransactions] = useState<TransactionRow[] | null>(null);
@@ -161,18 +170,14 @@ export function BuyerRequiredDocsPanel({ onNext }: { onNext?: () => void }) {
       <div className="space-y-1 text-sm text-[var(--stone)]">
         <p className="font-semibold text-[var(--navy)]">Instructions</p>
         <ul className="list-disc space-y-1 pl-5">
-          <li>The RWA is required on every LC transaction.</li>
-          <li>New buyers upload the RWA and the CIS. The FIS is optional.</li>
           <li>
-            Returning buyers already have the CIS and FIS on record, so only the RWA is needed.
+            Finekarts requests these documents in the offer, or while we discuss the trade with
+            you. Upload each one below.
           </li>
-          <li>
-            If you can provide the FIS, please upload it. If you cannot, we proceed without it. For
-            a very large transaction, the bank that handles the transaction may contact you or ask
-            for it.
-          </li>
+          <li>Finekarts verifies each document. The status shows next to it.</li>
+          <li>Returning buyers already have the CIS and FIS on record.</li>
         </ul>
-        <p>A checkmark shows the document is received or already on record.</p>
+        <p>A checkmark shows the document has been received or is already on record.</p>
       </div>
 
       {transactions.length > 1 ? (
@@ -221,6 +226,11 @@ export function BuyerRequiredDocsPanel({ onNext }: { onNext?: () => void }) {
                     {item.label} <span className="font-normal text-[var(--stone)]">- {item.name}</span>
                   </p>
                   <p className="text-xs text-[var(--stone)]">{item.note}</p>
+                  {statusFor(documents, item.type) ? (
+                    <p className="mt-1 text-xs font-medium text-[var(--navy)]">
+                      Status: {statusFor(documents, item.type)}
+                    </p>
+                  ) : null}
                   {standing ? (
                     <p className="mt-1 text-xs font-medium text-green-800">
                       Already on record from your earlier transaction. No upload needed.

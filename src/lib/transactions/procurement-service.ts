@@ -9,9 +9,21 @@ import { notifyUser, notifyAdmins } from "@/lib/notifications/service";
 import { writeAuditEvent } from "@/lib/audit/log";
 import { tryConnectMongo } from "@/lib/db/mongoose";
 import type { TransactionWorkflowStatus } from "@/models/Transaction";
+import type { CommercialTermsLean } from "@/models/CommercialTerms";
 import type { Permission } from "@/lib/authorization/permissions";
 import { hasPermission } from "@/lib/authorization/permissions";
 import { SUPPLIER_WORKFLOW_STEPS } from "@/lib/workflows/transitions";
+
+/** Buyer order number plus "-P" (then "-P2", "-P3" ...) for the matching supplier order. */
+async function allocateMirroredSupplierNumber(buyerNumber: string): Promise<string> {
+  const { Transaction } = await import("@/models");
+  for (let n = 1; n < 50; n++) {
+    const candidate = n === 1 ? `${buyerNumber}-P` : `${buyerNumber}-P${n}`;
+    const exists = await Transaction.findOne({ transactionNumber: candidate }).select("_id").lean();
+    if (!exists) return candidate;
+  }
+  throw new Error("Unable to allocate a supplier order number");
+}
 
 export async function createProcurementTransaction(input: {
   supplierOrganizationId: string;
@@ -21,6 +33,8 @@ export async function createProcurementTransaction(input: {
   productId?: string;
   productName?: string;
   internalNotes?: string;
+  /** The buyer order this supplier order is bought for (back-to-back). Product, quantity, quality, ports, Incoterm and terms are copied exactly; the price is not. */
+  buyerTransactionId?: string;
 }) {
   await tryConnectMongo();
   const {
@@ -30,6 +44,7 @@ export async function createProcurementTransaction(input: {
     Organization,
     SupplierOffer,
     ProcurementTerms,
+    CommercialTerms,
   } = await import("@/models");
 
   const supplierOrg = await Organization.findById(input.supplierOrganizationId);
@@ -47,7 +62,31 @@ export async function createProcurementTransaction(input: {
     }
   }
 
-  const transactionNumber = await allocateSupplierPurchaseTransactionNumber();
+  let buyerTx: { _id: Types.ObjectId; transactionNumber: string } | null = null;
+  let buyerTerms: CommercialTermsLean | null = null;
+  if (input.buyerTransactionId) {
+    if (!Types.ObjectId.isValid(input.buyerTransactionId)) throw new Error("buyer_transaction_not_found");
+    buyerTx =(await Transaction.findOne({
+      _id: input.buyerTransactionId,
+      side: "buyer",
+      deletedAt: null,
+    })
+      .select("transactionNumber")
+      .lean()) as { _id: Types.ObjectId; transactionNumber: string } | null;
+    if (!buyerTx) throw new Error("buyer_transaction_not_found");
+    const already = await Transaction.findOne({ linkedTransactionId: buyerTx._id, side: "supplier", deletedAt: null })
+      .select("_id")
+      .lean();
+    if (already) throw new Error("supplier_order_already_exists");
+    buyerTerms = (await CommercialTerms.findOne({ transactionId: buyerTx._id })
+      .sort({ version: -1 })
+      .lean()) as unknown as CommercialTermsLean | null;
+  }
+
+  // The supplier order keeps the buyer's order number with a "-P" suffix so the two orders are easy to tell apart.
+  const transactionNumber = buyerTx
+    ? await allocateMirroredSupplierNumber(buyerTx.transactionNumber)
+    : await allocateSupplierPurchaseTransactionNumber();
   const template = await WorkflowTemplate.findOne({
     key: "supplier_default_v1",
     version: 1,
@@ -62,7 +101,11 @@ export async function createProcurementTransaction(input: {
     organizationId: new Types.ObjectId(input.supplierOrganizationId),
     counterpartyOrgId: finekartsOrg?._id,
     sourceSupplierOfferId: offer?._id,
-    productId: offer?.productId ?? (input.productId ? new Types.ObjectId(input.productId) : undefined),
+    linkedTransactionId: buyerTx?._id,
+    productId:
+      buyerTerms?.productId ??
+      offer?.productId ??
+      (input.productId ? new Types.ObjectId(input.productId) : undefined),
     status: "active",
     workflowStatus: "offer_pending",
     currentStepKey: "supplier_sco_fco",
@@ -86,27 +129,39 @@ export async function createProcurementTransaction(input: {
     });
   }
 
-  const qty = offer?.availableQuantity
-    ? money(offer.availableQuantity.replace(/[^\d.]/g, "") || "0")
-    : money("0");
+  // Back-to-back: the quantity is the buyer's quantity, so the total uses it too.
+  const qty = buyerTerms?.quantity
+    ? money(buyerTerms.quantity.toString())
+    : offer?.availableQuantity
+      ? money(offer.availableQuantity.replace(/[^\d.]/g, "") || "0")
+      : money("0");
   const unitPrice = offer?.price ? money(offer.price.replace(/[^\d.]/g, "") || "0") : money("0");
   const total = mulMoney(qty, unitPrice);
 
+  const bt = buyerTerms;
   await ProcurementTerms.create({
     transactionId: tx._id,
     organizationId: new Types.ObjectId(input.supplierOrganizationId),
-    productId: offer?.productId,
-    productName: offer?.productName ?? input.productName ?? "Product",
-    productOrigin: offer?.origin,
-    quantity: Types.Decimal128.fromString(qty.toString()),
-    quantityUnit: offer?.unit ?? "MT",
-    currency: offer?.currency ?? "USD",
+    // Back-to-back: everything except the price mirrors the buyer order.
+    productId: bt?.productId ?? offer?.productId,
+    productName: bt?.productName ?? offer?.productName ?? input.productName ?? "Product",
+    specificationVersionId: bt?.specificationVersionId,
+    productOrigin: bt?.productOrigin ?? offer?.origin,
+    quantity: bt?.quantity ?? Types.Decimal128.fromString(qty.toString()),
+    quantityUnit: bt?.quantityUnit ?? offer?.unit ?? "MT",
+    quantityTolerance: bt?.quantityTolerance,
+    currency: bt?.currency ?? offer?.currency ?? "USD",
     procurementUnitPrice: Types.Decimal128.fromString(unitPrice.toString()),
     procurementTotal: Types.Decimal128.fromString(total.toString()),
-    incoterm: offer?.incoterm ?? "FOB",
-    loadingPort: offer?.loadingPort,
-    packaging: offer?.packaging,
-    inspection: offer?.inspectionAvailability,
+    incoterm: bt?.incoterm ?? offer?.incoterm ?? "FOB",
+    namedPortPlace: bt?.namedPortPlace,
+    loadingPort: bt?.loadingPort ?? offer?.loadingPort,
+    destinationPlace: bt?.destinationPort,
+    packaging: bt?.packaging ?? offer?.packaging,
+    inspection: bt?.inspectionCompany ?? offer?.inspectionAvailability,
+    shipmentSchedule: bt?.shipmentSchedule,
+    paymentProposal: bt?.paymentProposal,
+    proposedBankingInstrument: bt?.bankingInstrumentProposal,
     version: 1,
     approvalStatus: "draft",
   });

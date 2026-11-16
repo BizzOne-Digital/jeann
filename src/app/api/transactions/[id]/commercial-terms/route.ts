@@ -78,6 +78,12 @@ export async function PUT(
     }
     const { id } = await params;
     const body = updateSchema.parse(await request.json());
+    if (body.paymentProposal !== undefined && !auth.ctx.permissions.includes("payment_terms:decide")) {
+      return NextResponse.json(
+        { error: "Only a senior manager can decide or change the payment terms." },
+        { status: 403 },
+      );
+    }
     const { CommercialTerms, Transaction } = await import("@/models");
     const tx = await Transaction.findById(id);
     if (!tx) return NextResponse.json({ error: "Not found." }, { status: 404 });

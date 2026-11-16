@@ -1,4 +1,6 @@
 export const PERMISSIONS = [
+  /** Senior manager only: decide or change the payment terms of a trade. */
+  "payment_terms:decide",
   "cms:read",
   "cms:write",
   "cms:publish",
@@ -82,6 +84,7 @@ export type RoleKey =
 export const ROLE_PERMISSIONS: Record<RoleKey, Permission[]> = {
   ceo_super_admin: [...PERMISSIONS],
   general_manager: [
+    "payment_terms:decide",
     "cms:read",
     "cms:write",
     "cms:publish",

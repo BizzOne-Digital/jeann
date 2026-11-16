@@ -65,6 +65,37 @@ export function PortalMessagesPanel({ apiBase, initialThreads = [] }: Props) {
     };
   }, [apiBase, initialThreads.length]);
 
+  // Live chat: while the page is open, check for new messages every few seconds.
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (typeof document !== "undefined" && document.hidden) return;
+      void (async () => {
+        try {
+          const list = await fetch(apiBase, { credentials: "same-origin" });
+          if (list.ok) {
+            const data = (await list.json()) as { items?: MessageThreadSummary[] };
+            setThreads(data.items ?? []);
+          }
+          if (activeId) {
+            const res = await fetch(`${apiBase}/${activeId}`, { credentials: "same-origin" });
+            if (res.ok) {
+              const data = (await res.json()) as {
+                messages?: Array<{ id: string; body: string; authorName?: string; createdAt: string }>;
+              };
+              setMessages((prev) => {
+                const next = data.messages ?? [];
+                return next.length === prev.length ? prev : next;
+              });
+            }
+          }
+        } catch {
+          // Ignore: the next check will try again.
+        }
+      })();
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [apiBase, activeId]);
+
   async function onCompose(e: FormEvent) {
     e.preventDefault();
     setBusy(true);
