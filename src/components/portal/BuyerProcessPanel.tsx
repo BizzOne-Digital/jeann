@@ -19,6 +19,9 @@ type StepView = { key: string; title: string; status: string };
 
 const NON_QUALIFYING = ["changes_requested", "superseded", "archived"];
 
+export const AMENDMENT_WARNING =
+  "If you request an amendment, an amendment fee will apply and will be added to the total cost. By continuing you agree to this.";
+
 export const LC_DEADLINE_WARNING =
   "Important: once the PSA is signed and the Commercial Invoice has been issued to you, you have 24 hours to submit your LC (Banking tab).";
 
@@ -223,6 +226,7 @@ export function BuyerProcessPanel({
           ))}
         </ol>
         {step !== "psa" ? <Notice tone="warn">{LC_DEADLINE_WARNING}</Notice> : null}
+      {step === "psa" || step === "banking" ? <Notice tone="warn">{AMENDMENT_WARNING}</Notice> : null}
         <Notice tone="info">
           This step opens once your ICPO or LOI has been reviewed and Finekarts has opened your
           transaction.{" "}
@@ -251,6 +255,7 @@ export function BuyerProcessPanel({
       </ol>
 
       {step !== "psa" ? <Notice tone="warn">{LC_DEADLINE_WARNING}</Notice> : null}
+      {step === "psa" || step === "banking" ? <Notice tone="warn">{AMENDMENT_WARNING}</Notice> : null}
 
       {transactions.length > 1 ? (
         <label className="label block">

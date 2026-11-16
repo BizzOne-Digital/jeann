@@ -153,3 +153,19 @@ Build note: the mirrored supplier order copies everything except the price (done
 - **The LC deadline is not fixed.** 24 hours is the default; it can be adjusted **on the PSA** if the buyer requests more time. The portal must show the deadline written in the PSA, not a hard-coded 24 hours.
 - **Amendments:** if the buyer requests an amendment, an **amendment fee** is added to the total cost.
 - Current code: the "24 hours" text is hard-coded in `src/components/portal/BuyerProcessPanel.tsx` and `src/lib/content/buyer-portal-guidance.ts`. There is no LC-deadline field on the PSA or commercial terms, and no amendment-fee line on the total cost.
+
+**Chat attachments (client, 2026-11-18):** yes, the chat must allow file uploads (answers the earlier question).
+
+## Amendment fee rule (client, 2026-11-19)
+
+- If an adjustment is requested **after the PSA is signed and submitted to the bank**, it is a **paid amendment**.
+- If an amendment is requested **before the PSA is submitted to the bank**, Finekarts does **not** charge for it.
+- **Do not mention the free case in the warning.** The warning to the buyer says only that the buyer must agree that if they request amendments, an amendment fee applies.
+- Built: the warning text is shown on the PSA and Banking tabs (`AMENDMENT_WARNING` in `BuyerProcessPanel.tsx`).
+- Not yet built: staff-side recording of whether an amendment was before or after the bank submission, and adding the fee to the total cost.
+
+## Client's expectations for completion (2026-11-19)
+
+The client wants all portals finished and done right, with the logistics companies and shipment tracking integrated.
+He says the earlier work (transaction records, accounting, document records) is good but was not aligned.
+Current code: shipment tracking code exists (Terminal49 for containers, EasyPost for parcels, with webhooks) and needs its API keys set on the server; no live check was possible here. Freight and booking modules exist. Which logistics companies must be integrated is not yet specified.
