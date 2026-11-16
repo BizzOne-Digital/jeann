@@ -143,3 +143,6 @@ Existing code: `MessageThread` (optional `transactionId`), `src/lib/messages/mes
 - **Editing:** everything can be modified, arranged and rearranged. The format stays the same. Build it with all formatting tools (a rich-text editor over the fixed skeleton).
 - The client asks for a **user-friendly workflow**.
 - Current code: document templates exist (`DocumentTemplate` with `bodyBlocks`, published templates, placeholders) and PDFs are generated from them, but no rich-text editor was found in the code base. Roles in code include `general_manager` and `trade_manager`; there is no explicit "senior manager" role.
+
+**Business model (client, 2026-11-17):** Finekarts buys the exact same product it sold. It sells high and buys low. The profit margin may not be high, depending on the market. **The price can never be the same** between the buyer order and the supplier order.
+Build note: the mirrored supplier order copies everything except the price (done). Suggested next step: a staff-side margin view and a warning when the supplier price is equal to or higher than the buyer price.
