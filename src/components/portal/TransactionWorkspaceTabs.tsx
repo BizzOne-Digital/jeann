@@ -7,8 +7,9 @@ import { BuyerLcDetailsForm } from "@/components/portal/BuyerLcDetailsForm";
 import { StaffDocumentTools } from "@/components/portal/StaffDocumentTools";
 import { TransactionFinancePanel } from "@/components/portal/TransactionFinancePanel";
 import { TransactionWorkflowActions } from "@/components/portal/TransactionWorkflowActions";
+import { AdminSevenSteps } from "@/components/portal/AdminSevenSteps";
 
-type Tab = "overview" | "workflow" | "documents" | "finance" | "banking";
+type Tab = "overview" | "steps" | "workflow" | "documents" | "finance" | "banking";
 
 type TxDetail = {
   transaction: {
@@ -17,6 +18,7 @@ type TxDetail = {
     transactionType?: string;
     workflowLabel: string;
     workflowStatus: string;
+    status?: string;
     currentStepKey?: string;
     buyerVisibleNotes?: string;
     supplierVisibleNotes?: string;
@@ -101,6 +103,7 @@ export function TransactionWorkspaceTabs({
 
   const tabs: { id: Tab; label: string }[] = [
     { id: "overview", label: "Overview" },
+    ...(showStaffActions && workflowMode === "buyer" ? [{ id: "steps" as Tab, label: "7 steps" }] : []),
     { id: "workflow", label: "Workflow" },
     { id: "documents", label: "Documents" },
     ...(showFinance ? [{ id: "finance" as Tab, label: "Finance" }] : []),
@@ -147,6 +150,16 @@ export function TransactionWorkspaceTabs({
             ) : null}
           </section>
         </div>
+      ) : null}
+
+      {tab === "steps" && showStaffActions ? (
+        <AdminSevenSteps
+          transactionId={transactionId}
+          documents={data.documents}
+          isLocked={data.transaction.status === "completed" || data.transaction.status === "cancelled"}
+          onChanged={load}
+          onOpenDocuments={() => setTab("documents")}
+        />
       ) : null}
 
       {tab === "workflow" ? (
