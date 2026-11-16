@@ -181,7 +181,7 @@ export function BuyerPurchaseOrderWorkspace() {
               ["loi_upload", "Upload LOI"],
               ["required_docs", "CIS, RWA, FIS"],
               ["psa", "PSA"],
-              ["invoice", "Commercial invoice"],
+              ["invoice", "Proforma Invoice"],
               ["banking", "Banking (LC)"],
             ] as const
           ).map(([key, label]) => (

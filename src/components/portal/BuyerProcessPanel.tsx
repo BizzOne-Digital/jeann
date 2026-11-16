@@ -20,10 +20,10 @@ type StepView = { key: string; title: string; status: string };
 const NON_QUALIFYING = ["changes_requested", "superseded", "archived"];
 
 export const AMENDMENT_WARNING =
-  "If you request an amendment, an amendment fee will apply and will be added to the total cost. By continuing you agree to this.";
+  "If you request an amendment, an amendment fee set by the bank will apply and will be added to the total cost of the amended PSA. By continuing you agree to this.";
 
 export const LC_DEADLINE_WARNING =
-  "Important: once the PSA is signed and the Commercial Invoice has been issued to you, you have 24 hours to submit your LC (Banking tab).";
+  "Important: once the PSA is signed and the Proforma Invoice has been issued to you, you have 24 hours to submit your LC (Banking tab).";
 
 function Notice({ tone, children }: { tone: "info" | "warn"; children: React.ReactNode }) {
   return (
@@ -193,13 +193,13 @@ export function BuyerProcessPanel({
         "Upload the signed and stamped PSA together with a passport copy of the signer.",
         "Finekarts receives it, then signs and stamps it and returns the fully executed PSA.",
       ],
-      next: "Commercial invoice, issued by Finekarts once the PSA is signed by both parties.",
-      nextLabel: "Go to Commercial invoice",
+      next: "Proforma Invoice, issued by Finekarts once the PSA is signed by both parties.",
+      nextLabel: "Go to Proforma Invoice",
     },
     invoice: {
-      title: "Commercial invoice",
+      title: "Proforma Invoice",
       lines: [
-        "After the PSA is signed by both parties, Finekarts issues the Commercial Invoice here.",
+        "After the PSA is signed by both parties, Finekarts issues the Proforma Invoice here.",
         "Download it and give it to your bank when you arrange your LC.",
       ],
       next: "Banking. Submit your LC details within 24 hours of the invoice being issued.",
@@ -208,7 +208,7 @@ export function BuyerProcessPanel({
     banking: {
       title: "Banking - submit your LC",
       lines: [
-        "Arrange your Letter of Credit with your bank, based on the signed PSA and the Commercial Invoice.",
+        "Arrange your Letter of Credit with your bank, based on the signed PSA and the Proforma Invoice.",
         "Enter the LC details below once your bank has issued or confirmed it.",
       ],
       next: "Finekarts reviews your LC and confirms the next steps for shipment.",
@@ -396,10 +396,10 @@ export function BuyerProcessPanel({
 
       {step === "invoice" ? (
         <div className="rounded-md border border-[var(--line)] p-4">
-          <p className="font-semibold text-[var(--navy)]">Commercial invoice</p>
+          <p className="font-semibold text-[var(--navy)]">Proforma Invoice</p>
           {invoiceDocs.length === 0 ? (
             <p className="mt-2 text-sm text-[var(--stone)]">
-              The Commercial Invoice has not been issued yet. It appears here once the PSA is signed
+              The Proforma Invoice has not been issued yet. It appears here once the PSA is signed
               by both parties.
             </p>
           ) : (
