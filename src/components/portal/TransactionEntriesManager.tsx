@@ -31,13 +31,28 @@ const TYPES = [
   { value: "procurement_cost", label: "Procurement cost" },
 ];
 
+/** The expense headings tracked on every transaction. */
+const EXPENSE_HEADINGS = [
+  { code: "procurement", label: "Cost of products" },
+  { code: "freight", label: "Cost of logistics" },
+  { code: "inspection", label: "Cost of inspections" },
+  { code: "insurance", label: "Cost of insurance (if any)" },
+  { code: "verification", label: "Cost of verification (if any)" },
+  { code: "validation", label: "Cost of validation" },
+  { code: "lc_cost", label: "Cost of LC" },
+  { code: "amendment_fees", label: "Cost of amendments (if any)" },
+  { code: "agent_commission", label: "Agent fee (if any)" },
+  { code: "broker_commission", label: "Broker fee (if any)" },
+  { code: "other_direct", label: "Other direct cost" },
+];
+
 /** Internal-only: add costs to this contract and approve / post / reverse (remove) them. */
 export function TransactionEntriesManager({ transactionId }: { transactionId: string }) {
   const [items, setItems] = useState<Entry[]>([]);
   const [message, setMessage] = useState<string | null>(null);
   const [form, setForm] = useState({
     entryType: "direct_cost",
-    costCategoryCode: "bank_fees",
+    costCategoryCode: "procurement",
     description: "",
     originalAmount: "",
     currency: "USD",
@@ -87,7 +102,9 @@ export function TransactionEntriesManager({ transactionId }: { transactionId: st
         <select className={input} value={form.entryType} onChange={(e) => setForm({ ...form, entryType: e.target.value })}>
           {TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
         </select>
-        <input className={input} placeholder="Category code (e.g. bank_fees)" value={form.costCategoryCode} onChange={(e) => setForm({ ...form, costCategoryCode: e.target.value })} required />
+        <select className={input} value={form.costCategoryCode} onChange={(e) => setForm({ ...form, costCategoryCode: e.target.value })} required>
+          {EXPENSE_HEADINGS.map((h) => <option key={h.code} value={h.code}>{h.label}</option>)}
+        </select>
         <input className={input} placeholder="Description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} required />
         <input className={input} placeholder="Amount" inputMode="decimal" pattern="\d+(\.\d+)?" value={form.originalAmount} onChange={(e) => setForm({ ...form, originalAmount: e.target.value })} required />
         <input className={`${input} w-20`} maxLength={3} value={form.currency} onChange={(e) => setForm({ ...form, currency: e.target.value.toUpperCase() })} required />

@@ -39,6 +39,22 @@ export async function loadStepDefs(transactionId: unknown): Promise<WorkflowStep
   }));
 }
 
+/**
+ * Completed and cancelled transactions are closed records. Nothing in them may be added to, signed
+ * or changed (that would be falsification). Everyone can still view and download.
+ */
+export async function assertTransactionUnlocked(transactionId: unknown) {
+  await tryConnectMongo();
+  const { Transaction } = await import("@/models");
+  const tx = await Transaction.findById(transactionId).select("status transactionNumber").lean();
+  if (tx && (tx.status === "completed" || tx.status === "cancelled")) {
+    throw new StepRuleError(
+      `Transaction ${tx.transactionNumber} is ${tx.status} and its record is locked. Documents can be viewed and downloaded but not changed.`,
+      409,
+    );
+  }
+}
+
 /** Throws StepRuleError when the document action is not allowed at the current step. */
 export async function assertDocumentAllowed(input: {
   tx: { _id: unknown; side?: string; transactionType?: string };
@@ -46,6 +62,7 @@ export async function assertDocumentAllowed(input: {
   documentType: string;
   action: "upload" | "create" | "send";
 }) {
+  await assertTransactionUnlocked(input.tx._id);
   const steps = await loadStepDefs(input.tx._id);
   const msg = checkDocumentAction({
     side: sideOf(input.tx),
@@ -61,6 +78,7 @@ export async function assertSignAllowed(input: {
   tx: { _id: unknown; side?: string; transactionType?: string };
   signer: "external" | "staff";
 }) {
+  await assertTransactionUnlocked(input.tx._id);
   const steps = await loadStepDefs(input.tx._id);
   const msg = checkSignAction({ side: sideOf(input.tx), signer: input.signer, steps });
   if (msg) throw new StepRuleError(msg, 409);

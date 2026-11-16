@@ -32,7 +32,11 @@ export async function GET(request: NextRequest) {
     const from = sp.get("from");
     const to = sp.get("to");
     if (from && !Number.isNaN(Date.parse(from))) range.$gte = new Date(from);
-    if (to && !Number.isNaN(Date.parse(to))) range.$lte = new Date(to);
+    if (to && !Number.isNaN(Date.parse(to))) {
+      const end = new Date(to);
+      end.setUTCHours(23, 59, 59, 999);
+      range.$lte = end;
+    }
     if (Object.keys(range).length) filter.createdAt = range;
     const page = Math.max(1, Number(sp.get("page") ?? 1) || 1);
     const pageSize = Math.min(100, Math.max(1, Number(sp.get("pageSize") ?? 25) || 25));

@@ -34,7 +34,7 @@ export async function getCanadaHstRate(): Promise<{ rate: string; source: "tax_c
   return rate ? { rate, source: "tax_configuration" } : { rate: CANADA_HST_RATE, source: "default" };
 }
 
-const BANK_CODES = ["bank_fees", "amendment_fees"];
+const BANK_CODES = ["bank_fees", "amendment_fees", "lc_cost"];
 
 /** Internal-only: callers MUST enforce finance:read + isInternal before using. */
 export async function loadTransactionFinanceRows(filter: FinanceSummaryFilter = {}) {

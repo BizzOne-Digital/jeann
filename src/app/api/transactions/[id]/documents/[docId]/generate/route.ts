@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { requireApiAuth, handleApiError } from "@/lib/api/require-api-auth";
 import { generateDocumentPdf } from "@/lib/transactions/trade-document-service";
+import { assertTransactionUnlocked } from "@/lib/transactions/step-service";
 
 export const runtime = "nodejs";
 
@@ -25,6 +26,7 @@ export async function POST(
 
     const { id: transactionId, docId } = await params;
     const body = schema.parse(await request.json());
+    await assertTransactionUnlocked(transactionId);
     const { Transaction } = await import("@/models");
     const tx = await Transaction.findById(transactionId).lean();
     if (!tx) return NextResponse.json({ error: "Not found." }, { status: 404 });

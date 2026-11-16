@@ -19,6 +19,8 @@ export function BuyerTransactionsList() {
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
   const [status, setStatus] = useState("");
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const pageSize = 25;
@@ -28,6 +30,8 @@ export function BuyerTransactionsList() {
       const params = new URLSearchParams({ page: String(page), pageSize: String(pageSize) });
       if (q.trim()) params.set("q", q.trim());
       if (status) params.set("status", status);
+      if (from) params.set("from", from);
+      if (to) params.set("to", to);
       fetch(`/api/portal/buyer/transactions?${params}`)
         .then(async (res) => {
           const data = await res.json();
@@ -40,12 +44,12 @@ export function BuyerTransactionsList() {
         .finally(() => setLoading(false));
     }, 250);
     return () => clearTimeout(t);
-  }, [q, status, page]);
+  }, [q, status, from, to, page]);
 
   if (loading) return <p className="text-sm text-[var(--stone)]">Loading transactions…</p>;
   if (error) return <p className="text-sm text-red-600">{error}</p>;
 
-  if (!items.length && !q && !status) {
+  if (!items.length && !q && !status && !from && !to) {
     return (
       <p className="text-sm text-[var(--stone)]">
         No formal transactions yet. Submit a purchase request for qualification.
@@ -58,13 +62,37 @@ export function BuyerTransactionsList() {
       <div className="flex flex-wrap gap-3">
         <input
           className="field"
-          placeholder="Search by transaction number"
+          placeholder="Search by order number"
           value={q}
           onChange={(e) => {
             setQ(e.target.value);
             setPage(1);
           }}
         />
+        <label className="text-xs text-[var(--stone)]">
+          From
+          <input
+            type="date"
+            className="field block"
+            value={from}
+            onChange={(e) => {
+              setFrom(e.target.value);
+              setPage(1);
+            }}
+          />
+        </label>
+        <label className="text-xs text-[var(--stone)]">
+          To
+          <input
+            type="date"
+            className="field block"
+            value={to}
+            onChange={(e) => {
+              setTo(e.target.value);
+              setPage(1);
+            }}
+          />
+        </label>
         <select
           className="field"
           value={status}

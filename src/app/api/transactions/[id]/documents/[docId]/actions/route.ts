@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { requireApiAuth, handleApiError } from "@/lib/api/require-api-auth";
-import { assertDocumentAllowed } from "@/lib/transactions/step-service";
+import { assertDocumentAllowed, assertTransactionUnlocked } from "@/lib/transactions/step-service";
 import { writeAuditEvent } from "@/lib/audit/log";
 import { submitDocumentRevision, reviewDocumentRevision, sendDocumentToBuyer } from "@/lib/transactions/trade-document-service";
 
@@ -23,6 +23,7 @@ export async function POST(
     const { Document: DocModel, Transaction: TxModel } = await import("@/models");
     const owned = await DocModel.exists({ _id: docId, transactionId: actionTxId });
     if (!owned) return NextResponse.json({ error: "Not found." }, { status: 404 });
+    await assertTransactionUnlocked(actionTxId);
     const body = z.object({
       action: z.enum(["submit", "review", "send", "share_banking"]),
       versionId: z.string().optional(),

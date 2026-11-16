@@ -21,6 +21,7 @@ const UPLOAD_TYPES = [
   { value: "rwa", label: "RWA - Ready, Willing and Able letter (from your bank)" },
   { value: "cis", label: "CIS - Corporate Information Sheet" },
   { value: "fis", label: "FIS - Financial Information Services document" },
+  { value: "contract_amendment", label: "Amendment (PSA or LC)" },
   { value: "other", label: "Passport / other signer document" },
 ];
 
@@ -43,7 +44,7 @@ export function TransactionDocumentsPanel({
     isStaff
       ? true
       : mode === "buyer"
-        ? ["icpo", "loi", "passport_copy", "rwa", "fis", "cis", "other"].includes(t.value)
+        ? ["icpo", "loi", "passport_copy", "rwa", "fis", "cis", "contract_amendment", "other"].includes(t.value)
         : t.value !== "icpo" && t.value !== "rwa" && t.value !== "fis" && t.value !== "cis" && t.value !== "commercial_invoice",
   );
   const [signDocId, setSignDocId] = useState<string | null>(null);

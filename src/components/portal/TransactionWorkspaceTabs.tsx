@@ -97,6 +97,8 @@ export function TransactionWorkspaceTabs({
       </div>
     ) : null;
 
+  const amendments = data.documents.filter((d) => d.documentType === "contract_amendment");
+
   const tabs: { id: Tab; label: string }[] = [
     { id: "overview", label: "Overview" },
     { id: "workflow", label: "Workflow" },
@@ -154,6 +156,29 @@ export function TransactionWorkspaceTabs({
             steps={data.workflowSteps}
             currentStepKey={data.transaction.currentStepKey}
           />
+          <section className="rounded-lg border border-[var(--line)] bg-white p-4 text-sm">
+            <h3 className="font-semibold text-[var(--navy)]">Column 8: Amendments</h3>
+            <p className="mt-1 text-xs text-[var(--stone)]">
+              Amendments can be requested at any time and are not a blocking step. The bank sets the
+              amendment fee and it is added to the total cost of the amended PSA. Upload amendment
+              documents on the Documents tab (type: Amendment).
+            </p>
+            {amendments.length === 0 ? (
+              <p className="mt-2 text-[var(--stone)]">No amendments on this transaction.</p>
+            ) : (
+              <ul className="mt-2 divide-y divide-[var(--line)]">
+                {amendments.map((d) => (
+                  <li key={d.id} className="flex justify-between gap-2 py-2">
+                    <span>{d.title}</span>
+                    <span className="text-xs text-[var(--stone)]">{d.workflowStatus.replaceAll("_", " ")}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <button type="button" className="btn btn-secondary mt-3 text-xs" onClick={() => setTab("documents")}>
+              Upload or view amendment documents
+            </button>
+          </section>
           {showStaffActions ? (
             <TransactionWorkflowActions
               transactionId={transactionId}
