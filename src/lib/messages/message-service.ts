@@ -93,14 +93,29 @@ export async function createThreadWithMessage(input: {
 }): Promise<string | null> {
   if (!(await tryConnectMongo())) return null;
 
-  const { MessageThread, Message } = await import("@/models");
+  const { MessageThread, Message, Transaction } = await import("@/models");
+  // A conversation about an order is stamped with its order number (kept as evidence). Only the
+  // organisation that owns the order can attach a thread to it.
+  let transactionId: Types.ObjectId | undefined;
+  let subject = input.subject.trim();
+  if (input.transactionId && Types.ObjectId.isValid(input.transactionId)) {
+    const tx = await Transaction.findOne({
+      _id: input.transactionId,
+      organizationId: new Types.ObjectId(input.organizationId),
+      deletedAt: null,
+    })
+      .select("transactionNumber")
+      .lean();
+    if (tx) {
+      transactionId = tx._id as Types.ObjectId;
+      if (!subject.includes(tx.transactionNumber)) subject = "[" + tx.transactionNumber + "] " + subject;
+    }
+  }
   const thread = await MessageThread.create({
     organizationId: new Types.ObjectId(input.organizationId),
-    transactionId: input.transactionId
-      ? new Types.ObjectId(input.transactionId)
-      : undefined,
+    transactionId,
     visibility: "external",
-    subject: input.subject.trim(),
+    subject,
   });
 
   await Message.create({

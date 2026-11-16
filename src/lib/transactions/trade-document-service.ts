@@ -629,6 +629,15 @@ export async function uploadTransactionDocument(input: {
   submitForReview?: boolean;
 }) {
   await tryConnectMongo();
+  // Every uploaded file is stamped with its order number in its title and file name. The file
+  // contents are stored exactly as received so the evidence is never altered.
+  const { Transaction: StampTx } = await import("@/models");
+  const stampTx = await StampTx.findById(input.transactionId).select("transactionNumber").lean();
+  const orderNo = stampTx?.transactionNumber;
+  if (orderNo) {
+    if (!input.title.includes(orderNo)) input.title = orderNo + " | " + input.title;
+    if (!input.filename.startsWith(orderNo)) input.filename = orderNo + "_" + input.filename;
+  }
   const doc = await createTradeDocument({
     transactionId: input.transactionId,
     organizationId: input.organizationId,

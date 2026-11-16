@@ -6,9 +6,13 @@ import type { MessageThreadSummary } from "@/lib/messages/message-service";
 type Props = {
   apiBase: string;
   initialThreads?: MessageThreadSummary[];
+  /** When set, a new message can be attached to one of the organisation's orders (stamped with its number). */
+  transactionsApi?: string;
 };
 
-export function PortalMessagesPanel({ apiBase, initialThreads = [] }: Props) {
+export function PortalMessagesPanel({ apiBase, initialThreads = [], transactionsApi }: Props) {
+  const [orders, setOrders] = useState<Array<{ id: string; transactionNumber: string }>>([]);
+  const [newOrderId, setNewOrderId] = useState("");
   const [threads, setThreads] = useState<MessageThreadSummary[]>(initialThreads);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [messages, setMessages] = useState<
@@ -96,6 +100,20 @@ export function PortalMessagesPanel({ apiBase, initialThreads = [] }: Props) {
     return () => clearInterval(timer);
   }, [apiBase, activeId]);
 
+  useEffect(() => {
+    if (!transactionsApi) return;
+    let cancelled = false;
+    fetch(transactionsApi, { credentials: "same-origin" })
+      .then((r) => (r.ok ? r.json() : { items: [] }))
+      .then((d: { items?: Array<{ id: string; transactionNumber: string }> }) => {
+        if (!cancelled) setOrders(d.items ?? []);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [transactionsApi]);
+
   async function onCompose(e: FormEvent) {
     e.preventDefault();
     setBusy(true);
@@ -105,7 +123,11 @@ export function PortalMessagesPanel({ apiBase, initialThreads = [] }: Props) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "same-origin",
-        body: JSON.stringify({ subject: newSubject, message: newMessage }),
+        body: JSON.stringify({
+          subject: newSubject,
+          message: newMessage,
+          transactionId: newOrderId || undefined,
+        }),
       });
       const data = (await res.json()) as { threadId?: string; error?: string };
       if (!res.ok) throw new Error(data.error ?? "Unable to send message.");
@@ -157,6 +179,16 @@ export function PortalMessagesPanel({ apiBase, initialThreads = [] }: Props) {
 
         {showCompose ? (
           <form onSubmit={onCompose} className="mb-4 space-y-3 rounded border border-[var(--line)] bg-[var(--cream)] p-3">
+            {orders.length > 0 ? (
+              <select className="field" value={newOrderId} onChange={(e) => setNewOrderId(e.target.value)}>
+                <option value="">General (not about a specific order)</option>
+                {orders.map((o) => (
+                  <option key={o.id} value={o.id}>
+                    Order {o.transactionNumber}
+                  </option>
+                ))}
+              </select>
+            ) : null}
             <input
               className="field"
               placeholder="Subject"

@@ -21,6 +21,7 @@ export default async function SupplierMessagesPage() {
     >
       <PortalMessagesPanel
         apiBase="/api/portal/supplier/messages"
+        transactionsApi="/api/portal/supplier/transactions"
         initialThreads={initialThreads}
       />
     </PortalPage>

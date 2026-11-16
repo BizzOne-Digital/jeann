@@ -21,6 +21,7 @@ export default async function BuyerMessagesPage() {
     >
       <PortalMessagesPanel
         apiBase="/api/portal/buyer/messages"
+        transactionsApi="/api/portal/buyer/transactions"
         initialThreads={initialThreads}
       />
     </PortalPage>
