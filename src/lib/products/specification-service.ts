@@ -71,3 +71,21 @@ export async function saveProductSpecification(input: {
   });
   return { changed: true as const, version };
 }
+
+/** Saves the list of documents the bank requires for this product (shown in every generated SCO). */
+export async function saveRequiredDocuments(productId: unknown, labels: string[]) {
+  const { Product } = await import("@/models");
+  const clean = labels.map((l) => l.trim()).filter(Boolean);
+  await Product.updateOne(
+    { _id: productId },
+    {
+      $set: {
+        documentCategories: clean.map((label, i) => ({
+          key: "doc-" + (i + 1),
+          label,
+          required: true,
+        })),
+      },
+    },
+  );
+}

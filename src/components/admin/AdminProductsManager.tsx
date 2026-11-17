@@ -19,6 +19,7 @@ type FormState = {
   internalPrice: string;
   image: string;
   specification: string;
+  requiredDocuments: string;
   code: string;
   displayOrder: number;
 };
@@ -38,6 +39,7 @@ const emptyForm = (categoryId: string): FormState => ({
   internalPrice: "",
   image: "",
   specification: "",
+  requiredDocuments: "",
   code: "",
   displayOrder: 0,
 });
@@ -58,6 +60,7 @@ function itemToForm(item: AdminProductItem): FormState {
     internalPrice: item.internalPrice,
     image: item.image,
     specification: "",
+    requiredDocuments: "",
     code: item.code,
     displayOrder: item.displayOrder,
   };
@@ -109,8 +112,14 @@ export function AdminProductsManager({
     // The specification is stored separately; load the current one for editing.
     fetch("/api/admin/products/" + encodeURIComponent(item.slug), { credentials: "same-origin" })
       .then((r) => (r.ok ? r.json() : null))
-      .then((d: { product?: { specification?: string } } | null) => {
-        if (d?.product) setForm((f) => (f.slug === item.slug ? { ...f, specification: d.product?.specification ?? "" } : f));
+      .then((d: { product?: { specification?: string; requiredDocuments?: string[] } } | null) => {
+        if (d?.product) {
+          setForm((f) =>
+            f.slug === item.slug
+              ? { ...f, specification: d.product?.specification ?? "", requiredDocuments: (d.product?.requiredDocuments ?? []).join("\n") }
+              : f,
+          );
+        }
       })
       .catch(() => undefined);
   }
@@ -131,6 +140,7 @@ export function AdminProductsManager({
       internalPrice: current.internalPrice.trim(),
       image: current.image.trim(),
       specification: current.specification,
+      requiredDocuments: splitLines(current.requiredDocuments),
       code: current.code.trim().toUpperCase(),
       displayOrder: current.displayOrder,
     };
@@ -316,6 +326,19 @@ export function AdminProductsManager({
           />
           <span className="mt-1 block text-xs font-normal text-[var(--stone)]">
             When a buyer chooses this product in the order form, this text fills in the product specification.
+          </span>
+        </label>
+
+        <label className="label lg:col-span-2">
+          Documents the bank requires for this product (one per line)
+          <textarea
+            className="field mt-1 min-h-24"
+            value={form.requiredDocuments}
+            onChange={(e) => setForm({ ...form, requiredDocuments: e.target.value })}
+            placeholder="Certificate of Analysis (COA)"
+          />
+          <span className="mt-1 block text-xs font-normal text-[var(--stone)]">
+            These appear in the LC presentation section of every SCO for this product. Leave empty to use the standard list. For a CIF order the insurance document is always added.
           </span>
         </label>
 

@@ -10,7 +10,7 @@ import {
   serializeProduct,
 } from "@/lib/admin/product-serializer";
 import { tryConnectMongo } from "@/lib/db/mongoose";
-import { saveProductSpecification } from "@/lib/products/specification-service";
+import { saveProductSpecification, saveRequiredDocuments } from "@/lib/products/specification-service";
 
 export const runtime = "nodejs";
 
@@ -103,6 +103,9 @@ export async function POST(request: NextRequest) {
       { upsert: true, new: true },
     ).lean();
 
+    if (parsed.data.requiredDocuments !== undefined) {
+      await saveRequiredDocuments(doc._id, parsed.data.requiredDocuments);
+    }
     if (parsed.data.specification !== undefined) {
       await saveProductSpecification({
         productId: doc._id,

@@ -23,6 +23,8 @@ export const adminProductSchema = z.object({
   image: z.string().trim().max(500).optional().default(""),
   /** "Label: value" lines shown to buyers in the order form. Saved as a new specification version. */
   specification: z.string().max(8000).optional(),
+  /** Documents the bank requires at LC presentation for this product, one per line. */
+  requiredDocuments: z.array(z.string().trim().min(1).max(300)).max(30).optional(),
   code: z
     .string()
     .trim()

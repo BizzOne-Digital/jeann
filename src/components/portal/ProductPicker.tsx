@@ -10,6 +10,7 @@ export type PickerProduct = {
   categoryId?: string;
   grade?: string;
   origins: string[];
+  inspections?: string[];
   incoterms: string[];
   packaging: string[];
   specificationVersionId?: string;

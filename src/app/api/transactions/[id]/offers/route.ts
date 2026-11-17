@@ -9,6 +9,7 @@ const schema = z.object({
   documentType: z.enum(["sco", "fco"]),
   documentId: z.string().optional(),
   productName: z.string().min(1),
+  productId: z.string().optional(),
   unitPrice: z.string().regex(/^\d+(\.\d+)?$/),
   currency: z.string().length(3),
   quantity: z.string().min(1),

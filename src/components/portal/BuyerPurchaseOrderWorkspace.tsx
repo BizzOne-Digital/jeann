@@ -93,6 +93,8 @@ export function BuyerPurchaseOrderWorkspace() {
       requestedSpecification: product.specification || undefined,
       unit: "MT",
       incoterm,
+      originPreference: product.origins.length ? product.origins.join(" / ") : undefined,
+      inspection: product.inspections?.length ? product.inspections.join(", ") : undefined,
     };
     try {
       if (draftId) {

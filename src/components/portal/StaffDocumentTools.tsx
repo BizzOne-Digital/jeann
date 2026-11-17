@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import { FormattedTextEditor } from "@/components/portal/FormattedTextEditor";
+import { ProductPicker } from "@/components/portal/ProductPicker";
 
 type Doc = {
   id: string;
@@ -73,6 +74,7 @@ export function StaffDocumentTools({
     notes: "",
   });
   const [details, setDetails] = useState<Record<string, string>>({});
+  const [offerProductId, setOfferProductId] = useState("");
   const setDetail = (key: string, value: string) => setDetails((d) => ({ ...d, [key]: value }));
   const [internalPrice, setInternalPrice] = useState("");
   const [s3Type, setS3Type] = useState("spa");
@@ -139,7 +141,7 @@ export function StaffDocumentTools({
   function submitOffer(e: FormEvent) {
     e.preventDefault();
     void run(async () => {
-      const body = { ...offer, documentId: offer.documentId || undefined, details };
+      const body = { ...offer, documentId: offer.documentId || undefined, details, productId: offerProductId || undefined };
       const j = await post(`/api/transactions/${transactionId}/offers`, body);
       return `Offer revision v${j.version} created (draft). Submit, approve and send it below.`;
     });
@@ -217,8 +219,21 @@ export function StaffDocumentTools({
               </option>
             ))}
           </select>
-          <input className="field" placeholder="Product" required value={offer.productName}
-            onChange={(e) => setOffer({ ...offer, productName: e.target.value })} />
+          <div className="sm:col-span-2">
+            <ProductPicker
+              value={offer.productName}
+              pickedId={offerProductId}
+              onTextChange={(text) => setOffer((o) => ({ ...o, productName: text }))}
+              onClearPick={() => setOfferProductId("")}
+              onPick={(p) => {
+                setOfferProductId(p.id);
+                setOffer((o) => ({ ...o, productName: p.name }));
+              }}
+            />
+            <p className="mt-1 text-xs text-[var(--stone)]">
+              Choosing a product updates the specification, packaging, origin, inspection and required documents in the offer.
+            </p>
+          </div>
           <input className="field" placeholder="Unit price" required inputMode="decimal" value={offer.unitPrice}
             onChange={(e) => setOffer({ ...offer, unitPrice: e.target.value })} />
           <input className="field" placeholder="Currency" required maxLength={3} value={offer.currency}

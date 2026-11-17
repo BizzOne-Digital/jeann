@@ -15,6 +15,8 @@ import { findPublishedTemplate } from "@/lib/contracts/template-service";
 import { placeholderValues, renderTemplateLines, renderTemplateRich, wrapLine } from "@/lib/contracts/template-merge";
 import { missingPsaClauses, normalizeLcDeadlineHours } from "@/lib/contracts/psa-terms";
 import { embedRichFonts, renderRichText } from "@/lib/documents/rich-text-pdf";
+import { DEFAULT_INSPECTION, productLine, requiredDocumentsBlock, specificationToBlock } from "@/lib/products/document-fields";
+import { loadActiveSpecificationText } from "@/lib/products/specification-service";
 
 const TEST_WATERMARK = "TEST DOCUMENT — NOT VALID — FOR SOFTWARE QA ONLY";
 
@@ -98,6 +100,53 @@ export async function buildDocumentPrefill(
       packaging: terms.packaging,
       inspection: terms.inspectionCompany,
     });
+  }
+
+  // Product-driven lines: they follow the product on the order, so changing the product changes them
+  // and the document stays bank-compliant.
+  const { Product, ProductSpecificationVersion, PackagingType } = await import("@/models");
+  const productRef = terms?.productId ?? (await Transaction.findById(transactionId).select("productId").lean())?.productId;
+  const product = productRef
+    ? await Product.findOne({ _id: productRef, deletedAt: null })
+        .select("name gradeSummary originOptions inspectionOptions packagingOptionIds documentCategories")
+        .lean()
+    : null;
+  if (product) {
+    const grade = product.gradeSummary as string | undefined;
+    out.product = terms?.productName ?? product.name;
+    const line = productLine(String(out.product), grade);
+    if (line) out.productLine = line;
+
+    let specText = "";
+    if (terms?.specificationVersionId) {
+      const pinned = await ProductSpecificationVersion.findById(terms.specificationVersionId).lean();
+      if (pinned && String(pinned.productId) === String(product._id)) {
+        specText = Object.entries((pinned.fields ?? {}) as Record<string, unknown>)
+          .filter(([, v]) => v !== undefined && v !== null && String(v).trim() !== "")
+          .map(([k, v]) => (/^Note \d+$/.test(k) ? String(v) : k + ": " + String(v)))
+          .join("\n");
+      }
+    }
+    if (!specText) specText = await loadActiveSpecificationText(product._id);
+    if (specText) out.specificationBlock = specificationToBlock(specText);
+
+    if (!out.origin) {
+      const origin = terms?.productOrigin || (product.originOptions ?? []).join(" / ");
+      if (origin) out.origin = origin;
+    }
+    if (!out.packaging && (product.packagingOptionIds ?? []).length) {
+      const names = await PackagingType.find({ _id: { $in: product.packagingOptionIds }, status: "active", deletedAt: null })
+        .select("name")
+        .lean();
+      if (names.length) out.packaging = names.map((n: { name: string }) => n.name).join(" / ");
+    }
+    if (!out.inspection) out.inspection = (product.inspectionOptions ?? []).join(", ") || DEFAULT_INSPECTION;
+    out.requiredDocuments = requiredDocumentsBlock(
+      ((product.documentCategories ?? []) as { label: string; required?: boolean }[]).filter((d) => d.required !== false).map((d) => d.label),
+      String(out.incoterm ?? terms?.incoterm ?? ""),
+    );
+  } else if (!out.inspection) {
+    out.inspection = DEFAULT_INSPECTION;
   }
   return out;
 }

@@ -26,6 +26,9 @@ export const PLACEHOLDERS = [
   "origin",
   "contractDuration",
   "trancheValue",
+  "productLine",
+  "specificationBlock",
+  "requiredDocuments",
 ] as const;
 
 export type TemplateBlock = { type?: string; content: string; order?: number };

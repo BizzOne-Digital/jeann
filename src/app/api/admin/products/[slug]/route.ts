@@ -7,7 +7,7 @@ import {
 } from "@/lib/admin/product-validation";
 import { serializeProduct } from "@/lib/admin/product-serializer";
 import { tryConnectMongo } from "@/lib/db/mongoose";
-import { loadActiveSpecificationText, saveProductSpecification } from "@/lib/products/specification-service";
+import { loadActiveSpecificationText, saveProductSpecification, saveRequiredDocuments } from "@/lib/products/specification-service";
 import {
   revalidateMarketingPath,
   revalidateProductCatalog,
@@ -35,7 +35,8 @@ export async function GET(_request: NextRequest, context: RouteContext) {
     }
     const category = await ProductCategory.findById(product.categoryId).lean();
     const specification = await loadActiveSpecificationText(product._id);
-    return NextResponse.json({ product: { ...serializeProduct(product, category), specification } });
+    const requiredDocuments = ((product.documentCategories ?? []) as { label: string }[]).map((d) => d.label);
+    return NextResponse.json({ product: { ...serializeProduct(product, category), specification, requiredDocuments } });
   } catch (error) {
     console.error("[admin/products/:slug GET]", error);
     return NextResponse.json({ error: "Unable to load product." }, { status: 500 });
@@ -96,6 +97,9 @@ export async function PUT(request: NextRequest, context: RouteContext) {
       return NextResponse.json({ error: "Product not found." }, { status: 404 });
     }
 
+    if (parsed.data.requiredDocuments !== undefined) {
+      await saveRequiredDocuments(product._id, parsed.data.requiredDocuments);
+    }
     if (parsed.data.specification !== undefined) {
       await saveProductSpecification({
         productId: product._id,

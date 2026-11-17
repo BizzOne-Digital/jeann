@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { writeAuditEvent } from "@/lib/audit/log";
 import { tryConnectMongo } from "@/lib/db/mongoose";
 import {
@@ -12,6 +13,8 @@ export type OfferInput = {
   /** Existing SCO/FCO document to revise (creates a new version; sent versions stay immutable). */
   documentId?: string;
   productName: string;
+  /** The product chosen from the list. Changing it updates every product-driven line of the documents. */
+  productId?: string;
   unitPrice: string;
   currency: string;
   quantity: string;
@@ -49,6 +52,30 @@ export async function createOrReviseOffer(input: OfferInput) {
   if (tx.transactionType !== "buyer_sale") throw new Error("not_buyer_transaction");
   if (!/^\d+(\.\d+)?$/.test(input.unitPrice) || Number(input.unitPrice) <= 0) {
     throw new Error("invalid_price");
+  }
+
+  // The product on the order follows the product chosen here. The packaging, origin and inspection
+  // of the old product are cleared, so the new product's own values are used and the document
+  // stays bank-compliant.
+  if (input.productId && Types.ObjectId.isValid(input.productId)) {
+    const { CommercialTerms, Product, ProductSpecificationVersion } = await import("@/models");
+    const product = await Product.findOne({ _id: input.productId, deletedAt: null }).select("name").lean();
+    if (!product) throw new Error("product_not_found");
+    const terms = await CommercialTerms.findOne({ transactionId: tx._id }).sort({ version: -1 });
+    if (terms && String(terms.productId ?? "") !== String(product._id)) {
+      const spec = await ProductSpecificationVersion.findOne({ productId: product._id, active: true }).sort({ version: -1 }).select("_id").lean();
+      terms.productId = product._id;
+      terms.productName = product.name;
+      terms.specificationVersionId = spec?._id;
+      terms.packaging = undefined;
+      terms.productOrigin = undefined;
+      terms.inspectionCompany = undefined;
+      await terms.save();
+    }
+    if (String(tx.productId ?? "") !== String(product._id)) {
+      tx.productId = product._id;
+      await tx.save();
+    }
   }
 
   let documentId = input.documentId;

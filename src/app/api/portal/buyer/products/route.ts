@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
   try {
     const auth = await requireApiAuth({ permissions: "transactions:read" });
     if ("error" in auth) return auth.error;
-    await assertBuyerTransactionAccess(auth.ctx.userId);
+    if (!auth.ctx.isInternal) await assertBuyerTransactionAccess(auth.ctx.userId);
 
     const q = (request.nextUrl.searchParams.get("q") ?? "").trim().slice(0, 80);
     const { Product, ProductSpecificationVersion, PackagingType } = await import("@/models");
@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
     const filter: Record<string, unknown> = { status: "published", deletedAt: null };
     if (q) filter.name = { $regex: escapeRegex(q), $options: "i" };
     const products = await Product.find(filter)
-      .select("name slug code gradeSummary originOptions incotermOptions packagingOptionIds categoryId")
+      .select("name slug code gradeSummary originOptions inspectionOptions incotermOptions packagingOptionIds categoryId")
       .sort({ displayOrder: 1, name: 1 })
       .limit(20)
       .lean();
@@ -62,6 +62,7 @@ export async function GET(request: NextRequest) {
           categoryId: p.categoryId ? String(p.categoryId) : undefined,
           grade: p.gradeSummary,
           origins: p.originOptions ?? [],
+          inspections: p.inspectionOptions ?? [],
           incoterms: p.incotermOptions ?? [],
           packaging: (p.packagingOptionIds ?? []).map((id: unknown) => packagingName.get(String(id))).filter(Boolean),
           specificationVersionId: spec ? String(spec._id) : undefined,
