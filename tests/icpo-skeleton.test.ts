@@ -35,7 +35,7 @@ describe("client ICPO skeleton", () => {
 
   it("prints on several pages and leaves blanks for unfilled fields", async () => {
     const text = renderTemplateRich(ICPO_SKELETON_BLOCKS, {});
-    expect(text).toContain("________");
+    expect(text).toContain("[[BUYER LEGAL COMPANY NAME]]");
     const pdf = await PDFDocument.create();
     renderRichText(pdf, await embedRichFonts(pdf), text, { page: pdf.addPage([595, 842]), y: 800 });
     expect(pdf.getPageCount()).toBeGreaterThanOrEqual(3);

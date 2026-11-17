@@ -6,12 +6,14 @@
  *   - bullet           1. numbered line (kept as typed)
  *   **bold**  *italic*  __underline__
  *   [center] text      [right] text      [left] text
+ *   [[LABEL]]          text still to be filled in (prints red as [LABEL])
  *   ---                horizontal line
  *   [pagebreak]        starts a new page
  */
 
 export type Align = "left" | "center" | "right";
-export type Run = { text: string; bold: boolean; italic: boolean; underline: boolean };
+/** red = text that still has to be filled in. It prints red until it is filled, and black after. */
+export type Run = { text: string; bold: boolean; italic: boolean; underline: boolean; red?: boolean };
 export type RichBlock =
   | { kind: "text"; style: "h1" | "h2" | "p" | "bullet"; align: Align; runs: Run[] }
   | { kind: "rule" }
@@ -42,6 +44,15 @@ export function parseInline(text: string): Run[] {
     buf = "";
   };
   for (let i = 0; i < text.length; i++) {
+    if (text.startsWith("[[", i)) {
+      const end = text.indexOf("]]", i + 2);
+      if (end > i) {
+        flush();
+        runs.push({ text: "[" + text.slice(i + 2, end) + "]", bold, italic, underline, red: true });
+        i = end + 1;
+        continue;
+      }
+    }
     if (text.startsWith("**", i)) {
       flush();
       bold = !bold;
@@ -110,10 +121,12 @@ export function richTextToHtml(source: string): string {
       const inner = b.runs
         .map((r) => {
           let h = escapeHtml(r.text);
+          if (r.red) h = '<span style="color:#c00000">' + h + "</span>";
           if (r.bold) h = "<strong>" + h + "</strong>";
           if (r.italic) h = "<em>" + h + "</em>";
           if (r.underline) h = "<u>" + h + "</u>";
-          return h;
+          // Placeholders typed in a skeleton show in red in the editor preview.
+          return h.replace(/\{\{\s*(\w+)\s*\}\}/g, '<span style="color:#c00000">{{$1}}</span>');
         })
         .join("");
       const size = b.style === "h1" ? "18px" : b.style === "h2" ? "15px" : "13px";

@@ -1,6 +1,8 @@
 import { StandardFonts, rgb, type PDFDocument, type PDFFont, type PDFPage } from "pdf-lib";
 import { parseRichText, pdfSafe, type Run } from "@/lib/documents/rich-text";
 
+const INK = rgb(0.1, 0.1, 0.2);
+const RED = rgb(0.78, 0, 0);
 const PAGE_W = 595;
 const PAGE_H = 842;
 const MARGIN_X = 50;
@@ -104,18 +106,18 @@ export function renderRichText(
       if (block.align === "center") x = MARGIN_X + indent + (maxWidth - lineWidth) / 2;
       if (block.align === "right") x = MARGIN_X + indent + (maxWidth - lineWidth);
       if (block.style === "bullet" && index === 0) {
-        page.drawText("-", { x: MARGIN_X + 2, y, size, font: fonts.regular, color: rgb(0.1, 0.1, 0.2) });
+        page.drawText("-", { x: MARGIN_X + 2, y, size, font: fonts.regular, color: INK });
       }
       for (const w of line) {
         if (w.text.trim()) {
-          page.drawText(w.text, { x, y, size, font: w.font, color: rgb(0.1, 0.1, 0.2) });
+          page.drawText(w.text, { x, y, size, font: w.font, color: w.run.red ? RED : INK });
         }
         if (w.run.underline && w.text.trim()) {
           page.drawLine({
             start: { x, y: y - 1.5 },
             end: { x: x + w.width, y: y - 1.5 },
             thickness: 0.6,
-            color: rgb(0.1, 0.1, 0.2),
+            color: w.run.red ? RED : INK,
           });
         }
         x += w.width;

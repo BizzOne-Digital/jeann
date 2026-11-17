@@ -106,6 +106,7 @@ describe("client SCO skeleton", () => {
 
   it("leaves a blank line for fields that were not filled", () => {
     const text = renderTemplateRich(SCO_SKELETON_BLOCKS, {});
-    expect(text).toContain("________");
+    expect(text).toContain("[[BUYER LEGAL COMPANY NAME]]");
+    expect(text).toContain("[[6- TO 10-DIGIT HS CODE]]");
   });
 });
