@@ -41,6 +41,23 @@ export const OFFER_DETAIL_KEYS = [
   "shipmentSchedule",
   "packaging",
   "trancheValue",
+  "buyerInquiryRef",
+  "cropYear",
+  "buyerSalutation",
+  "sellerRegNumber",
+  "sellerTitle",
+  "buyerRegNumber",
+  "etaDays",
+  "purityCompliance",
+  "importStandards",
+  "sellerBankName",
+  "sellerBankAddress",
+  "sellerBankSwift",
+  "sellerBankAccount",
+  "sellerBankOfficer",
+  "sellerBankContact",
+  "performanceBondPercent",
+  "commission",
 ] as const;
 
 /** Staff-only. Price is entered per offer (prefill from Product.internalPrice via getOfferPrefill). */

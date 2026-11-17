@@ -55,6 +55,8 @@ export interface IProduct {
   displayOrder: number;
   /** Short code printed in the order number (for example RSO, CPO). */
   code?: string;
+  /** Harmonized System (HS) code, printed in the SCO. */
+  hsCode?: string;
   requiresAdminVerification: boolean;
   deletedAt?: Date;
 }
@@ -118,6 +120,7 @@ const productSchema = new Schema<IProduct>(
     claims: { type: claimsSchema, default: () => ({}) },
     seo: seoSchema,
     displayOrder: { type: Number, default: 0 },
+    hsCode: { type: String, trim: true },
     requiresAdminVerification: { type: Boolean, default: true },
     deletedAt: { type: Date },
   },

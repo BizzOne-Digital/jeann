@@ -21,6 +21,7 @@ type FormState = {
   specification: string;
   requiredDocuments: string;
   code: string;
+  hsCode: string;
   displayOrder: number;
 };
 
@@ -41,6 +42,7 @@ const emptyForm = (categoryId: string): FormState => ({
   specification: "",
   requiredDocuments: "",
   code: "",
+  hsCode: "",
   displayOrder: 0,
 });
 
@@ -62,6 +64,7 @@ function itemToForm(item: AdminProductItem): FormState {
     specification: "",
     requiredDocuments: "",
     code: item.code,
+    hsCode: item.hsCode,
     displayOrder: item.displayOrder,
   };
 }
@@ -142,6 +145,7 @@ export function AdminProductsManager({
       specification: current.specification,
       requiredDocuments: splitLines(current.requiredDocuments),
       code: current.code.trim().toUpperCase(),
+      hsCode: current.hsCode.trim(),
       displayOrder: current.displayOrder,
     };
   }
@@ -314,6 +318,17 @@ export function AdminProductsManager({
           <span className="mt-1 block text-xs font-normal text-[var(--stone)]">
             2 to 8 letters or numbers. Orders for this product are numbered like RSO-CIF-000123-26.
           </span>
+        </label>
+
+        <label className="label">
+          HS code (printed in the SCO)
+          <input
+            className="field mt-1"
+            maxLength={30}
+            value={form.hsCode}
+            onChange={(e) => setForm({ ...form, hsCode: e.target.value })}
+            placeholder="e.g. 1514.19"
+          />
         </label>
 
         <label className="label lg:col-span-2">

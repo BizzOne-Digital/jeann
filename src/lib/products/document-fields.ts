@@ -16,7 +16,11 @@ export function specificationToBlock(text: string): string {
     .filter(Boolean)
     .map((line) => {
       const i = line.indexOf(":");
-      if (i > 0 && i < 80) return "**" + line.slice(0, i).trim() + ":** " + line.slice(i + 1).trim();
+      if (i > 0 && i < 80) {
+        // "Label: value | test method" puts the test method in the third column of Schedule A.
+        const [value, method] = line.slice(i + 1).split("|").map((x) => x.trim());
+        return "**" + line.slice(0, i).trim() + ":** " + value + (method ? " (Test method: " + method + ")" : "");
+      }
       return line;
     })
     .join("\n");
@@ -24,11 +28,12 @@ export function specificationToBlock(text: string): string {
 
 /** Documents the bank asks for at presentation when the product does not list its own. */
 const STANDARD_LC_DOCUMENTS = [
-  "**Signed Commercial Invoice:** one (1) original and three (3) copies.",
-  "**Full Set (3/3) Clean \"On Board\" Marine Bills of Lading:** made out \"To Order\" and blank endorsed, notifying the Applicant.",
-  "**Packing List:** one (1) original and three (3) copies.",
-  "**Certificate of Origin:** issued or endorsed by the Chamber of Commerce of the exporting country.",
-  "**Certificate of Quality, Quantity, and Weight:** issued by an independent inspection company at the port of loading.",
+  "**Signed Commercial Invoice:** Issued by the First Beneficiary (or substituted invoices of the Second Beneficiary pursuant to UCP 600 Article 38), in one (1) original and three (3) copies stating Contract/LC number, HS Code, quantity, unit price, and total value.",
+  "**Full Set (3/3) Clean \"On Board\" Marine Bills of Lading:** Made out \"To Order\" and blank endorsed, marked \"Freight Prepaid\" (for CIF/CFR), showing Port of Loading, Port of Discharge, vessel name, and voyage number.",
+  "**Packing List:** One (1) original and three (3) copies detailing package/bag/flexitank count, container numbers, seal numbers, net weight, and gross weight.",
+  "**Certificate of Origin (COO):** Issued or endorsed by the Chamber of Commerce in the country of origin.",
+  "**Certificate of Quality, Quantity & Weight:** Issued by an independent inspection company at the port of loading.",
+  "**Certificate of Analysis (COA):** Accredited laboratory analysis confirming compliance with all chemical, physical, and MRL specifications.",
 ];
 
 const INSURANCE_LINE =
@@ -39,7 +44,13 @@ const INSURANCE_LINE =
  * it has one. For a CIF order the insurance document is always included, because CIF requires it.
  */
 export function requiredDocumentsBlock(labels: string[], incoterm?: string): string {
-  const own = labels.map((l) => l.trim()).filter(Boolean).map((l) => "**" + l + "**");
+  const own = labels
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .map((l) => {
+      const i = l.indexOf(":");
+      return i > 0 && i < 100 ? "**" + l.slice(0, i).trim() + ":**" + l.slice(i + 1) : "**" + l + "**";
+    });
   const lines = own.length ? own : [...STANDARD_LC_DOCUMENTS];
   const isCif = (incoterm ?? "").toUpperCase() === "CIF";
   if (isCif && !lines.some((l) => /insurance/i.test(l))) lines.push(INSURANCE_LINE);

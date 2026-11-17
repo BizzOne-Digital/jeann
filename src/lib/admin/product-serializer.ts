@@ -18,6 +18,7 @@ export type AdminProductItem = {
   internalPrice: string;
   image: string;
   code: string;
+  hsCode: string;
   displayOrder: number;
 };
 
@@ -49,6 +50,7 @@ export function serializeProduct(
     internalPrice: product.internalPrice ?? "",
     image: product.gallery?.[0]?.storageKey ?? "",
     code: product.code ?? "",
+    hsCode: product.hsCode ?? "",
     displayOrder: product.displayOrder ?? 0,
   };
 }

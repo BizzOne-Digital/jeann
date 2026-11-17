@@ -14,6 +14,7 @@ type Doc = {
 };
 
 const STEP3_TYPES = [
+  { value: "icpo", label: "ICPO (Finekarts order to the supplier)" },
   { value: "spa", label: "PSA / SPA" },
   { value: "proposed_lc_wording", label: "LC wording" },
   { value: "proforma_invoice", label: "Proforma invoice" },
@@ -32,6 +33,32 @@ const DETAIL_FIELDS = [
   { key: "shipmentSchedule", label: "Shipment schedule" },
   { key: "packaging", label: "Packaging" },
   { key: "trancheValue", label: "Quarterly tranche value" },
+  { key: "sellerContact", label: "Supplier contact person (ICPO)" },
+  { key: "consigneeCompany", label: "Final consignee company" },
+  { key: "consigneeContact", label: "Final consignee contact" },
+  { key: "consigneeAddress", label: "Final consignee address" },
+  { key: "consigneeVat", label: "Final consignee VAT number" },
+  { key: "consigneeEmail", label: "Final consignee email" },
+  { key: "deliveryTerms", label: "Estimated time of arrival (ETA)" },
+  { key: "liquidatedDamages", label: "Liquidated damages amount (USD)" },
+  { key: "documentsAddress", label: "Address for original documents" },
+  { key: "buyerInquiryRef", label: "Buyer inquiry ref. (LOI / ICPO no.)" },
+  { key: "cropYear", label: "Crop / production year" },
+  { key: "buyerSalutation", label: "Salutation (Mr./Ms. Last Name)" },
+  { key: "buyerRegNumber", label: "Buyer corp. reg. / tax ID" },
+  { key: "sellerRegNumber", label: "Finekarts corp. reg. no." },
+  { key: "sellerTitle", label: "Finekarts signatory title" },
+  { key: "etaDays", label: "ETA window (days)" },
+  { key: "purityCompliance", label: "Genetic and purity compliance" },
+  { key: "importStandards", label: "Import standards (CFIA, FDA, EU, GACC)" },
+  { key: "performanceBondPercent", label: "Performance bond (% of value)" },
+  { key: "commission", label: "Commission (USD per MT)" },
+  { key: "sellerBankName", label: "Advising bank name" },
+  { key: "sellerBankAddress", label: "Advising bank address" },
+  { key: "sellerBankSwift", label: "Bank SWIFT / BIC" },
+  { key: "sellerBankAccount", label: "Account / IBAN" },
+  { key: "sellerBankOfficer", label: "Bank officer name" },
+  { key: "sellerBankContact", label: "Bank officer phone / email" },
 ];
 
 async function post(url: string, body: unknown) {
@@ -162,7 +189,7 @@ export function StaffDocumentTools({
         documentId = c.documentId as string;
       }
       const j = await post(`/api/transactions/${transactionId}/documents/${documentId}/generate`, {
-        structuredData: { documentType: s3Type },
+        structuredData: { ...Object.fromEntries(Object.entries(details).filter(([, v]) => v.trim())), documentType: s3Type },
         clauseTexts: s3Text.split(/\n{2,}/).filter((t) => t.trim()),
         isDraft: true,
         ...(s3Type === "spa" ? { lcDeadlineHours: Math.max(1, Math.min(720, Math.round(Number(lcHours) || 24))) } : {}),
@@ -286,6 +313,22 @@ export function StaffDocumentTools({
             </option>
           ))}
         </select>
+        {s3Type === "icpo" || s3Type === "proforma_invoice" ? (
+          <details className="rounded border border-[var(--line)] p-3">
+            <summary className="cursor-pointer text-sm font-medium text-[var(--navy)]">More document fields</summary>
+            <div className="mt-3 grid gap-3 sm:grid-cols-3">
+              {DETAIL_FIELDS.map((f) => (
+                <input
+                  key={f.key}
+                  className="field"
+                  placeholder={f.label}
+                  value={details[f.key] ?? ""}
+                  onChange={(e) => setDetail(f.key, e.target.value)}
+                />
+              ))}
+            </div>
+          </details>
+        ) : null}
         {s3Type === "spa" ? (
           <label className="block text-sm text-[var(--stone)]">
             LC deadline written in this PSA (hours after the Proforma Invoice is issued). Admin can set any value from 1 to 720.

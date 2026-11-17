@@ -15,6 +15,7 @@ import { findPublishedTemplate } from "@/lib/contracts/template-service";
 import { placeholderValues, renderTemplateLines, renderTemplateRich, wrapLine } from "@/lib/contracts/template-merge";
 import { missingPsaClauses, normalizeLcDeadlineHours } from "@/lib/contracts/psa-terms";
 import { embedRichFonts, renderRichText } from "@/lib/documents/rich-text-pdf";
+import { FINEKARTS_DETAILS } from "@/lib/contracts/company-details";
 import { DEFAULT_INSPECTION, productLine, requiredDocumentsBlock, specificationToBlock } from "@/lib/products/document-fields";
 import { loadActiveSpecificationText } from "@/lib/products/specification-service";
 
@@ -73,19 +74,37 @@ export async function buildDocumentPrefill(
   const [terms, org] = await Promise.all([
     CommercialTerms.findOne({ transactionId: tx._id }).sort({ version: -1 }).lean(),
     Organization.findById(tx.organizationId)
-      .select("legalName businessAddressLine1 businessAddressCity businessAddressRegion businessAddressPostal country")
+      .select("legalName registrationNumber businessAddressLine1 businessAddressCity businessAddressRegion businessAddressPostal country")
       .lean(),
   ]);
   const out: Record<string, unknown> = {
     seller: tx.side === "supplier" ? org?.legalName : "Finekarts",
     buyer: tx.side === "supplier" ? "Finekarts" : org?.legalName,
   };
-  if (tx.side !== "supplier" && org) {
-    const address = [org.businessAddressLine1, org.businessAddressCity, org.businessAddressRegion, org.businessAddressPostal, org.country]
-      .filter(Boolean)
-      .join(", ");
-    if (address) out.buyerAddress = address;
+  const orgAddress = org
+    ? [org.businessAddressLine1, org.businessAddressCity, org.businessAddressRegion, org.businessAddressPostal, org.country]
+        .filter(Boolean)
+        .join(", ")
+    : "";
+  if (tx.side === "supplier") {
+    // Finekarts buys from the supplier: Finekarts is the buyer.
+    out.buyerAddress = FINEKARTS_DETAILS.address;
+    out.buyerTelephone = FINEKARTS_DETAILS.telephone;
+    out.buyerEmail = FINEKARTS_DETAILS.email;
+    out.buyerContact = FINEKARTS_DETAILS.representative;
+    out.buyerSignatory = FINEKARTS_DETAILS.representative;
+    out.documentsAddress = FINEKARTS_DETAILS.courierAddress;
+    if (orgAddress) out.sellerAddress = orgAddress;
+  } else {
+    if (orgAddress) out.buyerAddress = orgAddress;
+    if (org?.registrationNumber) out.buyerRegNumber = org.registrationNumber;
+    out.sellerAddress = FINEKARTS_DETAILS.address;
+    out.sellerContact = FINEKARTS_DETAILS.representative;
+    out.sellerRepresentative = FINEKARTS_DETAILS.representative;
+    out.sellerTitle = FINEKARTS_DETAILS.representativeTitle;
+    out.documentsAddress = FINEKARTS_DETAILS.courierAddress;
   }
+  out.etaDays = "30-45";
   if (terms) {
     Object.assign(out, {
       product: terms.productName,
@@ -108,7 +127,7 @@ export async function buildDocumentPrefill(
   const productRef = terms?.productId ?? (await Transaction.findById(transactionId).select("productId").lean())?.productId;
   const product = productRef
     ? await Product.findOne({ _id: productRef, deletedAt: null })
-        .select("name gradeSummary originOptions inspectionOptions packagingOptionIds documentCategories")
+        .select("name gradeSummary hsCode originOptions inspectionOptions packagingOptionIds documentCategories")
         .lean()
     : null;
   if (product) {
@@ -116,6 +135,8 @@ export async function buildDocumentPrefill(
     out.product = terms?.productName ?? product.name;
     const line = productLine(String(out.product), grade);
     if (line) out.productLine = line;
+    if (grade) out.productGrade = grade;
+    if (product.hsCode) out.hsCode = product.hsCode;
 
     let specText = "";
     if (terms?.specificationVersionId) {

@@ -46,12 +46,32 @@ describe("SCO changes with the product", () => {
     });
     expect(text).toContain("Crude Palm Oil, RBD");
     expect(text).toContain("**Free Fatty Acid:** Maximum 5%");
-    expect(text).toContain("loads the cargo in ISO tank");
+    expect(text).toContain("**Packaging:** ISO tank");
+    expect(text).toContain("inspected at the Port of Loading by");
     expect(text).toContain("1. **Certificate of Analysis (COA)**");
   });
 
   it("no longer carries any rapeseed oil wording of its own", () => {
     const all = SCO_SKELETON_BLOCKS.map((b) => b.content).join("\n");
     expect(all).not.toMatch(/rapeseed|canola|flexitank|Lovibond|Phytosanitary|human consumption/i);
+  });
+});
+
+describe("master SCO template", () => {
+  it("prints the HS code, grade and Schedule A of the chosen product", () => {
+    const text = renderTemplateRich(SCO_SKELETON_BLOCKS, {
+      product: "Refined White Cane Sugar ICUMSA 45",
+      productGrade: "Polarization 99.8 Z min",
+      hsCode: "1701.99",
+      specificationBlock: specificationToBlock("Polarization: Min 99.8 Z | ICUMSA GS1-7"),
+    });
+    expect(text).toContain("**Harmonized System (HS) Code:** 1701.99");
+    expect(text).toContain("**Grade / Quality Standard:** Polarization 99.8 Z min");
+    expect(text).toContain("## SCHEDULE A: COMMODITY TECHNICAL SPECIFICATIONS");
+    expect(text).toContain("**Polarization:** Min 99.8 Z (Test method: ICUMSA GS1-7)");
+  });
+
+  it("starts Schedule A on its own page", () => {
+    expect(SCO_SKELETON_BLOCKS.some((b) => b.content.trim() === "[pagebreak]")).toBe(true);
   });
 });

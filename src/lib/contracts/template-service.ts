@@ -38,8 +38,11 @@ export async function seedMissingDefaultTemplates(actorUserId?: string) {
  */
 export async function publishClientSkeleton(key: string, actorUserId?: string) {
   const { SCO_SKELETON_BLOCKS } = await import("@/lib/contracts/sco-skeleton");
+  const { ICPO_SKELETON_BLOCKS } = await import("@/lib/contracts/icpo-skeleton");
   const skeletons: Record<string, { name: string; side: ContractSide; blocks: { type: string; content: string }[] }> = {
     sco_buyer: { name: "Soft Corporate Offer (SCO), client skeleton", side: "buyer", blocks: SCO_SKELETON_BLOCKS },
+    icpo_buyer: { name: "ICPO, client skeleton (buyer portal)", side: "buyer", blocks: ICPO_SKELETON_BLOCKS },
+    icpo_supplier: { name: "ICPO, client skeleton (supplier portal)", side: "supplier", blocks: ICPO_SKELETON_BLOCKS },
   };
   const skeleton = skeletons[key];
   if (!skeleton) throw new Error("unknown_skeleton");

@@ -1,5 +1,6 @@
 import { contractFlow, templateKeyFor, type ContractSide } from "@/lib/contracts/contract-flow";
 import { SCO_SKELETON_BLOCKS } from "@/lib/contracts/sco-skeleton";
+import { ICPO_SKELETON_BLOCKS } from "@/lib/contracts/icpo-skeleton";
 
 type Block = { type: string; content: string };
 export type DefaultTemplate = {
@@ -38,13 +39,7 @@ const BODIES: Record<string, Block[]> = {
     P("The buyer confirms its intent to purchase the following product, subject to agreement of a sales and purchase agreement."),
     GOODS,
   ],
-  icpo: [
-    H("Irrevocable Corporate Purchase Order"),
-    PARTIES,
-    P("The buyer irrevocably confirms its order for the product below on the terms stated."),
-    GOODS,
-    P("Authorised signatory name, title and signature: ____________________"),
-  ],
+  icpo: ICPO_SKELETON_BLOCKS,
   spa: [
     H("Sales and Purchase Agreement"),
     PARTIES,

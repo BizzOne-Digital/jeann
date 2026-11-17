@@ -32,6 +32,7 @@ export const adminProductSchema = z.object({
     .regex(/^[A-Z0-9]{2,8}$/, "Use 2 to 8 letters or numbers, for example RSO.")
     .optional()
     .or(z.literal("")),
+  hsCode: z.string().trim().max(30).optional().default(""),
   displayOrder: z.number().int().min(0).optional().default(0),
 });
 
@@ -52,6 +53,7 @@ export function productInputToMongo(input: AdminProductInput) {
     minOrderText: input.minOrderText || undefined,
     internalPrice: input.internalPrice || undefined,
     ...(input.code ? { code: input.code } : {}),
+    hsCode: input.hsCode || undefined,
     gallery: input.image
       ? [{ storageKey: input.image, alt: input.name, displayOrder: 0 }]
       : [],

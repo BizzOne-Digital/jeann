@@ -61,7 +61,11 @@ export default async function ContractAutomationPage() {
           <div className="mt-4">
             <SeedContractTemplatesButton />
             <div className="mt-3">
-              <LoadClientSkeletonButton skeletonKey="sco_buyer" label="Load the client's SCO skeleton (new version)" />
+              <div className="flex flex-col gap-2">
+                <LoadClientSkeletonButton skeletonKey="sco_buyer" label="Load the client's SCO skeleton (new version)" />
+                <LoadClientSkeletonButton skeletonKey="icpo_supplier" label="Load the client's ICPO skeleton, supplier portal (new version)" />
+                <LoadClientSkeletonButton skeletonKey="icpo_buyer" label="Load the client's ICPO skeleton, buyer portal (new version)" />
+              </div>
             </div>
             <p className="mt-2 text-xs text-[var(--stone)]">
               Creates published starter templates only where none exist. Existing templates are never changed. Generated PDFs
