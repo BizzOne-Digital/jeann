@@ -7,7 +7,7 @@
 /** Hours the buyer has to submit the LC after the Proforma Invoice is issued. */
 export const LC_DEADLINE_HOURS = 24;
 
-export type PsaMandatoryClause = { marker: string; text: (hours: number) => string };
+export type PsaMandatoryClause = { marker: string; text: (hours: number | string) => string };
 
 /** Staff may set any deadline from 1 to 720 hours on a PSA. */
 export function normalizeLcDeadlineHours(value: unknown): number {

@@ -43,6 +43,8 @@ const DETAIL_FIELDS = [
   { key: "liquidatedDamages", label: "Liquidated damages amount (USD)" },
   { key: "documentsAddress", label: "Address for original documents" },
   { key: "buyerInquiryRef", label: "Buyer inquiry ref. (LOI / ICPO no.)" },
+  { key: "icpoRef", label: "Associated ICPO ref." },
+  { key: "buyerTitle", label: "Buyer signatory title" },
   { key: "cropYear", label: "Crop / production year" },
   { key: "buyerSalutation", label: "Salutation (Mr./Ms. Last Name)" },
   { key: "buyerRegNumber", label: "Buyer corp. reg. / tax ID" },
@@ -313,7 +315,7 @@ export function StaffDocumentTools({
             </option>
           ))}
         </select>
-        {s3Type === "icpo" || s3Type === "proforma_invoice" ? (
+        {s3Type === "icpo" || s3Type === "proforma_invoice" || s3Type === "spa" ? (
           <details className="rounded border border-[var(--line)] p-3">
             <summary className="cursor-pointer text-sm font-medium text-[var(--navy)]">More document fields</summary>
             <div className="mt-3 grid gap-3 sm:grid-cols-3">

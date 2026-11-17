@@ -1,6 +1,7 @@
 import { contractFlow, templateKeyFor, type ContractSide } from "@/lib/contracts/contract-flow";
 import { SCO_SKELETON_BLOCKS } from "@/lib/contracts/sco-skeleton";
 import { ICPO_SKELETON_BLOCKS } from "@/lib/contracts/icpo-skeleton";
+import { PSA_SKELETON_BLOCKS } from "@/lib/contracts/psa-skeleton";
 
 type Block = { type: string; content: string };
 export type DefaultTemplate = {
@@ -40,14 +41,7 @@ const BODIES: Record<string, Block[]> = {
     GOODS,
   ],
   icpo: ICPO_SKELETON_BLOCKS,
-  spa: [
-    H("Sales and Purchase Agreement"),
-    PARTIES,
-    P("1. Goods. The seller agrees to sell and the buyer agrees to buy the goods described below."),
-    GOODS,
-    P("2. Quality and quantity are verified by the inspection company named above at loading.\n3. Payment is made as stated in the payment terms agreed between the parties.\n4. Disputes are handled under the governing law and venue agreed in the signed schedule."),
-    P("Signed for the seller: ____________________\nSigned for the buyer: ____________________"),
-  ],
+  spa: PSA_SKELETON_BLOCKS,
   lc_wording: [
     H("Proposed Letter of Credit wording"),
     PARTIES,

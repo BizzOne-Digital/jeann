@@ -40,6 +40,9 @@ export const PLACEHOLDERS = [
   "liquidatedDamages",
   "documentsAddress",
   "buyerInquiryRef",
+  "icpoRef",
+  "buyerTitle",
+  "lcDeadlineHours",
   "cropYear",
   "buyerSalutation",
   "sellerRegNumber",
@@ -124,6 +127,9 @@ export const PLACEHOLDER_LABELS: Record<string, string> = {
   buyerSignatory: "BUYER AUTHORIZED SIGNATORY",
   buyerRegNumber: "BUYER REGISTRATION NO.",
   buyerInquiryRef: "BUYER LOI / ICPO REF. NO.",
+  icpoRef: "BUYER ICPO REF. NO.",
+  buyerTitle: "Buyer Title",
+  lcDeadlineHours: "24",
   buyerSalutation: "Mr./Ms. Last Name",
   sellerRepresentative: "AUTHORIZED SIGNATORY",
   sellerTitle: "TITLE",
@@ -154,7 +160,7 @@ export const PLACEHOLDER_LABELS: Record<string, string> = {
   consigneeVat: "VAT NUMBER",
   consigneeEmail: "CONSIGNEE EMAIL",
   deliveryTerms: "ETA",
-  liquidatedDamages: "X",
+  liquidatedDamages: "AMOUNT, e.g. 250,000",
   documentsAddress: "ADDRESS FOR ORIGINAL DOCUMENTS",
 };
 

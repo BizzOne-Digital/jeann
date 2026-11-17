@@ -42,6 +42,8 @@ export const OFFER_DETAIL_KEYS = [
   "packaging",
   "trancheValue",
   "buyerInquiryRef",
+  "icpoRef",
+  "buyerTitle",
   "cropYear",
   "buyerSalutation",
   "sellerRegNumber",

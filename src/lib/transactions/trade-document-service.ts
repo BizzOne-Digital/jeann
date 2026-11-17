@@ -277,14 +277,14 @@ export async function generateDocumentPdf(input: {
   // Use the published admin template for this document type when one exists; otherwise built-in layout.
   const template = await findPublishedTemplate(doc.documentType, side);
   if (template) {
-    structuredData._templateLines = renderTemplateLines(
-      template.bodyBlocks,
-      placeholderValues(structuredData, { transactionNumber: txNumber }),
+    const fieldValues = placeholderValues(
+      structuredData._lcDeadlineHours !== undefined
+        ? { ...structuredData, lcDeadlineHours: structuredData._lcDeadlineHours }
+        : structuredData,
+      { transactionNumber: txNumber },
     );
-    structuredData._templateRich = renderTemplateRich(
-      template.bodyBlocks,
-      placeholderValues(structuredData, { transactionNumber: txNumber }),
-    );
+    structuredData._templateLines = renderTemplateLines(template.bodyBlocks, fieldValues);
+    structuredData._templateRich = renderTemplateRich(template.bodyBlocks, fieldValues);
     structuredData._templateKey = template.key;
     structuredData._templateVersion = template.version;
     doc.templateKey = template.key;
