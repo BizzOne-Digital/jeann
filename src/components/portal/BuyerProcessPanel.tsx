@@ -23,10 +23,13 @@ const NON_QUALIFYING = ["changes_requested", "superseded", "archived"];
 export const AMENDMENT_WARNING =
   "If you request an amendment, an amendment fee set by the bank will apply and will be added to the total cost of the amended PSA. By continuing you agree to this.";
 
-export const LC_DEADLINE_WARNING =
-  "Important: as stated in the PSA, once the PSA is signed and the Proforma Invoice has been issued to you, you have " +
-  LC_DEADLINE_HOURS +
-  " hours to submit your LC (Banking tab).";
+export function lcDeadlineWarning(hours: number): string {
+  return (
+    "Important: as stated in the PSA, once the PSA is signed and the Proforma Invoice has been issued to you, you have " +
+    hours +
+    " hours to submit your LC (Banking tab)."
+  );
+}
 
 function Notice({ tone, children }: { tone: "info" | "warn"; children: React.ReactNode }) {
   return (
@@ -68,6 +71,7 @@ export function BuyerProcessPanel({
   const [transactionId, setTransactionId] = useState("");
   const [documents, setDocuments] = useState<Doc[]>([]);
   const [steps, setSteps] = useState<StepView[]>([]);
+  const [lcHours, setLcHours] = useState<number>(LC_DEADLINE_HOURS);
   const [reloadKey, setReloadKey] = useState(0);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -101,6 +105,7 @@ export function BuyerProcessPanel({
         if (cancelled) return;
         setDocuments(json.documents ?? []);
         setSteps(json.workflowSteps ?? []);
+        setLcHours(Number(json.transaction?.lcDeadlineHours) || LC_DEADLINE_HOURS);
       })
       .catch((e) => {
         if (!cancelled) setError(e instanceof Error ? e.message : "Unable to load documents.");
@@ -228,7 +233,7 @@ export function BuyerProcessPanel({
             <li key={l}>{l}</li>
           ))}
         </ol>
-        {step !== "psa" ? <Notice tone="warn">{LC_DEADLINE_WARNING}</Notice> : null}
+        {step !== "psa" ? <Notice tone="warn">{lcDeadlineWarning(lcHours)}</Notice> : null}
       {step === "psa" || step === "banking" ? <Notice tone="warn">{AMENDMENT_WARNING}</Notice> : null}
         <Notice tone="info">
           This step opens once your ICPO or LOI has been reviewed and Finekarts has opened your
@@ -257,7 +262,7 @@ export function BuyerProcessPanel({
         ))}
       </ol>
 
-      {step !== "psa" ? <Notice tone="warn">{LC_DEADLINE_WARNING}</Notice> : null}
+      {step !== "psa" ? <Notice tone="warn">{lcDeadlineWarning(lcHours)}</Notice> : null}
       {step === "psa" || step === "banking" ? <Notice tone="warn">{AMENDMENT_WARNING}</Notice> : null}
 
       {transactions.length > 1 ? (

@@ -78,6 +78,8 @@ export interface ITransaction {
   assignedReviewerIds?: Types.ObjectId[];
   priority?: string;
   internalNotes?: string;
+  /** Hours the buyer has to submit the LC after the Proforma Invoice. Set by staff on the PSA; default 24. */
+  lcDeadlineHours?: number;
   buyerVisibleNotes?: string;
   supplierVisibleNotes?: string;
   submittedAt?: Date;
@@ -186,6 +188,7 @@ const transactionSchema = new Schema<ITransaction>(
     assignedReviewerIds: [{ type: Schema.Types.ObjectId, ref: "User" }],
     priority: { type: String, trim: true },
     internalNotes: { type: String },
+    lcDeadlineHours: { type: Number, min: 1, max: 720 },
     buyerVisibleNotes: { type: String },
     supplierVisibleNotes: { type: String },
     submittedAt: { type: Date },

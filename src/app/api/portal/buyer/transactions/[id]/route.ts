@@ -49,6 +49,7 @@ export async function GET(
         status: tx.status,
         currentStepKey: tx.currentStepKey,
         buyerVisibleNotes: tx.buyerVisibleNotes,
+        lcDeadlineHours: tx.lcDeadlineHours ?? undefined,
         submittedAt: tx.submittedAt,
         createdAt: tx.createdAt,
       },

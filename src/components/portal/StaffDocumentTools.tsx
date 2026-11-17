@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
+import { FormattedTextEditor } from "@/components/portal/FormattedTextEditor";
 
 type Doc = {
   id: string;
@@ -60,6 +61,7 @@ export function StaffDocumentTools({
   const [internalPrice, setInternalPrice] = useState("");
   const [s3Type, setS3Type] = useState("spa");
   const [s3Text, setS3Text] = useState("");
+  const [lcHours, setLcHours] = useState("24");
   const [signName, setSignName] = useState("");
 
   function counterSign(e: FormEvent<HTMLFormElement>, d: Doc) {
@@ -145,6 +147,7 @@ export function StaffDocumentTools({
         structuredData: { documentType: s3Type },
         clauseTexts: s3Text.split(/\n{2,}/).filter((t) => t.trim()),
         isDraft: true,
+        ...(s3Type === "spa" ? { lcDeadlineHours: Math.max(1, Math.min(720, Math.round(Number(lcHours) || 24))) } : {}),
       });
       return `${label} v${j.version} generated as PDF (draft).`;
     });
@@ -233,11 +236,23 @@ export function StaffDocumentTools({
             </option>
           ))}
         </select>
-        <textarea
-          className="field min-h-28"
-          placeholder="Document wording. Separate clauses with a blank line."
+        {s3Type === "spa" ? (
+          <label className="block text-sm text-[var(--stone)]">
+            LC deadline written in this PSA (hours after the Proforma Invoice is issued). Admin can set any value from 1 to 720.
+            <input
+              className="field mt-1 block w-32"
+              type="number"
+              min={1}
+              max={720}
+              value={lcHours}
+              onChange={(e) => setLcHours(e.target.value)}
+            />
+          </label>
+        ) : null}
+        <FormattedTextEditor
+          placeholder="Document wording. Use the tools above to format. Separate clauses with a blank line."
           value={s3Text}
-          onChange={(e) => setS3Text(e.target.value)}
+          onChange={setS3Text}
         />
         <button className="btn btn-primary" type="submit" disabled={busy}>
           Generate PDF version

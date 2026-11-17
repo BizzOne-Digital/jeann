@@ -10,6 +10,7 @@ const schema = z.object({
   structuredData: z.record(z.string(), z.unknown()),
   clauseTexts: z.array(z.string()).optional(),
   isDraft: z.boolean().optional(),
+  lcDeadlineHours: z.number().int().min(1).max(720).optional(),
 });
 
 export async function POST(
@@ -37,6 +38,7 @@ export async function POST(
       structuredData: body.structuredData,
       clauseTexts: body.clauseTexts,
       isDraft: body.isDraft ?? true,
+      lcDeadlineHours: body.lcDeadlineHours,
       transactionNumber: tx.transactionNumber,
       documentType: body.structuredData.documentType as string | undefined,
     });

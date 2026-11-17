@@ -13,7 +13,8 @@ import { ICPO_SPECIFICATION_NOTE } from "@/lib/content/buyer-portal-guidance";
 import type { DocumentVersionStatus } from "@/models/DocumentVersion";
 import { findPublishedTemplate } from "@/lib/contracts/template-service";
 import { placeholderValues, renderTemplateLines, wrapLine } from "@/lib/contracts/template-merge";
-import { missingPsaClauses } from "@/lib/contracts/psa-terms";
+import { missingPsaClauses, normalizeLcDeadlineHours } from "@/lib/contracts/psa-terms";
+import { embedRichFonts, renderRichText } from "@/lib/documents/rich-text-pdf";
 
 const TEST_WATERMARK = "TEST DOCUMENT — NOT VALID — FOR SOFTWARE QA ONLY";
 
@@ -158,6 +159,8 @@ export async function generateDocumentPdf(input: {
   isDraft?: boolean;
   transactionNumber?: string;
   documentType?: string;
+  /** PSA only: hours the buyer has to submit the LC. Saved on the transaction. */
+  lcDeadlineHours?: number;
 }) {
   await tryConnectMongo();
   const { Document, DocumentVersion, Transaction } = await import("@/models");
@@ -185,6 +188,13 @@ export async function generateDocumentPdf(input: {
     if (v !== undefined && v !== null && v !== "") structuredData[k] = v;
   }
   structuredData._clauseTexts = input.clauseTexts ?? [];
+  if (doc.documentType === "spa" && doc.transactionId) {
+    if (input.lcDeadlineHours !== undefined) {
+      await Transaction.updateOne({ _id: doc.transactionId }, { $set: { lcDeadlineHours: normalizeLcDeadlineHours(input.lcDeadlineHours) } });
+    }
+    const saved = await Transaction.findById(doc.transactionId).select("lcDeadlineHours").lean();
+    structuredData._lcDeadlineHours = normalizeLcDeadlineHours(saved?.lcDeadlineHours);
+  }
 
   // Use the published admin template for this document type when one exists; otherwise built-in layout.
   const template = await findPublishedTemplate(doc.documentType, side);
@@ -332,7 +342,7 @@ async function buildPdf(input: {
   // the contract and not only shown on the portal.
   if (input.documentType === "spa") {
     const present = [...(templateLines ?? []), ...input.clauseTexts];
-    const missing = missingPsaClauses(present);
+    const missing = missingPsaClauses(present, normalizeLcDeadlineHours(input.structuredData._lcDeadlineHours));
     if (missing.length) {
       if (y < 260) {
         page = pdf.addPage([595, 842]);
@@ -350,11 +360,10 @@ async function buildPdf(input: {
   if (input.clauseTexts.length) {
     y -= 8;
     draw("Clauses:", 11, true);
-    for (const clause of input.clauseTexts) {
-      const lines = clause.split("\n").slice(0, 8);
-      for (const line of lines) draw(line, 9);
-      y -= 4;
-    }
+    // Clause text may use the editor formatting (bold, headings, bullets, alignment, page breaks).
+    const rendered = renderRichText(pdf, await embedRichFonts(pdf), input.clauseTexts.join("\n"), { page, y });
+    page = rendered.page;
+    y = rendered.y;
   }
 
   if (input.isDraft) {
