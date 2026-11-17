@@ -10,6 +10,7 @@ import {
   serializeProduct,
 } from "@/lib/admin/product-serializer";
 import { tryConnectMongo } from "@/lib/db/mongoose";
+import { saveProductSpecification } from "@/lib/products/specification-service";
 
 export const runtime = "nodejs";
 
@@ -50,7 +51,8 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  if (!(await requireAdminApiSession())) {
+  const session = await requireAdminApiSession();
+  if (!session) {
     return adminDeniedResponse();
   }
   if (!(await tryConnectMongo())) {
@@ -100,6 +102,16 @@ export async function POST(request: NextRequest) {
       },
       { upsert: true, new: true },
     ).lean();
+
+    if (parsed.data.specification !== undefined) {
+      await saveProductSpecification({
+        productId: doc._id,
+        productName: doc.name,
+        categoryId: doc.categoryId,
+        text: parsed.data.specification,
+        userId: session.userId,
+      });
+    }
 
     return NextResponse.json({
       ok: true,

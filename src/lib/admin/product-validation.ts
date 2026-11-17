@@ -21,6 +21,8 @@ export const adminProductSchema = z.object({
   minOrderText: z.string().trim().max(500).optional().default(""),
   internalPrice: z.string().trim().max(100).optional().default(""),
   image: z.string().trim().max(500).optional().default(""),
+  /** "Label: value" lines shown to buyers in the order form. Saved as a new specification version. */
+  specification: z.string().max(8000).optional(),
   displayOrder: z.number().int().min(0).optional().default(0),
 });
 

@@ -7,6 +7,7 @@ import {
 } from "@/lib/admin/product-validation";
 import { serializeProduct } from "@/lib/admin/product-serializer";
 import { tryConnectMongo } from "@/lib/db/mongoose";
+import { loadActiveSpecificationText, saveProductSpecification } from "@/lib/products/specification-service";
 import {
   revalidateMarketingPath,
   revalidateProductCatalog,
@@ -33,7 +34,8 @@ export async function GET(_request: NextRequest, context: RouteContext) {
       return NextResponse.json({ error: "Product not found." }, { status: 404 });
     }
     const category = await ProductCategory.findById(product.categoryId).lean();
-    return NextResponse.json({ product: serializeProduct(product, category) });
+    const specification = await loadActiveSpecificationText(product._id);
+    return NextResponse.json({ product: { ...serializeProduct(product, category), specification } });
   } catch (error) {
     console.error("[admin/products/:slug GET]", error);
     return NextResponse.json({ error: "Unable to load product." }, { status: 500 });
@@ -41,7 +43,8 @@ export async function GET(_request: NextRequest, context: RouteContext) {
 }
 
 export async function PUT(request: NextRequest, context: RouteContext) {
-  if (!(await requireAdminApiSession())) {
+  const session = await requireAdminApiSession();
+  if (!session) {
     return adminDeniedResponse();
   }
   if (!(await tryConnectMongo())) {
@@ -91,6 +94,16 @@ export async function PUT(request: NextRequest, context: RouteContext) {
 
     if (!product) {
       return NextResponse.json({ error: "Product not found." }, { status: 404 });
+    }
+
+    if (parsed.data.specification !== undefined) {
+      await saveProductSpecification({
+        productId: product._id,
+        productName: product.name,
+        categoryId: product.categoryId,
+        text: parsed.data.specification,
+        userId: session.userId,
+      });
     }
 
     revalidateProductCatalog(category.slug, product.slug);

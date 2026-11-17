@@ -11,6 +11,7 @@ import { ICPO_SPECIFICATION_NOTE } from "@/lib/content/buyer-portal-guidance";
 import { BuyerPortalAssistant } from "@/components/portal/BuyerPortalAssistant";
 import { BuyerRequiredDocsPanel } from "@/components/portal/BuyerRequiredDocsPanel";
 import { BuyerProcessPanel } from "@/components/portal/BuyerProcessPanel";
+import { ProductPicker, type PickerProduct } from "@/components/portal/ProductPicker";
 
 type PaymentTerm = { id: string; structure: string; iccCode: string; preferred?: boolean };
 
@@ -31,6 +32,12 @@ export function BuyerPurchaseOrderWorkspace() {
   const [busy, setBusy] = useState(false);
 
   const [productName, setProductName] = useState("");
+  // Chosen from the product list: the order reference is created as soon as a product is chosen.
+  const [productId, setProductId] = useState("");
+  const [specificationVersionId, setSpecificationVersionId] = useState("");
+  const [draftId, setDraftId] = useState("");
+  const [orderReference, setOrderReference] = useState("");
+  const [pickedProduct, setPickedProduct] = useState<PickerProduct | null>(null);
   const [quantity, setQuantity] = useState("");
   const [destinationPort, setDestinationPort] = useState("");
   const [destinationCountry, setDestinationCountry] = useState("");
@@ -66,6 +73,50 @@ export function BuyerPurchaseOrderWorkspace() {
     const data = (await res.json()) as { id?: string; error?: string };
     if (!res.ok || !data.id) throw new Error(data.error || "Unable to create request.");
     return data.id;
+  }
+
+  /** Choosing a product fills the specification and creates the order reference. */
+  async function onPickProduct(product: PickerProduct) {
+    setError(null);
+    setProductName(product.name);
+    setProductId(product.id);
+    setSpecificationVersionId(product.specificationVersionId ?? "");
+    setPickedProduct(product);
+    if (product.specification) setRequestedSpecification(product.specification);
+    if (product.packaging.length && !packaging) setPackaging(product.packaging.join(", "));
+    const payload = {
+      submissionKind: "icpo_form",
+      productName: product.name,
+      productId: product.id,
+      productCategoryId: product.categoryId,
+      specificationVersionId: product.specificationVersionId,
+      requestedSpecification: product.specification || undefined,
+      unit: "MT",
+    };
+    try {
+      if (draftId) {
+        const res = await fetch("/api/portal/buyer/requests/" + draftId, {
+          method: "PUT",
+          credentials: "same-origin",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error("Unable to update your order.");
+      } else {
+        const res = await fetch("/api/portal/buyer/requests", {
+          method: "POST",
+          credentials: "same-origin",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = (await res.json()) as { id?: string; reference?: string; error?: string };
+        if (!res.ok || !data.id) throw new Error(data.error || "Unable to create your order reference.");
+        setDraftId(data.id);
+        setOrderReference(data.reference ?? "");
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unable to create your order reference.");
+    }
   }
 
   async function submitRequest(id: string) {
@@ -105,9 +156,11 @@ export function BuyerPurchaseOrderWorkspace() {
     }
     setBusy(true);
     try {
-      const id = await createDraft({
+      const formPayload = {
         submissionKind: "icpo_form",
         productName,
+        productId: productId || undefined,
+        specificationVersionId: specificationVersionId || undefined,
         quantity,
         unit: "MT",
         destinationPort,
@@ -121,7 +174,19 @@ export function BuyerPurchaseOrderWorkspace() {
         message: discussFirst
           ? "Buyer asked to discuss order with trade desk before final ICPO."
           : undefined,
-      });
+      };
+      let id = draftId;
+      if (id) {
+        const res = await fetch("/api/portal/buyer/requests/" + id, {
+          method: "PUT",
+          credentials: "same-origin",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formPayload),
+        });
+        if (!res.ok) throw new Error("Unable to save your order.");
+      } else {
+        id = await createDraft(formPayload);
+      }
       const result = await submitRequest(id);
       setMessage(
         `${BUYER_ICPO_REVIEW_NOTICE} Reference: ${result.reference ?? "—"}.`,
@@ -217,15 +282,30 @@ export function BuyerPurchaseOrderWorkspace() {
               Complete all fields below. Quantities are in <strong>metric tons (MT)</strong>.
               Incoterms: <strong>FOB</strong> or <strong>CIF</strong> only.
             </p>
-            <label className="label block">
-              Product name
-              <input
-                className="field mt-1 w-full"
+            <div className="label block">
+              <label htmlFor="product-picker">Product name</label>
+              <ProductPicker
                 value={productName}
-                onChange={(e) => setProductName(e.target.value)}
-                required
+                onTextChange={setProductName}
+                pickedId={productId}
+                onClearPick={() => {
+                  setProductId("");
+                  setSpecificationVersionId("");
+                  setPickedProduct(null);
+                }}
+                onPick={onPickProduct}
               />
-            </label>
+              {orderReference ? (
+                <p className="mt-2 text-sm font-normal normal-case tracking-normal text-[var(--navy)]">
+                  Your order reference: <strong>{orderReference}</strong>
+                  {pickedProduct?.specificationName ? " (specification: " + pickedProduct.specificationName + ")" : ""}
+                </p>
+              ) : (
+                <p className="mt-1 text-xs font-normal normal-case tracking-normal text-[var(--stone)]">
+                  Choose a product from the list. Its specification fills in and your order reference is created.
+                </p>
+              )}
+            </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="label">
                 Quantity (MT)

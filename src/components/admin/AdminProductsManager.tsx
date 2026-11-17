@@ -18,6 +18,7 @@ type FormState = {
   minOrderText: string;
   internalPrice: string;
   image: string;
+  specification: string;
   displayOrder: number;
 };
 
@@ -35,6 +36,7 @@ const emptyForm = (categoryId: string): FormState => ({
   minOrderText: "",
   internalPrice: "",
   image: "",
+  specification: "",
   displayOrder: 0,
 });
 
@@ -53,6 +55,7 @@ function itemToForm(item: AdminProductItem): FormState {
     minOrderText: item.minOrderText,
     internalPrice: item.internalPrice,
     image: item.image,
+    specification: "",
     displayOrder: item.displayOrder,
   };
 }
@@ -100,6 +103,13 @@ export function AdminProductsManager({
     setForm(itemToForm(item));
     setMessage(null);
     setError(null);
+    // The specification is stored separately; load the current one for editing.
+    fetch("/api/admin/products/" + encodeURIComponent(item.slug), { credentials: "same-origin" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d: { product?: { specification?: string } } | null) => {
+        if (d?.product) setForm((f) => (f.slug === item.slug ? { ...f, specification: d.product?.specification ?? "" } : f));
+      })
+      .catch(() => undefined);
   }
 
   function buildPayload(current: FormState) {
@@ -117,6 +127,7 @@ export function AdminProductsManager({
       minOrderText: current.minOrderText.trim(),
       internalPrice: current.internalPrice.trim(),
       image: current.image.trim(),
+      specification: current.specification,
       displayOrder: current.displayOrder,
     };
   }
@@ -275,6 +286,19 @@ export function AdminProductsManager({
             onChange={(e) => setForm({ ...form, internalPrice: e.target.value })}
             placeholder="e.g. USD 920 / MT FOB"
           />
+        </label>
+
+        <label className="label lg:col-span-2">
+          Specification shown to buyers (one line per item, written as Label: value)
+          <textarea
+            className="field mt-1 min-h-32 font-mono text-sm"
+            value={form.specification}
+            onChange={(e) => setForm({ ...form, specification: e.target.value })}
+            placeholder="Free Fatty Acid (FFA): Maximum 0.10%"
+          />
+          <span className="mt-1 block text-xs font-normal text-[var(--stone)]">
+            When a buyer chooses this product in the order form, this text fills in the product specification.
+          </span>
         </label>
 
         <label className="label lg:col-span-2">
