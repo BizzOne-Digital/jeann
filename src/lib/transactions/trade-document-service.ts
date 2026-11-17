@@ -70,12 +70,20 @@ export async function buildDocumentPrefill(
   if (!tx) return {};
   const [terms, org] = await Promise.all([
     CommercialTerms.findOne({ transactionId: tx._id }).sort({ version: -1 }).lean(),
-    Organization.findById(tx.organizationId).select("legalName").lean(),
+    Organization.findById(tx.organizationId)
+      .select("legalName businessAddressLine1 businessAddressCity businessAddressRegion businessAddressPostal country")
+      .lean(),
   ]);
   const out: Record<string, unknown> = {
     seller: tx.side === "supplier" ? org?.legalName : "Finekarts",
     buyer: tx.side === "supplier" ? "Finekarts" : org?.legalName,
   };
+  if (tx.side !== "supplier" && org) {
+    const address = [org.businessAddressLine1, org.businessAddressCity, org.businessAddressRegion, org.businessAddressPostal, org.country]
+      .filter(Boolean)
+      .join(", ");
+    if (address) out.buyerAddress = address;
+  }
   if (terms) {
     Object.assign(out, {
       product: terms.productName,

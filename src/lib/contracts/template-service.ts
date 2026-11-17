@@ -32,6 +32,37 @@ export async function seedMissingDefaultTemplates(actorUserId?: string) {
   return { created, skipped };
 }
 
+/**
+ * Publishes the client's skeleton as a NEW published version of a template. Older versions stay on
+ * record. Admin chose to do this, so it replaces whatever is currently published for that key.
+ */
+export async function publishClientSkeleton(key: string, actorUserId?: string) {
+  const { SCO_SKELETON_BLOCKS } = await import("@/lib/contracts/sco-skeleton");
+  const skeletons: Record<string, { name: string; side: ContractSide; blocks: { type: string; content: string }[] }> = {
+    sco_buyer: { name: "Soft Corporate Offer (SCO), client skeleton", side: "buyer", blocks: SCO_SKELETON_BLOCKS },
+  };
+  const skeleton = skeletons[key];
+  if (!skeleton) throw new Error("unknown_skeleton");
+  const { DocumentTemplate } = await import("@/models");
+  const latest = await DocumentTemplate.findOne({ key }).sort({ version: -1 }).lean();
+  const version = (latest?.version ?? 0) + 1;
+  await DocumentTemplate.create({
+    key,
+    name: skeleton.name,
+    side: skeleton.side,
+    status: "published",
+    version,
+    bodyBlocks: skeleton.blocks.map((b, i) => ({ ...b, order: i })),
+  });
+  await writeAuditEvent({
+    action: "template.client_skeleton_published",
+    targetType: "document_template",
+    actorUserId,
+    metadata: { key, version },
+  });
+  return { key, version };
+}
+
 /** Body of the newest PUBLISHED version (a newer draft never switches generation off), else null (callers fall back to built-in content). */
 export async function findPublishedTemplate(
   documentType: string | undefined | null,

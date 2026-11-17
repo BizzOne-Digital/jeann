@@ -19,6 +19,20 @@ const STEP3_TYPES = [
   { value: "commercial_invoice", label: "Commercial invoice (for each shipment)" },
 ];
 
+const DETAIL_FIELDS = [
+  { key: "sellerRepresentative", label: "Seller authorized representative" },
+  { key: "buyerContact", label: "Buyer attention (contact person)" },
+  { key: "buyerAddress", label: "Buyer registered address" },
+  { key: "buyerTelephone", label: "Buyer telephone" },
+  { key: "buyerEmail", label: "Buyer email" },
+  { key: "buyerSignatory", label: "Buyer authorized signatory" },
+  { key: "origin", label: "Origin" },
+  { key: "contractDuration", label: "Contract duration" },
+  { key: "shipmentSchedule", label: "Shipment schedule" },
+  { key: "packaging", label: "Packaging" },
+  { key: "trancheValue", label: "Quarterly tranche value" },
+];
+
 async function post(url: string, body: unknown) {
   const res = await fetch(url, {
     method: "POST",
@@ -58,6 +72,8 @@ export function StaffDocumentTools({
     validity: "",
     notes: "",
   });
+  const [details, setDetails] = useState<Record<string, string>>({});
+  const setDetail = (key: string, value: string) => setDetails((d) => ({ ...d, [key]: value }));
   const [internalPrice, setInternalPrice] = useState("");
   const [s3Type, setS3Type] = useState("spa");
   const [s3Text, setS3Text] = useState("");
@@ -123,7 +139,7 @@ export function StaffDocumentTools({
   function submitOffer(e: FormEvent) {
     e.preventDefault();
     void run(async () => {
-      const body = { ...offer, documentId: offer.documentId || undefined };
+      const body = { ...offer, documentId: offer.documentId || undefined, details };
       const j = await post(`/api/transactions/${transactionId}/offers`, body);
       return `Offer revision v${j.version} created (draft). Submit, approve and send it below.`;
     });
@@ -222,6 +238,25 @@ export function StaffDocumentTools({
           <input className="field" placeholder="Offer validity" value={offer.validity}
             onChange={(e) => setOffer({ ...offer, validity: e.target.value })} />
         </div>
+        <details className="rounded border border-[var(--line)] p-3">
+          <summary className="cursor-pointer text-sm font-medium text-[var(--navy)]">
+            More document fields (buyer contact, address, origin, tranche value, signatories)
+          </summary>
+          <p className="mt-2 text-xs text-[var(--stone)]">
+            These fill the marked parts of the SCO skeleton. Anything left empty prints as a blank line to fill in by hand.
+          </p>
+          <div className="mt-3 grid gap-3 sm:grid-cols-3">
+            {DETAIL_FIELDS.map((f) => (
+              <input
+                key={f.key}
+                className="field"
+                placeholder={f.label}
+                value={details[f.key] ?? ""}
+                onChange={(e) => setDetail(f.key, e.target.value)}
+              />
+            ))}
+          </div>
+        </details>
         <button className="btn btn-primary" type="submit" disabled={busy}>
           Create offer revision
         </button>

@@ -19,7 +19,16 @@ export type RichBlock =
 
 /** Characters that the standard PDF fonts can draw; everything else becomes "?". */
 export function pdfSafe(text: string): string {
-  return text.replace(/[^\x20-\x7E\xA0-\xFF–—‘’“”•€]/g, "?");
+  // Common characters the standard PDF fonts cannot draw are written in a plain equivalent.
+  const mapped = text
+    .replace(/≤/g, "<=")
+    .replace(/≥/g, ">=")
+    .replace(/₂/g, "2")
+    .replace(/₃/g, "3")
+    .replace(/→/g, "->")
+    .replace(/−/g, "-")
+    .replace(/ /g, " ");
+  return mapped.replace(/[^\x20-\x7E\xA0-\xFF–—‘’“”•€]/g, "?");
 }
 
 export function parseInline(text: string): Run[] {

@@ -1,4 +1,5 @@
 import { contractFlow, templateKeyFor, type ContractSide } from "@/lib/contracts/contract-flow";
+import { SCO_SKELETON_BLOCKS } from "@/lib/contracts/sco-skeleton";
 
 type Block = { type: string; content: string };
 export type DefaultTemplate = {
@@ -22,13 +23,7 @@ const P = (content: string): Block => ({ type: "paragraph", content });
 const H = (content: string): Block => ({ type: "heading", content });
 
 const BODIES: Record<string, Block[]> = {
-  sco: [
-    H("Soft Corporate Offer"),
-    PARTIES,
-    P("We are pleased to offer the following product for your consideration. This is a soft offer and is subject to final confirmation."),
-    GOODS,
-    P("This offer is not binding until a Full Corporate Offer or signed contract is issued."),
-  ],
+  sco: SCO_SKELETON_BLOCKS,
   fco: [
     H("Full Corporate Offer"),
     PARTIES,

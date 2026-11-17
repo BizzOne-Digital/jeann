@@ -30,7 +30,8 @@ describe("rich text parsing", () => {
   });
 
   it("replaces characters the PDF font cannot draw", () => {
-    expect(pdfSafe("ok \u2265 5")).toBe("ok ? 5");
+    expect(pdfSafe("ok \u2603 5")).toBe("ok ? 5");
+    expect(pdfSafe("Pb \u2264 0.10 and O\u2082")).toBe("Pb <= 0.10 and O2");
   });
 });
 
@@ -74,5 +75,37 @@ describe("template skeleton rendering", () => {
     );
     expect(text).toBe("# Sales Agreement\n**Buyer:** ACME");
     expect(parseRichText(text)[0]).toMatchObject({ kind: "text", style: "h1" });
+  });
+});
+
+import { SCO_SKELETON_BLOCKS } from "@/lib/contracts/sco-skeleton";
+import { PLACEHOLDERS } from "@/lib/contracts/template-merge";
+
+describe("client SCO skeleton", () => {
+  const allText = SCO_SKELETON_BLOCKS.map((b) => b.content).join("\n");
+
+  it("only uses placeholders the system knows", () => {
+    const used = [...allText.matchAll(/\{\{\s*([A-Za-z0-9_]+)\s*\}\}/g)].map((m) => m[1]);
+    expect(used.length).toBeGreaterThan(10);
+    for (const name of used) expect(PLACEHOLDERS as readonly string[]).toContain(name);
+  });
+
+  it("fills every marked part and prints on several pages", async () => {
+    const values: Record<string, string> = {};
+    for (const name of PLACEHOLDERS) values[name] = "VALUE-" + name;
+    const text = renderTemplateRich(SCO_SKELETON_BLOCKS, values);
+    expect(text).not.toContain("{{");
+    expect(text).toContain("VALUE-buyerName");
+    expect(text).toContain("VALUE-trancheValue");
+    const pdf = await PDFDocument.create();
+    const fonts = await embedRichFonts(pdf);
+    renderRichText(pdf, fonts, text, { page: pdf.addPage([595, 842]), y: 800 });
+    expect(pdf.getPageCount()).toBeGreaterThanOrEqual(3);
+    expect(pdf.getPageCount()).toBeLessThanOrEqual(8);
+  });
+
+  it("leaves a blank line for fields that were not filled", () => {
+    const text = renderTemplateRich(SCO_SKELETON_BLOCKS, {});
+    expect(text).toContain("________");
   });
 });

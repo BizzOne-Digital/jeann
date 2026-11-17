@@ -19,6 +19,7 @@ const schema = z.object({
   paymentTerms: z.string().optional(),
   validity: z.string().optional(),
   notes: z.string().optional(),
+  details: z.record(z.string(), z.string().max(500)).optional(),
 });
 
 export async function GET(

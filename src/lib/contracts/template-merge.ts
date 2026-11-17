@@ -16,6 +16,16 @@ export const PLACEHOLDERS = [
   "inspection",
   "transactionNumber",
   "date",
+  "currency",
+  "buyerContact",
+  "buyerAddress",
+  "buyerTelephone",
+  "buyerEmail",
+  "buyerSignatory",
+  "sellerRepresentative",
+  "origin",
+  "contractDuration",
+  "trancheValue",
 ] as const;
 
 export type TemplateBlock = { type?: string; content: string; order?: number };

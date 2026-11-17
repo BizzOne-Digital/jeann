@@ -22,7 +22,23 @@ export type OfferInput = {
   paymentTerms?: string;
   validity?: string;
   notes?: string;
+  /** Extra document fields (buyer contact, address, origin, tranche value ...). Only known keys are used. */
+  details?: Record<string, string>;
 };
+
+export const OFFER_DETAIL_KEYS = [
+  "buyerContact",
+  "buyerAddress",
+  "buyerTelephone",
+  "buyerEmail",
+  "buyerSignatory",
+  "sellerRepresentative",
+  "origin",
+  "contractDuration",
+  "shipmentSchedule",
+  "packaging",
+  "trancheValue",
+] as const;
 
 /** Staff-only. Price is entered per offer (prefill from Product.internalPrice via getOfferPrefill). */
 export async function createOrReviseOffer(input: OfferInput) {
@@ -56,13 +72,23 @@ export async function createOrReviseOffer(input: OfferInput) {
     documentId = String(doc._id);
   }
 
+  const currency = input.currency.toUpperCase();
+  const qtyNumber = Number(input.quantity.replace(/[^\d.]/g, ""));
+  const total = qtyNumber > 0 ? (qtyNumber * Number(input.unitPrice)).toFixed(2) : "";
+  const details: Record<string, string> = {};
+  for (const key of OFFER_DETAIL_KEYS) {
+    const value = input.details?.[key]?.trim();
+    if (value) details[key] = value;
+  }
   const structuredData = {
+    ...details,
     documentType: input.documentType,
     product: input.productName,
-    unitPrice: input.unitPrice,
-    currency: input.currency.toUpperCase(),
-    quantity: input.quantity,
+    unitPrice: currency + " " + input.unitPrice,
+    currency,
+    quantity: input.quantity + " " + input.quantityUnit,
     quantityUnit: input.quantityUnit,
+    ...(total ? { totalValue: currency + " " + total } : {}),
     incoterm: input.incoterm,
     loadingPort: input.loadingPort,
     destinationPort: input.destinationPort,
