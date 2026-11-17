@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { FormattedTextEditor } from "@/components/portal/FormattedTextEditor";
 
 type Block = { type: string; content: string };
 type DocTpl = {
@@ -167,24 +168,54 @@ export function AdminStepTemplatesManager() {
             </div>
             {doc.bodyBlocks.map((b, i) => (
               <div key={i} className="flex gap-2">
-                <input
+                <select
                   className="field w-32"
-                  value={b.type}
+                  value={b.type === "heading" ? "heading" : "paragraph"}
                   onChange={(e) => {
                     const blocks = [...doc.bodyBlocks];
                     blocks[i] = { ...b, type: e.target.value };
                     setDoc({ ...doc, bodyBlocks: blocks });
                   }}
-                />
-                <textarea
-                  className="field min-h-20 flex-1"
-                  value={b.content}
-                  onChange={(e) => {
-                    const blocks = [...doc.bodyBlocks];
-                    blocks[i] = { ...b, content: e.target.value };
-                    setDoc({ ...doc, bodyBlocks: blocks });
-                  }}
-                />
+                >
+                  <option value="heading">Heading</option>
+                  <option value="paragraph">Paragraph</option>
+                </select>
+                <div className="flex-1">
+                  <FormattedTextEditor
+                    value={b.content}
+                    onChange={(value) => {
+                      const blocks = [...doc.bodyBlocks];
+                      blocks[i] = { ...b, content: value };
+                      setDoc({ ...doc, bodyBlocks: blocks });
+                    }}
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <button
+                    type="button"
+                    className="btn"
+                    disabled={i === 0}
+                    onClick={() => {
+                      const blocks = [...doc.bodyBlocks];
+                      [blocks[i - 1], blocks[i]] = [blocks[i], blocks[i - 1]];
+                      setDoc({ ...doc, bodyBlocks: blocks });
+                    }}
+                  >
+                    Up
+                  </button>
+                  <button
+                    type="button"
+                    className="btn"
+                    disabled={i === doc.bodyBlocks.length - 1}
+                    onClick={() => {
+                      const blocks = [...doc.bodyBlocks];
+                      [blocks[i + 1], blocks[i]] = [blocks[i], blocks[i + 1]];
+                      setDoc({ ...doc, bodyBlocks: blocks });
+                    }}
+                  >
+                    Down
+                  </button>
+                </div>
                 <button
                   type="button"
                   className="btn"

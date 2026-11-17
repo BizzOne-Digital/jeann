@@ -12,7 +12,7 @@ import { advanceForDocumentEvent } from "@/lib/transactions/step-service";
 import { ICPO_SPECIFICATION_NOTE } from "@/lib/content/buyer-portal-guidance";
 import type { DocumentVersionStatus } from "@/models/DocumentVersion";
 import { findPublishedTemplate } from "@/lib/contracts/template-service";
-import { placeholderValues, renderTemplateLines, wrapLine } from "@/lib/contracts/template-merge";
+import { placeholderValues, renderTemplateLines, renderTemplateRich, wrapLine } from "@/lib/contracts/template-merge";
 import { missingPsaClauses, normalizeLcDeadlineHours } from "@/lib/contracts/psa-terms";
 import { embedRichFonts, renderRichText } from "@/lib/documents/rich-text-pdf";
 
@@ -203,6 +203,10 @@ export async function generateDocumentPdf(input: {
       template.bodyBlocks,
       placeholderValues(structuredData, { transactionNumber: txNumber }),
     );
+    structuredData._templateRich = renderTemplateRich(
+      template.bodyBlocks,
+      placeholderValues(structuredData, { transactionNumber: txNumber }),
+    );
     structuredData._templateKey = template.key;
     structuredData._templateVersion = template.version;
     doc.templateKey = template.key;
@@ -319,7 +323,12 @@ async function buildPdf(input: {
   draw(`Generated: ${new Date().toISOString().slice(0, 10)}`);
   y -= 8;
 
-  if (templateLines) {
+  if (templateLines && typeof input.structuredData._templateRich === "string") {
+    // Template text keeps its formatting (headings, bold, bullets, alignment, page breaks).
+    const rendered = renderRichText(pdf, await embedRichFonts(pdf), input.structuredData._templateRich, { page, y });
+    page = rendered.page;
+    y = rendered.y;
+  } else if (templateLines) {
     for (const line of templateLines) for (const part of wrapLine(line)) draw(part, 10);
   }
 

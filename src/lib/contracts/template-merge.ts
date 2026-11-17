@@ -55,6 +55,25 @@ export function renderTemplateLines(blocks: TemplateBlock[], values: Record<stri
   return lines;
 }
 
+/**
+ * Renders blocks (sorted by order) to formatted text for the PDF renderer (see lib/documents/rich-text.ts).
+ * A heading block becomes a large bold heading; paragraph blocks keep any formatting written in them.
+ */
+export function renderTemplateRich(blocks: TemplateBlock[], values: Record<string, string>): string {
+  const sorted = [...blocks].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  const out: string[] = [];
+  for (const b of sorted) {
+    const merged = mergePlaceholders(b.content, values);
+    const lines = merged.split(/\r?\n/);
+    if (b.type === "heading") {
+      out.push(...lines.filter((l) => l.trim()).map((l) => "# " + l.replace(/^#+\s*/, "")));
+    } else {
+      out.push(...lines);
+    }
+  }
+  return out.join("\n");
+}
+
 /** Wraps text to a max character width on word boundaries. */
 export function wrapLine(line: string, width = 88): string[] {
   if (line.length <= width) return [line];

@@ -60,3 +60,19 @@ describe("PSA LC deadline", () => {
     expect(missingPsaClauses([], 72).join("\n")).toContain("within 72 hours");
   });
 });
+
+import { renderTemplateRich } from "@/lib/contracts/template-merge";
+
+describe("template skeleton rendering", () => {
+  it("turns heading blocks into headings, fills placeholders and keeps formatting", () => {
+    const text = renderTemplateRich(
+      [
+        { type: "paragraph", content: "**Buyer:** {{buyerName}}", order: 1 },
+        { type: "heading", content: "Sales Agreement", order: 0 },
+      ],
+      { buyerName: "ACME" },
+    );
+    expect(text).toBe("# Sales Agreement\n**Buyer:** ACME");
+    expect(parseRichText(text)[0]).toMatchObject({ kind: "text", style: "h1" });
+  });
+});
