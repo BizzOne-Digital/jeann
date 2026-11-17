@@ -40,16 +40,18 @@ export async function loadStepDefs(transactionId: unknown): Promise<WorkflowStep
 }
 
 /**
- * Completed and cancelled transactions are closed records. Nothing in them may be added to, signed
+ * Closed and cancelled transactions are locked records. A transaction is closed by staff after the
+ * final delivery is confirmed (it is NOT closed when the PSA is signed, because the Proforma
+ * Invoice, LC and shipping documents still follow). Nothing in them may be added to, signed
  * or changed (that would be falsification). Everyone can still view and download.
  */
 export async function assertTransactionUnlocked(transactionId: unknown) {
   await tryConnectMongo();
   const { Transaction } = await import("@/models");
-  const tx = await Transaction.findById(transactionId).select("status transactionNumber").lean();
-  if (tx && (tx.status === "completed" || tx.status === "cancelled")) {
+  const tx = await Transaction.findById(transactionId).select("status closedAt transactionNumber").lean();
+  if (tx && (tx.status === "cancelled" || tx.closedAt)) {
     throw new StepRuleError(
-      `Transaction ${tx.transactionNumber} is ${tx.status} and its record is locked. Documents can be viewed and downloaded but not changed.`,
+      `Transaction ${tx.transactionNumber} is ${tx.status === "cancelled" ? "cancelled" : "closed"} and its record is locked. Documents can be viewed and downloaded but not changed.`,
       409,
     );
   }
@@ -127,6 +129,32 @@ export async function applyStepStatus(input: {
     tx.status = "completed";
   }
   await tx.save();
+
+  // Once the PSA is fully signed by both parties, every document on the transaction file goes to
+  // the banking advisor for review.
+  const psaComplete =
+    input.status === "completed" &&
+    ((side === "buyer" && input.stepKey === "finekarts_sign") ||
+      (side === "supplier" && input.stepKey === "supplier_sign"));
+  if (psaComplete) {
+    const { Document } = await import("@/models");
+    const shared = await Document.updateMany(
+      {
+        transactionId: tx._id,
+        deletedAt: null,
+        documentType: { $in: ["sco", "fco", "icpo", "loi", "cis", "rwa", "fis", "passport_copy", "spa", "proposed_lc_wording", "proforma_invoice"] },
+      },
+      { $set: { bankingVisible: true } },
+    );
+    await writeAuditEvent({
+      action: "documents.shared_with_banking_advisor",
+      targetType: "transaction",
+      targetId: String(tx._id),
+      actorUserId: input.actorUserId,
+      organizationId: String(tx.organizationId),
+      metadata: { reason: "psa_completed", count: shared.modifiedCount },
+    });
+  }
 
   await writeAuditEvent({
     action: "workflow.step_advanced",

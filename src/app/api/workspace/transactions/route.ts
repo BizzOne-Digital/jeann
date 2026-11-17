@@ -35,6 +35,7 @@ export async function GET(request: NextRequest) {
     if (status && ["draft", "active", "on_hold", "completed", "cancelled"].includes(status)) {
       filter.status = status;
     }
+    if (sp.get("closed") === "1") filter.closedAt = { $ne: null };
     const range: Record<string, Date> = {};
     const from = sp.get("from");
     const to = sp.get("to");
@@ -65,6 +66,7 @@ export async function GET(request: NextRequest) {
             : (WORKFLOW_STATUS_LABELS[t.workflowStatus as keyof typeof WORKFLOW_STATUS_LABELS] ??
               t.workflowStatus),
         status: t.status,
+        locked: t.status === "cancelled" || Boolean(t.closedAt),
         currentStepKey: t.currentStepKey,
         createdAt: t.createdAt,
       })),

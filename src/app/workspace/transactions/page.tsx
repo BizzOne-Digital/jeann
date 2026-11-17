@@ -12,6 +12,7 @@ type Item = {
   side: string;
   transactionType: string;
   status?: string;
+  locked?: boolean;
   createdAt?: string;
 };
 
@@ -29,7 +30,8 @@ export default function WorkspaceTransactionsPage() {
       if (q.trim()) params.set("q", q.trim());
       if (from) params.set("from", from);
       if (to) params.set("to", to);
-      if (status) params.set("status", status);
+      if (status === "closed") params.set("closed", "1");
+      else if (status) params.set("status", status);
       fetch(`/api/workspace/transactions?${params}`, { credentials: "same-origin" })
         .then(async (res) => {
           const json = await res.json();
@@ -65,7 +67,7 @@ export default function WorkspaceTransactionsPage() {
         <select className="field" value={status} onChange={(e) => setStatus(e.target.value)}>
           <option value="">All records</option>
           <option value="active">Open</option>
-          <option value="completed">Completed (locked)</option>
+          <option value="closed">Closed (locked)</option>
           <option value="on_hold">On hold</option>
           <option value="cancelled">Cancelled (locked)</option>
         </select>
@@ -88,7 +90,7 @@ export default function WorkspaceTransactionsPage() {
                   {t.companyName ? `${t.companyName} · ` : ""}
                   {t.transactionType} · {t.side} · {t.workflowLabel}
                   {t.createdAt ? ` · ${new Date(t.createdAt).toLocaleDateString()}` : ""}
-                  {t.status === "completed" || t.status === "cancelled" ? " · Locked" : ""}
+                  {t.locked ? " · Locked" : ""}
                 </p>
               </div>
             </li>

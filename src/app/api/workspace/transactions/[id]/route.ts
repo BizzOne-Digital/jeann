@@ -57,6 +57,7 @@ export async function GET(
           ? (PROCUREMENT_STATUS_LABELS[tx.workflowStatus] ?? tx.workflowStatus)
           : WORKFLOW_STATUS_LABELS[tx.workflowStatus as keyof typeof WORKFLOW_STATUS_LABELS],
         status: tx.status,
+        locked: tx.status === "cancelled" || Boolean(tx.closedAt),
         currentStepKey: tx.currentStepKey,
         buyerVisibleNotes: tx.buyerVisibleNotes,
         supplierVisibleNotes: tx.supplierVisibleNotes,

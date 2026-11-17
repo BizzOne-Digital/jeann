@@ -10,6 +10,8 @@ type Doc = {
   currentVersionId?: string | null;
 };
 
+export type Variant = "buyer" | "supplier";
+
 type StepDef = {
   n: number;
   title: string;
@@ -19,7 +21,7 @@ type StepDef = {
   types: { value: string; label: string }[];
 };
 
-const STEPS: StepDef[] = [
+const BUYER_STEPS: StepDef[] = [
   {
     n: 1,
     title: "SCO or FCO",
@@ -83,7 +85,74 @@ const STEPS: StepDef[] = [
   },
 ];
 
-function docsForStep(step: StepDef, documents: Doc[]): Doc[] {
+const SUPPLIER_STEPS: StepDef[] = [
+  {
+    n: 1,
+    title: "Submit SCO or FCO",
+    admin: "Receive and review the SCO or FCO. If the buyer agrees, Finekarts issues the ICPO to the supplier.",
+    buyer: "Supplier submits the SCO or FCO. Both documents are accepted by the buyer.",
+    types: [
+      { value: "sco", label: "SCO" },
+      { value: "fco", label: "FCO" },
+      { value: "icpo", label: "ICPO" },
+    ],
+  },
+  {
+    n: 2,
+    title: "Request RWA and CIS (FIS optional)",
+    admin: "Finekarts sends the CIS, RWA and FIS to the supplier if requested. The RWA is used only in LC transactions.",
+    buyer: "Supplier requests the RWA and CIS. The FIS is optional.",
+    types: [
+      { value: "cis", label: "CIS" },
+      { value: "rwa", label: "RWA" },
+      { value: "fis", label: "FIS" },
+    ],
+  },
+  {
+    n: 3,
+    title: "Prepare the PSA",
+    admin: "Review the PSA, sign and stamp it with the passport copy, and send it to the supplier for final signature. The supplier returns a copy.",
+    buyer: "Supplier prepares the PSA and sends it to Finekarts to sign and stamp, with a copy of the passport.",
+    types: [
+      { value: "spa", label: "PSA / SPA" },
+      { value: "proposed_lc_wording", label: "LC wording" },
+      { value: "passport_copy", label: "Passport copy" },
+    ],
+  },
+  {
+    n: 4,
+    title: "Signed PSA and Proforma Invoice",
+    admin: "Receive the signed contract with the invoice. Open the LC account, send the LC to the supplier and request inspection of quality and quantity at the supplier site.",
+    buyer: "Supplier receives the signed PSA, signs and stamps it, attaches the passport, and sends the final contract with the invoice, requesting the LC.",
+    types: [{ value: "proforma_invoice", label: "Proforma Invoice" }],
+  },
+  {
+    n: 5,
+    title: "LC received and shipment",
+    admin: "The bank advisor verifies all shipping documents (BL, certificates of insurance) against the PSA, then payment is sent via MT103.",
+    buyer: "Supplier receives the LC and sends the contract to their bank. After bank approval the supplier loads the goods and, if there is no amendment, the advisor sends all documents and certificates to the buyer bank.",
+    types: [{ value: "other", label: "LC, shipping or certificate document" }],
+  },
+  {
+    n: 6,
+    title: "Payment confirmed",
+    admin: "The bank submits the final payment. After approval of all documents the payment is sent to the supplier and the trans-shipment is monitored until the port of delivery.",
+    buyer: "Supplier receives and confirms the payment and produces the final delivery report.",
+    types: [{ value: "other", label: "Payment confirmation or delivery report" }],
+  },
+  {
+    n: 7,
+    title: "Final documents and delivery",
+    admin: "Confirmation of delivery: the ship has docked and the shipments are ready for clearance.",
+    buyer: "Supplier sends all final documents to the buyer.",
+    types: [{ value: "other", label: "Final document" }],
+  },
+];
+
+/** Document types an external supplier may upload (mirrors the server rule). */
+const SUPPLIER_EXTERNAL_UPLOAD = ["sco", "fco", "spa", "proposed_lc_wording", "proforma_invoice", "passport_copy", "loi", "other"];
+
+function docsForStep(step: StepDef, documents: Doc[], variant: Variant): Doc[] {
   const values = step.types.map((t) => t.value);
   return documents.filter((d) => {
     const type = d.documentType ?? "";
@@ -93,7 +162,7 @@ function docsForStep(step: StepDef, documents: Doc[]): Doc[] {
       return step.n === (signed ? 4 : 3);
     }
     // Steps 6 and 7 both use "other"; show other documents under step 6 and 7 only by tab choice (step 6 here).
-    if (type === "other") return step.n === 6;
+    if (type === "other") return step.n === (variant === "supplier" ? 5 : 6);
     return values.includes(type);
   });
 }
@@ -108,13 +177,19 @@ export function AdminSevenSteps({
   isLocked,
   onChanged,
   onOpenDocuments,
+  variant = "buyer",
+  isStaff = true,
 }: {
   transactionId: string;
   documents: Doc[];
   isLocked: boolean;
   onChanged: () => void;
   onOpenDocuments: () => void;
+  variant?: Variant;
+  /** External users (a supplier) see only the types they may upload and no staff shortcuts. */
+  isStaff?: boolean;
 }) {
+  const STEPS = variant === "supplier" ? SUPPLIER_STEPS : BUYER_STEPS;
   const [open, setOpen] = useState<number>(1);
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -146,6 +221,26 @@ export function AdminSevenSteps({
       onChanged();
     } catch (err) {
       setMessage(err instanceof Error ? err.message : "Signing failed.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function closeTransaction() {
+    if (!window.confirm("Close this transaction? Its record will be locked and can no longer be changed. This cannot be undone.")) return;
+    setBusy(true);
+    setMessage(null);
+    try {
+      const res = await fetch("/api/workspace/transactions/" + transactionId + "/close", {
+        method: "POST",
+        credentials: "same-origin",
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error ?? "Unable to close the transaction.");
+      setMessage("Transaction closed and locked.");
+      onChanged();
+    } catch (err) {
+      setMessage(err instanceof Error ? err.message : "Unable to close the transaction.");
     } finally {
       setBusy(false);
     }
@@ -197,7 +292,7 @@ export function AdminSevenSteps({
   return (
     <div className="space-y-3">
       <p className="text-sm text-[var(--stone)]">
-        The seven steps of the buyer process. At each step you can upload and download documents.
+        The seven steps of the {variant === "supplier" ? "supplier" : "buyer"} process. At each step you can upload and download documents.
         The PSA can be signed here. Generating and sending documents are done from the Documents tab.
       </p>
       {isLocked ? (
@@ -208,7 +303,8 @@ export function AdminSevenSteps({
       {message ? <p className="text-sm text-[var(--navy)]">{message}</p> : null}
       <ol className="space-y-2">
         {STEPS.map((step) => {
-          const docs = docsForStep(step, documents);
+          const docs = docsForStep(step, documents, variant);
+          const uploadTypes = isStaff ? step.types : step.types.filter((t) => SUPPLIER_EXTERNAL_UPLOAD.includes(t.value));
           const done = stepDone(docs);
           const isOpen = open === step.n;
           return (
@@ -236,7 +332,7 @@ export function AdminSevenSteps({
                     {step.admin}
                   </p>
                   <p>
-                    <span className="font-medium text-[var(--navy)]">Buyer: </span>
+                    <span className="font-medium text-[var(--navy)]">{variant === "supplier" ? "Supplier: " : "Buyer: "}</span>
                     {step.buyer}
                   </p>
                   {docs.length === 0 ? (
@@ -284,10 +380,10 @@ export function AdminSevenSteps({
                       ))}
                     </ul>
                   )}
-                  {!isLocked ? (
+                  {!isLocked && uploadTypes.length > 0 ? (
                     <form onSubmit={(e) => upload(e, step)} className="flex flex-wrap items-center gap-2">
                       <select name="type" className="field">
-                        {step.types.map((t) => (
+                        {uploadTypes.map((t) => (
                           <option key={t.value} value={t.value}>
                             {t.label}
                           </option>
@@ -297,9 +393,11 @@ export function AdminSevenSteps({
                       <button type="submit" className="btn btn-primary text-xs" disabled={busy}>
                         {busy ? "Uploading…" : "Upload"}
                       </button>
-                      <button type="button" className="btn btn-secondary text-xs" onClick={onOpenDocuments}>
-                        Sign, generate or send
-                      </button>
+                      {isStaff ? (
+                        <button type="button" className="btn btn-secondary text-xs" onClick={onOpenDocuments}>
+                          Sign, generate or send
+                        </button>
+                      ) : null}
                     </form>
                   ) : null}
                 </div>
@@ -308,6 +406,17 @@ export function AdminSevenSteps({
           );
         })}
       </ol>
+      {isStaff && !isLocked ? (
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[var(--line)] bg-white p-4 text-sm">
+          <p className="text-[var(--stone)]">
+            After the final delivery is confirmed, close the transaction. A closed transaction is a locked record
+            that nobody can change.
+          </p>
+          <button type="button" className="btn btn-secondary text-xs" onClick={closeTransaction} disabled={busy}>
+            Close transaction
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 }

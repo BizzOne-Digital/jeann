@@ -44,6 +44,7 @@ export async function GET(
         workflowStatus: tx.workflowStatus,
         workflowLabel: PROCUREMENT_STATUS_LABELS[tx.workflowStatus] ?? tx.workflowStatus,
         status: tx.status,
+        locked: tx.status === "cancelled" || Boolean(tx.closedAt),
         currentStepKey: tx.currentStepKey,
         supplierVisibleNotes: tx.supplierVisibleNotes,
         createdAt: tx.createdAt,

@@ -19,6 +19,7 @@ type TxDetail = {
     workflowLabel: string;
     workflowStatus: string;
     status?: string;
+    locked?: boolean;
     currentStepKey?: string;
     buyerVisibleNotes?: string;
     supplierVisibleNotes?: string;
@@ -103,7 +104,7 @@ export function TransactionWorkspaceTabs({
 
   const tabs: { id: Tab; label: string }[] = [
     { id: "overview", label: "Overview" },
-    ...(showStaffActions && workflowMode === "buyer" ? [{ id: "steps" as Tab, label: "7 steps" }] : []),
+    ...(showStaffActions || workflowMode === "supplier" ? [{ id: "steps" as Tab, label: "7 steps" }] : []),
     { id: "workflow", label: "Workflow" },
     { id: "documents", label: "Documents" },
     ...(showFinance ? [{ id: "finance" as Tab, label: "Finance" }] : []),
@@ -152,13 +153,15 @@ export function TransactionWorkspaceTabs({
         </div>
       ) : null}
 
-      {tab === "steps" && showStaffActions ? (
+      {tab === "steps" ? (
         <AdminSevenSteps
           transactionId={transactionId}
           documents={data.documents}
-          isLocked={data.transaction.status === "completed" || data.transaction.status === "cancelled"}
+          isLocked={Boolean(data.transaction.locked)}
           onChanged={load}
           onOpenDocuments={() => setTab("documents")}
+          variant={workflowMode === "supplier" ? "supplier" : "buyer"}
+          isStaff={showStaffActions}
         />
       ) : null}
 
