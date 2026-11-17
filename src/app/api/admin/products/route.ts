@@ -118,6 +118,9 @@ export async function POST(request: NextRequest) {
       product: serializeProduct(doc, category),
     });
   } catch (error) {
+    if ((error as { code?: number }).code === 11000) {
+      return NextResponse.json({ error: "That product code is already used by another product." }, { status: 409 });
+    }
     console.error("[admin/products POST]", error);
     return NextResponse.json({ error: "Unable to save product." }, { status: 500 });
   }

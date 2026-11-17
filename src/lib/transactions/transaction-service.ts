@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { allocateBuyerSaleTransactionNumber } from "@/lib/transactions/number";
+import { allocateBuyerSaleTransactionNumber, parseProductOrderNumber } from "@/lib/transactions/number";
 import { findTransition } from "@/lib/transactions/workflow";
 import { money, mulMoney } from "@/lib/finance/money";
 import { notifyUser, notifyAdmins } from "@/lib/notifications/service";
@@ -31,7 +31,11 @@ export async function createTransactionFromRequest(input: {
   }).lean();
   if (existing) throw new Error("already_converted");
 
-  const transactionNumber = await allocateBuyerSaleTransactionNumber();
+  // The order number the buyer was given (it carries the product code) stays the transaction number.
+  let transactionNumber = pr.reference;
+  if (!parseProductOrderNumber(transactionNumber) || (await Transaction.exists({ transactionNumber }))) {
+    transactionNumber = await allocateBuyerSaleTransactionNumber();
+  }
 
   const template = await WorkflowTemplate.findOne({
     key: "buyer_default_v1",

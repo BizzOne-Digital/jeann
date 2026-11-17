@@ -17,6 +17,7 @@ export type AdminProductItem = {
   minOrderText: string;
   internalPrice: string;
   image: string;
+  code: string;
   displayOrder: number;
 };
 
@@ -47,6 +48,7 @@ export function serializeProduct(
     minOrderText: product.minOrderText ?? "",
     internalPrice: product.internalPrice ?? "",
     image: product.gallery?.[0]?.storageKey ?? "",
+    code: product.code ?? "",
     displayOrder: product.displayOrder ?? 0,
   };
 }

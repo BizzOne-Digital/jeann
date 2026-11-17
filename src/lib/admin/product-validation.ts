@@ -23,6 +23,13 @@ export const adminProductSchema = z.object({
   image: z.string().trim().max(500).optional().default(""),
   /** "Label: value" lines shown to buyers in the order form. Saved as a new specification version. */
   specification: z.string().max(8000).optional(),
+  code: z
+    .string()
+    .trim()
+    .toUpperCase()
+    .regex(/^[A-Z0-9]{2,8}$/, "Use 2 to 8 letters or numbers, for example RSO.")
+    .optional()
+    .or(z.literal("")),
   displayOrder: z.number().int().min(0).optional().default(0),
 });
 
@@ -42,6 +49,7 @@ export function productInputToMongo(input: AdminProductInput) {
     incotermOptions: input.incotermOptions,
     minOrderText: input.minOrderText || undefined,
     internalPrice: input.internalPrice || undefined,
+    ...(input.code ? { code: input.code } : {}),
     gallery: input.image
       ? [{ storageKey: input.image, alt: input.name, displayOrder: 0 }]
       : [],

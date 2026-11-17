@@ -49,6 +49,54 @@ export async function allocateDealGroupNumber(
   throw new Error("Unable to allocate unique deal group number");
 }
 
+/** Order numbers that start with a product code, for example RSO-CIF-000123-26. */
+export const PRODUCT_ORDER_NUMBER = /^([A-Z0-9]{2,8})-(FOB|CIF)-(\d{6})-(\d{2})$/;
+
+export function formatProductOrderNumber(code: string, incoterm: string, sequence: number, year: number): string {
+  const term = incoterm.toUpperCase() === "FOB" ? "FOB" : "CIF";
+  return code.toUpperCase() + "-" + term + "-" + String(sequence).padStart(6, "0") + "-" + String(year % 100).padStart(2, "0");
+}
+
+export function parseProductOrderNumber(value: string): { code: string; incoterm: string; sequence: number; year: number } | null {
+  const m = PRODUCT_ORDER_NUMBER.exec(value.trim());
+  if (!m) return null;
+  return { code: m[1], incoterm: m[2], sequence: Number(m[3]), year: 2000 + Number(m[4]) };
+}
+
+/** The same order number with another Incoterm (the buyer may change FOB or CIF before submitting). */
+export function withIncoterm(orderNumber: string, incoterm: string): string {
+  const parsed = parseProductOrderNumber(orderNumber);
+  if (!parsed) return orderNumber;
+  return formatProductOrderNumber(parsed.code, incoterm, parsed.sequence, parsed.year);
+}
+
+/**
+ * Allocates the next order number for a product: CODE-INCOTERM-NNNNNN-YY. One counter per year is
+ * shared by all products, so the sequence part is unique on its own.
+ */
+export async function allocateProductOrderNumber(
+  code: string,
+  incoterm: string,
+  year = new Date().getUTCFullYear(),
+): Promise<string> {
+  if (!isMongoConfigured()) throw new Error("Database required for order number allocation");
+  await tryConnectMongo();
+  const { TransactionCounter, Transaction, PurchaseRequest } = await import("@/models");
+  for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+    const counter = await TransactionCounter.findOneAndUpdate(
+      { year, side: "O" },
+      { $inc: { sequence: 1 } },
+      { upsert: true, new: true },
+    );
+    const number = formatProductOrderNumber(code, incoterm, counter.sequence, year);
+    const taken =
+      (await Transaction.exists({ transactionNumber: { $regex: "^[A-Z0-9]{2,8}-(FOB|CIF)-" + String(counter.sequence).padStart(6, "0") + "-" + String(year % 100).padStart(2, "0") + "$" } })) ||
+      (await PurchaseRequest.exists({ reference: { $regex: "^[A-Z0-9]{2,8}-(FOB|CIF)-" + String(counter.sequence).padStart(6, "0") + "-" + String(year % 100).padStart(2, "0") + "$" } }));
+    if (!taken) return number;
+  }
+  throw new Error("Unable to allocate a unique order number");
+}
+
 async function allocateTransactionNumber(side: "S" | "P", year: number): Promise<string> {
   if (!isMongoConfigured()) {
     throw new Error("Database required for transaction number allocation");

@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
     const filter: Record<string, unknown> = { status: "published", deletedAt: null };
     if (q) filter.name = { $regex: escapeRegex(q), $options: "i" };
     const products = await Product.find(filter)
-      .select("name slug gradeSummary originOptions incotermOptions packagingOptionIds categoryId")
+      .select("name slug code gradeSummary originOptions incotermOptions packagingOptionIds categoryId")
       .sort({ displayOrder: 1, name: 1 })
       .limit(20)
       .lean();
@@ -58,6 +58,7 @@ export async function GET(request: NextRequest) {
           id: String(p._id),
           name: p.name,
           slug: p.slug,
+          code: p.code,
           categoryId: p.categoryId ? String(p.categoryId) : undefined,
           grade: p.gradeSummary,
           origins: p.originOptions ?? [],

@@ -19,6 +19,7 @@ type FormState = {
   internalPrice: string;
   image: string;
   specification: string;
+  code: string;
   displayOrder: number;
 };
 
@@ -37,6 +38,7 @@ const emptyForm = (categoryId: string): FormState => ({
   internalPrice: "",
   image: "",
   specification: "",
+  code: "",
   displayOrder: 0,
 });
 
@@ -56,6 +58,7 @@ function itemToForm(item: AdminProductItem): FormState {
     internalPrice: item.internalPrice,
     image: item.image,
     specification: "",
+    code: item.code,
     displayOrder: item.displayOrder,
   };
 }
@@ -128,6 +131,7 @@ export function AdminProductsManager({
       internalPrice: current.internalPrice.trim(),
       image: current.image.trim(),
       specification: current.specification,
+      code: current.code.trim().toUpperCase(),
       displayOrder: current.displayOrder,
     };
   }
@@ -286,6 +290,20 @@ export function AdminProductsManager({
             onChange={(e) => setForm({ ...form, internalPrice: e.target.value })}
             placeholder="e.g. USD 920 / MT FOB"
           />
+        </label>
+
+        <label className="label">
+          Product code (printed in the order number)
+          <input
+            className="field mt-1 uppercase"
+            maxLength={8}
+            value={form.code}
+            onChange={(e) => setForm({ ...form, code: e.target.value.toUpperCase() })}
+            placeholder="e.g. RSO"
+          />
+          <span className="mt-1 block text-xs font-normal text-[var(--stone)]">
+            2 to 8 letters or numbers. Orders for this product are numbered like RSO-CIF-000123-26.
+          </span>
         </label>
 
         <label className="label lg:col-span-2">

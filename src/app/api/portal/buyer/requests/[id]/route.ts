@@ -42,7 +42,7 @@ export async function PUT(
     const { id } = await params;
     const body = (await request.json()) as Record<string, unknown>;
     const doc = await updateBuyerRequestDraft(id, access.organizationId, body);
-    return NextResponse.json({ ok: true, id: String(doc._id) });
+    return NextResponse.json({ ok: true, id: String(doc._id), reference: doc.reference });
   } catch (error) {
     if (error instanceof Error && error.message === "request_not_editable") {
       return NextResponse.json({ error: "Request is locked." }, { status: 409 });

@@ -1,5 +1,6 @@
 import { Types } from "mongoose";
 import { generateLeadReference } from "@/lib/leads/persist";
+import { allocateProductOrderNumber, parseProductOrderNumber, withIncoterm } from "@/lib/transactions/number";
 import { hashIp } from "@/lib/db/ids";
 import { money, mulMoney } from "@/lib/finance/money";
 import { notifyAdmins } from "@/lib/notifications/service";
@@ -17,7 +18,17 @@ export async function createBuyerRequestDraft(input: {
   await tryConnectMongo();
   const { PurchaseRequest } = await import("@/models");
 
-  const reference = generateLeadReference("BR");
+  // A product with a code gives the order its number (for example RSO-CIF-000123-26).
+  let reference = "";
+  if (input.data.productId && Types.ObjectId.isValid(String(input.data.productId))) {
+    const { Product } = await import("@/models");
+    const product = await Product.findOne({ _id: String(input.data.productId), deletedAt: null }).select("code").lean();
+    if (product?.code) {
+      const incoterm = String(input.data.incoterm ?? "CIF").toUpperCase() === "FOB" ? "FOB" : "CIF";
+      reference = await allocateProductOrderNumber(product.code, incoterm);
+    }
+  }
+  if (!reference) reference = generateLeadReference("BR");
   const doc = await PurchaseRequest.create({
     reference,
     organizationId: new Types.ObjectId(input.organizationId),
@@ -88,8 +99,15 @@ export async function updateBuyerRequestDraft(
   });
   if (!doc) throw new Error("request_not_editable");
 
-  Object.assign(doc, mapRequestFields(data));
+  // Only the fields that were sent are changed, so a partial update never clears the others.
+  const fields = mapRequestFields(data) as Record<string, unknown>;
+  for (const key of Object.keys(fields)) if (fields[key] === undefined) delete fields[key];
+  Object.assign(doc, fields);
   if (data.productName) doc.productName = String(data.productName);
+  // The Incoterm is part of the order number, so it follows the buyer's choice until submitted.
+  if (doc.status === "draft" && data.incoterm && parseProductOrderNumber(doc.reference)) {
+    doc.reference = withIncoterm(doc.reference, String(data.incoterm));
+  }
   await doc.save();
   return doc;
 }

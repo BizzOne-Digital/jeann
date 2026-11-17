@@ -6,6 +6,7 @@ export type PickerProduct = {
   id: string;
   name: string;
   slug?: string;
+  code?: string;
   categoryId?: string;
   grade?: string;
   origins: string[];

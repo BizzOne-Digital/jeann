@@ -109,6 +109,9 @@ export async function PUT(request: NextRequest, context: RouteContext) {
     revalidateProductCatalog(category.slug, product.slug);
     return NextResponse.json({ ok: true, product: serializeProduct(product, category) });
   } catch (error) {
+    if ((error as { code?: number }).code === 11000) {
+      return NextResponse.json({ error: "That product code is already used by another product." }, { status: 409 });
+    }
     console.error("[admin/products/:slug PUT]", error);
     return NextResponse.json({ error: "Unable to update product." }, { status: 500 });
   }

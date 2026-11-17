@@ -53,6 +53,8 @@ export interface IProduct {
   claims: ProductClaims;
   seo?: SeoFields;
   displayOrder: number;
+  /** Short code printed in the order number (for example RSO, CPO). */
+  code?: string;
   requiresAdminVerification: boolean;
   deletedAt?: Date;
 }
@@ -123,6 +125,7 @@ const productSchema = new Schema<IProduct>(
 );
 
 productSchema.index({ slug: 1 }, { unique: true, partialFilterExpression: { deletedAt: null } });
+productSchema.index({ code: 1 }, { unique: true, partialFilterExpression: { code: { $type: "string" } } });
 productSchema.index({ categoryId: 1, status: 1, displayOrder: 1 });
 productSchema.index({ status: 1, requiresAdminVerification: 1 });
 

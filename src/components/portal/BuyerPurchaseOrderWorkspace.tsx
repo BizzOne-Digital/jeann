@@ -92,6 +92,7 @@ export function BuyerPurchaseOrderWorkspace() {
       specificationVersionId: product.specificationVersionId,
       requestedSpecification: product.specification || undefined,
       unit: "MT",
+      incoterm,
     };
     try {
       if (draftId) {
@@ -101,7 +102,9 @@ export function BuyerPurchaseOrderWorkspace() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
+        const updated = (await res.json().catch(() => ({}))) as { reference?: string };
         if (!res.ok) throw new Error("Unable to update your order.");
+        if (updated.reference) setOrderReference(updated.reference);
       } else {
         const res = await fetch("/api/portal/buyer/requests", {
           method: "POST",
@@ -297,12 +300,12 @@ export function BuyerPurchaseOrderWorkspace() {
               />
               {orderReference ? (
                 <p className="mt-2 text-sm font-normal normal-case tracking-normal text-[var(--navy)]">
-                  Your order reference: <strong>{orderReference}</strong>
+                  Your order number: <strong>{orderReference}</strong>
                   {pickedProduct?.specificationName ? " (specification: " + pickedProduct.specificationName + ")" : ""}
                 </p>
               ) : (
                 <p className="mt-1 text-xs font-normal normal-case tracking-normal text-[var(--stone)]">
-                  Choose a product from the list. Its specification fills in and your order reference is created.
+                  Choose a product from the list. Its specification fills in and your order number is created.
                 </p>
               )}
             </div>
@@ -353,7 +356,24 @@ export function BuyerPurchaseOrderWorkspace() {
               <select
                 className="field mt-1 w-full"
                 value={incoterm}
-                onChange={(e) => setIncoterm(e.target.value as "FOB" | "CIF")}
+                onChange={(e) => {
+                  const next = e.target.value as "FOB" | "CIF";
+                  setIncoterm(next);
+                  // The Incoterm is part of the order number, so keep the number in step.
+                  if (draftId) {
+                    fetch("/api/portal/buyer/requests/" + draftId, {
+                      method: "PUT",
+                      credentials: "same-origin",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ incoterm: next }),
+                    })
+                      .then((r) => (r.ok ? r.json() : null))
+                      .then((d: { reference?: string } | null) => {
+                        if (d?.reference) setOrderReference(d.reference);
+                      })
+                      .catch(() => undefined);
+                  }
+                }}
               >
                 <option value="FOB">FOB</option>
                 <option value="CIF">CIF</option>
