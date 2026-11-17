@@ -1,3 +1,4 @@
+import { LC_DEADLINE_HOURS } from "@/lib/contracts/psa-terms";
 /** Copy for buyer portal only (registration, company profile, PO / ICPO / LOI). */
 
 export const BUYER_PROFILE_MAINTENANCE_DISCLAIMER =
@@ -30,7 +31,7 @@ export const BUYER_TRADE_DOCUMENT_FLOW = [
     step: "4",
     title: "Proforma Invoice",
     body:
-      "Once the PSA is signed, Finekarts issues the Proforma Invoice. From that point you have 24 hours to submit your LC.",
+      "Once the PSA is signed, Finekarts issues the Proforma Invoice. From that point you have " + LC_DEADLINE_HOURS + " hours to submit your LC.",
   },
   {
     step: "5",

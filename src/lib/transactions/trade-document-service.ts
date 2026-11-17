@@ -13,6 +13,7 @@ import { ICPO_SPECIFICATION_NOTE } from "@/lib/content/buyer-portal-guidance";
 import type { DocumentVersionStatus } from "@/models/DocumentVersion";
 import { findPublishedTemplate } from "@/lib/contracts/template-service";
 import { placeholderValues, renderTemplateLines, wrapLine } from "@/lib/contracts/template-merge";
+import { missingPsaClauses } from "@/lib/contracts/psa-terms";
 
 const TEST_WATERMARK = "TEST DOCUMENT — NOT VALID — FOR SOFTWARE QA ONLY";
 
@@ -325,6 +326,25 @@ async function buildPdf(input: {
   ) {
     y -= 6;
     for (const part of wrapLine(ICPO_SPECIFICATION_NOTE)) draw(part, 9, true);
+  }
+
+  // Every PSA states the LC deadline, the amendment rule and how it is executed, so they are part of
+  // the contract and not only shown on the portal.
+  if (input.documentType === "spa") {
+    const present = [...(templateLines ?? []), ...input.clauseTexts];
+    const missing = missingPsaClauses(present);
+    if (missing.length) {
+      if (y < 260) {
+        page = pdf.addPage([595, 842]);
+        y = 800;
+      }
+      y -= 8;
+      draw("Terms of this PSA:", 11, true);
+      for (const clause of missing) {
+        for (const part of wrapLine(clause)) draw(part, 9);
+        y -= 4;
+      }
+    }
   }
 
   if (input.clauseTexts.length) {

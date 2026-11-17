@@ -4,6 +4,7 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { BuyerLcDetailsForm } from "@/components/portal/BuyerLcDetailsForm";
 import { RWA_DESCRIPTION } from "@/lib/banking/rwa";
+import { LC_DEADLINE_HOURS } from "@/lib/contracts/psa-terms";
 
 export type ProcessStep = "psa" | "invoice" | "banking";
 
@@ -23,7 +24,9 @@ export const AMENDMENT_WARNING =
   "If you request an amendment, an amendment fee set by the bank will apply and will be added to the total cost of the amended PSA. By continuing you agree to this.";
 
 export const LC_DEADLINE_WARNING =
-  "Important: once the PSA is signed and the Proforma Invoice has been issued to you, you have 24 hours to submit your LC (Banking tab).";
+  "Important: as stated in the PSA, once the PSA is signed and the Proforma Invoice has been issued to you, you have " +
+  LC_DEADLINE_HOURS +
+  " hours to submit your LC (Banking tab).";
 
 function Notice({ tone, children }: { tone: "info" | "warn"; children: React.ReactNode }) {
   return (
@@ -202,7 +205,7 @@ export function BuyerProcessPanel({
         "After the PSA is signed by both parties, Finekarts issues the Proforma Invoice here.",
         "Download it and give it to your bank when you arrange your LC.",
       ],
-      next: "Banking. Submit your LC details within 24 hours of the invoice being issued.",
+      next: "Banking. Submit your LC details within " + LC_DEADLINE_HOURS + " hours of the invoice being issued.",
       nextLabel: "Go to Banking",
     },
     banking: {
