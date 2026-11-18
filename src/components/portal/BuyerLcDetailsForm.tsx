@@ -77,6 +77,10 @@ export function BuyerLcDetailsForm({
         <input name="amount" className="field" placeholder="Amount (e.g. 250000.00)" inputMode="decimal" />
         <input name="currency" className="field" placeholder="Currency (USD)" maxLength={3} />
         <input name="advisingBankCountry" className="field" placeholder="Country of the advising bank" maxLength={80} />
+        <p className="text-xs text-[var(--stone)] sm:col-span-2">
+          Enter the date of issue and the expiry date only when your bank has issued the LC. They depend on the
+          agreement in the PSA (the contract duration and the payment terms), so they are never calculated here.
+        </p>
         <label className="text-xs text-[var(--stone)]">
           Date of issue
           <input name="issueDate" className="field block" type="date" />
