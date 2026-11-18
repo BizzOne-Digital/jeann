@@ -104,9 +104,9 @@ export function contractFlow(side: ContractSide): FlowStep[] {
         direction: "The buyer confirms interest with a LOI or an ICPO. Staff reviews it and marks it received.",
       },
       {
-        number: 3, stepKey: "psa_lc", title: "Finekarts sends SPA / PSA, LC wording and proforma invoice", actor: "staff",
-        documents: [DOC_SPA, DOC_LC, DOC_PROFORMA],
-        direction: "Staff generates the three documents from the commercial terms, reviews them, then sends them to the buyer together.",
+        number: 3, stepKey: "psa_lc", title: "Finekarts sends SPA / PSA and LC wording together", actor: "staff",
+        documents: [DOC_SPA, DOC_LC],
+        direction: "Staff generates the PSA and the proposed LC wording from the same order record, reviews them, then sends both to the buyer at the same time. The LC wording is only the proposed text for the buyer's bank, it is not the real Letter of Credit.",
       },
       {
         number: 4, stepKey: "buyer_sign", title: "Buyer signs the PSA with passport copies", actor: "buyer",
@@ -114,14 +114,14 @@ export function contractFlow(side: ContractSide): FlowStep[] {
         direction: "The buyer signs and stamps the PSA and uploads it with signer passport copies. Staff checks the upload before countersigning.",
       },
       {
-        number: 5, stepKey: "finekarts_sign", title: "Finekarts countersigns", actor: "staff",
-        documents: [DOC_SPA],
-        direction: "Staff countersigns and returns the fully executed PSA to the buyer.",
+        number: 5, stepKey: "finekarts_sign", title: "Finekarts countersigns and sends the proforma invoice", actor: "staff",
+        documents: [DOC_SPA, DOC_PROFORMA],
+        direction: "Staff countersigns and returns the fully executed PSA to the buyer. The proforma invoice is sent only after the PSA is signed by both parties.",
       },
       {
-        number: 6, stepKey: "banking", title: "Banking: LC details / RWA", actor: "buyer",
+        number: 6, stepKey: "banking", title: "Buyer sends the Letter of Credit", actor: "buyer",
         documents: [DOC_RWA, DOC_COMMERCIAL],
-        direction: "The buyer proceeds with the agreed banking instrument. Staff tracks it in the Banking step.",
+        direction: "The last step: the buyer's bank issues the real Letter of Credit and the buyer sends it to Finekarts. Staff tracks it in the Banking step. This is not the LC wording sent with the PSA.",
       },
     ];
   }
@@ -137,9 +137,9 @@ export function contractFlow(side: ContractSide): FlowStep[] {
       direction: "Staff generates the purchase order from the commercial terms and sends it to the supplier.",
     },
     {
-      number: 3, stepKey: "supplier_psa_lc", title: "Supplier replies with SPA / PSA, LC wording and proforma invoice", actor: "supplier",
-      documents: [DOC_SPA, DOC_LC, DOC_PROFORMA],
-      direction: "The supplier returns the contract, LC wording and proforma. Staff reviews them against the agreed terms.",
+      number: 3, stepKey: "supplier_psa_lc", title: "Supplier replies with SPA / PSA and LC wording", actor: "supplier",
+      documents: [DOC_SPA, DOC_LC],
+      direction: "The supplier returns the contract and the LC wording. Staff reviews them against the agreed terms.",
     },
     {
       number: 4, stepKey: "finekarts_sign", title: "Finekarts signs the PSA with passport copies", actor: "staff",
@@ -147,9 +147,9 @@ export function contractFlow(side: ContractSide): FlowStep[] {
       direction: "Staff signs and stamps the PSA and attaches signer passport copies.",
     },
     {
-      number: 5, stepKey: "supplier_sign", title: "Supplier returns the executed counterpart", actor: "supplier",
-      documents: [DOC_SPA],
-      direction: "The supplier signs and returns the executed PSA. Staff checks it.",
+      number: 5, stepKey: "supplier_sign", title: "Supplier returns the executed counterpart and the proforma invoice", actor: "supplier",
+      documents: [DOC_SPA, DOC_PROFORMA],
+      direction: "The supplier signs and returns the executed PSA. The proforma invoice follows after both parties have signed. Staff checks them.",
     },
     {
       number: 6, stepKey: "banking", title: "Banking: LC details / RWA", actor: "staff",
@@ -163,9 +163,9 @@ export const HOW_TO_STEPS: string[] = [
   "Create or qualify the buyer request, then convert it to a transaction.",
   "Generate the SCO/FCO (adjust the price if needed) and send it.",
   "Receive the ICPO or LOI from the buyer.",
-  "Generate the PSA/SPA, LC wording and proforma invoice, then send them.",
-  "The buyer signs; Finekarts countersigns.",
-  "LC / banking proceeds.",
+  "Generate the PSA/SPA and the LC wording, then send them to the buyer at the same time.",
+  "The buyer signs; Finekarts countersigns; then the proforma invoice is sent.",
+  "Last step: the buyer sends the real Letter of Credit (not the LC wording).",
 ];
 export const HOW_TO_NOTE =
   "Step 1 (SCO/FCO) can be skipped when the deal started elsewhere, but a reason must be recorded.";

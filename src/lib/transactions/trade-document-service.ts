@@ -680,12 +680,12 @@ export async function sendDocumentToBuyer(input: {
   return version;
 }
 
-/** Documents that go out with the PSA in the same step. */
-export const PSA_COMPANION_TYPES = ["proposed_lc_wording", "proforma_invoice"] as const;
+/** Documents that go out with the PSA in the same step. The proforma invoice does not: it follows after both parties have signed. */
+export const PSA_COMPANION_TYPES = ["proposed_lc_wording"] as const;
 
 /**
- * The LC wording and the proforma invoice are sent to the other party at the same time as the PSA.
- * Each companion that has an approved version is sent now. A companion that is not approved yet
+ * The LC wording is sent to the other party at the same time as the PSA.
+ * A companion that has an approved version is sent now. A companion that is not approved yet
  * is not blocked: it is reported back so staff can finish it and send it, and mistakes can still be
  * corrected by creating a new version of any of the documents.
  */

@@ -90,6 +90,18 @@ export async function POST(
         action: "send",
       });
     }
+    // The proforma invoice is sent only after the PSA is signed by both parties.
+    if (sendDoc?.documentType === "proforma_invoice" && sendTx) {
+      const { WorkflowStep } = await import("@/models");
+      const finalKey = sendTx.side === "supplier" ? "supplier_sign" : "finekarts_sign";
+      const signed = await WorkflowStep.exists({ transactionId: actionTxId, key: finalKey, status: { $in: ["completed", "skipped"] } });
+      if (!signed) {
+        return NextResponse.json(
+          { error: "The proforma invoice is sent after the PSA has been signed by both parties." },
+          { status: 409 },
+        );
+      }
+    }
     const version = await sendDocumentToBuyer({
       documentId: docId,
       versionId,
