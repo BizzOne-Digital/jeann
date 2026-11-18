@@ -680,6 +680,53 @@ export async function sendDocumentToBuyer(input: {
   return version;
 }
 
+/** Documents that go out with the PSA in the same step. */
+export const PSA_COMPANION_TYPES = ["proposed_lc_wording", "proforma_invoice"] as const;
+
+/**
+ * The LC wording and the proforma invoice are sent to the other party at the same time as the PSA.
+ * Each companion that has an approved version is sent now. A companion that is not approved yet
+ * is not blocked: it is reported back so staff can finish it and send it, and mistakes can still be
+ * corrected by creating a new version of any of the documents.
+ */
+export async function sendPsaCompanions(input: {
+  transactionId: string;
+  actorUserId: string;
+}): Promise<{ sent: string[]; notReady: string[]; missing: string[] }> {
+  await tryConnectMongo();
+  const { Document, DocumentVersion } = await import("@/models");
+  const docs = await Document.find({
+    transactionId: input.transactionId,
+    documentType: { $in: [...PSA_COMPANION_TYPES] },
+    deletedAt: null,
+  })
+    .select("documentType workflowStatus")
+    .lean();
+
+  const sent: string[] = [];
+  const notReady: string[] = [];
+  for (const d of docs) {
+    if (d.workflowStatus === "sent") continue;
+    const approved = await DocumentVersion.findOne({ documentId: d._id, status: "approved" })
+      .sort({ version: -1 })
+      .select("_id")
+      .lean();
+    if (!approved) {
+      notReady.push(d.documentType);
+      continue;
+    }
+    await sendDocumentToBuyer({
+      documentId: String(d._id),
+      versionId: String(approved._id),
+      actorUserId: input.actorUserId,
+    });
+    sent.push(d.documentType);
+  }
+  const present = new Set(docs.map((d) => d.documentType));
+  const missing = PSA_COMPANION_TYPES.filter((t) => !present.has(t));
+  return { sent, notReady, missing };
+}
+
 export async function uploadSignedDocument(input: {
   documentId: string;
   versionId: string;

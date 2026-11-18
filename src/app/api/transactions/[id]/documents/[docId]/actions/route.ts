@@ -3,7 +3,7 @@ import { z } from "zod";
 import { requireApiAuth, handleApiError } from "@/lib/api/require-api-auth";
 import { assertDocumentAllowed, assertTransactionUnlocked } from "@/lib/transactions/step-service";
 import { writeAuditEvent } from "@/lib/audit/log";
-import { submitDocumentRevision, reviewDocumentRevision, sendDocumentToBuyer } from "@/lib/transactions/trade-document-service";
+import { submitDocumentRevision, reviewDocumentRevision, sendDocumentToBuyer, sendPsaCompanions } from "@/lib/transactions/trade-document-service";
 
 export const runtime = "nodejs";
 
@@ -95,7 +95,12 @@ export async function POST(
       versionId,
       actorUserId: auth.ctx.userId,
     });
-    return NextResponse.json({ ok: true, status: version.status });
+    // The LC wording and the proforma invoice go out together with the PSA.
+    const companions =
+      sendDoc?.documentType === "spa"
+        ? await sendPsaCompanions({ transactionId: actionTxId, actorUserId: auth.ctx.userId })
+        : undefined;
+    return NextResponse.json({ ok: true, status: version.status, companions });
   } catch (error) {
     return handleApiError(error);
   }

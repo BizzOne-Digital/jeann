@@ -211,12 +211,22 @@ export function StaffDocumentTools({
       if (!d.currentVersionId && action !== "share_banking") {
         throw new Error("No version yet.");
       }
-      await post(`/api/transactions/${transactionId}/documents/${d.id}/actions`, {
+      const json = await post(`/api/transactions/${transactionId}/documents/${d.id}/actions`, {
         action,
         versionId: d.currentVersionId ?? undefined,
         ...extra,
       });
-      return `${d.title}: ${action.replace("_", " ")} done.`;
+      let message = `${d.title}: ${action.replace("_", " ")} done.`;
+      const c = json?.companions as { sent: string[]; notReady: string[]; missing: string[] } | undefined;
+      if (c) {
+        const name = (t: string) => (t === "proposed_lc_wording" ? "LC wording" : "Proforma invoice");
+        if (c.sent.length) message += ` Also sent with the PSA: ${c.sent.map(name).join(", ")}.`;
+        const pending = [...c.notReady, ...c.missing];
+        if (pending.length) {
+          message += ` Not sent yet (create or approve it, then send it): ${pending.map(name).join(", ")}.`;
+        }
+      }
+      return message;
     });
   }
 
