@@ -69,9 +69,11 @@ const lcSchema = z.object({
   lcNumber: z.string().max(80).optional(),
   issuingBank: z.string().max(200).optional(),
   advisingBank: z.string().max(200).optional(),
-  amount: z.string().regex(/^d+(.d{1,2})?$/, "Enter the amount as a number, for example 250000.00").optional(),
+  amount: z.string().regex(/^\d+(\.\d{1,2})?$/, "Enter the amount as a number, for example 250000.00").optional(),
   currency: z.string().length(3).optional(),
   expiryDate: z.string().optional(),
+  issueDate: z.string().optional(),
+  advisingBankCountry: z.string().max(80).optional(),
   notes: z.string().max(2000).optional(),
 });
 

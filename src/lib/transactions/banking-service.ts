@@ -149,6 +149,8 @@ export type BuyerLcDetails = {
   amount?: string;
   currency?: string;
   expiryDate?: string;
+  issueDate?: string;
+  advisingBankCountry?: string;
   notes?: string;
 };
 
@@ -186,6 +188,8 @@ export async function recordBuyerLcDetails(input: {
         amount: d.amount,
         currency: d.currency,
         expiryDate: d.expiryDate ? new Date(d.expiryDate) : undefined,
+        issueDate: d.issueDate ? new Date(d.issueDate) : undefined,
+        advisingBankCountry: d.advisingBankCountry,
         buyerNotes: d.notes,
       },
       $setOnInsert: { status: "draft_wording" },

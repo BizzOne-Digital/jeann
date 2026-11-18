@@ -31,6 +31,10 @@ export interface IBankingInstrumentRecord {
   amount?: string;
   currency?: string;
   expiryDate?: Date;
+  /** Date the buyer's bank issued the LC (printed in field :31C: of the LC wording). */
+  issueDate?: Date;
+  /** Country of the advising bank (printed in field :31D: of the LC wording). */
+  advisingBankCountry?: string;
   buyerNotes?: string;
 }
 
@@ -69,6 +73,8 @@ const bankingInstrumentRecordSchema = new Schema<IBankingInstrumentRecord>(
     amount: { type: String, trim: true, maxlength: 40 },
     currency: { type: String, trim: true, uppercase: true, maxlength: 3 },
     expiryDate: { type: Date },
+    issueDate: { type: Date },
+    advisingBankCountry: { type: String, trim: true, maxlength: 80 },
     buyerNotes: { type: String, maxlength: 2000 },
   },
   { timestamps: true },

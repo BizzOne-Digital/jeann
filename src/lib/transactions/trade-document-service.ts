@@ -18,6 +18,7 @@ import { embedRichFonts, renderRichText } from "@/lib/documents/rich-text-pdf";
 import { loadCompanyImage } from "@/lib/documents/signature-image";
 import { FINEKARTS_DETAILS } from "@/lib/contracts/company-details";
 import { amountInWords } from "@/lib/finance/amount-words";
+import { swiftDate } from "@/lib/contracts/lc-dates";
 import { DEFAULT_INSPECTION, lcDocumentsBlock, productLine, requiredDocumentsBlock, specificationToBlock } from "@/lib/products/document-fields";
 import { loadActiveSpecificationText } from "@/lib/products/specification-service";
 
@@ -184,6 +185,21 @@ export async function buildDocumentPrefill(
       const { PurchaseRequest } = await import("@/models");
       const request = await PurchaseRequest.findById(sourceId).select("requestedSpecification").lean();
       if (request?.requestedSpecification?.trim()) out.specificationBlock = specificationToBlock(request.requestedSpecification);
+    }
+  }
+
+  // The LC wording fills in from the LC details the buyer recorded on the Banking tab. If something
+  // is wrong, admin corrects it by hand in the form.
+  if (documentType === "proposed_lc_wording") {
+    const { BankingInstrumentRecord } = await import("@/models");
+    const lc = await BankingInstrumentRecord.findOne({ transactionId }).lean();
+    if (lc) {
+      if (lc.lcNumber) out.lcNumber = lc.lcNumber;
+      const issued = swiftDate(lc.issueDate);
+      if (issued) out.lcIssueDate = issued;
+      const expiry = swiftDate(lc.expiryDate);
+      if (expiry) out.lcExpiryDate = expiry;
+      if (lc.advisingBankCountry) out.lcExpiryCountry = lc.advisingBankCountry;
     }
   }
 

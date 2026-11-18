@@ -40,6 +40,8 @@ export function BuyerLcDetailsForm({
           amount: text("amount"),
           currency: text("currency"),
           expiryDate: text("expiryDate"),
+          issueDate: text("issueDate"),
+          advisingBankCountry: text("advisingBankCountry"),
           notes: text("notes"),
         }),
       });
@@ -74,7 +76,15 @@ export function BuyerLcDetailsForm({
         <input name="advisingBank" className="field" placeholder="Advising bank" maxLength={200} />
         <input name="amount" className="field" placeholder="Amount (e.g. 250000.00)" inputMode="decimal" />
         <input name="currency" className="field" placeholder="Currency (USD)" maxLength={3} />
-        <input name="expiryDate" className="field" type="date" />
+        <input name="advisingBankCountry" className="field" placeholder="Country of the advising bank" maxLength={80} />
+        <label className="text-xs text-[var(--stone)]">
+          Date of issue
+          <input name="issueDate" className="field block" type="date" />
+        </label>
+        <label className="text-xs text-[var(--stone)]">
+          Expiry date
+          <input name="expiryDate" className="field block" type="date" />
+        </label>
       </div>
       <textarea name="notes" className="field min-h-20" placeholder="Notes" maxLength={2000} />
       <button className="btn btn-primary" type="submit" disabled={busy}>
