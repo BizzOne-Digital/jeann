@@ -66,6 +66,8 @@ export default async function ContractAutomationPage() {
                 <LoadClientSkeletonButton skeletonKey="icpo_supplier" label="Load the client's ICPO skeleton, supplier portal (new version)" />
                 <LoadClientSkeletonButton skeletonKey="icpo_buyer" label="Load the client's ICPO skeleton, buyer portal (new version)" />
                 <LoadClientSkeletonButton skeletonKey="spa_buyer" label="Load the client's PSA skeleton, buyer portal (new version)" />
+                <LoadClientSkeletonButton skeletonKey="lc_wording_buyer" label="Load the client's LC wording skeleton, buyer portal (new version)" />
+                <LoadClientSkeletonButton skeletonKey="proforma_invoice_buyer" label="Load the client's Proforma Invoice skeleton, buyer portal (new version)" />
               </div>
             </div>
             <p className="mt-2 text-xs text-[var(--stone)]">

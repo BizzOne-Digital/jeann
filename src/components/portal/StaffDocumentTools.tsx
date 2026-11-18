@@ -44,6 +44,12 @@ const DETAIL_FIELDS = [
   { key: "documentsAddress", label: "Address for original documents" },
   { key: "buyerInquiryRef", label: "Buyer inquiry ref. (LOI / ICPO no.)" },
   { key: "icpoRef", label: "Associated ICPO ref." },
+  { key: "lcNumber", label: "Buyer LC reference number" },
+  { key: "lcIssueDate", label: "LC date of issue (YYYYMMDD)" },
+  { key: "lcExpiryDate", label: "LC expiry date (YYYYMMDD)" },
+  { key: "lcExpiryCountry", label: "Country of the advising bank" },
+  { key: "latestShipmentDate", label: "Latest date of shipment (YYYYMMDD)" },
+  { key: "confirmationInstructions", label: "LC confirmation (requested or not)" },
   { key: "buyerTitle", label: "Buyer signatory title" },
   { key: "cropYear", label: "Crop / production year" },
   { key: "buyerSalutation", label: "Salutation (Mr./Ms. Last Name)" },
@@ -315,7 +321,7 @@ export function StaffDocumentTools({
             </option>
           ))}
         </select>
-        {s3Type === "icpo" || s3Type === "proforma_invoice" || s3Type === "spa" ? (
+        {s3Type === "icpo" || s3Type === "proforma_invoice" || s3Type === "spa" || s3Type === "proposed_lc_wording" ? (
           <details className="rounded border border-[var(--line)] p-3">
             <summary className="cursor-pointer text-sm font-medium text-[var(--navy)]">More document fields</summary>
             <div className="mt-3 grid gap-3 sm:grid-cols-3">

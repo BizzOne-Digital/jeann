@@ -9,6 +9,7 @@
  *   [[LABEL]]          text still to be filled in (prints red as [LABEL])
  *   ---                horizontal line
  *   [pagebreak]        starts a new page
+ *   [signature]        the preloaded Finekarts signature (a blank line when there is none)
  */
 
 export type Align = "left" | "center" | "right";
@@ -17,7 +18,8 @@ export type Run = { text: string; bold: boolean; italic: boolean; underline: boo
 export type RichBlock =
   | { kind: "text"; style: "h1" | "h2" | "p" | "bullet"; align: Align; runs: Run[] }
   | { kind: "rule" }
-  | { kind: "pagebreak" };
+  | { kind: "pagebreak" }
+  | { kind: "signature" };
 
 /** Characters that the standard PDF fonts can draw; everything else becomes "?". */
 export function pdfSafe(text: string): string {
@@ -86,6 +88,10 @@ export function parseRichText(source: string): RichBlock[] {
       blocks.push({ kind: "pagebreak" });
       continue;
     }
+    if (trimmed.toLowerCase() === "[signature]") {
+      blocks.push({ kind: "signature" });
+      continue;
+    }
     let align: Align = "left";
     const alignMatch = /^\[(left|center|right)\]\s*/i.exec(line);
     if (alignMatch) {
@@ -117,6 +123,7 @@ export function richTextToHtml(source: string): string {
   return parseRichText(source)
     .map((b) => {
       if (b.kind === "rule") return "<hr />";
+      if (b.kind === "signature") return '<div style="margin:8px 0;padding:10px;border:1px dashed #999;font-size:12px;color:#777">Finekarts signature prints here on the final document</div>';
       if (b.kind === "pagebreak") return '<div style="border-top:2px dashed #999;margin:12px 0;font-size:11px;color:#777">Page break</div>';
       const inner = b.runs
         .map((r) => {

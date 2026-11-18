@@ -6,6 +6,7 @@ import {
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
 import { PortalPage } from "@/components/portal/PortalPage";
 import { AdminSettingsEditor } from "@/components/admin/AdminSettingsEditor";
+import { AdminSignatureUpload } from "@/components/admin/AdminSignatureUpload";
 import { SITE_SETTINGS_KEY } from "@/models/SiteSettings";
 
 export const dynamic = "force-dynamic";
@@ -49,6 +50,8 @@ export default async function AdminSettingsPage() {
           </p>
         ) : null}
         <AdminSettingsEditor initialSettings={settings} />
+        <AdminSignatureUpload kind="signature" />
+        <AdminSignatureUpload kind="seal" />
       </div>
     </PortalPage>
   );

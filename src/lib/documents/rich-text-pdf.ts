@@ -1,4 +1,4 @@
-import { StandardFonts, rgb, type PDFDocument, type PDFFont, type PDFPage } from "pdf-lib";
+import { StandardFonts, rgb, type PDFDocument, type PDFFont, type PDFImage, type PDFPage } from "pdf-lib";
 import { parseRichText, pdfSafe, type Run } from "@/lib/documents/rich-text";
 
 const INK = rgb(0.1, 0.1, 0.2);
@@ -39,6 +39,7 @@ export function renderRichText(
   fonts: Fonts,
   source: string,
   start: { page: PDFPage; y: number },
+  options: { signature?: PDFImage; seal?: PDFImage } = {},
 ): { page: PDFPage; y: number } {
   let page = start.page;
   let y = start.y;
@@ -51,6 +52,27 @@ export function renderRichText(
   for (const block of parseRichText(source)) {
     if (block.kind === "pagebreak") {
       newPage();
+      continue;
+    }
+    if (block.kind === "signature") {
+      const sig = options.signature;
+      const seal = options.seal;
+      const sigHeight = sig ? Math.min(46, (sig.height / sig.width) * 150) : 14;
+      const sealSize = seal ? 76 : 0;
+      const height = Math.max(sigHeight, sealSize);
+      if (y < BOTTOM + height + 6) newPage();
+      if (sig) {
+        const width = (sig.width / sig.height) * sigHeight;
+        page.drawImage(sig, { x: MARGIN_X, y: y - sigHeight + 6, width, height: sigHeight });
+      } else {
+        page.drawText("____________________", { x: MARGIN_X, y, size: 10, font: fonts.regular, color: INK });
+      }
+      if (seal) {
+        // the company seal sits beside the signature, as a stamp would
+        const sealWidth = (seal.width / seal.height) * sealSize;
+        page.drawImage(seal, { x: MARGIN_X + 170, y: y - sealSize + 6, width: sealWidth, height: sealSize });
+      }
+      y -= height + 6;
       continue;
     }
     if (block.kind === "rule") {

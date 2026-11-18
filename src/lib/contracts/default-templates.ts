@@ -2,6 +2,8 @@ import { contractFlow, templateKeyFor, type ContractSide } from "@/lib/contracts
 import { SCO_SKELETON_BLOCKS } from "@/lib/contracts/sco-skeleton";
 import { ICPO_SKELETON_BLOCKS } from "@/lib/contracts/icpo-skeleton";
 import { PSA_SKELETON_BLOCKS } from "@/lib/contracts/psa-skeleton";
+import { LC_WORDING_SKELETON_BLOCKS } from "@/lib/contracts/lc-wording-skeleton";
+import { PROFORMA_SKELETON_BLOCKS } from "@/lib/contracts/proforma-skeleton";
 
 type Block = { type: string; content: string };
 export type DefaultTemplate = {
@@ -42,19 +44,8 @@ const BODIES: Record<string, Block[]> = {
   ],
   icpo: ICPO_SKELETON_BLOCKS,
   spa: PSA_SKELETON_BLOCKS,
-  lc_wording: [
-    H("Proposed Letter of Credit wording"),
-    PARTIES,
-    P("Proposed terms for the documentary letter of credit, to be reviewed by the issuing bank:"),
-    GOODS,
-    P("Documents required: commercial invoice, packing list, bill of lading, certificate of origin, inspection certificate.\nPartial shipments and transshipment: as agreed in the shipment schedule."),
-  ],
-  proforma_invoice: [
-    H("Proforma invoice"),
-    PARTIES,
-    GOODS,
-    P("This proforma invoice is issued for arranging payment and is not a tax invoice."),
-  ],
+  lc_wording: LC_WORDING_SKELETON_BLOCKS,
+  proforma_invoice: PROFORMA_SKELETON_BLOCKS,
   commercial_invoice: [
     H("Commercial invoice"),
     PARTIES,

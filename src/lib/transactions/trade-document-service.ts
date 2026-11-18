@@ -15,8 +15,10 @@ import { findPublishedTemplate } from "@/lib/contracts/template-service";
 import { placeholderValues, renderTemplateLines, renderTemplateRich, wrapLine } from "@/lib/contracts/template-merge";
 import { missingPsaClauses, normalizeLcDeadlineHours } from "@/lib/contracts/psa-terms";
 import { embedRichFonts, renderRichText } from "@/lib/documents/rich-text-pdf";
+import { loadCompanyImage } from "@/lib/documents/signature-image";
 import { FINEKARTS_DETAILS } from "@/lib/contracts/company-details";
-import { DEFAULT_INSPECTION, productLine, requiredDocumentsBlock, specificationToBlock } from "@/lib/products/document-fields";
+import { amountInWords } from "@/lib/finance/amount-words";
+import { DEFAULT_INSPECTION, lcDocumentsBlock, productLine, requiredDocumentsBlock, specificationToBlock } from "@/lib/products/document-fields";
 import { loadActiveSpecificationText } from "@/lib/products/specification-service";
 
 const TEST_WATERMARK = "TEST DOCUMENT — NOT VALID — FOR SOFTWARE QA ONLY";
@@ -162,12 +164,39 @@ export async function buildDocumentPrefill(
       if (names.length) out.packaging = names.map((n: { name: string }) => n.name).join(" / ");
     }
     if (!out.inspection) out.inspection = (product.inspectionOptions ?? []).join(", ") || DEFAULT_INSPECTION;
-    out.requiredDocuments = requiredDocumentsBlock(
-      ((product.documentCategories ?? []) as { label: string; required?: boolean }[]).filter((d) => d.required !== false).map((d) => d.label),
-      String(out.incoterm ?? terms?.incoterm ?? ""),
-    );
-  } else if (!out.inspection) {
-    out.inspection = DEFAULT_INSPECTION;
+    const docLabels = ((product.documentCategories ?? []) as { label: string; required?: boolean }[])
+      .filter((d) => d.required !== false)
+      .map((d) => d.label);
+    out.requiredDocuments = requiredDocumentsBlock(docLabels, String(out.incoterm ?? terms?.incoterm ?? ""));
+    out.lcDocuments = lcDocumentsBlock(docLabels, String(out.incoterm ?? terms?.incoterm ?? ""));
+  } else {
+    if (!out.inspection) out.inspection = DEFAULT_INSPECTION;
+    const incoterm = String(out.incoterm ?? terms?.incoterm ?? "");
+    out.requiredDocuments = requiredDocumentsBlock([], incoterm);
+    out.lcDocuments = lcDocumentsBlock([], incoterm);
+  }
+
+  // The specification comes from the product. When the product has none, it is imported from the
+  // buyer's ICPO (the specification written on the order request).
+  if (!out.specificationBlock) {
+    const sourceId = (await Transaction.findById(transactionId).select("sourcePurchaseRequestId").lean())?.sourcePurchaseRequestId;
+    if (sourceId) {
+      const { PurchaseRequest } = await import("@/models");
+      const request = await PurchaseRequest.findById(sourceId).select("requestedSpecification").lean();
+      if (request?.requestedSpecification?.trim()) out.specificationBlock = specificationToBlock(request.requestedSpecification);
+    }
+  }
+
+  // References that tie the documents of one order together, and the figures in words.
+  const txNumber = (await Transaction.findById(transactionId).select("transactionNumber").lean())?.transactionNumber;
+  if (txNumber) {
+    out.psaRef = txNumber;
+    out.proformaNumber = txNumber + "-PI";
+  }
+  if (typeof out.productLine === "string") out.productLineUpper = out.productLine.toUpperCase();
+  if (terms?.totalEstimatedValue) {
+    const words = amountInWords(String(terms.totalEstimatedValue), String(terms.currency ?? "USD"));
+    if (words) out.amountInWords = words;
   }
   return out;
 }
@@ -283,6 +312,8 @@ export async function generateDocumentPdf(input: {
         : structuredData,
       { transactionNumber: txNumber },
     );
+    // Finekarts signs as the buyer on the supplier side; on the buyer side the customer signs by hand.
+    if (!fieldValues.buyerSignature) fieldValues.buyerSignature = side === "supplier" ? "[signature]" : "____________________";
     structuredData._templateLines = renderTemplateLines(template.bodyBlocks, fieldValues);
     structuredData._templateRich = renderTemplateRich(template.bodyBlocks, fieldValues);
     structuredData._templateKey = template.key;
@@ -370,6 +401,15 @@ async function buildPdf(input: {
   const font = await pdf.embedFont(StandardFonts.Helvetica);
   const bold = await pdf.embedFont(StandardFonts.HelveticaBold);
   let y = 800;
+  // The preloaded Finekarts signature prints on final (approved) documents only, never on drafts.
+  let signature: Awaited<ReturnType<typeof pdf.embedPng>> | undefined;
+  let seal: Awaited<ReturnType<typeof pdf.embedPng>> | undefined;
+  if (!input.isDraft) {
+    const sigPng = await loadCompanyImage("signature");
+    if (sigPng) signature = await pdf.embedPng(sigPng);
+    const sealPng = await loadCompanyImage("seal");
+    if (sealPng) seal = await pdf.embedPng(sealPng);
+  }
   const templateLines = Array.isArray(input.structuredData._templateLines)
     ? (input.structuredData._templateLines as unknown[]).map(String)
     : null;
@@ -403,7 +443,7 @@ async function buildPdf(input: {
 
   if (templateLines && typeof input.structuredData._templateRich === "string") {
     // Template text keeps its formatting (headings, bold, bullets, alignment, page breaks).
-    const rendered = renderRichText(pdf, await embedRichFonts(pdf), input.structuredData._templateRich, { page, y });
+    const rendered = renderRichText(pdf, await embedRichFonts(pdf), input.structuredData._templateRich, { page, y }, { signature, seal });
     page = rendered.page;
     y = rendered.y;
   } else if (templateLines) {
@@ -448,7 +488,7 @@ async function buildPdf(input: {
     y -= 8;
     draw("Clauses:", 11, true);
     // Clause text may use the editor formatting (bold, headings, bullets, alignment, page breaks).
-    const rendered = renderRichText(pdf, await embedRichFonts(pdf), input.clauseTexts.join("\n"), { page, y });
+    const rendered = renderRichText(pdf, await embedRichFonts(pdf), input.clauseTexts.join("\n"), { page, y }, { signature, seal });
     page = rendered.page;
     y = rendered.y;
   }

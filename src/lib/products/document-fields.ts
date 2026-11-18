@@ -62,3 +62,11 @@ export function productLine(name: string | undefined, grade: string | undefined)
   if (!name) return undefined;
   return grade && grade.trim() ? name + ", " + grade.trim() : name;
 }
+
+/** The documents required, as numbered capital-letter lines for the SWIFT MT700 field 46A. */
+export function lcDocumentsBlock(labels: string[], incoterm?: string): string {
+  return requiredDocumentsBlock(labels, incoterm)
+    .split("\n")
+    .map((line) => line.replace(/\*\*/g, "").toUpperCase())
+    .join("\n");
+}

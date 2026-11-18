@@ -175,7 +175,8 @@ export const SCO_SKELETON_BLOCKS: SkeletonBlock[] = [
     type: "paragraph",
     content: [
       "**ISSUED BY SELLER — FINEKARTS INCORPORATED:**",
-      "Authorized Signature & Seal: ____________________",
+      "Authorized Signature & Seal:",
+      "[signature]",
       row("Name", "{{sellerRepresentative}}"),
       row("Title", "{{sellerTitle}}"),
       row("Date", "{{date}}"),

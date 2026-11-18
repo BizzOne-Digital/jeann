@@ -146,7 +146,8 @@ export const PSA_SKELETON_BLOCKS: SkeletonBlock[] = [
     type: "paragraph",
     content: [
       "**FOR SELLER — FINEKARTS INCORPORATED:**",
-      "Authorized Signature & Seal: ____________________",
+      "Authorized Signature & Seal:",
+      "[signature]",
       row("Name", "{{sellerRepresentative}}"),
       row("Title", "{{sellerTitle}}"),
       row("Date", "{{date}}"),
@@ -158,4 +159,8 @@ export const PSA_SKELETON_BLOCKS: SkeletonBlock[] = [
       "Date: ____________________",
     ].join("\n"),
   },
+  { type: "paragraph", content: "[pagebreak]" },
+  { type: "paragraph", content: "## SCHEDULE A: COMMODITY TECHNICAL SPECIFICATIONS" },
+  { type: "paragraph", content: "**Quality / Technical Parameter — Contractual Standard / Limit — Test Method / Standard**" },
+  { type: "paragraph", content: "{{specificationBlock}}" },
 ];
