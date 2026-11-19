@@ -142,7 +142,7 @@ export async function applyStepStatus(input: {
       {
         transactionId: tx._id,
         deletedAt: null,
-        documentType: { $in: ["sco", "fco", "icpo", "loi", "cis", "rwa", "fis", "passport_copy", "spa", "proposed_lc_wording", "proforma_invoice"] },
+        documentType: { $in: ["sco", "fco", "icpo", "loi", "cis", "rwa", "fis", "passport_copy", "spa", "proposed_lc_wording", "proforma_invoice", "letter_of_credit"] },
       },
       { $set: { bankingVisible: true } },
     );

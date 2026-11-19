@@ -74,7 +74,10 @@ const BUYER_STEPS: StepDef[] = [
     title: "LC received and bank review",
     admin: "Receive the LC. Send all contract paperwork to the banking advisor for review and approval. The bank opens an LC account.",
     buyer: "If the LC does not match the PSA, the buyer pays the amendment. If it is good, no amendment is due.",
-    types: [{ value: "other", label: "LC or bank document" }],
+    types: [
+      { value: "letter_of_credit", label: "Letter of Credit (real LC, not the LC wording)" },
+      { value: "other", label: "Other bank document" },
+    ],
   },
   {
     n: 7,

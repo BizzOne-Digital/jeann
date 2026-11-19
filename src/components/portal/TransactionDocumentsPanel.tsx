@@ -16,6 +16,7 @@ const UPLOAD_TYPES = [
   { value: "spa", label: "SPA / PSA" },
   { value: "proposed_lc_wording", label: "LC wording" },
   { value: "proforma_invoice", label: "Proforma invoice" },
+  { value: "letter_of_credit", label: "Letter of Credit (real LC from the buyer's bank)" },
   { value: "commercial_invoice", label: "Commercial invoice" },
   { value: "passport_copy", label: "Passport copy (signer)" },
   { value: "rwa", label: "RWA - Ready, Willing and Able letter (from your bank)" },

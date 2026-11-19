@@ -15,12 +15,12 @@ const STAFF_AUTHORED: Record<DocStepSide, string[]> = {
 
 /** Types the external party (buyer or supplier) may upload without staff. */
 const EXTERNAL_UPLOAD: Record<DocStepSide, string[]> = {
-  buyer: ["icpo", "passport_copy", "loi", "rwa", "fis", "cis", "other"],
+  buyer: ["icpo", "passport_copy", "loi", "rwa", "fis", "cis", "letter_of_credit", "other"],
   supplier: ["sco", "fco", "spa", "proposed_lc_wording", "proforma_invoice", "passport_copy", "loi", "other"],
 };
 
 /** Documents that can be uploaded at any time (supporting material, no step). */
-const FREE_TYPES = ["commercial_invoice", "passport_copy", "loi", "rwa", "fis", "cis", "other", "contract_amendment"];
+const FREE_TYPES = ["letter_of_credit", "commercial_invoice", "passport_copy", "loi", "rwa", "fis", "cis", "other", "contract_amendment"];
 
 const RANK: Record<string, number> = {
   not_started: 0,

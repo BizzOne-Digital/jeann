@@ -66,7 +66,7 @@ export async function GET() {
           mimeType: v?.mimeType,
         });
       })
-      .sort((a, b) => (a.transactionNumber ?? "").localeCompare(b.transactionNumber ?? "") || (a.stepNumber ?? 99) - (b.stepNumber ?? 99));
+      .sort((a, b) => (a.transactionNumber ?? "").localeCompare(b.transactionNumber ?? "") || a.tabNumber - b.tabNumber);
 
     return NextResponse.json({
       documents,

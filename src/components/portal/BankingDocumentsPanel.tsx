@@ -7,6 +7,8 @@ type DocRow = {
   transactionNumber?: string;
   side: "buyer_sale" | "supplier_purchase";
   stepNumber?: number;
+  tabNumber: number;
+  tabLabel: string;
   documentType: string;
   title: string;
   status: string;
@@ -165,11 +167,10 @@ export function BankingDocumentsPanel() {
               <li key={d.id} className="flex flex-wrap items-center justify-between gap-2 px-4 py-3 text-sm">
                 <div>
                   <p className="font-medium text-[var(--navy)]">
-                    {d.transactionNumber ?? "Transaction"} · {d.stepNumber ? `Step ${d.stepNumber}` : "Step n/a"} ·{" "}
-                    {d.documentType.replaceAll("_", " ").toUpperCase()}
+                    Tab {d.tabNumber} · {d.tabLabel}
                   </p>
                   <p className="text-xs text-[var(--stone)]">
-                    {d.title} · {d.side === "buyer_sale" ? "Buyer side" : "Supplier side"} ·{" "}
+                    {d.transactionNumber ?? "Transaction"} · {d.title} · {d.side === "buyer_sale" ? "Buyer side" : "Supplier side"} ·{" "}
                     {d.signed ? "Signed" : d.status.replaceAll("_", " ")}
                     {d.filename ? ` · ${d.filename}` : ""}
                     {d.filename && !d.isPdf ? " · non-PDF format" : ""}
