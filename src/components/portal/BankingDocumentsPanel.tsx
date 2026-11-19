@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 
 type DocRow = {
   id: string;
+  transactionId: string;
   transactionNumber?: string;
   side: "buyer_sale" | "supplier_purchase";
   stepNumber?: number;
@@ -162,6 +163,14 @@ export function BankingDocumentsPanel() {
         {documents.length === 0 ? (
           <p className="mt-2 text-sm text-[var(--stone)]">No released documents for your assigned deals yet.</p>
         ) : (
+          <>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {Array.from(new Map(documents.map((d) => [d.transactionId, d.transactionNumber ?? "Order"])).entries()).map(([txId, number]) => (
+              <a key={txId} className={btn} href={`/api/banking/transactions/${txId}/bank-file`}>
+                Download bank file (one PDF, numbered tabs): {number}
+              </a>
+            ))}
+          </div>
           <ul className="mt-3 divide-y divide-[var(--line)] rounded-lg border border-[var(--line)] bg-white">
             {documents.map((d) => (
               <li key={d.id} className="flex flex-wrap items-center justify-between gap-2 px-4 py-3 text-sm">
@@ -182,6 +191,7 @@ export function BankingDocumentsPanel() {
               </li>
             ))}
           </ul>
+          </>
         )}
       </section>
 
