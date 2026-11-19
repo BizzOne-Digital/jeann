@@ -250,7 +250,9 @@ export function BuyerProcessPanel({
   const live = documents.filter((d) => !NON_QUALIFYING.includes(d.workflowStatus));
   const hasPassport = live.some((d) => d.documentType === "passport_copy");
   const psaDocs = documents.filter((d) => d.documentType === "spa");
-  const invoiceDocs = documents.filter((d) => d.documentType === "commercial_invoice");
+  const lcWordingDocs = documents.filter((d) => d.documentType === "proposed_lc_wording");
+  // After the PSA is signed Finekarts issues a Proforma Invoice (a Commercial Invoice only for direct cash payment).
+  const invoiceDocs = documents.filter((d) => d.documentType === "proforma_invoice" || d.documentType === "commercial_invoice");
   const stepStatus = (key: string) => steps.find((s) => s.key === key)?.status;
 
   return (
@@ -399,6 +401,30 @@ export function BuyerProcessPanel({
               </p>
             ) : null}
           </div>
+
+          <div className="rounded-md border border-[var(--line)] p-4">
+            <p className="font-semibold text-[var(--navy)]">Proposed LC wording</p>
+            <p className="mt-1 text-xs text-[var(--stone)]">
+              Sent together with the PSA. Give it to your bank as the proposed text. It is not the Letter of Credit.
+            </p>
+            {lcWordingDocs.length === 0 ? (
+              <p className="mt-2 text-sm text-[var(--stone)]">The LC wording has not been sent yet.</p>
+            ) : (
+              <ul className="mt-2 divide-y divide-[var(--line)] text-sm">
+                {lcWordingDocs.map((d) => (
+                  <li key={d.id} className="flex flex-wrap items-center justify-between gap-2 py-3">
+                    <div>
+                      <p className="font-medium text-[var(--navy)]">{d.title}</p>
+                      <p className="text-xs text-[var(--stone)]">{d.workflowStatus.replaceAll("_", " ")}</p>
+                    </div>
+                    <button type="button" className="btn text-xs" onClick={() => download(d.id)}>
+                      Download
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
       ) : null}
 
@@ -433,6 +459,11 @@ export function BuyerProcessPanel({
       {step === "banking" ? (
         <div className="space-y-4">
           <Notice tone="info">{RWA_DESCRIPTION} The RWA is required on every LC transaction.</Notice>
+          <Notice tone="info">
+            Upload the Letter of Credit issued by your bank in the Documents tab of this transaction, as
+            document type &quot;Letter of Credit&quot;. It becomes its own tab in the file that goes to the
+            bank. The LC wording you received with the PSA is a different document.
+          </Notice>
           <BuyerLcDetailsForm transactionId={transactionId} onSaved={reload} />
         </div>
       ) : null}
