@@ -298,10 +298,10 @@ export const SUPPLIER_ICPO_SKELETON_BLOCKS: SkeletonBlock[] = [
       ),
     ].join("\n"),
   ),
-  P("## 6. NON-DISCLOSURE, NON-CIRCUMVENTION & NON-CONTACT (50 YEARS)"),
+  P("## 6. NON-DISCLOSURE, NON-CIRCUMVENTION & NON-CONTACT (10 YEARS)"),
   P(
     [
-      "The Seller/Supplier hereby irrevocably agrees that all information relating to Finekarts Incorporated, its Consignee, End Buyer, representatives, financial institutions, logistics providers, pricing, volumes, and transaction structure constitutes strictly confidential proprietary trade secrets. For a period of fifty (50) years from the date of this ICPO, the Seller/Supplier, its affiliates, directors, officers, employees, and agents shall not directly or indirectly:",
+      "The Seller/Supplier hereby irrevocably agrees that all information relating to Finekarts Incorporated, its Consignee, End Buyer, representatives, financial institutions, logistics providers, pricing, volumes, and transaction structure constitutes strictly confidential proprietary trade secrets. For a period of ten (10) years from the date of this ICPO, the Seller/Supplier, its affiliates, directors, officers, employees, and agents shall not directly or indirectly:",
       "1. Contact, communicate, solicit, negotiate, or transact with the Buyer's Consignee, End Buyer, or any affiliated party introduced or disclosed through this transaction without Finekarts Incorporated's prior written consent;",
       "2. Bypass, circumvent, or attempt to bypass Finekarts Incorporated in any manner whatsoever, including through agents, brokers, intermediaries, shipping lines, or third parties;",
       "3. Disclose or utilize any confidential information obtained hereunder for any purpose other than executing this transaction.",

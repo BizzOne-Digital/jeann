@@ -112,7 +112,7 @@ export const ICPO_SKELETON_BLOCKS: SkeletonBlock[] = [
     type: "paragraph",
     content: [
       "The Seller/Supplier hereby irrevocably agrees that all information relating to the Buyer, Consignee, End Buyer, Buyer's representatives, financial institutions, logistics providers, pricing, volumes, contract terms, and transaction structure is strictly confidential.",
-      "The Seller/Supplier shall not, directly or indirectly, for a period of fifty (50) years from the date of this ICPO:",
+      "The Seller/Supplier shall not, directly or indirectly, for a period of ten (10) years from the date of this ICPO:",
       "1. Contact, communicate, solicit, negotiate, or transact with the Buyer's Consignee, End Buyer, or any affiliated party, whether identified or introduced by the Buyer, without the Buyer's prior written consent.",
       "2. Bypass, circumvent, or attempt to bypass the Buyer in any manner whatsoever, including through agents, brokers, intermediaries, related companies, or third parties.",
       "3. Use or disclose any confidential or proprietary information obtained through this transaction for any purpose other than the execution of this contract.",

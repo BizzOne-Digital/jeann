@@ -43,6 +43,13 @@ describe("supplier portal skeletons", () => {
     for (const blocks of Object.values(ALL)) expect(text(blocks)).not.toMatch(/Red Fields|TO FILL IN RED|To Be Completed by Supplier|TO BE COMPLETED BY SUPPLIER/i);
   });
 
+  it("the confidentiality period is ten years in the ICPO and the PSA alike", () => {
+    expect(text(ALL.icpo)).toContain("NON-CONTACT (10 YEARS)");
+    expect(text(ALL.icpo)).toContain("ten (10) years");
+    expect(text(ALL.psa)).toContain("TEN (10) YEARS");
+    for (const blocks of Object.values(ALL)) expect(text(blocks)).not.toMatch(/fifty|\(50\)|50 YEARS/i);
+  });
+
   it("the supplier documents do not hard-code one product or human consumption", () => {
     for (const blocks of Object.values(ALL)) {
       expect(text(blocks)).not.toMatch(/human consumption/i);
