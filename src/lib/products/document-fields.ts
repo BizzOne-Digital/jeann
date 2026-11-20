@@ -36,6 +36,20 @@ const STANDARD_LC_DOCUMENTS = [
   "**Certificate of Analysis (COA):** Accredited laboratory analysis confirming compliance with all chemical, physical, and MRL specifications.",
 ];
 
+/**
+ * The same list when the supplier is the seller (supplier portal, Finekarts is the buyer). It says nothing
+ * about human consumption: that depends on the product (cooking oil yes, crude oil no) and comes from the
+ * product's own document list or the red fields.
+ */
+const STANDARD_SUPPLIER_DOCUMENTS = [
+  "**Signed Commercial Invoice:** Issued by the Supplier in one (1) original and three (3) copies stating Contract/LC number, HS Code, quantity, unit price, and total value.",
+  "**Full Set (3/3) Clean \"On Board\" Marine Bills of Lading:** Made out \"To Order\" and blank endorsed, marked \"Freight Prepaid\" (for CIF/CFR), notifying the Applicant (Finekarts Incorporated or designated notify party).",
+  "**Packing List:** One (1) original and three (3) copies detailing container numbers, seal numbers, package count, net weight, and gross weight.",
+  "**Certificate of Origin:** Issued or endorsed by the Chamber of Commerce of the exporting country.",
+  "**Certificate of Quality, Quantity, and Weight:** Issued by an independent inspection company at the port of loading.",
+  "**Certificate of Analysis (COA):** Confirming compliance with the contractual specification and with the import standards of the destination country.",
+];
+
 const INSURANCE_LINE =
   "**Marine Cargo Insurance Policy/Certificate (CIF requirement):** issued for 110% of the CIF invoice value covering Institute Cargo Clauses (A), War Risk, and Strikes, payable in USD at the destination.";
 
@@ -43,7 +57,7 @@ const INSURANCE_LINE =
  * Numbered list of the documents required for LC presentation. The product's own list is used when
  * it has one. For a CIF order the insurance document is always included, because CIF requires it.
  */
-export function requiredDocumentsBlock(labels: string[], incoterm?: string): string {
+export function requiredDocumentsBlock(labels: string[], incoterm?: string, seller: "finekarts" | "supplier" = "finekarts"): string {
   const own = labels
     .map((l) => l.trim())
     .filter(Boolean)
@@ -51,7 +65,7 @@ export function requiredDocumentsBlock(labels: string[], incoterm?: string): str
       const i = l.indexOf(":");
       return i > 0 && i < 100 ? "**" + l.slice(0, i).trim() + ":**" + l.slice(i + 1) : "**" + l + "**";
     });
-  const lines = own.length ? own : [...STANDARD_LC_DOCUMENTS];
+  const lines = own.length ? own : [...(seller === "supplier" ? STANDARD_SUPPLIER_DOCUMENTS : STANDARD_LC_DOCUMENTS)];
   const isCif = (incoterm ?? "").toUpperCase() === "CIF";
   if (isCif && !lines.some((l) => /insurance/i.test(l))) lines.push(INSURANCE_LINE);
   return lines.map((l, i) => i + 1 + ". " + l).join("\n");
@@ -64,8 +78,8 @@ export function productLine(name: string | undefined, grade: string | undefined)
 }
 
 /** The documents required, as numbered capital-letter lines for the SWIFT MT700 field 46A. */
-export function lcDocumentsBlock(labels: string[], incoterm?: string): string {
-  return requiredDocumentsBlock(labels, incoterm)
+export function lcDocumentsBlock(labels: string[], incoterm?: string, seller: "finekarts" | "supplier" = "finekarts"): string {
+  return requiredDocumentsBlock(labels, incoterm, seller)
     .split("\n")
     .map((line) => line.replace(/\*\*/g, "").toUpperCase())
     .join("\n");

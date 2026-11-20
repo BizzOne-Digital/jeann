@@ -73,6 +73,18 @@ export const PLACEHOLDERS = [
   "sellerBankContact",
   "performanceBondPercent",
   "commission",
+  "sellerTelephone",
+  "sellerEmail",
+  "supplierRegNumber",
+  "finekartsRegNumber",
+  "supplierScoRef",
+  "supplierCapacity",
+  "shelfLife",
+  "partialShipments",
+  "transshipment",
+  "lcForm",
+  "consigneePhone",
+  "issuingBank",
 ] as const;
 
 export type TemplateBlock = { type?: string; content: string; order?: number };
@@ -186,6 +198,18 @@ export const PLACEHOLDER_LABELS: Record<string, string> = {
   deliveryTerms: "ETA",
   liquidatedDamages: "AMOUNT, e.g. 250,000",
   documentsAddress: "ADDRESS FOR ORIGINAL DOCUMENTS",
+  sellerTelephone: "SUPPLIER PHONE",
+  sellerEmail: "SUPPLIER CORPORATE EMAIL",
+  supplierRegNumber: "SUPPLIER REGISTRATION / EXPORT LICENSE NO.",
+  finekartsRegNumber: "ONTARIO / FEDERAL CORP. NO.",
+  supplierScoRef: "SUPPLIER SCO / OFFER REF. NO.",
+  supplierCapacity: "TITLE HOLDER / MANUFACTURER / REFINERY / MANDATED EXPORT SUPPLIER",
+  shelfLife: "12-24 MONTHS; STORE IN A COOL, DRY PLACE AWAY FROM DIRECT SUNLIGHT",
+  partialShipments: "ALLOWED / NOT ALLOWED",
+  transshipment: "ALLOWED / NOT ALLOWED",
+  lcForm: "IRREVOCABLE / IRREVOCABLE TRANSFERABLE",
+  consigneePhone: "CONSIGNEE PHONE",
+  issuingBank: "BUYER'S ISSUING BANK NAME, BRANCH & SWIFT BIC",
 };
 
 /**

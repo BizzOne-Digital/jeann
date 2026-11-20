@@ -5,7 +5,7 @@ import { publishClientSkeleton } from "@/lib/contracts/template-service";
 
 export const runtime = "nodejs";
 
-const schema = z.object({ key: z.enum(["sco_buyer", "icpo_buyer", "icpo_supplier", "spa_buyer", "lc_wording_buyer", "proforma_invoice_buyer"]) });
+const schema = z.object({ key: z.enum(["sco_buyer", "icpo_buyer", "icpo_supplier", "spa_buyer", "lc_wording_buyer", "proforma_invoice_buyer", "sco_supplier", "spa_supplier", "lc_wording_supplier", "proforma_invoice_supplier"]) });
 
 /** Admin: publish the client's skeleton for a document as a new version. */
 export async function POST(request: NextRequest) {

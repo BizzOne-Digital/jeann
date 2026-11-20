@@ -42,13 +42,18 @@ export async function publishClientSkeleton(key: string, actorUserId?: string) {
   const { PSA_SKELETON_BLOCKS } = await import("@/lib/contracts/psa-skeleton");
   const { LC_WORDING_SKELETON_BLOCKS } = await import("@/lib/contracts/lc-wording-skeleton");
   const { PROFORMA_SKELETON_BLOCKS } = await import("@/lib/contracts/proforma-skeleton");
+  const sup = await import("@/lib/contracts/supplier-skeletons");
   const skeletons: Record<string, { name: string; side: ContractSide; blocks: { type: string; content: string }[] }> = {
     sco_buyer: { name: "Soft Corporate Offer (SCO), client skeleton", side: "buyer", blocks: SCO_SKELETON_BLOCKS },
     icpo_buyer: { name: "ICPO, client skeleton (buyer portal)", side: "buyer", blocks: ICPO_SKELETON_BLOCKS },
     lc_wording_buyer: { name: "Letter of Credit wording (SWIFT MT700), client skeleton", side: "buyer", blocks: LC_WORDING_SKELETON_BLOCKS },
     proforma_invoice_buyer: { name: "Proforma Invoice, client skeleton", side: "buyer", blocks: PROFORMA_SKELETON_BLOCKS },
     spa_buyer: { name: "Sales and Purchase Agreement (PSA), client skeleton", side: "buyer", blocks: PSA_SKELETON_BLOCKS },
-    icpo_supplier: { name: "ICPO, client skeleton (supplier portal)", side: "supplier", blocks: ICPO_SKELETON_BLOCKS },
+    icpo_supplier: { name: "ICPO, client skeleton (supplier portal)", side: "supplier", blocks: sup.SUPPLIER_ICPO_SKELETON_BLOCKS },
+    sco_supplier: { name: "Supplier SCO, client skeleton (supplier portal)", side: "supplier", blocks: sup.SUPPLIER_SCO_SKELETON_BLOCKS },
+    spa_supplier: { name: "PSA, client skeleton (supplier portal)", side: "supplier", blocks: sup.SUPPLIER_PSA_SKELETON_BLOCKS },
+    lc_wording_supplier: { name: "Letter of Credit wording (SWIFT MT700), client skeleton (supplier portal)", side: "supplier", blocks: sup.SUPPLIER_LC_WORDING_SKELETON_BLOCKS },
+    proforma_invoice_supplier: { name: "Proforma Invoice, client skeleton (supplier portal)", side: "supplier", blocks: sup.SUPPLIER_PROFORMA_SKELETON_BLOCKS },
   };
   const skeleton = skeletons[key];
   if (!skeleton) throw new Error("unknown_skeleton");

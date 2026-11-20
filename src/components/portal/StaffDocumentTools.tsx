@@ -22,6 +22,18 @@ const STEP3_TYPES = [
 ];
 
 const DETAIL_FIELDS = [
+  { key: "supplierRegNumber", label: "Supplier registration / export licence no." },
+  { key: "sellerTelephone", label: "Supplier telephone" },
+  { key: "sellerEmail", label: "Supplier email" },
+  { key: "supplierScoRef", label: "Supplier SCO / offer reference" },
+  { key: "supplierCapacity", label: "Supplier capacity (title holder, manufacturer, refinery, mandated exporter)" },
+  { key: "finekartsRegNumber", label: "Finekarts corporation number" },
+  { key: "issuingBank", label: "Buyer's issuing bank (name, branch, SWIFT)" },
+  { key: "consigneePhone", label: "Consignee telephone" },
+  { key: "shelfLife", label: "Shelf life and storage" },
+  { key: "partialShipments", label: "Partial shipments (allowed / not allowed)" },
+  { key: "transshipment", label: "Transshipment (allowed / not allowed)" },
+  { key: "lcForm", label: "LC form (irrevocable / irrevocable transferable)" },
   { key: "sellerRepresentative", label: "Seller authorized representative" },
   { key: "buyerContact", label: "Buyer attention (contact person)" },
   { key: "buyerAddress", label: "Buyer registered address" },

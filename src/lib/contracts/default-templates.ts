@@ -4,6 +4,13 @@ import { ICPO_SKELETON_BLOCKS } from "@/lib/contracts/icpo-skeleton";
 import { PSA_SKELETON_BLOCKS } from "@/lib/contracts/psa-skeleton";
 import { LC_WORDING_SKELETON_BLOCKS } from "@/lib/contracts/lc-wording-skeleton";
 import { PROFORMA_SKELETON_BLOCKS } from "@/lib/contracts/proforma-skeleton";
+import {
+  SUPPLIER_ICPO_SKELETON_BLOCKS,
+  SUPPLIER_LC_WORDING_SKELETON_BLOCKS,
+  SUPPLIER_PROFORMA_SKELETON_BLOCKS,
+  SUPPLIER_PSA_SKELETON_BLOCKS,
+  SUPPLIER_SCO_SKELETON_BLOCKS,
+} from "@/lib/contracts/supplier-skeletons";
 
 type Block = { type: string; content: string };
 export type DefaultTemplate = {
@@ -55,20 +62,30 @@ const BODIES: Record<string, Block[]> = {
   ],
 };
 
+/** On the supplier portal Finekarts is the buyer, so these documents have their own wording. */
+const SUPPLIER_BODIES: Record<string, Block[]> = {
+  sco: SUPPLIER_SCO_SKELETON_BLOCKS,
+  icpo: SUPPLIER_ICPO_SKELETON_BLOCKS,
+  spa: SUPPLIER_PSA_SKELETON_BLOCKS,
+  lc_wording: SUPPLIER_LC_WORDING_SKELETON_BLOCKS,
+  proforma_invoice: SUPPLIER_PROFORMA_SKELETON_BLOCKS,
+};
+
 export function defaultTemplates(): DefaultTemplate[] {
   const out: DefaultTemplate[] = [];
   for (const side of ["buyer", "supplier"] as ContractSide[]) {
     const seen = new Set<string>();
     for (const step of contractFlow(side)) {
       for (const doc of step.documents) {
-        if (!doc.slug || seen.has(doc.slug) || !BODIES[doc.slug]) continue;
+        const body = (side === "supplier" ? SUPPLIER_BODIES[doc.slug ?? ""] : undefined) ?? BODIES[doc.slug ?? ""];
+        if (!doc.slug || seen.has(doc.slug) || !body) continue;
         seen.add(doc.slug);
         out.push({
           key: templateKeyFor(doc.slug, side),
           name: `${doc.fullName} (${side} portal)`,
           side,
           status: "published",
-          bodyBlocks: BODIES[doc.slug],
+          bodyBlocks: body,
         });
       }
     }

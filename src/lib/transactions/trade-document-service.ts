@@ -96,8 +96,10 @@ export async function buildDocumentPrefill(
     out.buyerEmail = FINEKARTS_DETAILS.email;
     out.buyerContact = FINEKARTS_DETAILS.representative;
     out.buyerSignatory = FINEKARTS_DETAILS.representative;
+    out.buyerTitle = FINEKARTS_DETAILS.representativeTitle;
     out.documentsAddress = FINEKARTS_DETAILS.courierAddress;
     if (orgAddress) out.sellerAddress = orgAddress;
+    if (org?.registrationNumber) out.supplierRegNumber = org.registrationNumber;
   } else {
     if (orgAddress) out.buyerAddress = orgAddress;
     if (org?.registrationNumber) out.buyerRegNumber = org.registrationNumber;
@@ -123,6 +125,9 @@ export async function buildDocumentPrefill(
       inspection: terms.inspectionCompany,
     });
   }
+
+  // The documents the seller must present are worded for whoever the seller is on this order.
+  const seller: "finekarts" | "supplier" = tx.side === "supplier" ? "supplier" : "finekarts";
 
   // Product-driven lines: they follow the product on the order, so changing the product changes them
   // and the document stays bank-compliant.
@@ -168,13 +173,13 @@ export async function buildDocumentPrefill(
     const docLabels = ((product.documentCategories ?? []) as { label: string; required?: boolean }[])
       .filter((d) => d.required !== false)
       .map((d) => d.label);
-    out.requiredDocuments = requiredDocumentsBlock(docLabels, String(out.incoterm ?? terms?.incoterm ?? ""));
-    out.lcDocuments = lcDocumentsBlock(docLabels, String(out.incoterm ?? terms?.incoterm ?? ""));
+    out.requiredDocuments = requiredDocumentsBlock(docLabels, String(out.incoterm ?? terms?.incoterm ?? ""), seller);
+    out.lcDocuments = lcDocumentsBlock(docLabels, String(out.incoterm ?? terms?.incoterm ?? ""), seller);
   } else {
     if (!out.inspection) out.inspection = DEFAULT_INSPECTION;
     const incoterm = String(out.incoterm ?? terms?.incoterm ?? "");
-    out.requiredDocuments = requiredDocumentsBlock([], incoterm);
-    out.lcDocuments = lcDocumentsBlock([], incoterm);
+    out.requiredDocuments = requiredDocumentsBlock([], incoterm, seller);
+    out.lcDocuments = lcDocumentsBlock([], incoterm, seller);
   }
 
   // The specification comes from the product. When the product has none, it is imported from the
@@ -311,6 +316,7 @@ export async function generateDocumentPdf(input: {
     if (v !== undefined && v !== null && v !== "") structuredData[k] = v;
   }
   structuredData._clauseTexts = input.clauseTexts ?? [];
+  structuredData._side = side;
   if (doc.documentType === "spa" && doc.transactionId) {
     if (input.lcDeadlineHours !== undefined) {
       await Transaction.updateOne({ _id: doc.transactionId }, { $set: { lcDeadlineHours: normalizeLcDeadlineHours(input.lcDeadlineHours) } });
@@ -483,7 +489,8 @@ async function buildPdf(input: {
 
   // Every PSA states the LC deadline, the amendment rule and how it is executed, so they are part of
   // the contract and not only shown on the portal.
-  if (input.documentType === "spa") {
+  // On the supplier portal the supplier decides the seller's terms, so Finekarts does not add clauses to the supplier's PSA.
+  if (input.documentType === "spa" && input.structuredData._side !== "supplier") {
     const present = [...(templateLines ?? []), ...input.clauseTexts];
     const missing = missingPsaClauses(present, normalizeLcDeadlineHours(input.structuredData._lcDeadlineHours));
     if (missing.length) {
