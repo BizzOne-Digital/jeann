@@ -52,7 +52,7 @@ export default function WorkspaceTransactionsPage() {
       <div className="mb-4 flex flex-wrap items-end gap-3">
         <input
           className="field"
-          placeholder="Search by company name or order number"
+          placeholder="Search by company name, order number or email"
           value={q}
           onChange={(e) => setQ(e.target.value)}
         />

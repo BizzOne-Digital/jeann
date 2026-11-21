@@ -9,7 +9,7 @@ function escapeRegex(s: string) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-/** Staff transaction records: search by order number or company name, and filter by date. */
+/** Staff transaction records: search by order number, company name or member email, and filter by date. */
 export async function GET(request: NextRequest) {
   try {
     const auth = await requireApiAuth({ permissions: "transactions:read" });
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Workspace access required." }, { status: 403 });
     }
 
-    const { Transaction, Organization } = await import("@/models");
+    const { Transaction, Organization, User, OrganizationMembership } = await import("@/models");
     const sp = request.nextUrl.searchParams;
     const filter: Record<string, unknown> = { deletedAt: null };
 
@@ -26,9 +26,18 @@ export async function GET(request: NextRequest) {
     if (q) {
       const rx = { $regex: escapeRegex(q), $options: "i" };
       const orgs = await Organization.find({ legalName: rx }).select("_id").limit(200).lean();
+      // Archived records are also found by the email address of anyone who belongs to the company
+      // (removed members included, because the record must stay retrievable).
+      const users = await User.find({ email: rx }).select("_id").limit(200).lean();
+      const memberships = users.length
+        ? await OrganizationMembership.find({ userId: { $in: users.map((u) => u._id) } })
+            .select("organizationId")
+            .limit(400)
+            .lean()
+        : [];
       filter.$or = [
         { transactionNumber: rx },
-        { organizationId: { $in: orgs.map((o) => o._id) } },
+        { organizationId: { $in: [...orgs.map((o) => o._id), ...memberships.map((m) => m.organizationId)] } },
       ];
     }
     const status = sp.get("status");
