@@ -29,6 +29,8 @@ export const SHIPPING_DOCUMENT_CATALOGUE = {
   phytosanitary_certificate: "Phytosanitary Certificate",
   health_veterinary_certificate: "Health / Veterinary Certificate",
   fumigation_certificate: "Fumigation / Pest Control Certificate",
+  haccp_certificate: "HACCP Certificate",
+  label_documentation: "Label Documentation (required at port of discharge)",
   safety_data_sheet: "Safety Data Sheet (SDS/MSDS)",
   dangerous_goods_declaration: "Dangerous Goods Declaration (IMO/IATA)",
   insurance_certificate: "Insurance Certificate",

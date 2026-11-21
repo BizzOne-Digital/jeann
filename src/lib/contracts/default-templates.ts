@@ -57,8 +57,8 @@ const BODIES: Record<string, Block[]> = {
     H("Commercial invoice"),
     PARTIES,
     GOODS,
-    P("Invoice number: ____________________\nShipment / bill of lading reference: ____________________\nAmount due: {{totalValue}}"),
-    P("Goods are invoiced as shipped, on the terms stated above. Payment is made through the agreed banking instrument."),
+    P("Commercial Invoice No.: {{commercialInvoiceNumber}}\nAssociated PSA Ref.: {{psaRef}}\nShipment / bill of lading reference: ____________________\nAmount due: {{totalValue}}"),
+    P("This is the final invoice for the goods as shipped. Quantity and amount must match the shipped quantity and the supplier's shipping documents. It is presented to the bank together with the documents received from the supplier to request the final payment."),
   ],
 };
 

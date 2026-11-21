@@ -213,6 +213,8 @@ export async function buildDocumentPrefill(
   if (txNumber) {
     out.psaRef = txNumber;
     out.proformaNumber = txNumber + "-PI";
+    // The Commercial Invoice is a separate document from the Proforma Invoice and has its own number.
+    out.commercialInvoiceNumber = txNumber + "-CI";
   }
   if (typeof out.productLine === "string") out.productLineUpper = out.productLine.toUpperCase();
   if (terms?.totalEstimatedValue) {
