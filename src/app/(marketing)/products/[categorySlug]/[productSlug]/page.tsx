@@ -109,6 +109,7 @@ export default async function ProductPage({ params }: Props) {
     `${product.name} reference`;
 
   const contentBoxes =
+    product.admin?.contentBoxes ??
     sugarMarketing?.contentBoxes ??
     oilMarketing?.contentBoxes ??
     pulseMarketing?.contentBoxes ??

@@ -53,6 +53,16 @@ export const adminProductSchema = z.object({
     .max(300)
     .optional()
     .refine((v) => !v || parseYoutubeId(v) !== "", "Enter a YouTube link or the 11-character video ID."),
+  /** Sections at the bottom of the product page. An empty list keeps the built-in sections. */
+  contentBoxes: z
+    .array(
+      z.object({
+        title: z.string().trim().min(1, "Each section needs a title.").max(200),
+        body: z.string().trim().min(1, "Each section needs text.").max(3000),
+      }),
+    )
+    .max(12)
+    .optional(),
   /** Extra photos after the main image, in display order. */
   galleryImages: z.array(z.string().trim().min(1).max(500)).max(11).optional(),
   /** Packaging types offered for this product. When omitted the saved packaging is left unchanged. */
@@ -86,6 +96,7 @@ export function productInputToMongo(input: AdminProductInput) {
     // These are stored as given ("" or [] clears them) so the admin can go back to the built-in content.
     ...(input.description !== undefined ? { description: input.description } : {}),
     ...(input.highlights !== undefined ? { highlights: input.highlights } : {}),
+    ...(input.contentBoxes !== undefined ? { contentBoxes: input.contentBoxes } : {}),
     ...(input.youtubeVideo !== undefined ? { youtubeVideoId: parseYoutubeId(input.youtubeVideo) } : {}),
     ...(input.packagingOptionIds !== undefined ? { packagingOptionIds: input.packagingOptionIds } : {}),
     displayOrder: input.displayOrder,

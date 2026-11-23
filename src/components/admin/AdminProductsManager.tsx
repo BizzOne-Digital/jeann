@@ -23,12 +23,20 @@ type FormState = {
   highlights: string;
   youtubeVideo: string;
   packagingOptionIds: string[];
+  /** Sections at the bottom of the product page, as shown now (built-in text until the admin changes it). */
+  contentBoxes: { title: string; body: string }[];
+  /** The built-in sections, used to tell whether the admin changed anything. */
+  builtInContentBoxes: { title: string; body: string }[];
   specification: string;
   requiredDocuments: string;
   code: string;
   hsCode: string;
   displayOrder: number;
 };
+
+function sameBoxes(a: { title: string; body: string }[], b: { title: string; body: string }[]) {
+  return a.length === b.length && a.every((x, i) => x.title.trim() === b[i].title.trim() && x.body.trim() === b[i].body.trim());
+}
 
 const emptyForm = (categoryId: string): FormState => ({
   slug: "",
@@ -49,6 +57,8 @@ const emptyForm = (categoryId: string): FormState => ({
   highlights: "",
   youtubeVideo: "",
   packagingOptionIds: [],
+  contentBoxes: [],
+  builtInContentBoxes: [],
   specification: "",
   requiredDocuments: "",
   code: "",
@@ -76,6 +86,8 @@ function itemToForm(item: AdminProductItem): FormState {
     highlights: item.highlights.join("\n"),
     youtubeVideo: item.youtubeVideoId,
     packagingOptionIds: item.packagingOptionIds,
+    contentBoxes: item.contentBoxes.length ? item.contentBoxes : item.builtInContentBoxes,
+    builtInContentBoxes: item.builtInContentBoxes,
     specification: "",
     requiredDocuments: "",
     code: item.code,
@@ -164,6 +176,13 @@ export function AdminProductsManager({
       highlights: splitLines(current.highlights),
       youtubeVideo: current.youtubeVideo.trim(),
       packagingOptionIds: current.packagingOptionIds,
+      // Unchanged built-in text is not saved, so the page keeps following the built-in content.
+      contentBoxes: (() => {
+        const boxes = current.contentBoxes
+          .map((b) => ({ title: b.title.trim(), body: b.body.trim() }))
+          .filter((b) => b.title || b.body);
+        return sameBoxes(boxes, current.builtInContentBoxes) ? [] : boxes;
+      })(),
       specification: current.specification,
       requiredDocuments: splitLines(current.requiredDocuments),
       code: current.code.trim().toUpperCase(),
@@ -494,6 +513,68 @@ export function AdminProductsManager({
             Leave empty to keep the built-in video.
           </span>
         </label>
+
+        <div className="lg:col-span-2 space-y-3">
+          <p className="label">Sections at the bottom of the product page</p>
+          <p className="text-xs font-normal text-[var(--stone)]">
+            This is the text shown on the product page now. Edit it here to change it. Each section needs a title and text. Use Reset to go back to the built-in text.
+          </p>
+          {form.contentBoxes.map((box, i) => (
+            <div key={i} className="space-y-2 rounded-md border border-[var(--line)] p-3">
+              <input
+                className="field"
+                value={box.title}
+                placeholder={`Section ${i + 1} title`}
+                maxLength={200}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    contentBoxes: form.contentBoxes.map((b, j) => (j === i ? { ...b, title: e.target.value } : b)),
+                  })
+                }
+              />
+              <textarea
+                className="field min-h-24"
+                value={box.body}
+                placeholder="Section text"
+                maxLength={3000}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    contentBoxes: form.contentBoxes.map((b, j) => (j === i ? { ...b, body: e.target.value } : b)),
+                  })
+                }
+              />
+              <button
+                type="button"
+                className="text-sm text-red-700 underline"
+                onClick={() => setForm({ ...form, contentBoxes: form.contentBoxes.filter((_, j) => j !== i) })}
+              >
+                Remove section
+              </button>
+            </div>
+          ))}
+          <div className="flex flex-wrap gap-4">
+            {form.contentBoxes.length < 12 ? (
+              <button
+                type="button"
+                className="text-sm font-semibold text-[var(--navy)] underline"
+                onClick={() => setForm({ ...form, contentBoxes: [...form.contentBoxes, { title: "", body: "" }] })}
+              >
+                Add section
+              </button>
+            ) : null}
+            {form.builtInContentBoxes.length ? (
+              <button
+                type="button"
+                className="text-sm text-[var(--ocean)] underline"
+                onClick={() => setForm({ ...form, contentBoxes: form.builtInContentBoxes })}
+              >
+                Reset to built-in text
+              </button>
+            ) : null}
+          </div>
+        </div>
 
         {packagingTypes.length ? (
           <fieldset className="label lg:col-span-2">

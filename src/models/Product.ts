@@ -44,6 +44,8 @@ export interface IProduct {
   highlights?: string[];
   /** YouTube video ID (11 characters) shown on the public product page. Set in the admin. */
   youtubeVideoId?: string;
+  /** The sections at the bottom of the public product page. Empty means the built-in sections are used. */
+  contentBoxes?: { title: string; body: string }[];
   status: ProductStatus;
   availabilityText?: string;
   originOptions: string[];
@@ -111,6 +113,7 @@ const productSchema = new Schema<IProduct>(
     description: { type: String },
     highlights: [{ type: String }],
     youtubeVideoId: { type: String, trim: true },
+    contentBoxes: [{ _id: false, title: { type: String, required: true }, body: { type: String, required: true } }],
     status: {
       type: String,
       enum: ["draft", "pending_verification", "published", "archived"],

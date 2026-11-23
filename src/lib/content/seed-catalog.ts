@@ -34,6 +34,8 @@ export type SeedProduct = {
     /** All photos in display order (main image first). */
     gallery?: string[];
     packaging?: string[];
+    /** Sections at the bottom of the product page. */
+    contentBoxes?: { title: string; body: string }[];
   };
 };
 

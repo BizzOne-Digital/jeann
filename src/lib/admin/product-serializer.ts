@@ -1,4 +1,5 @@
 import type { ProductCategoryLean, ProductLean } from "@/models";
+import { getBuiltInContentBoxes } from "@/lib/content/product-content-boxes";
 
 export type AdminProductItem = {
   _id: string;
@@ -23,6 +24,10 @@ export type AdminProductItem = {
   highlights: string[];
   youtubeVideoId: string;
   packagingOptionIds: string[];
+  /** Sections saved by an admin (empty when the built-in sections are in use). */
+  contentBoxes: { title: string; body: string }[];
+  /** The sections live on the product page by default, shown so the admin can read and edit them. */
+  builtInContentBoxes: { title: string; body: string }[];
   code: string;
   hsCode: string;
   displayOrder: number;
@@ -60,6 +65,11 @@ export function serializeProduct(
     highlights: product.highlights ?? [],
     youtubeVideoId: product.youtubeVideoId ?? "",
     packagingOptionIds: (product.packagingOptionIds ?? []).map(String),
+    contentBoxes: (product.contentBoxes ?? []).map((b) => ({ title: b.title, body: b.body })),
+    builtInContentBoxes: getBuiltInContentBoxes(product.slug, product.name, category?.name ?? "").map((b) => ({
+      title: b.title,
+      body: b.body,
+    })),
     code: product.code ?? "",
     hsCode: product.hsCode ?? "",
     displayOrder: product.displayOrder ?? 0,

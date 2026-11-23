@@ -34,6 +34,7 @@ function mongoProductToSeed(
     highlights?: string[];
     youtubeVideoId?: string;
     packagingOptionIds?: unknown[];
+    contentBoxes?: { title: string; body: string }[];
   },
   seedFallback?: SeedProduct,
   packagingNames: Map<string, string> = new Map(),
@@ -54,6 +55,9 @@ function mongoProductToSeed(
   const adminGallery = (product.gallery ?? []).map((g) => g.storageKey?.trim()).filter(Boolean);
   if (adminGallery.length > 1) admin.gallery = adminGallery;
   if (adminPackaging.length) admin.packaging = adminPackaging;
+  if (product.contentBoxes?.length) {
+    admin.contentBoxes = product.contentBoxes.map((b) => ({ title: b.title, body: b.body }));
+  }
 
   return {
     slug: product.slug,
