@@ -16,7 +16,7 @@ type TaxResult = { status: string; message?: string; estimatedTax?: string; rate
 const TABS = [
   { id: "contracts", label: "1. Contract totals" },
   { id: "delivery", label: "2. Monthly delivery" },
-  { id: "canada", label: "Purchase in Canada (HST/GST)" },
+  { id: "canada", label: "Canada (HST/GST)" },
   { id: "rollups", label: "Monthly / Quarterly / Yearly" },
 ] as const;
 
@@ -115,7 +115,8 @@ export function FinanceTransactionTabs({ transactionId }: { transactionId?: stri
             <thead>
               <tr>
                 <th className={th}>Transaction</th><th className={th}>Month</th><th className={th}>Cur.</th><th className={th}>Total</th><th className={th}>Purchasing</th>
-                {tab === "canada" ? <th className={th}>HST/GST {Number(data.hst.rate) * 100}%</th> : null}
+                {tab === "canada" ? <th className={th}>HST/GST paid {Number(data.hst.rate) * 100}%</th> : null}
+                {tab === "canada" ? <th className={th}>HST/GST received {Number(data.hst.rate) * 100}%</th> : null}
                 <th className={th}>Banking fee</th><th className={th}>Agent fee</th><th className={th}>Other</th><th className={th}>Profit</th>
               </tr>
             </thead>
@@ -126,6 +127,7 @@ export function FinanceTransactionTabs({ transactionId }: { transactionId?: stri
                   <td className={td}>{r.periodDate.slice(0, 7)} <span className="text-xs text-[var(--stone)]">({SOURCE_LABEL[r.periodSource]})</span></td>
                   <td className={td}>{r.currency}</td><td className={td}>{fmt(r.contractTotal)}</td><td className={td}>{fmt(r.purchasingCost)}</td>
                   {tab === "canada" ? <td className={td}>{fmt(r.hstAmount)}</td> : null}
+                  {tab === "canada" ? <td className={td}>{fmt(r.hstReceived)}</td> : null}
                   <td className={td}>{fmt(r.bankingFees)}</td><td className={td}>{fmt(r.agentFees)}</td><td className={td}>{fmt(r.otherCosts)}</td>
                   <td className={td}>{fmt(r.profit)}{r.unconvertedCosts > 0 ? <span title="Some costs are in another currency and were excluded"> *</span> : null}</td>
                 </tr>
@@ -133,7 +135,7 @@ export function FinanceTransactionTabs({ transactionId }: { transactionId?: stri
             </tbody>
           </table>
           <p className="p-3 text-xs text-[var(--stone)]">
-            Profit deducts HST/GST on Canadian supplier purchases (rate {Number(data.hst.rate) * 100}%, source: {data.hst.source === "tax_configuration" ? "tax configuration" : "default 13%"}). Month = delivery date, else first invoice, else creation date. * = costs in a different currency excluded.
+            HST/GST paid applies when the supplier is in Canada and is deducted from profit. HST/GST received applies when the buyer is in Canada and is not part of profit. No tax applies when the other party is outside Canada (rate {Number(data.hst.rate) * 100}%, source: {data.hst.source === "tax_configuration" ? "tax configuration" : "default 13%"}). Month = delivery date, else first invoice, else creation date. * = costs in a different currency excluded.
           </p>
         </div>
       ) : null}

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   buildTransactionFinanceRow,
   computeCanadaHst,
+  computeCanadaHstReceived,
   matchesSearch,
   periodKey,
   rollupRows,
@@ -84,5 +85,25 @@ describe("rate normalization and currency grouping", () => {
   });
   it("uses a custom HST rate", () => {
     expect(computeCanadaHst("1000.00", true, "0.15")).toBe("150.00");
+  });
+});
+
+describe("canada HST received from a Canadian buyer", () => {
+  it("receives 13% on the contract total only when the buyer is in Canada", () => {
+    expect(computeCanadaHstReceived("10000.00", true)).toBe("1300.00");
+    expect(computeCanadaHstReceived("10000.00", false)).toBe("0.00");
+  });
+  it("shows what is paid and what is received without changing profit", () => {
+    const both = buildTransactionFinanceRow({ ...base, canadianSupplier: true, canadianBuyer: true });
+    expect(both.hstAmount).toBe("910.00");
+    expect(both.hstReceived).toBe("1300.00");
+    expect(both.profit).toBe("1790.00");
+    const buyerOnly = buildTransactionFinanceRow({ ...base, canadianSupplier: false, canadianBuyer: true });
+    expect(buyerOnly.hstAmount).toBe("0.00");
+    expect(buyerOnly.hstReceived).toBe("1300.00");
+    expect(buyerOnly.profit).toBe("2700.00");
+    const neither = buildTransactionFinanceRow({ ...base, canadianSupplier: false, canadianBuyer: false });
+    expect(neither.hstReceived).toBe("0.00");
+    expect(neither.hstRate).toBe("0");
   });
 });

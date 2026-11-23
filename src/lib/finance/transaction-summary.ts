@@ -27,8 +27,10 @@ export interface TransactionFinanceInput {
   agentFees: string;
   /** Other posted direct costs (freight, inspection, etc.); defaults to 0. */
   otherCosts?: string;
-  /** True when the supplier organisation is in Canada (local purchase). */
+  /** True when the supplier organisation is in Canada (local purchase): Finekarts pays HST/GST. */
   canadianSupplier: boolean;
+  /** True when the buyer organisation is in Canada (local sale): Finekarts receives HST/GST from the buyer. */
+  canadianBuyer?: boolean;
   /** Optional override of HST rate (decimal string). */
   hstRate?: string;
 }
@@ -50,9 +52,12 @@ export interface TransactionFinanceRow {
   agentFees: string;
   otherCosts: string;
   canadianSupplier: boolean;
+  canadianBuyer: boolean;
   hstRate: string;
-  /** HST/GST on local Canadian purchase, deducted automatically; "0.00" when not applicable. */
+  /** HST/GST on local Canadian purchase (paid to the supplier), deducted from profit; "0.00" when not applicable. */
   hstAmount: string;
+  /** HST/GST received from a Canadian buyer on a local sale; "0.00" when the buyer is not in Canada. Not part of profit. */
+  hstReceived: string;
   /** Profit = contract total - purchasing - banking - agent - other costs - HST. */
   profit: string;
 }
@@ -62,9 +67,17 @@ export function computeCanadaHst(purchasingCost: string, canadian: boolean, rate
   return money(purchasingCost).times(rate).toDecimalPlaces(2).toFixed(2);
 }
 
+/** Sales tax received from a buyer in Canada, on the contract total. No tax when the buyer is outside Canada. */
+export function computeCanadaHstReceived(contractTotal: string, canadianBuyer: boolean, rate = CANADA_HST_RATE) {
+  if (!canadianBuyer) return "0.00";
+  return money(contractTotal).times(rate).toDecimalPlaces(2).toFixed(2);
+}
+
 export function buildTransactionFinanceRow(input: TransactionFinanceInput): TransactionFinanceRow {
   const rate = input.hstRate ?? CANADA_HST_RATE;
   const hst = computeCanadaHst(input.purchasingCost, input.canadianSupplier, rate);
+  const canadianBuyer = Boolean(input.canadianBuyer);
+  const hstReceived = computeCanadaHstReceived(input.contractTotal, canadianBuyer, rate);
   const other = input.otherCosts ?? "0";
   const profit = money(input.contractTotal)
     .minus(input.purchasingCost)
@@ -91,8 +104,10 @@ export function buildTransactionFinanceRow(input: TransactionFinanceInput): Tran
     agentFees: input.agentFees,
     otherCosts: other,
     canadianSupplier: input.canadianSupplier,
-    hstRate: input.canadianSupplier ? rate : "0",
+    canadianBuyer,
+    hstRate: input.canadianSupplier || canadianBuyer ? rate : "0",
     hstAmount: hst,
+    hstReceived,
     profit,
   };
 }

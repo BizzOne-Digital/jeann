@@ -168,6 +168,7 @@ export async function loadTransactionFinanceRows(filter: FinanceSummaryFilter = 
       agentFees: agent.toFixed(2),
       otherCosts: other.toFixed(2),
       canadianSupplier: supplierOrg?.country === "CA",
+      canadianBuyer: buyerOrgId ? orgById.get(String(buyerOrgId))?.country === "CA" : false,
     });
   });
 
@@ -188,9 +189,9 @@ export async function buildFinanceSummary(filter: FinanceSummaryFilter) {
   return {
     rows,
     hst,
-    canadaRows: rows.filter((r) => r.canadianSupplier),
+    canadaRows: rows.filter((r) => r.canadianSupplier || r.canadianBuyer),
     rollups,
     disclaimer:
-      "Operational figures as recorded; HST/GST at 13% is applied automatically to purchases from Canadian suppliers. Not audited and not an official tax filing.",
+      "Operational figures as recorded; HST/GST at 13% is paid on purchases from Canadian suppliers (deducted from profit) and received on sales to Canadian buyers (shown separately, not part of profit). No tax applies when the other party is outside Canada. Not audited and not an official tax filing.",
   };
 }
