@@ -19,12 +19,12 @@ const createSchema = z.object({
   packaging: z.string().optional(),
 });
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     const auth = await requireApiAuth({ permissions: "shipments:read" });
     if ("error" in auth) return auth.error;
 
-    const { ShipmentLot, Transaction } = await import("@/models");
+    const { ShipmentLot, Transaction, Organization } = await import("@/models");
     const ctx = auth.ctx;
     const isInternal = ctx.isInternal;
 
@@ -46,7 +46,33 @@ export async function GET() {
       };
     }
 
-    const items = await ShipmentLot.find(query).sort({ createdAt: -1 }).limit(100).lean();
+    // ?active=1 keeps only the shipments of active transactions.
+    if (request.nextUrl.searchParams.get("active") === "1") {
+      const activeTxs = await Transaction.find({ status: "active", deletedAt: null }).select("_id").lean();
+      const activeIds = new Set(activeTxs.map((t) => String(t._id)));
+      const scoped = query.transactionId as { $in: unknown[] } | undefined;
+      const allowed = scoped
+        ? scoped.$in.filter((id) => activeIds.has(String(id)))
+        : activeTxs.map((t) => t._id);
+      query = { ...query, transactionId: { $in: allowed } };
+    }
+
+    const items = await ShipmentLot.find(query).sort({ createdAt: -1 }).limit(300).lean();
+
+    // Every lot is labelled with its own transaction, so lots of different trades are never mixed.
+    const lotTxs = items.length
+      ? await Transaction.find({ _id: { $in: [...new Set(items.map((l) => String(l.transactionId)))] } })
+          .select("transactionNumber organizationId status")
+          .lean()
+      : [];
+    const txById = new Map(lotTxs.map((t) => [String(t._id), t]));
+    const orgNames = new Map<string, string>();
+    if (isInternal && lotTxs.length) {
+      const orgs = await Organization.find({ _id: { $in: [...new Set(lotTxs.map((t) => String(t.organizationId)))] } })
+        .select("legalName")
+        .lean();
+      for (const o of orgs) orgNames.set(String(o._id), o.legalName);
+    }
 
     // Monitoring data (staff / CEO / GM only): latest tracking event + tracking numbers per lot.
     const latestByLot = new Map<string, { eventType: string; eventTimestamp: Date; location?: string; confidence: string }>();
@@ -89,6 +115,11 @@ export async function GET() {
         id: String(lot._id),
         shipmentLotNumber: lot.shipmentLotNumber,
         transactionId: String(lot.transactionId),
+        transactionNumber: txById.get(String(lot.transactionId))?.transactionNumber,
+        transactionStatus: txById.get(String(lot.transactionId))?.status,
+        companyName: isInternal
+          ? orgNames.get(String(txById.get(String(lot.transactionId))?.organizationId))
+          : undefined,
         transactionSide: lot.transactionSide,
         plannedQuantity: lot.plannedQuantity?.toString(),
         quantityUnit: lot.quantityUnit,

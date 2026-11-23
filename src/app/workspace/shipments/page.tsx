@@ -7,7 +7,7 @@ export default function WorkspaceShipmentsPage() {
       title="Shipment lots"
       description="Internal shipment operations — buyer and supplier lots remain separate records linked only through authorized allocations."
     >
-      <ShipmentLotsList detailBasePath="/workspace/shipments" />
+      <ShipmentLotsList detailBasePath="/workspace/shipments" activeOnlyDefault />
     </PortalPage>
   );
 }
