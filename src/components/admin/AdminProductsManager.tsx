@@ -18,6 +18,11 @@ type FormState = {
   minOrderText: string;
   internalPrice: string;
   image: string;
+  galleryImages: string[];
+  description: string;
+  highlights: string;
+  youtubeVideo: string;
+  packagingOptionIds: string[];
   specification: string;
   requiredDocuments: string;
   code: string;
@@ -39,6 +44,11 @@ const emptyForm = (categoryId: string): FormState => ({
   minOrderText: "",
   internalPrice: "",
   image: "",
+  galleryImages: [],
+  description: "",
+  highlights: "",
+  youtubeVideo: "",
+  packagingOptionIds: [],
   specification: "",
   requiredDocuments: "",
   code: "",
@@ -61,6 +71,11 @@ function itemToForm(item: AdminProductItem): FormState {
     minOrderText: item.minOrderText,
     internalPrice: item.internalPrice,
     image: item.image,
+    galleryImages: item.galleryImages,
+    description: item.description,
+    highlights: item.highlights.join("\n"),
+    youtubeVideo: item.youtubeVideoId,
+    packagingOptionIds: item.packagingOptionIds,
     specification: "",
     requiredDocuments: "",
     code: item.code,
@@ -79,9 +94,11 @@ function splitLines(value: string) {
 export function AdminProductsManager({
   initialProducts,
   initialCategories,
+  packagingTypes = [],
 }: {
   initialProducts: AdminProductItem[];
   initialCategories: AdminCategoryOption[];
+  packagingTypes?: { _id: string; name: string }[];
 }) {
   const [products, setProducts] = useState(initialProducts);
   const [categories] = useState(initialCategories);
@@ -142,6 +159,11 @@ export function AdminProductsManager({
       minOrderText: current.minOrderText.trim(),
       internalPrice: current.internalPrice.trim(),
       image: current.image.trim(),
+      galleryImages: current.galleryImages.map((s) => s.trim()).filter(Boolean),
+      description: current.description.trim(),
+      highlights: splitLines(current.highlights),
+      youtubeVideo: current.youtubeVideo.trim(),
+      packagingOptionIds: current.packagingOptionIds,
       specification: current.specification,
       requiredDocuments: splitLines(current.requiredDocuments),
       code: current.code.trim().toUpperCase(),
@@ -167,11 +189,12 @@ export function AdminProductsManager({
       },
     );
 
-    const data = (await res.json()) as { error?: string };
+    const data = (await res.json()) as { error?: string; issues?: { fieldErrors?: Record<string, string[]> } };
     setSaving(false);
 
     if (!res.ok) {
-      setError(data.error || "Unable to save product.");
+      const firstIssue = Object.values(data.issues?.fieldErrors ?? {})[0]?.[0];
+      setError(data.error === "Invalid input" && firstIssue ? firstIssue : data.error || "Unable to save product.");
       return;
     }
 
@@ -400,6 +423,105 @@ export function AdminProductsManager({
           onChange={(url) => setForm({ ...form, image: url })}
           helpText="Upload a product photo. Stored in MongoDB — works after Vercel deploy."
         />
+
+        <div className="lg:col-span-2 space-y-3">
+          <p className="label">More photos (shown in the product gallery, in this order)</p>
+          {form.galleryImages.map((src, i) => (
+            <div key={i} className="flex items-end gap-3">
+              <div className="flex-1">
+                <UploadedImageField
+                  label={`Photo ${i + 2}`}
+                  folder="products"
+                  value={src}
+                  onChange={(url) =>
+                    setForm({ ...form, galleryImages: form.galleryImages.map((s, j) => (j === i ? url : s)) })
+                  }
+                />
+              </div>
+              <button
+                type="button"
+                className="pb-2 text-sm text-red-700 underline"
+                onClick={() => setForm({ ...form, galleryImages: form.galleryImages.filter((_, j) => j !== i) })}
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+          {form.galleryImages.length < 11 ? (
+            <button
+              type="button"
+              className="text-sm font-semibold text-[var(--navy)] underline"
+              onClick={() => setForm({ ...form, galleryImages: [...form.galleryImages, ""] })}
+            >
+              Add another photo
+            </button>
+          ) : null}
+        </div>
+
+        <label className="label lg:col-span-2">
+          Product description (shown on the product page)
+          <textarea
+            className="field mt-1 min-h-28"
+            value={form.description}
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
+          />
+          <span className="mt-1 block text-xs font-normal text-[var(--stone)]">
+            Leave empty to keep the built-in description.
+          </span>
+        </label>
+
+        <label className="label lg:col-span-2">
+          Highlights (one per line, shown as bullet points)
+          <textarea
+            className="field mt-1 min-h-24"
+            value={form.highlights}
+            onChange={(e) => setForm({ ...form, highlights: e.target.value })}
+          />
+          <span className="mt-1 block text-xs font-normal text-[var(--stone)]">
+            Up to 12 lines. Leave empty to keep the built-in highlights.
+          </span>
+        </label>
+
+        <label className="label lg:col-span-2">
+          YouTube video (link or video ID)
+          <input
+            className="field mt-1"
+            value={form.youtubeVideo}
+            onChange={(e) => setForm({ ...form, youtubeVideo: e.target.value })}
+            placeholder="https://www.youtube.com/watch?v=..."
+          />
+          <span className="mt-1 block text-xs font-normal text-[var(--stone)]">
+            Leave empty to keep the built-in video.
+          </span>
+        </label>
+
+        {packagingTypes.length ? (
+          <fieldset className="label lg:col-span-2">
+            <legend>Packaging offered for this product</legend>
+            <div className="mt-2 flex flex-wrap gap-x-5 gap-y-2">
+              {packagingTypes.map((p) => (
+                <label key={p._id} className="flex items-center gap-2 text-sm font-normal">
+                  <input
+                    type="checkbox"
+                    checked={form.packagingOptionIds.includes(p._id)}
+                    onChange={(e) =>
+                      setForm({
+                        ...form,
+                        packagingOptionIds: e.target.checked
+                          ? [...form.packagingOptionIds, p._id]
+                          : form.packagingOptionIds.filter((id) => id !== p._id),
+                      })
+                    }
+                  />
+                  {p.name}
+                </label>
+              ))}
+            </div>
+            <span className="mt-1 block text-xs font-normal text-[var(--stone)]">
+              Shown on the product page and used in the packaging line of generated documents. Leave all unticked to keep the built-in packaging.
+            </span>
+          </fieldset>
+        ) : null}
 
         <label className="label">
           Display order

@@ -17,6 +17,12 @@ export type AdminProductItem = {
   minOrderText: string;
   internalPrice: string;
   image: string;
+  /** Photos after the main image. */
+  galleryImages: string[];
+  description: string;
+  highlights: string[];
+  youtubeVideoId: string;
+  packagingOptionIds: string[];
   code: string;
   hsCode: string;
   displayOrder: number;
@@ -49,6 +55,11 @@ export function serializeProduct(
     minOrderText: product.minOrderText ?? "",
     internalPrice: product.internalPrice ?? "",
     image: product.gallery?.[0]?.storageKey ?? "",
+    galleryImages: (product.gallery ?? []).slice(1).map((g) => g.storageKey),
+    description: product.description ?? "",
+    highlights: product.highlights ?? [],
+    youtubeVideoId: product.youtubeVideoId ?? "",
+    packagingOptionIds: (product.packagingOptionIds ?? []).map(String),
     code: product.code ?? "",
     hsCode: product.hsCode ?? "",
     displayOrder: product.displayOrder ?? 0,

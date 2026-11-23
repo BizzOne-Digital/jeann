@@ -23,6 +23,18 @@ export type SeedProduct = {
   image?: string;
   youtubeVideoId?: string;
   highlights?: string[];
+  /**
+   * Values set by an admin in the back office. When present they take priority over the
+   * built-in content on the public product page. Not used by the built-in seed data.
+   */
+  admin?: {
+    description?: string;
+    highlights?: string[];
+    youtubeVideoId?: string;
+    /** All photos in display order (main image first). */
+    gallery?: string[];
+    packaging?: string[];
+  };
 };
 
 export type SeedCategory = {

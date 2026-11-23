@@ -13,13 +13,16 @@ export default async function AdminProductsPage() {
 
   let initialProducts: ReturnType<typeof serializeProduct>[] = [];
   let initialCategories: ReturnType<typeof serializeCategory>[] = [];
+  let packagingTypes: { _id: string; name: string }[] = [];
 
   if (conn) {
-    const { Product, ProductCategory } = await import("@/models");
-    const [products, categories] = await Promise.all([
+    const { Product, ProductCategory, PackagingType } = await import("@/models");
+    const [products, categories, packaging] = await Promise.all([
       Product.find({ deletedAt: null }).sort({ displayOrder: 1, name: 1 }).lean(),
       ProductCategory.find({ deletedAt: null }).sort({ displayOrder: 1, name: 1 }).lean(),
+      PackagingType.find({ status: "active", deletedAt: null }).sort({ name: 1 }).select("name").lean(),
     ]);
+    packagingTypes = packaging.map((p) => ({ _id: String(p._id), name: p.name }));
     const categoryById = new Map(categories.map((category) => [String(category._id), category]));
     initialProducts = products.map((product) =>
       serializeProduct(product, categoryById.get(String(product.categoryId))),
@@ -53,6 +56,7 @@ export default async function AdminProductsPage() {
           <AdminProductsManager
             initialProducts={initialProducts}
             initialCategories={initialCategories}
+            packagingTypes={packagingTypes}
           />
         )}
       </div>

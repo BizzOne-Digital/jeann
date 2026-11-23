@@ -38,6 +38,12 @@ export interface IProduct {
   slug: string;
   name: string;
   overview?: string;
+  /** Long description shown on the public product page. Set in the admin; overrides the built-in text. */
+  description?: string;
+  /** Bullet highlights shown on the public product page. Set in the admin. */
+  highlights?: string[];
+  /** YouTube video ID (11 characters) shown on the public product page. Set in the admin. */
+  youtubeVideoId?: string;
   status: ProductStatus;
   availabilityText?: string;
   originOptions: string[];
@@ -102,6 +108,9 @@ const productSchema = new Schema<IProduct>(
     slug: { type: String, required: true, lowercase: true, trim: true },
     name: { type: String, required: true, trim: true },
     overview: { type: String },
+    description: { type: String },
+    highlights: [{ type: String }],
+    youtubeVideoId: { type: String, trim: true },
     status: {
       type: String,
       enum: ["draft", "pending_verification", "published", "archived"],

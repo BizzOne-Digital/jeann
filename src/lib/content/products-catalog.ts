@@ -30,25 +30,42 @@ function mongoProductToSeed(
     incotermOptions?: string[];
     minOrderText?: string;
     gallery?: { storageKey: string }[];
+    description?: string;
+    highlights?: string[];
+    youtubeVideoId?: string;
+    packagingOptionIds?: unknown[];
   },
   seedFallback?: SeedProduct,
+  packagingNames: Map<string, string> = new Map(),
 ): SeedProduct | null {
   if (!isPublicProductStatus(product.status)) return null;
 
   const uploaded = product.gallery?.[0]?.storageKey?.trim();
   const image = uploaded || seedFallback?.image;
 
+  // What an admin set in the back office. Anything left empty keeps the built-in content.
+  const adminPackaging = (product.packagingOptionIds ?? [])
+    .map((id) => packagingNames.get(String(id)))
+    .filter((n): n is string => Boolean(n));
+  const admin: NonNullable<SeedProduct["admin"]> = {};
+  if (product.description?.trim()) admin.description = product.description.trim();
+  if (product.highlights?.length) admin.highlights = product.highlights;
+  if (product.youtubeVideoId?.trim()) admin.youtubeVideoId = product.youtubeVideoId.trim();
+  const adminGallery = (product.gallery ?? []).map((g) => g.storageKey?.trim()).filter(Boolean);
+  if (adminGallery.length > 1) admin.gallery = adminGallery;
+  if (adminPackaging.length) admin.packaging = adminPackaging;
+
   return {
     slug: product.slug,
     name: product.name,
     overview: product.overview ?? seedFallback?.overview ?? "",
-    description: seedFallback?.description,
+    description: admin.description ?? seedFallback?.description,
     availabilityText: product.availabilityText ?? seedFallback?.availabilityText ?? "",
     originOptions: product.originOptions?.length
       ? product.originOptions
       : (seedFallback?.originOptions ?? []),
     gradeSummary: product.gradeSummary ?? seedFallback?.gradeSummary ?? "",
-    packaging: seedFallback?.packaging ?? [],
+    packaging: admin.packaging ?? seedFallback?.packaging ?? [],
     inspectionOptions: product.inspectionOptions?.length
       ? product.inspectionOptions
       : (seedFallback?.inspectionOptions ?? []),
@@ -59,8 +76,9 @@ function mongoProductToSeed(
     minOrderText: product.minOrderText ?? seedFallback?.minOrderText ?? "",
     status: product.status as SeedProduct["status"],
     image,
-    youtubeVideoId: seedFallback?.youtubeVideoId,
-    highlights: seedFallback?.highlights,
+    youtubeVideoId: admin.youtubeVideoId ?? seedFallback?.youtubeVideoId,
+    highlights: admin.highlights ?? seedFallback?.highlights,
+    ...(Object.keys(admin).length ? { admin } : {}),
   };
 }
 
@@ -69,13 +87,17 @@ export async function getMergedCategories(): Promise<SeedCategory[]> {
   const conn = await tryConnectMongo();
   if (!conn) return SEED_CATEGORIES;
 
-  const { Product, ProductCategory } = await import("@/models");
-  const [mongoCategories, mongoProducts] = await Promise.all([
+  const { Product, ProductCategory, PackagingType } = await import("@/models");
+  const [mongoCategories, mongoProducts, packagingTypes] = await Promise.all([
     ProductCategory.find({ deletedAt: null, status: "published" })
       .sort({ displayOrder: 1 })
       .lean(),
     Product.find({ deletedAt: null }).sort({ displayOrder: 1 }).lean(),
+    PackagingType.find({ status: "active", deletedAt: null }).select("name").lean(),
   ]);
+  const packagingNames = new Map<string, string>(
+    packagingTypes.map((p: { _id: unknown; name: string }) => [String(p._id), p.name]),
+  );
 
   if (mongoCategories.length === 0) return SEED_CATEGORIES;
 
@@ -101,7 +123,7 @@ export async function getMergedCategories(): Promise<SeedCategory[]> {
     for (const seedProduct of seedCategory.products) {
       const mongoProduct = mongoForCategory.find((p) => p.slug === seedProduct.slug);
       if (mongoProduct) {
-        const merged = mongoProductToSeed(mongoProduct, seedProduct);
+        const merged = mongoProductToSeed(mongoProduct, seedProduct, packagingNames);
         if (merged) {
           mergedProducts.push(merged);
           seen.add(seedProduct.slug);
@@ -115,7 +137,7 @@ export async function getMergedCategories(): Promise<SeedCategory[]> {
     for (const mongoProduct of mongoForCategory) {
       if (seen.has(mongoProduct.slug)) continue;
       if (DEPRECATED_PRODUCT_SLUGS.has(mongoProduct.slug)) continue;
-      const merged = mongoProductToSeed(mongoProduct);
+      const merged = mongoProductToSeed(mongoProduct, undefined, packagingNames);
       if (merged) mergedProducts.push(merged);
     }
 

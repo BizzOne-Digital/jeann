@@ -117,7 +117,7 @@ export default async function ProductPage({ params }: Props) {
     coffeeMarketing?.contentBoxes ??
     marketing.contentBoxes;
 
-  const detailContent = buildDetailContent({
+  const builtInDetailContent = buildDetailContent({
     productName: product.name,
     productDescription: product.description ?? marketing.description,
     productHighlights: product.highlights ?? marketing.highlights,
@@ -129,8 +129,23 @@ export default async function ProductPage({ params }: Props) {
     coffeeProduct,
   });
 
-  const youtubeUrl =
-    sugarGrade?.youtubeVideoId || product.youtubeVideoId
+  // Content an admin set in the back office takes priority over the built-in content.
+  const adminContent = product.admin;
+  const detailContent: ProductDetailContent = adminContent
+    ? {
+        ...builtInDetailContent,
+        description: adminContent.description ?? builtInDetailContent.description,
+        highlights: adminContent.highlights ?? builtInDetailContent.highlights,
+        packaging: adminContent.packaging ?? builtInDetailContent.packaging,
+        images: adminContent.gallery
+          ? adminContent.gallery.map((src) => ({ src: resolveImageSrc(src), alt: `${product.name} photo` }))
+          : builtInDetailContent.images,
+      }
+    : builtInDetailContent;
+
+  const youtubeUrl = adminContent?.youtubeVideoId
+    ? `https://www.youtube.com/watch?v=${adminContent.youtubeVideoId}`
+    : sugarGrade?.youtubeVideoId || product.youtubeVideoId
       ? `https://www.youtube.com/watch?v=${sugarGrade?.youtubeVideoId ?? product.youtubeVideoId}`
       : marketing.youtubeVideoId
         ? `https://www.youtube.com/watch?v=${marketing.youtubeVideoId}`
