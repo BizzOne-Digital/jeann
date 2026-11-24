@@ -113,6 +113,8 @@ export async function updateCisDraft(
 export async function submitCisProfile(input: {
   organizationId: string;
   userId: string;
+  /** Default true. The buyer portal turns it off: supporting documents are requested later, by the trade desk. */
+  requireDocuments?: boolean;
 }): Promise<{ version: number }> {
   await tryConnectMongo();
   const { CisProfile, Organization, KybDocument } = await import("@/models");
@@ -129,12 +131,14 @@ export async function submitCisProfile(input: {
   if (!draft.legalName?.trim()) throw new Error("incomplete_cis");
   if (!draft.addresses?.length) throw new Error("incomplete_cis");
 
-  const docCount = await KybDocument.countDocuments({
-    organizationId: new Types.ObjectId(input.organizationId),
-    cisProfileId: draft._id,
-    deletedAt: null,
-  });
-  if (docCount === 0) throw new Error("documents_required");
+  if (input.requireDocuments !== false) {
+    const docCount = await KybDocument.countDocuments({
+      organizationId: new Types.ObjectId(input.organizationId),
+      cisProfileId: draft._id,
+      deletedAt: null,
+    });
+    if (docCount === 0) throw new Error("documents_required");
+  }
 
   const wasChangesRequested = draft.status === "changes_requested";
 

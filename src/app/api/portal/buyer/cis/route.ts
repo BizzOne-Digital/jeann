@@ -41,6 +41,12 @@ export async function POST(request: NextRequest) {
     const { CisProfile } = await import("@/models");
     const input = parsed.data;
     const existing = await CisProfile.findOne({ organizationId: orgId }).sort({ version: -1 });
+    if (existing && existing.status !== "draft" && existing.status !== "changes_requested") {
+      return NextResponse.json(
+        { error: "Your company profile is with Finekarts for review and cannot be edited now." },
+        { status: 409 },
+      );
+    }
     const version = existing ? existing.version : 1;
 
     await CisProfile.findOneAndUpdate(
