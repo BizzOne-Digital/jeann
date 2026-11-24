@@ -132,9 +132,21 @@ export function TransactionDocumentsPanel({
 
   return (
     <section className="rounded-lg border border-[var(--line)] bg-white p-5">
-      <h2 className="font-semibold text-[var(--navy)]">Documents</h2>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h2 className="font-semibold text-[var(--navy)]">Documents</h2>
+        {documents.length > 0 ? (
+          <a
+            className="btn text-xs"
+            href={`/api/transactions/${transactionId}/documents/package`}
+            download
+          >
+            Download all documents (ZIP)
+          </a>
+        ) : null}
+      </div>
       <p className="mt-1 text-xs text-[var(--stone)]">
-        Upload PDF or accepted formats. Each document is stored separately and audited.
+        Upload PDF or accepted formats. Each document is stored separately and audited. The ZIP holds
+        only this transaction&apos;s documents, ready to give to the bank.
       </p>
 
       {documents.length === 0 ? (

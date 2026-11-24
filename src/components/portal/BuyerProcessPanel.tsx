@@ -267,6 +267,19 @@ export function BuyerProcessPanel({
       {step !== "psa" ? <Notice tone="warn">{lcDeadlineWarning(lcHours)}</Notice> : null}
       {step === "psa" || step === "banking" ? <Notice tone="warn">{AMENDMENT_WARNING}</Notice> : null}
 
+      {documents.length > 0 && transactionId ? (
+        <p className="text-sm text-[var(--stone)]">
+          <a
+            className="btn text-xs"
+            href={`/api/transactions/${transactionId}/documents/package`}
+            download
+          >
+            Download all documents of this transaction (ZIP)
+          </a>{" "}
+          For your bank. Contains only this transaction&apos;s documents.
+        </p>
+      ) : null}
+
       {transactions.length > 1 ? (
         <label className="label block">
           Transaction
