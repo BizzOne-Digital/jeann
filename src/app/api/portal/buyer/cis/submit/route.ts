@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getBuyerOrganizationId } from "@/lib/auth/buyer-org";
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
+import { notifyBuyerProfileSubmitted } from "@/lib/email/buyer-notifications";
 import { submitCisProfile } from "@/lib/onboarding/cis-service";
 import { writeAuditEvent } from "@/lib/audit/log";
 import { auditRequestMeta } from "@/lib/api/request-meta";
@@ -36,6 +37,20 @@ export async function POST(request: NextRequest) {
       ...auditRequestMeta(request),
       metadata: { version: result.version, source: "buyer_company_profile" },
     });
+
+    // Email must never undo a successful submission.
+    try {
+      const { Organization } = await import("@/models");
+      const org = await Organization.findById(orgId).select("legalName").lean();
+      await notifyBuyerProfileSubmitted({
+        organizationName: org?.legalName ?? "A buyer",
+        contactName: session.user.name || session.user.email,
+        contactEmail: session.user.email,
+        organizationId: String(orgId),
+      });
+    } catch (mailError) {
+      console.error("[portal/buyer/cis/submit] email failed", mailError);
+    }
 
     return NextResponse.json({ ok: true, version: result.version });
   } catch (error) {

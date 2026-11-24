@@ -59,6 +59,45 @@ export async function notifyBuyerRegistrationReceived(input: {
   });
 }
 
+/** A buyer pressed "Submit for approval": tell the Finekarts admin and confirm to the buyer. */
+export async function notifyBuyerProfileSubmitted(input: {
+  organizationName: string;
+  contactName: string;
+  contactEmail: string;
+  organizationId: string;
+}) {
+  const admin = adminNotifyEmail();
+  if (admin) {
+    await sendEmail({
+      to: { email: admin, name: "Finekarts Admin" },
+      subject: `Buyer awaiting approval — ${input.organizationName}`,
+      text: [
+        "A buyer submitted its company profile for approval.",
+        "",
+        `Company: ${input.organizationName}`,
+        `Contact: ${input.contactName} <${input.contactEmail}>`,
+        "",
+        `Review and approve in admin: ${appUrl()}/admin/buyers/${input.organizationId}`,
+      ].join("\n"),
+      tags: ["buyer-submitted", "admin"],
+      metadata: { organizationId: input.organizationId },
+    });
+  }
+  await sendEmail({
+    to: { email: input.contactEmail, name: input.contactName },
+    subject: "Finekarts — company profile submitted",
+    text: [
+      `Hello ${input.contactName},`,
+      "",
+      `We received the company profile for ${input.organizationName}.`,
+      "Our team will review it and email you when your buyer account is approved.",
+      "",
+      "Finekarts Trade Desk",
+    ].join("\n"),
+    tags: ["buyer-submitted"],
+  });
+}
+
 export async function notifyBuyerApproved(input: {
   contactEmail: string;
   contactName: string;
