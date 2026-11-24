@@ -21,6 +21,7 @@ import { amountInWords } from "@/lib/finance/amount-words";
 import { swiftDate } from "@/lib/contracts/lc-dates";
 import { DEFAULT_INSPECTION, lcDocumentsBlock, productLine, requiredDocumentsBlock, specificationToBlock } from "@/lib/products/document-fields";
 import { loadActiveSpecificationText } from "@/lib/products/specification-service";
+import { cleanDocumentDetails, documentPrefillFromDetails } from "@/lib/organizations/document-details";
 
 const TEST_WATERMARK = "TEST DOCUMENT — NOT VALID — FOR SOFTWARE QA ONLY";
 
@@ -77,7 +78,7 @@ export async function buildDocumentPrefill(
   const [terms, org] = await Promise.all([
     CommercialTerms.findOne({ transactionId: tx._id }).sort({ version: -1 }).lean(),
     Organization.findById(tx.organizationId)
-      .select("legalName registrationNumber businessAddressLine1 businessAddressCity businessAddressRegion businessAddressPostal country")
+      .select("legalName registrationNumber businessAddressLine1 businessAddressCity businessAddressRegion businessAddressPostal country documentDetails")
       .lean(),
   ]);
   const out: Record<string, unknown> = {
@@ -109,6 +110,13 @@ export async function buildDocumentPrefill(
     out.sellerTitle = FINEKARTS_DETAILS.representativeTitle;
     out.documentsAddress = FINEKARTS_DETAILS.courierAddress;
   }
+  // Details the organization entered in its own portal fill the contact, signatory, consignee and bank parts.
+  // Nothing that is already set above is overwritten, and staff can still correct any field by hand.
+  const fromPortal = documentPrefillFromDetails(
+    cleanDocumentDetails(tx.side === "supplier" ? "supplier" : "buyer", org?.documentDetails as Record<string, unknown> | undefined),
+    tx.side === "supplier",
+  );
+  for (const [k, v] of Object.entries(fromPortal)) if (out[k] === undefined) out[k] = v;
   out.etaDays = "30-45";
   if (terms) {
     Object.assign(out, {

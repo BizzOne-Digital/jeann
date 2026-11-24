@@ -9,7 +9,10 @@ export default async function AgentLayout({ children }: { children: React.ReactN
   return (
     <PortalAppShell>
       <div className="portal-shell md:flex">
-        <Sidebar title="Agent portal" links={[{ href: "/portal/agent", label: "Submissions" }]} />
+        <Sidebar title="Agent portal" links={[
+            { href: "/portal/agent", label: "Submissions" },
+            { href: "/portal/agent/company-details", label: "Company details" },
+          ]} />
         <main className="min-w-0 w-full max-w-full flex-1 overflow-x-clip p-4 sm:p-6 md:p-10">{children}</main>
       </div>
     </PortalAppShell>

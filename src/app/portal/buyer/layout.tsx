@@ -21,6 +21,7 @@ const fullLinks = [
   { label: "Shipments", href: "/portal/buyer/shipments" },
   { label: "Invoices", href: "/portal/buyer/invoices" },
   { label: "Company profile", href: "/portal/buyer/cis" },
+  { label: "Company details", href: "/portal/buyer/company-details" },
   { label: "Documents", href: "/portal/buyer/documents" },
   { label: "Booking", href: "/portal/buyer/booking" },
   { label: "Contact", href: "/portal/buyer/contact" },

@@ -33,6 +33,8 @@ export interface IOrganization {
   previousHsCode?: string;
   website?: string;
   domain?: string;
+  /** Contact, signatory, consignee and bank details the organization enters in its portal; they fill generated documents. */
+  documentDetails?: Record<string, string>;
   status: OrganizationStatus;
   onboardingStatus: OrganizationOnboardingStatus;
   verificationNotes?: string;
@@ -94,6 +96,7 @@ const organizationSchema = new Schema<IOrganization>(
     verificationNotes: { type: String },
     mergeReviewFlag: { type: Boolean, default: false },
     duplicateReviewFlag: { type: Boolean, default: false },
+    documentDetails: { type: Schema.Types.Mixed },
     createdByUserId: { type: Schema.Types.ObjectId, ref: "User" },
     approvedByUserId: { type: Schema.Types.ObjectId, ref: "User" },
     approvedAt: { type: Date },

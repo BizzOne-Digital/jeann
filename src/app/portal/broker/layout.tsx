@@ -9,7 +9,10 @@ export default async function BrokerLayout({ children }: { children: React.React
   return (
     <PortalAppShell>
       <div className="portal-shell md:flex">
-        <Sidebar title="Broker portal" links={[{ href: "/portal/broker", label: "Submissions" }]} />
+        <Sidebar title="Broker portal" links={[
+            { href: "/portal/broker", label: "Submissions" },
+            { href: "/portal/broker/company-details", label: "Company details" },
+          ]} />
         <main className="min-w-0 w-full max-w-full flex-1 overflow-x-clip p-4 sm:p-6 md:p-10">{children}</main>
       </div>
     </PortalAppShell>
