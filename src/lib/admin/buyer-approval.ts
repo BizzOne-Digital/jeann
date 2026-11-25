@@ -7,6 +7,8 @@ export type AdminBuyerDetail = {
   legalName: string;
   country: string;
   status: string;
+  /** Where the buyer's company profile is in review, e.g. cis_kyb_submitted or changes_requested. */
+  onboardingStatus: string;
   registrationNumber: string;
   domain: string;
   verificationNotes: string;
@@ -31,6 +33,7 @@ export function serializeBuyerDetail(
     legalName: org.legalName,
     country: org.country,
     status: org.status,
+    onboardingStatus: org.onboardingStatus ?? "",
     registrationNumber: org.registrationNumber ?? "",
     domain: org.domain ?? "",
     verificationNotes: org.verificationNotes ?? "",

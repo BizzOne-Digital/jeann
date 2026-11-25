@@ -120,6 +120,30 @@ export async function notifyBuyerApproved(input: {
   });
 }
 
+export async function notifyBuyerChangesRequested(input: {
+  contactEmail: string;
+  contactName: string;
+  organizationName: string;
+  comment: string;
+}) {
+  await sendEmail({
+    to: { email: input.contactEmail, name: input.contactName },
+    subject: "Finekarts — please update your company profile",
+    text: [
+      `Hello ${input.contactName},`,
+      "",
+      `We reviewed the company profile for ${input.organizationName} and need a change before approval:`,
+      "",
+      input.comment,
+      "",
+      `Update it and press "Submit for approval" again: ${appUrl()}/portal/buyer/cis`,
+      "",
+      "Finekarts Trade Desk",
+    ].join("\n"),
+    tags: ["buyer-changes-requested"],
+  });
+}
+
 export async function notifyBuyerRejected(input: {
   contactEmail: string;
   contactName: string;

@@ -21,7 +21,7 @@ export function buildCisProgress(input: {
     { key: "company_details", label: "Company name, registration and tax details", complete: input.hasCompanyDetails },
     { key: "registered_address", label: "Registered address", complete: input.hasRegisteredAddress },
     { key: "representative", label: "Authorized representative and contact", complete: input.hasAuthorizedRepresentative },
-    { key: "supporting_documents", label: "Supporting documents uploaded", complete: input.hasSupportingDocuments },
+    { key: "supporting_documents", label: "Supporting documents (Finekarts will request these later, optional for now)", complete: input.hasSupportingDocuments },
   ];
   const complete = items.filter((i) => i.complete).length;
   return { items, complete, total: items.length, label: `${complete} of ${items.length} complete` };
@@ -32,7 +32,8 @@ export async function loadCisProgress(organizationId: string): Promise<CisProgre
   await tryConnectMongo();
   const { CisProfile, KybDocument } = await import("@/models");
   const orgOid = new Types.ObjectId(organizationId);
-  const cis = await CisProfile.findOne({ organizationId: orgOid }).sort({ version: -1 }).lean();
+  // taxId is `select: false` on the model, so it must be asked for or it always looks missing.
+  const cis = await CisProfile.findOne({ organizationId: orgOid }).select("+taxId").sort({ version: -1 }).lean();
   if (!cis) {
     return buildCisProgress({
       hasCompanyDetails: false,

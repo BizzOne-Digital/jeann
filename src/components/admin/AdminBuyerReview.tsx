@@ -24,6 +24,27 @@ export function AdminBuyerReview({
   const [saving, setSaving] = useState(false);
   const [canOverride, setCanOverride] = useState(false);
   const [overrideReason, setOverrideReason] = useState("");
+  const [changeNote, setChangeNote] = useState("");
+
+  async function requestChanges() {
+    setSaving(true);
+    setMessage(null);
+    setError(null);
+    const res = await fetch(`/api/admin/buyers/${encodeURIComponent(buyer._id)}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ decision: "changes_requested", reason: changeNote.trim() }),
+    });
+    const data = (await res.json()) as { buyer?: AdminBuyerDetail; error?: string };
+    setSaving(false);
+    if (!res.ok || !data.buyer) {
+      setError(data.error || "Unable to request changes.");
+      return;
+    }
+    setBuyer(data.buyer);
+    setChangeNote("");
+    setMessage("Sent back to the buyer. They received an email and can update and submit again.");
+  }
 
   async function decide(decision: "approved" | "rejected") {
     setSaving(true);
@@ -186,6 +207,32 @@ export function AdminBuyerReview({
                 Reject
               </button>
             </div>
+          </div>
+        ) : null}
+
+        {["cis_kyb_submitted", "under_review"].includes(buyer.onboardingStatus) ? (
+          <div className="lg:col-span-2 space-y-3 border-t border-[var(--line)] pt-4">
+            <h3 className="font-semibold text-[var(--navy)]">Company profile submitted</h3>
+            <p className="text-sm text-[var(--stone)]">
+              Something missing or wrong? Send it back to the buyer with a note. They get an email, update the
+              profile and submit it again.
+            </p>
+            <label className="label">
+              What should the buyer change?
+              <textarea
+                className="field mt-1 min-h-20"
+                value={changeNote}
+                onChange={(e) => setChangeNote(e.target.value)}
+              />
+            </label>
+            <button
+              type="button"
+              className="btn border border-[var(--line)]"
+              disabled={saving || !changeNote.trim()}
+              onClick={requestChanges}
+            >
+              Request changes
+            </button>
           </div>
         ) : null}
 

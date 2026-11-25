@@ -125,7 +125,7 @@ export async function submitCisProfile(input: {
   })
     .sort({ version: -1 });
 
-  if (!draft || !EDITABLE_STATUSES.includes(draft.status)) {
+  if (!draft || ![...EDITABLE_STATUSES, "changes_requested"].includes(draft.status)) {
     throw new Error("no_editable_cis");
   }
 

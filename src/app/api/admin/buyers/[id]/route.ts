@@ -4,6 +4,7 @@ import { z } from "zod";
 import { adminDeniedResponse, requireAdminApiSession } from "@/lib/admin/require-admin-api";
 import { decideBuyerOrganization, loadBuyerDetail } from "@/lib/admin/buyer-approval";
 import {
+  notifyBuyerChangesRequested,
   notifyBuyerApproved,
   notifyBuyerRejected,
 } from "@/lib/email/buyer-notifications";
@@ -15,7 +16,7 @@ export const runtime = "nodejs";
 type RouteContext = { params: Promise<{ id: string }> };
 
 const decisionSchema = z.object({
-  decision: z.enum(["approved", "rejected"]),
+  decision: z.enum(["approved", "rejected", "changes_requested"]),
   reason: z.string().trim().max(1000).optional(),
   kybOverrideReason: z.string().trim().max(2000).optional(),
 });
@@ -82,6 +83,43 @@ export async function POST(request: NextRequest, context: RouteContext) {
   }
 
   try {
+    if (parsed.data.decision === "changes_requested") {
+      const comment = parsed.data.reason?.trim();
+      if (!comment) {
+        return NextResponse.json({ error: "Tell the buyer what to change." }, { status: 422 });
+      }
+      const { CisProfile } = await import("@/models");
+      const cis = await CisProfile.findOne({ organizationId: new Types.ObjectId(id) })
+        .sort({ version: -1 })
+        .select("_id status")
+        .lean();
+      if (!cis) {
+        return NextResponse.json({ error: "This buyer has not saved a company profile yet." }, { status: 409 });
+      }
+      const { reviewCisProfile } = await import("@/lib/onboarding/cis-service");
+      await reviewCisProfile({
+        organizationId: id,
+        cisProfileId: String(cis._id),
+        actorUserId: String(session.userId),
+        action: "request_changes",
+        comment,
+      });
+      const detail = await loadBuyerDetail(id);
+      if (detail?.primaryContact) {
+        try {
+          await notifyBuyerChangesRequested({
+            contactEmail: detail.primaryContact.email,
+            contactName: detail.primaryContact.name,
+            organizationName: detail.legalName,
+            comment,
+          });
+        } catch (mailError) {
+          console.error("[admin/buyers/:id] changes email failed", mailError);
+        }
+      }
+      return NextResponse.json({ ok: true, buyer: detail });
+    }
+
     const { org, contact, kyb } = await decideBuyerOrganization({
       orgId: id,
       decision: parsed.data.decision,
