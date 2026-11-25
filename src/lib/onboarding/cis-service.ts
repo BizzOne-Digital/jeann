@@ -1,5 +1,6 @@
 import { Types } from "mongoose";
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
+import { getEnv } from "@/lib/config/env";
 import { notifyAdmins, notifyUser } from "@/lib/notifications/service";
 import type { CisProfileStatus } from "@/models/CisProfile";
 
@@ -167,9 +168,18 @@ export async function submitCisProfile(input: {
     type: "cis_submitted",
     title: "Company profile submission",
     body: `${org?.legalName ?? "An organization"} submitted a company profile for review.`,
-    href: `/admin/organizations`,
-    emailSubject: "Company profile pending review",
-    emailText: `${org?.legalName ?? "An organization"} submitted a company profile for review.`,
+    href: org?.type === "buyer" ? `/admin/buyers/${input.organizationId}` : `/admin/organizations`,
+    emailSubject: `Company profile pending review — ${org?.legalName ?? "organization"}`,
+    emailText: [
+      `${org?.legalName ?? "An organization"} submitted its company profile for review.`,
+      "",
+      `Country: ${org?.country ?? "-"}`,
+      `Registration number: ${org?.registrationNumber ?? "-"}`,
+      "",
+      org?.type === "buyer"
+        ? `Review and approve the buyer here: ${getEnv().APP_URL.replace(/\/$/, "")}/admin/buyers/${input.organizationId}`
+        : `Review it in the admin: ${getEnv().APP_URL.replace(/\/$/, "")}/admin/organizations`,
+    ].join("\n"),
   });
 
   return { version: draft.version };
