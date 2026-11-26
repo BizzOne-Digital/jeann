@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { requirePortalAccess } from "@/lib/auth/portal-access";
 import { getBuyerOrganizationId } from "@/lib/auth/buyer-org";
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
@@ -54,6 +55,13 @@ export default async function CisPage() {
       description="Tell us about your company so we can review and approve your buyer account."
     >
       <CisDraftForm initial={initial} />
+      <p className="mt-6 text-sm text-[var(--stone)]">
+        Contact person, signatory, consignee and bank details for your documents are kept in{" "}
+        <Link href="/portal/buyer/company-details" className="font-semibold text-[var(--navy)] underline">
+          Company details
+        </Link>
+        .
+      </p>
     </PortalPage>
   );
 }

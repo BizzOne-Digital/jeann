@@ -12,28 +12,24 @@ import {
 
 export const dynamic = "force-dynamic";
 
+// Approved buyer: only what the buyer needs day to day. Documents live inside each transaction.
+// The other pages (requests, invoices, company details, organization, contact) are still reachable
+// from the pages that use them (Transactions, Company profile, Overview).
 const fullLinks = [
   { label: "Overview", href: "/portal/buyer" },
-  { label: "Onboarding", href: "/portal/buyer/onboarding" },
-  { label: "PO / ICPO", href: "/portal/buyer/new-request" },
-  { label: "Requests", href: "/portal/buyer/requests" },
   { label: "Transactions", href: "/portal/buyer/transactions" },
-  { label: "Shipments", href: "/portal/buyer/shipments" },
-  { label: "Invoices", href: "/portal/buyer/invoices" },
-  { label: "Company profile", href: "/portal/buyer/cis" },
-  { label: "Company details", href: "/portal/buyer/company-details" },
-  { label: "Documents", href: "/portal/buyer/documents" },
+  { label: "New transaction", href: "/portal/buyer/new-request" },
+  { label: "Tracking shipments", href: "/portal/buyer/shipments" },
   { label: "Booking", href: "/portal/buyer/booking" },
-  { label: "Contact", href: "/portal/buyer/contact" },
+  { label: "Company profile", href: "/portal/buyer/cis" },
   { label: "Messages", href: "/portal/buyer/messages" },
-  { label: "Organization", href: "/portal/buyer/organization" },
   { label: "Help", href: "/portal/buyer/help" },
 ];
 
+// Before approval the buyer only completes onboarding.
 const onboardingLinks = [
   { label: "Onboarding", href: "/portal/buyer/onboarding" },
   { label: "Company profile", href: "/portal/buyer/cis" },
-  { label: "Documents", href: "/portal/buyer/documents" },
   { label: "Help", href: "/portal/buyer/help" },
 ];
 

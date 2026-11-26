@@ -44,7 +44,7 @@ export default async function BuyerDashboard() {
   return (
     <PortalPage
       title="Buyer overview"
-      description="Track purchase requests, formal transactions, documents, and messages."
+      description="Start a new transaction, follow your transactions and shipments, and keep your company profile up to date."
     >
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatPill label="Purchase requests" value={String(requests)} />
@@ -56,15 +56,27 @@ export default async function BuyerDashboard() {
       </div>
       <div className="mt-6 flex flex-wrap gap-3">
         <Link href="/portal/buyer/new-request" className="btn btn-primary">
-          Submit PO / ICPO
-        </Link>
-        <Link href="/portal/buyer/requests" className="btn btn-outline">
-          View requests
+          New transaction
         </Link>
         <Link href="/portal/buyer/transactions" className="btn btn-outline">
-          View transactions
+          My transactions
+        </Link>
+        <Link href="/portal/buyer/shipments" className="btn btn-outline">
+          Tracking shipments
         </Link>
       </div>
+      <p className="mt-4 text-sm text-[var(--stone)]">
+        Also:{" "}
+        <Link href="/portal/buyer/invoices" className="font-medium text-[var(--navy)] underline">Invoices</Link>
+        {" · "}
+        <Link href="/portal/buyer/requests" className="font-medium text-[var(--navy)] underline">All requests</Link>
+        {" · "}
+        <Link href="/portal/buyer/company-details" className="font-medium text-[var(--navy)] underline">Company details</Link>
+        {" · "}
+        <Link href="/portal/buyer/organization" className="font-medium text-[var(--navy)] underline">Organization</Link>
+        {" · "}
+        <Link href="/portal/buyer/contact" className="font-medium text-[var(--navy)] underline">Contact Finekarts</Link>
+      </p>
       {requests === 0 && transactions === 0 && (
         <div className="mt-6">
           <EmptyState

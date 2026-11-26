@@ -5,7 +5,7 @@ import { PortalPage } from "@/components/portal/PortalPage";
 const LINKS = [
   { href: "/faq", label: "FAQ — trade process and Incoterms" },
   { href: "/resources", label: "Resources — documents and banking terms" },
-  { href: "/portal/buyer/new-request", label: "Submit PO / ICPO" },
+  { href: "/portal/buyer/new-request", label: "Start a new transaction" },
   { href: "/contact", label: "Contact the trade desk" },
   { href: "/portal/buyer/onboarding", label: "Onboarding checklist" },
 ];

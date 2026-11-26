@@ -8,6 +8,11 @@ export default function DocumentsPage() {
       title="Documents"
       description="Upload your LOI here. Other transaction documents are handled inside each transaction's Documents tab."
     >
+      <p className="mb-4 rounded-md border border-[var(--line)] bg-[var(--mist)] px-4 py-3 text-sm text-[var(--navy)]">
+        Each transaction has its own Documents tab. Open the transaction under{" "}
+        <Link href="/portal/buyer/transactions" className="font-semibold underline">Transactions</Link>{" "}
+        to see and upload its documents.
+      </p>
       <div className="mb-8 rounded-lg border border-[var(--line)] bg-white p-5 text-sm text-[var(--stone)]">
         <p className="font-semibold text-[var(--navy)]">How documents are requested</p>
         <p className="mt-2 leading-relaxed">

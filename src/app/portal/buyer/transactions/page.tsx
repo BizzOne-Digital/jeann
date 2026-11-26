@@ -1,13 +1,13 @@
 import { PortalPage } from "@/components/portal/PortalPage";
-import { BuyerTransactionsList } from "@/components/portal/BuyerTransactionsList";
+import { BuyerTransactionFolders } from "@/components/portal/BuyerTransactionFolders";
 
 export default function TransactionsPage() {
   return (
     <PortalPage
       title="Transactions"
-      description="Formal buyer sale transactions with controlled workflow and document history."
+      description="Your pending, active and closed transactions. Each transaction has its own documents."
     >
-      <BuyerTransactionsList />
+      <BuyerTransactionFolders />
     </PortalPage>
   );
 }

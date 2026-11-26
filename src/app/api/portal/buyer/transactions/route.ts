@@ -22,6 +22,12 @@ export async function GET(request: NextRequest) {
       side: "buyer",
       deletedAt: null,
     };
+    // Folders: "active" = still running, "closed" = closed by staff after delivery, or cancelled.
+    // Status alone cannot tell them apart: it turns "completed" as soon as the PSA is signed.
+    const base = { ...filter };
+    const folder = sp.get("folder");
+    if (folder === "closed") filter.$or = [{ closedAt: { $ne: null } }, { status: "cancelled" }];
+    else if (folder === "active") Object.assign(filter, { closedAt: null, status: { $ne: "cancelled" } });
     const q = (sp.get("q") ?? "").trim().slice(0, 60);
     if (q) filter.transactionNumber = { $regex: escapeRegex(q), $options: "i" };
     const status = sp.get("status");
@@ -47,10 +53,16 @@ export async function GET(request: NextRequest) {
       .limit(pageSize)
       .lean();
 
+    const [activeCount, closedCount] = await Promise.all([
+      Transaction.countDocuments({ ...base, closedAt: null, status: { $ne: "cancelled" } }),
+      Transaction.countDocuments({ ...base, $or: [{ closedAt: { $ne: null } }, { status: "cancelled" }] }),
+    ]);
+
     return NextResponse.json({
       page,
       pageSize,
       total,
+      counts: { active: activeCount, closed: closedCount },
       items: items.map((t) => ({
         id: String(t._id),
         transactionNumber: t.transactionNumber,
@@ -60,6 +72,7 @@ export async function GET(request: NextRequest) {
         currentStepKey: t.currentStepKey,
         createdAt: t.createdAt,
         submittedAt: t.submittedAt,
+        closedAt: t.closedAt ?? null,
       })),
     });
   } catch (error) {
