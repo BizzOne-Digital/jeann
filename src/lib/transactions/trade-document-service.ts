@@ -19,7 +19,7 @@ import { loadCompanyImage } from "@/lib/documents/signature-image";
 import { FINEKARTS_DETAILS } from "@/lib/contracts/company-details";
 import { amountInWords } from "@/lib/finance/amount-words";
 import { swiftDate } from "@/lib/contracts/lc-dates";
-import { DEFAULT_INSPECTION, lcDocumentsBlock, productLine, requiredDocumentsBlock, specificationToBlock } from "@/lib/products/document-fields";
+import { DEFAULT_INSPECTION, isPlaceholderText, lcDocumentsBlock, productLine, requiredDocumentsBlock, specificationToBlock } from "@/lib/products/document-fields";
 import { loadActiveSpecificationText } from "@/lib/products/specification-service";
 import { cleanDocumentDetails, documentPrefillFromDetails } from "@/lib/organizations/document-details";
 
@@ -73,7 +73,7 @@ export async function buildDocumentPrefill(
     return {};
   }
   const { Transaction, CommercialTerms, Organization } = await import("@/models");
-  const tx = await Transaction.findById(transactionId).select("organizationId side").lean();
+  const tx = await Transaction.findById(transactionId).select("organizationId side sourcePurchaseRequestId").lean();
   if (!tx) return {};
   const [terms, org] = await Promise.all([
     CommercialTerms.findOne({ transactionId: tx._id }).sort({ version: -1 }).lean(),
@@ -118,6 +118,19 @@ export async function buildDocumentPrefill(
   );
   for (const [k, v] of Object.entries(fromPortal)) if (out[k] === undefined) out[k] = v;
   out.etaDays = "30-45";
+
+  // Finekarts' own corporation number comes from the admin settings; the buyer's ICPO reference is the
+  // reference of the purchase request the order was opened from. Both used to be left red.
+  const { SiteSettings, PurchaseRequest } = await import("@/models");
+  const site = await SiteSettings.findOne({ key: "default" }).select("corporationNumber").lean();
+  if (site?.corporationNumber) {
+    out.sellerRegNumber = site.corporationNumber;
+    out.finekartsRegNumber = site.corporationNumber;
+  }
+  if (tx.sourcePurchaseRequestId) {
+    const source = await PurchaseRequest.findById(tx.sourcePurchaseRequestId).select("reference").lean();
+    if (source?.reference) out.icpoRef = source.reference;
+  }
   if (terms) {
     Object.assign(out, {
       product: terms.productName,
@@ -147,7 +160,8 @@ export async function buildDocumentPrefill(
         .lean()
     : null;
   if (product) {
-    const grade = product.gradeSummary as string | undefined;
+    const rawGrade = product.gradeSummary as string | undefined;
+    const grade = isPlaceholderText(rawGrade) ? undefined : rawGrade;
     out.product = terms?.productName ?? product.name;
     const line = productLine(String(out.product), grade);
     if (line) out.productLine = line;
@@ -168,7 +182,8 @@ export async function buildDocumentPrefill(
     if (specText) out.specificationBlock = specificationToBlock(specText);
 
     if (!out.origin) {
-      const origin = terms?.productOrigin || (product.originOptions ?? []).join(" / ");
+      const catalogueOrigins = ((product.originOptions ?? []) as string[]).filter((o) => !isPlaceholderText(o));
+      const origin = (isPlaceholderText(terms?.productOrigin) ? "" : terms?.productOrigin) || catalogueOrigins.join(" / ");
       if (origin) out.origin = origin;
     }
     if (!out.packaging && (product.packagingOptionIds ?? []).length) {
@@ -697,11 +712,15 @@ export async function sendDocumentToBuyer(input: {
   return version;
 }
 
-/** Documents that go out with the PSA in the same step. The proforma invoice does not: it follows after both parties have signed. */
-export const PSA_COMPANION_TYPES = ["proposed_lc_wording"] as const;
+/**
+ * Documents that go out with the PSA in the same step. The client confirmed that the Proforma Invoice
+ * travels with the PSA and the LC wording (the buyer uses it to open the LC), and that everything
+ * exchanged between buyer and seller goes to the bank.
+ */
+export const PSA_COMPANION_TYPES = ["proposed_lc_wording", "proforma_invoice"] as const;
 
 /**
- * The LC wording is sent to the other party at the same time as the PSA.
+ * The LC wording and the Proforma Invoice are sent to the other party at the same time as the PSA.
  * A companion that has an approved version is sent now. A companion that is not approved yet
  * is not blocked: it is reported back so staff can finish it and send it, and mistakes can still be
  * corrected by creating a new version of any of the documents.

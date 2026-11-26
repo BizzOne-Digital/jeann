@@ -27,6 +27,8 @@ export interface ISiteSettings {
   companyName: string;
   email: string;
   phone?: string;
+  /** Finekarts' own Ontario / federal corporation number. It fills "Corp. Reg. No." on generated documents. */
+  corporationNumber?: string;
   addressVisible: boolean;
   address?: SiteAddress;
   socialLinks: SocialLink[];
@@ -65,6 +67,7 @@ const siteSettingsSchema = new Schema<ISiteSettings>(
     companyName: { type: String, required: true, trim: true },
     email: { type: String, required: true, lowercase: true, trim: true },
     phone: { type: String, trim: true },
+    corporationNumber: { type: String, trim: true },
     addressVisible: { type: Boolean, default: false },
     address: siteAddressSchema,
     socialLinks: [socialLinkSchema],

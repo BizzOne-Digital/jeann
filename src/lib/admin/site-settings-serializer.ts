@@ -5,6 +5,7 @@ export type AdminSiteSettings = {
   companyName: string;
   email: string;
   phone: string;
+  corporationNumber: string;
   addressVisible: boolean;
   addressLine1: string;
   addressCity: string;
@@ -50,6 +51,7 @@ export function serializeSiteSettings(doc: SiteSettingsLean): AdminSiteSettings 
     companyName: doc.companyName,
     email: doc.email,
     phone: doc.phone ?? "",
+    corporationNumber: doc.corporationNumber ?? "",
     addressVisible: doc.addressVisible,
     addressLine1: doc.address?.line1 ?? "",
     addressCity: doc.address?.city ?? "",
@@ -71,6 +73,7 @@ export const DEFAULT_SITE_SETTINGS: AdminSiteSettings = {
   companyName: "Finekarts",
   email: "trade@finekarts.com",
   phone: "",
+  corporationNumber: "",
   addressVisible: false,
   addressLine1: "",
   addressCity: "",

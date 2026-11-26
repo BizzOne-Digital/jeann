@@ -135,7 +135,7 @@ export function FinanceTransactionTabs({ transactionId }: { transactionId?: stri
             </tbody>
           </table>
           <p className="p-3 text-xs text-[var(--stone)]">
-            HST/GST paid applies when the supplier is in Canada and is deducted from profit. HST/GST received applies when the buyer is in Canada and is not part of profit. No tax applies when the other party is outside Canada (rate {Number(data.hst.rate) * 100}%, source: {data.hst.source === "tax_configuration" ? "tax configuration" : "default 13%"}). Month = delivery date, else first invoice, else creation date. * = costs in a different currency excluded.
+            HST/GST paid applies when the supplier is in Canada and is deducted from profit. HST/GST received applies when the buyer is in Canada and is not part of profit. No tax applies when the other party is outside Canada (rate {Number(data.hst.rate) * 100}%, source: {data.hst.source === "tax_configuration" ? "tax configuration" : "default 13%"}). Month = delivery date, else first invoice, else creation date. * = costs in a different currency excluded. Until an invoice is issued, the total is the agreed total from the order&apos;s terms, and profit is only meaningful once the supplier&apos;s costs are recorded.
           </p>
         </div>
       ) : null}

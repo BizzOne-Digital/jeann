@@ -177,6 +177,8 @@ export async function reviewBuyerRequest(input: {
   const { PurchaseRequest } = await import("@/models");
   const doc = await PurchaseRequest.findById(input.requestId);
   if (!doc) throw new Error("not_found");
+  // A draft is still the buyer's own work in progress. Staff review requests the buyer has submitted.
+  if (doc.status === "draft") throw new Error("not_submitted");
 
   switch (input.action) {
     case "qualify":

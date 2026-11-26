@@ -46,9 +46,13 @@ export async function GET(request: NextRequest) {
       };
     }
 
-    // ?active=1 keeps only the shipments of active transactions.
+    // ?active=1 keeps only the shipments of active transactions. A transaction is active until staff close
+    // it after final delivery or it is cancelled. Its status turns "completed" as soon as the PSA is signed
+    // by both parties, which is exactly when shipping starts, so the status alone cannot be used here.
     if (request.nextUrl.searchParams.get("active") === "1") {
-      const activeTxs = await Transaction.find({ status: "active", deletedAt: null }).select("_id").lean();
+      const activeTxs = await Transaction.find({ status: { $ne: "cancelled" }, closedAt: null, deletedAt: null })
+        .select("_id")
+        .lean();
       const activeIds = new Set(activeTxs.map((t) => String(t._id)));
       const scoped = query.transactionId as { $in: unknown[] } | undefined;
       const allowed = scoped

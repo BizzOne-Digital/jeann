@@ -39,7 +39,7 @@ const BANK_CODES = ["bank_fees", "amendment_fees", "lc_cost"];
 /** Internal-only: callers MUST enforce finance:read + isInternal before using. */
 export async function loadTransactionFinanceRows(filter: FinanceSummaryFilter = {}) {
   await tryConnectMongo();
-  const { Transaction, BuyerInvoice, SupplierBill, FinancialEntry, CommissionRecord, Organization, Product, ShipmentLot, FinancialSettings } =
+  const { Transaction, BuyerInvoice, SupplierBill, FinancialEntry, CommissionRecord, Organization, Product, ShipmentLot, FinancialSettings, CommercialTerms } =
     await import("@/models");
   const hst = await getCanadaHstRate();
   const settings = await FinancialSettings.findOne().lean();
@@ -75,6 +75,23 @@ export async function loadTransactionFinanceRows(filter: FinanceSummaryFilter = 
     }).lean(),
     CommissionRecord.find({ transactionId: { $in: ids }, approvalStatus: "approved" }).lean(),
   ]);
+
+  // Orders that run through the portal's documents have agreed commercial terms but no finance invoice
+  // yet. Their agreed total is used as the contract total until an invoice is issued.
+  const termRows = await CommercialTerms.find({ transactionId: { $in: ids } })
+    .sort({ version: -1 })
+    .select("transactionId version totalEstimatedValue currency")
+    .lean();
+  const latestTerms = new Map<string, { total?: string; currency?: string }>();
+  for (const ct of termRows) {
+    const key = String(ct.transactionId);
+    if (!latestTerms.has(key)) {
+      latestTerms.set(key, {
+        total: ct.totalEstimatedValue ? ct.totalEstimatedValue.toString() : undefined,
+        currency: ct.currency ? String(ct.currency) : undefined,
+      });
+    }
+  }
 
   const orgIds = new Set<string>();
   for (const t of txs) {
@@ -114,6 +131,14 @@ export async function loadTransactionFinanceRows(filter: FinanceSummaryFilter = 
       const snap = t.financeSnapshot?.lines?.find((l: { label: string }) => /contract/i.test(l.label));
       if (snap) contract = money(snap.amountDecimal.toString());
     }
+    let termsCurrency: string | undefined;
+    if (inv.length === 0 && contract.isZero() && t.side === "buyer") {
+      const agreed = latestTerms.get(k);
+      if (agreed?.total) {
+        contract = money(agreed.total);
+        termsCurrency = agreed.currency;
+      }
+    }
     let purchasing = money(0);
     for (const b of bl) {
       let tax = money(0);
@@ -122,7 +147,7 @@ export async function loadTransactionFinanceRows(filter: FinanceSummaryFilter = 
       }
       purchasing = purchasing.plus(b.total.toString()).minus(tax);
     }
-    const currency: string = inv[0]?.currency ?? bl[0]?.currency ?? baseCurrency;
+    const currency: string = inv[0]?.currency ?? bl[0]?.currency ?? termsCurrency ?? baseCurrency;
     let unconverted = 0;
     const costAmount = (e: { convertedAmount: { toString(): string }; originalAmount: { toString(): string }; originalCurrency: string }) => {
       if (currency === baseCurrency) return money(e.convertedAmount.toString());

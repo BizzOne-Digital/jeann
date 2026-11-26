@@ -4,6 +4,7 @@ export const adminSiteSettingsSchema = z.object({
   companyName: z.string().trim().min(2).max(200),
   email: z.string().trim().email().max(200),
   phone: z.string().trim().max(50).optional().default(""),
+  corporationNumber: z.string().trim().max(60).optional().default(""),
   addressVisible: z.boolean().default(false),
   addressLine1: z.string().trim().max(200).optional().default(""),
   addressCity: z.string().trim().max(120).optional().default(""),
@@ -44,6 +45,7 @@ export function siteSettingsInputToMongo(input: AdminSiteSettingsInput) {
     companyName: input.companyName,
     email: input.email.toLowerCase(),
     phone: input.phone || undefined,
+    corporationNumber: input.corporationNumber || undefined,
     addressVisible: input.addressVisible,
     address:
       input.addressLine1 && input.addressCity && input.addressCountry

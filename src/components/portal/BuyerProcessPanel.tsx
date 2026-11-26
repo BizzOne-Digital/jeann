@@ -201,13 +201,13 @@ export function BuyerProcessPanel({
         "Upload the signed and stamped PSA together with a passport copy of the signer.",
         "Finekarts receives it, then signs and stamps it and returns the fully executed PSA.",
       ],
-      next: "Proforma Invoice, issued by Finekarts once the PSA is signed by both parties.",
+      next: "Proforma Invoice, sent by Finekarts together with the PSA and the LC wording.",
       nextLabel: "Go to Proforma Invoice",
     },
     invoice: {
       title: "Proforma Invoice",
       lines: [
-        "After the PSA is signed by both parties, Finekarts issues the Proforma Invoice here.",
+        "Finekarts sends the Proforma Invoice here together with the PSA and the LC wording.",
         "Download it and give it to your bank when you arrange your LC.",
       ],
       next: "Banking. Submit your LC details within " + LC_DEADLINE_HOURS + " hours of the invoice being issued.",
@@ -446,8 +446,8 @@ export function BuyerProcessPanel({
           <p className="font-semibold text-[var(--navy)]">Proforma Invoice</p>
           {invoiceDocs.length === 0 ? (
             <p className="mt-2 text-sm text-[var(--stone)]">
-              The Proforma Invoice has not been issued yet. It appears here once the PSA is signed
-              by both parties.
+              The Proforma Invoice has not been sent yet. It appears here when Finekarts sends it
+              together with the PSA and the LC wording.
             </p>
           ) : (
             <ul className="mt-2 divide-y divide-[var(--line)] text-sm">

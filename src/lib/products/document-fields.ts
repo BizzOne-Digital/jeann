@@ -71,6 +71,16 @@ export function requiredDocumentsBlock(labels: string[], incoterm?: string, sell
   return lines.map((l, i) => i + 1 + ". " + l).join("\n");
 }
 
+/**
+ * True for the sample text that ships with the product catalogue ("Example content - requires
+ * Finekarts admin verification...", "(example field)"). It must never be printed into a contract as
+ * if it were a confirmed value: the field stays red until an admin enters the real one.
+ */
+export function isPlaceholderText(text: string | undefined | null): boolean {
+  if (!text) return false;
+  return /example content|example field|requires finekarts admin verification|lorem ipsum/i.test(text);
+}
+
 /** Product name with its grade, for the commodity line. */
 export function productLine(name: string | undefined, grade: string | undefined): string | undefined {
   if (!name) return undefined;

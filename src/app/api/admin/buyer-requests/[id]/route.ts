@@ -69,6 +69,9 @@ export async function POST(
       if (error.message === "reason_required" || error.message === "comment_required") {
         return NextResponse.json({ error: "Comment or reason required." }, { status: 422 });
       }
+      if (error.message === "not_submitted") {
+        return NextResponse.json({ error: "The buyer has not submitted this request yet." }, { status: 409 });
+      }
       if (error.message === "already_converted") {
         return NextResponse.json({ error: "Already converted." }, { status: 409 });
       }

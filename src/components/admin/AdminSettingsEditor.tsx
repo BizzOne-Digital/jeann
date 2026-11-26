@@ -67,6 +67,18 @@ export function AdminSettingsEditor({ initialSettings }: { initialSettings: Admi
         />
       </label>
 
+      <label className="label">
+        Finekarts corporation number (Ontario / federal)
+        <input
+          className="field mt-1"
+          value={settings.corporationNumber}
+          onChange={(e) => setSettings({ ...settings, corporationNumber: e.target.value })}
+        />
+        <span className="mt-1 block text-xs text-[var(--stone)]">
+          Fills &quot;Corp. Reg. No.&quot; on every generated document, so it is no longer left red.
+        </span>
+      </label>
+
       <label className="label flex items-center gap-2 pt-6">
         <input
           type="checkbox"

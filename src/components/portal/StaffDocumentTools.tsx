@@ -231,7 +231,7 @@ export function StaffDocumentTools({
       let message = `${d.title}: ${action.replace("_", " ")} done.`;
       const c = json?.companions as { sent: string[]; notReady: string[]; missing: string[] } | undefined;
       if (c) {
-        const name = () => "LC wording";
+        const name = (t: string) => (t === "proforma_invoice" ? "Proforma invoice" : "LC wording");
         if (c.sent.length) message += ` Also sent with the PSA: ${c.sent.map(name).join(", ")}.`;
         const pending = [...c.notReady, ...c.missing];
         if (pending.length) {
