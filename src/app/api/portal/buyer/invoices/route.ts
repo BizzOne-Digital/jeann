@@ -1,9 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { Types } from "mongoose";
 import { requireApiAuth, handleApiError } from "@/lib/api/require-api-auth";
 
 export const runtime = "nodejs";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     const auth = await requireApiAuth({ permissions: "buyer:access" });
     if ("error" in auth) return auth.error;
@@ -12,10 +13,14 @@ export async function GET() {
     if (!membership) return NextResponse.json({ items: [] });
 
     const { BuyerInvoice } = await import("@/models");
-    const items = await BuyerInvoice.find({
+    const filter: Record<string, unknown> = {
       buyerOrganizationId: membership.organizationId,
       status: { $nin: ["draft", "voided"] },
-    })
+    };
+    // Inside a transaction only that transaction's invoices are shown (the filter never widens the buyer's own scope).
+    const transactionId = request.nextUrl.searchParams.get("transactionId");
+    if (transactionId && Types.ObjectId.isValid(transactionId)) filter.transactionId = new Types.ObjectId(transactionId);
+    const items = await BuyerInvoice.find(filter)
       .sort({ invoiceDate: -1 })
       .limit(50)
       .lean();

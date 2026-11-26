@@ -1,5 +1,6 @@
 import { getEnv } from "@/lib/config/env";
 import { sendEmail } from "@/lib/email";
+import { signBuyerDecisionToken } from "@/lib/admin/buyer-decision-token";
 
 function appUrl() {
   return getEnv().APP_URL.replace(/\/$/, "");
@@ -68,16 +69,22 @@ export async function notifyBuyerProfileSubmitted(input: {
 }) {
   const admin = adminNotifyEmail();
   if (admin) {
+    const decisionUrl = `${appUrl()}/buyer-decision?token=${encodeURIComponent(signBuyerDecisionToken(input.organizationId))}`;
     await sendEmail({
       to: { email: admin, name: "Finekarts Admin" },
-      subject: `Buyer awaiting approval — ${input.organizationName}`,
+      subject: `Approve or decline this buyer — ${input.organizationName}`,
       text: [
-        "A buyer submitted its company profile for approval.",
+        "A buyer submitted its company profile and is waiting for your decision.",
         "",
         `Company: ${input.organizationName}`,
         `Contact: ${input.contactName} <${input.contactEmail}>`,
         "",
-        `Review and approve in admin: ${appUrl()}/admin/buyers/${input.organizationId}`,
+        "APPROVE or DECLINE this buyer (opens a page with the two buttons, nothing is decided until you press one):",
+        decisionUrl,
+        "",
+        `To check more details first, open the buyer in the admin: ${appUrl()}/admin/buyers/${input.organizationId}`,
+        "",
+        "The link works for 14 days.",
       ].join("\n"),
       tags: ["buyer-submitted", "admin"],
       metadata: { organizationId: input.organizationId },

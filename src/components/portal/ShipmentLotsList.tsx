@@ -25,19 +25,26 @@ type ShipmentRow = {
 export function ShipmentLotsList({
   detailBasePath,
   activeOnlyDefault = false,
+  transactionId,
 }: {
   detailBasePath: string;
   /** Start with only the shipments of active transactions (staff view). */
   activeOnlyDefault?: boolean;
+  /** Show only the shipments of this one transaction (used inside the transaction's own tab). */
+  transactionId?: string;
 }) {
   const [items, setItems] = useState<ShipmentRow[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeOnly, setActiveOnly] = useState(activeOnlyDefault);
+  const [activeOnly, setActiveOnly] = useState(activeOnlyDefault && !transactionId);
 
   useEffect(() => {
     setLoading(true);
-    fetch(activeOnly ? "/api/shipments/lots?active=1" : "/api/shipments/lots")
+    const params = new URLSearchParams();
+    if (activeOnly) params.set("active", "1");
+    if (transactionId) params.set("transactionId", transactionId);
+    const query = params.toString();
+    fetch("/api/shipments/lots" + (query ? "?" + query : ""))
       .then(async (res) => {
         const data = await res.json();
         if (!res.ok) throw new Error(data.error ?? "Unable to load shipments");
@@ -45,12 +52,12 @@ export function ShipmentLotsList({
       })
       .catch((e) => setError(e instanceof Error ? e.message : "Error"))
       .finally(() => setLoading(false));
-  }, [activeOnly]);
+  }, [activeOnly, transactionId]);
 
   if (loading) return <p className="text-sm text-[var(--stone)]">Loading shipments…</p>;
   if (error) return <p className="text-sm text-red-600">{error}</p>;
 
-  const filterBox = (
+  const filterBox = transactionId ? null : (
     <label className="mb-3 flex items-center gap-2 text-sm text-[var(--stone)]">
       <input type="checkbox" checked={activeOnly} onChange={(e) => setActiveOnly(e.target.checked)} />
       Active transactions only

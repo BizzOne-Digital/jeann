@@ -13,7 +13,7 @@ import { ICPO_SPECIFICATION_NOTE } from "@/lib/content/buyer-portal-guidance";
 import type { DocumentVersionStatus } from "@/models/DocumentVersion";
 import { findPublishedTemplate } from "@/lib/contracts/template-service";
 import { placeholderValues, renderTemplateLines, renderTemplateRich, wrapLine } from "@/lib/contracts/template-merge";
-import { missingPsaClauses, normalizeLcDeadlineHours } from "@/lib/contracts/psa-terms";
+import { lcDeadlineLabel, missingPsaClauses, normalizeLcDeadlineHours, PROFORMA_DEADLINE_CLAUSE } from "@/lib/contracts/psa-terms";
 import { embedRichFonts, renderRichText } from "@/lib/documents/rich-text-pdf";
 import { loadCompanyImage } from "@/lib/documents/signature-image";
 import { FINEKARTS_DETAILS } from "@/lib/contracts/company-details";
@@ -312,8 +312,10 @@ export async function generateDocumentPdf(input: {
   isDraft?: boolean;
   transactionNumber?: string;
   documentType?: string;
-  /** PSA only: hours the buyer has to submit the LC. Saved on the transaction. */
+  /** PSA and Proforma: hours the buyer has to submit the LC. Saved on the transaction so both documents agree. */
   lcDeadlineHours?: number;
+  /** Count the deadline in business hours (for example 48 business hours). */
+  lcDeadlineBusinessHours?: boolean;
 }) {
   await tryConnectMongo();
   const { Document, DocumentVersion, Transaction } = await import("@/models");
@@ -342,20 +344,22 @@ export async function generateDocumentPdf(input: {
   }
   structuredData._clauseTexts = input.clauseTexts ?? [];
   structuredData._side = side;
-  if (doc.documentType === "spa" && doc.transactionId) {
-    if (input.lcDeadlineHours !== undefined) {
-      await Transaction.updateOne({ _id: doc.transactionId }, { $set: { lcDeadlineHours: normalizeLcDeadlineHours(input.lcDeadlineHours) } });
-    }
-    const saved = await Transaction.findById(doc.transactionId).select("lcDeadlineHours").lean();
+  if ((doc.documentType === "spa" || (doc.documentType === "proforma_invoice" && side === "buyer")) && doc.transactionId) {
+    const set: Record<string, unknown> = {};
+    if (input.lcDeadlineHours !== undefined) set.lcDeadlineHours = normalizeLcDeadlineHours(input.lcDeadlineHours);
+    if (input.lcDeadlineBusinessHours !== undefined) set.lcDeadlineBusinessHours = input.lcDeadlineBusinessHours;
+    if (Object.keys(set).length) await Transaction.updateOne({ _id: doc.transactionId }, { $set: set });
+    const saved = await Transaction.findById(doc.transactionId).select("lcDeadlineHours lcDeadlineBusinessHours").lean();
     structuredData._lcDeadlineHours = normalizeLcDeadlineHours(saved?.lcDeadlineHours);
+    structuredData._lcDeadlineLabel = lcDeadlineLabel(saved?.lcDeadlineHours, Boolean(saved?.lcDeadlineBusinessHours));
   }
 
   // Use the published admin template for this document type when one exists; otherwise built-in layout.
   const template = await findPublishedTemplate(doc.documentType, side);
   if (template) {
     const fieldValues = placeholderValues(
-      structuredData._lcDeadlineHours !== undefined
-        ? { ...structuredData, lcDeadlineHours: structuredData._lcDeadlineHours }
+      structuredData._lcDeadlineLabel !== undefined
+        ? { ...structuredData, lcDeadlineHours: structuredData._lcDeadlineLabel }
         : structuredData,
       { transactionNumber: txNumber },
     );
@@ -517,7 +521,10 @@ async function buildPdf(input: {
   // On the supplier portal the supplier decides the seller's terms, so Finekarts does not add clauses to the supplier's PSA.
   if (input.documentType === "spa" && input.structuredData._side !== "supplier") {
     const present = [...(templateLines ?? []), ...input.clauseTexts];
-    const missing = missingPsaClauses(present, normalizeLcDeadlineHours(input.structuredData._lcDeadlineHours));
+    const missing = missingPsaClauses(
+      present,
+      String(input.structuredData._lcDeadlineLabel ?? normalizeLcDeadlineHours(input.structuredData._lcDeadlineHours)),
+    );
     if (missing.length) {
       if (y < 260) {
         page = pdf.addPage([595, 842]);
@@ -529,6 +536,22 @@ async function buildPdf(input: {
         for (const part of wrapLine(clause)) draw(part, 9);
         y -= 4;
       }
+    }
+  }
+
+  // The Proforma Invoice states the same LC deadline as the PSA, so the two documents agree.
+  if (input.documentType === "proforma_invoice" && input.structuredData._side !== "supplier") {
+    const present = [...(templateLines ?? []), ...input.clauseTexts];
+    if (!present.join("\n").includes(PROFORMA_DEADLINE_CLAUSE.marker)) {
+      if (y < 200) {
+        page = pdf.addPage([595, 842]);
+        y = 800;
+      }
+      y -= 8;
+      draw("Deadline:", 11, true);
+      const label = String(input.structuredData._lcDeadlineLabel ?? normalizeLcDeadlineHours(input.structuredData._lcDeadlineHours));
+      for (const part of wrapLine(PROFORMA_DEADLINE_CLAUSE.text(label))) draw(part, 9);
+      y -= 4;
     }
   }
 

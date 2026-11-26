@@ -46,6 +46,16 @@ export async function GET(request: NextRequest) {
       };
     }
 
+    // ?transactionId= narrows to one transaction (its own Shipment tracking tab). It can only narrow the caller's
+    // scope: for an external user the id must already be one of their organization's transactions.
+    const onlyTransaction = request.nextUrl.searchParams.get("transactionId");
+    if (onlyTransaction && /^[a-f0-9]{24}$/i.test(onlyTransaction)) {
+      const scoped = query.transactionId as { $in: unknown[] } | undefined;
+      query = scoped
+        ? { ...query, transactionId: { $in: scoped.$in.filter((id) => String(id) === onlyTransaction) } }
+        : { ...query, transactionId: onlyTransaction };
+    }
+
     // ?active=1 keeps only the shipments of active transactions. A transaction is active until staff close
     // it after final delivery or it is cancelled. Its status turns "completed" as soon as the PSA is signed
     // by both parties, which is exactly when shipping starts, so the status alone cannot be used here.

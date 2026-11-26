@@ -46,11 +46,21 @@ export async function POST(
       }
     }
     const signer = auth.ctx.isInternal ? "staff" : "external";
-    await assertSignAllowed({ tx, signer });
 
     const form = await request.formData();
     const file = form.get("file");
     const versionId = String(form.get("versionId") ?? "");
+
+    // An amended version that has been sent and not yet signed may be signed again, even though the
+    // signing step was completed for the earlier version: nothing is final until the trade ends.
+    let allowResign = false;
+    if (/^[a-f0-9]{24}$/i.test(versionId)) {
+      const { DocumentVersion } = await import("@/models");
+      const target = await DocumentVersion.findOne({ _id: versionId, documentId: docId }).select("status").lean();
+      allowResign = target?.status === "sent";
+    }
+    await assertSignAllowed({ tx, signer, allowResign });
+
     const signatoryName = String(form.get("signatoryName") ?? "");
     const signatoryTitle = form.get("signatoryTitle") ? String(form.get("signatoryTitle")) : undefined;
 

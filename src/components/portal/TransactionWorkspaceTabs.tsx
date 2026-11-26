@@ -8,8 +8,10 @@ import { StaffDocumentTools } from "@/components/portal/StaffDocumentTools";
 import { TransactionFinancePanel } from "@/components/portal/TransactionFinancePanel";
 import { TransactionWorkflowActions } from "@/components/portal/TransactionWorkflowActions";
 import { AdminSevenSteps } from "@/components/portal/AdminSevenSteps";
+import { ShipmentLotsList } from "@/components/portal/ShipmentLotsList";
+import { BuyerInvoicesList } from "@/components/portal/BuyerInvoicesList";
 
-type Tab = "overview" | "steps" | "workflow" | "documents" | "finance" | "banking";
+type Tab = "overview" | "steps" | "workflow" | "documents" | "shipments" | "invoices" | "finance" | "banking";
 
 type TxDetail = {
   transaction: {
@@ -107,9 +109,17 @@ export function TransactionWorkspaceTabs({
     ...(showStaffActions || workflowMode === "supplier" ? [{ id: "steps" as Tab, label: "7 steps" }] : []),
     { id: "workflow", label: "Workflow" },
     { id: "documents", label: "Documents" },
+    // Shipment tracking and invoices belong to the transaction, not to a separate menu.
+    { id: "shipments", label: "Shipment tracking" },
+    ...(workflowMode === "buyer" && !showStaffActions ? [{ id: "invoices" as Tab, label: "Invoices" }] : []),
     ...(showFinance ? [{ id: "finance" as Tab, label: "Finance" }] : []),
     { id: "banking", label: "Banking" },
   ];
+  const shipmentsBase = showStaffActions
+    ? "/workspace/shipments"
+    : workflowMode === "supplier"
+      ? "/portal/supplier/shipments"
+      : "/portal/buyer/shipments";
 
   return (
     <div className="space-y-6">
@@ -226,6 +236,12 @@ export function TransactionWorkspaceTabs({
           ) : null}
         </div>
       ) : null}
+
+      {tab === "shipments" ? (
+        <ShipmentLotsList detailBasePath={shipmentsBase} transactionId={transactionId} />
+      ) : null}
+
+      {tab === "invoices" ? <BuyerInvoicesList transactionId={transactionId} /> : null}
 
       {tab === "finance" && showFinance ? (
         <TransactionFinancePanel transactionId={transactionId} canView />

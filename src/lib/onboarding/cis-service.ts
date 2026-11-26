@@ -169,7 +169,9 @@ export async function submitCisProfile(input: {
     title: "Company profile submission",
     body: `${org?.legalName ?? "An organization"} submitted a company profile for review.`,
     href: org?.type === "buyer" ? `/admin/buyers/${input.organizationId}` : `/admin/organizations`,
-    emailSubject: `Company profile pending review — ${org?.legalName ?? "organization"}`,
+    // A buyer gets one dedicated email with Approve / Decline links (see notifyBuyerProfileSubmitted), so the
+    // generic email is skipped for buyers to avoid sending the admin the same news twice.
+    emailSubject: org?.type === "buyer" ? undefined : `Company profile pending review — ${org?.legalName ?? "organization"}`,
     emailText: [
       `${org?.legalName ?? "An organization"} submitted its company profile for review.`,
       "",

@@ -127,6 +127,7 @@ export function StaffDocumentTools({
   const [s3Type, setS3Type] = useState("spa");
   const [s3Text, setS3Text] = useState("");
   const [lcHours, setLcHours] = useState("24");
+  const [lcBusiness, setLcBusiness] = useState(false);
   const [signName, setSignName] = useState("");
 
   function counterSign(e: FormEvent<HTMLFormElement>, d: Doc) {
@@ -212,7 +213,9 @@ export function StaffDocumentTools({
         structuredData: { ...Object.fromEntries(Object.entries(details).filter(([, v]) => v.trim())), documentType: s3Type },
         clauseTexts: s3Text.split(/\n{2,}/).filter((t) => t.trim()),
         isDraft: true,
-        ...(s3Type === "spa" ? { lcDeadlineHours: Math.max(1, Math.min(720, Math.round(Number(lcHours) || 24))) } : {}),
+        ...(s3Type === "spa" || s3Type === "proforma_invoice"
+          ? { lcDeadlineHours: Math.max(1, Math.min(720, Math.round(Number(lcHours) || 24))), lcDeadlineBusinessHours: lcBusiness }
+          : {}),
       });
       return `${label} v${j.version} generated as PDF (draft).`;
     });
@@ -359,18 +362,27 @@ export function StaffDocumentTools({
             </div>
           </details>
         ) : null}
-        {s3Type === "spa" ? (
-          <label className="block text-sm text-[var(--stone)]">
-            LC deadline written in this PSA (hours after the Proforma Invoice is issued). Admin can set any value from 1 to 720.
-            <input
-              className="field mt-1 block w-32"
-              type="number"
-              min={1}
-              max={720}
-              value={lcHours}
-              onChange={(e) => setLcHours(e.target.value)}
-            />
-          </label>
+        {s3Type === "spa" || s3Type === "proforma_invoice" ? (
+          <div className="block text-sm text-[var(--stone)]">
+            <p>
+              LC deadline (counted from the Proforma Invoice being issued). It is negotiable: change it whenever the buyer asks
+              for more time, then generate the PSA and the Proforma again so both documents show the same deadline.
+            </p>
+            <div className="mt-1 flex flex-wrap items-center gap-2">
+              <input
+                className="field block w-28"
+                type="number"
+                min={1}
+                max={720}
+                value={lcHours}
+                onChange={(e) => setLcHours(e.target.value)}
+              />
+              <select className="field block w-44" value={lcBusiness ? "business" : "hours"} onChange={(e) => setLcBusiness(e.target.value === "business")}>
+                <option value="hours">hours</option>
+                <option value="business">business hours</option>
+              </select>
+            </div>
+          </div>
         ) : null}
         <FormattedTextEditor
           placeholder="Document wording. Use the tools above to format. Separate clauses with a blank line."

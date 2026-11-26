@@ -11,6 +11,7 @@ const schema = z.object({
   clauseTexts: z.array(z.string()).optional(),
   isDraft: z.boolean().optional(),
   lcDeadlineHours: z.number().int().min(1).max(720).optional(),
+  lcDeadlineBusinessHours: z.boolean().optional(),
 });
 
 export async function POST(
@@ -39,6 +40,7 @@ export async function POST(
       clauseTexts: body.clauseTexts,
       isDraft: body.isDraft ?? true,
       lcDeadlineHours: body.lcDeadlineHours,
+      lcDeadlineBusinessHours: body.lcDeadlineBusinessHours,
       transactionNumber: tx.transactionNumber,
       documentType: body.structuredData.documentType as string | undefined,
     });

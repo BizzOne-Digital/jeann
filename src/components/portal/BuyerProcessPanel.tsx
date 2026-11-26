@@ -23,11 +23,12 @@ const NON_QUALIFYING = ["changes_requested", "superseded", "archived"];
 export const AMENDMENT_WARNING =
   "If you request an amendment, an amendment fee set by the bank will apply and will be added to the total cost of the amended PSA. By continuing you agree to this.";
 
-export function lcDeadlineWarning(hours: number): string {
+export function lcDeadlineWarning(hours: number, business = false): string {
   return (
     "Important: as stated in the PSA, once the PSA is signed and the Proforma Invoice has been issued to you, you have " +
     hours +
-    " hours to submit your LC (Banking tab)."
+    (business ? " business" : "") +
+    " hours to submit your LC (Banking tab). This is the deadline agreed in your PSA. If you need more time, ask Finekarts before it expires."
   );
 }
 
@@ -72,6 +73,7 @@ export function BuyerProcessPanel({
   const [documents, setDocuments] = useState<Doc[]>([]);
   const [steps, setSteps] = useState<StepView[]>([]);
   const [lcHours, setLcHours] = useState<number>(LC_DEADLINE_HOURS);
+  const [lcBusiness, setLcBusiness] = useState(false);
   const [reloadKey, setReloadKey] = useState(0);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -106,6 +108,7 @@ export function BuyerProcessPanel({
         setDocuments(json.documents ?? []);
         setSteps(json.workflowSteps ?? []);
         setLcHours(Number(json.transaction?.lcDeadlineHours) || LC_DEADLINE_HOURS);
+        setLcBusiness(Boolean(json.transaction?.lcDeadlineBusinessHours));
       })
       .catch((e) => {
         if (!cancelled) setError(e instanceof Error ? e.message : "Unable to load documents.");
@@ -210,7 +213,7 @@ export function BuyerProcessPanel({
         "Finekarts sends the Proforma Invoice here together with the PSA and the LC wording.",
         "Download it and give it to your bank when you arrange your LC.",
       ],
-      next: "Banking. Submit your LC details within " + LC_DEADLINE_HOURS + " hours of the invoice being issued.",
+      next: "Banking. Submit your LC details within " + lcHours + (lcBusiness ? " business" : "") + " hours of the invoice being issued.",
       nextLabel: "Go to Banking",
     },
     banking: {
@@ -233,7 +236,7 @@ export function BuyerProcessPanel({
             <li key={l}>{l}</li>
           ))}
         </ol>
-        {step !== "psa" ? <Notice tone="warn">{lcDeadlineWarning(lcHours)}</Notice> : null}
+        {step !== "psa" ? <Notice tone="warn">{lcDeadlineWarning(lcHours, lcBusiness)}</Notice> : null}
       {step === "psa" || step === "banking" ? <Notice tone="warn">{AMENDMENT_WARNING}</Notice> : null}
         <Notice tone="info">
           This step opens once your ICPO or LOI has been reviewed and Finekarts has opened your
@@ -264,7 +267,7 @@ export function BuyerProcessPanel({
         ))}
       </ol>
 
-      {step !== "psa" ? <Notice tone="warn">{lcDeadlineWarning(lcHours)}</Notice> : null}
+      {step !== "psa" ? <Notice tone="warn">{lcDeadlineWarning(lcHours, lcBusiness)}</Notice> : null}
       {step === "psa" || step === "banking" ? <Notice tone="warn">{AMENDMENT_WARNING}</Notice> : null}
 
       {documents.length > 0 && transactionId ? (

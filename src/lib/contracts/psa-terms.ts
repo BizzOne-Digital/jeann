@@ -15,6 +15,29 @@ export function normalizeLcDeadlineHours(value: unknown): number {
   return Number.isFinite(n) && n >= 1 && n <= 720 ? Math.round(n) : LC_DEADLINE_HOURS;
 }
 
+/**
+ * The deadline as it reads in a document. The clauses say "within {label} hours", so a deadline counted
+ * in business hours is written "48 business", which reads "within 48 business hours". Because the unit
+ * lives in the value, documents already stored with the old wording still read correctly.
+ */
+export function lcDeadlineLabel(hours: unknown, businessHours = false): string {
+  const n = normalizeLcDeadlineHours(hours);
+  return businessHours ? n + " business" : String(n);
+}
+
+/**
+ * The same agreed deadline is stated on the Proforma Invoice, so the PSA and the Proforma never
+ * disagree. Nothing is final until the end of the trade: if the buyer needs more time, staff change the
+ * deadline and issue new versions of both documents.
+ */
+export const PROFORMA_DEADLINE_CLAUSE: PsaMandatoryClause = {
+  marker: "LC submission deadline:",
+  text: (label) =>
+    "LC submission deadline: the buyer shall submit the Letter of Credit within " +
+    label +
+    " hours of this Proforma Invoice being issued, as agreed in the PSA.",
+};
+
 export const PSA_MANDATORY_CLAUSES: PsaMandatoryClause[] = [
   {
     marker: "Letter of Credit deadline:",
@@ -36,7 +59,7 @@ export const PSA_MANDATORY_CLAUSES: PsaMandatoryClause[] = [
 ];
 
 /** The mandatory clauses that are not already present in the given text lines. */
-export function missingPsaClauses(existing: string[], hours: number = LC_DEADLINE_HOURS): string[] {
+export function missingPsaClauses(existing: string[], hours: number | string = LC_DEADLINE_HOURS): string[] {
   const haystack = existing.join("\n");
   return PSA_MANDATORY_CLAUSES.filter((c) => !haystack.includes(c.marker)).map((c) => c.text(hours));
 }

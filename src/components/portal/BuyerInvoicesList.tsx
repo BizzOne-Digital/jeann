@@ -14,13 +14,13 @@ type InvoiceRow = {
   dueDate: string;
 };
 
-export function BuyerInvoicesList() {
+export function BuyerInvoicesList({ transactionId }: { transactionId?: string }) {
   const [items, setItems] = useState<InvoiceRow[]>([]);
   const [disclaimer, setDisclaimer] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/portal/buyer/invoices")
+    fetch("/api/portal/buyer/invoices" + (transactionId ? "?transactionId=" + encodeURIComponent(transactionId) : ""))
       .then(async (res) => {
         const data = await res.json();
         if (!res.ok) throw new Error(data.error ?? "Unable to load invoices");
@@ -28,10 +28,16 @@ export function BuyerInvoicesList() {
         setDisclaimer(data.disclaimer ?? "");
       })
       .catch((e) => setError(e instanceof Error ? e.message : "Error"));
-  }, []);
+  }, [transactionId]);
 
   if (error) return <p className="text-sm text-red-600">{error}</p>;
-  if (!items.length) return <p className="text-sm text-[var(--stone)]">No invoices issued yet.</p>;
+  if (!items.length) {
+    return (
+      <p className="text-sm text-[var(--stone)]">
+        {transactionId ? "No invoices have been issued for this transaction yet." : "No invoices issued yet."}
+      </p>
+    );
+  }
 
   return (
     <div className="space-y-4">

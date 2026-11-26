@@ -79,10 +79,12 @@ export async function assertDocumentAllowed(input: {
 export async function assertSignAllowed(input: {
   tx: { _id: unknown; side?: string; transactionType?: string };
   signer: "external" | "staff";
+  /** The version being signed is an amended version awaiting signature (see checkSignAction). */
+  allowResign?: boolean;
 }) {
   await assertTransactionUnlocked(input.tx._id);
   const steps = await loadStepDefs(input.tx._id);
-  const msg = checkSignAction({ side: sideOf(input.tx), signer: input.signer, steps });
+  const msg = checkSignAction({ side: sideOf(input.tx), signer: input.signer, steps, allowResign: input.allowResign });
   if (msg) throw new StepRuleError(msg, 409);
 }
 

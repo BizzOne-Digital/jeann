@@ -126,6 +126,12 @@ export function checkSignAction(input: {
   side: DocStepSide;
   signer: "external" | "staff";
   steps: WorkflowStepDef[];
+  /**
+   * True when the version being signed is an amended version that was sent after the earlier one was
+   * signed. Nothing is final in a negotiated trade: the contract can be amended after signing, and the
+   * amended version is signed again.
+   */
+  allowResign?: boolean;
 }): string | null {
   if (input.steps.length === 0) return null;
   const key =
@@ -136,7 +142,7 @@ export function checkSignAction(input: {
     return "Signing is not open yet. The previous steps must be completed first.";
   }
   const cur = input.steps.find((s) => s.key === key);
-  if (cur && isStepSatisfied(cur.status)) return "This signing step is already completed.";
+  if (cur && isStepSatisfied(cur.status) && !input.allowResign) return "This signing step is already completed.";
   return null;
 }
 

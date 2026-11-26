@@ -12,14 +12,13 @@ import {
 
 export const dynamic = "force-dynamic";
 
-// Approved buyer: only what the buyer needs day to day. Documents live inside each transaction.
-// The other pages (requests, invoices, company details, organization, contact) are still reachable
-// from the pages that use them (Transactions, Company profile, Overview).
+// Approved buyer: only what the buyer needs day to day. Documents, shipment tracking and invoices live
+// inside each transaction (its own tabs). The other pages (all shipments, requests, invoices, company
+// details, organization, contact) are still reachable from the Overview and Company profile pages.
 const fullLinks = [
   { label: "Overview", href: "/portal/buyer" },
   { label: "Transactions", href: "/portal/buyer/transactions" },
   { label: "New transaction", href: "/portal/buyer/new-request" },
-  { label: "Tracking shipments", href: "/portal/buyer/shipments" },
   { label: "Booking", href: "/portal/buyer/booking" },
   { label: "Company profile", href: "/portal/buyer/cis" },
   { label: "Messages", href: "/portal/buyer/messages" },

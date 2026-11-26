@@ -50,6 +50,7 @@ export async function GET(
         currentStepKey: tx.currentStepKey,
         buyerVisibleNotes: tx.buyerVisibleNotes,
         lcDeadlineHours: tx.lcDeadlineHours ?? undefined,
+        lcDeadlineBusinessHours: Boolean(tx.lcDeadlineBusinessHours),
         submittedAt: tx.submittedAt,
         createdAt: tx.createdAt,
       },
