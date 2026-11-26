@@ -6,10 +6,28 @@ import { assertSupplierTransactionAccess } from "@/lib/transactions/supplier-acc
 import { assertOrgScope } from "@/lib/authorization/authorize";
 import { createZip, safeFileName, type ZipEntry } from "@/lib/files/zip";
 import { writeAuditEvent } from "@/lib/audit/log";
+import { readPrivateObject } from "@/lib/storage/local";
 
 export const runtime = "nodejs";
 
 const MAX_DOCUMENTS = 100;
+
+/**
+ * Reads a stored file. The local storage provider hands out URLs that need a logged-in browser
+ * session, which a server-side fetch does not have, so those files are read from disk directly
+ * (access was already checked above). Other providers (S3) give self-contained signed URLs.
+ */
+async function readStoredFile(signedUrl: string): Promise<Uint8Array> {
+  const parsed = new URL(signedUrl);
+  if (parsed.pathname === "/api/storage/local") {
+    const key = parsed.searchParams.get("key");
+    if (!key) throw new Error("missing_key");
+    return new Uint8Array(await readPrivateObject(key));
+  }
+  const res = await fetch(signedUrl);
+  if (!res.ok) throw new Error("fetch_failed");
+  return new Uint8Array(await res.arrayBuffer());
+}
 
 function extensionOf(filename: string): string {
   const m = /\.[A-Za-z0-9]{1,8}$/.exec(filename);
@@ -61,9 +79,7 @@ export async function GET(
           userId: auth.ctx.userId,
           external: !auth.ctx.isInternal,
         });
-        const res = await fetch(url);
-        if (!res.ok) throw new Error("fetch_failed");
-        const data = new Uint8Array(await res.arrayBuffer());
+        const data = await readStoredFile(url);
         n += 1;
         const name = `${String(n).padStart(2, "0")} - ${safeFileName(doc.title)}${extensionOf(filename)}`;
         entries.push({ name, data });

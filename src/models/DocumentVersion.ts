@@ -99,7 +99,9 @@ documentVersionSchema.index({ documentId: 1, version: 1 }, { unique: true });
 documentVersionSchema.index({ documentId: 1, status: 1 });
 
 documentVersionSchema.pre("save", function () {
-  if (!this.isNew && this.locked) {
+  // Only a version that was already locked before this save is frozen. The save that locks it
+  // (submit for review) also records who submitted and when, so it must be allowed through.
+  if (!this.isNew && this.locked && !this.isModified("locked")) {
     const modified = this.modifiedPaths().filter(
       (path) => path !== "updatedAt" && path !== "status" && path !== "supersededAt",
     );

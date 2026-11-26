@@ -332,6 +332,7 @@ async function main() {
     if (!user) {
       user = await User.create({
         email,
+        normalizedEmail: email,
         passwordHash,
         name: env.INITIAL_ADMIN_NAME || "Platform Administrator",
         emailVerifiedAt: new Date(),
@@ -379,6 +380,7 @@ async function main() {
   if (!demoUser) {
     demoUser = await User.create({
       email: demoEmail,
+      normalizedEmail: demoEmail,
       passwordHash: demoHash,
       name: "Demo Buyer",
       phone: "+1-416-555-0100",
@@ -440,7 +442,7 @@ async function main() {
       status: "submitted",
       termsVersion: 1,
       termsAcceptedAt: new Date(),
-      source: "seed",
+      source: "admin",
       attachments: [],
     });
   }
