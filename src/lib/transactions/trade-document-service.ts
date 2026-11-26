@@ -736,27 +736,44 @@ export async function sendDocumentToBuyer(input: {
 }
 
 /**
- * Documents that go out with the PSA in the same step. The client confirmed that the Proforma Invoice
- * travels with the PSA and the LC wording (the buyer uses it to open the LC), and that everything
- * exchanged between buyer and seller goes to the bank.
+ * Process, as the client drew it: the PSA and the LC wording go to the buyer first. The buyer signs and
+ * stamps the PSA, attaches the director's passport and returns it. Finekarts signs and stamps it and attaches
+ * its own passport: from that moment the PSA is a contract. Finekarts then sends the buyer a copy of the
+ * contract together with the Proforma Invoice (see CONTRACT_COPY_COMPANION_TYPES).
  */
-export const PSA_COMPANION_TYPES = ["proposed_lc_wording", "proforma_invoice"] as const;
+export const PSA_COMPANION_TYPES = ["proposed_lc_wording"] as const;
+
+/** Sent to the buyer together with the copy of the signed contract, after both parties have signed. */
+export const CONTRACT_COPY_COMPANION_TYPES = ["proforma_invoice"] as const;
 
 /**
- * The LC wording and the Proforma Invoice are sent to the other party at the same time as the PSA.
+ * The LC wording is sent to the other party at the same time as the PSA.
  * A companion that has an approved version is sent now. A companion that is not approved yet
  * is not blocked: it is reported back so staff can finish it and send it, and mistakes can still be
  * corrected by creating a new version of any of the documents.
  */
-export async function sendPsaCompanions(input: {
-  transactionId: string;
-  actorUserId: string;
-}): Promise<{ sent: string[]; notReady: string[]; missing: string[] }> {
+export async function sendPsaCompanions(input: { transactionId: string; actorUserId: string }) {
+  return sendApprovedCompanions(PSA_COMPANION_TYPES, input);
+}
+
+/**
+ * Called when Finekarts has counter-signed the PSA (the contract is now executed): the Proforma Invoice
+ * goes to the buyer together with the copy of the signed contract, which the buyer already sees as the
+ * document's latest signed version.
+ */
+export async function sendProformaWithSignedContract(input: { transactionId: string; actorUserId: string }) {
+  return sendApprovedCompanions(CONTRACT_COPY_COMPANION_TYPES, input);
+}
+
+async function sendApprovedCompanions(
+  types: readonly string[],
+  input: { transactionId: string; actorUserId: string },
+): Promise<{ sent: string[]; notReady: string[]; missing: string[] }> {
   await tryConnectMongo();
   const { Document, DocumentVersion } = await import("@/models");
   const docs = await Document.find({
     transactionId: input.transactionId,
-    documentType: { $in: [...PSA_COMPANION_TYPES] },
+    documentType: { $in: [...types] },
     deletedAt: null,
   })
     .select("documentType workflowStatus")
@@ -782,7 +799,7 @@ export async function sendPsaCompanions(input: {
     sent.push(d.documentType);
   }
   const present = new Set(docs.map((d) => d.documentType));
-  const missing = PSA_COMPANION_TYPES.filter((t) => !present.has(t));
+  const missing = types.filter((t) => !present.has(t));
   return { sent, notReady, missing };
 }
 

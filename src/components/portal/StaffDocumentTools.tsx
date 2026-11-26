@@ -146,7 +146,13 @@ export function StaffDocumentTools({
       });
       const json = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(json.error ?? "Counter-signing failed.");
-      return "Counter-signed copy recorded.";
+      const c = json?.contractCopy as { sent: string[]; notReady: string[]; missing: string[] } | undefined;
+      let message = "Counter-signed copy recorded. The PSA is now a contract and the buyer can download the signed copy.";
+      if (c?.sent.length) message += " The Proforma Invoice was sent to the buyer with it.";
+      if (c && (c.notReady.length || c.missing.length)) {
+        message += " The Proforma Invoice has not been sent yet: create it or approve it, then press Send on it.";
+      }
+      return message;
     });
   }
 

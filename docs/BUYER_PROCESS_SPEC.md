@@ -182,3 +182,16 @@ After the PSA is signed, Finekarts issues a **Proforma Invoice**, not a Commerci
 - RWA is required on every LC transaction. If the buyer does not have the FIS ready, the transaction moves forward without it (Finekarts makes an arrangement).
 - The PSA is a contract: it is complete when both parties have signed and stamped it with a copy of the director's passport attached.
 - Each step on both sides must allow upload, download and signing. Finekarts must be able to correct errors in any document it generated and have the fully formatted version.
+
+## Contract and Proforma: the exact order, in the client's own words (2026-11-27). Follow this, do not reinterpret it.
+
+1. Finekarts sends the buyer the **PSA and the LC wording**.
+2. The buyer **signs and stamps the PSA, attaches the passport of the director, and sends it back**.
+3. Finekarts **signs and stamps it and attaches its own passport**. At this point both parties have signed and the PSA **becomes a contract**.
+4. Finekarts then **sends a copy of the contract (the signed PSA) to the buyer together with the Proforma Invoice**.
+5. The buyer uses the Proforma Invoice and the PSA to open the LC (deadline agreed on the PSA, negotiable, hours or business hours).
+
+So the Proforma Invoice is NOT sent with the first PSA. It goes out with the copy of the signed contract.
+(2026-11-26 an earlier message was read as "the Proforma goes with the PSA and the LC wording" and the code was changed; that was wrong and was reverted. Before changing the process from a message that seems to disagree with this file or the diagram, ask the client what he means.)
+
+Nothing is final until the end of the trade: the LC deadline can be changed, an amended PSA can be issued and signed again after signing, and banking errors lead to amendments. Forms stay flexible.

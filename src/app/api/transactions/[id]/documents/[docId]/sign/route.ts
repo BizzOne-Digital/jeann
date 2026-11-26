@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { requireApiAuth, handleApiError } from "@/lib/api/require-api-auth";
-import { uploadSignedDocument } from "@/lib/transactions/trade-document-service";
+import { sendProformaWithSignedContract, uploadSignedDocument } from "@/lib/transactions/trade-document-service";
 import { auditRequestMeta } from "@/lib/api/request-meta";
 import { assertSignAllowed } from "@/lib/transactions/step-service";
 import { assertSupplierTransactionAccess } from "@/lib/transactions/supplier-access";
@@ -22,7 +22,7 @@ export async function POST(
     const tx = await Transaction.findById(transactionId).lean();
     if (!tx) return NextResponse.json({ error: "Not found." }, { status: 404 });
     const doc = await Document.findById(docId)
-      .select("transactionId buyerVisible supplierVisible internalOnly")
+      .select("transactionId buyerVisible supplierVisible internalOnly documentType")
       .lean();
     if (!doc || String(doc.transactionId) !== String(tx._id)) {
       return NextResponse.json({ error: "Not found." }, { status: 404 });
@@ -88,7 +88,15 @@ export async function POST(
       userAgent: meta.userAgent,
     });
 
-    return NextResponse.json({ ok: true, checksum: result.checksum });
+    // Finekarts has now counter-signed the PSA, so the PSA is a contract. Finekarts sends the buyer a copy of
+    // the contract together with the Proforma Invoice. The copy is the signed version the buyer already sees;
+    // the Proforma goes now if it is approved, otherwise staff are told to finish and send it.
+    let contractCopy: { sent: string[]; notReady: string[]; missing: string[] } | undefined;
+    if (auth.ctx.isInternal && doc.documentType === "spa" && tx.side !== "supplier") {
+      contractCopy = await sendProformaWithSignedContract({ transactionId, actorUserId: auth.ctx.userId });
+    }
+
+    return NextResponse.json({ ok: true, checksum: result.checksum, contractCopy });
   } catch (error) {
     return handleApiError(error);
   }
