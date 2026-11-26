@@ -69,13 +69,17 @@ export function CisDraftForm({ initial }: CisFormProps) {
     setError(null);
     try {
       const res = await fetch("/api/portal/buyer/cis/submit", { method: "POST" });
-      const body = (await res.json()) as { error?: string };
+      const body = (await res.json()) as { error?: string; emailSent?: boolean };
       if (!res.ok) {
         setError(body.error || "Unable to submit the company profile.");
         return;
       }
       setStatus("submitted");
-      setMessage("Submitted. Finekarts will review your company profile and approve your buyer account.");
+      setMessage(
+        body.emailSent === false
+          ? "Submitted, but the notification email could not be sent. Finekarts can still see your submission in the admin."
+          : "Submitted. Finekarts will review your company profile and approve your buyer account.",
+      );
     } catch {
       setError("Unable to submit the company profile.");
     } finally {

@@ -38,7 +38,8 @@ export async function POST(request: NextRequest) {
       metadata: { version: result.version, source: "buyer_company_profile" },
     });
 
-    // Email must never undo a successful submission.
+    // Email must never undo a successful submission, but a failure must not stay invisible either.
+    let emailSent = true;
     try {
       const { Organization } = await import("@/models");
       const org = await Organization.findById(orgId).select("legalName").lean();
@@ -49,10 +50,11 @@ export async function POST(request: NextRequest) {
         organizationId: String(orgId),
       });
     } catch (mailError) {
+      emailSent = false;
       console.error("[portal/buyer/cis/submit] email failed", mailError);
     }
 
-    return NextResponse.json({ ok: true, version: result.version });
+    return NextResponse.json({ ok: true, version: result.version, emailSent });
   } catch (error) {
     if (error instanceof Error) {
       if (error.message === "incomplete_cis") {
