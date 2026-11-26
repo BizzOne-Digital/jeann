@@ -7,6 +7,7 @@ import {
 import { getTransactionBankingSummary } from "@/lib/banking/transaction-banking-summary";
 import { hasStandingFis } from "@/lib/transactions/banking-service";
 import { whitelistBuyerTerms } from "@/lib/transactions/step-rules";
+import { resolveLcDeadline } from "@/lib/contracts/psa-terms";
 import { WORKFLOW_STATUS_LABELS, allowedTransitionsFrom } from "@/lib/transactions/workflow";
 
 export const runtime = "nodejs";
@@ -49,8 +50,8 @@ export async function GET(
         status: tx.status,
         currentStepKey: tx.currentStepKey,
         buyerVisibleNotes: tx.buyerVisibleNotes,
-        lcDeadlineHours: tx.lcDeadlineHours ?? undefined,
-        lcDeadlineBusinessHours: Boolean(tx.lcDeadlineBusinessHours),
+        lcDeadlineHours: resolveLcDeadline(tx).hours,
+        lcDeadlineBusinessHours: resolveLcDeadline(tx).business,
         submittedAt: tx.submittedAt,
         createdAt: tx.createdAt,
       },

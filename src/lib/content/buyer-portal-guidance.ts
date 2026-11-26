@@ -31,7 +31,7 @@ export const BUYER_TRADE_DOCUMENT_FLOW = [
     step: "4",
     title: "Proforma Invoice",
     body:
-      "Once the PSA is signed, Finekarts issues the Proforma Invoice. From that point you have " + LC_DEADLINE_HOURS + " hours to submit your LC.",
+      "Once the PSA is signed, Finekarts issues the Proforma Invoice. From that point you have " + LC_DEADLINE_HOURS + " business hours (or the deadline agreed in your PSA) to submit your LC.",
   },
   {
     step: "5",

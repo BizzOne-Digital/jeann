@@ -13,7 +13,7 @@ import { ICPO_SPECIFICATION_NOTE } from "@/lib/content/buyer-portal-guidance";
 import type { DocumentVersionStatus } from "@/models/DocumentVersion";
 import { findPublishedTemplate } from "@/lib/contracts/template-service";
 import { placeholderValues, renderTemplateLines, renderTemplateRich, wrapLine } from "@/lib/contracts/template-merge";
-import { lcDeadlineLabel, missingPsaClauses, normalizeLcDeadlineHours, PROFORMA_DEADLINE_CLAUSE } from "@/lib/contracts/psa-terms";
+import { lcDeadlineLabel, missingPsaClauses, normalizeLcDeadlineHours, PROFORMA_DEADLINE_CLAUSE, resolveLcDeadline } from "@/lib/contracts/psa-terms";
 import { embedRichFonts, renderRichText } from "@/lib/documents/rich-text-pdf";
 import { loadCompanyImage } from "@/lib/documents/signature-image";
 import { FINEKARTS_DETAILS } from "@/lib/contracts/company-details";
@@ -350,8 +350,9 @@ export async function generateDocumentPdf(input: {
     if (input.lcDeadlineBusinessHours !== undefined) set.lcDeadlineBusinessHours = input.lcDeadlineBusinessHours;
     if (Object.keys(set).length) await Transaction.updateOne({ _id: doc.transactionId }, { $set: set });
     const saved = await Transaction.findById(doc.transactionId).select("lcDeadlineHours lcDeadlineBusinessHours").lean();
-    structuredData._lcDeadlineHours = normalizeLcDeadlineHours(saved?.lcDeadlineHours);
-    structuredData._lcDeadlineLabel = lcDeadlineLabel(saved?.lcDeadlineHours, Boolean(saved?.lcDeadlineBusinessHours));
+    const deadline = resolveLcDeadline(saved);
+    structuredData._lcDeadlineHours = deadline.hours;
+    structuredData._lcDeadlineLabel = lcDeadlineLabel(deadline.hours, deadline.business);
   }
 
   // Use the published admin template for this document type when one exists; otherwise built-in layout.

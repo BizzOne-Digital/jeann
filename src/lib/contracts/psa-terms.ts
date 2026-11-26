@@ -4,8 +4,13 @@
  * reads the same values from here.
  */
 
-/** Hours the buyer has to submit the LC after the Proforma Invoice is issued. */
-export const LC_DEADLINE_HOURS = 24;
+/**
+ * Default time the buyer has to submit the LC after the Proforma Invoice is issued: 48 business hours
+ * (client, 2026-11-27: the buyer may need more time, and the ICC period is 5 business days). It is only a
+ * default. The deadline is negotiable, so staff can set any value on the PSA, in hours or business hours.
+ */
+export const LC_DEADLINE_HOURS = 48;
+export const LC_DEADLINE_DEFAULT_BUSINESS = true;
 
 export type PsaMandatoryClause = { marker: string; text: (hours: number | string) => string };
 
@@ -24,6 +29,25 @@ export function lcDeadlineLabel(hours: unknown, businessHours = false): string {
   const n = normalizeLcDeadlineHours(hours);
   return businessHours ? n + " business" : String(n);
 }
+
+/**
+ * The deadline that applies to a transaction. When staff never set one, the default applies (48 business
+ * hours). A deadline that staff already set keeps its own unit, and one saved before business hours
+ * existed stays in plain hours.
+ */
+export function resolveLcDeadline(saved?: { lcDeadlineHours?: number | null; lcDeadlineBusinessHours?: boolean | null } | null): {
+  hours: number;
+  business: boolean;
+} {
+  const n = Number(saved?.lcDeadlineHours);
+  if (saved?.lcDeadlineHours != null && Number.isFinite(n) && n >= 1 && n <= 720) {
+    return { hours: Math.round(n), business: Boolean(saved.lcDeadlineBusinessHours) };
+  }
+  return { hours: LC_DEADLINE_HOURS, business: LC_DEADLINE_DEFAULT_BUSINESS };
+}
+
+/** The default deadline as it reads in a document ("48 business"). */
+export const LC_DEADLINE_DEFAULT_LABEL = lcDeadlineLabel(LC_DEADLINE_HOURS, LC_DEADLINE_DEFAULT_BUSINESS);
 
 /**
  * The same agreed deadline is stated on the Proforma Invoice, so the PSA and the Proforma never
@@ -59,7 +83,7 @@ export const PSA_MANDATORY_CLAUSES: PsaMandatoryClause[] = [
 ];
 
 /** The mandatory clauses that are not already present in the given text lines. */
-export function missingPsaClauses(existing: string[], hours: number | string = LC_DEADLINE_HOURS): string[] {
+export function missingPsaClauses(existing: string[], hours: number | string = LC_DEADLINE_DEFAULT_LABEL): string[] {
   const haystack = existing.join("\n");
   return PSA_MANDATORY_CLAUSES.filter((c) => !haystack.includes(c.marker)).map((c) => c.text(hours));
 }

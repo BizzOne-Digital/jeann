@@ -49,12 +49,12 @@ describe("rich text in a PDF", () => {
 });
 
 describe("PSA LC deadline", () => {
-  it("accepts any admin deadline from 1 to 720 hours and falls back to 24", () => {
-    expect(normalizeLcDeadlineHours(48)).toBe(48);
+  it("accepts any admin deadline from 1 to 720 hours and falls back to the default of 48", () => {
+    expect(normalizeLcDeadlineHours(72)).toBe(72);
     expect(normalizeLcDeadlineHours(1)).toBe(1);
-    expect(normalizeLcDeadlineHours(0)).toBe(24);
-    expect(normalizeLcDeadlineHours(5000)).toBe(24);
-    expect(normalizeLcDeadlineHours("abc")).toBe(24);
+    expect(normalizeLcDeadlineHours(0)).toBe(48);
+    expect(normalizeLcDeadlineHours(5000)).toBe(48);
+    expect(normalizeLcDeadlineHours("abc")).toBe(48);
   });
 
   it("writes the chosen deadline into the PSA clause", () => {

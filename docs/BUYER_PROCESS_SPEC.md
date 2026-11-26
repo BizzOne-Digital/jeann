@@ -195,3 +195,6 @@ So the Proforma Invoice is NOT sent with the first PSA. It goes out with the cop
 (2026-11-26 an earlier message was read as "the Proforma goes with the PSA and the LC wording" and the code was changed; that was wrong and was reverted. Before changing the process from a message that seems to disagree with this file or the diagram, ask the client what he means.)
 
 Nothing is final until the end of the trade: the LC deadline can be changed, an amended PSA can be issued and signed again after signing, and banking errors lead to amendments. Forms stay flexible.
+
+## LC deadline default (client, 2026-11-27)
+The default LC deadline is **48 business hours** (the buyer may need more time; the ICC period is 5 business days). It is only a default and is negotiable: staff can set any value on the PSA, in hours or business hours, and issue new versions of the PSA and the Proforma Invoice. Transactions where staff already set a deadline keep it.

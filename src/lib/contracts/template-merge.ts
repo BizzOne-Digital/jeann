@@ -167,7 +167,7 @@ export const PLACEHOLDER_LABELS: Record<string, string> = {
   productLineUpper: "COMMODITY NAME AND GRADE",
   buyerSignature: "SIGNATURE",
   buyerTitle: "Buyer Title",
-  lcDeadlineHours: "24",
+  lcDeadlineHours: "48 business",
   buyerSalutation: "Mr./Ms. Last Name",
   sellerRepresentative: "AUTHORIZED SIGNATORY",
   sellerTitle: "TITLE",

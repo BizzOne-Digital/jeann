@@ -66,7 +66,7 @@ const BUYER_STEPS: StepDef[] = [
     n: 5,
     title: "Proforma Invoice",
     admin: "Generate the banking-regulated Proforma Invoice. Request the LC type and exact amount agreed on the PSA. Everything must match.",
-    buyer: "Buyer receives the Proforma Invoice and must submit the LC from the issuing bank within 24 hours.",
+    buyer: "Buyer receives the Proforma Invoice and must submit the LC from the issuing bank within the deadline agreed in the PSA (48 business hours by default).",
     types: [{ value: "proforma_invoice", label: "Proforma Invoice" }],
   },
   {

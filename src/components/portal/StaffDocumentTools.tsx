@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { FormattedTextEditor } from "@/components/portal/FormattedTextEditor";
 import { ProductPicker } from "@/components/portal/ProductPicker";
+import { LC_DEADLINE_DEFAULT_BUSINESS, LC_DEADLINE_HOURS } from "@/lib/contracts/psa-terms";
 
 type Doc = {
   id: string;
@@ -126,8 +127,8 @@ export function StaffDocumentTools({
   const [internalPrice, setInternalPrice] = useState("");
   const [s3Type, setS3Type] = useState("spa");
   const [s3Text, setS3Text] = useState("");
-  const [lcHours, setLcHours] = useState("24");
-  const [lcBusiness, setLcBusiness] = useState(false);
+  const [lcHours, setLcHours] = useState(String(LC_DEADLINE_HOURS));
+  const [lcBusiness, setLcBusiness] = useState(LC_DEADLINE_DEFAULT_BUSINESS);
   const [signName, setSignName] = useState("");
 
   function counterSign(e: FormEvent<HTMLFormElement>, d: Doc) {
@@ -220,7 +221,7 @@ export function StaffDocumentTools({
         clauseTexts: s3Text.split(/\n{2,}/).filter((t) => t.trim()),
         isDraft: true,
         ...(s3Type === "spa" || s3Type === "proforma_invoice"
-          ? { lcDeadlineHours: Math.max(1, Math.min(720, Math.round(Number(lcHours) || 24))), lcDeadlineBusinessHours: lcBusiness }
+          ? { lcDeadlineHours: Math.max(1, Math.min(720, Math.round(Number(lcHours) || LC_DEADLINE_HOURS))), lcDeadlineBusinessHours: lcBusiness }
           : {}),
       });
       return `${label} v${j.version} generated as PDF (draft).`;

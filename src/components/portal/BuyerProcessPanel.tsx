@@ -4,7 +4,7 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { BuyerLcDetailsForm } from "@/components/portal/BuyerLcDetailsForm";
 import { RWA_DESCRIPTION } from "@/lib/banking/rwa";
-import { LC_DEADLINE_HOURS } from "@/lib/contracts/psa-terms";
+import { LC_DEADLINE_DEFAULT_BUSINESS, LC_DEADLINE_HOURS } from "@/lib/contracts/psa-terms";
 
 export type ProcessStep = "psa" | "invoice" | "banking";
 
@@ -73,7 +73,7 @@ export function BuyerProcessPanel({
   const [documents, setDocuments] = useState<Doc[]>([]);
   const [steps, setSteps] = useState<StepView[]>([]);
   const [lcHours, setLcHours] = useState<number>(LC_DEADLINE_HOURS);
-  const [lcBusiness, setLcBusiness] = useState(false);
+  const [lcBusiness, setLcBusiness] = useState(LC_DEADLINE_DEFAULT_BUSINESS);
   const [reloadKey, setReloadKey] = useState(0);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -108,7 +108,7 @@ export function BuyerProcessPanel({
         setDocuments(json.documents ?? []);
         setSteps(json.workflowSteps ?? []);
         setLcHours(Number(json.transaction?.lcDeadlineHours) || LC_DEADLINE_HOURS);
-        setLcBusiness(Boolean(json.transaction?.lcDeadlineBusinessHours));
+        setLcBusiness(json.transaction?.lcDeadlineBusinessHours ?? LC_DEADLINE_DEFAULT_BUSINESS);
       })
       .catch((e) => {
         if (!cancelled) setError(e instanceof Error ? e.message : "Unable to load documents.");
