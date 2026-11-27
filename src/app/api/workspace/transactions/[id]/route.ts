@@ -43,6 +43,39 @@ export async function GET(
     const fisOnRecord = await hasStandingFis(tx);
     const cisOnRecord = await hasStandingFis(tx, undefined, "cis");
 
+    // One trade has two stages: stage 1 in the buyer portal (Finekarts sells) and stage 2 in the supplier portal
+    // (Finekarts buys). The supplier order is linked to the buyer order and carries its number with a suffix.
+    const summarize = async (t: { _id: unknown; transactionNumber: string; transactionType?: string; workflowStatus: string }, stage: 1 | 2) => {
+      const rows = String(t._id) === String(tx._id) ? steps : await WorkflowStep.find({ transactionId: t._id }).sort({ order: 1 }).lean();
+      const done = rows.filter((r) => ["completed", "skipped"].includes(String(r.status))).length;
+      const next = rows.find((r) => !["completed", "skipped"].includes(String(r.status)));
+      const procurement = t.transactionType === "supplier_purchase";
+      return {
+        id: String(t._id),
+        number: t.transactionNumber,
+        stage,
+        portal: stage === 1 ? "Buyer portal" : "Supplier portal",
+        role: stage === 1 ? "Finekarts sells" : "Finekarts buys",
+        statusLabel: procurement
+          ? (PROCUREMENT_STATUS_LABELS[t.workflowStatus] ?? t.workflowStatus)
+          : (WORKFLOW_STATUS_LABELS[t.workflowStatus as keyof typeof WORKFLOW_STATUS_LABELS] ?? t.workflowStatus),
+        stepsDone: done,
+        stepsTotal: rows.length,
+        nextStep: next ? { order: next.order, title: next.title } : null,
+        isThis: String(t._id) === String(tx._id),
+      };
+    };
+    const buyerStage = isProcurement
+      ? tx.linkedTransactionId ? await Transaction.findById(tx.linkedTransactionId).lean() : null
+      : tx;
+    const supplierStage = isProcurement
+      ? tx
+      : await Transaction.findOne({ linkedTransactionId: tx._id, side: "supplier", deletedAt: null }).lean();
+    const stages = {
+      stage1: buyerStage ? await summarize(buyerStage, 1) : null,
+      stage2: supplierStage ? await summarize(supplierStage, 2) : null,
+    };
+
     const allowedTransitions = isProcurement
       ? allowedProcurementTransitionsFrom(tx.workflowStatus).map((t) => t.to)
       : allowedTransitionsFrom(tx.workflowStatus).map((t) => t.to);
@@ -69,6 +102,7 @@ export async function GET(
         lcDeadlineBusinessHours: resolveLcDeadline(tx).business,
       },
       terms,
+      stages,
       workflowSteps: steps.map((s) => ({
         key: s.key,
         order: s.order,
