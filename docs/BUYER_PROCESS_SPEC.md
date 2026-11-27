@@ -198,3 +198,22 @@ Nothing is final until the end of the trade: the LC deadline can be changed, an 
 
 ## LC deadline default (client, 2026-11-27)
 The default LC deadline is **48 business hours** (the buyer may need more time; the ICC period is 5 business days). It is only a default and is negotiable: staff can set any value on the PSA, in hours or business hours, and issue new versions of the PSA and the Proforma Invoice. Transactions where staff already set a deadline keep it.
+
+## Second stage: trade documents and certificates (client, 2026-11-27)
+- Stage 1 ends with the Proforma Invoice (sent with the copy of the signed contract).
+- Stage 2 is the trade documents and certificates that Finekarts agreed in the PSA to provide to the buyer (COO, HACCP, Kosher, Halal, shipping documents, and the documents the buyer needs at the port of discharge). If Finekarts agreed to provide them, it must.
+- Finekarts buys the exact same product from its supplier and signs a contract with the supplier to provide the product, the shipping documents and the certificates.
+- **Requirements vary from port to port and regulations change at any time.** Example: Canada changed its labelling rules last year, and a shipment sent with the old label is arrested. So the list of required documents must never be fixed in code: staff must be able to add document types and change the requirements for a port or country whenever the rules change, and change the list of a single transaction at any time.
+- Current code (2026-11-27): requirement templates exist with destination country, port, product, effective date and active flag (`DocumentRequirementTemplate`, API only, no admin screen). The document TYPES are a fixed list in `src/lib/shipments/checklist-service.ts`, so a new type needs a developer (only "Other" is free). Checklists are built by hand per shipment lot and are not taken from the PSA. Not yet built; waiting for the client to confirm the plan.
+
+### Correction on stage 2 (client, 2026-11-27, same day): documents are managed per transaction
+- The certificates and documents are **part of what the buyer requests**. Finekarts does not know in advance what the buyer will buy, so it cannot know the documents in advance.
+- Therefore the documents are **managed inside each transaction**, by the people running that transaction. **The platform must not dictate how Finekarts conducts the transaction.**
+- Do NOT build mandatory per-port lists or a fixed catalogue that forces documents on a transaction. Per-port lists, if ever added, are only optional helpers that staff may ignore. Document names must be free text (any certificate, any label requirement), not limited to a fixed list.
+- Each transaction has its own list of agreed documents that staff can add to, change and remove at any time, with a status per item (agreed, received from the supplier, provided to the buyer). The earlier idea of per-port lists that fill in new transactions is withdrawn until the client asks for it.
+
+### Built (2026-11-27): Requested documents, per transaction
+The client confirmed: whatever documents are requested from Finekarts, Finekarts requests the same from its supplier. Each transaction has a "Requested documents" tab. The buyer adds what he needs (free text, no fixed list), staff can add, rename, change the status and remove any item at any time, and the same items are mirrored on the linked supplier order (also copied when the supplier order is opened later). Status: Requested, Received from the supplier, Provided to the buyer. The supplier sees what Finekarts asks of them and cannot add. The files themselves are uploaded in the transaction's Documents tab. Code: RequestedDocument model, equested-documents-service.ts, /api/transactions/[id]/requested-documents.
+
+### Principle (client, 2026-11-27): every transaction is separate
+Each transaction is kept separate from every other one to avoid confusion. Documents, requested documents, shipments, invoices and signatures belong to ONE transaction and must never mix with documents that are not related to it. A route that receives a transaction id and a document id must check that the document belongs to that transaction. (A missing check on the document generate route was found and fixed on 2026-11-27.) The only records shared across transactions are the organization-level verification documents (CIS, RWA, FIS) of a returning buyer, as the process spec says.

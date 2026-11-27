@@ -33,6 +33,12 @@ export async function POST(
     const tx = await Transaction.findById(transactionId).lean();
     if (!tx) return NextResponse.json({ error: "Not found." }, { status: 404 });
 
+    // Every transaction is separate: a document can only be generated through the transaction it belongs to.
+    // Without this, a document of a closed transaction could be changed through the URL of an open one.
+    const { Document } = await import("@/models");
+    const owned = await Document.exists({ _id: docId, transactionId: tx._id, deletedAt: null });
+    if (!owned) return NextResponse.json({ error: "Not found." }, { status: 404 });
+
     const result = await generateDocumentPdf({
       documentId: docId,
       actorUserId: auth.ctx.userId,

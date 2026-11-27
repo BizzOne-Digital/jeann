@@ -129,6 +129,17 @@ export async function createProcurementTransaction(input: {
     });
   }
 
+  // Whatever documents the buyer already asked Finekarts for are asked from the supplier too.
+  if (buyerTx) {
+    const { copyRequestedDocumentsToSupplierOrder } = await import("@/lib/transactions/requested-documents-service");
+    await copyRequestedDocumentsToSupplierOrder({
+      buyerTransactionId: buyerTx._id,
+      supplierTransactionId: tx._id,
+      supplierOrganizationId: new Types.ObjectId(input.supplierOrganizationId),
+      userId: input.actorUserId,
+    });
+  }
+
   // Back-to-back: the quantity is the buyer's quantity, so the total uses it too.
   const qty = buyerTerms?.quantity
     ? money(buyerTerms.quantity.toString())

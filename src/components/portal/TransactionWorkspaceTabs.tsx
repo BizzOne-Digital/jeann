@@ -9,9 +9,10 @@ import { TransactionFinancePanel } from "@/components/portal/TransactionFinanceP
 import { TransactionWorkflowActions } from "@/components/portal/TransactionWorkflowActions";
 import { AdminSevenSteps } from "@/components/portal/AdminSevenSteps";
 import { ShipmentLotsList } from "@/components/portal/ShipmentLotsList";
+import { RequestedDocumentsPanel } from "@/components/portal/RequestedDocumentsPanel";
 import { BuyerInvoicesList } from "@/components/portal/BuyerInvoicesList";
 
-type Tab = "overview" | "steps" | "workflow" | "documents" | "shipments" | "invoices" | "finance" | "banking";
+type Tab = "overview" | "steps" | "workflow" | "documents" | "requested" | "shipments" | "invoices" | "finance" | "banking";
 
 type TxDetail = {
   transaction: {
@@ -109,6 +110,7 @@ export function TransactionWorkspaceTabs({
     ...(showStaffActions || workflowMode === "supplier" ? [{ id: "steps" as Tab, label: "7 steps" }] : []),
     { id: "workflow", label: "Workflow" },
     { id: "documents", label: "Documents" },
+    { id: "requested", label: "Requested documents" },
     // Shipment tracking and invoices belong to the transaction, not to a separate menu.
     { id: "shipments", label: "Shipment tracking" },
     ...(workflowMode === "buyer" && !showStaffActions ? [{ id: "invoices" as Tab, label: "Invoices" }] : []),
@@ -235,6 +237,14 @@ export function TransactionWorkspaceTabs({
             />
           ) : null}
         </div>
+      ) : null}
+
+      {tab === "requested" ? (
+        <RequestedDocumentsPanel
+          transactionId={transactionId}
+          mode={workflowMode === "supplier" ? "supplier" : "buyer"}
+          isStaff={showStaffActions}
+        />
       ) : null}
 
       {tab === "shipments" ? (

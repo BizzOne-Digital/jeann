@@ -53,6 +53,7 @@ export * from "./TradeClaim";
 export * from "./PresentationPackage";
 export * from "./TransportUnit";
 export * from "./DocumentRequirementTemplate";
+export * from "./RequestedDocument";
 export * from "./SignatureRecord";
 export * from "./PurchaseRequest";
 export * from "./AgentDeal";
