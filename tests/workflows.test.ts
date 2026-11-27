@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   BUYER_WORKFLOW_STEPS,
+  SUPPLIER_WORKFLOW_STEPS,
   canOpenStep,
   transitionStep,
   type WorkflowStepDef,
@@ -14,8 +15,9 @@ function readySteps(): WorkflowStepDef[] {
 }
 
 describe("buyer workflow transitions", () => {
-  it("has six steps", () => {
-    expect(BUYER_WORKFLOW_STEPS).toHaveLength(6);
+  it("has the eight steps of stage 1 (buyer portal) and the nine of stage 2 (supplier portal)", () => {
+    expect(BUYER_WORKFLOW_STEPS).toHaveLength(8);
+    expect(SUPPLIER_WORKFLOW_STEPS).toHaveLength(9);
   });
 
   it("locks later steps until prerequisites satisfied", () => {

@@ -25,16 +25,8 @@ export interface WorkflowTemplateDefinition {
 
 export const BUYER_WORKFLOW_KEY = "buyer_default_v1";
 
-const DESCRIPTIONS: Record<string, string> = {
-  sco_fco:
-    "Seller/Finekarts sends SCO or FCO. Authorized staff may skip with a recorded reason when parties began through another agreed route.",
-  icpo: "Buyer submits or replies with ICPO.",
-  psa_lc: "Finekarts sends PSA/SPA draft and approved LC wording references.",
-  buyer_sign: "Buyer signs/stamps PSA/SPA and submits authorized-signer documents.",
-  finekarts_sign: "Finekarts signs/stamps and returns the fully executed counterpart.",
-  banking:
-    "Buyer proceeds with the agreed banking instrument (e.g. approved LC structure), subject to bank and contract requirements.",
-};
+// The step titles are the client's own wording and are complete sentences, so they are also the descriptions.
+const DESCRIPTIONS: Record<string, string> = {};
 
 export const BUYER_WORKFLOW: WorkflowTemplateDefinition = {
   key: BUYER_WORKFLOW_KEY,

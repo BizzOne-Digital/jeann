@@ -5,6 +5,8 @@
  * Schedule A) come from the product record, so they follow the product and stay bank-compliant.
  * Admin can edit, add or remove sections in the skeleton editor.
  */
+import { tradeProcedureLines } from "@/lib/contracts/trade-procedure";
+
 export type SkeletonBlock = { type: string; content: string };
 
 const row = (label: string, value: string) => "**" + label + ":** " + value;
@@ -147,15 +149,11 @@ export const SCO_SKELETON_BLOCKS: SkeletonBlock[] = [
     content:
       "Quality, quantity, weight, and packing shall be inspected at the Port of Loading by {{inspection}} at Seller's expense. All original shipping documents shall be presented through bank-to-bank channels pursuant to UCP 600:\n{{requiredDocuments}}",
   },
-  { type: "paragraph", content: "## 6. TRANSACTION PROCEDURE & GOVERNING CLAUSES" },
+  { type: "paragraph", content: "## 6. TRADE PROCEDURE (THE WORKFLOW OF THIS TRANSACTION) & GOVERNING CLAUSES" },
   {
     type: "paragraph",
     content: [
-      "1. **SCO Acceptance & ICPO Submission:** Buyer signs and returns this SCO accompanied by an Irrevocable Corporate Purchase Order (ICPO), Client Information Sheet (CIS), Certificate of Incorporation, and a bank-issued Ready, Willing, and Able (RWA) letter or Bank Comfort Letter (BCL) verifiable via bank-to-bank SWIFT MT799.",
-      "2. **SPA Execution:** Within three (3) banking days of KYC/capability verification, Seller issues the formal Sales and Purchase Agreement (SPA) and Proforma Invoice. Both Parties finalize, sign, and seal the SPA within three (3) banking days.",
-      "3. **Operative Transferable LC Issuance:** Within five (5) banking days of SPA execution, Buyer's Issuing Bank transmits the operative Irrevocable, Transferable Letter of Credit (SWIFT MT700) to Seller's Advising/Transferring Bank.",
-      "4. **Performance Bond & Loading:** Seller's Bank issues the operative Performance Bond (if applicable), completes pre-shipment inspection, and loads the cargo within the contracted shipment window.",
-      "5. **Document Presentation & Settlement:** Seller (or Second Beneficiaries via the Transferring Bank) presents compliant documents to Buyer's Issuing Bank; payment is released immediately upon document verification under ICC UCP 600.",
+      ...tradeProcedureLines(),
       row(
         "Allocation & Validity",
         "Product allocation is subject to production capacity on a First-Come, First-Served (FCFS) basis. Quoted pricing becomes contractually binding upon SPA execution and receipt of an operative SWIFT MT700.",

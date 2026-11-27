@@ -10,7 +10,12 @@ import {
   transitionTable,
   whitelistBuyerTerms,
 } from "@/lib/transactions/step-rules";
-import { BUYER_WORKFLOW_STEPS, SUPPLIER_WORKFLOW_STEPS, type StepStatus } from "@/lib/workflows/transitions";
+// These tests describe the six-step workflow that transactions opened before 2026-11-28 keep following.
+import {
+  LEGACY_BUYER_WORKFLOW_STEPS as BUYER_WORKFLOW_STEPS,
+  LEGACY_SUPPLIER_WORKFLOW_STEPS as SUPPLIER_WORKFLOW_STEPS,
+  type StepStatus,
+} from "@/lib/workflows/transitions";
 
 const buyerSteps = (statuses: StepStatus[]) =>
   BUYER_WORKFLOW_STEPS.map((s, i) => ({ ...s, status: statuses[i] ?? "not_started" }));

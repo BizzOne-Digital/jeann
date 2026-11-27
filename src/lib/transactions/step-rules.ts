@@ -1,7 +1,7 @@
 import { canOpenStep, isStepSatisfied, type StepStatus, type WorkflowStepDef } from "@/lib/workflows/transitions";
 import { WORKFLOW_TRANSITIONS, type WorkflowTransition } from "@/lib/transactions/workflow";
 import { PROCUREMENT_TRANSITIONS } from "@/lib/transactions/procurement-workflow";
-import { defaultStepForDocument, type DocStepSide } from "@/lib/transactions/document-steps";
+import { defaultStepForDocument, usesStageSteps, type DocStepSide } from "@/lib/transactions/document-steps";
 
 /** Pure step-advance rules for both portals. No database access here. */
 
@@ -53,19 +53,28 @@ export function stepUpdateForEvent(
   documentType: string,
   event: DocEvent,
   signer?: "external" | "staff",
+  /** The step keys of the transaction: tells whether it follows the two-stage workflow or the older six steps. */
+  keys?: readonly string[],
 ): StepUpdate | null {
+  const staged = usesStageSteps(side, keys);
   if (event === "signed") {
     if (documentType !== "spa") return null;
     if (side === "buyer") {
+      // Two-stage workflow: the buyer's signature completes step 5 (the PSA sent for review and signing).
       return signer === "staff"
         ? { stepKey: "finekarts_sign", status: "completed" }
-        : { stepKey: "buyer_sign", status: "completed" };
+        : { stepKey: staged ? "psa_lc" : "buyer_sign", status: "completed" };
     }
     return signer === "staff"
       ? { stepKey: "finekarts_sign", status: "completed" }
       : { stepKey: "supplier_sign", status: "completed" };
   }
-  const def = defaultStepForDocument(documentType, side);
+  // Buyer portal, step 7: the Proforma Invoice goes out with the copy of the signed contract. Preparing it earlier
+  // must not move the transaction forward, so only sending it counts.
+  if (staged && side === "buyer" && documentType === "proforma_invoice") {
+    return event === "sent" ? { stepKey: "contract_copy", status: "completed" } : null;
+  }
+  const def = defaultStepForDocument(documentType, side, keys);
   if (!def) return null;
   const staff = isStaffAuthored(side, documentType);
   const completesStep = documentType !== "proposed_lc_wording" && documentType !== "proforma_invoice";
@@ -109,14 +118,19 @@ export function checkDocumentAction(input: {
     return "This document type is issued by Finekarts and cannot be uploaded here.";
   }
   if (FREE_TYPES.includes(documentType) || steps.length === 0) return null;
-  const def = defaultStepForDocument(documentType, side);
+  const keys = steps.map((s) => s.key);
+  // The Proforma Invoice is prepared in advance and sent with the copy of the signed contract (buyer portal, step 7).
+  if (usesStageSteps(side, keys) && side === "buyer" && documentType === "proforma_invoice") return null;
+  const def = defaultStepForDocument(documentType, side, keys);
   if (!def) return null;
+  // The number shown is the transaction's own step number.
+  const number = steps.find((s) => s.key === def.stepKey)?.order ?? def.stepNumber;
   if (!canOpenStep(steps, def.stepKey)) {
-    return `Step ${def.stepNumber} is not open yet. Earlier steps must be completed or skipped first.`;
+    return `Step ${number} is not open yet. Earlier steps must be completed or skipped first.`;
   }
   const current = steps.find((s) => s.key === def.stepKey);
   if (current && !isInternal && isStepSatisfied(current.status)) {
-    return `Step ${def.stepNumber} is already completed.`;
+    return `Step ${number} is already completed.`;
   }
   return null;
 }
@@ -134,9 +148,10 @@ export function checkSignAction(input: {
   allowResign?: boolean;
 }): string | null {
   if (input.steps.length === 0) return null;
+  const staged = usesStageSteps(input.side, input.steps.map((s) => s.key));
   const key =
     input.side === "buyer"
-      ? input.signer === "staff" ? "finekarts_sign" : "buyer_sign"
+      ? input.signer === "staff" ? "finekarts_sign" : staged ? "psa_lc" : "buyer_sign"
       : input.signer === "staff" ? "finekarts_sign" : "supplier_sign";
   if (!canOpenStep(input.steps, key)) {
     return "Signing is not open yet. The previous steps must be completed first.";
@@ -151,7 +166,23 @@ export function targetWorkflowStatus(
   side: DocStepSide,
   stepKey: string,
   status: StepStatus,
+  keys?: readonly string[],
 ): string | null {
+  const staged = usesStageSteps(side, keys);
+  if (staged && side === "buyer") {
+    // Two-stage workflow: step 4 prepares the PSA, step 5 is the buyer reviewing and signing it.
+    const stage1: Record<string, Partial<Record<StepStatus, string>>> = {
+      sco_fco: { in_progress: "offer_draft", submitted: "offer_under_review", approved: "offer_approved", completed: "offer_sent" },
+      icpo: { in_progress: "icpo_draft", submitted: "icpo_submitted", approved: "icpo_approved", completed: "icpo_approved" },
+      psa_prepare: { in_progress: "contract_draft", submitted: "contract_under_review", approved: "contract_approved", completed: "awaiting_buyer_signature" },
+      psa_lc: { completed: "awaiting_finekarts_signature" },
+      finekarts_sign: { completed: "contract_executed" },
+    };
+    return stage1[stepKey]?.[status] ?? null;
+  }
+  if (staged && side === "supplier" && ["lc_to_supplier"].includes(stepKey)) {
+    return ({ in_progress: "banking_setup", completed: "instrument_issuance_requested" } as Partial<Record<StepStatus, string>>)[status] ?? null;
+  }
   const b: Record<string, Partial<Record<StepStatus, string>>> = {
     sco_fco: { in_progress: "offer_draft", submitted: "offer_under_review", approved: "offer_approved", completed: "offer_sent" },
     icpo: { in_progress: "icpo_draft", submitted: "icpo_submitted", approved: "icpo_approved", completed: "icpo_approved" },

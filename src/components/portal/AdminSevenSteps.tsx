@@ -14,160 +14,163 @@ export type Variant = "buyer" | "supplier";
 
 type StepDef = {
   n: number;
+  /** The key of this step in the transaction's own workflow (the engine). */
+  key: string;
   title: string;
   admin: string;
   buyer: string;
-  /** Document types that belong to this step. */
+  /** Document types that can be uploaded at this step. */
   types: { value: string; label: string }[];
+  /** Finekarts staff decide when this step is done (nothing blocks them). */
+  manual?: boolean;
 };
 
+/** STAGE 1, buyer portal: Finekarts is the supplier. The client's own steps (2026-11-28). */
 const BUYER_STEPS: StepDef[] = [
   {
-    n: 1,
-    title: "SCO or FCO",
-    admin: "Generate a pre-loaded SCO or FCO with the product name and price (FOB and CIF) and send it to the buyer. This step can be bypassed in some cases.",
-    buyer: "Buyer receives and reviews the SCO or FCO.",
-    types: [
-      { value: "sco", label: "SCO" },
-      { value: "fco", label: "FCO" },
-    ],
+    n: 1, key: "sco_fco", title: "SCO or FCO, the offer",
+    admin: "Finekarts issues the SCO or FCO: the offer. It carries the trade procedure, the same steps as this workflow, so the buyer knows every step.",
+    buyer: "The buyer reviews the terms of the offer.",
+    types: [{ value: "sco", label: "SCO" }, { value: "fco", label: "FCO" }],
   },
   {
-    n: 2,
-    title: "ICPO or LOI, with CIS, RWA and FIS",
-    admin: "Receive and review the ICPO or LOI. The ICPO cannot be bypassed. Request the CIS and RWA (and the FIS, unless you make an exception). Review them here before the PSA.",
-    buyer: "Buyer submits a generated or pre-loaded ICPO or LOI, or uploads their own, and sends the CIS, RWA and FIS (with the ICPO, or later in this step).",
-    types: [
-      { value: "icpo", label: "ICPO" },
-      { value: "loi", label: "LOI" },
-      { value: "cis", label: "CIS" },
-      { value: "rwa", label: "RWA" },
-      { value: "fis", label: "FIS" },
-    ],
+    n: 2, key: "icpo", title: "The buyer submits the ICPO",
+    admin: "Receive and review the ICPO. It is the buyer's irrevocable purchase order.",
+    buyer: "The buyer reviews and accepts the offer and submits the ICPO, an irrevocable purchase order (PO).",
+    types: [{ value: "icpo", label: "ICPO" }, { value: "loi", label: "LOI" }],
   },
   {
-    n: 3,
-    title: "PSA with LC wording",
-    admin: "Generate the PSA from the ICPO or LOI and send it with the LC wording to the buyer to sign.",
-    buyer: "Buyer receives the PSA and the LC wording, then signs and stamps the PSA with the passport of the person in charge.",
-    types: [
-      { value: "spa", label: "PSA / SPA" },
-      { value: "proposed_lc_wording", label: "LC wording" },
-    ],
+    n: 3, key: "verification", title: "Verification documents: CIS, RWA and FIS", manual: true,
+    admin: "Finekarts formally requests the verification documents. Review the CIS, RWA and FIS, then mark this step done. A missing document is your call and never blocks the transaction.",
+    buyer: "The buyer already knows from the offer and complies by uploading the CIS, RWA and FIS.",
+    types: [{ value: "cis", label: "CIS" }, { value: "rwa", label: "RWA" }, { value: "fis", label: "FIS" }],
   },
   {
-    n: 4,
-    title: "Signed PSA and passports",
-    admin: "Receive the signed and stamped PSA with the buyer's passport. Finekarts signs and stamps the PSA and attaches the passport of the person in charge.",
-    buyer: "Buyer receives a copy of the fully signed PSA.",
+    n: 4, key: "psa_prepare", title: "Finekarts prepares the PSA",
+    admin: "If you are satisfied with the verification, use the buyer's ICPO to prepare the PSA (Documents tab).",
+    buyer: "Finekarts reviews the verification documents and prepares the purchase and sales agreement (PSA) from the buyer's ICPO.",
+    types: [{ value: "spa", label: "PSA / SPA" }, { value: "proposed_lc_wording", label: "LC wording" }],
+  },
+  {
+    n: 5, key: "psa_lc", title: "PSA and LC wording sent; the buyer signs and returns the PSA",
+    admin: "Send the PSA together with the LC wording to the buyer for review and approval.",
+    buyer: "The buyer reviews. If it matches the purchase order, the buyer signs the PSA, stamps it, attaches a copy of the passport and sends it back. If there are discrepancies, the buyer requests changes or an amendment.",
     types: [{ value: "passport_copy", label: "Passport copy" }],
   },
   {
-    n: 5,
-    title: "Proforma Invoice",
-    admin: "Generate the banking-regulated Proforma Invoice. Request the LC type and exact amount agreed on the PSA. Everything must match.",
-    buyer: "Buyer receives the Proforma Invoice and must submit the LC from the issuing bank within the deadline agreed in the PSA (48 business hours by default).",
+    n: 6, key: "finekarts_sign", title: "Finekarts signs the PSA: it becomes a full contract",
+    admin: "You receive the signed PSA. Sign it, stamp it and attach a copy of the director's passport. Both parties have now signed: it is a full contract.",
+    buyer: "The buyer waits for the fully signed contract.",
+    types: [{ value: "passport_copy", label: "Passport copy" }],
+  },
+  {
+    n: 7, key: "contract_copy", title: "Final copy of the contract with the Proforma Invoice",
+    admin: "Send a final copy of the contract (the PSA) to the buyer together with the Proforma Invoice. It goes out automatically when you counter-sign if the Proforma is approved.",
+    buyer: "The buyer receives the contract and the Proforma Invoice and opens the LC account within 48 business hours (the deadline can be negotiated).",
     types: [{ value: "proforma_invoice", label: "Proforma Invoice" }],
   },
   {
-    n: 6,
-    title: "LC received and bank review",
-    admin: "Receive the LC. Send all contract paperwork to the banking advisor for review and approval. The bank opens an LC account.",
-    buyer: "If the LC does not match the PSA, the buyer pays the amendment. If it is good, no amendment is due.",
+    n: 8, key: "amendments", title: "Amendments, as many as needed",
+    admin: "Amendments can be requested at any time and there can be several. The buyer's inspection request is granted at the loading port and the report is provided in stage 2.",
+    buyer: "The buyer can request an amendment at any time. The bank sets the amendment fee.",
     types: [
-      { value: "letter_of_credit", label: "Letter of Credit (real LC, not the LC wording)" },
-      { value: "other", label: "Other bank document" },
+      { value: "contract_amendment", label: "Amendment" },
+      { value: "letter_of_credit", label: "Letter of Credit (the real LC)" },
+      { value: "commercial_invoice", label: "Commercial Invoice" },
+      { value: "other", label: "Other document" },
     ],
-  },
-  {
-    n: 7,
-    title: "Shipping documents and payment",
-    admin: "After collecting all LC documents and certificates agreed on the PSA, the advisor reviews them and sends them to the buyer's bank for payment.",
-    buyer: "The seller and bank submit all documents. The buyer's bank pays by SWIFT MT103.",
-    types: [{ value: "other", label: "Shipping or payment document" }],
   },
 ];
 
+/** STAGE 2, supplier portal: Finekarts is the buyer and completes the purchase order of stage 1. */
 const SUPPLIER_STEPS: StepDef[] = [
   {
-    n: 1,
-    title: "Submit SCO or FCO",
-    admin: "Receive and review the SCO or FCO. If the buyer agrees, Finekarts issues the ICPO to the supplier.",
-    buyer: "Supplier submits the SCO or FCO. Both documents are accepted by the buyer.",
-    types: [
-      { value: "sco", label: "SCO" },
-      { value: "fco", label: "FCO" },
-      { value: "icpo", label: "ICPO" },
-    ],
+    n: 1, key: "supplier_sco_fco", title: "The supplier's SCO or FCO",
+    admin: "Finekarts receives the SCO or FCO from the supplier, or the opportunity is discussed by chat, message, email or WhatsApp. Review it and decide whether to proceed.",
+    buyer: "The supplier sends the offer.",
+    types: [{ value: "sco", label: "SCO" }, { value: "fco", label: "FCO" }],
   },
   {
-    n: 2,
-    title: "Request RWA and CIS (FIS optional)",
-    admin: "Finekarts sends the CIS, RWA and FIS to the supplier if requested. The RWA is used only in LC transactions.",
-    buyer: "Supplier requests the RWA and CIS. The FIS is optional.",
-    types: [
-      { value: "cis", label: "CIS" },
-      { value: "rwa", label: "RWA" },
-      { value: "fis", label: "FIS" },
-    ],
+    n: 2, key: "finekarts_icpo", title: "Finekarts submits its ICPO",
+    admin: "Submit the ICPO to the supplier. It is the purchase order that completes the purchase order of stage 1: the buyer's ICPO, with only the company name different.",
+    buyer: "The supplier receives Finekarts' ICPO.",
+    types: [{ value: "icpo", label: "ICPO" }, { value: "loi", label: "LOI" }],
   },
   {
-    n: 3,
-    title: "Prepare the PSA",
-    admin: "Review the PSA, sign and stamp it with the passport copy, and send it to the supplier for final signature. The supplier returns a copy.",
-    buyer: "Supplier prepares the PSA and sends it to Finekarts to sign and stamp, with a copy of the passport.",
-    types: [
-      { value: "spa", label: "PSA / SPA" },
-      { value: "proposed_lc_wording", label: "LC wording" },
-      { value: "passport_copy", label: "Passport copy" },
-    ],
+    n: 3, key: "supplier_verification", title: "Verification documents: CIS, RWA and FIS", manual: true,
+    admin: "Upload the CIS, RWA and FIS the supplier asked for, and any other document the supplier requests. Then mark this step done.",
+    buyer: "The supplier asks Finekarts for the verification documents.",
+    types: [{ value: "cis", label: "CIS" }, { value: "rwa", label: "RWA" }, { value: "fis", label: "FIS" }, { value: "other", label: "Other document the supplier asks for" }],
   },
   {
-    n: 4,
-    title: "Signed PSA and Proforma Invoice",
-    admin: "Receive the signed contract with the invoice. Open the LC account, send the LC to the supplier and request inspection of quality and quantity at the supplier site.",
-    buyer: "Supplier receives the signed PSA, signs and stamps it, attaches the passport, and sends the final contract with the invoice, requesting the LC.",
-    types: [{ value: "proforma_invoice", label: "Proforma Invoice" }],
+    n: 4, key: "supplier_psa_lc", title: "The supplier prepares the PSA",
+    admin: "Receive the PSA and the LC wording. The PSA must use the terms, conditions and product specification of the purchase order.",
+    buyer: "The supplier prepares the PSA from the purchase order, with the LC wording, and sends it to Finekarts.",
+    types: [{ value: "spa", label: "PSA / SPA" }, { value: "proposed_lc_wording", label: "LC wording" }],
   },
   {
-    n: 5,
-    title: "LC received and shipment",
-    admin: "The bank advisor verifies all shipping documents (BL, certificates of insurance) against the PSA, then payment is sent via MT103.",
-    buyer: "Supplier receives the LC and sends the contract to their bank. After bank approval the supplier loads the goods and, if there is no amendment, the advisor sends all documents and certificates to the buyer bank.",
-    types: [{ value: "other", label: "LC, shipping or certificate document" }],
+    n: 5, key: "finekarts_sign", title: "Finekarts reviews, signs and returns the PSA",
+    admin: "Review the PSA, sign it, stamp it, attach a copy of the director's passport and return it to the supplier.",
+    buyer: "The supplier receives the PSA signed by Finekarts.",
+    types: [{ value: "passport_copy", label: "Passport copy" }],
   },
   {
-    n: 6,
-    title: "Payment confirmed",
-    admin: "The bank submits the final payment. After approval of all documents the payment is sent to the supplier and the trans-shipment is monitored until the port of delivery.",
-    buyer: "Supplier receives and confirms the payment and produces the final delivery report.",
-    types: [{ value: "other", label: "Payment confirmation or delivery report" }],
+    n: 6, key: "supplier_sign", title: "The supplier signs: the contract is complete, with the Proforma Invoice",
+    admin: "The supplier signs, stamps and attaches a copy of the director's passport. The contract is complete on the supplier's side. Receive the contract with the Proforma Invoice.",
+    buyer: "The supplier sends the contract to Finekarts together with a Proforma Invoice.",
+    types: [{ value: "spa", label: "PSA / SPA" }, { value: "proforma_invoice", label: "Proforma Invoice" }],
   },
   {
-    n: 7,
-    title: "Final documents and delivery",
-    admin: "Confirmation of delivery: the ship has docked and the shipments are ready for clearance.",
-    buyer: "Supplier sends all final documents to the buyer.",
-    types: [{ value: "other", label: "Final document" }],
+    n: 7, key: "contract_check", title: "Finekarts checks the contract and opens the LC account", manual: true,
+    admin: "Check that the full contract matches the purchase order, with no amendment needed. Take all the paperwork and the Proforma Invoice to your bank to create the LC account, then mark this step done.",
+    buyer: "The supplier waits for the LC.",
+    types: [{ value: "other", label: "Bank document" }],
+  },
+  {
+    n: 8, key: "lc_to_supplier", title: "Finekarts sends the LC to the supplier", manual: true,
+    admin: "Send the LC to the supplier as agreed in the PSA. The supplier then provides all the trade documents requested by the buyer's ICPO in stage 1. Mark this step done when the LC has been sent.",
+    buyer: "The supplier receives the LC and provides the trade documents.",
+    types: [{ value: "letter_of_credit", label: "Letter of Credit (the real LC)" }, { value: "other", label: "Other document" }],
+  },
+  {
+    n: 9, key: "trade_documents", title: "Documents, banking advisor review and final payment", manual: true,
+    admin: "Collect all documents from the supplier with your due diligence, the inspection report, the verification report, the certificates, the Bill of Lading and the commercial invoice, for the banking advisor. After the review, your bank sends the contract and all documents requested by the buyer to the buyer's bank, which checks them against the pre-order inspection and pays the full contract amount by MT103. Mark this step done at that point.",
+    buyer: "The supplier provides the documents. The documents process repeats monthly for the duration of the contract.",
+    types: [{ value: "commercial_invoice", label: "Commercial Invoice" }, { value: "other", label: "Shipping, certificate or inspection document" }],
   },
 ];
 
 /** Document types an external supplier may upload (mirrors the server rule). */
 const SUPPLIER_EXTERNAL_UPLOAD = ["sco", "fco", "spa", "proposed_lc_wording", "proforma_invoice", "passport_copy", "loi", "other"];
 
+/** The step a document is shown under. */
+function stepOfDocument(d: Doc, variant: Variant): number {
+  const type = d.documentType ?? "";
+  const sent = ["sent", "viewed"].includes(d.workflowStatus);
+  const signed = d.workflowStatus === "signed";
+  if (variant === "supplier") {
+    if (type === "sco" || type === "fco") return 1;
+    if (type === "icpo" || type === "loi") return 2;
+    if (["cis", "rwa", "fis"].includes(type)) return 3;
+    if (type === "spa") return signed ? 6 : 4;
+    if (type === "proposed_lc_wording") return 4;
+    if (type === "passport_copy") return 5;
+    if (type === "proforma_invoice") return 6;
+    if (type === "letter_of_credit") return 8;
+    return 9;
+  }
+  if (type === "sco" || type === "fco") return 1;
+  if (type === "icpo" || type === "loi") return 2;
+  if (["cis", "rwa", "fis"].includes(type)) return 3;
+  if (type === "spa") return signed ? 6 : sent ? 5 : 4;
+  if (type === "proposed_lc_wording") return sent ? 5 : 4;
+  if (type === "passport_copy") return 5;
+  if (type === "proforma_invoice") return 7;
+  return 8;
+}
+
 function docsForStep(step: StepDef, documents: Doc[], variant: Variant): Doc[] {
-  const values = step.types.map((t) => t.value);
-  return documents.filter((d) => {
-    const type = d.documentType ?? "";
-    // A PSA moves from step 3 to step 4 once it is signed.
-    if (type === "spa") {
-      const signed = d.workflowStatus === "signed";
-      return step.n === (signed ? 4 : 3);
-    }
-    // Steps 6 and 7 both use "other"; show other documents under step 6 and 7 only by tab choice (step 6 here).
-    if (type === "other") return step.n === (variant === "supplier" ? 5 : 6);
-    return values.includes(type);
-  });
+  return documents.filter((d) => stepOfDocument(d, variant) === step.n);
 }
 
 function stepDone(docs: Doc[]): boolean {
@@ -182,6 +185,7 @@ export function AdminSevenSteps({
   onOpenDocuments,
   variant = "buyer",
   isStaff = true,
+  workflowSteps,
 }: {
   transactionId: string;
   documents: Doc[];
@@ -191,6 +195,8 @@ export function AdminSevenSteps({
   variant?: Variant;
   /** External users (a supplier) see only the types they may upload and no staff shortcuts. */
   isStaff?: boolean;
+  /** The transaction's own workflow steps, so each step shows its real status. */
+  workflowSteps?: { key: string; status: string }[];
 }) {
   const STEPS = variant === "supplier" ? SUPPLIER_STEPS : BUYER_STEPS;
   const [open, setOpen] = useState<number>(1);
@@ -224,6 +230,33 @@ export function AdminSevenSteps({
       onChanged();
     } catch (err) {
       setMessage(err instanceof Error ? err.message : "Signing failed.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  /** Staff decide that a review step is done, or skip it with a written reason. */
+  async function finishStep(key: string, action: "complete" | "skip") {
+    let reason: string | undefined;
+    if (action === "skip") {
+      reason = window.prompt("Why is this step skipped? (a short written reason, at least 8 characters)") ?? "";
+      if (reason.trim().length < 8) return;
+    }
+    setBusy(true);
+    setMessage(null);
+    try {
+      const res = await fetch(`/api/transactions/${transactionId}/steps/${key}`, {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action, reason }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error ?? "Unable to update the step.");
+      setMessage(action === "skip" ? "Step skipped." : "Step marked as done.");
+      onChanged();
+    } catch (err) {
+      setMessage(err instanceof Error ? err.message : "Unable to update the step.");
     } finally {
       setBusy(false);
     }
@@ -295,7 +328,7 @@ export function AdminSevenSteps({
   return (
     <div className="space-y-3">
       <p className="text-sm text-[var(--stone)]">
-        The seven steps of the {variant === "supplier" ? "supplier" : "buyer"} process. At each step you can upload and download documents.
+        {variant === "supplier" ? "Stage 2, the supplier portal: Finekarts is the buyer. The nine steps that complete the purchase order of stage 1." : "Stage 1, the buyer portal: Finekarts is the supplier. The eight steps of the workflow, the same ones the buyer reads as the trade procedure in the SCO or FCO."} At each step you can upload and download documents.
         The PSA can be signed here. Generating and sending documents are done from the Documents tab.
       </p>
       {isLocked ? (
@@ -308,7 +341,11 @@ export function AdminSevenSteps({
         {STEPS.map((step) => {
           const docs = docsForStep(step, documents, variant);
           const uploadTypes = isStaff ? step.types : step.types.filter((t) => SUPPLIER_EXTERNAL_UPLOAD.includes(t.value));
-          const done = stepDone(docs);
+          const engine = workflowSteps?.find((w) => w.key === step.key)?.status;
+          const done = engine ? ["completed", "skipped"].includes(engine) : stepDone(docs);
+          const badge = engine
+            ? done ? (engine === "skipped" ? "Skipped" : "Done") : ["in_progress", "submitted", "approved", "ready"].includes(engine) ? "In progress" : "Waiting"
+            : done ? "Done" : docs.length ? "In progress" : "Waiting";
           const isOpen = open === step.n;
           return (
             <li key={step.n} className="rounded-lg border border-[var(--line)] bg-white">
@@ -325,7 +362,7 @@ export function AdminSevenSteps({
                     done ? "bg-[var(--forest)] text-white" : "bg-[var(--mist)] text-[var(--stone)]"
                   }`}
                 >
-                  {done ? "Done" : docs.length ? "In progress" : "Waiting"}
+                  {badge}
                 </span>
               </button>
               {isOpen ? (
@@ -338,6 +375,16 @@ export function AdminSevenSteps({
                     <span className="font-medium text-[var(--navy)]">{variant === "supplier" ? "Supplier: " : "Buyer: "}</span>
                     {step.buyer}
                   </p>
+                  {isStaff && step.manual && engine && !done && !isLocked ? (
+                    <div className="flex flex-wrap gap-2">
+                      <button type="button" className="btn btn-primary text-xs" disabled={busy} onClick={() => finishStep(step.key, "complete")}>
+                        Mark this step done
+                      </button>
+                      <button type="button" className="btn text-xs" disabled={busy} onClick={() => finishStep(step.key, "skip")}>
+                        Skip with a reason
+                      </button>
+                    </div>
+                  ) : null}
                   {docs.length === 0 ? (
                     <p className="text-[var(--stone)]">No documents at this step yet.</p>
                   ) : (

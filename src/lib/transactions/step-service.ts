@@ -1,6 +1,6 @@
 import { tryConnectMongo } from "@/lib/db/mongoose";
 import { writeAuditEvent } from "@/lib/audit/log";
-import type { StepStatus, WorkflowStepDef } from "@/lib/workflows/transitions";
+import { canOpenStep, canSkipStep, STAFF_COMPLETED_STEPS, type StepStatus, type WorkflowStepDef } from "@/lib/workflows/transitions";
 import type { DocStepSide } from "@/lib/transactions/document-steps";
 import {
   checkDocumentAction,
@@ -122,7 +122,8 @@ export async function applyStepStatus(input: {
     tx.currentStepKey = step.key;
   }
 
-  const target = targetWorkflowStatus(side, input.stepKey, input.status);
+  const stepKeys = (await WorkflowStep.find({ transactionId: tx._id }).select("key").lean()).map((s) => s.key as string);
+  const target = targetWorkflowStatus(side, input.stepKey, input.status, stepKeys);
   if (target) {
     const path = findPath(transitionTable(side), tx.workflowStatus, target);
     if (path && path.length) tx.workflowStatus = path[path.length - 1] as typeof tx.workflowStatus;
@@ -184,7 +185,8 @@ export async function advanceForDocumentEvent(input: {
   const { Transaction } = await import("@/models");
   const tx = await Transaction.findById(input.transactionId).select("side transactionType").lean();
   if (!tx) return null;
-  const update = stepUpdateForEvent(sideOf(tx), input.documentType, input.event, input.signer);
+  const stepKeys = (await loadStepDefs(input.transactionId)).map((s) => s.key);
+  const update = stepUpdateForEvent(sideOf(tx), input.documentType, input.event, input.signer, stepKeys);
   if (!update) return null;
   return applyStepStatus({
     transactionId: input.transactionId,
@@ -231,4 +233,50 @@ export async function assertSkipStepOne(input: {
     alreadySkipped: Boolean(input.tx.offerSkipped),
   });
   if (msg) throw new StepRuleError(msg, 409);
+}
+
+/**
+ * Some steps have no single document that completes them: Finekarts staff review and decide. They press the button
+ * when satisfied, or skip with a written reason. Nothing is blocked by a hidden rule: a missing FIS, for example,
+ * is the staff's call. Only the steps listed in STAFF_COMPLETED_STEPS can be completed this way, and only when the
+ * steps before them are done, so the workflow keeps its order.
+ */
+export async function completeStaffStep(input: {
+  transactionId: string;
+  stepKey: string;
+  action: "complete" | "skip";
+  reason?: string;
+  actorUserId: string;
+}) {
+  await assertTransactionUnlocked(input.transactionId);
+  const { Transaction, WorkflowStep } = await import("@/models");
+  const tx = await Transaction.findById(input.transactionId).select("side transactionType").lean();
+  if (!tx) throw new StepRuleError("Transaction not found.", 404);
+  const side = sideOf(tx);
+  if (!STAFF_COMPLETED_STEPS[side].includes(input.stepKey)) {
+    throw new StepRuleError("This step is completed by a document, not by staff.", 422);
+  }
+  const steps = await loadStepDefs(input.transactionId);
+  if (!steps.some((s) => s.key === input.stepKey)) {
+    throw new StepRuleError("This transaction does not have that step.", 404);
+  }
+  if (!canOpenStep(steps, input.stepKey)) {
+    throw new StepRuleError("The steps before this one are not done yet.", 409);
+  }
+  if (input.action === "skip" && !canSkipStep(input.reason)) {
+    throw new StepRuleError("Skipping a step needs a written reason (at least 8 characters).", 422);
+  }
+  const status: StepStatus = input.action === "skip" ? "skipped" : "completed";
+  await applyStepStatus({ transactionId: input.transactionId, stepKey: input.stepKey, status, actorUserId: input.actorUserId });
+  if (status === "skipped") {
+    await WorkflowStep.updateOne({ transactionId: input.transactionId, key: input.stepKey }, { $set: { skipReason: input.reason!.trim() } });
+  }
+  await writeAuditEvent({
+    action: "workflow.step_" + (status === "skipped" ? "skipped" : "completed_by_staff"),
+    targetType: "transaction",
+    targetId: input.transactionId,
+    actorUserId: input.actorUserId,
+    metadata: { stepKey: input.stepKey, reason: input.reason },
+  });
+  return { stepKey: input.stepKey, status };
 }

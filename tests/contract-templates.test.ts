@@ -29,9 +29,9 @@ describe("template merge", () => {
 });
 
 describe("contract flow and defaults", () => {
-  it("has 6 steps per side", () => {
-    expect(contractFlow("buyer")).toHaveLength(6);
-    expect(contractFlow("supplier")).toHaveLength(6);
+  it("has 8 steps in stage 1 (buyer portal) and 9 in stage 2 (supplier portal)", () => {
+    expect(contractFlow("buyer")).toHaveLength(8);
+    expect(contractFlow("supplier")).toHaveLength(9);
   });
   it("maps document types to template slugs", () => {
     expect(templateSlugForDocumentType("proposed_lc_wording")).toBe("lc_wording");

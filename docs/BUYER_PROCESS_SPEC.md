@@ -222,3 +222,36 @@ Each transaction is kept separate from every other one to avoid confusion. Docum
 - **Every step is separate, as in the diagram.** CIS, RWA and FIS belong to step 2 (with the ICPO or LOI), the step BEFORE the PSA. Step 3 is only the PSA with the LC wording. The 7-step guide and the step titles were changed to match; the step engine keeps its own six workflow steps (CIS, RWA, FIS can be uploaded at any time and never block).
 - **To view a transaction:** open Transactions, find the transaction number, open it, and every detail of that transaction shows on its Overview (order details, LC deadline, dates) with its own tabs for documents, requested documents, shipment tracking, invoices and banking.
 - The buyer sees the terms of their own order once the SCO or FCO has been sent. Before this change they were never shown, because nothing ever set the terms to "approved".
+
+## FINAL INSTRUCTIONS (client, 2026-11-28). This replaces every earlier step list. Read it and follow it exactly.
+
+Each transaction has TWO STAGES. It starts in the BUYER portal, where Finekarts is the SUPPLIER (STAGE 1), and it ends in the SUPPLIER portal, where Finekarts is the BUYER (STAGE 2). Stage 2 completes the purchase order of stage 1. On the platform this is called the **workflow** (in the SCO/FCO document the same thing is called the **trade procedure**, so the buyer already knows every step).
+
+The transaction number of stage 1 must match stage 2, with a few letters added to tell them apart (the supplier order keeps the buyer order number with a suffix).
+
+### STAGE 1: buyer portal (Finekarts is the supplier), 8 steps
+1. Finekarts issues the SCO or FCO (the offer). The document carries the trade procedure, identical to the workflow, explaining every step to the buyer.
+2. The buyer reviews and accepts the offer and submits the ICPO (a purchase order that is irrevocable).
+3. Finekarts formally requests verification documents (the buyer already knows after reading the SCO/FCO). The buyer uploads CIS, RWA and FIS.
+4. Finekarts reviews CIS, RWA and FIS. If satisfied, Finekarts uses the buyer's ICPO to prepare the PSA.
+5. Finekarts sends the PSA together with the LC wording to the buyer for review and approval. If the buyer is satisfied (it matches the purchase order) the buyer signs, stamps, attaches a copy of the passport and sends it back. If there are discrepancies the buyer requests changes or an amendment.
+6. Finekarts receives the signed PSA, signs it, stamps it and attaches a copy of the director's passport. It is now a full contract.
+7. The PSA is signed by both parties and is a contract. Finekarts sends a final copy of the contract (PSA) to the buyer together with the Proforma Invoice, for the buyer to open the LC account within 48 business hours.
+8. Space for amendments; there can be several. The buyer's inspection request is granted at the loading port; the report is provided in stage 2.
+End of stage 1, proceed to stage 2.
+
+### STAGE 2: supplier portal (Finekarts is the buyer), 9 steps
+1. Finekarts receives an SCO/FCO from the supplier, or discusses the opportunity by chat, instant message, email or WhatsApp, and decides whether to proceed.
+2. Finekarts submits its ICPO to the supplier (a purchase order that completes the purchase order of stage 1). It must be the buyer's ICPO; only the company name is different.
+3. When the supplier asks for verification documents, Finekarts uploads CIS, RWA and FIS (the supplier may ask for others too).
+4. The supplier prepares the PSA using the terms, conditions and product specification of the purchase order, with the LC wording, and sends it to Finekarts.
+5. Finekarts reviews the PSA, signs it, stamps it, attaches a copy of the director's passport and returns it to the supplier.
+6. The supplier signs, stamps and attaches a copy of the director's passport: the contract is complete on the supplier's side. The supplier sends the contract to Finekarts together with a Proforma Invoice.
+7. Finekarts receives the full contract, checks it matches the purchase order (no amendment needed), and takes all the paperwork and the Proforma Invoice to its bank to create the LC account.
+8. Finekarts sends the LC to the supplier as agreed on the PSA. The supplier then provides all the trade documents requested by the buyer's ICPO in stage 1.
+9. Finekarts collects all documents from the supplier, with its own due diligence, the inspection report, the verification report, all certificates, the Bill of Lading and every document of the transaction, with the commercial invoice, and sends them to the banking advisor, who reviews the contract (PSA) and every document and checks they are authentic. Then OUR BANK SENDS THE CONTRACT WITH ALL DOCUMENTS REQUESTED BY THE BUYER ON THE PURCHASE ORDER TO THE BUYER'S BANK. The buyer's bank reviews the contract and all documents (shipping documents, certificates, BL, inspection report); they must match the pre-order inspection (POI). When everything matches, the buyer's bank completes the transaction: the final payment of the total contract amount (PSA of stage 1) by MT103.
+
+### Rules that apply to both stages
+- The whole process is time sensitive: everything is done within the agreed timeframe. The contract is filled once, but the documents process repeats monthly for the duration of the contract.
+- Our bank deducts the LC fees and banking fees; if there is an amendment the bank charges an amendment fee. MT101 is deposited to Finekarts' corporate bank account. Finekarts pays the supplier, which may happen beforehand.
+- How to work with the client: just read and follow the steps and adjust the workflow. Do NOT send long messages with many questions. If a question is really needed it must be specific and name the stage and the step.

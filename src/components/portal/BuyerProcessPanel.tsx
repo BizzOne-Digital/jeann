@@ -409,9 +409,9 @@ export function BuyerProcessPanel({
                 ))}
               </ul>
             )}
-            {stepStatus("buyer_sign") || stepStatus("finekarts_sign") ? (
+            {stepStatus("buyer_sign") || stepStatus("psa_lc") || stepStatus("finekarts_sign") ? (
               <p className="mt-3 text-xs text-[var(--stone)]">
-                Your signature: {String(stepStatus("buyer_sign") ?? "pending").replaceAll("_", " ")}.
+                Your signature: {String(stepStatus("buyer_sign") ?? stepStatus("psa_lc") ?? "pending").replaceAll("_", " ")}.
                 Finekarts counter-signature:{" "}
                 {String(stepStatus("finekarts_sign") ?? "pending").replaceAll("_", " ")}.
               </p>

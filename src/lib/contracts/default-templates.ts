@@ -1,5 +1,6 @@
 import { contractFlow, templateKeyFor, type ContractSide } from "@/lib/contracts/contract-flow";
 import { SCO_SKELETON_BLOCKS } from "@/lib/contracts/sco-skeleton";
+import { tradeProcedureLines } from "@/lib/contracts/trade-procedure";
 import { ICPO_SKELETON_BLOCKS } from "@/lib/contracts/icpo-skeleton";
 import { PSA_SKELETON_BLOCKS } from "@/lib/contracts/psa-skeleton";
 import { LC_WORDING_SKELETON_BLOCKS } from "@/lib/contracts/lc-wording-skeleton";
@@ -42,6 +43,8 @@ const BODIES: Record<string, Block[]> = {
     GOODS,
     P("Banking requirement: any Letter of Credit (LC) or Standby Letter of Credit (SBLC) under this offer must be issued by a financial institution ranked among the top 50 banking institutions in the world. The buyer shall provide its banking information, including the name of the issuing bank, to the seller for review before the transaction is committed."),
     P("Acceptance by ICPO or signed contract is the basis for the sales and purchase agreement."),
+    H("Trade procedure (the workflow of this transaction)"),
+    P(tradeProcedureLines().join("\n")),
   ],
   loi: [
     H("Letter of Intent"),

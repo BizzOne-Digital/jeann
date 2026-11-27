@@ -55,6 +55,10 @@ export async function publishClientSkeleton(key: string, actorUserId?: string) {
     lc_wording_supplier: { name: "Letter of Credit wording (SWIFT MT700), client skeleton (supplier portal)", side: "supplier", blocks: sup.SUPPLIER_LC_WORDING_SKELETON_BLOCKS },
     proforma_invoice_supplier: { name: "Proforma Invoice, client skeleton (supplier portal)", side: "supplier", blocks: sup.SUPPLIER_PROFORMA_SKELETON_BLOCKS },
   };
+  // The FCO has no separate skeleton file: its text lives with the default templates.
+  const { defaultTemplates } = await import("@/lib/contracts/default-templates");
+  const fco = defaultTemplates().find((t) => t.key === "fco_buyer");
+  if (fco) skeletons.fco_buyer = { name: "Full Corporate Offer (FCO), client text", side: "buyer", blocks: fco.bodyBlocks };
   const skeleton = skeletons[key];
   if (!skeleton) throw new Error("unknown_skeleton");
   const { DocumentTemplate } = await import("@/models");

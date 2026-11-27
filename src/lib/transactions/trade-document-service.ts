@@ -8,7 +8,7 @@ import { writeAuditEvent } from "@/lib/audit/log";
 import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
 import type { TradeDocumentType, TradeDocumentStatus } from "@/models/Document";
 import { defaultStepForDocument, stepNumberFor, documentFilename } from "@/lib/transactions/document-steps";
-import { advanceForDocumentEvent } from "@/lib/transactions/step-service";
+import { advanceForDocumentEvent, loadStepDefs } from "@/lib/transactions/step-service";
 import { ICPO_SPECIFICATION_NOTE } from "@/lib/content/buyer-portal-guidance";
 import type { DocumentVersionStatus } from "@/models/DocumentVersion";
 import { findPublishedTemplate } from "@/lib/contracts/template-service";
@@ -43,7 +43,8 @@ export async function createTradeDocument(input: {
   let stepKey = input.stepKey;
   if (!stepKey) {
     const t = await Transaction.findById(input.transactionId).select("side").lean();
-    stepKey = defaultStepForDocument(input.documentType, t?.side === "supplier" ? "supplier" : "buyer")?.stepKey;
+    const keys = (await loadStepDefs(input.transactionId)).map((st) => st.key);
+    stepKey = defaultStepForDocument(input.documentType, t?.side === "supplier" ? "supplier" : "buyer", keys)?.stepKey;
   }
   return Document.create({
     stepKey,
@@ -259,7 +260,8 @@ async function createCleanApprovedVersion(documentId: string, draftVersionId: st
     ? await Transaction.findById(doc.transactionId).select("side transactionNumber").lean()
     : null;
   const side = tx?.side === "supplier" ? "supplier" : "buyer";
-  const stepNumber = stepNumberFor(doc.stepKey, side);
+  const stepKeys = doc.transactionId ? (await loadStepDefs(doc.transactionId)).map((st) => st.key) : undefined;
+  const stepNumber = stepNumberFor(doc.stepKey, side, stepKeys);
   const latest = await DocumentVersion.findOne({ documentId: doc._id }).sort({ version: -1 }).select("version").lean();
   const version = (latest?.version ?? draft.version) + 1;
   const bytes = await buildPdf({
@@ -325,11 +327,12 @@ export async function generateDocumentPdf(input: {
     ? await Transaction.findById(doc.transactionId).select("side transactionNumber").lean()
     : null;
   const side = txForStep?.side === "supplier" ? "supplier" : "buyer";
+  const stepKeys = doc.transactionId ? (await loadStepDefs(doc.transactionId)).map((st) => st.key) : undefined;
   if (!doc.stepKey) {
-    const def = defaultStepForDocument(doc.documentType, side);
+    const def = defaultStepForDocument(doc.documentType, side, stepKeys);
     if (def) doc.stepKey = def.stepKey;
   }
-  const stepNumber = stepNumberFor(doc.stepKey, side);
+  const stepNumber = stepNumberFor(doc.stepKey, side, stepKeys);
   const txNumber = input.transactionNumber ?? txForStep?.transactionNumber ?? "";
 
   const latest = await DocumentVersion.findOne({ documentId: doc._id })

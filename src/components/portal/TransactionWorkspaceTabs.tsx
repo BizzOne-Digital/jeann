@@ -185,6 +185,7 @@ export function TransactionWorkspaceTabs({
           onOpenDocuments={() => setTab("documents")}
           variant={workflowMode === "supplier" ? "supplier" : "buyer"}
           isStaff={showStaffActions}
+          workflowSteps={data.workflowSteps}
         />
       ) : null}
 
