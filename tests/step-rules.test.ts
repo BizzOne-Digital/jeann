@@ -116,6 +116,14 @@ describe("buyer field whitelisting", () => {
     expect(whitelistBuyerTerms({ ...terms, approvalStatus: "draft" })).toBeNull();
     expect(whitelistBuyerTerms(null)).toBeNull();
   });
+  it("shows the terms of a draft once the SCO or FCO has been sent, without any internal field", () => {
+    const draft = { ...terms, approvalStatus: "draft" };
+    expect(whitelistBuyerTerms(draft, { released: false })).toBeNull();
+    const out = whitelistBuyerTerms(draft, { released: true })!;
+    expect(out.productName).toBe("Sunflower oil");
+    expect(out).not.toHaveProperty("internalNotes");
+    expect(out).not.toHaveProperty("productId");
+  });
   it("drops internal and unknown fields", () => {
     const out = whitelistBuyerTerms(terms)!;
     expect(out.productName).toBe("Sunflower oil");

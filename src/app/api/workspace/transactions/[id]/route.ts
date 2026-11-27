@@ -10,6 +10,7 @@ import {
 } from "@/lib/transactions/procurement-workflow";
 import { getTransactionBankingSummary } from "@/lib/banking/transaction-banking-summary";
 import { hasStandingFis } from "@/lib/transactions/banking-service";
+import { resolveLcDeadline } from "@/lib/contracts/psa-terms";
 
 export const runtime = "nodejs";
 
@@ -63,6 +64,9 @@ export async function GET(
         supplierVisibleNotes: tx.supplierVisibleNotes,
         internalNotes: tx.internalNotes,
         createdAt: tx.createdAt,
+        closedAt: tx.closedAt ?? null,
+        lcDeadlineHours: resolveLcDeadline(tx).hours,
+        lcDeadlineBusinessHours: resolveLcDeadline(tx).business,
       },
       terms,
       workflowSteps: steps.map((s) => ({

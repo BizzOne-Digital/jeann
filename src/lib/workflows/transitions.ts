@@ -65,7 +65,7 @@ export function transitionStep(
 
 export const BUYER_WORKFLOW_STEPS: Omit<WorkflowStepDef, "status">[] = [
   { key: "sco_fco", order: 1, title: "Seller/Finekarts sends SCO or FCO" },
-  { key: "icpo", order: 2, title: "Buyer submits/replies with ICPO" },
+  { key: "icpo", order: 2, title: "Buyer submits ICPO or LOI and sends CIS, RWA and FIS" },
   { key: "psa_lc", order: 3, title: "Finekarts sends PSA/SPA draft and LC wording" },
   { key: "buyer_sign", order: 4, title: "Buyer signs/stamps PSA/SPA and signer documents" },
   { key: "finekarts_sign", order: 5, title: "Finekarts returns fully executed counterpart" },

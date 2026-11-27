@@ -217,3 +217,8 @@ The client confirmed: whatever documents are requested from Finekarts, Finekarts
 
 ### Principle (client, 2026-11-27): every transaction is separate
 Each transaction is kept separate from every other one to avoid confusion. Documents, requested documents, shipments, invoices and signatures belong to ONE transaction and must never mix with documents that are not related to it. A route that receives a transaction id and a document id must check that the document belongs to that transaction. (A missing check on the document generate route was found and fixed on 2026-11-27.) The only records shared across transactions are the organization-level verification documents (CIS, RWA, FIS) of a returning buyer, as the process spec says.
+
+### Steps and transaction view (client, 2026-11-27)
+- **Every step is separate, as in the diagram.** CIS, RWA and FIS belong to step 2 (with the ICPO or LOI), the step BEFORE the PSA. Step 3 is only the PSA with the LC wording. The 7-step guide and the step titles were changed to match; the step engine keeps its own six workflow steps (CIS, RWA, FIS can be uploaded at any time and never block).
+- **To view a transaction:** open Transactions, find the transaction number, open it, and every detail of that transaction shows on its Overview (order details, LC deadline, dates) with its own tabs for documents, requested documents, shipment tracking, invoices and banking.
+- The buyer sees the terms of their own order once the SCO or FCO has been sent. Before this change they were never shown, because nothing ever set the terms to "approved".

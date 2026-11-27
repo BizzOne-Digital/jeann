@@ -57,8 +57,20 @@ export async function GET(
     const terms = await CommercialTerms.findOne({ transactionId: tx._id })
       .sort({ version: -1 })
       .lean();
+    let released = false;
+    if (!auth.ctx.isInternal) {
+      const { Document } = await import("@/models");
+      released = Boolean(
+        await Document.exists({
+          transactionId: tx._id,
+          documentType: { $in: ["sco", "fco"] },
+          workflowStatus: { $in: ["sent", "signed"] },
+          deletedAt: null,
+        }),
+      );
+    }
     return NextResponse.json({
-      terms: auth.ctx.isInternal ? terms : whitelistBuyerTerms(terms as Record<string, unknown> | null),
+      terms: auth.ctx.isInternal ? terms : whitelistBuyerTerms(terms as Record<string, unknown> | null, { released }),
     });
   } catch (error) {
     return handleApiError(error);

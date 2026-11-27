@@ -237,10 +237,16 @@ export const BUYER_TERMS_FIELDS = [
 
 export function whitelistBuyerTerms(
   terms: Record<string, unknown> | null | undefined,
+  /**
+   * `released`: the SCO or FCO of this transaction has been sent to the buyer, so its terms are already the buyer's
+   * to see. Nothing in the app ever set a draft's approval status to "approved", so without this the buyer never
+   * saw the terms of their own order.
+   */
+  opts?: { released?: boolean },
 ): Record<string, unknown> | null {
   if (!terms) return null;
   const status = String(terms.approvalStatus ?? "");
-  if (status !== "approved") return null;
+  if (status !== "approved" && !opts?.released) return null;
   const out: Record<string, unknown> = {};
   for (const k of BUYER_TERMS_FIELDS) {
     const v = terms[k];

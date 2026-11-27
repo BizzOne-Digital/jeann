@@ -10,6 +10,7 @@ import { TransactionWorkflowActions } from "@/components/portal/TransactionWorkf
 import { AdminSevenSteps } from "@/components/portal/AdminSevenSteps";
 import { ShipmentLotsList } from "@/components/portal/ShipmentLotsList";
 import { RequestedDocumentsPanel } from "@/components/portal/RequestedDocumentsPanel";
+import { TransactionDetailsCard } from "@/components/portal/TransactionDetailsCard";
 import { BuyerInvoicesList } from "@/components/portal/BuyerInvoicesList";
 
 type Tab = "overview" | "steps" | "workflow" | "documents" | "requested" | "shipments" | "invoices" | "finance" | "banking";
@@ -27,6 +28,10 @@ type TxDetail = {
     buyerVisibleNotes?: string;
     supplierVisibleNotes?: string;
     internalNotes?: string;
+    createdAt?: string;
+    closedAt?: string | null;
+    lcDeadlineHours?: number;
+    lcDeadlineBusinessHours?: boolean;
   };
   workflowSteps?: WorkflowStepView[];
   fisOnRecord?: boolean;
@@ -51,6 +56,8 @@ type TxDetail = {
   allowedTransitions?: string[];
   isInternal?: boolean;
   terms?: Record<string, unknown> | null;
+  /** The buyer API names the approved terms this way. */
+  commercialTerms?: Record<string, unknown> | null;
 };
 
 export function TransactionWorkspaceTabs({
@@ -149,9 +156,13 @@ export function TransactionWorkspaceTabs({
             steps={data.workflowSteps}
             currentStepKey={data.transaction.currentStepKey}
           />
+          <TransactionDetailsCard
+            transaction={data.transaction}
+            terms={(data.terms ?? data.commercialTerms) as Record<string, unknown> | null | undefined}
+            showLcDeadline={workflowMode === "buyer"}
+          />
           <section className="rounded-lg border border-[var(--line)] bg-white p-5">
-            <h2 className="font-semibold text-[var(--navy)]">{data.transaction.transactionNumber}</h2>
-            <p className="mt-2 text-sm text-[var(--stone)]">Status: {data.transaction.workflowLabel}</p>
+            <h2 className="font-semibold text-[var(--navy)]">Notes</h2>
             {data.transaction.buyerVisibleNotes ? (
               <p className="mt-2 text-sm">{data.transaction.buyerVisibleNotes}</p>
             ) : null}

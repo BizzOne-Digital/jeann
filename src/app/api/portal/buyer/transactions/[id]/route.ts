@@ -54,8 +54,12 @@ export async function GET(
         lcDeadlineBusinessHours: resolveLcDeadline(tx).business,
         submittedAt: tx.submittedAt,
         createdAt: tx.createdAt,
+        closedAt: tx.closedAt ?? null,
       },
-      commercialTerms: whitelistBuyerTerms(terms as Record<string, unknown> | null),
+      commercialTerms: whitelistBuyerTerms(terms as Record<string, unknown> | null, {
+        // Once the SCO or FCO has been sent to the buyer, the terms in it are the buyer's to see.
+        released: documents.some((d) => ["sco", "fco"].includes(String(d.documentType)) && ["sent", "signed"].includes(String(d.workflowStatus))),
+      }),
       workflowSteps: steps.map((s) => ({
         key: s.key,
         order: s.order,
