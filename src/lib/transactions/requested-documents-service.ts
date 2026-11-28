@@ -15,6 +15,8 @@ export type RequestedDocumentView = {
   notes: string;
   requestedBy: "buyer" | "staff";
   status: RequestedDocumentStatus;
+  /** The month of a monthly round (for example 2026-12); empty for the documents of the contract itself. */
+  cycleLabel: string;
   createdAt: string;
 };
 
@@ -30,9 +32,11 @@ function view(d: {
   notes?: string | null;
   requestedBy: "buyer" | "staff";
   status: RequestedDocumentStatus;
+  cycleLabel?: string | null;
   createdAt?: Date | string;
 }): RequestedDocumentView {
   return {
+    cycleLabel: d.cycleLabel ?? "",
     id: String(d._id),
     title: d.title,
     notes: d.notes ?? "",
@@ -65,6 +69,7 @@ export async function addRequestedDocument(input: {
   notes?: string;
   requestedBy: "buyer" | "staff";
   userId: string;
+  cycleLabel?: string;
 }): Promise<RequestedDocumentView> {
   await tryConnectMongo();
   const { RequestedDocument } = await import("@/models");
@@ -75,6 +80,7 @@ export async function addRequestedDocument(input: {
     side,
     title: input.title,
     notes: input.notes || undefined,
+    cycleLabel: input.cycleLabel || undefined,
     requestedBy: input.requestedBy,
     requestedByUserId: new Types.ObjectId(input.userId),
     status: "requested",
@@ -92,6 +98,7 @@ export async function addRequestedDocument(input: {
         requestedBy: "staff",
         requestedByUserId: new Types.ObjectId(input.userId),
         status: "requested",
+        cycleLabel: input.cycleLabel || undefined,
         mirroredItemId: item._id,
       });
       item.mirroredItemId = mirror._id;
@@ -190,6 +197,64 @@ export async function removeRequestedDocument(input: {
   return true;
 }
 
+/** The month after the latest monthly round of a transaction (or the month after today when there is none), as YYYY-MM. */
+export function nextCycleLabel(existing: string[], today = new Date()): string {
+  const latest = [...existing].filter((l) => /^\d{4}-(0[1-9]|1[0-2])$/.test(l)).sort().pop();
+  const [y, m] = latest
+    ? latest.split("-").map(Number)
+    : [today.getUTCFullYear(), today.getUTCMonth() + 1];
+  const next = new Date(Date.UTC(y, m, 1));
+  return next.getUTCFullYear() + "-" + String(next.getUTCMonth() + 1).padStart(2, "0");
+}
+
+/**
+ * The documents process repeats every month; the contract is filled in once (client, 2026-11-28). Starting a monthly
+ * round asks for the same documents again for that month, so each month has its own list and nothing is mixed up.
+ * The documents of the contract itself (the items without a month) are the model for every round.
+ */
+export async function startMonthlyCycle(input: {
+  transaction: { _id: Types.ObjectId; organizationId: Types.ObjectId; side?: string };
+  cycleLabel: string;
+  userId: string;
+}): Promise<{ created: number } | { error: "exists" | "nothing_to_repeat" }> {
+  await tryConnectMongo();
+  const { RequestedDocument } = await import("@/models");
+  const base = await RequestedDocument.find({
+    transactionId: input.transaction._id,
+    deletedAt: null,
+    $or: [{ cycleLabel: { $exists: false } }, { cycleLabel: null }, { cycleLabel: "" }],
+  })
+    .sort({ createdAt: 1 })
+    .lean();
+  if (base.length === 0) return { error: "nothing_to_repeat" };
+  const already = await RequestedDocument.exists({
+    transactionId: input.transaction._id,
+    deletedAt: null,
+    cycleLabel: input.cycleLabel,
+  });
+  if (already) return { error: "exists" };
+  let created = 0;
+  for (const b of base) {
+    await addRequestedDocument({
+      transaction: input.transaction,
+      title: b.title,
+      notes: b.notes ?? undefined,
+      requestedBy: "staff",
+      userId: input.userId,
+      cycleLabel: input.cycleLabel,
+    });
+    created += 1;
+  }
+  await writeAuditEvent({
+    action: "requested_document.cycle_started",
+    targetType: "transaction",
+    targetId: String(input.transaction._id),
+    actorUserId: input.userId,
+    metadata: { cycleLabel: input.cycleLabel, created },
+  });
+  return { created };
+}
+
 /** When the supplier order is opened, everything the buyer already requested is requested from the supplier too. */
 export async function copyRequestedDocumentsToSupplierOrder(input: {
   buyerTransactionId: Types.ObjectId;
@@ -208,6 +273,7 @@ export async function copyRequestedDocumentsToSupplierOrder(input: {
       side: "supplier",
       title: item.title,
       notes: item.notes,
+      cycleLabel: item.cycleLabel || undefined,
       requestedBy: "staff",
       requestedByUserId: new Types.ObjectId(input.userId),
       status: item.status === "requested" ? "requested" : "received_from_supplier",

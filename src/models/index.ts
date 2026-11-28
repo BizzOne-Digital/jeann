@@ -54,6 +54,8 @@ export * from "./PresentationPackage";
 export * from "./TransportUnit";
 export * from "./DocumentRequirementTemplate";
 export * from "./RequestedDocument";
+export * from "./TransactionFee";
+export * from "./InspectionRequest";
 export * from "./SignatureRecord";
 export * from "./PurchaseRequest";
 export * from "./AgentDeal";

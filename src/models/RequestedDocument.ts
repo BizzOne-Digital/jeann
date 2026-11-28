@@ -18,6 +18,11 @@ export interface IRequestedDocument {
   requestedBy: "buyer" | "staff";
   requestedByUserId?: Types.ObjectId;
   status: RequestedDocumentStatus;
+  /**
+   * The documents process repeats every month while the contract is filled in only once. An item of a monthly
+   * round carries the month, for example "2026-12". Items without it belong to the contract itself.
+   */
+  cycleLabel?: string;
   /** The matching item on the linked transaction (the supplier order, for a buyer item). */
   mirroredItemId?: Types.ObjectId;
   deletedAt?: Date | null;
@@ -39,6 +44,7 @@ const requestedDocumentSchema = new Schema<IRequestedDocument>(
       enum: ["requested", "received_from_supplier", "provided_to_buyer"],
       default: "requested",
     },
+    cycleLabel: { type: String, trim: true, match: /^\d{4}-(0[1-9]|1[0-2])$/ },
     mirroredItemId: { type: Schema.Types.ObjectId, ref: "RequestedDocument" },
     deletedAt: { type: Date, default: null },
   },

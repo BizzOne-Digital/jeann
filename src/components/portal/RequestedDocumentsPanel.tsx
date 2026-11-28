@@ -10,6 +10,7 @@ type Item = {
   notes: string;
   requestedBy: "buyer" | "staff";
   status: Status;
+  cycleLabel: string;
   createdAt: string;
 };
 
@@ -42,6 +43,7 @@ export function RequestedDocumentsPanel({
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState("");
   const [editNotes, setEditNotes] = useState("");
+  const [cycleMonth, setCycleMonth] = useState("");
 
   const base = `/api/transactions/${transactionId}/requested-documents`;
   // The supplier only sees what Finekarts asks of them. The buyer and staff can add.
@@ -94,6 +96,21 @@ export function RequestedDocumentsPanel({
     }
   }
 
+  /** The documents process repeats every month: start the list for the next month (or the month chosen). */
+  async function startCycle() {
+    if (await call(base + "/cycle", "POST", cycleMonth ? { cycleLabel: cycleMonth } : {})) setCycleMonth("");
+  }
+
+  const monthName = (label: string) => {
+    const [y, m] = label.split("-").map(Number);
+    return new Date(Date.UTC(y, m - 1, 1)).toLocaleDateString("en-US", { month: "long", year: "numeric", timeZone: "UTC" });
+  };
+  const cycleLabels = Array.from(new Set(items.map((i) => i.cycleLabel).filter(Boolean))).sort();
+  const groups: { label: string; title: string; rows: Item[] }[] = [
+    { label: "", title: cycleLabels.length ? "Documents of the contract" : "", rows: items.filter((i) => !i.cycleLabel) },
+    ...cycleLabels.map((l) => ({ label: l, title: "Monthly round: " + monthName(l), rows: items.filter((i) => i.cycleLabel === l) })),
+  ].filter((g) => g.rows.length > 0);
+
   async function saveEdit(id: string) {
     if (await call(`${base}/${id}`, "PATCH", { title: editTitle.trim(), notes: editNotes.trim() })) setEditingId(null);
   }
@@ -118,8 +135,12 @@ export function RequestedDocumentsPanel({
           {canAdd ? "Nothing has been requested yet. Add the first document below." : "Nothing has been requested yet."}
         </p>
       ) : (
+        <div className="space-y-5">
+          {groups.map((g) => (
+            <div key={g.label || "base"}>
+              {g.title ? <h3 className="mb-1 text-sm font-semibold text-[var(--navy)]">{g.title}</h3> : null}
         <ul className="divide-y divide-[var(--line)] text-sm">
-          {items.map((it) => (
+          {g.rows.map((it) => (
             <li key={it.id} className="space-y-2 py-3">
               {editingId === it.id ? (
                 <div className="space-y-2">
@@ -183,7 +204,26 @@ export function RequestedDocumentsPanel({
             </li>
           ))}
         </ul>
+            </div>
+          ))}
+        </div>
       )}
+
+      {isStaff && items.some((i) => !i.cycleLabel) ? (
+        <div className="space-y-2 border-t border-[var(--line)] pt-4">
+          <p className="text-sm font-medium text-[var(--navy)]">Monthly round</p>
+          <p className="text-xs text-[var(--stone)]">
+            The contract is filled in once, but the documents are needed again every month. This asks for the same documents again for
+            a new month, in a separate list. Leave the month empty to use the month after the latest round.
+          </p>
+          <div className="flex flex-wrap items-center gap-2">
+            <input className="field w-44" type="month" value={cycleMonth} onChange={(e) => setCycleMonth(e.target.value)} />
+            <button type="button" className="btn btn-secondary text-xs" disabled={busy} onClick={startCycle}>
+              Start the monthly round
+            </button>
+          </div>
+        </div>
+      ) : null}
 
       {canAdd ? (
         <form onSubmit={add} className="space-y-2 border-t border-[var(--line)] pt-4">

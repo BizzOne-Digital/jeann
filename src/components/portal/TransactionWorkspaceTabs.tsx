@@ -13,8 +13,10 @@ import { RequestedDocumentsPanel } from "@/components/portal/RequestedDocumentsP
 import { TransactionDetailsCard } from "@/components/portal/TransactionDetailsCard";
 import { TransactionStagesCard, type StageSummary } from "@/components/portal/TransactionStagesCard";
 import { BuyerInvoicesList } from "@/components/portal/BuyerInvoicesList";
+import { TransactionFeesPanel } from "@/components/portal/TransactionFeesPanel";
+import { InspectionRequestPanel } from "@/components/portal/InspectionRequestPanel";
 
-type Tab = "overview" | "steps" | "workflow" | "documents" | "requested" | "shipments" | "invoices" | "finance" | "banking";
+type Tab = "overview" | "steps" | "workflow" | "documents" | "requested" | "inspection" | "shipments" | "invoices" | "fees" | "finance" | "banking";
 
 type TxDetail = {
   transaction: {
@@ -121,9 +123,13 @@ export function TransactionWorkspaceTabs({
     { id: "workflow", label: "Workflow" },
     { id: "documents", label: "Documents" },
     { id: "requested", label: "Requested documents" },
+    // The buyer asks for an inspection at the loading port in the buyer portal (stage 1); staff see it on the buyer order.
+    ...(workflowMode === "buyer" ? [{ id: "inspection" as Tab, label: "Inspection" }] : []),
     // Shipment tracking and invoices belong to the transaction, not to a separate menu.
     { id: "shipments", label: "Shipment tracking" },
     ...(workflowMode === "buyer" && !showStaffActions ? [{ id: "invoices" as Tab, label: "Invoices" }] : []),
+    // LC, banking and amendment fees, the MT101 deposit and the supplier payment: staff only.
+    ...(showStaffActions ? [{ id: "fees" as Tab, label: "Fees and payments" }] : []),
     ...(showFinance ? [{ id: "finance" as Tab, label: "Finance" }] : []),
     { id: "banking", label: "Banking" },
   ];
@@ -263,6 +269,14 @@ export function TransactionWorkspaceTabs({
           mode={workflowMode === "supplier" ? "supplier" : "buyer"}
           isStaff={showStaffActions}
         />
+      ) : null}
+
+      {tab === "inspection" && workflowMode === "buyer" ? (
+        <InspectionRequestPanel transactionId={transactionId} isStaff={showStaffActions} />
+      ) : null}
+
+      {tab === "fees" && showStaffActions ? (
+        <TransactionFeesPanel transactionId={transactionId} isSupplierOrder={workflowMode === "supplier"} />
       ) : null}
 
       {tab === "shipments" ? (

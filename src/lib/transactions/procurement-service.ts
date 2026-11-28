@@ -144,6 +144,9 @@ export async function createProcurementTransaction(input: {
       supplierOrganizationId: new Types.ObjectId(input.supplierOrganizationId),
       userId: input.actorUserId,
     });
+    // An inspection at the loading port that the buyer already asked for (and Finekarts granted) asks the supplier for its report.
+    const { openInspectionReportsOnSupplierOrder } = await import("@/lib/transactions/inspection-service");
+    await openInspectionReportsOnSupplierOrder(buyerTx._id, input.actorUserId);
   }
 
   // Back-to-back: the quantity is the buyer's quantity, so the total uses it too.
