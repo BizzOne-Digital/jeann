@@ -202,6 +202,7 @@ export const SUPPLIER_ICPO_SKELETON_BLOCKS: SkeletonBlock[] = [
       row("Date of Issuance", "{{date}}"),
       row("ICPO Validity", "Five (5) International Banking Days"),
       row("Supplier SCO Ref.", "{{supplierScoRef}}"),
+      row("Buyer ICPO Ref.", "{{icpoRef}}"),
     ].join("\n"),
   ),
   P("**SUBJECT:** IRREVOCABLE CORPORATE PURCHASE ORDER FOR {{quantity}} OF {{productLine}} — CROP/PRODUCTION YEAR {{cropYear}} ({{purityCompliance}})"),

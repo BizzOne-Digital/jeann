@@ -74,14 +74,38 @@ export async function buildDocumentPrefill(
     return {};
   }
   const { Transaction, CommercialTerms, Organization } = await import("@/models");
-  const tx = await Transaction.findById(transactionId).select("organizationId side sourcePurchaseRequestId").lean();
+  const tx = await Transaction.findById(transactionId).select("organizationId side sourcePurchaseRequestId linkedTransactionId").lean();
   if (!tx) return {};
-  const [terms, org] = await Promise.all([
+  const { ProcurementTerms } = await import("@/models");
+  const [commercial, procurement, org] = await Promise.all([
     CommercialTerms.findOne({ transactionId: tx._id }).sort({ version: -1 }).lean(),
+    tx.side === "supplier" ? ProcurementTerms.findOne({ transactionId: tx._id }).sort({ version: -1 }).lean() : Promise.resolve(null),
     Organization.findById(tx.organizationId)
       .select("legalName registrationNumber businessAddressLine1 businessAddressCity businessAddressRegion businessAddressPostal country documentDetails")
       .lean(),
   ]);
+  // Stage 2 (supplier portal): the terms are the procurement terms, which were copied from the buyer's order,
+  // so the supplier documents carry the same product, quantity, ports and conditions as the buyer's ICPO.
+  const terms = commercial ?? (procurement
+    ? {
+        productName: procurement.productName,
+        productId: procurement.productId,
+        specificationVersionId: procurement.specificationVersionId,
+        productOrigin: procurement.productOrigin,
+        quantity: procurement.quantity,
+        quantityUnit: procurement.quantityUnit,
+        currency: procurement.currency,
+        unitPrice: procurement.procurementUnitPrice,
+        totalEstimatedValue: procurement.procurementTotal,
+        incoterm: procurement.incoterm,
+        loadingPort: procurement.loadingPort,
+        destinationPort: procurement.destinationPlace ?? procurement.namedPortPlace,
+        paymentProposal: procurement.paymentProposal,
+        shipmentSchedule: procurement.shipmentSchedule,
+        packaging: procurement.packaging,
+        inspectionCompany: procurement.inspection,
+      }
+    : null);
   const out: Record<string, unknown> = {
     seller: tx.side === "supplier" ? org?.legalName : "Finekarts",
     buyer: tx.side === "supplier" ? "Finekarts" : org?.legalName,
@@ -118,6 +142,27 @@ export async function buildDocumentPrefill(
     tx.side === "supplier",
   );
   for (const [k, v] of Object.entries(fromPortal)) if (out[k] === undefined) out[k] = v;
+  // Stage 2 (client, 2026-11-28): Finekarts Incorporated is the buyer on every supplier order, and the buyer of the
+  // buyer order is named as the consignee on the supplier's PSA and ICPO.
+  if (tx.side === "supplier" && tx.linkedTransactionId) {
+    const linked = await Transaction.findById(tx.linkedTransactionId).select("organizationId").lean();
+    const endBuyer = linked
+      ? await Organization.findById(linked.organizationId)
+          .select("legalName businessAddressLine1 businessAddressCity businessAddressRegion businessAddressPostal country documentDetails")
+          .lean()
+      : null;
+    if (endBuyer) {
+      const d = cleanDocumentDetails("buyer", endBuyer.documentDetails as Record<string, unknown> | undefined) as Record<string, string | undefined>;
+      const addr = [endBuyer.businessAddressLine1, endBuyer.businessAddressCity, endBuyer.businessAddressRegion, endBuyer.businessAddressPostal, endBuyer.country].filter(Boolean).join(", ");
+      out.consigneeCompany = d.consigneeCompany || endBuyer.legalName;
+      if (d.consigneeContact) out.consigneeContact = d.consigneeContact;
+      const ca = d.consigneeAddress || addr;
+      if (ca) out.consigneeAddress = ca;
+      if (d.consigneeEmail) out.consigneeEmail = d.consigneeEmail;
+      if (d.consigneePhone) out.consigneePhone = d.consigneePhone;
+      if (d.consigneeVat) out.consigneeVat = d.consigneeVat;
+    }
+  }
   out.etaDays = "30-45";
 
   // Finekarts' own corporation number comes from the admin settings; the buyer's ICPO reference is the
@@ -128,16 +173,21 @@ export async function buildDocumentPrefill(
     out.sellerRegNumber = site.corporationNumber;
     out.finekartsRegNumber = site.corporationNumber;
   }
-  if (tx.sourcePurchaseRequestId) {
-    const source = await PurchaseRequest.findById(tx.sourcePurchaseRequestId).select("reference").lean();
+  // On the supplier order the ICPO is the buyer's ICPO: its reference and specification come from the linked buyer order.
+  let icpoSourceId = tx.sourcePurchaseRequestId;
+  if (!icpoSourceId && tx.side === "supplier" && tx.linkedTransactionId) {
+    icpoSourceId = (await Transaction.findById(tx.linkedTransactionId).select("sourcePurchaseRequestId").lean())?.sourcePurchaseRequestId;
+  }
+  if (icpoSourceId) {
+    const source = await PurchaseRequest.findById(icpoSourceId).select("reference").lean();
     if (source?.reference) out.icpoRef = source.reference;
   }
   if (terms) {
     Object.assign(out, {
       product: terms.productName,
       quantity: terms.quantity ? String(terms.quantity) + " " + terms.quantityUnit : undefined,
-      unitPrice: terms.unitPrice ? String(terms.currency) + " " + String(terms.unitPrice) : undefined,
-      totalValue: terms.totalEstimatedValue ? String(terms.currency) + " " + String(terms.totalEstimatedValue) : undefined,
+      unitPrice: Number(String(terms.unitPrice ?? 0)) > 0 ? String(terms.currency) + " " + String(terms.unitPrice) : undefined,
+      totalValue: Number(String(terms.totalEstimatedValue ?? 0)) > 0 ? String(terms.currency) + " " + String(terms.totalEstimatedValue) : undefined,
       incoterm: terms.incoterm,
       loadingPort: terms.loadingPort,
       destinationPort: terms.destinationPort,
@@ -209,7 +259,7 @@ export async function buildDocumentPrefill(
   // The specification comes from the product. When the product has none, it is imported from the
   // buyer's ICPO (the specification written on the order request).
   if (!out.specificationBlock) {
-    const sourceId = (await Transaction.findById(transactionId).select("sourcePurchaseRequestId").lean())?.sourcePurchaseRequestId;
+    const sourceId = icpoSourceId;
     if (sourceId) {
       const { PurchaseRequest } = await import("@/models");
       const request = await PurchaseRequest.findById(sourceId).select("requestedSpecification").lean();
