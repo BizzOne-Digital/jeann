@@ -10,6 +10,8 @@ const schema = z.object({
   structuredData: z.record(z.string(), z.unknown()),
   clauseTexts: z.array(z.string()).optional(),
   isDraft: z.boolean().optional(),
+  /** The whole wording, edited for this transaction only. */
+  wordingOverride: z.string().max(200000).optional(),
   lcDeadlineHours: z.number().int().min(1).max(720).optional(),
   lcDeadlineBusinessHours: z.boolean().optional(),
 });
@@ -44,6 +46,7 @@ export async function POST(
       actorUserId: auth.ctx.userId,
       structuredData: body.structuredData,
       clauseTexts: body.clauseTexts,
+      wordingOverride: body.wordingOverride,
       isDraft: body.isDraft ?? true,
       lcDeadlineHours: body.lcDeadlineHours,
       lcDeadlineBusinessHours: body.lcDeadlineBusinessHours,

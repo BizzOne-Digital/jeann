@@ -298,6 +298,33 @@ export async function buildDocumentPrefill(
   return out;
 }
 
+/**
+ * The full wording of a document as it would be generated now: the published template (or the built-in one) with this
+ * transaction's details filled in (unfilled fields are red [[LABELS]]). Staff load it, edit it freely and generate the
+ * document from the edited text. When the latest version was already edited, that edited wording is returned.
+ */
+export async function loadDocumentWording(documentId: string, extra: Record<string, unknown> = {}): Promise<{ wording: string; edited: boolean } | null> {
+  await tryConnectMongo();
+  const { Document, DocumentVersion, Transaction } = await import("@/models");
+  const doc = await Document.findById(documentId).lean();
+  if (!doc || doc.deletedAt) return null;
+  const latest = await DocumentVersion.findOne({ documentId: doc._id }).sort({ version: -1 }).select("structuredData").lean();
+  const saved = (latest?.structuredData ?? {}) as Record<string, unknown>;
+  if (saved._wordingEdited && typeof saved._templateRich === "string") return { wording: saved._templateRich, edited: true };
+  const tx = doc.transactionId ? await Transaction.findById(doc.transactionId).select("side transactionNumber").lean() : null;
+  const side = tx?.side === "supplier" ? "supplier" : "buyer";
+  const prefill = doc.transactionId ? await buildDocumentPrefill(String(doc.transactionId), doc.documentType) : {};
+  const data: Record<string, unknown> = { ...prefill };
+  for (const [k, v] of Object.entries({ ...Object.fromEntries(Object.entries(saved).filter(([k]) => !k.startsWith("_"))), ...extra })) {
+    if (v !== undefined && v !== null && v !== "") data[k] = v;
+  }
+  const template = await findPublishedTemplate(doc.documentType, side);
+  if (!template) return { wording: "", edited: false };
+  const values = placeholderValues(data, { transactionNumber: tx?.transactionNumber ?? "" });
+  if (!values.buyerSignature) values.buyerSignature = side === "supplier" ? "[signature]" : "____________________";
+  return { wording: renderTemplateRich(template.bodyBlocks, values), edited: false };
+}
+
 /** Approval produces a clean (non-draft) PDF version so the version that is sent carries no DRAFT stamp. */
 async function createCleanApprovedVersion(documentId: string, draftVersionId: string, actorUserId: string) {
   const { Document, DocumentVersion, Transaction } = await import("@/models");
@@ -368,6 +395,11 @@ export async function generateDocumentPdf(input: {
   lcDeadlineHours?: number;
   /** Count the deadline in business hours (for example 48 business hours). */
   lcDeadlineBusinessHours?: boolean;
+  /**
+   * The full wording of the document, edited by staff for this transaction only (client, 2026-11-28: every order can
+   * have different terms, agreed with the end buyer). When set it replaces the template wording; the template is not changed.
+   */
+  wordingOverride?: string;
 }) {
   await tryConnectMongo();
   const { Document, DocumentVersion, Transaction } = await import("@/models");
@@ -425,6 +457,12 @@ export async function generateDocumentPdf(input: {
     structuredData._templateVersion = template.version;
     doc.templateKey = template.key;
     doc.templateVersion = template.version;
+  }
+
+  if (input.wordingOverride?.trim()) {
+    structuredData._templateRich = input.wordingOverride;
+    structuredData._templateLines = input.wordingOverride.split(/\r?\n/);
+    structuredData._wordingEdited = true;
   }
 
   const pdfBytes = await buildPdf({

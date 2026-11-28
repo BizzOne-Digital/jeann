@@ -127,6 +127,9 @@ export function StaffDocumentTools({
   const [internalPrice, setInternalPrice] = useState("");
   const [s3Type, setS3Type] = useState("spa");
   const [s3Text, setS3Text] = useState("");
+  // The whole wording of the document, loaded and edited for this transaction only. Empty means the standard template is used.
+  const [wording, setWording] = useState("");
+  const [wordingNote, setWordingNote] = useState<string | null>(null);
   const [lcHours, setLcHours] = useState(String(LC_DEADLINE_HOURS));
   const [lcBusiness, setLcBusiness] = useState(LC_DEADLINE_DEFAULT_BUSINESS);
   const [signName, setSignName] = useState("");
@@ -202,6 +205,26 @@ export function StaffDocumentTools({
     });
   }
 
+  /** Opens the full wording of the selected document so it can be changed freely for this transaction. */
+  function loadWording() {
+    void run(async () => {
+      const label = STEP3_TYPES.find((t) => t.value === s3Type)?.label ?? s3Type;
+      const existing = documents.find((d) => d.documentType === s3Type);
+      let documentId = existing?.id;
+      if (!documentId) {
+        const c = await post(`/api/transactions/${transactionId}/documents`, { documentType: s3Type, title: label, buyerVisible: false });
+        documentId = c.documentId as string;
+      }
+      const res = await fetch(`/api/transactions/${transactionId}/documents/${documentId}/wording`, { credentials: "same-origin" });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error ?? "Unable to load the wording.");
+      if (!json.wording) throw new Error("There is no standard wording for this document yet. Publish the template first, or type the wording below.");
+      setWording(json.wording as string);
+      setWordingNote(json.edited ? "This is the wording edited on the last version." : "This is the standard wording with this transaction's details filled in.");
+      return "The full wording is open below. Change anything, then generate the PDF.";
+    });
+  }
+
   function generateStep3(e: FormEvent) {
     e.preventDefault();
     void run(async () => {
@@ -220,6 +243,7 @@ export function StaffDocumentTools({
         structuredData: { ...Object.fromEntries(Object.entries(details).filter(([, v]) => v.trim())), documentType: s3Type },
         clauseTexts: s3Text.split(/\n{2,}/).filter((t) => t.trim()),
         isDraft: true,
+        ...(wording.trim() ? { wordingOverride: wording } : {}),
         ...(s3Type === "spa" || s3Type === "proforma_invoice"
           ? { lcDeadlineHours: Math.max(1, Math.min(720, Math.round(Number(lcHours) || LC_DEADLINE_HOURS))), lcDeadlineBusinessHours: lcBusiness }
           : {}),
@@ -346,7 +370,7 @@ export function StaffDocumentTools({
 
       <form onSubmit={generateStep3} className="space-y-3 border-t border-[var(--line)] pt-4">
         <h3 className="text-sm font-semibold">Generate PSA/SPA, LC wording, proforma invoice or commercial invoice</h3>
-        <select className="field" value={s3Type} onChange={(e) => setS3Type(e.target.value)}>
+        <select className="field" value={s3Type} onChange={(e) => { setS3Type(e.target.value); setWording(""); setWordingNote(null); }}>
           {STEP3_TYPES.map((t) => (
             <option key={t.value} value={t.value}>
               {t.label}
@@ -391,6 +415,31 @@ export function StaffDocumentTools({
             </div>
           </div>
         ) : null}
+        <div className="rounded border border-[var(--line)] p-3">
+          <p className="text-sm font-medium text-[var(--navy)]">Edit the full wording for this transaction</p>
+          <p className="mt-1 text-xs text-[var(--stone)]">
+            Terms can differ from one order to the next, as agreed with the end buyer. Load the wording, change, remove or add anything,
+            and generate the PDF. Only this transaction changes; the standard template stays as it is. Red text in double square brackets
+            is a field that is still empty.
+          </p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            <button type="button" className="btn btn-secondary text-xs" disabled={busy} onClick={loadWording}>
+              {wording ? "Reload the standard wording" : "Load the full wording to edit"}
+            </button>
+            {wording ? (
+              <button type="button" className="btn text-xs" onClick={() => { setWording(""); setWordingNote(null); }}>
+                Use the standard template again
+              </button>
+            ) : null}
+          </div>
+          {wording ? (
+            <div className="mt-3 space-y-1">
+              {wordingNote ? <p className="text-xs text-[var(--stone)]">{wordingNote}</p> : null}
+              <FormattedTextEditor placeholder="Full wording of the document." value={wording} onChange={setWording} />
+            </div>
+          ) : null}
+        </div>
+        <p className="text-xs text-[var(--stone)]">Extra clauses (added after the wording above):</p>
         <FormattedTextEditor
           placeholder="Document wording. Use the tools above to format. Separate clauses with a blank line."
           value={s3Text}
