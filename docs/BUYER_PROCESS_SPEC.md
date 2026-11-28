@@ -255,3 +255,9 @@ End of stage 1, proceed to stage 2.
 - The whole process is time sensitive: everything is done within the agreed timeframe. The contract is filled once, but the documents process repeats monthly for the duration of the contract.
 - Our bank deducts the LC fees and banking fees; if there is an amendment the bank charges an amendment fee. MT101 is deposited to Finekarts' corporate bank account. Finekarts pays the supplier, which may happen beforehand.
 - How to work with the client: just read and follow the steps and adjust the workflow. Do NOT send long messages with many questions. If a question is really needed it must be specific and name the stage and the step.
+
+### Order numbers (client, 2026-11-28)
+- Whatever supplier is chosen to forward the transaction to, **the process is the same**. The supplier order is opened when staff choose the supplier.
+- **Stage 1 (buyer portal) order number ends with FB. Stage 2 (supplier portal) order number ends with FS.** That is what tells the portals apart. The two numbers are otherwise identical.
+- The number **starts with the product code**: Refined Palm Oil RPO, Crude Palm Oil CPO, sugar ICU, and so on. Example: RPO-CIF-000123-26-FB and RPO-CIF-000123-26-FS. The product code is set per product in Admin, Products (2 to 8 letters or digits). A product without a code gets FK-S-YYYY-NNNNNN-FB and FK-S-YYYY-NNNNNN-FS.
+- Numbers created before this date have no suffix (and older supplier orders end -P); they are not renamed, because records are never rewritten.

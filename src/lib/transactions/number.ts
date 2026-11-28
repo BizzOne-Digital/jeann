@@ -4,7 +4,21 @@ import { isMongoConfigured, tryConnectMongo } from "@/lib/db/mongoose";
 const MAX_RETRIES = 5;
 
 /**
- * Allocates a unique buyer sale transaction number: FK-S-YYYY-NNNNNN
+ * Every order number says which portal it belongs to (client, 2026-11-28): a number in the buyer portal (stage 1,
+ * Finekarts sells) ends with FB, and its number in the supplier portal (stage 2, Finekarts buys) ends with FS.
+ * Numbers created before that carry no suffix and keep working.
+ */
+export type StageSuffix = "FB" | "FS";
+export const STAGE_1_SUFFIX: StageSuffix = "FB";
+export const STAGE_2_SUFFIX: StageSuffix = "FS";
+
+/** The stage 2 (supplier portal) number that matches a stage 1 (buyer portal) number: same number, ending FS. */
+export function stageTwoNumber(stageOneNumber: string): string {
+  return stageOneNumber.trim().replace(/-(FB|FS)$/, "") + "-" + STAGE_2_SUFFIX;
+}
+
+/**
+ * Allocates a unique buyer sale transaction number: FK-S-YYYY-NNNNNN-FB
  * Uses atomic counter increment — safe under concurrent requests.
  */
 export async function allocateBuyerSaleTransactionNumber(
@@ -14,7 +28,7 @@ export async function allocateBuyerSaleTransactionNumber(
 }
 
 /**
- * Allocates a unique supplier purchase transaction number: FK-P-YYYY-NNNNNN
+ * Allocates a unique supplier purchase transaction number: FK-P-YYYY-NNNNNN-FS
  */
 export async function allocateSupplierPurchaseTransactionNumber(
   year = new Date().getUTCFullYear(),
@@ -49,25 +63,36 @@ export async function allocateDealGroupNumber(
   throw new Error("Unable to allocate unique deal group number");
 }
 
-/** Order numbers that start with a product code, for example RSO-CIF-000123-26. */
-export const PRODUCT_ORDER_NUMBER = /^([A-Z0-9]{2,8})-(FOB|CIF)-(\d{6})-(\d{2})$/;
+/** Order numbers that start with a product code, for example RPO-CIF-000123-26-FB (buyer portal) and RPO-CIF-000123-26-FS (supplier portal). */
+export const PRODUCT_ORDER_NUMBER = /^([A-Z0-9]{2,8})-(FOB|CIF)-(\d{6})-(\d{2})(?:-(FB|FS))?$/;
 
-export function formatProductOrderNumber(code: string, incoterm: string, sequence: number, year: number): string {
+export function formatProductOrderNumber(
+  code: string,
+  incoterm: string,
+  sequence: number,
+  year: number,
+  /** FB for the buyer portal (the default for a new number), FS for the supplier portal, null for a number without a suffix. */
+  stage: StageSuffix | null = STAGE_1_SUFFIX,
+): string {
   const term = incoterm.toUpperCase() === "FOB" ? "FOB" : "CIF";
-  return code.toUpperCase() + "-" + term + "-" + String(sequence).padStart(6, "0") + "-" + String(year % 100).padStart(2, "0");
+  const base = code.toUpperCase() + "-" + term + "-" + String(sequence).padStart(6, "0") + "-" + String(year % 100).padStart(2, "0");
+  return stage ? base + "-" + stage : base;
 }
 
-export function parseProductOrderNumber(value: string): { code: string; incoterm: string; sequence: number; year: number } | null {
+export function parseProductOrderNumber(
+  value: string,
+): { code: string; incoterm: string; sequence: number; year: number; stage?: StageSuffix } | null {
   const m = PRODUCT_ORDER_NUMBER.exec(value.trim());
   if (!m) return null;
-  return { code: m[1], incoterm: m[2], sequence: Number(m[3]), year: 2000 + Number(m[4]) };
+  return { code: m[1], incoterm: m[2], sequence: Number(m[3]), year: 2000 + Number(m[4]), ...(m[5] ? { stage: m[5] as StageSuffix } : {}) };
 }
 
 /** The same order number with another Incoterm (the buyer may change FOB or CIF before submitting). */
 export function withIncoterm(orderNumber: string, incoterm: string): string {
   const parsed = parseProductOrderNumber(orderNumber);
   if (!parsed) return orderNumber;
-  return formatProductOrderNumber(parsed.code, incoterm, parsed.sequence, parsed.year);
+  // The suffix (FB or FS) stays as it was; a number created before the suffixes existed stays without one.
+  return formatProductOrderNumber(parsed.code, incoterm, parsed.sequence, parsed.year, parsed.stage ?? null);
 }
 
 /**
@@ -90,8 +115,8 @@ export async function allocateProductOrderNumber(
     );
     const number = formatProductOrderNumber(code, incoterm, counter.sequence, year);
     const taken =
-      (await Transaction.exists({ transactionNumber: { $regex: "^[A-Z0-9]{2,8}-(FOB|CIF)-" + String(counter.sequence).padStart(6, "0") + "-" + String(year % 100).padStart(2, "0") + "$" } })) ||
-      (await PurchaseRequest.exists({ reference: { $regex: "^[A-Z0-9]{2,8}-(FOB|CIF)-" + String(counter.sequence).padStart(6, "0") + "-" + String(year % 100).padStart(2, "0") + "$" } }));
+      (await Transaction.exists({ transactionNumber: { $regex: "^[A-Z0-9]{2,8}-(FOB|CIF)-" + String(counter.sequence).padStart(6, "0") + "-" + String(year % 100).padStart(2, "0") + "(-(FB|FS))?$" } })) ||
+      (await PurchaseRequest.exists({ reference: { $regex: "^[A-Z0-9]{2,8}-(FOB|CIF)-" + String(counter.sequence).padStart(6, "0") + "-" + String(year % 100).padStart(2, "0") + "(-(FB|FS))?$" } }));
     if (!taken) return number;
   }
   throw new Error("Unable to allocate a unique order number");
@@ -113,7 +138,7 @@ async function allocateTransactionNumber(side: "S" | "P", year: number): Promise
     );
 
     const sequence = counter.sequence;
-    const number = `FK-${side}-${year}-${String(sequence).padStart(6, "0")}`;
+    const number = `FK-${side}-${year}-${String(sequence).padStart(6, "0")}-${side === "S" ? STAGE_1_SUFFIX : STAGE_2_SUFFIX}`;
 
     const { Transaction } = await import("@/models");
     const exists = await Transaction.findOne({ transactionNumber: number }).lean();
@@ -146,7 +171,7 @@ export function parseTransactionNumber(value: string): {
   year: number;
   sequence: number;
 } | null {
-  const match = /^FK-(S|P)-(\d{4})-(\d{6})$/.exec(value.trim());
+  const match = /^FK-(S|P)-(\d{4})-(\d{6})(?:-(?:FB|FS))?$/.exec(value.trim());
   if (!match) return null;
   return {
     side: match[1],

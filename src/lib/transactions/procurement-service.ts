@@ -2,6 +2,7 @@ import { assertSkipStepOne } from "@/lib/transactions/step-service";
 import { Types } from "mongoose";
 import {
   allocateSupplierPurchaseTransactionNumber,
+  stageTwoNumber,
 } from "@/lib/transactions/number";
 import { findProcurementTransition } from "@/lib/transactions/procurement-workflow";
 import { money, mulMoney } from "@/lib/finance/money";
@@ -14,11 +15,16 @@ import type { Permission } from "@/lib/authorization/permissions";
 import { hasPermission } from "@/lib/authorization/permissions";
 import { SUPPLIER_WORKFLOW_STEPS } from "@/lib/workflows/transitions";
 
-/** Buyer order number plus "-P" (then "-P2", "-P3" ...) for the matching supplier order. */
+/**
+ * The matching supplier order (stage 2): the buyer order number (stage 1, ending FB) with the ending FS, so the two
+ * orders carry the same number and the ending tells the portals apart. A second supplier order for the same buyer
+ * order, if ever needed, gets FS2, FS3 and so on.
+ */
 async function allocateMirroredSupplierNumber(buyerNumber: string): Promise<string> {
   const { Transaction } = await import("@/models");
+  const stageTwo = stageTwoNumber(buyerNumber);
   for (let n = 1; n < 50; n++) {
-    const candidate = n === 1 ? `${buyerNumber}-P` : `${buyerNumber}-P${n}`;
+    const candidate = n === 1 ? stageTwo : `${stageTwo}${n}`;
     const exists = await Transaction.findOne({ transactionNumber: candidate }).select("_id").lean();
     if (!exists) return candidate;
   }
@@ -83,7 +89,7 @@ export async function createProcurementTransaction(input: {
       .lean()) as unknown as CommercialTermsLean | null;
   }
 
-  // The supplier order keeps the buyer's order number with a "-P" suffix so the two orders are easy to tell apart.
+  // The supplier order keeps the buyer's order number, ending FS instead of FB, so the two orders are easy to tell apart.
   const transactionNumber = buyerTx
     ? await allocateMirroredSupplierNumber(buyerTx.transactionNumber)
     : await allocateSupplierPurchaseTransactionNumber();

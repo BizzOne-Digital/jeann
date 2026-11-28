@@ -35,7 +35,7 @@ export function TransactionStagesCard({
           <p className="text-xs text-[var(--stone)]">{title}</p>
           <p className="mt-1 text-sm text-[var(--stone)]">
             {stage === 2
-              ? "The supplier order has not been opened yet. It will carry this order number with a suffix."
+              ? "The supplier order has not been opened yet. It will carry this order number, ending FS instead of FB."
               : "This supplier order is not linked to a buyer order."}
           </p>
         </div>
